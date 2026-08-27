@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lewis · Tyneside Logistics hackathon</title>
+  <meta name="description" content="Lewis's log of the first Tyneside Logistics hackathon slice: clone, run, edit, commit, push.">
+  <link rel="icon" href="logo.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="site lewis-page">
+  <nav class="site-nav" aria-label="Primary">
+    <div class="inner">
+      <a href="index.html" class="brand-link">
+        <img src="logo.svg" width="36" height="36" alt="Tyneside">
+        <span>TYNESIDE</span>
+        <span class="brand-sub">LOGISTICS</span>
+      </a>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="app/">Map</a>
+        <a href="board.html">Board</a>
+        <a href="onboarding.html">Onboarding</a>
+        <a href="lewis.html" class="is-current" aria-current="page">Lewis</a>
+      </div>
+      <a class="btn btn-fill" href="index.html">See the banner →</a>
+    </div>
+  </nav>
+
+  <header class="hero lewis-hero">
+    <div class="wrap">
+      <p class="hero-kicker">🌱 Lewis Thomson · hackathon night · 27 Aug 2026</p>
+      <h1>Lewis's log</h1>
+      <p class="hero-tag">Clone → run → edit → commit → push.</p>
+      <p class="hero-lead">
+        First onboarding card: prove the loop on a real machine, not a slide.
+        This page is the write-up of what actually happened — the two repos,
+        the local stack, the obnoxious homepage banner, and the first push to
+        <code>Tyneside-Software/hackathon-site</code>.
+      </p>
+      <div class="hero-actions">
+        <a class="btn btn-fill" href="#timeline">Read the timeline →</a>
+        <a class="btn btn-ghost" href="https://github.com/Tyneside-Software/hackathon-site" target="_blank" rel="noopener">GitHub repo</a>
+      </div>
+    </div>
+  </header>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="lewis-stats" aria-label="Session snapshot">
+        <div class="lewis-stat">
+          <span class="k">Repos cloned</span>
+          <span class="v">2</span>
+          <span class="n">site + API, as siblings</span>
+        </div>
+        <div class="lewis-stat">
+          <span class="k">Local site</span>
+          <span class="v">:5500</span>
+          <span class="n">Python static server</span>
+        </div>
+        <div class="lewis-stat">
+          <span class="k">Local API</span>
+          <span class="v">:8080</span>
+          <span class="n">FastAPI + uvicorn</span>
+        </div>
+        <div class="lewis-stat">
+          <span class="k">First push</span>
+          <span class="v">b65badd</span>
+          <span class="n">banner landed on main</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="why">
+    <div class="wrap">
+      <h2>Why this mattered</h2>
+      <p class="lede">
+        The board's first cards are not product features. They are
+        <strong>get the front end and back end running</strong>, then prove
+        <strong>edit → run → push</strong> so the rest of the night can ship in slices.
+      </p>
+      <div class="grid-2">
+        <div class="panel">
+          <h3>The rule</h3>
+          <p>Every card is a releasable increment. The site still has to look working when the card lands. Tonight started local-only — no Cloud Run until Michael is back.</p>
+        </div>
+        <div class="panel">
+          <h3>What we actually proved</h3>
+          <p>GitHub auth, clone from the org, Python venv, two processes, a visible HTML change, a real commit identity, a rebase over teammates' work, and a fast-forward push to <code>main</code>.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="timeline">
+    <div class="wrap">
+      <h2>What we did, in order</h2>
+      <p class="lede">Same machine, same night. Each step is the thing we had to get right before the next one would work.</p>
+
+      <ol class="lewis-timeline">
+        <li>
+          <span class="step">01</span>
+          <div class="body">
+            <h3>Found the org repos</h3>
+            <p>
+              The Tyneside-Software GitHub org has two hackathon repos:
+              <a href="https://github.com/Tyneside-Software/hackathon-site">hackathon-site</a>
+              (GitHub Pages front end — board, desktop, map) and
+              <a href="https://github.com/Tyneside-Software/hackathon-api">hackathon-api</a>
+              (Python FastAPI, aimed at Cloud Run later).
+              They are meant to be cloned as sibling folders.
+            </p>
+          </div>
+        </li>
+        <li>
+          <span class="step">02</span>
+          <div class="body">
+            <h3>Cloned both locally</h3>
+            <p>
+              Not into <code>C:\WINDOWS\system32</code> (the default shell cwd).
+              Both repos went into a proper folder:
+            </p>
+            <pre><code>C:\Users\Lewis\repos\hackathon-site
+C:\Users\Lewis\repos\hackathon-api</code></pre>
+            <p>
+              That match is what <code>start.ps1</code> expects — it looks next door
+              for <code>hackathon-api\app\main.py</code>.
+            </p>
+          </div>
+        </li>
+        <li>
+          <span class="step">03</span>
+          <div class="body">
+            <h3>Booted the stack</h3>
+            <p>
+              System <code>python</code> is a broken WindowsApps stub; the real interpreter is
+              Python 3.14 via the <code>py</code> launcher. We created a venv in the API repo,
+              installed FastAPI and uvicorn, then started two processes:
+            </p>
+            <ul>
+              <li>Site: <code>python -m http.server 5500</code> bound to 127.0.0.1</li>
+              <li>API: <code>uvicorn app.main:app --reload --port 8080</code></li>
+            </ul>
+            <p>
+              <code>config.js</code> already points the front end at
+              <code>http://127.0.0.1:8080</code>, and the API CORS allow-list already
+              includes the local site origin. No extra wiring was needed.
+            </p>
+          </div>
+        </li>
+        <li>
+          <span class="step">04</span>
+          <div class="body">
+            <h3>Proved the pages were live</h3>
+            <p>Every URL we care about returned HTTP 200:</p>
+            <ul class="lewis-links">
+              <li><a href="http://127.0.0.1:5500/">http://127.0.0.1:5500/</a> — desktop home</li>
+              <li><a href="http://127.0.0.1:5500/app/">/app/</a> — map + waypoints</li>
+              <li><a href="http://127.0.0.1:5500/board.html">/board.html</a> — kanban</li>
+              <li><a href="http://127.0.0.1:8080/health">:8080/health</a> — API health JSON</li>
+              <li><a href="http://127.0.0.1:8080/docs">:8080/docs</a> — FastAPI Swagger</li>
+            </ul>
+            <p>
+              The API is still a skeleton (root, health, docs). That is enough
+              for tonight's first two hours: a live backend the site can talk to.
+            </p>
+          </div>
+        </li>
+        <li>
+          <span class="step">05</span>
+          <div class="body">
+            <h3>Made an unmissable test change</h3>
+            <p>
+              To prove <em>edit → run</em> without opening DevTools, we put a
+              huge blinking <strong>LEWIS WAS HERE</strong> banner under the nav
+              on the homepage. Hot pink, acid yellow, 0.7s blink.
+              Refresh <a href="index.html">the home page</a> and you cannot miss it.
+            </p>
+            <p>
+              That is deliberately loud. The point of the card is that a change
+              on disk is immediately visible in the browser, because we are
+              serving files, not opening <code>file://</code>.
+            </p>
+          </div>
+        </li>
+        <li>
+          <span class="step">06</span>
+          <div class="body">
+            <h3>Committed and pushed — including the messy bits</h3>
+            <p>
+              Git had no <code>user.name</code> / <code>user.email</code> on this machine.
+              We set them locally in the repo from the GitHub account
+              <code>captainbikk</code> → Lewis Thomson &lt;captainbikk@gmail.com&gt;,
+              without touching global config.
+            </p>
+            <p>
+              First push was rejected: Reeve/others had already landed a person
+              filter on the board. We pulled with rebase (no force-push), then
+              pushed cleanly.
+            </p>
+            <pre><code>b65badd  Add obvious Lewis was here banner on the homepage.</code></pre>
+            <p>
+              That commit is on <code>origin/main</code>. The GitHub loop card is done.
+            </p>
+          </div>
+        </li>
+        <li>
+          <span class="step">07</span>
+          <div class="body">
+            <h3>Pulled again to stay current</h3>
+            <p>
+              After the push we fetched both repos. Both working trees were
+              clean and already matched <code>origin/main</code>. Site tip:
+              the banner commit. API tip: README pointing at the org and
+              <code>start.ps1</code>.
+            </p>
+          </div>
+        </li>
+        <li>
+          <span class="step">08</span>
+          <div class="body">
+            <h3>Wrote this page</h3>
+            <p>
+              A dedicated Lewis page, linked from the nav, so the night has a
+              human-readable record of the first slice — not just a git log.
+              Attractive on purpose: the rule is the site should still look
+              working when the card lands.
+            </p>
+          </div>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="section" id="stack">
+    <div class="wrap">
+      <h2>The local setup, explained</h2>
+      <p class="lede">Nothing fancy. Two folders, two processes, one browser.</p>
+      <div class="who-wrap">
+        <table class="who-table lewis-table">
+          <thead>
+            <tr>
+              <th>Piece</th>
+              <th>What it is</th>
+              <th>Why it is there</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>hackathon-site</td>
+              <td>Static HTML / CSS / JS</td>
+              <td>GitHub Pages later; tonight a local HTTP server so the API is not blocked by <code>file://</code>.</td>
+            </tr>
+            <tr>
+              <td>hackathon-api</td>
+              <td>FastAPI app in <code>app/main.py</code></td>
+              <td>Health + CORS now; Cloud Run in London once Michael is back.</td>
+            </tr>
+            <tr>
+              <td>.venv</td>
+              <td>Python 3.14 virtualenv</td>
+              <td>Keeps FastAPI / uvicorn off the system interpreter.</td>
+            </tr>
+            <tr>
+              <td>config.js</td>
+              <td><code>window.HACKATHON_API</code></td>
+              <td>Points at <code>http://127.0.0.1:8080</code> until a Cloud Run URL is pasted in.</td>
+            </tr>
+            <tr>
+              <td>start.ps1</td>
+              <td>Opens site + API windows</td>
+              <td>The intended one-command boot once both repos sit side by side.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="loop">
+    <div class="wrap">
+      <h2>The loop we proved</h2>
+      <ol class="lewis-loop">
+        <li>
+          <strong>Edit</strong>
+          <span>Change a real file in <code>hackathon-site</code>.</span>
+        </li>
+        <li>
+          <strong>Run</strong>
+          <span>Refresh localhost — the static server picks it up immediately.</span>
+        </li>
+        <li>
+          <strong>Commit</strong>
+          <span>Named files only, message in the repo's voice, local git identity set.</span>
+        </li>
+        <li>
+          <strong>Rebase</strong>
+          <span>Teammates had pushed. Integrate, don't overwrite.</span>
+        </li>
+        <li>
+          <strong>Push</strong>
+          <span>Land on <code>origin/main</code> so the next person pulls a working site.</span>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <footer class="foot">
+    <div class="wrap">
+      Reeve · Connor · Michael · Lewis · hackathon night ·
+      <a href="board.html">board</a> ·
+      <a href="onboarding.html">onboarding</a> ·
+      <a href="lewis.html">Lewis's log</a>
+    </div>
+  </footer>
+</body>
+</html>
