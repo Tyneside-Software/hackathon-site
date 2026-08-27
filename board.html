@@ -35,7 +35,7 @@
 
     <div class="board-banner">
       <div>📋 Tyneside Logistics. Start with local proof, then visualisation, then light UI. Cloud Run waits.</div>
-      <div style="display:flex;gap:0.5rem;flex-wrap:wrap">
+      <div class="btns">
         <a class="btn btn-fill" href="app/">Map app</a>
         <a class="btn btn-ghost" href="index.html">Desktop home</a>
       </div>
@@ -43,23 +43,23 @@
 
     <div class="people">
       <div class="person">
-        <div class="who">🧭 Reeve</div>
-        <div class="hrs">6.5<span style="font-size:1rem;color:var(--muted);font-weight:500"> hrs</span></div>
+        <div class="who"><span class="emoji">🧭</span> Reeve</div>
+        <div class="hrs">6.5 <span>hrs</span></div>
         <div class="meta">1 ready (3h) · 2 later (3.5h)</div>
       </div>
       <div class="person">
-        <div class="who">⚡ Connor</div>
-        <div class="hrs">7<span style="font-size:1rem;color:var(--muted);font-weight:500"> hrs</span></div>
+        <div class="who"><span class="emoji">⚡</span> Connor</div>
+        <div class="hrs">7 <span>hrs</span></div>
         <div class="meta">1 ready (3h) · 2 later (4h)</div>
       </div>
       <div class="person">
-        <div class="who">🏗️ Michael</div>
-        <div class="hrs">8<span style="font-size:1rem;color:var(--muted);font-weight:500"> hrs</span></div>
+        <div class="who"><span class="emoji">🏗️</span> Michael</div>
+        <div class="hrs">8 <span>hrs</span></div>
         <div class="meta">away 2h · API / Cloud Run after</div>
       </div>
       <div class="person">
-        <div class="who">🌱 Lewis</div>
-        <div class="hrs">6.5<span style="font-size:1rem;color:var(--muted);font-weight:500"> hrs</span></div>
+        <div class="who"><span class="emoji">🌱</span> Lewis</div>
+        <div class="hrs">6.5 <span>hrs</span></div>
         <div class="meta">2 done (2.5h) · 2 later (4h)</div>
       </div>
     </div>
@@ -68,7 +68,7 @@
       <div class="kanban">
 
         <div class="col todo">
-          <div class="head">To do <span class="count">6 · 15.5h</span></div>
+          <div class="head"><span class="col-name">To do</span><span class="count">6 · 15.5h</span></div>
           <div class="stack">
             <a class="card" href="#t-06">
               <div class="top"><span class="id">06</span><span class="emoji">🌱</span></div>
@@ -106,14 +106,14 @@
         </div>
 
         <div class="col doing">
-          <div class="head">In progress <span class="count">0 · 0h</span></div>
+          <div class="head"><span class="col-name">In progress</span><span class="count">0 · 0h</span></div>
           <div class="stack">
             <p style="color:var(--muted);font-size:0.85rem;padding:0.4rem 0.2rem">Empty on purpose. Pull a Ready card and ship it.</p>
           </div>
         </div>
 
         <div class="col ready">
-          <div class="head">Ready to demo <span class="count">2 · 6h</span></div>
+          <div class="head"><span class="col-name">Ready to demo</span><span class="count">2 · 6h</span></div>
           <div class="stack">
             <a class="card" href="app/">
               <div class="top"><span class="id">04</span><span class="emoji">🧭</span></div>
@@ -131,7 +131,7 @@
         </div>
 
         <div class="col done">
-          <div class="head">Done <span class="count">3 · 3.5h</span></div>
+          <div class="head"><span class="col-name">Done</span><span class="count">3 · 3.5h</span></div>
           <div class="stack">
             <a class="card" href="#t-01">
               <div class="top"><span class="id">01</span><span class="emoji">🌱</span></div>
@@ -159,6 +159,7 @@
 
     <h2 style="margin-top:2rem">Who’s who</h2>
     <p class="lede">Hours are every card attributed to that person, whichever column it sits in.</p>
+    <div class="who-wrap">
     <table class="who-table">
       <thead>
         <tr><th></th><th>Owner</th><th>Claimed work</th><th>Hours</th></tr>
@@ -190,6 +191,7 @@
         </tr>
       </tbody>
     </table>
+    </div>
 
     <h2>How a card ships</h2>
     <ol style="color:var(--muted);padding-left:1.2rem;line-height:1.7">
