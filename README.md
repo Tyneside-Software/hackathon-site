@@ -2,9 +2,11 @@
 
 Front end for tonight. **GitHub Pages** later; **local first**.
 
-**Site:** https://github.com/michaelthomsoncc/hackathon-site  
-**API:** https://github.com/michaelthomsoncc/hackathon-api  
+**Site:** https://github.com/Tyneside-Software/hackathon-site  
+**API:** https://github.com/Tyneside-Software/hackathon-api  
 **Board:** [board.html](board.html) (Reeve, Connor, Michael, Lewis)
+
+Clone from the **Tyneside-Software** org. First cards: Lewis and Reeve get front end **and** back end running; everyone proves **edit → run → push**.
 
 ## Run locally (card 01)
 

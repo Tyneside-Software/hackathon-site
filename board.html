@@ -34,7 +34,7 @@
     </p>
 
     <div class="board-banner">
-      <div>📋 Tyneside Logistics. Start with local proof, then visualisation, then light UI. Cloud Run waits.</div>
+      <div>📋 First: Lewis and Reeve get <strong>front end and back end running</strong>. Everyone (including Connor) proves the GitHub <strong>edit → run → push</strong> loop. Then the map cards.</div>
       <div class="btns">
         <a class="btn btn-fill" href="app/">Map app</a>
         <a class="btn btn-ghost" href="index.html">Desktop home</a>
@@ -44,23 +44,23 @@
     <div class="people">
       <div class="person">
         <div class="who"><span class="emoji">🧭</span> Reeve</div>
-        <div class="hrs">6.5 <span>hrs</span></div>
-        <div class="meta">1 ready (3h) · 2 later (3.5h)</div>
+        <div class="hrs">8 <span>hrs</span></div>
+        <div class="meta">3 onboarding to do · map ready</div>
       </div>
       <div class="person">
         <div class="who"><span class="emoji">⚡</span> Connor</div>
-        <div class="hrs">7 <span>hrs</span></div>
-        <div class="meta">1 ready (3h) · 2 later (4h)</div>
+        <div class="hrs">6.5 <span>hrs</span></div>
+        <div class="meta">2 onboarding to do · routing ready</div>
       </div>
       <div class="person">
         <div class="who"><span class="emoji">🏗️</span> Michael</div>
-        <div class="hrs">8 <span>hrs</span></div>
-        <div class="meta">away 2h · API / Cloud Run after</div>
+        <div class="hrs">8.5 <span>hrs</span></div>
+        <div class="meta">git loop + Cloud Run after 2h</div>
       </div>
       <div class="person">
         <div class="who"><span class="emoji">🌱</span> Lewis</div>
-        <div class="hrs">6.5 <span>hrs</span></div>
-        <div class="meta">2 done (2.5h) · 2 later (4h)</div>
+        <div class="hrs">9 <span>hrs</span></div>
+        <div class="meta">3 onboarding to do · chrome done</div>
       </div>
     </div>
 
@@ -68,8 +68,62 @@
       <div class="kanban">
 
         <div class="col todo">
-          <div class="head"><span class="col-name">To do</span><span class="count">6 · 15.5h</span></div>
+          <div class="head"><span class="col-name">To do</span><span class="count">15 · 22h</span></div>
           <div class="stack">
+            <a class="card" href="#t-12">
+              <div class="top"><span class="id">12</span><span class="emoji">🌱</span></div>
+              <div class="title">Lewis: get the front end running locally</div>
+              <span class="tag tag-wait">clone org repo · serve.ps1 · home + map + board</span>
+              <div class="bot"><span>0.5h</span><span>Lewis</span></div>
+            </a>
+            <a class="card" href="#t-13">
+              <div class="top"><span class="id">13</span><span class="emoji">🌱</span></div>
+              <div class="title">Lewis: get the back end running locally</div>
+              <span class="tag tag-wait">clone api · venv · uvicorn · /health</span>
+              <div class="bot"><span>1h</span><span>Lewis</span></div>
+            </a>
+            <a class="card" href="#t-14">
+              <div class="top"><span class="id">14</span><span class="emoji">🌱</span></div>
+              <div class="title">Lewis: GitHub edit → run → push (site repo)</div>
+              <span class="tag tag-wait">Tyneside-Software/hackathon-site</span>
+              <div class="bot"><span>0.75h</span><span>Lewis</span></div>
+            </a>
+            <a class="card" href="#t-15">
+              <div class="top"><span class="id">15</span><span class="emoji">🧭</span></div>
+              <div class="title">Reeve: get the front end running locally</div>
+              <span class="tag tag-wait">clone org repo · serve.ps1 · home + map + board</span>
+              <div class="bot"><span>0.5h</span><span>Reeve</span></div>
+            </a>
+            <a class="card" href="#t-16">
+              <div class="top"><span class="id">16</span><span class="emoji">🧭</span></div>
+              <div class="title">Reeve: get the back end running locally</div>
+              <span class="tag tag-wait">clone api · venv · uvicorn · /health</span>
+              <div class="bot"><span>1h</span><span>Reeve</span></div>
+            </a>
+            <a class="card" href="#t-17">
+              <div class="top"><span class="id">17</span><span class="emoji">🧭</span></div>
+              <div class="title">Reeve: GitHub edit → run → push (API repo)</div>
+              <span class="tag tag-wait">Tyneside-Software/hackathon-api</span>
+              <div class="bot"><span>0.75h</span><span>Reeve</span></div>
+            </a>
+            <a class="card" href="#t-18">
+              <div class="top"><span class="id">18</span><span class="emoji">⚡</span></div>
+              <div class="title">Connor: get the front end running locally</div>
+              <span class="tag tag-wait">clone org repo · serve.ps1 · home + map + board</span>
+              <div class="bot"><span>0.5h</span><span>Connor</span></div>
+            </a>
+            <a class="card" href="#t-19">
+              <div class="top"><span class="id">19</span><span class="emoji">⚡</span></div>
+              <div class="title">Connor: GitHub edit → run → push (site repo)</div>
+              <span class="tag tag-wait">Tyneside-Software/hackathon-site</span>
+              <div class="bot"><span>0.75h</span><span>Connor</span></div>
+            </a>
+            <a class="card" href="#t-20">
+              <div class="top"><span class="id">20</span><span class="emoji">🏗️</span></div>
+              <div class="title">Michael: GitHub edit → run → push (both repos)</div>
+              <span class="tag tag-wait">after 2h away · prove the loop</span>
+              <div class="bot"><span>0.75h</span><span>Michael</span></div>
+            </a>
             <a class="card" href="#t-06">
               <div class="top"><span class="id">06</span><span class="emoji">🌱</span></div>
               <div class="title">Save routes in the browser (localStorage)</div>
@@ -168,26 +222,26 @@
         <tr>
           <td>🧭</td>
           <td><strong>Reeve</strong></td>
-          <td>Local API health (1h, done) · Map waypoints (3h, ready) · Demo seed (1.5h)</td>
-          <td><strong>5.5h</strong></td>
+          <td>Front end local (0.5h) · Back end local (1h) · GitHub loop on API (0.75h) · Map waypoints (3h, ready) · Demo seed (1.5h) · API health scaffold (1h, done)</td>
+          <td><strong>8h</strong></td>
         </tr>
         <tr>
           <td>⚡</td>
           <td><strong>Connor</strong></td>
-          <td>Route calculation (3h, ready) · Job list beside map (2h) · (stretch) ETA labels</td>
-          <td><strong>5h+</strong></td>
+          <td>Front end local (0.5h) · GitHub loop on site (0.75h) · Route calculation (3h, ready) · Job list beside map (2h)</td>
+          <td><strong>6.5h</strong></td>
         </tr>
         <tr>
           <td>🏗️</td>
           <td><strong>Michael</strong></td>
-          <td>Away first 2h. Then Cloud Run + CORS (4h) · Persist routes on API (4h)</td>
-          <td><strong>8h</strong></td>
+          <td>GitHub loop both repos (0.75h) · Cloud Run + CORS (4h) · Persist routes on API (4h)</td>
+          <td><strong>8.5h</strong></td>
         </tr>
         <tr>
           <td>🌱</td>
           <td><strong>Lewis</strong></td>
-          <td>Local site serve (0.5h, done) · Desktop chrome (2h, done) · localStorage routes (2h) · local account (2h)</td>
-          <td><strong>6.5h</strong></td>
+          <td>Front end local (0.5h) · Back end local (1h) · GitHub loop on site (0.75h) · Desktop chrome (2h, done) · localStorage (2h) · local account (2h) · serve scaffold (0.5h, done)</td>
+          <td><strong>9h</strong></td>
         </tr>
       </tbody>
     </table>
@@ -199,6 +253,17 @@
       <li>Home, Map, and Board still load if the new thing is half-finished — fallbacks, never a blank page.</li>
       <li>Move the card to <em>Ready to demo</em> when someone else can click it without a briefing.</li>
       <li>No Cloud Run until card 10. LocalStorage is the persistence story until then.</li>
+    </ol>
+
+    <h2 style="margin-top:2rem">GitHub loop (cards 14 · 17 · 19 · 20)</h2>
+    <p class="lede">Do this on the <strong>Tyneside-Software</strong> repos, not personal forks unless you have been told otherwise.</p>
+    <ol style="color:var(--muted);padding-left:1.2rem;line-height:1.7">
+      <li>Clone (or pull) <a href="https://github.com/Tyneside-Software/hackathon-site">hackathon-site</a> and/or <a href="https://github.com/Tyneside-Software/hackathon-api">hackathon-api</a>.</li>
+      <li>Run it: <code>.\serve.ps1</code> (site, :5500) and/or <code>uvicorn app.main:app --reload --port 8080</code> (API).</li>
+      <li>Make a tiny visible change (your name in a comment, README line, or a harmless label).</li>
+      <li>Confirm it still runs.</li>
+      <li><code>git add</code> · <code>git commit</code> · <code>git push origin main</code>.</li>
+      <li>Check the commit on GitHub. Then move your card to Done.</li>
     </ol>
   </div>
 
