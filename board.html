@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tyneside Logistics — hackathon board</title>
+  <link rel="icon" href="logo.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="site">
+  <nav class="site-nav" aria-label="Primary">
+    <div class="inner">
+      <a href="index.html" class="brand-link">
+        <img src="logo.svg" width="36" height="36" alt="Tyneside">
+        <span>TYNESIDE</span>
+        <span class="brand-sub">LOGISTICS</span>
+      </a>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="app/">Map</a>
+        <a href="board.html" class="is-current" aria-current="page">Board</a>
+      </div>
+      <a class="btn btn-fill" href="app/">Open map →</a>
+    </div>
+  </nav>
+
+  <div class="wrap-wide" style="padding: 1.5rem 0 3rem">
+    <p class="hero-kicker">Hackathon night · 2026-08-27</p>
+    <h1 style="font-size:1.7rem;margin-bottom:0.4rem">Logistics — work tracking board</h1>
+    <p style="color:var(--muted);max-width:42rem">
+      Same idea as the Automatica kanban. Every card is a <strong>releasable increment</strong> —
+      the site should still look working when the card lands.
+      First two hours: <strong>local only</strong> (Michael on backend later).
+    </p>
+
+    <div class="board-banner">
+      <div>📋 Tyneside Logistics. Start with local proof, then visualisation, then light UI. Cloud Run waits.</div>
+      <div style="display:flex;gap:0.5rem;flex-wrap:wrap">
+        <a class="btn btn-fill" href="app/">Map app</a>
+        <a class="btn btn-ghost" href="index.html">Desktop home</a>
+      </div>
+    </div>
+
+    <div class="people">
+      <div class="person">
+        <div class="who">🧭 Reeve</div>
+        <div class="hrs">6.5<span style="font-size:1rem;color:var(--muted);font-weight:500"> hrs</span></div>
+        <div class="meta">1 ready (3h) · 2 later (3.5h)</div>
+      </div>
+      <div class="person">
+        <div class="who">⚡ Connor</div>
+        <div class="hrs">7<span style="font-size:1rem;color:var(--muted);font-weight:500"> hrs</span></div>
+        <div class="meta">1 ready (3h) · 2 later (4h)</div>
+      </div>
+      <div class="person">
+        <div class="who">🏗️ Michael</div>
+        <div class="hrs">8<span style="font-size:1rem;color:var(--muted);font-weight:500"> hrs</span></div>
+        <div class="meta">away 2h · API / Cloud Run after</div>
+      </div>
+      <div class="person">
+        <div class="who">🌱 Lewis</div>
+        <div class="hrs">6.5<span style="font-size:1rem;color:var(--muted);font-weight:500"> hrs</span></div>
+        <div class="meta">2 done (2.5h) · 2 later (4h)</div>
+      </div>
+    </div>
+
+    <div class="kanban-scroll">
+      <div class="kanban">
+
+        <div class="col todo">
+          <div class="head">To do <span class="count">6 · 15.5h</span></div>
+          <div class="stack">
+            <a class="card" href="#t-06">
+              <div class="top"><span class="id">06</span><span class="emoji">🌱</span></div>
+              <div class="title">Save routes in the browser (localStorage)</div>
+              <div class="bot"><span>2h</span><span>Lewis</span></div>
+            </a>
+            <a class="card" href="#t-07">
+              <div class="top"><span class="id">07</span><span class="emoji">⚡</span></div>
+              <div class="title">Job list beside the map (seed Howden-shaped jobs)</div>
+              <div class="bot"><span>2h</span><span>Connor</span></div>
+            </a>
+            <a class="card" href="#t-08">
+              <div class="top"><span class="id">08</span><span class="emoji">🧭</span></div>
+              <div class="title">Demo seed: 5 Tyneside waypoints + named run</div>
+              <div class="bot"><span>1.5h</span><span>Reeve</span></div>
+            </a>
+            <a class="card" href="#t-09">
+              <div class="top"><span class="id">09</span><span class="emoji">🌱</span></div>
+              <div class="title">Local “who am I” account (name in the browser)</div>
+              <div class="bot"><span>2h</span><span>Lewis</span></div>
+            </a>
+            <a class="card" href="#t-10">
+              <div class="top"><span class="id">10</span><span class="emoji">🏗️</span></div>
+              <div class="title">Cloud Run API live + CORS for Pages</div>
+              <span class="tag tag-wait">blocked — Michael back</span>
+              <div class="bot"><span>4h</span><span>Michael</span></div>
+            </a>
+            <a class="card" href="#t-11">
+              <div class="top"><span class="id">11</span><span class="emoji">🏗️</span></div>
+              <div class="title">Persist routes on the API (replace localStorage)</div>
+              <span class="tag tag-wait">after 10</span>
+              <div class="bot"><span>4h</span><span>Michael</span></div>
+            </a>
+          </div>
+        </div>
+
+        <div class="col doing">
+          <div class="head">In progress <span class="count">0 · 0h</span></div>
+          <div class="stack">
+            <p style="color:var(--muted);font-size:0.85rem;padding:0.4rem 0.2rem">Empty on purpose. Pull a Ready card and ship it.</p>
+          </div>
+        </div>
+
+        <div class="col ready">
+          <div class="head">Ready to demo <span class="count">2 · 6h</span></div>
+          <div class="stack">
+            <a class="card" href="app/">
+              <div class="top"><span class="id">04</span><span class="emoji">🧭</span></div>
+              <div class="title">Map with clickable / draggable waypoints</div>
+              <span class="tag tag-ok">open app/</span>
+              <div class="bot"><span>3h</span><span>Reeve</span></div>
+            </a>
+            <a class="card" href="app/">
+              <div class="top"><span class="id">05</span><span class="emoji">⚡</span></div>
+              <div class="title">Route calculation between waypoints</div>
+              <span class="tag tag-ok">OSRM + straight-line fallback</span>
+              <div class="bot"><span>3h</span><span>Connor</span></div>
+            </a>
+          </div>
+        </div>
+
+        <div class="col done">
+          <div class="head">Done <span class="count">3 · 3.5h</span></div>
+          <div class="stack">
+            <a class="card" href="#t-01">
+              <div class="top"><span class="id">01</span><span class="emoji">🌱</span></div>
+              <div class="title">Serve the site locally</div>
+              <span class="tag tag-ok">serve.ps1 → :5500</span>
+              <div class="bot"><span>0.5h</span><span>Lewis</span></div>
+            </a>
+            <a class="card" href="#t-02">
+              <div class="top"><span class="id">02</span><span class="emoji">🧭</span></div>
+              <div class="title">Run the API locally and hit /health</div>
+              <span class="tag tag-ok">uvicorn :8080</span>
+              <div class="bot"><span>1h</span><span>Reeve</span></div>
+            </a>
+            <a class="card" href="index.html">
+              <div class="top"><span class="id">03</span><span class="emoji">🌱</span></div>
+              <div class="title">Desktop home in Tyneside style</div>
+              <span class="tag tag-ok">this site’s index</span>
+              <div class="bot"><span>2h</span><span>Lewis</span></div>
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <h2 style="margin-top:2rem">Who’s who</h2>
+    <p class="lede">Hours are every card attributed to that person, whichever column it sits in.</p>
+    <table class="who-table">
+      <thead>
+        <tr><th></th><th>Owner</th><th>Claimed work</th><th>Hours</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>🧭</td>
+          <td><strong>Reeve</strong></td>
+          <td>Local API health (1h, done) · Map waypoints (3h, ready) · Demo seed (1.5h)</td>
+          <td><strong>5.5h</strong></td>
+        </tr>
+        <tr>
+          <td>⚡</td>
+          <td><strong>Connor</strong></td>
+          <td>Route calculation (3h, ready) · Job list beside map (2h) · (stretch) ETA labels</td>
+          <td><strong>5h+</strong></td>
+        </tr>
+        <tr>
+          <td>🏗️</td>
+          <td><strong>Michael</strong></td>
+          <td>Away first 2h. Then Cloud Run + CORS (4h) · Persist routes on API (4h)</td>
+          <td><strong>8h</strong></td>
+        </tr>
+        <tr>
+          <td>🌱</td>
+          <td><strong>Lewis</strong></td>
+          <td>Local site serve (0.5h, done) · Desktop chrome (2h, done) · localStorage routes (2h) · local account (2h)</td>
+          <td><strong>6.5h</strong></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>How a card ships</h2>
+    <ol style="color:var(--muted);padding-left:1.2rem;line-height:1.7">
+      <li>The increment is visible on the running site (not a branch of theory).</li>
+      <li>Home, Map, and Board still load if the new thing is half-finished — fallbacks, never a blank page.</li>
+      <li>Move the card to <em>Ready to demo</em> when someone else can click it without a briefing.</li>
+      <li>No Cloud Run until card 10. LocalStorage is the persistence story until then.</li>
+    </ol>
+  </div>
+
+  <footer class="foot">
+    <div class="wrap-wide">Tyneside Logistics hackathon · Reeve · Connor · Michael · Lewis</div>
+  </footer>
+</body>
+</html>

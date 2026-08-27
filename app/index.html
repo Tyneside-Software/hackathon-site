@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tyneside Logistics · Routes</title>
+  <link rel="icon" href="../logo.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../styles.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+  <link rel="stylesheet" href="map.css">
+</head>
+<body class="site">
+  <nav class="site-nav" aria-label="Primary">
+    <div class="inner">
+      <a href="../index.html" class="brand-link">
+        <img src="../logo.svg" width="36" height="36" alt="Tyneside">
+        <span>TYNESIDE</span>
+        <span class="brand-sub">LOGISTICS</span>
+      </a>
+      <div class="nav-links">
+        <a href="../index.html">Home</a>
+        <a href="./" class="is-current" aria-current="page">Map</a>
+        <a href="../board.html">Board</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="map-shell">
+    <aside class="map-side">
+      <p class="hero-kicker">Ops · route visualiser</p>
+      <h1>Waypoints</h1>
+      <p class="lede">Click the map to add a stop. Drag a pin to move it. Route uses public OSRM; if that fails you still get a line so the board never looks dead.</p>
+      <div class="map-actions">
+        <button type="button" class="btn btn-fill" id="btn-route">Calculate route</button>
+        <button type="button" class="btn btn-ghost" id="btn-clear">Clear</button>
+      </div>
+      <p class="map-status" id="status">Add at least two waypoints.</p>
+      <dl class="stats" id="stats" hidden>
+        <div><dt>Stops</dt><dd id="stat-stops">0</dd></div>
+        <div><dt>Distance</dt><dd id="stat-km">—</dd></div>
+        <div><dt>Time</dt><dd id="stat-time">—</dd></div>
+        <div><dt>Engine</dt><dd id="stat-engine">—</dd></div>
+      </dl>
+      <ol class="stops" id="stops"></ol>
+    </aside>
+    <div id="map" role="application" aria-label="Tyneside route map"></div>
+  </div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script src="map.js"></script>
+</body>
+</html>

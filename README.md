@@ -1,26 +1,44 @@
-# hackathon-site
+# Tyneside Logistics — hackathon
 
-GitHub Pages front end for tonight’s hackathon.
+Front end for tonight. **GitHub Pages** later; **local first**.
 
-**Repo:** https://github.com/michaelthomsoncc/hackathon-site  
-**API:** https://github.com/michaelthomsoncc/hackathon-api
+**Site:** https://github.com/michaelthomsoncc/hackathon-site  
+**API:** https://github.com/michaelthomsoncc/hackathon-api  
+**Board:** [board.html](board.html) (Reeve, Connor, Michael, Lewis)
 
-## Local
-
-Open `index.html` in a browser, or:
+## Run locally (card 01)
 
 ```powershell
-python -m http.server 5500
+cd C:\Users\MichaelThomson\source\hackathon-site
+.\serve.ps1
 ```
 
-Then set `window.HACKATHON_API` in `config.js` (local default is `http://127.0.0.1:8080`).
+Open http://127.0.0.1:5500/ — home, map, board.
 
-## GitHub Pages
+Do **not** open `index.html` as `file://` if you want the API; browsers block that.
 
-Settings → Pages → **Deploy from a branch** → `main` / `/ (root)`.
+## Optional local API (card 02)
 
-After the first Pages build, the site is:
+```powershell
+cd C:\Users\MichaelThomson\source\hackathon-api
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+pip install -r requirements.txt
+uvicorn app.main:app --reload --port 8080
+```
 
-https://michaelthomsoncc.github.io/hackathon-site/
+http://127.0.0.1:8080/health
 
-When the Cloud Run API is up, put that URL in `config.js` and allow this origin in the API `CORS_ORIGINS`.
+Michael is away for the first two hours — **no Cloud Run until he is back**. Cards 10–11 are blocked on that.
+
+## What is already demoable
+
+| Page | Increment |
+|------|-----------|
+| `/` | Desktop chrome in Tyneside / logistics style |
+| `/app/` | Map, waypoints, OSRM route (straight-line fallback) |
+| `/board.html` | Kanban |
+
+## Rule
+
+Each board card is a releasable slice. The site must still look working when the card lands.

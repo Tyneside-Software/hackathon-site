@@ -3,21 +3,79 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Hackathon site</title>
+  <title>Tyneside Logistics</title>
+  <meta name="description" content="Tyneside Logistics — dispatch to field work. Hackathon increment: desktop site + route visualiser.">
+  <link rel="icon" href="logo.svg" type="image/svg+xml">
   <link rel="stylesheet" href="styles.css">
 </head>
-<body>
-  <main>
-    <p class="kicker">GitHub Pages · tonight</p>
-    <h1>Hackathon site</h1>
-    <p class="lede">
-      Front end lives here. API lives on Cloud Run
-      (<a href="https://github.com/michaelthomsoncc/hackathon-api">hackathon-api</a>).
-    </p>
-    <p class="status" id="status">Checking API…</p>
-    <pre id="out" hidden></pre>
-  </main>
-  <script src="config.js"></script>
-  <script src="app.js"></script>
+<body class="site">
+  <nav class="site-nav" aria-label="Primary">
+    <div class="inner">
+      <a href="index.html" class="brand-link">
+        <img src="logo.svg" width="36" height="36" alt="Tyneside">
+        <span>TYNESIDE</span>
+        <span class="brand-sub">LOGISTICS</span>
+      </a>
+      <div class="nav-links">
+        <a href="index.html" class="is-current" aria-current="page">Home</a>
+        <a href="app/">Map</a>
+        <a href="board.html">Board</a>
+      </div>
+      <a class="btn btn-fill" href="app/">Open map →</a>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <div class="wrap">
+      <p class="hero-kicker">Hackathon night · local-first · releasable each card</p>
+      <h1>TYNESIDE<br>LOGISTICS</h1>
+      <p class="hero-tag">
+        Dispatch → field work.<br>
+        Phase 1 spine: jobs, workers, routes.
+      </p>
+      <p class="hero-lead">
+        Tonight we start where the product is weakest and most visible:
+        <strong>a working desktop site</strong> and a
+        <strong>maps / route visualiser</strong> with waypoints.
+        No Cloud Run until Michael is back. Everything here runs on your machine.
+      </p>
+      <div class="hero-actions">
+        <a class="btn btn-fill" href="app/">Route visualiser →</a>
+        <a class="btn btn-ghost" href="board.html">Kanban board</a>
+      </div>
+    </div>
+  </header>
+
+  <section class="section">
+    <div class="wrap">
+      <h2>This increment is live</h2>
+      <p class="lede">The site is meant to look working at every step. Open the map, drop waypoints, get a route.</p>
+      <div class="grid-2">
+        <div class="panel">
+          <h3>Desktop chrome</h3>
+          <p>Same family as tyneside.software: sticky nav, amber logistics skin, honest copy. This page is that slice.</p>
+        </div>
+        <div class="panel">
+          <h3>Map + waypoints</h3>
+          <p>Click the map to pin a stop. Route uses public OSRM when the network is up; otherwise a straight-line fallback so it never looks broken.</p>
+        </div>
+        <div class="panel">
+          <h3>Local, not Cloud Run</h3>
+          <p>First two hours: <code>serve.ps1</code> for the site, optional local API on :8080. Persistence and accounts wait until the backend is up.</p>
+        </div>
+        <div class="panel">
+          <h3>What this is for</h3>
+          <p>Tyneside Logistics: iCabbi-class dispatch, then cleaning on the same spine. Docs live on tyneside.software/logistics. Tonight we prove the visual layer.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="foot">
+    <div class="wrap">
+      Reeve · Connor · Michael · Lewis · hackathon night ·
+      <a href="board.html">board</a>
+    </div>
+  </footer>
 </body>
 </html>
