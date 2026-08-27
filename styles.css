@@ -95,6 +95,25 @@ a:hover { color: var(--link-hover); }
 @keyframes lewis-blink {
   50% { background: #fff200; color: #ff00aa; border-bottom-color: #ff00aa; }
 }
+
+.i-am-here {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 1.5rem auto;
+  width: min(920px, calc(100% - 2rem));
+  background: var(--accent);
+  color: #0c1219;
+  font-size: clamp(1.6rem, 5vw, 2.8rem);
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-align: center;
+  text-transform: uppercase;
+  padding: 1.25rem 1.5rem;
+  border-radius: var(--radius);
+  border: 3px solid #d97706;
+  box-shadow: 0 0 0 6px var(--accent-soft);
+}
 @media (max-width: 720px) {
   .site-nav .btn-fill { display: none; }
   .nav-links { margin-left: 0; width: 100%; }
