@@ -250,3 +250,152 @@ a:hover { color: var(--link-hover); }
 .who-table tbody tr[data-person] { cursor: pointer; }
 .who-table tbody tr[data-person]:hover { background: rgba(245, 158, 11, 0.06); }
 .who-table tbody tr.is-on { background: var(--accent-soft); }
+
+/* Lewis log page */
+.lewis-hero h1 { letter-spacing: -0.04em; }
+.lewis-stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.75rem;
+  margin-top: -0.4rem;
+}
+@media (max-width: 800px) { .lewis-stats { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 480px) { .lewis-stats { grid-template-columns: 1fr; } }
+.lewis-stat {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 1rem 1.05rem 1.1rem;
+  box-shadow: inset 3px 0 0 var(--accent);
+}
+.lewis-stat .k {
+  display: block;
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.lewis-stat .v {
+  display: block;
+  font-size: 1.7rem;
+  font-weight: 750;
+  letter-spacing: -0.03em;
+  color: var(--heading);
+  margin: 0.25rem 0 0.15rem;
+  line-height: 1.15;
+  font-variant-numeric: tabular-nums;
+}
+.lewis-stat .n { display: block; font-size: 0.82rem; color: var(--muted); }
+.lewis-page pre {
+  background: #0a1016;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.85rem 1rem;
+  overflow-x: auto;
+  margin: 0.7rem 0 0.85rem;
+}
+.lewis-page code {
+  font-family: ui-monospace, "Cascadia Code", Consolas, monospace;
+  font-size: 0.86em;
+  color: #fde68a;
+}
+.lewis-page p code, .lewis-page li code {
+  background: var(--accent-soft);
+  border: 1px solid rgba(245, 158, 11, 0.25);
+  border-radius: 5px;
+  padding: 0.05rem 0.35rem;
+  color: var(--link);
+}
+.lewis-page pre code {
+  background: none;
+  border: 0;
+  padding: 0;
+  color: #e8eef4;
+  font-size: 0.84rem;
+  line-height: 1.55;
+}
+.lewis-page ul { margin: 0.4rem 0 0.7rem 1.15rem; color: var(--muted); }
+.lewis-page ul li { margin: 0.2rem 0; }
+.lewis-links { list-style: none; margin-left: 0 !important; }
+.lewis-links li {
+  margin: 0.35rem 0;
+  padding: 0.45rem 0.7rem;
+  background: #0a1016;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+.lewis-timeline {
+  list-style: none;
+  margin: 0;
+  padding: 0 0 0 0.35rem;
+  border-left: 2px solid var(--border);
+}
+.lewis-timeline > li {
+  display: grid;
+  grid-template-columns: 3.2rem 1fr;
+  gap: 0.85rem;
+  position: relative;
+  padding: 0 0 1.6rem 1.15rem;
+}
+.lewis-timeline > li:last-child { padding-bottom: 0; }
+.lewis-timeline .step {
+  position: absolute;
+  left: -1.15rem;
+  top: 0.1rem;
+  width: 2.2rem;
+  height: 2.2rem;
+  border-radius: 999px;
+  background: #0c1219;
+  border: 2px solid var(--accent);
+  color: var(--accent);
+  font-size: 0.68rem;
+  font-weight: 750;
+  letter-spacing: 0.04em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.lewis-timeline .body {
+  grid-column: 1 / -1;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 1.05rem 1.15rem 1.15rem;
+  margin-left: 1.1rem;
+}
+.lewis-timeline h3 {
+  font-size: 1.05rem;
+  margin-bottom: 0.4rem;
+  color: var(--heading);
+}
+.lewis-timeline p { color: var(--muted); margin-bottom: 0.55rem; }
+.lewis-timeline p:last-child { margin-bottom: 0; }
+.lewis-loop {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0.7rem;
+  counter-reset: loop;
+}
+@media (max-width: 900px) { .lewis-loop { grid-template-columns: 1fr; } }
+.lewis-loop li {
+  counter-increment: loop;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 1rem 1.05rem 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  min-width: 0;
+}
+.lewis-loop li::before {
+  content: counter(loop, decimal-leading-zero);
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  color: var(--accent);
+  font-weight: 750;
+}
+.lewis-loop strong { color: var(--heading); font-size: 1.05rem; }
+.lewis-loop span { color: var(--muted); font-size: 0.9rem; }
+.lewis-table td:first-child { font-weight: 650; color: var(--heading); white-space: nowrap; }
