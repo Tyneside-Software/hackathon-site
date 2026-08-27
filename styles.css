@@ -511,4 +511,3 @@ details.fix summary::before {
 details.fix[open] summary::before { content: "–"; }
 details.fix p { color: var(--muted); margin: 0.35rem 0 0.55rem; }
 details.fix p:last-child { margin-bottom: 0; }
-
