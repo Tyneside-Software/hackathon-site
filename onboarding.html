@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Onboarding · Tyneside Logistics</title>
+  <meta name="description" content="Clone hackathon-site and hackathon-api as siblings, run the local stack, then pull, branch, push, and merge into main.">
+  <link rel="icon" href="logo.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="site lewis-page">
+  <nav class="site-nav" aria-label="Primary">
+    <div class="inner">
+      <a href="index.html" class="brand-link">
+        <img src="logo.svg" width="36" height="36" alt="Tyneside">
+        <span>TYNESIDE</span>
+        <span class="brand-sub">LOGISTICS</span>
+      </a>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="app/">Map</a>
+        <a href="board.html">Board</a>
+        <a href="onboarding.html" class="is-current" aria-current="page">Onboarding</a>
+        <a href="lewis.html">Lewis</a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="hero lewis-hero">
+    <div class="wrap">
+      <p class="hero-kicker">Hackathon night · local-first · clone, run, then git</p>
+      <h1>Get the stack running</h1>
+      <p class="hero-tag">Two repos. One source folder. Two processes. Then a branch.</p>
+      <p class="hero-lead">
+        Clone <strong>hackathon-site</strong> and <strong>hackathon-api</strong> next to each other,
+        start the desktop site on <code>:5500</code> and the API on <code>:8080</code>,
+        then work on a branch, push it, and merge into <code>main</code>.
+        Do not open HTML as <code>file://</code> — the browser will block the API.
+      </p>
+      <div class="hero-actions">
+        <a class="btn btn-fill" href="#steps">Follow the steps →</a>
+        <a class="btn btn-ghost" href="#git">Git: pull · branch · push · merge</a>
+        <a class="btn btn-ghost" href="#fix">Fix a problem</a>
+        <a class="btn btn-ghost" href="https://github.com/Tyneside-Software/hackathon-site" target="_blank" rel="noopener">Site repo</a>
+        <a class="btn btn-ghost" href="https://github.com/Tyneside-Software/hackathon-api" target="_blank" rel="noopener">API repo</a>
+      </div>
+    </div>
+  </header>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="lewis-stats" aria-label="What you will have">
+        <div class="lewis-stat">
+          <span class="k">Repos</span>
+          <span class="v">2</span>
+          <span class="n">siblings under source\</span>
+        </div>
+        <div class="lewis-stat">
+          <span class="k">Site</span>
+          <span class="v">:5500</span>
+          <span class="n">http.server · this page</span>
+        </div>
+        <div class="lewis-stat">
+          <span class="k">API</span>
+          <span class="v">:8080</span>
+          <span class="n">FastAPI · /health</span>
+        </div>
+        <div class="lewis-stat">
+          <span class="k">Command</span>
+          <span class="v">1</span>
+          <span class="n">.\start.ps1 from the site</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="toc">
+    <div class="wrap">
+      <h2>On this page</h2>
+      <p class="lede">Do the numbered steps in order. Jump to troubleshooting only when a command fails.</p>
+      <ol class="onboard-toc">
+        <li><a href="#need">What you need</a></li>
+        <li><a href="#steps">Clone both repos into a shared source folder</a></li>
+        <li><a href="#run">Run the website (and API)</a></li>
+        <li><a href="#check">Prove it is working</a></li>
+        <li><a href="#git">Git: pull, branches, push, merge into main</a></li>
+        <li><a href="#fix">Fix the usual problems</a></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="section" id="need">
+    <div class="wrap">
+      <h2>What you need first</h2>
+      <p class="lede">Install these, then <strong>close and reopen PowerShell</strong> so PATH updates stick.</p>
+      <div class="grid-2">
+        <div class="panel">
+          <h3>Git</h3>
+          <p>Git for Windows. After install, a new terminal should print a version for <code>git --version</code>.</p>
+        </div>
+        <div class="panel">
+          <h3>Python 3</h3>
+          <p>From <a href="https://www.python.org/downloads/" target="_blank" rel="noopener">python.org</a>, not the Microsoft Store stub. Tick <strong>Add python.exe to PATH</strong>. Prefer the <code>py</code> launcher if <code>python</code> is broken.</p>
+        </div>
+        <div class="panel">
+          <h3>Org access</h3>
+          <p>You must be able to see
+            <a href="https://github.com/Tyneside-Software/hackathon-site">Tyneside-Software/hackathon-site</a>
+            and
+            <a href="https://github.com/Tyneside-Software/hackathon-api">hackathon-api</a>
+            while signed in. A 404 means you are not in the org, or you are signed into the wrong GitHub account.
+          </p>
+        </div>
+        <div class="panel">
+          <h3>PowerShell</h3>
+          <p>Windows PowerShell 5.1 is enough. Run commands from a folder you own — never from <code>C:\Windows\System32</code>.</p>
+        </div>
+      </div>
+      <p class="lede" style="margin-top:1.1rem">Sanity check in a <strong>new</strong> PowerShell window:</p>
+      <pre><code>git --version
+py --version
+python --version
+whoami
+Get-Location</code></pre>
+      <p>
+        <code>git</code> and at least one of <code>py</code> / <code>python</code> must print a real version
+        (3.10+). <code>Get-Location</code> must <em>not</em> be System32. If Python opens the Store, skip to
+        <a href="#fix-python">Fix: Python is the Store stub</a>.
+      </p>
+    </div>
+  </section>
+
+  <section class="section" id="steps">
+    <div class="wrap">
+      <h2>Clone both repos into a shared source folder</h2>
+      <p class="lede">
+        The start script looks <strong>next door</strong> for the API. The folder names must be exact,
+        and they must be siblings — not one inside the other.
+      </p>
+
+      <ol class="lewis-timeline">
+        <li>
+          <span class="step">01</span>
+          <div class="body">
+            <h3>Create the shared parent</h3>
+            <p>
+              Use <code>source</code> under your user profile. Any parent is fine as long as both clones
+              sit directly inside it. Do not clone into Downloads, Program Files, or the Windows directory.
+            </p>
+            <pre><code>mkdir $env:USERPROFILE\source
+cd $env:USERPROFILE\source
+Get-Location</code></pre>
+            <p>You should now be in <code>C:\Users\&lt;you&gt;\source</code>.</p>
+          </div>
+        </li>
+        <li>
+          <span class="step">02</span>
+          <div class="body">
+            <h3>Clone the site and the API as siblings</h3>
+            <p>HTTPS (typical):</p>
+            <pre><code>git clone https://github.com/Tyneside-Software/hackathon-site.git
+git clone https://github.com/Tyneside-Software/hackathon-api.git</code></pre>
+            <p>
+              Clone from the <strong>Tyneside-Software</strong> org, not a personal fork, unless someone
+              has told you otherwise.
+            </p>
+          </div>
+        </li>
+        <li>
+          <span class="step">03</span>
+          <div class="body">
+            <h3>Confirm the layout <code>start.ps1</code> expects</h3>
+            <p>From <code>source</code>:</p>
+            <pre><code>Get-ChildItem
+Test-Path .\hackathon-site\start.ps1
+Test-Path .\hackathon-api\app\main.py</code></pre>
+            <p>Both <code>Test-Path</code> lines must print <code>True</code>. The tree is:</p>
+            <pre><code>C:\Users\&lt;you&gt;\source\
+  hackathon-site\          ← front end (this website)
+    start.ps1
+    index.html
+    onboarding.html
+    app\
+  hackathon-api\           ← back end
+    app\main.py
+    requirements.txt</code></pre>
+            <div class="warn-panel">
+              <strong>Wrong:</strong> <code>source\hackathon-site\hackathon-api</code>
+              (nested). The start script will not find <code>app\main.py</code>.
+              <br>
+              <strong>Also wrong:</strong> cloning while PowerShell is still in System32,
+              or renaming the folders.
+            </div>
+          </div>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="section" id="run">
+    <div class="wrap">
+      <h2>Run the website</h2>
+      <p class="lede">
+        One command starts both processes. It opens two PowerShell windows and your browser.
+        Close those two windows to stop the servers — closing the launcher is not enough.
+      </p>
+
+      <ol class="lewis-timeline">
+        <li>
+          <span class="step">04</span>
+          <div class="body">
+            <h3>Preferred: site + API together</h3>
+            <pre><code>cd $env:USERPROFILE\source\hackathon-site
+.\start.ps1</code></pre>
+            <p>
+              First run creates <code>hackathon-api\.venv</code>, installs FastAPI / uvicorn,
+              then serves:
+            </p>
+            <ul class="lewis-links">
+              <li>Front end — <a href="http://127.0.0.1:5500/">http://127.0.0.1:5500/</a></li>
+              <li>Map — <a href="http://127.0.0.1:5500/app/">http://127.0.0.1:5500/app/</a></li>
+              <li>Board — <a href="http://127.0.0.1:5500/board.html">http://127.0.0.1:5500/board.html</a></li>
+              <li>This page — <a href="http://127.0.0.1:5500/onboarding.html">http://127.0.0.1:5500/onboarding.html</a></li>
+              <li>API health — <a href="http://127.0.0.1:8080/health">http://127.0.0.1:8080/health</a></li>
+              <li>API docs — <a href="http://127.0.0.1:8080/docs">http://127.0.0.1:8080/docs</a></li>
+            </ul>
+            <p>
+              If PowerShell refuses to run the script, see
+              <a href="#fix-policy">Fix: running scripts is disabled</a>.
+            </p>
+          </div>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="section" id="check">
+    <div class="wrap">
+      <h2>Prove it is working</h2>
+      <p class="lede">Tick these before you start editing. If any fail, go to troubleshooting with the exact error text.</p>
+      <ul class="check-list">
+        <li>Home, Map, Board, and Onboarding all load from <code>:5500</code>.</li>
+        <li><code>:8080/health</code> returns JSON with <code>ok: true</code>.</li>
+        <li>The address bar says <code>http://127.0.0.1:...</code>, never <code>file://</code>.</li>
+        <li>Two extra PowerShell windows stay open (site + API) after <code>.\start.ps1</code>.</li>
+        <li><code>hackathon-api\.venv</code> exists after the first successful start.</li>
+      </ul>
+      <p>
+        When those pass, do not keep stacking commits on <code>main</code>.
+        Pull, branch, push the branch, then merge into <code>main</code> —
+        <a href="#git">the git steps below</a>.
+      </p>
+    </div>
+  </section>
+
+  <section class="section" id="git">
+    <div class="wrap">
+      <h2>Next: pull, branches, push, and merge into main</h2>
+      <p class="lede">
+        Commands below use <code>hackathon-site</code>. Repeat the same sequence in
+        <code>hackathon-api</code> when the card is backend work.
+        Never force-push <code>main</code>.
+      </p>
+
+      <ol class="lewis-loop" aria-label="Git loop">
+        <li>
+          <strong>Pull</strong>
+          <span>Update local <code>main</code> from GitHub before you start.</span>
+        </li>
+        <li>
+          <strong>Branch</strong>
+          <span>Do the card on a named branch, not on <code>main</code>.</span>
+        </li>
+        <li>
+          <strong>Commit</strong>
+          <span>Named files only. Confirm localhost still looks working.</span>
+        </li>
+        <li>
+          <strong>Push</strong>
+          <span>Publish <em>the branch</em> so GitHub has your commits.</span>
+        </li>
+        <li>
+          <strong>Merge</strong>
+          <span>Land the branch on <code>main</code>, then everyone pulls.</span>
+        </li>
+      </ol>
+
+      <ol class="lewis-timeline" style="margin-top:1.8rem">
+        <li>
+          <span class="step">05</span>
+          <div class="body">
+            <h3>One-time: git identity in this repo</h3>
+            <p>
+              Git will refuse to commit until <code>user.name</code> and <code>user.email</code> exist.
+              Set them <em>locally</em> so you do not overwrite a teammate’s global config:
+            </p>
+            <pre><code>cd $env:USERPROFILE\source\hackathon-site
+git config user.name "Your Name"
+git config user.email "you@example.com"
+git config --local --get-regexp user.</code></pre>
+            <p>Use the name and email on your GitHub account. Repeat in <code>hackathon-api</code>.</p>
+          </div>
+        </li>
+        <li>
+          <span class="step">06</span>
+          <div class="body">
+            <h3>Pull <code>main</code> so you start current</h3>
+            <p>
+              <code>git pull</code> downloads new commits from GitHub and joins them into your current branch.
+              Always do this on <code>main</code> before you branch, and again before you merge.
+            </p>
+            <pre><code>cd $env:USERPROFILE\source\hackathon-site
+git status
+git checkout main
+git pull origin main</code></pre>
+            <p>
+              <code>git status</code> should say you are on <code>main</code> and
+              <em>working tree clean</em>. If you have leftover local edits, commit or stash them first —
+              pull will refuse to overwrite them. Same commands in the API repo when you need it.
+            </p>
+            <p>
+              Later, when you already have local commits that GitHub does not, and Git rejects a push with
+              “non-fast-forward”, update with rebase instead of a messy extra merge:
+            </p>
+            <pre><code>git pull --rebase origin main</code></pre>
+            <p>That replays your commits on top of theirs. Do not <code>git push --force</code> to <code>main</code>.</p>
+          </div>
+        </li>
+        <li>
+          <span class="step">07</span>
+          <div class="body">
+            <h3>Create a branch for the card</h3>
+            <p>
+              A branch is a named line of commits. <code>main</code> stays the working site;
+              your card lives on the branch until it is ready to merge.
+              Name it <code>&lt;you&gt;/&lt;short-topic&gt;</code> so the rest of the table can see who owns it.
+            </p>
+            <pre><code>git checkout main
+git pull origin main
+git checkout -b reeve/onboarding-git
+git status
+git branch</code></pre>
+            <p>
+              <code>git checkout -b</code> creates the branch and switches you onto it.
+              <code>git status</code> should now say <code>On branch reeve/onboarding-git</code>
+              (use your name and topic). The star in <code>git branch</code> is the branch you are on.
+            </p>
+            <p>Switch later with <code>git checkout main</code> or <code>git checkout reeve/onboarding-git</code>.</p>
+            <div class="warn-panel">
+              Do not commit new work on <code>main</code> unless you have been told to.
+              If you already did, see <a href="#fix-wrong-branch">Fix: I committed on main by mistake</a>.
+            </div>
+          </div>
+        </li>
+        <li>
+          <span class="step">08</span>
+          <div class="body">
+            <h3>Edit, run, then commit on that branch</h3>
+            <p>
+              Change the files for the card. Refresh <a href="http://127.0.0.1:5500/">http://127.0.0.1:5500/</a>
+              and confirm Home, Map, and Board still load. Then commit <em>named files</em>, not a blind add of everything:
+            </p>
+            <pre><code>git status
+git add onboarding.html
+git commit -m "Add git pull, branch, push, and merge steps to onboarding."
+git log -1 --oneline</code></pre>
+            <p>
+              In <code>hackathon-api</code>, <code>.venv</code> and <code>.env</code> are gitignored — leave them untracked.
+              Check <code>git status</code> before you add. The commit lives only on your machine until you push.
+            </p>
+          </div>
+        </li>
+        <li>
+          <span class="step">09</span>
+          <div class="body">
+            <h3>Push the branch to GitHub</h3>
+            <p>
+              Push publishes your branch so others (and the merge) can see it.
+              The first push of a new branch needs <code>-u</code> to set the upstream:
+            </p>
+            <pre><code>git push -u origin reeve/onboarding-git</code></pre>
+            <p>
+              After that, more commits on the same branch are just <code>git push</code>.
+              Check GitHub: you should see the branch on
+              <a href="https://github.com/Tyneside-Software/hackathon-site" target="_blank" rel="noopener">hackathon-site</a>
+              (or the API repo). You have <strong>not</strong> changed <code>main</code> yet.
+            </p>
+            <p>
+              If GitHub already has commits you do not, pull the branch first
+              (<code>git pull</code> once upstream is set), then push.
+            </p>
+          </div>
+        </li>
+        <li>
+          <span class="step">10</span>
+          <div class="body">
+            <h3>Bring <code>main</code> into your branch if it moved</h3>
+            <p>
+              While you worked, someone else may have merged. Update your branch so the later merge is small:
+            </p>
+            <pre><code>git checkout reeve/onboarding-git
+git fetch origin
+git merge origin/main
+git push</code></pre>
+            <p>
+              If Git stops on a conflict, it lists the files. Open each, keep the right lines
+              (both sides if both belong), delete the <code>&lt;&lt;&lt;&lt;&lt;&lt;&lt;</code> / <code>=======</code> /
+              <code>&gt;&gt;&gt;&gt;&gt;&gt;&gt;</code> markers, then:
+            </p>
+            <pre><code>git add path\to\fixed-file
+git status
+git commit
+git push</code></pre>
+            <p>The site must still load after you resolve. Do not skip a conflicted file.</p>
+          </div>
+        </li>
+        <li>
+          <span class="step">11</span>
+          <div class="body">
+            <h3>Merge the branch into <code>main</code></h3>
+            <p>
+              Two equivalent ways. Use a pull request if someone else should glance at the diff;
+              merge locally if you are landing a small card and <code>main</code> is quiet.
+            </p>
+            <p><strong>A — GitHub pull request (preferred when two people finish at once)</strong></p>
+            <ol>
+              <li>After the branch is pushed, open the repo on GitHub.</li>
+              <li>Compare &amp; pull request: base <code>main</code> ← compare your branch.</li>
+              <li>Title it like the card. Merge (Create a merge commit or Squash is fine tonight).</li>
+              <li>Then update your machine:</li>
+            </ol>
+            <pre><code>git checkout main
+git pull origin main</code></pre>
+            <p><strong>B — merge locally, then push <code>main</code></strong></p>
+            <pre><code>git checkout main
+git pull origin main
+git merge reeve/onboarding-git
+# refresh localhost — Home / Map / Board still work
+git push origin main</code></pre>
+            <p>
+              <code>git merge</code> brings the branch commits onto <code>main</code>.
+              If GitHub’s <code>main</code> moved after your pull, the push is rejected — do
+              <code>git pull --rebase origin main</code> (or merge origin/main), confirm the site, then push again.
+              Never <code>--force</code> on <code>main</code>.
+            </p>
+          </div>
+        </li>
+        <li>
+          <span class="step">12</span>
+          <div class="body">
+            <h3>Delete the branch and pull on every machine</h3>
+            <p>Once it is on <code>main</code>, the branch is done:</p>
+            <pre><code>git checkout main
+git pull origin main
+git branch -d reeve/onboarding-git
+git push origin --delete reeve/onboarding-git</code></pre>
+            <p>
+              <code>-d</code> refuses if the branch never merged — that is a safety rail.
+              Everyone else runs <code>git checkout main</code> then <code>git pull origin main</code>
+              in both repos before starting the next card.
+            </p>
+            <div class="warn-panel">
+              <strong>Do not</strong> push straight to <code>main</code> as the default loop.
+              Branch → push branch → merge → everyone pulls.
+              Force-push, rewriting published history, and “I will just overwrite theirs” are out.
+            </div>
+          </div>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="section" id="fix">
+    <div class="wrap">
+      <h2>Fix the usual problems</h2>
+      <p class="lede">
+        Open the row that matches what you saw. Most failures on this stack are PATH, folder layout,
+        execution policy, or a port still held by an old window.
+      </p>
+
+      <details class="fix" id="fix-policy">
+        <summary>Running scripts is disabled / start.ps1 will not run</summary>
+        <p>Error looks like:</p>
+        <pre><code>.\start.ps1 : File cannot be loaded because running scripts is disabled on this system.</code></pre>
+        <p>Allow your own scripts (once per machine):</p>
+        <pre><code>Set-ExecutionPolicy -Scope CurrentUser RemoteSigned</code></pre>
+        <p>Or run this copy without changing policy:</p>
+        <pre><code>powershell -ExecutionPolicy Bypass -File .\start.ps1</code></pre>
+      </details>
+
+      <details class="fix" id="fix-python">
+        <summary>Python is missing, or it opens the Microsoft Store</summary>
+        <p>Typical messages:</p>
+        <pre><code>Python was not found; run without arguments to install from the Microsoft Store.
+py : The term 'py' is not recognized as the name of a cmdlet.</code></pre>
+        <p>
+          The Store alias under WindowsApps is not a real interpreter.
+          Install Python from <a href="https://www.python.org/downloads/" target="_blank" rel="noopener">python.org</a>,
+          tick <strong>Add python.exe to PATH</strong>, then <strong>close every terminal</strong> and open a new one.
+        </p>
+        <p>Check:</p>
+        <pre><code>py --list
+py -3 --version
+Get-Command python | Format-List Source</code></pre>
+        <p>
+          If <code>python</code> still points at WindowsApps but <code>py -3</code> works, use <code>py -3</code>
+          for any manual server commands. For <code>start.ps1</code> (which calls <code>python</code>),
+          either fix PATH or run the site and API commands yourself with <code>py -3</code>.
+        </p>
+      </details>
+
+      <details class="fix">
+        <summary>Git is not recognized / clone fails with 404 or permission denied</summary>
+        <p><code>git</code> missing: install Git for Windows, restart the terminal, retry <code>git --version</code>.</p>
+        <p><code>Repository not found</code> / 404: you are not in <strong>Tyneside-Software</strong>, or you cloned the old personal URL. Use:</p>
+        <pre><code>https://github.com/Tyneside-Software/hackathon-site.git
+https://github.com/Tyneside-Software/hackathon-api.git</code></pre>
+        <p>HTTPS auth looping: sign in with a GitHub account that can see the org, or run <code>gh auth login</code> if you use GitHub CLI.</p>
+        <p>SSH <code>Permission denied (publickey)</code>: either add your key to GitHub, or switch to the HTTPS clone URLs above.</p>
+      </details>
+
+      <details class="fix">
+        <summary>start.ps1: “API not found” next to hackathon-site</summary>
+        <p>
+          The script expects <code>..\hackathon-api\app\main.py</code>. That fails if the API was never cloned,
+          was renamed, or was cloned <em>inside</em> the site repo.
+        </p>
+        <pre><code>cd $env:USERPROFILE\source
+Get-ChildItem
+Test-Path .\hackathon-api\app\main.py</code></pre>
+        <p>If that is <code>False</code>, clone it there (do not nest it):</p>
+        <pre><code>cd $env:USERPROFILE\source
+git clone https://github.com/Tyneside-Software/hackathon-api.git</code></pre>
+        <p>Then <code>cd hackathon-site</code> and run <code>.\start.ps1</code> again.</p>
+      </details>
+
+      <details class="fix">
+        <summary>I cloned into System32, nested the repos, or used the wrong folder names</summary>
+        <p>
+          PowerShell often opens in <code>C:\Windows\System32</code>. Cloning there is a mess.
+          Move the work to your profile and delete the accidental copy.
+        </p>
+        <pre><code># see where you actually are
+Get-Location
+
+# if you already cloned in the wrong place, start clean:
+mkdir $env:USERPROFILE\source -ErrorAction SilentlyContinue
+cd $env:USERPROFILE\source
+git clone https://github.com/Tyneside-Software/hackathon-site.git
+git clone https://github.com/Tyneside-Software/hackathon-api.git</code></pre>
+        <p>Folder names must be exactly <code>hackathon-site</code> and <code>hackathon-api</code>.</p>
+      </details>
+
+      <details class="fix">
+        <summary>Port 5500 or 8080 is already in use</summary>
+        <p>You probably still have a previous server window open. Close those two PowerShell windows first.</p>
+        <p>If that is not enough:</p>
+        <pre><code>netstat -ano | findstr ":5500"
+netstat -ano | findstr ":8080"</code></pre>
+        <p>Last column is the PID. Stop it:</p>
+        <pre><code>taskkill /PID &lt;pid&gt; /F</code></pre>
+        <p>Then run <code>.\start.ps1</code> again.</p>
+      </details>
+
+      <details class="fix">
+        <summary>venv / pip / uvicorn failed</summary>
+        <p><code>Activate.ps1</code> blocked: same as execution policy — <a href="#fix-policy">fix that</a>, then:</p>
+        <pre><code>cd $env:USERPROFILE\source\hackathon-api
+.\.venv\Scripts\Activate.ps1</code></pre>
+        <p><code>No module named uvicorn</code>: the venv is missing or you ran uvicorn with system Python. Recreate:</p>
+        <pre><code>cd $env:USERPROFILE\source\hackathon-api
+py -3 -m venv .venv
+.\.venv\Scripts\python.exe -m pip install -r requirements.txt
+.\.venv\Scripts\python.exe -m uvicorn app.main:app --reload --port 8080</code></pre>
+        <p>
+          Using the venv’s <code>python.exe</code> directly avoids activate entirely.
+          <code>start.ps1</code> already does this once Python itself works.
+        </p>
+      </details>
+
+      <details class="fix">
+        <summary>The site loads but the API does not / browser console shows CORS or failed fetch</summary>
+        <p>Check you are on <code>http://127.0.0.1:5500/</code>, not <code>file://</code> and not a random other port.</p>
+        <p>
+          Stick to <code>127.0.0.1</code> or <code>localhost</code> consistently.
+          CORS in the API allow-list is <code>http://127.0.0.1:5500</code> and <code>http://localhost:5500</code>.
+        </p>
+        <p>Confirm the API process is up:</p>
+        <pre><code>curl http://127.0.0.1:8080/health</code></pre>
+        <p>
+          <code>config.js</code> should still say <code>http://127.0.0.1:8080</code> until Cloud Run exists.
+          Do not change it for local work.
+        </p>
+      </details>
+
+      <details class="fix">
+        <summary>Windows Firewall popup / browser cannot connect to 127.0.0.1</summary>
+        <p>Allow Python on private networks if Windows asks. You only need loopback — you are not hosting on the LAN.</p>
+        <p>If the tab spins, the server window usually has the real error (port in use, or Python missing).</p>
+      </details>
+
+      <details class="fix">
+        <summary>Pages look stale after I edit a file</summary>
+        <p>The static server reads files from disk on each request. Hard-refresh the tab (Ctrl+F5).</p>
+        <p>If you opened <code>file://</code> earlier, close that tab and go through <code>http://127.0.0.1:5500/</code>.</p>
+      </details>
+
+      <details class="fix">
+        <summary>git push rejected, or commit is blocked because user.name is not set</summary>
+        <p>Set identity <em>in this repo only</em> (do not overwrite a teammate’s global config):</p>
+        <pre><code>cd $env:USERPROFILE\source\hackathon-site
+git config user.name "Your Name"
+git config user.email "you@example.com"</code></pre>
+        <p>Push rejected because the remote branch moved (non-fast-forward):</p>
+        <pre><code>git pull --rebase origin main
+git push origin main</code></pre>
+        <p>
+          If you are on a feature branch, rebase that branch instead:
+          <code>git pull --rebase origin reeve/onboarding-git</code> then <code>git push</code>.
+          Do not force-push. Fix conflicts, keep the site loading, then push again.
+        </p>
+      </details>
+
+      <details class="fix">
+        <summary>failed to push some refs / no upstream branch</summary>
+        <p>First push of a new branch needs the upstream set. Use your actual branch name:</p>
+        <pre><code>git push -u origin reeve/onboarding-git</code></pre>
+        <p>After that, <code>git push</code> and <code>git pull</code> know which remote branch to use.</p>
+      </details>
+
+      <details class="fix" id="fix-wrong-branch">
+        <summary>I committed on main by mistake</summary>
+        <p>Do not reset if you have already pushed. Move the commits onto a branch, then restore main:</p>
+        <pre><code>git branch reeve/rescue
+git log origin/main..HEAD --oneline
+git reset --hard origin/main
+git checkout reeve/rescue
+git push -u origin reeve/rescue</code></pre>
+        <p>
+          Only use <code>reset --hard</code> if you are sure those commits exist on <code>reeve/rescue</code>
+          and you have not mixed in other people’s unpublished work. Then merge the rescue branch as in step 11.
+        </p>
+      </details>
+
+      <details class="fix">
+        <summary>Merge conflict while pulling or merging into main</summary>
+        <p>Git lists unmerged paths. Open each file, keep the correct content, remove conflict markers, then:</p>
+        <pre><code>git add path\to\file
+git status
+git commit
+git push</code></pre>
+        <p>
+          If you are mid-rebase and want to stop: <code>git rebase --abort</code>.
+          Mid-merge: <code>git merge --abort</code>. That returns you to the pre-merge state.
+        </p>
+        <p>Refresh localhost after resolving. Home, Map, and Board must still load.</p>
+      </details>
+
+      <details class="fix">
+        <summary>pull would overwrite local changes / working tree not clean</summary>
+        <p>Commit what you want to keep, or stash the rest, then pull:</p>
+        <pre><code>git status
+git stash push -m "wip before pull"
+git pull origin main
+git stash pop</code></pre>
+        <p>If stash pop conflicts, fix files the same way as a merge conflict, then <code>git add</code> them.</p>
+      </details>
+
+      <details class="fix">
+        <summary>Cannot delete branch: not fully merged</summary>
+        <p>
+          <code>git branch -d</code> is refusing because those commits are not on <code>main</code> yet.
+          Merge first (step 11), then delete. To throw the branch away on purpose:
+          <code>git branch -D reeve/onboarding-git</code> — that drops the commits locally. Do not do this
+          if the work still matters.
+        </p>
+      </details>
+
+      <details class="fix">
+        <summary>README mentions serve.ps1 but the file is not there</summary>
+        <p>
+          That is expected tonight. Site-only serving is
+          <code>py -3 -m http.server 5500</code> from <code>hackathon-site</code>.
+          The combined boot is <code>.\start.ps1</code>.
+        </p>
+      </details>
+    </div>
+  </section>
+
+  <footer class="foot">
+    <div class="wrap">
+      Reeve · Connor · Michael · Lewis · hackathon night ·
+      <a href="board.html">board</a> ·
+      <a href="onboarding.html">onboarding</a> ·
+      <a href="lewis.html">Lewis's log</a>
+    </div>
+  </footer>
+</body>
+</html>
