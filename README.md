@@ -2,11 +2,24 @@
 
 Front end for tonight. **GitHub Pages** later; **local first**.
 
-**Site:** https://github.com/michaelthomsoncc/hackathon-site  
-**API:** https://github.com/michaelthomsoncc/hackathon-api  
+**Site:** https://github.com/Tyneside-Software/hackathon-site  
+**API:** https://github.com/Tyneside-Software/hackathon-api  
 **Board:** [board.html](board.html) (Reeve, Connor, Michael, Lewis)
 
-## Run locally (card 01)
+Clone from the **Tyneside-Software** org. First cards: Lewis and Reeve get front end **and** back end running; everyone proves **edit → run → push**.
+
+## Run locally (card 21 — Reeve)
+
+Clone **hackathon-site** and **hackathon-api** as sibling folders, then:
+
+```powershell
+cd C:\Users\MichaelThomson\source\hackathon-site
+.\start.ps1
+```
+
+That opens two windows: site on http://127.0.0.1:5500/ and API on http://127.0.0.1:8080/health.
+
+Site only (card 01):
 
 ```powershell
 cd C:\Users\MichaelThomson\source\hackathon-site
