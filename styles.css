@@ -127,13 +127,47 @@ a:hover { color: var(--link-hover); }
 }
 .board-banner > div:first-child { flex: 1 1 16rem; min-width: 0; line-height: 1.45; }
 .board-banner .btns { display: flex; gap: 0.5rem; flex-wrap: wrap; flex-shrink: 0; }
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin: 0 0 1rem;
+}
+.filter {
+  appearance: none;
+  font-family: inherit;
+  font-size: 0.82rem;
+  font-weight: 650;
+  padding: 0.4rem 0.8rem;
+  min-height: 2.4rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--panel);
+  color: var(--text);
+  cursor: pointer;
+}
+.filter:hover { border-color: var(--accent); }
+.filter.is-on {
+  background: var(--accent);
+  color: #0c1219;
+  border-color: #d97706;
+}
+.filter-status {
+  color: var(--muted);
+  font-size: 0.85rem;
+  margin: -0.35rem 0 1rem;
+  min-height: 1.25em;
+}
 .people { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0.7rem; margin-bottom: 1.5rem; }
 @media (max-width: 900px) { .people { grid-template-columns: 1fr 1fr; } }
 @media (max-width: 520px) { .people { grid-template-columns: 1fr; } }
 .person {
+  appearance: none;
+  display: block;
   background: var(--panel); border: 1px solid var(--border); border-radius: 14px; padding: 1rem 1.05rem;
-  min-width: 0;
+  min-width: 0; cursor: pointer; text-align: left; width: 100%; font: inherit; color: inherit;
 }
+.person.is-on { border-color: var(--accent); box-shadow: inset 3px 0 0 var(--accent); }
 .person .who {
   display: flex; align-items: center; gap: 0.45rem;
   font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted);
@@ -169,6 +203,8 @@ a:hover { color: var(--link-hover); }
 .col.ready .head { color: #ddd6fe; }
 .col.done .head { color: #6ee7b7; }
 .col .stack { padding: 0.7rem; }
+.col .stack .empty-col { color: var(--muted); font-size: 0.85rem; padding: 0.4rem 0.2rem; }
+.card.is-hidden, .empty-col.is-hidden { display: none; }
 .card {
   display: block; background: #0c1219; border: 1px solid #1e293b;
   border-radius: 12px; padding: 0.75rem 0.8rem; margin-bottom: 0.55rem; color: inherit;
@@ -194,3 +230,6 @@ a:hover { color: var(--link-hover); }
 .who-table { width: 100%; min-width: 36rem; border-collapse: collapse; font-size: 0.88rem; margin: 1rem 0 2rem; }
 .who-table th, .who-table td { text-align: left; padding: 0.55rem 0.65rem; border-bottom: 1px solid var(--border); vertical-align: top; line-height: 1.45; }
 .who-table th { color: var(--muted); font-size: 0.75rem; letter-spacing: 0.06em; text-transform: uppercase; }
+.who-table tbody tr[data-person] { cursor: pointer; }
+.who-table tbody tr[data-person]:hover { background: rgba(245, 158, 11, 0.06); }
+.who-table tbody tr.is-on { background: var(--accent-soft); }

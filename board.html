@@ -31,7 +31,17 @@
       Same idea as the Automatica kanban. Every card is a <strong>releasable increment</strong> —
       the site should still look working when the card lands.
       First two hours: <strong>local only</strong> (Michael on backend later).
+      Filter the board by person with the chips, the hour cards, or a row in Who’s who.
     </p>
+
+    <div class="filters" role="toolbar" aria-label="Filter by person">
+      <button type="button" class="filter is-on" data-person="all" aria-pressed="true">Everyone</button>
+      <button type="button" class="filter" data-person="reeve" aria-pressed="false">🧭 Reeve</button>
+      <button type="button" class="filter" data-person="connor" aria-pressed="false">⚡ Connor</button>
+      <button type="button" class="filter" data-person="michael" aria-pressed="false">🏗️ Michael</button>
+      <button type="button" class="filter" data-person="lewis" aria-pressed="false">🌱 Lewis</button>
+    </div>
+    <p class="filter-status" id="filter-status">Showing everyone.</p>
 
     <div class="board-banner">
       <div>📋 First: Lewis and Reeve get <strong>front end and back end running</strong>. Everyone (including Connor) proves the GitHub <strong>edit → run → push</strong> loop. Then the map cards.</div>
@@ -42,26 +52,26 @@
     </div>
 
     <div class="people">
-      <div class="person">
+      <button type="button" class="person" data-person="reeve" aria-pressed="false">
         <div class="who"><span class="emoji">🧭</span> Reeve</div>
         <div class="hrs">9 <span>hrs</span></div>
         <div class="meta">3 onboarding · start script · map ready</div>
-      </div>
-      <div class="person">
+      </button>
+      <button type="button" class="person" data-person="connor" aria-pressed="false">
         <div class="who"><span class="emoji">⚡</span> Connor</div>
         <div class="hrs">6.5 <span>hrs</span></div>
         <div class="meta">2 onboarding to do · routing ready</div>
-      </div>
-      <div class="person">
+      </button>
+      <button type="button" class="person" data-person="michael" aria-pressed="false">
         <div class="who"><span class="emoji">🏗️</span> Michael</div>
         <div class="hrs">8.5 <span>hrs</span></div>
         <div class="meta">git loop + Cloud Run after 2h</div>
-      </div>
-      <div class="person">
+      </button>
+      <button type="button" class="person" data-person="lewis" aria-pressed="false">
         <div class="who"><span class="emoji">🌱</span> Lewis</div>
         <div class="hrs">9 <span>hrs</span></div>
         <div class="meta">3 onboarding to do · chrome done</div>
-      </div>
+      </button>
     </div>
 
     <div class="kanban-scroll">
@@ -70,93 +80,94 @@
         <div class="col todo">
           <div class="head"><span class="col-name">To do</span><span class="count">16 · 23h</span></div>
           <div class="stack">
-            <a class="card" href="#t-12">
+            <p class="empty-col is-hidden" data-all="Nothing here."></p>
+            <a class="card" href="#t-12" data-person="lewis" data-hours="0.5">
               <div class="top"><span class="id">12</span><span class="emoji">🌱</span></div>
               <div class="title">Lewis: get the front end running locally</div>
               <span class="tag tag-wait">clone org repo · serve.ps1 · home + map + board</span>
               <div class="bot"><span>0.5h</span><span>Lewis</span></div>
             </a>
-            <a class="card" href="#t-13">
+            <a class="card" href="#t-13" data-person="lewis" data-hours="1">
               <div class="top"><span class="id">13</span><span class="emoji">🌱</span></div>
               <div class="title">Lewis: get the back end running locally</div>
               <span class="tag tag-wait">clone api · venv · uvicorn · /health</span>
               <div class="bot"><span>1h</span><span>Lewis</span></div>
             </a>
-            <a class="card" href="#t-14">
+            <a class="card" href="#t-14" data-person="lewis" data-hours="0.75">
               <div class="top"><span class="id">14</span><span class="emoji">🌱</span></div>
               <div class="title">Lewis: GitHub edit → run → push (site repo)</div>
               <span class="tag tag-wait">Tyneside-Software/hackathon-site</span>
               <div class="bot"><span>0.75h</span><span>Lewis</span></div>
             </a>
-            <a class="card" href="#t-15">
+            <a class="card" href="#t-15" data-person="reeve" data-hours="0.5">
               <div class="top"><span class="id">15</span><span class="emoji">🧭</span></div>
               <div class="title">Reeve: get the front end running locally</div>
               <span class="tag tag-wait">clone org repo · serve.ps1 · home + map + board</span>
               <div class="bot"><span>0.5h</span><span>Reeve</span></div>
             </a>
-            <a class="card" href="#t-16">
+            <a class="card" href="#t-16" data-person="reeve" data-hours="1">
               <div class="top"><span class="id">16</span><span class="emoji">🧭</span></div>
               <div class="title">Reeve: get the back end running locally</div>
               <span class="tag tag-wait">clone api · venv · uvicorn · /health</span>
               <div class="bot"><span>1h</span><span>Reeve</span></div>
             </a>
-            <a class="card" href="#t-17">
+            <a class="card" href="#t-17" data-person="reeve" data-hours="0.75">
               <div class="top"><span class="id">17</span><span class="emoji">🧭</span></div>
               <div class="title">Reeve: GitHub edit → run → push (API repo)</div>
               <span class="tag tag-wait">Tyneside-Software/hackathon-api</span>
               <div class="bot"><span>0.75h</span><span>Reeve</span></div>
             </a>
-            <a class="card" href="#t-21">
+            <a class="card" href="#t-21" data-person="reeve" data-hours="1">
               <div class="top"><span class="id">21</span><span class="emoji">🧭</span></div>
               <div class="title">Reeve: start script for front end and back end together</div>
               <span class="tag tag-wait">one command, two processes, no asking the AI</span>
               <div class="bot"><span>1h</span><span>Reeve</span></div>
             </a>
-            <a class="card" href="#t-18">
+            <a class="card" href="#t-18" data-person="connor" data-hours="0.5">
               <div class="top"><span class="id">18</span><span class="emoji">⚡</span></div>
               <div class="title">Connor: get the front end running locally</div>
               <span class="tag tag-wait">clone org repo · serve.ps1 · home + map + board</span>
               <div class="bot"><span>0.5h</span><span>Connor</span></div>
             </a>
-            <a class="card" href="#t-19">
+            <a class="card" href="#t-19" data-person="connor" data-hours="0.75">
               <div class="top"><span class="id">19</span><span class="emoji">⚡</span></div>
               <div class="title">Connor: GitHub edit → run → push (site repo)</div>
               <span class="tag tag-wait">Tyneside-Software/hackathon-site</span>
               <div class="bot"><span>0.75h</span><span>Connor</span></div>
             </a>
-            <a class="card" href="#t-20">
+            <a class="card" href="#t-20" data-person="michael" data-hours="0.75">
               <div class="top"><span class="id">20</span><span class="emoji">🏗️</span></div>
               <div class="title">Michael: GitHub edit → run → push (both repos)</div>
               <span class="tag tag-wait">after 2h away · prove the loop</span>
               <div class="bot"><span>0.75h</span><span>Michael</span></div>
             </a>
-            <a class="card" href="#t-06">
+            <a class="card" href="#t-06" data-person="lewis" data-hours="2">
               <div class="top"><span class="id">06</span><span class="emoji">🌱</span></div>
               <div class="title">Save routes in the browser (localStorage)</div>
               <div class="bot"><span>2h</span><span>Lewis</span></div>
             </a>
-            <a class="card" href="#t-07">
+            <a class="card" href="#t-07" data-person="connor" data-hours="2">
               <div class="top"><span class="id">07</span><span class="emoji">⚡</span></div>
               <div class="title">Job list beside the map (seed Howden-shaped jobs)</div>
               <div class="bot"><span>2h</span><span>Connor</span></div>
             </a>
-            <a class="card" href="#t-08">
+            <a class="card" href="#t-08" data-person="reeve" data-hours="1.5">
               <div class="top"><span class="id">08</span><span class="emoji">🧭</span></div>
               <div class="title">Demo seed: 5 Tyneside waypoints + named run</div>
               <div class="bot"><span>1.5h</span><span>Reeve</span></div>
             </a>
-            <a class="card" href="#t-09">
+            <a class="card" href="#t-09" data-person="lewis" data-hours="2">
               <div class="top"><span class="id">09</span><span class="emoji">🌱</span></div>
               <div class="title">Local “who am I” account (name in the browser)</div>
               <div class="bot"><span>2h</span><span>Lewis</span></div>
             </a>
-            <a class="card" href="#t-10">
+            <a class="card" href="#t-10" data-person="michael" data-hours="4">
               <div class="top"><span class="id">10</span><span class="emoji">🏗️</span></div>
               <div class="title">Cloud Run API live + CORS for Pages</div>
               <span class="tag tag-wait">blocked — Michael back</span>
               <div class="bot"><span>4h</span><span>Michael</span></div>
             </a>
-            <a class="card" href="#t-11">
+            <a class="card" href="#t-11" data-person="michael" data-hours="4">
               <div class="top"><span class="id">11</span><span class="emoji">🏗️</span></div>
               <div class="title">Persist routes on the API (replace localStorage)</div>
               <span class="tag tag-wait">after 10</span>
@@ -168,20 +179,21 @@
         <div class="col doing">
           <div class="head"><span class="col-name">In progress</span><span class="count">0 · 0h</span></div>
           <div class="stack">
-            <p style="color:var(--muted);font-size:0.85rem;padding:0.4rem 0.2rem">Empty on purpose. Pull a Ready card and ship it.</p>
+            <p class="empty-col" data-all="Empty on purpose. Pull a Ready card and ship it.">Empty on purpose. Pull a Ready card and ship it.</p>
           </div>
         </div>
 
         <div class="col ready">
           <div class="head"><span class="col-name">Ready to demo</span><span class="count">2 · 6h</span></div>
           <div class="stack">
-            <a class="card" href="app/">
+            <p class="empty-col is-hidden" data-all="Nothing here."></p>
+            <a class="card" href="app/" data-person="reeve" data-hours="3">
               <div class="top"><span class="id">04</span><span class="emoji">🧭</span></div>
               <div class="title">Map with clickable / draggable waypoints</div>
               <span class="tag tag-ok">open app/</span>
               <div class="bot"><span>3h</span><span>Reeve</span></div>
             </a>
-            <a class="card" href="app/">
+            <a class="card" href="app/" data-person="connor" data-hours="3">
               <div class="top"><span class="id">05</span><span class="emoji">⚡</span></div>
               <div class="title">Route calculation between waypoints</div>
               <span class="tag tag-ok">OSRM + straight-line fallback</span>
@@ -193,19 +205,20 @@
         <div class="col done">
           <div class="head"><span class="col-name">Done</span><span class="count">3 · 3.5h</span></div>
           <div class="stack">
-            <a class="card" href="#t-01">
+            <p class="empty-col is-hidden" data-all="Nothing here."></p>
+            <a class="card" href="#t-01" data-person="lewis" data-hours="0.5">
               <div class="top"><span class="id">01</span><span class="emoji">🌱</span></div>
               <div class="title">Serve the site locally</div>
               <span class="tag tag-ok">serve.ps1 → :5500</span>
               <div class="bot"><span>0.5h</span><span>Lewis</span></div>
             </a>
-            <a class="card" href="#t-02">
+            <a class="card" href="#t-02" data-person="reeve" data-hours="1">
               <div class="top"><span class="id">02</span><span class="emoji">🧭</span></div>
               <div class="title">Run the API locally and hit /health</div>
               <span class="tag tag-ok">uvicorn :8080</span>
               <div class="bot"><span>1h</span><span>Reeve</span></div>
             </a>
-            <a class="card" href="index.html">
+            <a class="card" href="index.html" data-person="lewis" data-hours="2">
               <div class="top"><span class="id">03</span><span class="emoji">🌱</span></div>
               <div class="title">Desktop home in Tyneside style</div>
               <span class="tag tag-ok">this site’s index</span>
@@ -218,32 +231,32 @@
     </div>
 
     <h2 style="margin-top:2rem">Who’s who</h2>
-    <p class="lede">Hours are every card attributed to that person, whichever column it sits in.</p>
+    <p class="lede">Hours are every card attributed to that person, whichever column it sits in. Click a row to filter the board.</p>
     <div class="who-wrap">
     <table class="who-table">
       <thead>
         <tr><th></th><th>Owner</th><th>Claimed work</th><th>Hours</th></tr>
       </thead>
       <tbody>
-        <tr>
+        <tr data-person="reeve">
           <td>🧭</td>
           <td><strong>Reeve</strong></td>
           <td>Front end local (0.5h) · Back end local (1h) · GitHub loop on API (0.75h) · Start script for site+API (1h) · Map waypoints (3h, ready) · Demo seed (1.5h) · API health scaffold (1h, done)</td>
           <td><strong>9h</strong></td>
         </tr>
-        <tr>
+        <tr data-person="connor">
           <td>⚡</td>
           <td><strong>Connor</strong></td>
           <td>Front end local (0.5h) · GitHub loop on site (0.75h) · Route calculation (3h, ready) · Job list beside map (2h)</td>
           <td><strong>6.5h</strong></td>
         </tr>
-        <tr>
+        <tr data-person="michael">
           <td>🏗️</td>
           <td><strong>Michael</strong></td>
           <td>GitHub loop both repos (0.75h) · Cloud Run + CORS (4h) · Persist routes on API (4h)</td>
           <td><strong>8.5h</strong></td>
         </tr>
-        <tr>
+        <tr data-person="lewis">
           <td>🌱</td>
           <td><strong>Lewis</strong></td>
           <td>Front end local (0.5h) · Back end local (1h) · GitHub loop on site (0.75h) · Desktop chrome (2h, done) · localStorage (2h) · local account (2h) · serve scaffold (0.5h, done)</td>
@@ -276,5 +289,6 @@
   <footer class="foot">
     <div class="wrap-wide">Tyneside Logistics hackathon · Reeve · Connor · Michael · Lewis</div>
   </footer>
+  <script src="board.js"></script>
 </body>
 </html>
