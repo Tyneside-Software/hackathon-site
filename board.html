@@ -44,8 +44,8 @@
     <div class="people">
       <div class="person">
         <div class="who"><span class="emoji">🧭</span> Reeve</div>
-        <div class="hrs">8 <span>hrs</span></div>
-        <div class="meta">3 onboarding to do · map ready</div>
+        <div class="hrs">9 <span>hrs</span></div>
+        <div class="meta">3 onboarding · start script · map ready</div>
       </div>
       <div class="person">
         <div class="who"><span class="emoji">⚡</span> Connor</div>
@@ -68,7 +68,7 @@
       <div class="kanban">
 
         <div class="col todo">
-          <div class="head"><span class="col-name">To do</span><span class="count">15 · 22h</span></div>
+          <div class="head"><span class="col-name">To do</span><span class="count">16 · 23h</span></div>
           <div class="stack">
             <a class="card" href="#t-12">
               <div class="top"><span class="id">12</span><span class="emoji">🌱</span></div>
@@ -105,6 +105,12 @@
               <div class="title">Reeve: GitHub edit → run → push (API repo)</div>
               <span class="tag tag-wait">Tyneside-Software/hackathon-api</span>
               <div class="bot"><span>0.75h</span><span>Reeve</span></div>
+            </a>
+            <a class="card" href="#t-21">
+              <div class="top"><span class="id">21</span><span class="emoji">🧭</span></div>
+              <div class="title">Reeve: start script for front end and back end together</div>
+              <span class="tag tag-wait">one command, two processes, no asking the AI</span>
+              <div class="bot"><span>1h</span><span>Reeve</span></div>
             </a>
             <a class="card" href="#t-18">
               <div class="top"><span class="id">18</span><span class="emoji">⚡</span></div>
@@ -222,8 +228,8 @@
         <tr>
           <td>🧭</td>
           <td><strong>Reeve</strong></td>
-          <td>Front end local (0.5h) · Back end local (1h) · GitHub loop on API (0.75h) · Map waypoints (3h, ready) · Demo seed (1.5h) · API health scaffold (1h, done)</td>
-          <td><strong>8h</strong></td>
+          <td>Front end local (0.5h) · Back end local (1h) · GitHub loop on API (0.75h) · Start script for site+API (1h) · Map waypoints (3h, ready) · Demo seed (1.5h) · API health scaffold (1h, done)</td>
+          <td><strong>9h</strong></td>
         </tr>
         <tr>
           <td>⚡</td>
@@ -258,8 +264,8 @@
     <h2 style="margin-top:2rem">GitHub loop (cards 14 · 17 · 19 · 20)</h2>
     <p class="lede">Do this on the <strong>Tyneside-Software</strong> repos, not personal forks unless you have been told otherwise.</p>
     <ol style="color:var(--muted);padding-left:1.2rem;line-height:1.7">
-      <li>Clone (or pull) <a href="https://github.com/Tyneside-Software/hackathon-site">hackathon-site</a> and/or <a href="https://github.com/Tyneside-Software/hackathon-api">hackathon-api</a>.</li>
-      <li>Run it: <code>.\serve.ps1</code> (site, :5500) and/or <code>uvicorn app.main:app --reload --port 8080</code> (API).</li>
+      <li>Clone (or pull) <a href="https://github.com/Tyneside-Software/hackathon-site">hackathon-site</a> and/or <a href="https://github.com/Tyneside-Software/hackathon-api">hackathon-api</a> as sibling folders.</li>
+      <li>Run both: <code>.\start.ps1</code> in the site repo (or <code>.\serve.ps1</code> for the site only, and uvicorn on :8080 for the API).</li>
       <li>Make a tiny visible change (your name in a comment, README line, or a harmless label).</li>
       <li>Confirm it still runs.</li>
       <li><code>git add</code> · <code>git commit</code> · <code>git push origin main</code>.</li>
