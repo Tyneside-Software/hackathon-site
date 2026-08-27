@@ -269,8 +269,7 @@ a:hover { color: var(--link-hover); }
 .who-table tbody tr[data-person] { cursor: pointer; }
 .who-table tbody tr[data-person]:hover { background: rgba(245, 158, 11, 0.06); }
 .who-table tbody tr.is-on { background: var(--accent-soft); }
-<<<<<<< Updated upstream
-=======
+
 
 /* Lewis log page */
 .lewis-hero h1 { letter-spacing: -0.04em; }
@@ -512,4 +511,4 @@ details.fix summary::before {
 details.fix[open] summary::before { content: "–"; }
 details.fix p { color: var(--muted); margin: 0.35rem 0 0.55rem; }
 details.fix p:last-child { margin-bottom: 0; }
->>>>>>> Stashed changes
+
