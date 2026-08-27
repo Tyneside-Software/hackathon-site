@@ -1,6 +1,8 @@
 (() => {
   const NEWCASTLE = [54.9783, -1.6178];
   const OSRM = "https://router.project-osrm.org/route/v1/driving/";
+  const ROUTE_COLOR = "#00BFFF";
+  const ROUTE_OUTLINE = "#054a9e";
 
   const statusEl = document.getElementById("status");
   const stopsEl = document.getElementById("stops");
@@ -58,10 +60,26 @@
     statEngine.textContent = "—";
   }
 
+  function samePoint(a, b) {
+    return Math.abs(a[0] - b[0]) < 1e-6 && Math.abs(a[1] - b[1]) < 1e-6;
+  }
+
+  function endAtLastCheckpoint(coords, last) {
+    const end = [last.lat, last.lng];
+    if (!coords.length) return [end];
+    const tail = coords[coords.length - 1];
+    if (samePoint(tail, end)) return coords;
+    return coords.concat([end]);
+  }
+
   function drawLine(latlngList, color) {
     if (routeLine) map.removeLayer(routeLine);
-    routeLine = L.polyline(latlngList, { color, weight: 5, opacity: 0.9 }).addTo(map);
-    map.fitBounds(routeLine.getBounds().pad(0.12));
+    const lineOpts = { lineJoin: "round", lineCap: "round" };
+    routeLine = L.layerGroup([
+      L.polyline(latlngList, { ...lineOpts, color: ROUTE_OUTLINE, weight: 9, opacity: 0.9 }),
+      L.polyline(latlngList, { ...lineOpts, color, weight: 5, opacity: 1 }),
+    ]).addTo(map);
+    map.fitBounds(L.latLngBounds(latlngList).pad(0.12));
   }
 
   function haversineKm(a, b) {
@@ -80,7 +98,7 @@
     const pts = latlngs();
     let km = 0;
     for (let i = 1; i < pts.length; i++) km += haversineKm(pts[i - 1], pts[i]);
-    drawLine(pts, "#fbbf24");
+    drawLine(pts, ROUTE_COLOR);
     statKm.textContent = km.toFixed(1) + " km";
     statTime.textContent = Math.round((km / 35) * 60) + " min est.";
     statEngine.textContent = "straight-line";
@@ -102,8 +120,11 @@
       const data = await res.json();
       const route = data.routes && data.routes[0];
       if (!route) throw new Error("no route");
-      const coords = route.geometry.coordinates.map(([lng, lat]) => [lat, lng]);
-      drawLine(coords, "#f59e0b");
+      const coords = endAtLastCheckpoint(
+        route.geometry.coordinates.map(([lng, lat]) => [lat, lng]),
+        pts[pts.length - 1]
+      );
+      drawLine(coords, ROUTE_COLOR);
       statKm.textContent = (route.distance / 1000).toFixed(1) + " km";
       statTime.textContent = Math.round(route.duration / 60) + " min";
       statEngine.textContent = "OSRM driving";
