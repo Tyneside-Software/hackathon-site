@@ -1,102 +1,93 @@
-# Tech stack — hackathon-site
+# Site stack
 
-Static front end for Tyneside Logistics. No bundler, no Node toolchain. What you commit is what GitHub Pages serves.
+Libraries and files on **hackathon-site**. For how the two repos fit together, start at [Architecture](#architecture).
 
-Sibling API: [hackathon-api](https://github.com/Tyneside-Software/hackathon-api) (FastAPI on Cloud Run). Run them together with `.\start.ps1`.
+Static files only. No bundler, no `package.json`. What you commit is what GitHub Pages serves.
 
 ## At a glance
 
-| Layer | Choice | Why |
-|-------|--------|-----|
-| Pages | Static HTML | GitHub Pages, no build |
-| CSS | `styles.css` (custom properties) | One Tyneside amber/navy skin |
-| JavaScript | **Alpine.js 3** (CDN) | Behaviour in the markup; no npm |
-| Map | Leaflet 1.9.4 + OSM tiles | Click/drag waypoints |
-| Routing | Public OSRM, haversine fallback | Demo never looks dead |
-| API client | `config.js` → `window.HACKATHON_API` | Local `:8080` or Cloud Run |
-| Board data | `scripts/cards.json` + Python 3 stdlib | Edit cards without hand-HTML |
-| Hosting | GitHub Pages + CNAME | `hackathon.tyneside.software` |
-| Local serve | `python -m http.server 5500` | CORS-friendly; not `file://` |
+| Layer | Choice | Notes |
+|-------|--------|--------|
+| Pages | Static HTML | Root `*.html` plus `app/` and `docs/` |
+| CSS | `styles.css` | Custom properties; Tyneside amber/navy |
+| New JS | **Alpine.js 3.14.8** (jsDelivr, `defer`) | [Alpine.js](#javascript) |
+| Map | Leaflet 1.9.4 + OSM | `app/index.html`, `app/map.js` |
+| Driving geometry | Public OSRM | Straight-line haversine if OSRM fails |
+| Our API | `config.js` → `window.HACKATHON_API` | Cloud Run URL in git |
+| Kanban | `scripts/cards.json` + Python 3 | [Kanban board](#board) |
+| Wiki | Alpine + marked.js | This folder |
+| Host | GitHub Pages + `CNAME` | https://hackathon.tyneside.software |
+| Local | `python -m http.server 5500` | Or `.\start.ps1` with the API |
 
-## What we are not using
+## Not in this project
 
-- No React, Vue, Svelte, or jQuery
-- No webpack / Vite / npm scripts for the site (Alpine comes from a `<script defer>` tag)
-- No CSS framework (no Tailwind, Bootstrap)
-- `serve.ps1` is gone; use `start.ps1` or `python -m http.server 5500`
+- React, Vue, Svelte, jQuery
+- npm / webpack / Vite / Tailwind / Bootstrap
+- `serve.ps1` (removed — use `start.ps1` or `http.server`)
 
 ## HTML and CSS
 
-- Pages are plain `.html` in the repo root (`index.html`, `board.html`, `todo.html`, `done.html`, `onboarding.html`, `lewis.html`) and `app/` for the map.
-- Shared chrome: sticky nav, `logo.svg`, `styles.css`.
-- Colour tokens live on `:root` in `styles.css` (`--accent`, `--panel`, `--bg`, …). Match those; do not invent a second palette.
-- Layout should still work on a laptop and a phone. The map and kanban already wrap.
+Shared chrome: sticky nav, `logo.svg`, `styles.css`. Tokens on `:root` (`--accent`, `--panel`, `--bg`, `--text`, `--muted`). Match those; do not invent a second palette.
+
+Pages that exist today are listed on [Pages](#pages). New **product** UI goes in the repo root or `app/`. New **documentation** goes in `docs/`.
+
+Layout should still work on a laptop and a phone.
 
 ## JavaScript
 
-**Alpine.js is the JavaScript layer.** New UI behaviour (filters, modals, toggles, forms) goes in Alpine directives, not a new vanilla IIFE.
+**Alpine.js is the JavaScript layer** for new behaviour. Vanilla leftovers: `board.js`, `app/map.js`. Leaflet stays for the map canvas.
 
-Details, CDN snippet, and how to treat the existing `board.js` / `map.js`: [JAVASCRIPT.md](JAVASCRIPT.md).
+Details: [Alpine.js](#javascript).
 
-Leaflet stays for the map canvas. Alpine can own the sidebar around it (stops list, buttons, status). Do not replace Leaflet with Alpine.
+## Map
 
-## Maps and routes
+| Piece | Where |
+|-------|--------|
+| Leaflet 1.9.4 (js + css, SRI) | unpkg, from `app/index.html` |
+| Tiles | `tile.openstreetmap.org` (attribution required) |
+| Route | `https://router.project-osrm.org/route/v1/driving/` |
+| Fallback | Haversine, ~35 km/h estimate |
 
-| Piece | Where | Notes |
-|-------|--------|--------|
-| Leaflet | unpkg `leaflet@1.9.4` (js + css, SRI) | `app/index.html` |
-| Tiles | `tile.openstreetmap.org` | Attribution required |
-| Driving geometry | `https://router.project-osrm.org/route/v1/driving/` | Public demo server; rate-limited |
-| Fallback | Haversine + ~35 km/h | Straight line if OSRM fails |
+Default centre: Newcastle `[54.9783, -1.6178]`. The map does not call hackathon-api.
 
-Default view: Newcastle `[54.9783, -1.6178]`.
+## Our API from the browser
 
-## Talking to hackathon-api
-
-`config.js` sets `window.HACKATHON_API` (Cloud Run URL by default; override for local uvicorn).
-
-Include it **before** any script that `fetch`es the API:
+`config.js` (no `defer`) must load **before** any script that `fetch`es:
 
 ```html
 <script src="config.js"></script>
 ```
 
-The map does not call our API yet (it calls OSRM). Card 11 is persist-routes on the API; that fetch must use `window.HACKATHON_API` and fail visibly (or fall back to `localStorage`) so the page never goes blank.
+From `app/` use `../config.js`. From `docs/` use `../config.js` if a wiki page ever calls the API (today they do not).
 
-CORS on the API must allow:
+Committed default is the Cloud Run URL. Override locally with `window.HACKATHON_API = "http://127.0.0.1:8080"` in the console, or a local edit you do not push.
 
-- `http://127.0.0.1:5500`
-- `http://localhost:5500`
-- `https://hackathon.tyneside.software`
+CORS must allow the page origin: `http://127.0.0.1:5500`, `http://localhost:5500`, `https://hackathon.tyneside.software`. That is configured on the API, not here.
 
-## Board generator
+## Kanban generator
 
 | File | Role |
 |------|------|
-| `scripts/cards.json` | Source of truth for kanban cards |
+| `scripts/cards.json` | Source of truth |
 | `scripts/update_board.py` | `list` / `done` / `move` / `add` / `render` |
-| `board.html` | Live columns (to-do preview + done summary) — generated blocks |
-| `todo.html` / `done.html` | Full archives — generated |
+| `board.html` | Live columns — only inside `<!-- BOARD:… -->` |
+| `todo.html` / `done.html` | Archives, generated whole-file |
 
-Do not hand-edit the `<!-- BOARD:… -->` regions. See [../scripts/README.md](../scripts/README.md).
+Python 3 stdlib. Run from the site root. See [Kanban board](#board).
 
-Python 3 stdlib only (no pip). Run from the site root.
+## Hosting
 
-## Hosting and deploy
+Push **site** `main` → GitHub Pages.  
+Push **API** `main` → Cloud Run (buildpacks). That path is documented on [API](#api).
 
-- **Live site:** https://hackathon.tyneside.software  
-- **CNAME:** `hackathon.tyneside.software` in repo root (GitHub Pages custom domain)
-- **Trigger:** push / merge to `main`
-- **API:** Cloud Run, also from push to `main` on the API repo
+## Versions we actually use
 
-Local remains the development path. Pages is the demo path.
-
-## Runtime versions
-
-| Tool | Expect |
-|------|--------|
-| Python | 3.12+ (http.server, board script, API venv) |
-| PowerShell | 5.1+ (`start.ps1`) |
-| Alpine.js | 3.x from jsDelivr CDN |
+| Tool | Version |
+|------|---------|
+| Alpine.js | 3.14.8 (pinned CDN) |
 | Leaflet | 1.9.4 (pinned + integrity) |
-| Browsers | Current Chromium / Firefox / Safari / Edge |
+| marked.js (wiki) | 11.1.1 |
+| Python (board script, `http.server`) | 3.12+ on the laptop is fine |
+| Python (Cloud Run buildpacks) | **3.13** (ubuntu2404 has no 3.12) |
+| FastAPI | `>=0.115,<0.117` |
+| PowerShell | 5.1+ (`start.ps1`) |

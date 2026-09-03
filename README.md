@@ -15,6 +15,7 @@ Push to `main` deploys this site (GitHub Pages) and the API (Cloud Run). Local s
 | Doc | Contents |
 |-----|----------|
 | [docs/](docs/) | Wiki home |
+| [docs/#architecture](docs/#architecture) | **How the two repos fit together** |
 | [docs/#grok](docs/#grok) | **For Grok** — briefing Connor (or anyone) points an AI at |
 | [docs/#connor](docs/#connor) | Connor’s wiki shelf |
 | [docs/STACK.md](docs/STACK.md) | HTML/CSS, Alpine.js, Leaflet, OSRM, Pages, board script |
@@ -78,7 +79,7 @@ Filter the board with `?person=lewis`. Open a card with `#t-04`.
 
 `board.js` and `app/map.js` are vanilla leftovers. Keep them working; migrate by card, do not rewrite the night in one go. Leaflet stays for the map.
 
-API base URL: `config.js` → `window.HACKATHON_API` (default `http://127.0.0.1:8080`). Include that file on any page that `fetch`es the API.
+API base URL: `config.js` → `window.HACKATHON_API` (Cloud Run URL in git). Include that file on any page that `fetch`es the API. Local override: `http://127.0.0.1:8080`.
 
 ## Board cards
 
@@ -97,7 +98,7 @@ The board shows the top four to-do cards plus a link to `todo.html`. Done is a c
 
 Merge to `main` on this repo → GitHub Pages at https://hackathon.tyneside.software  
 
-The API repo deploys to Cloud Run on its own `main`. Point `config.js` at the Cloud Run URL for the live site; leave `127.0.0.1:8080` for local.
+The API repo deploys to Cloud Run on its own `main` (GitHub **buildpacks**, Python 3.13). `config.js` already holds the Cloud Run URL.
 
 ## Rule
 

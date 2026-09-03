@@ -1,19 +1,29 @@
 # Pages on the site
 
-| URL | What |
-|-----|------|
-| `/` | Desktop home |
-| `/app/` | Map, waypoints, OSRM route (straight-line fallback) |
-| `/board.html` | Kanban (short to-do + done summary) |
-| `/todo.html` | Full to-do list |
-| `/done.html` | Done archive |
-| `/api-test.html` | Alpine.js `GET /test_field` |
-| `/docs/` | This wiki |
-| `/onboarding.html` | Clone / run / git |
-| `/lewis.html` | Lewis’s night log |
+| URL | File | What |
+|-----|------|------|
+| `/` | `index.html` | Desktop home |
+| `/app/` | `app/index.html` | Map, waypoints, OSRM (vanilla `map.js`) |
+| `/board.html` | `board.html` + `board.js` | Kanban preview |
+| `/todo.html` | generated | Full to-do list |
+| `/done.html` | generated | Done archive |
+| `/api-test.html` | `api-test.html` | Alpine `GET /test_field` |
+| `/docs/` | `docs/index.html` | This wiki |
+| `/onboarding.html` | `onboarding.html` | Clone / run / git |
+| `/lewis.html` | `lewis.html` | Lewis’s night log |
 
-## Chrome
+Shared: `styles.css`, `logo.svg`, sticky nav. **Docs** in the nav is `/docs/`.
 
-Shared `styles.css`, `logo.svg`, sticky nav. **Docs** in the nav always returns to `/docs/`.
+## Nav
 
-New product pages go in the repo root (or `app/`). New documentation goes in `docs/` — see [Add a wiki page](#adding).
+Most HTML files copy the same nav by hand. `todo.html` and `done.html` get theirs from `scripts/update_board.py` (`render_archive_page`). If you add a nav item, update the static files **and** that template, then `python scripts/update_board.py render`.
+
+## Where new files go
+
+| Kind | Where |
+|------|--------|
+| Product screen | Repo root or `app/` |
+| Documentation | `docs/` (register in `pages.json`) |
+| Connor’s notes | `docs/connor/` with id prefix `connor-` |
+
+See [Add a wiki page](#adding).

@@ -1,30 +1,28 @@
-# JavaScript — Alpine.js
+# Alpine.js
 
-**Alpine.js 3 is the JavaScript layer for hackathon-site.** New interactive behaviour is Alpine in the HTML, not a fresh vanilla module and not a SPA framework.
+**Alpine.js 3 is the JavaScript layer** for new UI on hackathon-site. Official guide: [alpinejs.dev/start-here](https://alpinejs.dev/start-here).
 
-Official guide: https://alpinejs.dev/start-here
+The site is static files on GitHub Pages. Alpine loads from a CDN. No npm, no bundler, no SPA framework.
 
-## Why Alpine
+Leaflet still draws the map. Alpine owns chrome around it (lists, buttons, dialogs, filters) and already runs the wiki and the API test page.
 
-The site is static files on GitHub Pages. Alpine loads from a CDN, needs no npm or bundler, and keeps state next to the markup the team already edits. That matches “releasable each card” better than introducing React/Vue.
+## Include it
 
-Leaflet still draws the map. Alpine owns UI around it (lists, buttons, dialogs, filters).
-
-## How to include it
-
-Put this in `<head>` on any page that uses Alpine, **before** other deferred scripts that expect Alpine to exist. Keep `defer`.
+In `<head>`, `defer`, pinned:
 
 ```html
 <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.8/dist/cdn.min.js"></script>
 ```
 
-Pin `3.14.8` (or a later 3.x you have tried). Do not use an unpinned `@3` / `@3.x.x` URL on Pages.
+Do not use an unpinned `@3` / `@3.x.x` URL on Pages.
 
-Working example: [../api-test.html](../api-test.html) — Alpine `x-data` calling `GET /test_field` on Cloud Run.
+`styles.css` already has:
 
-Nothing else to install. No `package.json`.
+```css
+[x-cloak] { display: none !important; }
+```
 
-Every interactive island needs `x-data` or it will not run:
+Every island needs `x-data` or nothing runs:
 
 ```html
 <div x-data="{ open: false }">
@@ -33,31 +31,27 @@ Every interactive island needs `x-data` or it will not run:
 </div>
 ```
 
-Add this CSS once in `styles.css` so `x-cloak` does not flash:
+Working pages:
 
-```css
-[x-cloak] { display: none !important; }
-```
+- [Alpine API test](../api-test.html) — `GET /test_field`
+- This wiki — `docs/index.html` + `docs/wiki.js`
 
 ## Conventions
 
-| Do | Don't |
+| Do | Do not |
 |----|--------|
-| One `x-data` object per island (nav filter, modal, map sidebar) | One giant `x-data` on `<body>` for the whole site |
-| `@click`, `x-show`, `x-for`, `x-model` for UI | New jQuery, Vue, or React |
-| Keep Leaflet in `app/map.js` until an Alpine island wraps the sidebar | Reimplement the map in Alpine |
-| `fetch(window.HACKATHON_API + "/health")` for our API | Hard-code Cloud Run URLs in components |
-| Fallbacks when the API or OSRM is down | Blank pages on network failure |
-| `type="button"` on buttons inside forms / dialogs | Let a button submit or navigate by accident |
+| One `x-data` island (filter, modal, sidebar) | One giant `x-data` on `<body>` |
+| `@click`, `x-show`, `x-for`, `x-model` | React, Vue, jQuery, npm |
+| Keep Leaflet in `app/map.js` | Reimplement the map in Alpine |
+| `fetch((window.HACKATHON_API \|\| "").replace(/\/$/, "") + "/health")` | Hard-code Cloud Run URLs in components |
+| Visible fallback if the API or OSRM is down | Blank page on network failure |
+| `type="button"` on buttons | Accidental submit / navigate |
 
-### Names
-
-- Directives and `x-data` keys: camelCase (`personFilter`, `waypoints`).
-- Prefer small functions on the data object (`init()`, `openCard(id)`) over inline novels in `@click`.
+Keys and functions: camelCase (`personFilter`, `load()`). Prefer methods on the data object over long `@click` strings.
 
 ### Dialogs
 
-Native `<dialog>` + Alpine is the board-modal pattern going forward:
+Native `<dialog>` plus Alpine is the intended board-modal shape:
 
 ```html
 <div x-data="cardModal()">
@@ -70,47 +64,45 @@ Native `<dialog>` + Alpine is the board-modal pattern going forward:
 </div>
 ```
 
-Define `cardModal()` in a small page script, or inline `x-data="{ … }"` if it stays tiny.
+`board.js` already locks body scroll while the modal is open. Port that when the modal moves to Alpine.
 
-Lock body scroll while open (the current `board.js` already does this). Port that behaviour when the modal moves to Alpine.
+## What is still vanilla
 
-## Existing vanilla files
+Leave these working. Migrate by card, not as a rewrite.
 
-These predate the Alpine decision. Leave them working. Migrate by card, not as a rewrite.
+| File | Role | Later |
+|------|------|--------|
+| `board.js` | Person filter, card modal, `#t-04`, to-do/done summaries, scroll lock | Alpine on board / archives |
+| `app/map.js` | Leaflet, waypoints, OSRM + straight line | Keep Leaflet; sidebar can be Alpine |
+| `config.js` | `window.HACKATHON_API` | Stay a blocking script, included first |
 
-| File | What it does | Alpine destination |
-|------|----------------|--------------------|
-| `board.js` | Person filter, card modal, hash `#t-04`, to-do/done summaries, scroll lock | `x-data` on the board / archive pages |
-| `app/map.js` | Leaflet map, waypoints, OSRM + straight-line fallback | Keep Leaflet; sidebar/status can become Alpine |
-| `config.js` | `window.HACKATHON_API` | Stay as a plain script, included first |
+Do not delete `board.js` until filters + modal + hash work without it.
 
-Do not delete `board.js` until the same page does filters + modal + hash without it.
+Migrate a slice:
 
-When you migrate a page:
+1. Add the Alpine `<script defer>` on that page.
+2. Rebuild one island with `x-data`.
+3. Confirm Home, Map, and Board still load.
+4. Remove only the vanilla that island replaced.
 
-1. Add the Alpine `<script defer>` in `<head>`.
-2. Reimplement one island (e.g. person chips) with `x-data`.
-3. Confirm Home, Map, Board still load.
-4. Remove only the vanilla that that island replaced.
-
-## Talking to the API
+## Calling the API
 
 ```html
-<script src="/config.js"></script>
+<script src="config.js"></script>
 ```
 
-From `app/` the path is `../config.js`.
+From `app/` the path is `../config.js`. There is no site-root `/config.js` on GitHub Pages.
 
 ```js
 async function health() {
-  const base = window.HACKATHON_API || "http://127.0.0.1:8080";
+  const base = (window.HACKATHON_API || "").replace(/\/$/, "");
   const res = await fetch(base + "/health", { headers: { Accept: "application/json" } });
   if (!res.ok) throw new Error("health " + res.status);
   return res.json();
 }
 ```
 
-CORS is the API’s problem (`CORS_ORIGINS`). The site must be served from `http://127.0.0.1:5500` (or Pages), never `file://`.
+The committed default in `config.js` is the Cloud Run URL. CORS is the API’s job (`CORS_ORIGINS`). Serve from `http://127.0.0.1:5500` or Pages, never `file://`.
 
 ## Cheatsheet
 
@@ -119,10 +111,8 @@ CORS is the API’s problem (`CORS_ORIGINS`). The site must be served from `http
 | State | `x-data="{ count: 0 }"` |
 | Click | `@click="count++"` |
 | Text | `x-text="count"` |
-| Show/hide | `x-show="open"` |
+| Show / hide | `x-show="open"` |
 | List | `template x-for="stop in stops"` |
 | Input | `x-model="name"` |
 | Classes | `:class="open && 'is-on'"` |
-| Init | `x-init="load()"` or `init()` on the data object |
-
-Full directive list: https://alpinejs.dev/start-here
+| Init | `x-init="load()"` or `init()` on the object |

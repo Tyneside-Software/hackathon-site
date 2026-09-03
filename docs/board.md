@@ -1,5 +1,7 @@
 # Kanban board
 
+How this sits in the product: [Architecture](#architecture).
+
 Do not hand-edit the kanban columns, hour cards, or Who’s who in `board.html`. Those blocks are generated.
 
 **Source of truth:** `scripts/cards.json`  

@@ -2,10 +2,10 @@
 
 This page is the briefing for an AI (Grok, or anything similar) helping **Connor** on the Tyneside Logistics hackathon. Connor works the same way Michael does: he asks Grok, Grok reads the repo, Grok does the work.
 
-If you have been pointed at this URL and given a task, **read this whole page, then execute**. Do not ask Connor to paste stack notes that are already here.
+If you have been pointed at this URL and given a task, **read this whole page, then [Architecture](#architecture), then execute**. Do not ask Connor to paste stack notes that are already here.
 
-| | |
-|--|--|
+| Field | Value |
+|-------|--------|
 | **Human** | Connor (board id `connor`, ⚡) |
 | **Company** | Tyneside Software / Cloud Connect — Tyneside Logistics hackathon |
 | **Live wiki** | https://hackathon.tyneside.software/docs/#grok |
@@ -97,7 +97,7 @@ Working Alpine + API example: `api-test.html` (`GET /test_field`).
 
 ## Tech stack (API)
 
-FastAPI + Uvicorn, Docker, Cloud Run `europe-west2`.
+FastAPI + Uvicorn on Cloud Run `europe-west2`. GitHub deploys with **buildpacks** (Python **3.13**, ubuntu2404). The Dockerfile is unused by that trigger. Root `main.py` re-exports the app for pack’s `main:app`.
 
 | Method | Path |
 |--------|------|
@@ -109,7 +109,7 @@ FastAPI + Uvicorn, Docker, Cloud Run `europe-west2`.
 
 CORS must allow `https://hackathon.tyneside.software` and `http://127.0.0.1:5500`. If Cloud Run has `CORS_ORIGINS` set, code defaults are ignored.
 
-Live `/test_field` 404s until that Cloud Run revision is redeployed; local uvicorn already has the route. See [API](#api).
+If live `/test_field` is 404, the Cloud Run revision is behind `main`. Check `/health` for `version` (current code is **0.1.3**). See [API](#api).
 
 ---
 
@@ -179,4 +179,4 @@ Nav on `todo.html` / `done.html` is generated inside `scripts/update_board.py` (
 
 ## Related wiki pages
 
-[Wiki home](#home) · [Connor’s area](#connor) · [Add a wiki page](#adding) · [Run locally](#local) · [Site stack](#stack) · [Alpine.js](#javascript) · [Kanban](#board) · [API](#api)
+[Wiki home](#home) · [Architecture](#architecture) · [Connor’s area](#connor) · [Add a wiki page](#adding) · [Run locally](#local) · [Site stack](#stack) · [Alpine.js](#javascript) · [Kanban](#board) · [API](#api)

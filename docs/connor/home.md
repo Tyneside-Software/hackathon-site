@@ -2,7 +2,7 @@
 
 This shelf is Connor’s. He (and his Grok) add pages here the same way Michael does: ask Grok, Grok edits the repo, Grok pushes.
 
-**Grok: stop and read [For Grok](#grok) first** if you have not already. That page is the whole briefing.
+**Grok: stop and read [For Grok](#grok) first**, then [Architecture](#architecture). Those two pages are the briefing.
 
 Connor’s area is the scratch pad for whatever he is trying tonight. If it is on this page, it is meant to be visible: a sentence, a reminder, a dummy line so the wiki edit loop is obvious. More serious write-ups go on their own pages under this shelf.
 

@@ -1,19 +1,17 @@
 # Docs — hackathon-site
 
-The **wiki** is the human interface: [index.html](index.html) (live: `/docs/`).
+The wiki people use is [index.html](index.html) (live `/docs/`). Markdown here is the source. Register pages in [pages.json](pages.json).
 
-Markdown in this folder is the source. Register new pages in [pages.json](pages.json) — see [adding.md](adding.md).
-
-| File | Contents |
-|------|----------|
-| [index.html](index.html) | Wiki shell (Alpine + marked) |
-| [pages.json](pages.json) | Table of contents |
-| [home.md](home.md) | Wiki home |
-| [GROK.md](GROK.md) | Briefing to point an AI at |
-| [connor/](connor/home.md) | Connor’s shelf |
-| [STACK.md](STACK.md) | HTML, CSS, Alpine, Leaflet, OSRM, Pages |
-| [JAVASCRIPT.md](JAVASCRIPT.md) | Alpine.js 3 — CDN, rules, migration |
-| [board.md](board.md) | Kanban generator |
-| [api.md](api.md) | FastAPI / Cloud Run |
-| [../README.md](../README.md) | Repo README |
-| [../scripts/README.md](../scripts/README.md) | `update_board.py` CLI |
+| File | Wiki hash | Contents |
+|------|-----------|----------|
+| [index.html](index.html) | `/docs/` | Shell (Alpine + marked) |
+| [pages.json](pages.json) | — | Sidebar |
+| [home.md](home.md) | `#home` | Wiki home |
+| [architecture.md](architecture.md) | `#architecture` | Two repos, request flow |
+| [STACK.md](STACK.md) | `#stack` | Site libraries |
+| [JAVASCRIPT.md](JAVASCRIPT.md) | `#javascript` | Alpine.js |
+| [board.md](board.md) | `#board` | Kanban generator |
+| [api.md](api.md) | `#api` | FastAPI / Cloud Run |
+| [GROK.md](GROK.md) | `#grok` | Briefing for Connor’s AI |
+| [connor/](connor/home.md) | `#connor` | Connor’s shelf |
+| [adding.md](adding.md) | `#adding` | How to add a page |

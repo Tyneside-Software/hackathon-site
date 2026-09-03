@@ -1,6 +1,6 @@
 # Add a wiki page
 
-The wiki is meant to accumulate. Do not invent a second docs tree.
+The wiki is meant to accumulate. Do not invent a second docs tree. How the wiki is wired: [Architecture](#architecture).
 
 ## Steps
 

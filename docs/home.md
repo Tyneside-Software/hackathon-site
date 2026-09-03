@@ -1,30 +1,33 @@
 # Tyneside Logistics wiki
 
-This is the documentation area for the hackathon. Pages live as markdown in `docs/` and are linked from the sidebar. Add a file, register it in `pages.json`, and it appears here.
+Documentation for the hackathon. The **Docs** control in the site nav always comes here.
 
-**Live site:** https://hackathon.tyneside.software  
-**Site repo:** [Tyneside-Software/hackathon-site](https://github.com/Tyneside-Software/hackathon-site)  
-**API repo:** [Tyneside-Software/hackathon-api](https://github.com/Tyneside-Software/hackathon-api)
+If you do not know how the site is wired, start with **[Architecture](#architecture)**.
+
+**Live:** https://hackathon.tyneside.software  
+**Site:** [Tyneside-Software/hackathon-site](https://github.com/Tyneside-Software/hackathon-site)  
+**API:** [Tyneside-Software/hackathon-api](https://github.com/Tyneside-Software/hackathon-api)
 
 ## Go here first
 
 | If you need… | Open |
 |--------------|------|
-| Clone, run, git | [Onboarding](../onboarding.html) |
-| Stack decisions | [Site stack](#stack) |
+| How the two repos fit | [Architecture](#architecture) |
+| Clone, run, git (human) | [Onboarding](../onboarding.html) · [Run locally](#local) |
+| Libraries on the site | [Site stack](#stack) |
 | New JavaScript | [Alpine.js](#javascript) |
 | Move a kanban card | [Kanban board](#board) |
-| Call the API | [API stack](#api) · [Alpine test](../api-test.html) |
+| Call the API | [API](#api) · [Alpine test](../api-test.html) |
 | Add a wiki page | [Add a wiki page](#adding) |
-| Connor + Grok | [Connor’s area](#connor) · **[For Grok](#grok)** |
+| Connor + Grok | [Connor’s area](#connor) · [For Grok](#grok) |
 
-## How the wiki works
+## How this wiki works
 
-- **Source of truth** is the `.md` files in this folder (and `pages.json` for the table of contents).
-- The shell is `docs/index.html` (Alpine.js + marked). Hash URLs like `#javascript` are shareable.
-- The **Docs** control in the site nav always comes back here.
-- Product pages (home, map, board) stay out of this folder so the wiki can grow without cluttering the app.
+- Source of truth: markdown in `docs/` plus `pages.json` (sidebar).
+- Shell: `docs/index.html` (Alpine.js + marked). Share pages as `/docs/#architecture`.
+- Product UI stays in the repo root / `app/`. Documentation stays in `docs/`.
+- Serve over HTTP (`http://127.0.0.1:5500/docs/`), not `file://`.
 
-## Repos
+## Repos in one line
 
-The **site** is static HTML on GitHub Pages. The **API** is FastAPI on Cloud Run. They are siblings on disk. See [Run locally](#local).
+The **site** is static HTML on GitHub Pages. The **API** is FastAPI on Cloud Run. They meet only when the browser `fetch`es `window.HACKATHON_API`. [Architecture](#architecture) has the diagram.

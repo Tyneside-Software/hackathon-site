@@ -10,7 +10,13 @@
           "id": "home",
           "title": "Wiki home",
           "file": "home.md",
-          "summary": "How this wiki is laid out and how to add a page."
+          "summary": "Index of the wiki."
+        },
+        {
+          "id": "architecture",
+          "title": "Architecture",
+          "file": "architecture.md",
+          "summary": "Two repos, two hosts, how a request flows."
         },
         {
           "id": "local",

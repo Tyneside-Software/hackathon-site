@@ -99,6 +99,7 @@ function wiki() {
         if (href === "JAVASCRIPT.md") return 'href="#javascript"';
         if (href === "STACK.md") return 'href="#stack"';
         if (href === "GROK.md") return 'href="#grok"';
+        if (href === "architecture.md") return 'href="#architecture"';
         if (href === "connor/home.md") return 'href="#connor"';
         if (href.indexOf("../scripts/README.md") !== -1) return 'href="#board"';
         if (href.charAt(0) === "#") return full;
