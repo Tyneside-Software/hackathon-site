@@ -35,7 +35,7 @@
     <h1 style="font-size:1.7rem;margin-bottom:0.4rem">Done cards</h1>
     <p style="color:var(--muted);max-width:42rem">
       Finished increments live here so the board stays short.
-      <strong>11 cards · 13.5h</strong>.
+      <strong>20 cards · 22.25h</strong>.
       Click a card for the brief. Filter with the chips, hour cards, or <code>?person=lewis</code>.
     </p>
 
@@ -53,31 +53,188 @@
       <button type="button" class="person" data-person="reeve" aria-pressed="false">
         <div class="who"><span class="emoji">🧭</span> Reeve</div>
         <div class="hrs">8.75 <span>hrs</span></div>
-        <div class="meta">3 done · 1 ready · 3 to do</div>
+        <div class="meta">4 done · 1 ready · 2 to do</div>
       </button>
       <button type="button" class="person" data-person="connor" aria-pressed="false">
         <div class="who"><span class="emoji">⚡</span> Connor</div>
         <div class="hrs">6.75 <span>hrs</span></div>
-        <div class="meta">1 ready · 4 to do</div>
+        <div class="meta">3 done · 1 ready · 1 to do</div>
       </button>
       <button type="button" class="person" data-person="michael" aria-pressed="false">
         <div class="who"><span class="emoji">🏗️</span> Michael</div>
-        <div class="hrs">10.75 <span>hrs</span></div>
-        <div class="meta">2 done · 2 to do</div>
+        <div class="hrs">15.25 <span>hrs</span></div>
+        <div class="meta">6 done · 1 to do</div>
       </button>
       <button type="button" class="person" data-person="lewis" aria-pressed="false">
         <div class="who"><span class="emoji">🌱</span> Lewis</div>
         <div class="hrs">8.75 <span>hrs</span></div>
-        <div class="meta">3 done · 4 to do</div>
+        <div class="meta">4 done · 3 to do</div>
       </button>
       <button type="button" class="person" data-person="noah" aria-pressed="false">
         <div class="who"><span class="emoji">🔧</span> Noah</div>
-        <div class="hrs">2 <span>hrs</span></div>
-        <div class="meta">3 done</div>
+        <div class="hrs">6 <span>hrs</span></div>
+        <div class="meta">3 done · 1 in progress</div>
       </button>
     </div>
 
     <div class="card-archive" id="done-archive">
+          <a class="card" id="card-28" href="#t-28" data-person="michael" data-hours="1">
+            <div class="top"><span class="id">28</span><span class="emoji">🏗️</span></div>
+            <div class="title">Alpine.js test page calls GET /test_field</div>
+            <span class="tag tag-ok">api-test.html</span>
+            <div class="bot"><span>1h</span><span>Michael</span></div>
+            <template class="card-brief">
+              <p>First Alpine.js island on the site. <code>api-test.html</code> loads Alpine 3.14.8 and <code>config.js</code>, then <code>GET /test_field</code> on Cloud Run and shows the JSON.</p>
+              <h3>Done when</h3>
+              <ul>
+                <li>The page is in the nav and runs without <code>board.js</code>.</li>
+                <li><code>config.js</code> points at the live Cloud Run URL.</li>
+              </ul>
+              <div class="brief-actions"><a class="btn btn-fill" href="api-test.html">Open API test →</a></div>
+            </template>
+          </a>
+          <a class="card" id="card-29" href="#t-29" data-person="michael" data-hours="2">
+            <div class="top"><span class="id">29</span><span class="emoji">🏗️</span></div>
+            <div class="title">Docs wiki (Docs in the nav)</div>
+            <span class="tag tag-ok">/docs/</span>
+            <div class="bot"><span>2h</span><span>Michael</span></div>
+            <template class="card-brief">
+              <p>Linked wiki at <code>/docs/</code>: markdown in <code>docs/</code>, sidebar from <code>pages.json</code>, Alpine + marked. Architecture, stack, Alpine, API, Connor shelf, For Grok.</p>
+              <h3>Done when</h3>
+              <ul>
+                <li>Docs is in the main nav.</li>
+                <li>A new page is a markdown file plus a <code>pages.json</code> entry.</li>
+              </ul>
+              <div class="brief-actions"><a class="btn btn-fill" href="docs/">Open wiki →</a></div>
+            </template>
+          </a>
+          <a class="card" id="card-30" href="#t-30" data-person="michael" data-hours="1.5">
+            <div class="top"><span class="id">30</span><span class="emoji">🏗️</span></div>
+            <div class="title">Cloud Run GitHub builds (buildpacks, Python 3.13)</div>
+            <span class="tag tag-ok">pack · 3.13</span>
+            <div class="bot"><span>1.5h</span><span>Michael</span></div>
+            <template class="card-brief">
+              <p>GitHub → Cloud Run uses <strong>buildpacks</strong> (<code>pack</code> on ubuntu2404), not the Dockerfile. Pinning Python 3.12 failed the build. Root <code>main.py</code>, <code>Procfile</code>, and <code>.python-version</code> 3.13 make pack succeed. Build is working again.</p>
+              <h3>Done when</h3>
+              <ul>
+                <li>Cloud Build is green on push to API <code>main</code>.</li>
+                <li><code>GET /health</code> reports version 0.1.3 or later.</li>
+              </ul>
+            </template>
+          </a>
+          <a class="card" id="card-14" href="#t-14" data-person="lewis" data-hours="0.75">
+            <div class="top"><span class="id">14</span><span class="emoji">🌱</span></div>
+            <div class="title">Lewis: GitHub edit → run → push (site repo)</div>
+            <span class="tag tag-ok">Tyneside-Software/hackathon-site</span>
+            <div class="bot"><span>0.75h</span><span>Lewis</span></div>
+            <template class="card-brief">
+              <p>Prove the org-repo loop on <strong>hackathon-site</strong>: a tiny visible change, still runs, then push to <code>origin/main</code>. Not a personal fork unless you have been told otherwise.</p>
+                              <h3>Done when</h3>
+                              <ul>
+                                <li>Your commit is on <a href="https://github.com/Tyneside-Software/hackathon-site">Tyneside-Software/hackathon-site</a>.</li>
+                                <li>Home / Map / Board still load after the change.</li>
+                                <li>This card moves to Done.</li>
+                              </ul>
+                              <h3>How</h3>
+                              <ol>
+                                <li>Pull latest <code>main</code>.</li>
+                                <li>Make a small visible edit (name in a comment, README line, harmless label).</li>
+                                <li>Confirm it still runs locally.</li>
+                                <li><code>git add</code> · <code>git commit</code> · <code>git push origin main</code>.</li>
+                              </ol>
+                              <div class="brief-actions"><a class="btn btn-ghost" href="onboarding.html#git">Git steps</a></div>
+            </template>
+          </a>
+          <a class="card" id="card-18" href="#t-18" data-person="connor" data-hours="0.5">
+            <div class="top"><span class="id">18</span><span class="emoji">⚡</span></div>
+            <div class="title">Connor: get the front end running locally</div>
+            <span class="tag tag-ok">clone org repo · serve.ps1 · home + map + board</span>
+            <div class="bot"><span>0.5h</span><span>Connor</span></div>
+            <template class="card-brief">
+              <p>Connor’s first onboarding slice: the desktop site running locally so the routing work can be demoed on his machine.</p>
+                              <h3>Done when</h3>
+                              <ul>
+                                <li>Home, Map, and Board all load at <code>http://127.0.0.1:5500/</code>.</li>
+                              </ul>
+                              <h3>How</h3>
+                              <ol>
+                                <li>Clone <a href="https://github.com/Tyneside-Software/hackathon-site">hackathon-site</a>.</li>
+                                <li><code>.\start.ps1</code> or <code>python -m http.server 5500</code> from that folder.</li>
+                                <li>Skip <code>file://</code>.</li>
+                              </ol>
+                              <div class="brief-actions"><a class="btn btn-ghost" href="onboarding.html">Onboarding steps</a></div>
+            </template>
+          </a>
+          <a class="card" id="card-19" href="#t-19" data-person="connor" data-hours="0.75">
+            <div class="top"><span class="id">19</span><span class="emoji">⚡</span></div>
+            <div class="title">Connor: GitHub edit → run → push (site repo)</div>
+            <span class="tag tag-ok">Tyneside-Software/hackathon-site</span>
+            <div class="bot"><span>0.75h</span><span>Connor</span></div>
+            <template class="card-brief">
+              <p>Prove the org-repo loop on <strong>hackathon-site</strong>. Small visible change, still runs, push to <code>origin/main</code>.</p>
+                              <h3>Done when</h3>
+                              <ul>
+                                <li>Commit is on <a href="https://github.com/Tyneside-Software/hackathon-site">Tyneside-Software/hackathon-site</a>.</li>
+                                <li>The site still looks working.</li>
+                              </ul>
+                              <h3>How</h3>
+                              <ol>
+                                <li>Pull, edit, run, commit, push — same as the GitHub loop at the bottom of this board.</li>
+                              </ol>
+                              <div class="brief-actions"><a class="btn btn-ghost" href="onboarding.html#git">Git steps</a></div>
+            </template>
+          </a>
+          <a class="card" id="card-20" href="#t-20" data-person="michael" data-hours="0.75">
+            <div class="top"><span class="id">20</span><span class="emoji">🏗️</span></div>
+            <div class="title">Michael: GitHub edit → run → push (both repos)</div>
+            <span class="tag tag-ok">after 2h away · prove the loop</span>
+            <div class="bot"><span>0.75h</span><span>Michael</span></div>
+            <template class="card-brief">
+              <p>Michael was away for the first two hours. This card is the same GitHub loop as everyone else, on <strong>both</strong> org repos, before Cloud Run (cards 10–11).</p>
+                              <h3>Done when</h3>
+                              <ul>
+                                <li>A commit from this machine is on hackathon-site <em>and</em> hackathon-api <code>main</code>.</li>
+                                <li>Local site and <code>/health</code> still run.</li>
+                              </ul>
+                              <h3>How</h3>
+                              <ol>
+                                <li>Pull both remotes.</li>
+                                <li>Tiny visible change in each (or one real increment that happens to touch both).</li>
+                                <li>Run, commit, push <code>origin/main</code>.</li>
+                              </ol>
+                              <div class="brief-actions"><a class="btn btn-ghost" href="onboarding.html#git">Git steps</a></div>
+            </template>
+          </a>
+          <a class="card" id="card-21" href="#t-21" data-person="reeve" data-hours="1">
+            <div class="top"><span class="id">21</span><span class="emoji">🧭</span></div>
+            <div class="title">Reeve: start script for front end and back end together</div>
+            <span class="tag tag-ok">one command, two processes, no asking the AI</span>
+            <div class="bot"><span>1h</span><span>Reeve</span></div>
+            <template class="card-brief">
+              <p><code>start.ps1</code> already lives in the site repo. This card is: a teammate can clone both repos as siblings, run one command, and get site :5500 plus API :8080 without asking anyone.</p>
+                              <h3>Done when</h3>
+                              <ul>
+                                <li>From <code>hackathon-site</code>, <code>.\start.ps1</code> opens two windows.</li>
+                                <li>Site and <code>/health</code> both work. If the venv is missing, the script creates it.</li>
+                                <li>A teammate who is not Reeve can follow the README and succeed.</li>
+                              </ul>
+                              <h3>How</h3>
+                              <ol>
+                                <li>Keep site and API as sibling folders.</li>
+                                <li>Fix the script if paths, quoting, or venv creation fail on a clean machine.</li>
+                                <li>Document the command in the README (already started).</li>
+                              </ol>
+            </template>
+          </a>
+          <a class="card" id="card-27" href="#t-27" data-person="connor" data-hours="0.5">
+            <div class="top"><span class="id">27</span><span class="emoji">⚡</span></div>
+            <div class="title">finished push and pull</div>
+            <span class="tag tag-ok">git pull · git push</span>
+            <div class="bot"><span>0.5h</span><span>Connor</span></div>
+            <template class="card-brief">
+              <p>Practiced git pull and git push against the Tyneside-Software hackathon-site repo.</p>
+            </template>
+          </a>
           <a class="card" id="card-26" href="#t-26" data-person="michael" data-hours="2">
             <div class="top"><span class="id">26</span><span class="emoji">🏗️</span></div>
             <div class="title">Site + API deploy on push to main</div>

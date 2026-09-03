@@ -56,7 +56,7 @@
     <p class="filter-status" id="filter-status">Showing everyone.</p>
 
     <div class="board-banner">
-      <div>📋 Site + API deploy from <strong>push to main</strong>. Reeve, Lewis, and Noah have the front end locally; Reeve and Noah have the API too. Connor still proves the GitHub loop, then the map cards.</div>
+      <div>📋 Cloud Run <strong>builds again</strong> (Python 3.13 buildpacks). Noah is wiring the API to <strong>Firestore</strong>. Map is ready to demo. Next product slices: job list, demo seed, localStorage, persist routes.</div>
       <div class="btns">
         <a class="btn btn-fill" href="app/">Map app</a>
         <a class="btn btn-ghost" href="onboarding.html">Onboarding</a>
@@ -69,30 +69,31 @@
       <button type="button" class="person" data-person="reeve" aria-pressed="false">
         <div class="who"><span class="emoji">🧭</span> Reeve</div>
         <div class="hrs">8.75 <span>hrs</span></div>
-        <div class="meta">3 done · 1 ready · 3 to do</div>
+        <div class="meta">4 done · 1 ready · 2 to do</div>
       </button>
       <button type="button" class="person" data-person="connor" aria-pressed="false">
         <div class="who"><span class="emoji">⚡</span> Connor</div>
         <div class="hrs">6.75 <span>hrs</span></div>
-        <div class="meta">1 ready · 4 to do</div>
+        <div class="meta">3 done · 1 ready · 1 to do</div>
       </button>
       <button type="button" class="person" data-person="michael" aria-pressed="false">
         <div class="who"><span class="emoji">🏗️</span> Michael</div>
-        <div class="hrs">10.75 <span>hrs</span></div>
-        <div class="meta">2 done · 2 to do</div>
+        <div class="hrs">15.25 <span>hrs</span></div>
+        <div class="meta">6 done · 1 to do</div>
       </button>
       <button type="button" class="person" data-person="lewis" aria-pressed="false">
         <div class="who"><span class="emoji">🌱</span> Lewis</div>
         <div class="hrs">8.75 <span>hrs</span></div>
-        <div class="meta">3 done · 4 to do</div>
+        <div class="meta">4 done · 3 to do</div>
       </button>
       <button type="button" class="person" data-person="noah" aria-pressed="false">
         <div class="who"><span class="emoji">🔧</span> Noah</div>
-        <div class="hrs">2 <span>hrs</span></div>
-        <div class="meta">3 done</div>
+        <div class="hrs">6 <span>hrs</span></div>
+        <div class="meta">3 done · 1 in progress</div>
       </button>
     </div>
     <!-- /BOARD:PEOPLE -->
+
 
 
 
@@ -101,9 +102,9 @@
       <div class="kanban">
 
         <div class="col todo">
-          <div class="head"><span class="col-name">To do</span><span class="count" id="todo-col-count">13 · 17.5h</span></div>
+          <div class="head"><span class="col-name">To do</span><span class="count" id="todo-col-count">7 · 13.25h</span></div>
           <div class="stack">
-            <script type="application/json" id="todo-cards-index">[{"id":"13","person":"lewis","hours":1},{"id":"14","person":"lewis","hours":0.75},{"id":"17","person":"reeve","hours":0.75},{"id":"21","person":"reeve","hours":1},{"id":"18","person":"connor","hours":0.5},{"id":"19","person":"connor","hours":0.75},{"id":"20","person":"michael","hours":0.75},{"id":"06","person":"lewis","hours":2},{"id":"07","person":"connor","hours":2},{"id":"08","person":"reeve","hours":1.5},{"id":"09","person":"lewis","hours":2},{"id":"11","person":"michael","hours":4},{"id":"27","person":"connor","hours":0.5}]</script>
+            <script type="application/json" id="todo-cards-index">[{"id":"13","person":"lewis","hours":1},{"id":"17","person":"reeve","hours":0.75},{"id":"06","person":"lewis","hours":2},{"id":"07","person":"connor","hours":2},{"id":"08","person":"reeve","hours":1.5},{"id":"09","person":"lewis","hours":2},{"id":"11","person":"michael","hours":4}]</script>
             <p class="empty-col is-hidden" data-all="Nothing here."></p>
             <a class="card" id="card-13" href="#t-13" data-person="lewis" data-hours="1">
               <div class="top"><span class="id">13</span><span class="emoji">🌱</span></div>
@@ -124,29 +125,6 @@
                                   <li><code>uvicorn app.main:app --reload --port 8080</code> (or just <code>.\start.ps1</code> from the site folder).</li>
                                 </ol>
                                 <div class="brief-actions"><a class="btn btn-ghost" href="onboarding.html">Onboarding steps</a></div>
-              </template>
-            </a>
-            <a class="card" id="card-14" href="#t-14" data-person="lewis" data-hours="0.75">
-              <div class="top"><span class="id">14</span><span class="emoji">🌱</span></div>
-              <div class="title">Lewis: GitHub edit → run → push (site repo)</div>
-              <span class="tag tag-wait">Tyneside-Software/hackathon-site</span>
-              <div class="bot"><span>0.75h</span><span>Lewis</span></div>
-              <template class="card-brief">
-                <p>Prove the org-repo loop on <strong>hackathon-site</strong>: a tiny visible change, still runs, then push to <code>origin/main</code>. Not a personal fork unless you have been told otherwise.</p>
-                                <h3>Done when</h3>
-                                <ul>
-                                  <li>Your commit is on <a href="https://github.com/Tyneside-Software/hackathon-site">Tyneside-Software/hackathon-site</a>.</li>
-                                  <li>Home / Map / Board still load after the change.</li>
-                                  <li>This card moves to Done.</li>
-                                </ul>
-                                <h3>How</h3>
-                                <ol>
-                                  <li>Pull latest <code>main</code>.</li>
-                                  <li>Make a small visible edit (name in a comment, README line, harmless label).</li>
-                                  <li>Confirm it still runs locally.</li>
-                                  <li><code>git add</code> · <code>git commit</code> · <code>git push origin main</code>.</li>
-                                </ol>
-                                <div class="brief-actions"><a class="btn btn-ghost" href="onboarding.html#git">Git steps</a></div>
               </template>
             </a>
             <a class="card" id="card-17" href="#t-17" data-person="reeve" data-hours="0.75">
@@ -170,39 +148,82 @@
                                 <div class="brief-actions"><a class="btn btn-ghost" href="onboarding.html#git">Git steps</a></div>
               </template>
             </a>
-            <a class="card" id="card-21" href="#t-21" data-person="reeve" data-hours="1">
-              <div class="top"><span class="id">21</span><span class="emoji">🧭</span></div>
-              <div class="title">Reeve: start script for front end and back end together</div>
-              <span class="tag tag-wait">one command, two processes, no asking the AI</span>
-              <div class="bot"><span>1h</span><span>Reeve</span></div>
+            <a class="card" id="card-06" href="#t-06" data-person="lewis" data-hours="2">
+              <div class="top"><span class="id">06</span><span class="emoji">🌱</span></div>
+              <div class="title">Save routes in the browser (localStorage)</div>
+              <div class="bot"><span>2h</span><span>Lewis</span></div>
               <template class="card-brief">
-                <p><code>start.ps1</code> already lives in the site repo. This card is: a teammate can clone both repos as siblings, run one command, and get site :5500 plus API :8080 without asking anyone.</p>
+                <p>Persist the current waypoint list in the browser so a refresh does not wipe a demo. No API. This is the persistence story until card 11.</p>
                                 <h3>Done when</h3>
                                 <ul>
-                                  <li>From <code>hackathon-site</code>, <code>.\start.ps1</code> opens two windows.</li>
-                                  <li>Site and <code>/health</code> both work. If the venv is missing, the script creates it.</li>
-                                  <li>A teammate who is not Reeve can follow the README and succeed.</li>
+                                  <li>Add stops, refresh, they come back on the map and in the sidebar.</li>
+                                  <li>Clear still clears, including storage.</li>
+                                  <li>Home / Board still load if storage is empty or corrupt — never a blank map.</li>
                                 </ul>
                                 <h3>How</h3>
                                 <ol>
-                                  <li>Keep site and API as sibling folders.</li>
-                                  <li>Fix the script if paths, quoting, or venv creation fail on a clean machine.</li>
-                                  <li>Document the command in the README (already started).</li>
+                                  <li>Write waypoints (lat/lng order) to <code>localStorage</code> from <code>app/map.js</code>.</li>
+                                  <li>Restore on load, then let the user Calculate route as today.</li>
+                                  <li>Do not block on Cloud Run.</li>
                                 </ol>
+                                <div class="brief-actions"><a class="btn btn-ghost" href="app/">Open map</a></div>
+              </template>
+            </a>
+            <a class="card" id="card-07" href="#t-07" data-person="connor" data-hours="2">
+              <div class="top"><span class="id">07</span><span class="emoji">⚡</span></div>
+              <div class="title">Job list beside the map (seed Howden-shaped jobs)</div>
+              <div class="bot"><span>2h</span><span>Connor</span></div>
+              <template class="card-brief">
+                <p>A job list in the map sidebar, seeded with Howden-shaped work: named jobs, rough Tyneside locations. This is the first hint of dispatch, not a full scheduler.</p>
+                                <h3>Done when</h3>
+                                <ul>
+                                  <li>At least five seed jobs visible beside the map without an API.</li>
+                                  <li>Clicking a job does something visible (focus the map, highlight, or drop its waypoint).</li>
+                                  <li>The existing waypoint + route flow still works if you ignore the list.</li>
+                                </ul>
+                                <h3>How</h3>
+                                <ol>
+                                  <li>Hard-code a small JSON/JS list in the map page (name, area, lat/lng).</li>
+                                  <li>Render it in the existing sidebar; keep the layout usable on a laptop.</li>
+                                  <li>Shape the names like real cleaning/logistics jobs, not “Test 1”.</li>
+                                </ol>
+                                <div class="brief-actions"><a class="btn btn-ghost" href="app/">Open map</a></div>
               </template>
             </a>
             <a class="card todo-index" id="todo-index" href="todo.html">
-              <div class="todo-index-count" id="todo-index-count">13</div>
+              <div class="todo-index-count" id="todo-index-count">7</div>
               <div class="title">All to-do cards</div>
-              <p class="todo-index-meta" id="todo-index-meta">9 more · all 13 →</p>
+              <p class="todo-index-meta" id="todo-index-meta">3 more · all 7 →</p>
             </a>
           </div>
         </div>
 
         <div class="col doing">
-          <div class="head"><span class="col-name">In progress</span><span class="count">0 · 0h</span></div>
+          <div class="head"><span class="col-name">In progress</span><span class="count">1 · 4h</span></div>
           <div class="stack">
-            <p class="empty-col" data-all="Empty on purpose. Pull a Ready card and ship it.">Empty on purpose. Pull a Ready card and ship it.</p>
+            <p class="empty-col is-hidden" data-all="Empty on purpose. Pull a Ready card and ship it."></p>
+            <a class="card" id="card-31" href="#t-31" data-person="noah" data-hours="4">
+              <div class="top"><span class="id">31</span><span class="emoji">🔧</span></div>
+              <div class="title">Noah: API talks to Firestore</div>
+              <span class="tag tag-wait">Datastore / Firestore</span>
+              <div class="bot"><span>4h</span><span>Noah</span></div>
+              <template class="card-brief">
+                <p>Wire <code>hackathon-api</code> to Firestore (code currently imports Datastore in <code>POST /create_field</code>). The handler should take a real key/value, write it, and read it back. Cloud Run is live; this is persistence, not deploy.</p>
+                <h3>Done when</h3>
+                <ul>
+                  <li><code>POST /create_field</code> (or a clearer route) stores a field in GCP and returns an id.</li>
+                  <li>A GET can read that field back from the live API.</li>
+                  <li><code>/health</code> still works if Firestore is down.</li>
+                  <li>The Cloud Run service account has datastore/firestore access.</li>
+                </ul>
+                <h3>How</h3>
+                <ol>
+                  <li>Use the official client (<code>google-cloud-firestore</code> or Datastore — pick one and document it).</li>
+                  <li>Do not import the client at module top if that can crash Cloud Run when credentials are missing — lazy import or catch and return 503.</li>
+                  <li>Add a GET so Alpine can prove the round-trip (extend <code>api-test.html</code> or a new island).</li>
+                </ol>
+              </template>
+            </a>
           </div>
         </div>
 
@@ -255,13 +276,13 @@
         </div>
 
         <div class="col done">
-          <div class="head"><span class="col-name">Done</span><span class="count" id="done-col-count">11 · 13.5h</span></div>
+          <div class="head"><span class="col-name">Done</span><span class="count" id="done-col-count">20 · 22.25h</span></div>
           <div class="stack">
-            <script type="application/json" id="done-cards-index">[{"id":"26","person":"michael","hours":2},{"id":"10","person":"michael","hours":4},{"id":"12","person":"lewis","hours":0.5},{"id":"15","person":"reeve","hours":0.5},{"id":"16","person":"reeve","hours":1},{"id":"01","person":"lewis","hours":0.5},{"id":"02","person":"reeve","hours":1},{"id":"03","person":"lewis","hours":2},{"id":"25","person":"noah","hours":0.5},{"id":"22","person":"noah","hours":0.5},{"id":"23","person":"noah","hours":1}]</script>
+            <script type="application/json" id="done-cards-index">[{"id":"28","person":"michael","hours":1},{"id":"29","person":"michael","hours":2},{"id":"30","person":"michael","hours":1.5},{"id":"14","person":"lewis","hours":0.75},{"id":"18","person":"connor","hours":0.5},{"id":"19","person":"connor","hours":0.75},{"id":"20","person":"michael","hours":0.75},{"id":"21","person":"reeve","hours":1},{"id":"27","person":"connor","hours":0.5},{"id":"26","person":"michael","hours":2},{"id":"10","person":"michael","hours":4},{"id":"12","person":"lewis","hours":0.5},{"id":"15","person":"reeve","hours":0.5},{"id":"16","person":"reeve","hours":1},{"id":"01","person":"lewis","hours":0.5},{"id":"02","person":"reeve","hours":1},{"id":"03","person":"lewis","hours":2},{"id":"25","person":"noah","hours":0.5},{"id":"22","person":"noah","hours":0.5},{"id":"23","person":"noah","hours":1}]</script>
             <a class="card done-index" id="done-index" href="done.html">
-              <div class="done-index-count" id="done-index-count">11</div>
+              <div class="done-index-count" id="done-index-count">20</div>
               <div class="title">All done cards</div>
-              <p class="done-index-meta" id="done-index-meta">11 cards · 13.5h · archive →</p>
+              <p class="done-index-meta" id="done-index-meta">20 cards · 22.25h · archive →</p>
             </a>
           </div>
         </div>
@@ -269,6 +290,7 @@
       </div>
     </div>
     <!-- /BOARD:KANBAN -->
+
 
 
 
@@ -284,37 +306,38 @@
         <tr data-person="reeve">
           <td>🧭</td>
           <td><strong>Reeve</strong></td>
-          <td>Reeve: get the front end running locally (0.5h, done) · Reeve: get the back end running locally (1h, done) · Reeve: GitHub edit → run → push (API repo) (0.75h) · Reeve: start script for front end and back end together (1h) · Demo seed: 5 Tyneside waypoints + named run (1.5h) · Map with clickable / draggable waypoints (3h, ready) · Run the API locally and hit /health (1h, done)</td>
+          <td>Reeve: start script for front end and back end together (1h, done) · Reeve: get the front end running locally (0.5h, done) · Reeve: get the back end running locally (1h, done) · Reeve: GitHub edit → run → push (API repo) (0.75h) · Demo seed: 5 Tyneside waypoints + named run (1.5h) · Map with clickable / draggable waypoints (3h, ready) · Run the API locally and hit /health (1h, done)</td>
           <td><strong>8.75h</strong></td>
         </tr>
         <tr data-person="connor">
           <td>⚡</td>
           <td><strong>Connor</strong></td>
-          <td>Connor: get the front end running locally (0.5h) · Connor: GitHub edit → run → push (site repo) (0.75h) · Job list beside the map (seed Howden-shaped jobs) (2h) · Route calculation between waypoints (3h, ready) · finished push and pull (0.5h)</td>
+          <td>Connor: get the front end running locally (0.5h, done) · Connor: GitHub edit → run → push (site repo) (0.75h, done) · finished push and pull (0.5h, done) · Job list beside the map (seed Howden-shaped jobs) (2h) · Route calculation between waypoints (3h, ready)</td>
           <td><strong>6.75h</strong></td>
         </tr>
         <tr data-person="michael">
           <td>🏗️</td>
           <td><strong>Michael</strong></td>
-          <td>Site + API deploy on push to main (2h, done) · Cloud Run API live + CORS for Pages (4h, done) · Michael: GitHub edit → run → push (both repos) (0.75h) · Persist routes on the API (replace localStorage) (4h)</td>
-          <td><strong>10.75h</strong></td>
+          <td>Alpine.js test page calls GET /test_field (1h, done) · Docs wiki (Docs in the nav) (2h, done) · Cloud Run GitHub builds (buildpacks, Python 3.13) (1.5h, done) · Michael: GitHub edit → run → push (both repos) (0.75h, done) · Site + API deploy on push to main (2h, done) · Cloud Run API live + CORS for Pages (4h, done) · Persist routes on the API (replace localStorage) (4h)</td>
+          <td><strong>15.25h</strong></td>
         </tr>
         <tr data-person="lewis">
           <td>🌱</td>
           <td><strong>Lewis</strong></td>
-          <td>Lewis: get the front end running locally (0.5h, done) · Lewis: get the back end running locally (1h) · Lewis: GitHub edit → run → push (site repo) (0.75h) · Save routes in the browser (localStorage) (2h) · Local “who am I” account (name in the browser) (2h) · Serve the site locally (0.5h, done) · Desktop home in Tyneside style (2h, done)</td>
+          <td>Lewis: GitHub edit → run → push (site repo) (0.75h, done) · Lewis: get the front end running locally (0.5h, done) · Lewis: get the back end running locally (1h) · Save routes in the browser (localStorage) (2h) · Local “who am I” account (name in the browser) (2h) · Serve the site locally (0.5h, done) · Desktop home in Tyneside style (2h, done)</td>
           <td><strong>8.75h</strong></td>
         </tr>
         <tr data-person="noah">
           <td>🔧</td>
           <td><strong>Noah</strong></td>
-          <td>Noah: API version on / and /health (0.5h, done) · Noah: get the front end running locally (0.5h, done) · Noah: get the back end running locally (1h, done)</td>
-          <td><strong>2h</strong></td>
+          <td>Noah: API version on / and /health (0.5h, done) · Noah: get the front end running locally (0.5h, done) · Noah: get the back end running locally (1h, done) · Noah: API talks to Firestore (4h, in progress)</td>
+          <td><strong>6h</strong></td>
         </tr>
       </tbody>
     </table>
     </div>
     <!-- /BOARD:WHO -->
+
 
 
 
