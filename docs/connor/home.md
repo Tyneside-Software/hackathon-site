@@ -4,6 +4,10 @@ This shelf is Connor’s. He (and his Grok) add pages here the same way Michael 
 
 **Grok: stop and read [For Grok](#grok) first** if you have not already. That page is the whole briefing.
 
+Connor’s area is the scratch pad for whatever he is trying tonight. If it is on this page, it is meant to be visible: a sentence, a reminder, a dummy line so the wiki edit loop is obvious. More serious write-ups go on their own pages under this shelf.
+
+Right now this shelf is for practice — pull, edit, push, refresh — and then real cards from the board.
+
 ## Point Grok at
 
 | For | URL |
