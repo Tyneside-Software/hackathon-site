@@ -4,6 +4,8 @@ This page is the briefing for an AI (Grok, or anything similar) helping **Connor
 
 If you have been pointed at this URL and given a task, **read this whole page, then [Architecture](#architecture), then execute**. Do not ask Connor to paste stack notes that are already here.
 
+Been away, or the board looks noisy: the human catch-up page is [Current progress](../progress.html).
+
 | Field | Value |
 |-------|--------|
 | **Human** | Connor (board id `connor`, ⚡) |

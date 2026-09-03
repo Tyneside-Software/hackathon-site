@@ -6,7 +6,7 @@ Two GitHub repos, two hosts, one product. The **site** is static files. The **AP
   Browser
      │
      ├─ HTML / CSS / JS  ← GitHub Pages  (hackathon.tyneside.software)
-     │     index, map, board, wiki, api-test
+     │     index, progress, map, board, wiki, api-test
      │
      ├─ OSM tiles + public OSRM          (map only; not our API)
      │
@@ -33,6 +33,7 @@ Clone them as **siblings**. `start.ps1` finds the API as `../hackathon-api`.
 ```
 hackathon-site/
   index.html          Home
+  progress.html       Catch-up snapshot (been away?)
   app/                Map (Leaflet + map.js)
   board.html          Kanban (preview columns)
   board.js            Filter, card modal, scroll lock

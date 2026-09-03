@@ -12,6 +12,7 @@ If you do not know how the site is wired, start with **[Architecture](#architect
 
 | If you need… | Open |
 |--------------|------|
+| Been away — current picture | [Current progress](../progress.html) |
 | How the two repos fit | [Architecture](#architecture) |
 | Clone, run, git (human) | [Onboarding](../onboarding.html) · [Run locally](#local) |
 | Libraries on the site | [Site stack](#stack) |

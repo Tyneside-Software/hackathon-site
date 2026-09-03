@@ -477,6 +477,7 @@ def render_archive_page(cards: list[dict], column: str) -> str:
       </a>
       <div class="nav-links">
         <a href="index.html">Home</a>
+        <a href="progress.html" class="nav-now">Progress</a>
         <a href="app/">Map</a>
         <a href="board.html">Board</a>
         <a href="todo.html"{todo_cur}>To do</a>

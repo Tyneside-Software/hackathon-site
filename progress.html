@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Current progress · Tyneside Logistics</title>
+  <meta name="description" content="Catch-up snapshot for the Tyneside Logistics hackathon. Map is demoable, Cloud Run is live at 0.1.3, Noah is wiring Firestore.">
+  <link rel="icon" href="logo.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+  <script src="config.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.8/dist/cdn.min.js"></script>
+</head>
+<body class="site progress-page">
+  <nav class="site-nav" aria-label="Primary">
+    <div class="inner">
+      <a href="index.html" class="brand-link">
+        <img src="logo.svg" width="36" height="36" alt="Tyneside">
+        <span>TYNESIDE</span>
+        <span class="brand-sub">LOGISTICS</span>
+      </a>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="progress.html" class="nav-now is-current" aria-current="page">Progress</a>
+        <a href="app/">Map</a>
+        <a href="board.html">Board</a>
+        <a href="todo.html">To do</a>
+        <a href="done.html">Done</a>
+        <a href="docs/" class="nav-docs">Docs</a>
+        <a href="api-test.html">API test</a>
+        <a href="onboarding.html">Onboarding</a>
+        <a href="lewis.html">Lewis</a>
+      </div>
+      <a class="btn btn-fill" href="app/">Open map →</a>
+    </div>
+  </nav>
+
+  <header class="progress-hero">
+    <div class="wrap">
+      <p class="hero-kicker">
+        Snapshot ·
+        <time datetime="2026-09-03">3 September 2026</time>
+        · catch-up for anyone who has been away
+      </p>
+      <h1>CURRENT<br>PROGRESS</h1>
+      <p class="hero-tag">The map is demoable. The API is live. Persistence is the work in flight.</p>
+      <p class="hero-lead">
+        Two repos, two hosts. The site is static on GitHub Pages.
+        The API is FastAPI on Cloud Run in London, version <strong>0.1.3</strong>,
+        building again on Python 3.13 pack.
+        They only meet when the browser <code>fetch</code>es
+        <code>window.HACKATHON_API</code>.
+        Noah is wiring that API to Firestore.
+        Next product slices still live on the map: a job list, a demo seed, and saving routes in the browser.
+      </p>
+      <div class="hero-actions">
+        <a class="btn btn-fill" href="app/">Open the map →</a>
+        <a class="btn btn-ghost" href="board.html">Kanban</a>
+        <a class="btn btn-ghost" href="docs/#architecture">Architecture</a>
+        <a class="btn btn-ghost" href="api-test.html">Ping the API</a>
+        <a class="btn btn-ghost" href="onboarding.html">Get running</a>
+      </div>
+    </div>
+  </header>
+
+  <div class="progress-live-wrap">
+    <div class="wrap-wide">
+      <div class="progress-live" x-data="progressPulse()" x-init="ping()" aria-live="polite">
+        <div class="progress-live-item">
+          <span class="progress-dot" :class="dotClass" aria-hidden="true"></span>
+          <span>
+            <span class="k">API</span>
+            <span class="v" x-text="apiLine">Cloud Run · snapshot 0.1.3</span>
+          </span>
+        </div>
+        <div class="progress-live-item">
+          <span class="progress-dot is-ok" aria-hidden="true"></span>
+          <span>
+            <span class="k">Site</span>
+            <span class="v">Pages · hackathon.tyneside.software</span>
+          </span>
+        </div>
+        <div class="progress-live-item">
+          <span class="progress-dot is-ok" aria-hidden="true"></span>
+          <span>
+            <span class="k">Map</span>
+            <span class="v">Waypoints + OSRM · ready to demo</span>
+          </span>
+        </div>
+        <div class="progress-live-item">
+          <span class="progress-dot is-now" aria-hidden="true"></span>
+          <span>
+            <span class="k">Persistence</span>
+            <span class="v">Noah · Firestore in progress</span>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <nav class="progress-jump wrap-wide" aria-label="On this page">
+    <a href="#brief">Read first</a>
+    <a href="#now">Now / next</a>
+    <a href="#who">Who</a>
+    <a href="#landed">What landed</a>
+    <a href="#stack">Stack</a>
+    <a href="#pickup">Pick up</a>
+  </nav>
+
+  <section class="section" id="brief">
+    <div class="wrap">
+      <p class="hero-kicker">Sixty seconds</p>
+      <h2>Read this first</h2>
+      <p class="lede">If you only have a minute, this is the whole picture.</p>
+      <ol class="progress-facts">
+        <li>
+          <span class="n">01</span>
+          <div>
+            <strong>Two repos, two hosts.</strong>
+            <span><code>hackathon-site</code> is HTML on GitHub Pages.
+            <code>hackathon-api</code> is FastAPI on Cloud Run.
+            Clone them as siblings. <code>.\start.ps1</code> starts both.</span>
+          </div>
+        </li>
+        <li>
+          <span class="n">02</span>
+          <div>
+            <strong>The map does not call our API.</strong>
+            <span>Leaflet + OSM tiles + public OSRM, with a straight-line fallback.
+            You can demo routing tonight even if Cloud Run is quiet.</span>
+          </div>
+        </li>
+        <li>
+          <span class="n">03</span>
+          <div>
+            <strong>Cloud Run builds again.</strong>
+            <span>GitHub → Cloud Run uses <em>buildpacks</em> (<code>pack</code> on ubuntu2404), not the Dockerfile.
+            Pinning Python 3.12 failed the build. Pin is <strong>3.13</strong>. Live health is <strong>0.1.3</strong>.</span>
+          </div>
+        </li>
+        <li>
+          <span class="n">04</span>
+          <div>
+            <strong>Noah is on persistence.</strong>
+            <span>Card 31: the API should write a field to Firestore/Datastore and read it back.
+            <code>/health</code> must stay cheap if the database is down. Card 11 (persist routes) waits on this.</span>
+          </div>
+        </li>
+        <li>
+          <span class="n">05</span>
+          <div>
+            <strong>Next product is still the map.</strong>
+            <span>Job list (Connor), demo seed (Reeve), localStorage routes (Lewis), then a display name.
+            That is the show-and-tell path while Firestore lands.</span>
+          </div>
+        </li>
+        <li>
+          <span class="n">06</span>
+          <div>
+            <strong>New JavaScript is Alpine.js 3.</strong>
+            <span>CDN, <code>defer</code>, no npm. This page pings <code>/health</code> that way.
+            Docs live at <a href="docs/">/docs/</a>. Board source of truth is <code>scripts/cards.json</code>, not hand-edited HTML.</span>
+          </div>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="section progress-sec" id="now">
+    <div class="wrap-wide">
+      <p class="hero-kicker">Board, distilled</p>
+      <h2>Now, next, later</h2>
+      <p class="lede">The kanban has the briefs. This is the order that matters if you just walked in.</p>
+      <div class="progress-lanes">
+        <article class="progress-lane is-now">
+          <header>
+            <span class="lane-kicker">In flight</span>
+            <h3>Now</h3>
+            <p>1 card · 4h</p>
+          </header>
+          <a class="progress-item" href="board.html#t-31">
+            <span class="id">31 · 🔧 Noah</span>
+            <strong>API talks to Firestore</strong>
+            <span>Datastore is imported on <code>POST /create_field</code>. Still need a real key/value write, a GET round-trip, lazy import / 503, and the service account. Do not put the client at module top.</span>
+          </a>
+        </article>
+        <article class="progress-lane is-next">
+          <header>
+            <span class="lane-kicker">Ready + product</span>
+            <h3>Next</h3>
+            <p>Demo the map, then fill it</p>
+          </header>
+          <a class="progress-item" href="board.html#t-04">
+            <span class="id">04 · 🧭 Reeve · Ready</span>
+            <strong>Clickable / draggable waypoints</strong>
+            <span>Live on <code>app/</code>. Polish and a teammate can add two pins without a briefing.</span>
+          </a>
+          <a class="progress-item" href="board.html#t-05">
+            <span class="id">05 · ⚡ Connor · Ready</span>
+            <strong>Route calculation</strong>
+            <span>OSRM driving, haversine fallback. Sidebar shows distance, time, and engine.</span>
+          </a>
+          <a class="progress-item" href="todo.html#t-07">
+            <span class="id">07 · ⚡ Connor</span>
+            <strong>Job list beside the map</strong>
+            <span>Five Howden-shaped seed jobs. Click a job, something visible happens.</span>
+          </a>
+          <a class="progress-item" href="todo.html#t-08">
+            <span class="id">08 · 🧭 Reeve</span>
+            <strong>Demo seed: five Tyneside stops</strong>
+            <span>One button loads a named run so nobody clicks the map five times in a demo.</span>
+          </a>
+          <a class="progress-item" href="todo.html#t-06">
+            <span class="id">06 · 🌱 Lewis</span>
+            <strong>Save routes in localStorage</strong>
+            <span>Refresh must not wipe a demo. Fallback until the API can persist.</span>
+          </a>
+        </article>
+        <article class="progress-lane is-later">
+          <header>
+            <span class="lane-kicker">Waiting or onboarding</span>
+            <h3>Later</h3>
+            <p>7 open · 13.25h</p>
+          </header>
+          <a class="progress-item" href="todo.html#t-11">
+            <span class="id">11 · 🏗️ Michael · after Firestore</span>
+            <strong>Persist routes on the API</strong>
+            <span>Replace browser-only storage so two machines share a run. Blocked on card 31.</span>
+          </a>
+          <a class="progress-item" href="todo.html#t-09">
+            <span class="id">09 · 🌱 Lewis</span>
+            <strong>Local “who am I”</strong>
+            <span>Display name in the browser. No real auth.</span>
+          </a>
+          <a class="progress-item" href="todo.html#t-13">
+            <span class="id">13 · 🌱 Lewis</span>
+            <strong>Back end running locally</strong>
+            <span><code>/health</code> on :8080. Onboarding, not Cloud Run.</span>
+          </a>
+          <a class="progress-item" href="todo.html#t-17">
+            <span class="id">17 · 🧭 Reeve</span>
+            <strong>GitHub loop on the API repo</strong>
+            <span>Tiny change, still serves health, push to <code>origin/main</code>.</span>
+          </a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="who">
+    <div class="wrap-wide">
+      <p class="hero-kicker">The room</p>
+      <h2>Who is on what</h2>
+      <p class="lede">Hours are the board totals. Focus is what to pick up tonight.</p>
+      <div class="progress-who">
+        <a class="progress-person" href="board.html?person=noah">
+          <span class="who"><span class="emoji">🔧</span> Noah</span>
+          <span class="hrs">6 <span>hrs</span></span>
+          <span class="focus">Firestore · card 31</span>
+          <span class="meta">3 done · 1 in progress. Machine is up. This is the persistence path.</span>
+        </a>
+        <a class="progress-person" href="board.html?person=reeve">
+          <span class="who"><span class="emoji">🧭</span> Reeve</span>
+          <span class="hrs">8.75 <span>hrs</span></span>
+          <span class="focus">Map polish · demo seed</span>
+          <span class="meta">4 done · 1 ready · 2 to do. Waypoints are live; seed is the demo unlock.</span>
+        </a>
+        <a class="progress-person" href="board.html?person=connor">
+          <span class="who"><span class="emoji">⚡</span> Connor</span>
+          <span class="hrs">6.75 <span>hrs</span></span>
+          <span class="focus">Routing polish · job list</span>
+          <span class="meta">3 done · 1 ready · 1 to do. OSRM works; jobs make it look like dispatch.</span>
+        </a>
+        <a class="progress-person" href="board.html?person=lewis">
+          <span class="who"><span class="emoji">🌱</span> Lewis</span>
+          <span class="hrs">8.75 <span>hrs</span></span>
+          <span class="focus">localStorage · who-am-I · local API</span>
+          <span class="meta">4 done · 3 to do. Front end loop is done. Persistence in the browser is next.</span>
+        </a>
+        <a class="progress-person" href="board.html?person=michael">
+          <span class="who"><span class="emoji">🏗️</span> Michael</span>
+          <span class="hrs">15.25 <span>hrs</span></span>
+          <span class="focus">Persist routes after 31</span>
+          <span class="meta">6 done · 1 to do. Cloud Run, wiki, Alpine test, 3.13 pin. Card 11 waits on Noah.</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section progress-sec" id="landed">
+    <div class="wrap">
+      <p class="hero-kicker">While you were away</p>
+      <h2>What already shipped</h2>
+      <p class="lede">20 cards · 22.25h on Done. Do not redo these.</p>
+      <ol class="progress-rail">
+        <li>
+          <span class="mark" aria-hidden="true"></span>
+          <div class="body">
+            <p class="hero-kicker">3 September · card 30</p>
+            <h3>Cloud Run builds on Python 3.13 pack</h3>
+            <p>ubuntu2404 has 3.13 and 3.14 only. A 3.12 pin failed Cloud Build. Root <code>main.py</code>, <code>Procfile</code>, and <code>.python-version</code> 3.13 make pack succeed. Live <code>/health</code> reports <strong>0.1.3</strong>.</p>
+          </div>
+        </li>
+        <li>
+          <span class="mark" aria-hidden="true"></span>
+          <div class="body">
+            <p class="hero-kicker">3 September · card 29</p>
+            <h3>Docs wiki, including architecture</h3>
+            <p>Docs is in the nav. Markdown in <code>docs/</code>, sidebar from <code>pages.json</code>, Alpine + marked. If you do not know how the two repos fit, open <a href="docs/#architecture">Architecture</a>.</p>
+          </div>
+        </li>
+        <li>
+          <span class="mark" aria-hidden="true"></span>
+          <div class="body">
+            <p class="hero-kicker">3 September · card 28</p>
+            <h3>Alpine API test page</h3>
+            <p><a href="api-test.html">api-test.html</a> calls <code>GET /test_field</code> on Cloud Run. First Alpine island. New UI behaviour goes here, not React/Vue/npm.</p>
+          </div>
+        </li>
+        <li>
+          <span class="mark" aria-hidden="true"></span>
+          <div class="body">
+            <p class="hero-kicker">Cards 22 · 23 · 25</p>
+            <h3>Noah’s machine, then VERSION</h3>
+            <p>Front end and local API are up. <code>VERSION</code> is on <code>/</code> and <code>/health</code>. He moved from onboarding onto Firestore.</p>
+          </div>
+        </li>
+        <li>
+          <span class="mark" aria-hidden="true"></span>
+          <div class="body">
+            <p class="hero-kicker">Cards 26 · 10</p>
+            <h3>Push to main deploys both sides</h3>
+            <p>Site → GitHub Pages. API → Cloud Run. <code>.\start.ps1</code> is still the local path. Cloud Run CORS allows the live origin and localhost:5500.</p>
+          </div>
+        </li>
+        <li>
+          <span class="mark" aria-hidden="true"></span>
+          <div class="body">
+            <p class="hero-kicker">Cards 04 · 05 · onboarding loops</p>
+            <h3>Map + routing are demoable</h3>
+            <p>Click to pin, drag to move, calculate a driving route. GitHub loops and local FE/BE are done for Reeve, Connor, Michael, Noah; Lewis still has local API on the to-do list.</p>
+          </div>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="section" id="stack">
+    <div class="wrap-wide">
+      <p class="hero-kicker">How it is wired</p>
+      <h2>The stack in one glance</h2>
+      <p class="lede">The two hosts never import each other. The browser is the join.</p>
+      <div class="progress-arch">
+        <div class="progress-host">
+          <p class="hero-kicker">hackathon-site</p>
+          <h3>GitHub Pages</h3>
+          <p>Static HTML, <code>styles.css</code>, Alpine, Leaflet. Live at <a href="https://hackathon.tyneside.software">hackathon.tyneside.software</a>. Local: <code>:5500</code>.</p>
+          <ul>
+            <li>Home, this page, map, board, wiki</li>
+            <li><code>config.js</code> sets <code>window.HACKATHON_API</code></li>
+            <li>Map talks to OSM + public OSRM only</li>
+          </ul>
+        </div>
+        <div class="progress-join" aria-hidden="true">
+          <span>browser</span>
+          <span class="arrow">fetch →</span>
+        </div>
+        <div class="progress-host is-api">
+          <p class="hero-kicker">hackathon-api</p>
+          <h3>Cloud Run · europe-west2</h3>
+          <p>FastAPI + Uvicorn. Live health <strong>0.1.3</strong>. Local: <code>:8080</code>. Buildpacks, not the Dockerfile, on GitHub CD.</p>
+          <ul>
+            <li><code>GET /</code> · <code>/health</code> · <code>/test_field</code></li>
+            <li><code>POST /create_field</code> (Firestore work)</li>
+            <li>Python <strong>3.13</strong> · do not pin 3.12</li>
+          </ul>
+        </div>
+      </div>
+      <div class="progress-dont">
+        <h3>Do not spend the session on these</h3>
+        <ul>
+          <li>Do not pin Python <strong>3.12</strong> for pack — ubuntu2404 cannot resolve it.</li>
+          <li>Do not open HTML as <code>file://</code> — the browser will block the API and the wiki.</li>
+          <li>Do not hand-edit <code>&lt;!-- BOARD:… --&gt;</code> HTML. Change <code>scripts/cards.json</code> and run <code>python scripts/update_board.py</code>.</li>
+          <li>Do not import the Datastore/Firestore client at module top on Cloud Run — lazy import or 503.</li>
+          <li>Do not wait for the API to demo the map. OSRM is public; our API is not in that path.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section progress-sec" id="pickup">
+    <div class="wrap-wide">
+      <p class="hero-kicker">Your next hour</p>
+      <h2>Pick up from here</h2>
+      <p class="lede">Choose a length. Then open the matching surface — do not start a third plan.</p>
+      <div class="progress-pickup">
+        <article>
+          <span class="k">Ten minutes</span>
+          <h3>See it working</h3>
+          <p>Open the <a href="app/">map</a>, drop two pins, calculate a route. Hit <a href="api-test.html">API test</a> and confirm JSON comes back. Skim <a href="docs/#architecture">architecture</a> if the two-repo split is fuzzy.</p>
+        </article>
+        <article>
+          <span class="k">Thirty minutes</span>
+          <h3>Cold machine</h3>
+          <p>Follow <a href="onboarding.html">onboarding</a>: clone both repos as siblings, run <code>.\start.ps1</code>, pull <code>main</code>. Home, map, and board must load on <code>http://127.0.0.1:5500/</code>. Then take a to-do card with your name on it.</p>
+        </article>
+        <article>
+          <span class="k">A session</span>
+          <h3>Ship a slice</h3>
+          <p>Noah: Firestore round-trip on the live API. Reeve: demo seed. Connor: job list. Lewis: localStorage or local <code>/health</code>. Michael: persist routes only after 31 is green. Push <code>origin/main</code> — that deploys.</p>
+        </article>
+      </div>
+      <div class="progress-jumps">
+        <a href="app/">Map →</a>
+        <a href="board.html">Board →</a>
+        <a href="todo.html">To do →</a>
+        <a href="done.html">Done →</a>
+        <a href="docs/">Docs →</a>
+        <a href="api-test.html">API test →</a>
+        <a href="onboarding.html">Onboarding →</a>
+        <a href="https://github.com/Tyneside-Software/hackathon-site">Site repo →</a>
+        <a href="https://github.com/Tyneside-Software/hackathon-api">API repo →</a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="foot">
+    <div class="wrap">
+      Snapshot <time datetime="2026-09-03">3 September 2026</time>
+      · not generated from the board — update this page when the picture changes
+      · <a href="board.html">board</a>
+      · <a href="docs/#architecture">architecture</a>
+      · <a href="docs/#board">how to move a card</a>
+    </div>
+  </footer>
+
+  <script>
+    function progressPulse() {
+      const raw = (window.HACKATHON_API || "").replace(/\/$/, "");
+      return {
+        base: raw,
+        apiLine: "Cloud Run · snapshot 0.1.3",
+        state: "wait",
+        get dotClass() {
+          return {
+            "is-wait": this.state === "wait",
+            "is-ok": this.state === "ok",
+            "is-bad": this.state === "bad"
+          };
+        },
+        async ping() {
+          if (!this.base) {
+            this.apiLine = "config.js missing";
+            this.state = "bad";
+            return;
+          }
+          this.state = "wait";
+          this.apiLine = "Calling /health…";
+          try {
+            const res = await fetch(this.base + "/health");
+            const data = await res.json();
+            if (!res.ok || !data.ok) {
+              this.state = "bad";
+              this.apiLine = "HTTP " + res.status + " · check Cloud Run";
+              return;
+            }
+            this.state = "ok";
+            this.apiLine = "v" + (data.version || "?") + " · live";
+          } catch (err) {
+            this.state = "bad";
+            this.apiLine = "Unreachable · snapshot still 0.1.3";
+          }
+        }
+      };
+    }
+  </script>
+</body>
+</html>

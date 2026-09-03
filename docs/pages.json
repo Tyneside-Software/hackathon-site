@@ -13,6 +13,12 @@
           "summary": "Index of the wiki."
         },
         {
+          "id": "progress",
+          "title": "Current progress",
+          "href": "../progress.html",
+          "summary": "Catch-up snapshot if you have been away."
+        },
+        {
           "id": "architecture",
           "title": "Architecture",
           "file": "architecture.md",

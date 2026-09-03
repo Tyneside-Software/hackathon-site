@@ -3,6 +3,7 @@
 Static front end for the Tyneside Logistics hackathon: dispatch → field work. Amber/navy chrome, a map with waypoints, and a kanban board.
 
 **Live:** https://hackathon.tyneside.software  
+**Been away?** [Current progress](https://hackathon.tyneside.software/progress.html)  
 **Repo:** https://github.com/Tyneside-Software/hackathon-site  
 **API:** https://github.com/Tyneside-Software/hackathon-api  
 
@@ -63,6 +64,7 @@ Do **not** open HTML as `file://` — the browser will block the API.
 | URL | What |
 |-----|------|
 | `/` | Desktop home |
+| `/progress.html` | Catch-up snapshot if you have been away |
 | `/app/` | Map, waypoints, route |
 | `/board.html` | Kanban (short to-do + done summary) |
 | `/todo.html` | Full to-do list |
