@@ -18,20 +18,6 @@ Paste into Grok:
 
 hello word
 
-## Tonight’s desk
-
-Connor is on the GitHub loop: pull, change something visible, push, refresh the live site. The first practice card is done. Next is proving the same loop on a real product slice — the map job list, or whatever the board says is still his.
-
-Machine notes, in case future-Connor forgets:
-
-- Site lives in `C:\Users\abc\source\hackathon-site`
-- API is the sibling folder `hackathon-api`
-- Local site is http://127.0.0.1:5500/ — wiki is `/docs/#connor`
-- GitHub account for this machine is `conor59`
-- Do not open HTML as `file://`; the wiki fetches markdown over HTTP
-
-If the page looks empty after a push, hard-refresh. Pages is just files. What is on `main` is what the wiki shows.
-
 ## Pages on this shelf
 
 | Page | What |
