@@ -12,5 +12,9 @@ Newest first. One short entry per useful Grok session.
 
 ## Entries
 
+## 2026-09-03 — hello word page
+- New page `docs/connor/hello-word.md` (`#connor-hello-word`) with the text `hello word`.
+- Registered in `docs/pages.json` and linked from Connor’s area.
+
 ## 2026-09-03 — hello word
 - Added `hello word` to Connor’s area (`docs/connor/home.md`) and scratch (`docs/connor/scratch.md`).

@@ -22,6 +22,7 @@ hello word
 
 | Page | What |
 |------|------|
+| [hello word](#connor-hello-word) | hello word |
 | [Scratch](#connor-scratch) | Dumping ground — replace or append |
 | [Log](#connor-log) | What Connor’s Grok actually shipped |
 
