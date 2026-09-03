@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tyneside Logistics — Alpine API test</title>
+  <link rel="icon" href="logo.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+  <script src="config.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.8/dist/cdn.min.js"></script>
+</head>
+<body class="site">
+  <nav class="site-nav" aria-label="Primary">
+    <div class="inner">
+      <a href="index.html" class="brand-link">
+        <img src="logo.svg" width="36" height="36" alt="Tyneside">
+        <span>TYNESIDE</span>
+        <span class="brand-sub">LOGISTICS</span>
+      </a>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="app/">Map</a>
+        <a href="board.html">Board</a>
+        <a href="todo.html">To do</a>
+        <a href="done.html">Done</a>
+        <a href="api-test.html" class="is-current" aria-current="page">API test</a>
+        <a href="onboarding.html">Onboarding</a>
+        <a href="lewis.html">Lewis</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="wrap" style="padding: 1.5rem 0 3rem">
+    <p class="hero-kicker">Alpine.js 3 · GET /test_field</p>
+    <h1 style="font-size:1.7rem;margin-bottom:0.4rem">API test</h1>
+    <div x-data="apiTest()" x-init="load()">
+    <p class="lede">
+      This page is Alpine.js only (no <code>board.js</code>).
+      It calls the Cloud Run API at <code x-text="base"></code>.
+    </p>
+
+    <div class="panel">
+      <p class="hero-kicker" style="margin-bottom:0.4rem">GET /test_field</p>
+      <p class="lede" style="margin-bottom:0.8rem">
+        Base: <code x-text="base"></code>
+      </p>
+      <div class="hero-actions" style="margin-top:0">
+        <button type="button" class="btn btn-fill" @click="load()" :disabled="loading">
+          <span x-show="!loading">Call API</span>
+          <span x-show="loading" x-cloak>Calling…</span>
+        </button>
+      </div>
+      <p class="map-status" style="margin:0.8rem 0 0.5rem" x-text="status"></p>
+      <pre class="api-json" x-show="payload" x-cloak x-text="pretty"></pre>
+      <p x-show="error" x-cloak style="color:#fca5a5;margin-top:0.6rem" x-text="error"></p>
+    </div>
+    </div>
+  </div>
+
+  <footer class="foot">
+    <div class="wrap">Tyneside Logistics hackathon · Alpine.js + Cloud Run</div>
+  </footer>
+
+  <script>
+    function apiTest() {
+      const raw = (window.HACKATHON_API || "").replace(/\/$/, "");
+      return {
+        base: raw || "(missing config.js)",
+        loading: false,
+        status: "Calling GET /test_field…",
+        payload: null,
+        error: "",
+        get pretty() {
+          return this.payload ? JSON.stringify(this.payload, null, 2) : "";
+        },
+        async load() {
+          this.loading = true;
+          this.error = "";
+          this.status = "Calling GET /test_field…";
+          try {
+            const res = await fetch(this.base + "/test_field", {
+              method: "GET",
+              headers: { Accept: "application/json" },
+            });
+            const text = await res.text();
+            let data = null;
+            try { data = text ? JSON.parse(text) : null; } catch (err) { data = { raw: text }; }
+            if (!res.ok) {
+              this.error = "HTTP " + res.status;
+              this.payload = data;
+              this.status = "Request failed.";
+              return;
+            }
+            this.payload = data;
+            this.status = "OK — Alpine.js received /test_field from Cloud Run.";
+          } catch (err) {
+            this.error = String(err && err.message ? err.message : err);
+            this.status = "Network or CORS failure.";
+            this.payload = null;
+          } finally {
+            this.loading = false;
+          }
+        },
+      };
+    }
+  </script>
+</body>
+</html>

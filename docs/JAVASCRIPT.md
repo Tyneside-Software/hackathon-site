@@ -20,6 +20,8 @@ Put this in `<head>` on any page that uses Alpine, **before** other deferred scr
 
 Pin `3.14.8` (or a later 3.x you have tried). Do not use an unpinned `@3` / `@3.x.x` URL on Pages.
 
+Working example: [../api-test.html](../api-test.html) — Alpine `x-data` calling `GET /test_field` on Cloud Run.
+
 Nothing else to install. No `package.json`.
 
 Every interactive island needs `x-data` or it will not run:

@@ -61,6 +61,7 @@ Do **not** open HTML as `file://` — the browser will block the API.
 | `/board.html` | Kanban (short to-do + done summary) |
 | `/todo.html` | Full to-do list |
 | `/done.html` | Done archive |
+| `/api-test.html` | Alpine.js GET `/test_field` against Cloud Run |
 | `/onboarding.html` | Clone / run / git |
 
 Filter the board with `?person=lewis`. Open a card with `#t-04`.

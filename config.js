@@ -1,2 +1,2 @@
-// Point this at the Cloud Run URL once the API is deployed.
-window.HACKATHON_API = window.HACKATHON_API || "http://127.0.0.1:8080";
+// Cloud Run (europe-west2). Override before this file loads if you need local uvicorn.
+window.HACKATHON_API = window.HACKATHON_API || "https://hackathon-api-git-975511976696.europe-west2.run.app";
