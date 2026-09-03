@@ -91,12 +91,6 @@
           "summary": "Point Grok at this page. Full briefing for Connor’s AI."
         },
         {
-          "id": "connor-hello-word",
-          "title": "hello word",
-          "file": "connor/hello-word.md",
-          "summary": "hello word"
-        },
-        {
           "id": "connor-scratch",
           "title": "Scratch",
           "file": "connor/scratch.md",

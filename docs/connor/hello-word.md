@@ -1,3 +1,0 @@
-# hello word
-
-hello word

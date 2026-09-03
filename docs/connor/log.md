@@ -12,6 +12,9 @@ Newest first. One short entry per useful Grok session.
 
 ## Entries
 
+## 2026-09-03 — remove hello word
+- Removed `hello word` from Connor’s area, scratch, and deleted `docs/connor/hello-word.md`.
+
 ## 2026-09-03 — remove Tonight’s desk
 - Removed the made-up “Tonight’s desk” section from `docs/connor/home.md`.
 
