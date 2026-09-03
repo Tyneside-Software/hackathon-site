@@ -75,6 +75,36 @@
       ]
     },
     {
+      "id": "connor",
+      "title": "Connor",
+      "pages": [
+        {
+          "id": "connor",
+          "title": "Connor’s area",
+          "file": "connor/home.md",
+          "summary": "Connor’s shelf — his Grok writes here."
+        },
+        {
+          "id": "grok",
+          "title": "For Grok",
+          "file": "GROK.md",
+          "summary": "Point Grok at this page. Full briefing for Connor’s AI."
+        },
+        {
+          "id": "connor-scratch",
+          "title": "Scratch",
+          "file": "connor/scratch.md",
+          "summary": "Dumping ground for in-progress notes."
+        },
+        {
+          "id": "connor-log",
+          "title": "Log",
+          "file": "connor/log.md",
+          "summary": "What Connor’s Grok shipped."
+        }
+      ]
+    },
+    {
       "id": "contribute",
       "title": "Contribute",
       "pages": [

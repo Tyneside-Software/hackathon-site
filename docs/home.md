@@ -16,6 +16,7 @@ This is the documentation area for the hackathon. Pages live as markdown in `doc
 | Move a kanban card | [Kanban board](#board) |
 | Call the API | [API stack](#api) · [Alpine test](../api-test.html) |
 | Add a wiki page | [Add a wiki page](#adding) |
+| Connor + Grok | [Connor’s area](#connor) · **[For Grok](#grok)** |
 
 ## How the wiki works
 

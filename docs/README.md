@@ -9,6 +9,8 @@ Markdown in this folder is the source. Register new pages in [pages.json](pages.
 | [index.html](index.html) | Wiki shell (Alpine + marked) |
 | [pages.json](pages.json) | Table of contents |
 | [home.md](home.md) | Wiki home |
+| [GROK.md](GROK.md) | Briefing to point an AI at |
+| [connor/](connor/home.md) | Connor’s shelf |
 | [STACK.md](STACK.md) | HTML, CSS, Alpine, Leaflet, OSRM, Pages |
 | [JAVASCRIPT.md](JAVASCRIPT.md) | Alpine.js 3 — CDN, rules, migration |
 | [board.md](board.md) | Kanban generator |

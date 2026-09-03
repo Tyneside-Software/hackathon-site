@@ -98,6 +98,8 @@ function wiki() {
         if (match) return 'href="#' + match.id + '"';
         if (href === "JAVASCRIPT.md") return 'href="#javascript"';
         if (href === "STACK.md") return 'href="#stack"';
+        if (href === "GROK.md") return 'href="#grok"';
+        if (href === "connor/home.md") return 'href="#connor"';
         if (href.indexOf("../scripts/README.md") !== -1) return 'href="#board"';
         if (href.charAt(0) === "#") return full;
         return full;

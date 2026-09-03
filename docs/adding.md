@@ -35,6 +35,10 @@ The wiki is meant to accumulate. Do not invent a second docs tree.
 - The sidebar search matches title + summary.
 - Markdown is fetched at runtime — serve over `http://127.0.0.1:5500/docs/`, not `file://`.
 
+## Connor
+
+Connor’s pages go in `docs/connor/` with ids prefixed `connor-`. Register them in the `connor` section of `pages.json`. Point Grok at [For Grok](#grok) — that file is the whole briefing.
+
 ## People
 
 If you mention a new teammate on the kanban, that is `scripts/update_board.py` (`PEOPLE`), not this wiki. See [Kanban board](#board).

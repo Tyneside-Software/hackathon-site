@@ -15,6 +15,8 @@ Push to `main` deploys this site (GitHub Pages) and the API (Cloud Run). Local s
 | Doc | Contents |
 |-----|----------|
 | [docs/](docs/) | Wiki home |
+| [docs/#grok](docs/#grok) | **For Grok** — briefing Connor (or anyone) points an AI at |
+| [docs/#connor](docs/#connor) | Connor’s wiki shelf |
 | [docs/STACK.md](docs/STACK.md) | HTML/CSS, Alpine.js, Leaflet, OSRM, Pages, board script |
 | [docs/JAVASCRIPT.md](docs/JAVASCRIPT.md) | **Alpine.js is the JS layer** — CDN, conventions, migration |
 | [scripts/README.md](scripts/README.md) | How to move kanban cards (`update_board.py`) |
