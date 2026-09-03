@@ -2,6 +2,8 @@
 
 Do not hand-edit the kanban columns, hour cards, or Who’s who in `board.html`. Those blocks are generated.
 
+Stack and Alpine.js: [docs/STACK.md](../docs/STACK.md), [docs/JAVASCRIPT.md](../docs/JAVASCRIPT.md).
+
 **Source of truth:** `scripts/cards.json`  
 **Script:** `python scripts/update_board.py` (stdlib only)
 

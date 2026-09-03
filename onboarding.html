@@ -81,6 +81,7 @@
       <h2>On this page</h2>
       <p class="lede">Do the numbered steps in order. Jump to troubleshooting only when a command fails.</p>
       <ol class="onboard-toc">
+        <li><a href="#stack">Stack (Alpine.js, FastAPI, Pages)</a></li>
         <li><a href="#need">What you need</a></li>
         <li><a href="#steps">Clone both repos into a shared source folder</a></li>
         <li><a href="#run">Run the website (and API)</a></li>
@@ -88,6 +89,34 @@
         <li><a href="#git">Git: pull, branches, push, merge into main</a></li>
         <li><a href="#fix">Fix the usual problems</a></li>
       </ol>
+    </div>
+  </section>
+
+  <section class="section" id="stack">
+    <div class="wrap">
+      <h2>Stack</h2>
+      <p class="lede">Two repos, static site, JSON API. Full write-up in the READMEs.</p>
+      <div class="grid-2">
+        <div class="panel">
+          <h3>Site — Alpine.js</h3>
+          <p>
+            HTML + <code>styles.css</code>. New JavaScript is <strong>Alpine.js 3</strong> from a CDN (no npm).
+            Leaflet draws the map. See
+            <a href="https://github.com/Tyneside-Software/hackathon-site/blob/main/docs/JAVASCRIPT.md">docs/JAVASCRIPT.md</a>
+            and <a href="https://github.com/Tyneside-Software/hackathon-site/blob/main/docs/STACK.md">docs/STACK.md</a>.
+          </p>
+        </div>
+        <div class="panel">
+          <h3>API — FastAPI</h3>
+          <p>
+            Python 3.12, Uvicorn, Docker, Cloud Run in London.
+            <code>/health</code> is the probe.
+            <a href="https://github.com/Tyneside-Software/hackathon-api/blob/main/docs/STACK.md">API stack</a>
+            ·
+            <a href="https://github.com/Tyneside-Software/hackathon-api/blob/main/docs/DEPLOY.md">deploy</a>.
+          </p>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -590,8 +619,9 @@ py -3 -m venv .venv
         <p>Confirm the API process is up:</p>
         <pre><code>curl http://127.0.0.1:8080/health</code></pre>
         <p>
-          <code>config.js</code> should still say <code>http://127.0.0.1:8080</code> until Cloud Run exists.
-          Do not change it for local work.
+          For local work leave <code>config.js</code> as <code>http://127.0.0.1:8080</code>.
+          The live site uses the Cloud Run URL; CORS must allow
+          <code>https://hackathon.tyneside.software</code> as well as localhost.
         </p>
       </details>
 

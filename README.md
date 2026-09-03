@@ -1,59 +1,97 @@
-# Tyneside Logistics — hackathon
+# Tyneside Logistics — hackathon-site
 
-Front end for tonight. **GitHub Pages** on push to `main` (`hackathon.tyneside.software`); API likewise from `main`. Local still works.
+Static front end for the Tyneside Logistics hackathon: dispatch → field work. Amber/navy chrome, a map with waypoints, and a kanban board.
 
-**Site:** https://github.com/Tyneside-Software/hackathon-site  
+**Live:** https://hackathon.tyneside.software  
+**Repo:** https://github.com/Tyneside-Software/hackathon-site  
 **API:** https://github.com/Tyneside-Software/hackathon-api  
-**Board:** [board.html](board.html) — Reeve, Connor, Michael, Lewis, Noah. Backlog: [todo.html](todo.html). Done: [done.html](done.html). Filter by person. Click a card for the brief. Share with `?person=lewis` or `#t-04`.
 
-Move board cards with `python scripts/update_board.py` — see [scripts/README.md](scripts/README.md).
+Push to `main` deploys this site (GitHub Pages) and the API (Cloud Run). Local still works.
 
-Clone from the **Tyneside-Software** org. First cards: Lewis and Reeve get front end **and** back end running; everyone proves **edit → run → push**.
+## Documentation
 
-## Run locally (card 21 — Reeve)
+| Doc | Contents |
+|-----|----------|
+| [docs/STACK.md](docs/STACK.md) | HTML/CSS, Alpine.js, Leaflet, OSRM, Pages, board script |
+| [docs/JAVASCRIPT.md](docs/JAVASCRIPT.md) | **Alpine.js is the JS layer** — CDN, conventions, migration |
+| [scripts/README.md](scripts/README.md) | How to move kanban cards (`update_board.py`) |
+| [onboarding.html](onboarding.html) | Clone, run, git loop (for humans on the night) |
 
-Clone **hackathon-site** and **hackathon-api** as sibling folders, then:
+## Tech stack (short)
+
+- **HTML + `styles.css`** — no CSS framework
+- **Alpine.js 3** (jsDelivr CDN, `defer`) — all new UI behaviour
+- **Leaflet 1.9.4** + OSM + public OSRM (straight-line fallback)
+- **Python 3** — `http.server` for local, stdlib script for the board
+- **GitHub Pages** + `CNAME` `hackathon.tyneside.software`
+
+No npm, no bundler. What you push is what Pages serves.
+
+## Run locally
+
+Clone **hackathon-site** and **hackathon-api** as siblings, then:
 
 ```powershell
 cd C:\Users\MichaelThomson\source\hackathon-site
 .\start.ps1
 ```
 
-That opens two windows: site on http://127.0.0.1:5500/ and API on http://127.0.0.1:8080/health.
+That opens:
 
-Site only (card 01):
+- Site http://127.0.0.1:5500/
+- API  http://127.0.0.1:8080/health  
+- Swagger http://127.0.0.1:8080/docs
 
-```powershell
-cd C:\Users\MichaelThomson\source\hackathon-site
-.\serve.ps1
-```
-
-Open http://127.0.0.1:5500/ — home, map, board.
-
-Do **not** open `index.html` as `file://` if you want the API; browsers block that.
-
-## Optional local API (card 02)
+Site only:
 
 ```powershell
-cd C:\Users\MichaelThomson\source\hackathon-api
-python -m venv .venv
-.\.venv\Scripts\Activate.ps1
-pip install -r requirements.txt
-uvicorn app.main:app --reload --port 8080
+python -m http.server 5500
 ```
 
-http://127.0.0.1:8080/health
+Do **not** open HTML as `file://` — the browser will block the API.
 
-Push to `main` deploys the site and the API. Card 11 (persist routes on the API) still follows that.
+`serve.ps1` was removed. `start.ps1` is the one-command path (creates the API venv if needed).
 
-## What is already demoable
+## Pages
 
-| Page | Increment |
-|------|-----------|
-| `/` | Desktop chrome in Tyneside / logistics style |
-| `/app/` | Map, waypoints, OSRM route (straight-line fallback) |
-| `/board.html` | Kanban |
+| URL | What |
+|-----|------|
+| `/` | Desktop home |
+| `/app/` | Map, waypoints, route |
+| `/board.html` | Kanban (short to-do + done summary) |
+| `/todo.html` | Full to-do list |
+| `/done.html` | Done archive |
+| `/onboarding.html` | Clone / run / git |
+
+Filter the board with `?person=lewis`. Open a card with `#t-04`.
+
+## JavaScript
+
+**Use Alpine.js** for new behaviour. Pin 3.14.8 from jsDelivr, `defer`, and wrap islands in `x-data`. See [docs/JAVASCRIPT.md](docs/JAVASCRIPT.md).
+
+`board.js` and `app/map.js` are vanilla leftovers. Keep them working; migrate by card, do not rewrite the night in one go. Leaflet stays for the map.
+
+API base URL: `config.js` → `window.HACKATHON_API` (default `http://127.0.0.1:8080`). Include that file on any page that `fetch`es the API.
+
+## Board cards
+
+Source of truth is `scripts/cards.json`. Do not hand-edit the `<!-- BOARD:… -->` blocks.
+
+```powershell
+python scripts/update_board.py list
+python scripts/update_board.py done 13
+python scripts/update_board.py move 07 doing
+python scripts/update_board.py add --title "A new slice" --person lewis --hours 2 --column todo --brief "What done looks like."
+```
+
+The board shows the top four to-do cards plus a link to `todo.html`. Done is a count plus `done.html`.
+
+## Deploy
+
+Merge to `main` on this repo → GitHub Pages at https://hackathon.tyneside.software  
+
+The API repo deploys to Cloud Run on its own `main`. Point `config.js` at the Cloud Run URL for the live site; leave `127.0.0.1:8080` for local.
 
 ## Rule
 
-Each board card is a releasable slice. The site must still look working when the card lands.
+Each board card is a releasable slice. Home, Map, and Board must still look working when the card lands — fallbacks, never a blank page.
