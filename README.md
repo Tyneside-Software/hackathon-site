@@ -4,7 +4,7 @@ Front end for tonight. **GitHub Pages** later; **local first**.
 
 **Site:** https://github.com/Tyneside-Software/hackathon-site  
 **API:** https://github.com/Tyneside-Software/hackathon-api  
-**Board:** [board.html](board.html) — Reeve, Connor, Michael, Lewis. Filter by person (chips, hour cards, or Who’s who). Share with `?person=lewis`.
+**Board:** [board.html](board.html) — Reeve, Connor, Michael, Lewis, Noah. Filter by person (chips, hour cards, or Who’s who). Share with `?person=lewis`.
 
 Clone from the **Tyneside-Software** org. First cards: Lewis and Reeve get front end **and** back end running; everyone proves **edit → run → push**.
 

@@ -44,11 +44,12 @@
       <button type="button" class="filter" data-person="connor" aria-pressed="false">⚡ Connor</button>
       <button type="button" class="filter" data-person="michael" aria-pressed="false">🏗️ Michael</button>
       <button type="button" class="filter" data-person="lewis" aria-pressed="false">🌱 Lewis</button>
+      <button type="button" class="filter" data-person="noah" aria-pressed="false">🔧 Noah</button>
     </div>
     <p class="filter-status" id="filter-status">Showing everyone.</p>
 
     <div class="board-banner">
-      <div>📋 First: Lewis and Reeve get <strong>front end and back end running</strong>. Everyone (including Connor) proves the GitHub <strong>edit → run → push</strong> loop. Then the map cards.</div>
+      <div>📋 First: Lewis and Reeve get <strong>front end and back end running</strong>. Everyone (including Connor and new developer Noah) proves the GitHub <strong>edit → run → push</strong> loop. Then the map cards.</div>
       <div class="btns">
         <a class="btn btn-fill" href="app/">Map app</a>
         <a class="btn btn-ghost" href="onboarding.html">Onboarding</a>
@@ -77,13 +78,18 @@
         <div class="hrs">9 <span>hrs</span></div>
         <div class="meta">3 onboarding to do · chrome done</div>
       </button>
+      <button type="button" class="person" data-person="noah" aria-pressed="false">
+        <div class="who"><span class="emoji">🔧</span> Noah</div>
+        <div class="hrs">2.75 <span>hrs</span></div>
+        <div class="meta">3 onboarding · API version shipped</div>
+      </button>
     </div>
 
     <div class="kanban-scroll">
       <div class="kanban">
 
         <div class="col todo">
-          <div class="head"><span class="col-name">To do</span><span class="count">16 · 23h</span></div>
+          <div class="head"><span class="col-name">To do</span><span class="count">19 · 25.25h</span></div>
           <div class="stack">
             <p class="empty-col is-hidden" data-all="Nothing here."></p>
             <a class="card" href="#t-12" data-person="lewis" data-hours="0.5">
@@ -145,6 +151,24 @@
               <div class="title">Michael: GitHub edit → run → push (both repos)</div>
               <span class="tag tag-wait">after 2h away · prove the loop</span>
               <div class="bot"><span>0.75h</span><span>Michael</span></div>
+            </a>
+            <a class="card" href="#t-22" data-person="noah" data-hours="0.5">
+              <div class="top"><span class="id">22</span><span class="emoji">🔧</span></div>
+              <div class="title">Noah: get the front end running locally</div>
+              <span class="tag tag-wait">clone org repo · start.ps1 · home + map + board</span>
+              <div class="bot"><span>0.5h</span><span>Noah</span></div>
+            </a>
+            <a class="card" href="#t-23" data-person="noah" data-hours="1">
+              <div class="top"><span class="id">23</span><span class="emoji">🔧</span></div>
+              <div class="title">Noah: get the back end running locally</div>
+              <span class="tag tag-wait">clone api · venv · uvicorn · /health</span>
+              <div class="bot"><span>1h</span><span>Noah</span></div>
+            </a>
+            <a class="card" href="#t-24" data-person="noah" data-hours="0.75">
+              <div class="top"><span class="id">24</span><span class="emoji">🔧</span></div>
+              <div class="title">Noah: GitHub edit → run → push (API repo)</div>
+              <span class="tag tag-wait">Tyneside-Software/hackathon-api</span>
+              <div class="bot"><span>0.75h</span><span>Noah</span></div>
             </a>
             <a class="card" href="#t-06" data-person="lewis" data-hours="2">
               <div class="top"><span class="id">06</span><span class="emoji">🌱</span></div>
@@ -208,7 +232,7 @@
         </div>
 
         <div class="col done">
-          <div class="head"><span class="col-name">Done</span><span class="count">3 · 3.5h</span></div>
+          <div class="head"><span class="col-name">Done</span><span class="count">4 · 4h</span></div>
           <div class="stack">
             <p class="empty-col is-hidden" data-all="Nothing here."></p>
             <a class="card" href="#t-01" data-person="lewis" data-hours="0.5">
@@ -228,6 +252,12 @@
               <div class="title">Desktop home in Tyneside style</div>
               <span class="tag tag-ok">this site’s index</span>
               <div class="bot"><span>2h</span><span>Lewis</span></div>
+            </a>
+            <a class="card" href="#t-25" data-person="noah" data-hours="0.5">
+              <div class="top"><span class="id">25</span><span class="emoji">🔧</span></div>
+              <div class="title">Noah: API version on / and /health</div>
+              <span class="tag tag-ok">VERSION on root + health</span>
+              <div class="bot"><span>0.5h</span><span>Noah</span></div>
             </a>
           </div>
         </div>
@@ -267,6 +297,12 @@
           <td>Front end local (0.5h) · Back end local (1h) · GitHub loop on site (0.75h) · Desktop chrome (2h, done) · localStorage (2h) · local account (2h) · serve scaffold (0.5h, done)</td>
           <td><strong>9h</strong></td>
         </tr>
+        <tr data-person="noah">
+          <td>🔧</td>
+          <td><strong>Noah</strong></td>
+          <td>Front end local (0.5h) · Back end local (1h) · GitHub loop on API (0.75h) · API version on / and /health (0.5h, done)</td>
+          <td><strong>2.75h</strong></td>
+        </tr>
       </tbody>
     </table>
     </div>
@@ -279,7 +315,7 @@
       <li>No Cloud Run until card 10. LocalStorage is the persistence story until then.</li>
     </ol>
 
-    <h2 style="margin-top:2rem">GitHub loop (cards 14 · 17 · 19 · 20)</h2>
+    <h2 style="margin-top:2rem">GitHub loop (cards 14 · 17 · 19 · 20 · 24)</h2>
     <p class="lede">Do this on the <strong>Tyneside-Software</strong> repos, not personal forks unless you have been told otherwise. Full clone-and-run steps (and the usual Windows fixes) live on <a href="onboarding.html">Onboarding</a>.</p>
     <ol style="color:var(--muted);padding-left:1.2rem;line-height:1.7">
       <li>Clone (or pull) <a href="https://github.com/Tyneside-Software/hackathon-site">hackathon-site</a> and/or <a href="https://github.com/Tyneside-Software/hackathon-api">hackathon-api</a> as sibling folders.</li>
@@ -294,7 +330,7 @@
   <footer class="foot">
 
 
-    <div class="wrap-wide">Tyneside Logistics hackathon · Reeve · Connor · Michael · Lewis</div>
+    <div class="wrap-wide">Tyneside Logistics hackathon · Reeve · Connor · Michael · Lewis · Noah</div>
 
   </footer>
   <script src="board.js"></script>

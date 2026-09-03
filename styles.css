@@ -194,7 +194,7 @@ a:hover { color: var(--link-hover); }
   margin: -0.35rem 0 1rem;
   min-height: 1.25em;
 }
-.people { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0.7rem; margin-bottom: 1.5rem; }
+.people { display: grid; grid-template-columns: repeat(auto-fit, minmax(11.5rem, 1fr)); gap: 0.7rem; margin-bottom: 1.5rem; }
 @media (max-width: 900px) { .people { grid-template-columns: 1fr 1fr; } }
 @media (max-width: 520px) { .people { grid-template-columns: 1fr; } }
 .person {

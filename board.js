@@ -1,6 +1,6 @@
 (function () {
-  const PEOPLE = ["reeve", "connor", "michael", "lewis"];
-  const NAMES = { reeve: "Reeve", connor: "Connor", michael: "Michael", lewis: "Lewis" };
+  const PEOPLE = ["reeve", "connor", "michael", "lewis", "noah"];
+  const NAMES = { reeve: "Reeve", connor: "Connor", michael: "Michael", lewis: "Lewis", noah: "Noah" };
 
   function readFilter() {
     const q = new URLSearchParams(location.search).get("person");
