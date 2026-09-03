@@ -244,10 +244,11 @@ a:hover { color: var(--link-hover); }
 .card {
   display: block; background: #0c1219; border: 1px solid #1e293b;
   border-radius: 12px; padding: 0.75rem 0.8rem; margin-bottom: 0.55rem; color: inherit;
-  min-width: 0;
+  min-width: 0; cursor: pointer; scroll-margin-top: 5rem;
 }
 .card:last-child { margin-bottom: 0; }
 .card:hover { border-color: #475569; }
+.card:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .card .top { display: flex; justify-content: space-between; align-items: center; gap: 0.4rem; }
 .card .id { font-family: ui-monospace, Consolas, monospace; font-size: 0.72rem; color: #64748b; }
 .card .emoji { font-size: 1.15rem; line-height: 1; flex-shrink: 0; }
@@ -270,6 +271,87 @@ a:hover { color: var(--link-hover); }
 .who-table tbody tr[data-person]:hover { background: rgba(245, 158, 11, 0.06); }
 .who-table tbody tr.is-on { background: var(--accent-soft); }
 
+.card-modal {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+}
+.card-modal[open] {
+  display: grid;
+  place-items: center;
+  width: 100vw;
+  height: 100vh;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  padding: 1rem;
+}
+.card-modal::backdrop {
+  background: rgba(6, 10, 16, 0.78);
+}
+.card-modal-inner {
+  width: min(38rem, calc(100vw - 2rem));
+  max-height: min(88vh, 42rem);
+  overflow: auto;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 1.15rem 1.2rem 1.35rem;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.55);
+  position: relative;
+}
+.card-modal-close {
+  position: absolute;
+  top: 0.7rem;
+  right: 0.7rem;
+  appearance: none;
+  font: inherit;
+  font-weight: 650;
+  font-size: 0.82rem;
+  color: var(--text);
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  min-height: 2.2rem;
+  padding: 0.25rem 0.7rem;
+  cursor: pointer;
+}
+.card-modal-close:hover { border-color: var(--accent); color: var(--heading); }
+.card-modal-inner .hero-kicker { margin-bottom: 0.35rem; padding-right: 5rem; }
+.card-modal-inner h2 {
+  font-size: 1.25rem;
+  line-height: 1.3;
+  margin: 0 0 0.85rem;
+  padding-right: 5rem;
+  color: var(--heading);
+}
+.card-modal-body p { color: var(--muted); margin: 0 0 0.85rem; }
+.card-modal-body h3 {
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin: 1rem 0 0.4rem;
+}
+.card-modal-body ul, .card-modal-body ol {
+  color: var(--muted);
+  padding-left: 1.2rem;
+  margin: 0 0 0.85rem;
+  line-height: 1.55;
+}
+.card-modal-body li { margin: 0.2rem 0; }
+.card-modal-body code {
+  font-family: ui-monospace, Consolas, monospace;
+  font-size: 0.86em;
+  color: var(--heading);
+}
+.card-modal-body .brief-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
 
 /* Lewis log page */
 .lewis-hero h1 { letter-spacing: -0.04em; }

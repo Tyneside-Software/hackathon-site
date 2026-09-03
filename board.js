@@ -2,6 +2,14 @@
   const PEOPLE = ["reeve", "connor", "michael", "lewis", "noah"];
   const NAMES = { reeve: "Reeve", connor: "Connor", michael: "Michael", lewis: "Lewis", noah: "Noah" };
 
+  const dialog = document.getElementById("card-modal");
+  const titleEl = document.getElementById("card-modal-title");
+  const metaEl = document.getElementById("card-modal-meta");
+  const bodyEl = document.getElementById("card-modal-body");
+  const closeBtn = document.getElementById("card-modal-close");
+  let lastFocus = null;
+  let closingFromUrl = false;
+
   function readFilter() {
     const q = new URLSearchParams(location.search).get("person");
     if (q && PEOPLE.includes(q.toLowerCase())) return q.toLowerCase();
@@ -101,6 +109,122 @@
     row.setAttribute("title", "Filter the board to this person");
   });
 
-  window.addEventListener("popstate", function () { apply(readFilter()); });
+  function padCardId(raw) {
+    const digits = String(raw || "").replace(/^t-/i, "").replace(/\D/g, "");
+    if (!digits) return "";
+    return digits.padStart(2, "0");
+  }
+
+  function readCardHash() {
+    const h = (location.hash || "").replace(/^#/, "");
+    const m = h.match(/^t-(\d+)$/i);
+    return m ? padCardId(m[1]) : "";
+  }
+
+  function cardById(id) {
+    return document.getElementById("t-" + id);
+  }
+
+  function columnName(card) {
+    const name = card.closest(".col") && card.closest(".col").querySelector(".col-name");
+    return name ? name.textContent.trim() : "";
+  }
+
+  function fillModal(card) {
+    const id = padCardId(card.id);
+    const title = (card.querySelector(".title") && card.querySelector(".title").textContent) || ("Card " + id);
+    const person = card.getAttribute("data-person") || "";
+    const hours = card.getAttribute("data-hours") || "";
+    const tag = card.querySelector(".tag");
+    const tpl = card.querySelector("template.card-brief");
+    titleEl.textContent = title;
+    metaEl.textContent = [
+      "#" + id,
+      NAMES[person] || person,
+      hours ? hours + "h" : "",
+      columnName(card)
+    ].filter(Boolean).join(" · ");
+    bodyEl.innerHTML = "";
+    if (tpl) {
+      bodyEl.appendChild(tpl.content.cloneNode(true));
+    } else {
+      const p = document.createElement("p");
+      p.textContent = tag ? tag.textContent.trim() : "No extra brief on this card yet.";
+      bodyEl.appendChild(p);
+    }
+  }
+
+  function openCard(id) {
+    const card = cardById(id);
+    if (!card || !dialog || !titleEl || !bodyEl) return;
+    if (!dialog.open) lastFocus = document.activeElement;
+    fillModal(card);
+    if (!dialog.open) {
+      dialog.showModal();
+      document.body.style.overflow = "hidden";
+    }
+    if (readCardHash() !== id) {
+      const url = new URL(location.href);
+      history.pushState(null, "", url.pathname + url.search + "#t-" + id);
+    }
+  }
+
+  function syncFromUrl() {
+    apply(readFilter());
+    const id = readCardHash();
+    if (id && cardById(id)) {
+      if (!dialog.open) lastFocus = document.activeElement;
+      fillModal(cardById(id));
+      if (dialog && !dialog.open) {
+        dialog.showModal();
+        document.body.style.overflow = "hidden";
+      }
+    } else if (dialog && dialog.open) {
+      closingFromUrl = true;
+      dialog.close();
+      closingFromUrl = false;
+    }
+  }
+
+  document.querySelectorAll(".card[href^='#t-']").forEach(function (card) {
+    card.setAttribute("aria-haspopup", "dialog");
+    card.addEventListener("click", function (e) {
+      if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      e.preventDefault();
+      const id = padCardId(card.id || card.getAttribute("href"));
+      if (id) openCard(id);
+    });
+  });
+
+  if (closeBtn) {
+    closeBtn.addEventListener("click", function () {
+      if (dialog && dialog.open) dialog.close();
+    });
+  }
+
+  if (dialog) {
+    dialog.addEventListener("click", function (e) {
+      const inner = dialog.querySelector(".card-modal-inner");
+      if (inner && !inner.contains(e.target) && dialog.open) dialog.close();
+    });
+    dialog.addEventListener("close", function () {
+      document.body.style.overflow = "";
+      if (!closingFromUrl && readCardHash()) {
+        const url = new URL(location.href);
+        history.pushState(null, "", url.pathname + url.search);
+      }
+      if (lastFocus && typeof lastFocus.focus === "function") lastFocus.focus();
+    });
+  }
+
+  window.addEventListener("popstate", syncFromUrl);
+  window.addEventListener("hashchange", syncFromUrl);
   apply(readFilter());
+  const initialCard = readCardHash();
+  if (initialCard && cardById(initialCard) && dialog) {
+    lastFocus = document.activeElement;
+    fillModal(cardById(initialCard));
+    dialog.showModal();
+    document.body.style.overflow = "hidden";
+  }
 })();
