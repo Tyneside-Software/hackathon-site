@@ -1,0 +1,90 @@
+{
+  "title": "Tyneside Logistics wiki",
+  "default": "home",
+  "sections": [
+    {
+      "id": "start",
+      "title": "Start here",
+      "pages": [
+        {
+          "id": "home",
+          "title": "Wiki home",
+          "file": "home.md",
+          "summary": "How this wiki is laid out and how to add a page."
+        },
+        {
+          "id": "local",
+          "title": "Run locally",
+          "file": "local.md",
+          "summary": "start.ps1, ports 5500 / 8080, never file://."
+        },
+        {
+          "id": "onboarding",
+          "title": "Onboarding (night)",
+          "href": "../onboarding.html",
+          "summary": "Clone both repos, run, git pull / branch / push."
+        }
+      ]
+    },
+    {
+      "id": "site",
+      "title": "Site",
+      "pages": [
+        {
+          "id": "stack",
+          "title": "Site stack",
+          "file": "STACK.md",
+          "summary": "HTML, CSS, Alpine, Leaflet, OSRM, Pages."
+        },
+        {
+          "id": "javascript",
+          "title": "Alpine.js",
+          "file": "JAVASCRIPT.md",
+          "summary": "The JavaScript layer — CDN, conventions, migration."
+        },
+        {
+          "id": "board",
+          "title": "Kanban board",
+          "file": "board.md",
+          "summary": "cards.json and update_board.py."
+        },
+        {
+          "id": "pages",
+          "title": "Pages on the site",
+          "file": "pages.md",
+          "summary": "Home, map, board, todo, done, API test."
+        }
+      ]
+    },
+    {
+      "id": "api",
+      "title": "API",
+      "pages": [
+        {
+          "id": "api",
+          "title": "API stack and routes",
+          "file": "api.md",
+          "summary": "FastAPI, CORS, Cloud Run, GET /test_field."
+        },
+        {
+          "id": "api-test",
+          "title": "Alpine API test",
+          "href": "../api-test.html",
+          "summary": "Live GET /test_field from the browser."
+        }
+      ]
+    },
+    {
+      "id": "contribute",
+      "title": "Contribute",
+      "pages": [
+        {
+          "id": "adding",
+          "title": "Add a wiki page",
+          "file": "adding.md",
+          "summary": "Drop a markdown file, register it in pages.json."
+        }
+      ]
+    }
+  ]
+}

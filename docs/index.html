@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Docs — Tyneside Logistics</title>
+  <meta name="description" content="Wiki for the Tyneside Logistics hackathon: stack, Alpine.js, board, API.">
+  <link rel="icon" href="../logo.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/marked@11.1.1/marked.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.8/dist/cdn.min.js"></script>
+</head>
+<body class="site wiki-page">
+  <nav class="site-nav" aria-label="Primary">
+    <div class="inner">
+      <a href="../index.html" class="brand-link">
+        <img src="../logo.svg" width="36" height="36" alt="Tyneside">
+        <span>TYNESIDE</span>
+        <span class="brand-sub">LOGISTICS</span>
+      </a>
+      <div class="nav-links">
+        <a href="../index.html">Home</a>
+        <a href="../app/">Map</a>
+        <a href="../board.html">Board</a>
+        <a href="../todo.html">To do</a>
+        <a href="../done.html">Done</a>
+        <a href="./" class="is-current" aria-current="page">Docs</a>
+        <a href="../api-test.html">API test</a>
+        <a href="../onboarding.html">Onboarding</a>
+        <a href="../lewis.html">Lewis</a>
+      </div>
+      <a class="btn btn-fill" href="./">Docs</a>
+    </div>
+  </nav>
+
+  <div class="wiki-shell" x-data="wiki()" x-init="boot()">
+    <aside class="wiki-side">
+      <p class="hero-kicker">Wiki</p>
+      <h1>Docs</h1>
+      <p class="lede">Linked pages. Search the sidebar or pick a section.</p>
+      <label class="wiki-search">
+        <span class="visually-hidden">Search docs</span>
+        <input type="search" x-model="q" placeholder="Search pages…">
+      </label>
+      <template x-for="section in sections" :key="section.id">
+        <div class="wiki-group">
+          <h2 x-text="section.title"></h2>
+          <ul>
+            <template x-for="page in section.pages" :key="page.id">
+              <li>
+                <a
+                  :href="page.href || ('#' + page.id)"
+                  :class="page.id === current && !page.href ? 'is-current' : ''"
+                  @click.prevent="page.href ? (location.href = page.href) : open(page.id)"
+                >
+                  <span x-text="page.title"></span>
+                </a>
+              </li>
+            </template>
+          </ul>
+        </div>
+      </template>
+      <p class="wiki-add"><a href="#adding">+ Add a page</a></p>
+    </aside>
+    <article class="wiki-article" id="wiki-article">
+      <p class="wiki-status" x-show="status" x-text="status"></p>
+      <p class="wiki-error" x-show="error" x-cloak x-text="error"></p>
+      <div class="wiki-body" x-html="html"></div>
+    </article>
+  </div>
+
+  <footer class="foot">
+    <div class="wrap-wide">Tyneside Logistics hackathon · documentation wiki</div>
+  </footer>
+  <script src="wiki.js"></script>
+</body>
+</html>

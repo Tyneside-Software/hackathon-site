@@ -53,7 +53,7 @@ Default view: Newcastle `[54.9783, -1.6178]`.
 
 ## Talking to hackathon-api
 
-`config.js` sets `window.HACKATHON_API` (default `http://127.0.0.1:8080`).
+`config.js` sets `window.HACKATHON_API` (Cloud Run URL by default; override for local uvicorn).
 
 Include it **before** any script that `fetch`es the API:
 

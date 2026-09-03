@@ -10,8 +10,11 @@ Push to `main` deploys this site (GitHub Pages) and the API (Cloud Run). Local s
 
 ## Documentation
 
+**Wiki:** [docs/](docs/) (Docs button in the nav). Linked pages, sidebar search, hash URLs.
+
 | Doc | Contents |
 |-----|----------|
+| [docs/](docs/) | Wiki home |
 | [docs/STACK.md](docs/STACK.md) | HTML/CSS, Alpine.js, Leaflet, OSRM, Pages, board script |
 | [docs/JAVASCRIPT.md](docs/JAVASCRIPT.md) | **Alpine.js is the JS layer** — CDN, conventions, migration |
 | [scripts/README.md](scripts/README.md) | How to move kanban cards (`update_board.py`) |
@@ -62,6 +65,7 @@ Do **not** open HTML as `file://` — the browser will block the API.
 | `/todo.html` | Full to-do list |
 | `/done.html` | Done archive |
 | `/api-test.html` | Alpine.js GET `/test_field` against Cloud Run |
+| `/docs/` | Documentation wiki |
 | `/onboarding.html` | Clone / run / git |
 
 Filter the board with `?person=lewis`. Open a card with `#t-04`.

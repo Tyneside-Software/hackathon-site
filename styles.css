@@ -90,6 +90,11 @@ a:hover { color: var(--link-hover); }
 .nav-links a:hover, .nav-links a.is-current {
   color: var(--heading); border-color: var(--border); background: var(--accent-soft);
 }
+.nav-docs {
+  color: var(--heading) !important;
+  border-color: var(--border) !important;
+  background: var(--accent-soft);
+}
 .site-nav .btn { flex-shrink: 0; }
 
 @media (max-width: 720px) {
@@ -379,6 +384,108 @@ html.card-modal-open body {
   margin-top: 0.5rem;
 }
 .card-archive .card, .done-archive .card { margin-bottom: 0; }
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+.wiki-shell {
+  display: grid;
+  grid-template-columns: minmax(14rem, 18rem) 1fr;
+  min-height: calc(100vh - 8rem);
+  border-bottom: 1px solid var(--border);
+}
+.wiki-side {
+  padding: 1.2rem 1.15rem 2rem;
+  border-right: 1px solid var(--border);
+  background: rgba(12, 18, 25, 0.92);
+}
+.wiki-side h1 { font-size: 1.45rem; margin-bottom: 0.35rem; }
+.wiki-search { display: block; margin: 0.7rem 0 1rem; }
+.wiki-search input {
+  width: 100%;
+  font: inherit;
+  font-size: 0.88rem;
+  color: var(--text);
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.45rem 0.65rem;
+  min-height: 2.4rem;
+}
+.wiki-group h2 {
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 0.85rem 0 0.35rem;
+}
+.wiki-group ul { list-style: none; padding: 0; margin: 0; }
+.wiki-group a {
+  display: block;
+  color: var(--text);
+  font-size: 0.88rem;
+  font-weight: 600;
+  padding: 0.32rem 0.5rem;
+  border-radius: 8px;
+  border: 1px solid transparent;
+}
+.wiki-group a:hover, .wiki-group a.is-current {
+  color: var(--heading);
+  background: var(--accent-soft);
+  border-color: var(--border);
+}
+.wiki-add { margin-top: 1.2rem; font-size: 0.85rem; }
+.wiki-article {
+  padding: 1.4rem 1.4rem 3rem;
+  max-width: 48rem;
+}
+.wiki-status { color: var(--muted); }
+.wiki-error { color: #fca5a5; }
+.wiki-body h1 { font-size: 1.7rem; margin: 0 0 0.7rem; line-height: 1.2; }
+.wiki-body h2 { font-size: 1.2rem; margin: 1.5rem 0 0.45rem; color: var(--heading); }
+.wiki-body h3 { font-size: 1.02rem; margin: 1.1rem 0 0.35rem; }
+.wiki-body p, .wiki-body li { color: var(--muted); }
+.wiki-body ul, .wiki-body ol { padding-left: 1.2rem; margin: 0.4rem 0 0.85rem; }
+.wiki-body li { margin: 0.2rem 0; }
+.wiki-body table { width: 100%; border-collapse: collapse; font-size: 0.9rem; margin: 0.6rem 0 1rem; }
+.wiki-body th, .wiki-body td {
+  text-align: left;
+  padding: 0.45rem 0.5rem;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+.wiki-body th { color: var(--muted); font-size: 0.75rem; letter-spacing: 0.06em; text-transform: uppercase; }
+.wiki-body pre {
+  background: #0a1016;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.85rem 1rem;
+  overflow-x: auto;
+  margin: 0.55rem 0 0.9rem;
+}
+.wiki-body code {
+  font-family: ui-monospace, Consolas, monospace;
+  font-size: 0.86em;
+}
+.wiki-body p code, .wiki-body li code, .wiki-body td code {
+  background: var(--accent-soft);
+  border-radius: 5px;
+  padding: 0.05rem 0.35rem;
+  color: var(--link);
+}
+.wiki-body pre code { background: none; padding: 0; color: #e8eef4; }
+@media (max-width: 800px) {
+  .wiki-shell { grid-template-columns: 1fr; }
+  .wiki-side { border-right: 0; border-bottom: 1px solid var(--border); }
+}
 
 /* Lewis log page */
 .lewis-hero h1 { letter-spacing: -0.04em; }
