@@ -299,9 +299,9 @@
       "person": "connor",
       "hours": 0.5,
       "emoji": "⚡",
-      "title": "learn how to puh and pull test",
+      "title": "finished push and pull",
       "column": "todo",
-      "brief": "<p>Practice git pull and git push against the Tyneside-Software hackathon-site repo.</p>",
+      "brief": "<p>Practiced git pull and git push against the Tyneside-Software hackathon-site repo.</p>",
       "tag": "git pull · git push",
       "tag_kind": "wait"
     }
