@@ -271,29 +271,47 @@ a:hover { color: var(--link-hover); }
 .who-table tbody tr[data-person]:hover { background: rgba(245, 158, 11, 0.06); }
 .who-table tbody tr.is-on { background: var(--accent-soft); }
 
-.card-modal {
-  padding: 0;
-  border: 0;
-  background: transparent;
-  color: var(--text);
+html.card-modal-open,
+html.card-modal-open body {
+  overflow: hidden;
+  overscroll-behavior: none;
 }
-.card-modal[open] {
-  display: grid;
-  place-items: center;
-  width: 100vw;
-  height: 100vh;
+html.card-modal-open body {
+  position: fixed;
+  width: 100%;
+  left: 0;
+  right: 0;
+}
+.card-modal {
+  position: fixed;
+  inset: 0;
+  width: auto;
+  height: auto;
   max-width: none;
   max-height: none;
   margin: 0;
   padding: 1rem;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+.card-modal[open] {
+  display: grid;
+  place-items: center;
 }
 .card-modal::backdrop {
   background: rgba(6, 10, 16, 0.78);
+  overscroll-behavior: none;
 }
 .card-modal-inner {
   width: min(38rem, calc(100vw - 2rem));
   max-height: min(88vh, 42rem);
   overflow: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
   background: var(--panel);
   border: 1px solid var(--border);
   border-radius: 14px;

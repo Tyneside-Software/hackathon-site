@@ -9,6 +9,8 @@
   const closeBtn = document.getElementById("card-modal-close");
   let lastFocus = null;
   let closingFromUrl = false;
+  let scrollLockY = 0;
+  let scrollLocked = false;
 
   function readFilter() {
     const q = new URLSearchParams(location.search).get("person");
@@ -122,7 +124,24 @@
   }
 
   function cardById(id) {
-    return document.getElementById("t-" + id);
+    return document.getElementById("card-" + id) ||
+      document.querySelector('.card[href="#t-' + id + '"]');
+  }
+
+  function lockPageScroll() {
+    if (scrollLocked) return;
+    scrollLockY = window.scrollY || window.pageYOffset || 0;
+    document.body.style.top = "-" + scrollLockY + "px";
+    document.documentElement.classList.add("card-modal-open");
+    scrollLocked = true;
+  }
+
+  function unlockPageScroll() {
+    if (!scrollLocked) return;
+    document.documentElement.classList.remove("card-modal-open");
+    document.body.style.top = "";
+    scrollLocked = false;
+    window.scrollTo(0, scrollLockY);
   }
 
   function columnName(card) {
@@ -160,8 +179,8 @@
     if (!dialog.open) lastFocus = document.activeElement;
     fillModal(card);
     if (!dialog.open) {
+      lockPageScroll();
       dialog.showModal();
-      document.body.style.overflow = "hidden";
     }
     if (readCardHash() !== id) {
       const url = new URL(location.href);
@@ -176,8 +195,8 @@
       if (!dialog.open) lastFocus = document.activeElement;
       fillModal(cardById(id));
       if (dialog && !dialog.open) {
+        lockPageScroll();
         dialog.showModal();
-        document.body.style.overflow = "hidden";
       }
     } else if (dialog && dialog.open) {
       closingFromUrl = true;
@@ -208,12 +227,14 @@
       if (inner && !inner.contains(e.target) && dialog.open) dialog.close();
     });
     dialog.addEventListener("close", function () {
-      document.body.style.overflow = "";
+      unlockPageScroll();
       if (!closingFromUrl && readCardHash()) {
         const url = new URL(location.href);
         history.pushState(null, "", url.pathname + url.search);
       }
-      if (lastFocus && typeof lastFocus.focus === "function") lastFocus.focus();
+      if (lastFocus && typeof lastFocus.focus === "function") {
+        lastFocus.focus({ preventScroll: true });
+      }
     });
   }
 
@@ -224,7 +245,7 @@
   if (initialCard && cardById(initialCard) && dialog) {
     lastFocus = document.activeElement;
     fillModal(cardById(initialCard));
+    lockPageScroll();
     dialog.showModal();
-    document.body.style.overflow = "hidden";
   }
 })();
