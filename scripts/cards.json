@@ -293,6 +293,17 @@
       "brief": "<p>Local FastAPI on :8080. Noah already shipped a version field on the API (card 25); this card is the machine setup so he can keep iterating without Cloud Run. Moved to Done.</p>\n                <h3>Done when</h3>\n                <ul>\n                  <li><code>http://127.0.0.1:8080/health</code> returns <code>ok</code> and a <code>version</code>.</li>\n                </ul>\n                <h3>How</h3>\n                <ol>\n                  <li>Clone <a href=\"https://github.com/Tyneside-Software/hackathon-api\">hackathon-api</a> as a sibling of the site.</li>\n                  <li>venv · <code>pip install -r requirements.txt</code> · uvicorn :8080, or <code>.\\start.ps1</code>.</li>\n                </ol>\n                <div class=\"brief-actions\"><a class=\"btn btn-ghost\" href=\"onboarding.html\">Onboarding steps</a></div>",
       "tag": "uvicorn · /health",
       "tag_kind": "ok"
+    },
+    {
+      "id": "27",
+      "person": "connor",
+      "hours": 0.5,
+      "emoji": "⚡",
+      "title": "learn how to puh and pull test",
+      "column": "todo",
+      "brief": "<p>Practice git pull and git push against the Tyneside-Software hackathon-site repo.</p>",
+      "tag": "git pull · git push",
+      "tag_kind": "wait"
     }
   ]
 }

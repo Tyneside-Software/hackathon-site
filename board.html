@@ -69,8 +69,8 @@
       </button>
       <button type="button" class="person" data-person="connor" aria-pressed="false">
         <div class="who"><span class="emoji">⚡</span> Connor</div>
-        <div class="hrs">6.25 <span>hrs</span></div>
-        <div class="meta">1 ready · 3 to do</div>
+        <div class="hrs">6.75 <span>hrs</span></div>
+        <div class="meta">1 ready · 4 to do</div>
       </button>
       <button type="button" class="person" data-person="michael" aria-pressed="false">
         <div class="who"><span class="emoji">🏗️</span> Michael</div>
@@ -90,12 +90,14 @@
     </div>
     <!-- /BOARD:PEOPLE -->
 
+
+
     <!-- BOARD:KANBAN -->
     <div class="kanban-scroll">
       <div class="kanban">
 
         <div class="col todo">
-          <div class="head"><span class="col-name">To do</span><span class="count">12 · 17h</span></div>
+          <div class="head"><span class="col-name">To do</span><span class="count">13 · 17.5h</span></div>
           <div class="stack">
             <p class="empty-col is-hidden" data-all="Nothing here."></p>
             <a class="card" id="card-13" href="#t-13" data-person="lewis" data-hours="1">
@@ -351,6 +353,15 @@
                                 </ol>
               </template>
             </a>
+            <a class="card" id="card-27" href="#t-27" data-person="connor" data-hours="0.5">
+              <div class="top"><span class="id">27</span><span class="emoji">⚡</span></div>
+              <div class="title">learn how to puh and pull test</div>
+              <span class="tag tag-wait">git pull · git push</span>
+              <div class="bot"><span>0.5h</span><span>Connor</span></div>
+              <template class="card-brief">
+                <p>Practice git pull and git push against the Tyneside-Software hackathon-site repo.</p>
+              </template>
+            </a>
           </div>
         </div>
 
@@ -425,6 +436,8 @@
     </div>
     <!-- /BOARD:KANBAN -->
 
+
+
 <h2 style="margin-top:2rem">Who’s who</h2>
     <p class="lede">Hours are every card attributed to that person, whichever column it sits in. Click a row to filter the board.</p>
     <!-- BOARD:WHO -->
@@ -443,8 +456,8 @@
         <tr data-person="connor">
           <td>⚡</td>
           <td><strong>Connor</strong></td>
-          <td>Connor: get the front end running locally (0.5h) · Connor: GitHub edit → run → push (site repo) (0.75h) · Job list beside the map (seed Howden-shaped jobs) (2h) · Route calculation between waypoints (3h, ready)</td>
-          <td><strong>6.25h</strong></td>
+          <td>Connor: get the front end running locally (0.5h) · Connor: GitHub edit → run → push (site repo) (0.75h) · Job list beside the map (seed Howden-shaped jobs) (2h) · Route calculation between waypoints (3h, ready) · learn how to puh and pull test (0.5h)</td>
+          <td><strong>6.75h</strong></td>
         </tr>
         <tr data-person="michael">
           <td>🏗️</td>
@@ -468,6 +481,8 @@
     </table>
     </div>
     <!-- /BOARD:WHO -->
+
+
 
 <h2>How a card ships</h2>
     <ol style="color:var(--muted);padding-left:1.2rem;line-height:1.7">
