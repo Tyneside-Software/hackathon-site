@@ -12,4 +12,5 @@ Newest first. One short entry per useful Grok session.
 
 ## Entries
 
-_None yet. Connor’s Grok should add one when it ships something._
+## 2026-09-03 — hello word
+- Added `hello word` to Connor’s area (`docs/connor/home.md`) and scratch (`docs/connor/scratch.md`).

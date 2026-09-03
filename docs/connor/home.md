@@ -16,6 +16,8 @@ Paste into Grok:
 
 > Read `docs/GROK.md` in hackathon-site. Then: **\<what you want done\>**. Put new docs under `docs/connor/`, register them in `docs/pages.json` (section `connor`), commit and push `origin/main`.
 
+hello word
+
 ## Pages on this shelf
 
 | Page | What |
