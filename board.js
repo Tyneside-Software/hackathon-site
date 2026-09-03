@@ -39,28 +39,41 @@
     return Number.isInteger(rounded) ? String(rounded) : String(rounded);
   }
 
-  function doneIndex() {
-    const el = document.getElementById("done-cards-index");
+  function columnIndex(kind) {
+    const el = document.getElementById(kind + "-cards-index");
     if (!el) return [];
     try { return JSON.parse(el.textContent || "[]"); } catch (err) { return []; }
   }
 
-  function updateDoneSummary(person) {
-    const all = doneIndex();
+  function indexHas(kind, id) {
+    return columnIndex(kind).some(function (c) {
+      return String(c.id).padStart(2, "0") === id;
+    });
+  }
+
+  function updateArchiveSummary(kind, person) {
+    const all = columnIndex(kind);
     const visible = person === "all" ? all : all.filter(function (c) { return c.person === person; });
     const hours = visible.reduce(function (sum, c) { return sum + (Number(c.hours) || 0); }, 0);
-    const countEl = document.getElementById("done-col-count");
+    const page = kind + ".html";
+    const countEl = document.getElementById(kind + "-col-count");
     if (countEl) countEl.textContent = visible.length + " · " + fmtHours(hours) + "h";
-    const nEl = document.getElementById("done-index-count");
+    const nEl = document.getElementById(kind + "-index-count");
     if (nEl) nEl.textContent = String(visible.length);
-    const meta = document.getElementById("done-index-meta");
+    const meta = document.getElementById(kind + "-index-meta");
     if (meta) {
-      meta.textContent = visible.length + " card" + (visible.length === 1 ? "" : "s") +
-        " · " + fmtHours(hours) + "h · archive →";
+      const preview = document.querySelectorAll(".col." + kind + " .card[data-person]:not(.is-hidden)").length;
+      const rest = Math.max(0, visible.length - preview);
+      if (kind === "todo" && rest > 0) {
+        meta.textContent = rest + " more · all " + visible.length + " →";
+      } else {
+        meta.textContent = visible.length + " card" + (visible.length === 1 ? "" : "s") +
+          " · " + fmtHours(hours) + "h · all " + (kind === "todo" ? "to-do" : "done") + " →";
+      }
     }
-    const link = document.getElementById("done-index");
+    const link = document.getElementById(kind + "-index");
     if (link) {
-      link.setAttribute("href", person === "all" ? "done.html" : "done.html?person=" + person);
+      link.setAttribute("href", person === "all" ? page : page + "?person=" + person);
     }
   }
 
@@ -85,15 +98,8 @@
     });
 
     document.querySelectorAll(".col").forEach(function (col) {
-      if (col.classList.contains("done") && document.getElementById("done-cards-index")) {
-        updateDoneSummary(person);
-        return;
-      }
       const cards = Array.prototype.slice.call(col.querySelectorAll(".card[data-person]"));
       const visible = cards.filter(function (c) { return !c.classList.contains("is-hidden"); });
-      const hours = visible.reduce(function (sum, c) { return sum + hoursOf(c); }, 0);
-      const countEl = col.querySelector(".count");
-      if (countEl) countEl.textContent = visible.length + " · " + fmtHours(hours) + "h";
       const empty = col.querySelector(".empty-col");
       if (empty) {
         const show = visible.length === 0;
@@ -104,20 +110,43 @@
             : "No cards for " + NAMES[person] + " here.";
         }
       }
+      if (col.classList.contains("done") && document.getElementById("done-cards-index")) {
+        updateArchiveSummary("done", person);
+        return;
+      }
+      if (col.classList.contains("todo") && document.getElementById("todo-cards-index")) {
+        updateArchiveSummary("todo", person);
+        return;
+      }
+      const hours = visible.reduce(function (sum, c) { return sum + hoursOf(c); }, 0);
+      const countEl = col.querySelector(".count");
+      if (countEl) countEl.textContent = visible.length + " · " + fmtHours(hours) + "h";
     });
 
     const status = document.getElementById("filter-status");
     if (status) {
       const live = document.querySelectorAll(".card[data-person]:not(.is-hidden)").length;
-      const doneAll = doneIndex();
-      const doneN = person === "all" ? doneAll.length : doneAll.filter(function (c) { return c.person === person; }).length;
+      const doneAll = columnIndex("done");
+      const todoAll = columnIndex("todo");
+      const pick = function (arr) {
+        return person === "all" ? arr.length : arr.filter(function (c) { return c.person === person; }).length;
+      };
+      const doneN = pick(doneAll);
+      const todoN = pick(todoAll);
       if (person === "all") {
-        status.textContent = doneAll.length
-          ? "Showing everyone. " + doneAll.length + " done on the archive."
+        const bits = [];
+        if (todoN) bits.push(todoN + " to-do");
+        if (doneN) bits.push(doneN + " done");
+        status.textContent = bits.length
+          ? "Showing everyone. " + bits.join(" · ") + " on the archive pages."
           : "Showing everyone.";
       } else {
-        const extra = doneN ? " · " + doneN + " done" : "";
-        status.textContent = "Showing " + NAMES[person] + " — " + live + " card" + (live === 1 ? "" : "s") + extra + ". Click Everyone to clear.";
+        const extra = [
+          todoN ? todoN + " to-do" : "",
+          doneN ? doneN + " done" : ""
+        ].filter(Boolean).join(" · ");
+        status.textContent = "Showing " + NAMES[person] + " — " + live + " card" + (live === 1 ? "" : "s") +
+          (extra ? " · " + extra : "") + ". Click Everyone to clear.";
       }
     }
   }
@@ -210,10 +239,8 @@
   function openCard(id) {
     const card = cardById(id);
     if (!card) {
-      const onDonePage = /done\.html$/i.test(location.pathname);
-      if (!onDonePage && /^t-\d+$/i.test("t-" + id)) {
-        location.href = "done.html#t-" + id;
-      }
+      if (indexHas("todo", id)) location.href = "todo.html#t-" + id;
+      else if (indexHas("done", id)) location.href = "done.html#t-" + id;
       return;
     }
     if (!dialog || !titleEl || !bodyEl) return;

@@ -2,7 +2,7 @@
 """Update the hackathon kanban without hand-editing HTML.
 
 Source of truth: scripts/cards.json
-Writes: board.html (live columns + done summary) and done.html (archive)
+Writes: board.html (short to-do preview + done summary), todo.html, and done.html
 
 Examples (from the repo root):
 
@@ -29,6 +29,8 @@ SCRIPTS = Path(__file__).resolve().parent
 CARDS_PATH = SCRIPTS / "cards.json"
 BOARD_PATH = ROOT / "board.html"
 DONE_PATH = ROOT / "done.html"
+TODO_PATH = ROOT / "todo.html"
+TODO_PREVIEW = 4
 
 PEOPLE = [
     {"id": "reeve", "name": "Reeve", "emoji": "🧭"},
@@ -152,7 +154,7 @@ def _card_chunks(section: str) -> list[str]:
             close = re.search(r"</a>", piece)
             if close:
                 piece = piece[: close.end()]
-        if 'class="done-index"' in piece:
+        if "done-index" in piece or "todo-index" in piece:
             continue
         chunks.append(piece)
     return chunks
@@ -272,20 +274,52 @@ def render_live_column(cards: list[dict], column: str) -> str:
     return "\n".join(parts)
 
 
-def render_done_summary(cards: list[dict]) -> str:
-    done = in_column(cards, "done")
-    n, h = len(done), hours_of(done)
-    index = json.dumps(
-        [{"id": str(c["id"]).zfill(2), "person": c["person"], "hours": c.get("hours") or 0} for c in done],
+def card_index_json(cards: list[dict]) -> str:
+    return json.dumps(
+        [{"id": str(c["id"]).zfill(2), "person": c["person"], "hours": c.get("hours") or 0} for c in cards],
         ensure_ascii=False,
         separators=(",", ":"),
     )
+
+
+def render_todo_column(cards: list[dict]) -> str:
+    todos = in_column(cards, "todo")
+    preview = todos[:TODO_PREVIEW]
+    rest = max(0, len(todos) - len(preview))
+    n, h = len(todos), hours_of(todos)
+    empty_hidden = "" if not preview else " is-hidden"
+    empty_text = EMPTY_ALL["todo"] if not preview else ""
+    more = f"{rest} more · all {n} →" if rest else f"{n} cards · {fmt_hours(h)}h · all to-do →"
+    parts = [
+        '        <div class="col todo">',
+        f'          <div class="head"><span class="col-name">To do</span><span class="count" id="todo-col-count">{n} · {fmt_hours(h)}h</span></div>',
+        '          <div class="stack">',
+        f'            <script type="application/json" id="todo-cards-index">{card_index_json(todos)}</script>',
+        f'            <p class="empty-col{empty_hidden}" data-all="{html.escape(EMPTY_ALL["todo"])}">{empty_text}</p>',
+    ]
+    for card in preview:
+        parts.append(render_card(card))
+    if todos:
+        parts += [
+            '            <a class="card todo-index" id="todo-index" href="todo.html">',
+            f'              <div class="todo-index-count" id="todo-index-count">{n}</div>',
+            '              <div class="title">All to-do cards</div>',
+            f'              <p class="todo-index-meta" id="todo-index-meta">{more}</p>',
+            "            </a>",
+        ]
+    parts += ["          </div>", "        </div>"]
+    return "\n".join(parts)
+
+
+def render_done_summary(cards: list[dict]) -> str:
+    done = in_column(cards, "done")
+    n, h = len(done), hours_of(done)
     return "\n".join(
         [
             '        <div class="col done">',
             f'          <div class="head"><span class="col-name">Done</span><span class="count" id="done-col-count">{n} · {fmt_hours(h)}h</span></div>',
             '          <div class="stack">',
-            f'            <script type="application/json" id="done-cards-index">{index}</script>',
+            f'            <script type="application/json" id="done-cards-index">{card_index_json(done)}</script>',
             '            <a class="card done-index" id="done-index" href="done.html">',
             f'              <div class="done-index-count" id="done-index-count">{n}</div>',
             '              <div class="title">All done cards</div>',
@@ -303,7 +337,7 @@ def render_kanban(cards: list[dict]) -> str:
             '    <div class="kanban-scroll">',
             '      <div class="kanban">',
             "",
-            render_live_column(cards, "todo"),
+            render_todo_column(cards),
             "",
             render_live_column(cards, "doing"),
             "",
@@ -401,19 +435,35 @@ def patch_board_html(cards: list[dict]) -> None:
     BOARD_PATH.write_text(text, encoding="utf-8")
 
 
-def render_done_page(cards: list[dict]) -> str:
-    done = in_column(cards, "done")
-    n, h = len(done), hours_of(done)
-    card_html = "\n".join(render_card(c, indent="          ") for c in done) or (
-        '          <p class="empty-col">Nothing done yet.</p>'
+def render_archive_page(cards: list[dict], column: str) -> str:
+    items = in_column(cards, column)
+    n, h = len(items), hours_of(items)
+    if column == "todo":
+        slug, heading, kicker, blurb = (
+            "todo",
+            "To-do cards",
+            "Hackathon night · backlog",
+            "The board only shows the top few. Everything still open lives here.",
+        )
+    else:
+        slug, heading, kicker, blurb = (
+            "done",
+            "Done cards",
+            "Hackathon night · archive",
+            "Finished increments live here so the board stays short.",
+        )
+    card_html = "\n".join(render_card(c, indent="          ") for c in items) or (
+        f'          <p class="empty-col">Nothing {column} yet.</p>'
     )
     people_html = render_people(cards)
+    todo_cur = ' class="is-current" aria-current="page"' if column == "todo" else ""
+    done_cur = ' class="is-current" aria-current="page"' if column == "done" else ""
     return f"""<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Tyneside Logistics — done</title>
+  <title>Tyneside Logistics — {slug}</title>
   <link rel="icon" href="logo.svg" type="image/svg+xml">
   <link rel="stylesheet" href="styles.css">
 </head>
@@ -429,7 +479,8 @@ def render_done_page(cards: list[dict]) -> str:
         <a href="index.html">Home</a>
         <a href="app/">Map</a>
         <a href="board.html">Board</a>
-        <a href="done.html" class="is-current" aria-current="page">Done</a>
+        <a href="todo.html"{todo_cur}>To do</a>
+        <a href="done.html"{done_cur}>Done</a>
         <a href="onboarding.html">Onboarding</a>
         <a href="lewis.html">Lewis</a>
       </div>
@@ -438,10 +489,10 @@ def render_done_page(cards: list[dict]) -> str:
   </nav>
 
   <div class="wrap-wide" style="padding: 1.5rem 0 3rem">
-    <p class="hero-kicker">Hackathon night · archive</p>
-    <h1 style="font-size:1.7rem;margin-bottom:0.4rem">Done cards</h1>
+    <p class="hero-kicker">{kicker}</p>
+    <h1 style="font-size:1.7rem;margin-bottom:0.4rem">{heading}</h1>
     <p style="color:var(--muted);max-width:42rem">
-      Finished increments live here so the board stays short.
+      {blurb}
       <strong>{n} cards · {fmt_hours(h)}h</strong>.
       Click a card for the brief. Filter with the chips, hour cards, or <code>?person=lewis</code>.
     </p>
@@ -458,7 +509,7 @@ def render_done_page(cards: list[dict]) -> str:
 
 {people_html}
 
-    <div class="done-archive" id="done-archive">
+    <div class="card-archive" id="{slug}-archive">
 {card_html}
     </div>
   </div>
@@ -484,10 +535,11 @@ def render_done_page(cards: list[dict]) -> str:
 def cmd_render(args: argparse.Namespace | None = None) -> None:
     cards = load_cards()
     patch_board_html(cards)
-    DONE_PATH.write_text(render_done_page(cards), encoding="utf-8")
+    TODO_PATH.write_text(render_archive_page(cards, "todo"), encoding="utf-8")
+    DONE_PATH.write_text(render_archive_page(cards, "done"), encoding="utf-8")
     done = in_column(cards, "done")
     print(
-        f"Rendered board.html + done.html "
+        f"Rendered board.html + todo.html + done.html "
         f"({len(in_column(cards, 'todo'))} todo, "
         f"{len(in_column(cards, 'doing'))} doing, "
         f"{len(in_column(cards, 'ready'))} ready, "
@@ -593,7 +645,7 @@ def build_parser() -> argparse.ArgumentParser:
     imp.add_argument("--force", action="store_true")
     imp.set_defaults(func=cmd_import_html)
 
-    rend = sub.add_parser("render", help="Rewrite board.html + done.html from cards.json")
+    rend = sub.add_parser("render", help="Rewrite board.html + todo.html + done.html from cards.json")
     rend.set_defaults(func=cmd_render)
 
     lst = sub.add_parser("list", help="Print cards")

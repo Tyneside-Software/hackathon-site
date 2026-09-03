@@ -16,6 +16,8 @@ python scripts/update_board.py add --title "A new slice" --person lewis --hours 
 python scripts/update_board.py render
 ```
 
-`done`, `move`, and `add` rewrite `board.html` and `done.html` for you.
+`done`, `move`, and `add` rewrite `board.html`, `todo.html`, and `done.html` for you.
+
+The board shows the top four to-do cards plus a count/link; the rest live on `todo.html`. Done is count + link only.
 
 `import-html` rebuilds `cards.json` from the current `board.html` if the JSON is missing (`--force` to overwrite).

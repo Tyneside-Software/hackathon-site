@@ -19,6 +19,7 @@
         <a href="index.html">Home</a>
         <a href="app/">Map</a>
         <a href="board.html" class="is-current" aria-current="page">Board</a>
+        <a href="todo.html">To do</a>
         <a href="done.html">Done</a>
         <a href="onboarding.html">Onboarding</a>
         <a href="lewis.html">Lewis</a>
@@ -34,8 +35,9 @@
     <p style="color:var(--muted);max-width:42rem">
       Same idea as the Automatica kanban. Every card is a <strong>releasable increment</strong> —
       the site should still look working when the card lands.
-      Push to <code>main</code> deploys the site and the API. Done cards live on a
-      <a href="done.html">separate archive</a> so this board stays short.
+      Push to <code>main</code> deploys the site and the API. To-do and done lists
+      have their own pages (<a href="todo.html">to do</a>, <a href="done.html">done</a>)
+      so this board stays short.
       Filter by person with the chips, the hour cards, or a row in Who’s who.
       <strong>Click a card</strong> for the full brief (or share <code>#t-04</code>).
       Board edits: <code>python scripts/update_board.py</code>.
@@ -91,15 +93,14 @@
     <!-- /BOARD:PEOPLE -->
 
 
-
-
     <!-- BOARD:KANBAN -->
     <div class="kanban-scroll">
       <div class="kanban">
 
         <div class="col todo">
-          <div class="head"><span class="col-name">To do</span><span class="count">13 · 17.5h</span></div>
+          <div class="head"><span class="col-name">To do</span><span class="count" id="todo-col-count">13 · 17.5h</span></div>
           <div class="stack">
+            <script type="application/json" id="todo-cards-index">[{"id":"13","person":"lewis","hours":1},{"id":"14","person":"lewis","hours":0.75},{"id":"17","person":"reeve","hours":0.75},{"id":"21","person":"reeve","hours":1},{"id":"18","person":"connor","hours":0.5},{"id":"19","person":"connor","hours":0.75},{"id":"20","person":"michael","hours":0.75},{"id":"06","person":"lewis","hours":2},{"id":"07","person":"connor","hours":2},{"id":"08","person":"reeve","hours":1.5},{"id":"09","person":"lewis","hours":2},{"id":"11","person":"michael","hours":4},{"id":"27","person":"connor","hours":0.5}]</script>
             <p class="empty-col is-hidden" data-all="Nothing here."></p>
             <a class="card" id="card-13" href="#t-13" data-person="lewis" data-hours="1">
               <div class="top"><span class="id">13</span><span class="emoji">🌱</span></div>
@@ -187,181 +188,10 @@
                                 </ol>
               </template>
             </a>
-            <a class="card" id="card-18" href="#t-18" data-person="connor" data-hours="0.5">
-              <div class="top"><span class="id">18</span><span class="emoji">⚡</span></div>
-              <div class="title">Connor: get the front end running locally</div>
-              <span class="tag tag-wait">clone org repo · serve.ps1 · home + map + board</span>
-              <div class="bot"><span>0.5h</span><span>Connor</span></div>
-              <template class="card-brief">
-                <p>Connor’s first onboarding slice: the desktop site running locally so the routing work can be demoed on his machine.</p>
-                                <h3>Done when</h3>
-                                <ul>
-                                  <li>Home, Map, and Board all load at <code>http://127.0.0.1:5500/</code>.</li>
-                                </ul>
-                                <h3>How</h3>
-                                <ol>
-                                  <li>Clone <a href="https://github.com/Tyneside-Software/hackathon-site">hackathon-site</a>.</li>
-                                  <li><code>.\start.ps1</code> or <code>python -m http.server 5500</code> from that folder.</li>
-                                  <li>Skip <code>file://</code>.</li>
-                                </ol>
-                                <div class="brief-actions"><a class="btn btn-ghost" href="onboarding.html">Onboarding steps</a></div>
-              </template>
-            </a>
-            <a class="card" id="card-19" href="#t-19" data-person="connor" data-hours="0.75">
-              <div class="top"><span class="id">19</span><span class="emoji">⚡</span></div>
-              <div class="title">Connor: GitHub edit → run → push (site repo)</div>
-              <span class="tag tag-wait">Tyneside-Software/hackathon-site</span>
-              <div class="bot"><span>0.75h</span><span>Connor</span></div>
-              <template class="card-brief">
-                <p>Prove the org-repo loop on <strong>hackathon-site</strong>. Small visible change, still runs, push to <code>origin/main</code>.</p>
-                                <h3>Done when</h3>
-                                <ul>
-                                  <li>Commit is on <a href="https://github.com/Tyneside-Software/hackathon-site">Tyneside-Software/hackathon-site</a>.</li>
-                                  <li>The site still looks working.</li>
-                                </ul>
-                                <h3>How</h3>
-                                <ol>
-                                  <li>Pull, edit, run, commit, push — same as the GitHub loop at the bottom of this board.</li>
-                                </ol>
-                                <div class="brief-actions"><a class="btn btn-ghost" href="onboarding.html#git">Git steps</a></div>
-              </template>
-            </a>
-            <a class="card" id="card-20" href="#t-20" data-person="michael" data-hours="0.75">
-              <div class="top"><span class="id">20</span><span class="emoji">🏗️</span></div>
-              <div class="title">Michael: GitHub edit → run → push (both repos)</div>
-              <span class="tag tag-wait">after 2h away · prove the loop</span>
-              <div class="bot"><span>0.75h</span><span>Michael</span></div>
-              <template class="card-brief">
-                <p>Michael was away for the first two hours. This card is the same GitHub loop as everyone else, on <strong>both</strong> org repos, before Cloud Run (cards 10–11).</p>
-                                <h3>Done when</h3>
-                                <ul>
-                                  <li>A commit from this machine is on hackathon-site <em>and</em> hackathon-api <code>main</code>.</li>
-                                  <li>Local site and <code>/health</code> still run.</li>
-                                </ul>
-                                <h3>How</h3>
-                                <ol>
-                                  <li>Pull both remotes.</li>
-                                  <li>Tiny visible change in each (or one real increment that happens to touch both).</li>
-                                  <li>Run, commit, push <code>origin/main</code>.</li>
-                                </ol>
-                                <div class="brief-actions"><a class="btn btn-ghost" href="onboarding.html#git">Git steps</a></div>
-              </template>
-            </a>
-            <a class="card" id="card-06" href="#t-06" data-person="lewis" data-hours="2">
-              <div class="top"><span class="id">06</span><span class="emoji">🌱</span></div>
-              <div class="title">Save routes in the browser (localStorage)</div>
-              <div class="bot"><span>2h</span><span>Lewis</span></div>
-              <template class="card-brief">
-                <p>Persist the current waypoint list in the browser so a refresh does not wipe a demo. No API. This is the persistence story until card 11.</p>
-                                <h3>Done when</h3>
-                                <ul>
-                                  <li>Add stops, refresh, they come back on the map and in the sidebar.</li>
-                                  <li>Clear still clears, including storage.</li>
-                                  <li>Home / Board still load if storage is empty or corrupt — never a blank map.</li>
-                                </ul>
-                                <h3>How</h3>
-                                <ol>
-                                  <li>Write waypoints (lat/lng order) to <code>localStorage</code> from <code>app/map.js</code>.</li>
-                                  <li>Restore on load, then let the user Calculate route as today.</li>
-                                  <li>Do not block on Cloud Run.</li>
-                                </ol>
-                                <div class="brief-actions"><a class="btn btn-ghost" href="app/">Open map</a></div>
-              </template>
-            </a>
-            <a class="card" id="card-07" href="#t-07" data-person="connor" data-hours="2">
-              <div class="top"><span class="id">07</span><span class="emoji">⚡</span></div>
-              <div class="title">Job list beside the map (seed Howden-shaped jobs)</div>
-              <div class="bot"><span>2h</span><span>Connor</span></div>
-              <template class="card-brief">
-                <p>A job list in the map sidebar, seeded with Howden-shaped work: named jobs, rough Tyneside locations. This is the first hint of dispatch, not a full scheduler.</p>
-                                <h3>Done when</h3>
-                                <ul>
-                                  <li>At least five seed jobs visible beside the map without an API.</li>
-                                  <li>Clicking a job does something visible (focus the map, highlight, or drop its waypoint).</li>
-                                  <li>The existing waypoint + route flow still works if you ignore the list.</li>
-                                </ul>
-                                <h3>How</h3>
-                                <ol>
-                                  <li>Hard-code a small JSON/JS list in the map page (name, area, lat/lng).</li>
-                                  <li>Render it in the existing sidebar; keep the layout usable on a laptop.</li>
-                                  <li>Shape the names like real cleaning/logistics jobs, not “Test 1”.</li>
-                                </ol>
-                                <div class="brief-actions"><a class="btn btn-ghost" href="app/">Open map</a></div>
-              </template>
-            </a>
-            <a class="card" id="card-08" href="#t-08" data-person="reeve" data-hours="1.5">
-              <div class="top"><span class="id">08</span><span class="emoji">🧭</span></div>
-              <div class="title">Demo seed: 5 Tyneside waypoints + named run</div>
-              <div class="bot"><span>1.5h</span><span>Reeve</span></div>
-              <template class="card-brief">
-                <p>One-click demo so nobody has to click the map five times during a show-and-tell. Load a named run with five Tyneside waypoints already placed.</p>
-                                <h3>Done when</h3>
-                                <ul>
-                                  <li>A button (e.g. “Load Tyneside demo”) drops five named stops and a run name.</li>
-                                  <li>Calculate route works immediately on that seed.</li>
-                                  <li>Clear still returns to an empty map.</li>
-                                </ul>
-                                <h3>How</h3>
-                                <ol>
-                                  <li>Pick five real-ish spots around Newcastle / Tyneside (not a straight line down one street).</li>
-                                  <li>Give the run a name the operator can see in the sidebar.</li>
-                                  <li>Keep the manual click-to-add path working.</li>
-                                </ol>
-                                <div class="brief-actions"><a class="btn btn-ghost" href="app/">Open map</a></div>
-              </template>
-            </a>
-            <a class="card" id="card-09" href="#t-09" data-person="lewis" data-hours="2">
-              <div class="top"><span class="id">09</span><span class="emoji">🌱</span></div>
-              <div class="title">Local “who am I” account (name in the browser)</div>
-              <div class="bot"><span>2h</span><span>Lewis</span></div>
-              <template class="card-brief">
-                <p>No real auth. A display name stored in the browser so the chrome can say who is driving the demo. Later job assignment can reuse it.</p>
-                                <h3>Done when</h3>
-                                <ul>
-                                  <li>You can set a name from the site (prompt, form, or nav control).</li>
-                                  <li>It survives refresh.</li>
-                                  <li>It is visible in the chrome (nav or map sidebar). Empty name is a valid empty state, not a crash.</li>
-                                </ul>
-                                <h3>How</h3>
-                                <ol>
-                                  <li><code>localStorage</code> for the name. Keep it off the API until card 10.</li>
-                                  <li>Show it on more than one page if the chrome is shared; otherwise map + home is enough.</li>
-                                </ol>
-              </template>
-            </a>
-            <a class="card" id="card-11" href="#t-11" data-person="michael" data-hours="4">
-              <div class="top"><span class="id">11</span><span class="emoji">🏗️</span></div>
-              <div class="title">Persist routes on the API (replace localStorage)</div>
-              <span class="tag tag-wait">after 10</span>
-              <div class="bot"><span>4h</span><span>Michael</span></div>
-              <template class="card-brief">
-                <p>Replace browser-only route storage with API persistence so two machines can share a run. Card 06 stays as the fallback if the API is down — the map must not go blank.</p>
-                                <h3>Done when</h3>
-                                <ul>
-                                  <li>POST (or PUT) a route, GET it back from the Cloud Run URL.</li>
-                                  <li>Save on one browser, load on another.</li>
-                                  <li>If the API errors, localStorage or a visible error keeps the page usable.</li>
-                                </ul>
-                                <h3>Blocked on</h3>
-                                <ul>
-                                  <li>Card 10 (live API + CORS).</li>
-                                </ul>
-                                <h3>How</h3>
-                                <ol>
-                                  <li>Minimal routes resource: id, name, waypoints, maybe duration/distance.</li>
-                                  <li>In-memory is acceptable for the hackathon if two requests to the same instance work; say so in the brief if it is not durable.</li>
-                                  <li>Wire the map save/load to <code>window.HACKATHON_API</code>.</li>
-                                </ol>
-              </template>
-            </a>
-            <a class="card" id="card-27" href="#t-27" data-person="connor" data-hours="0.5">
-              <div class="top"><span class="id">27</span><span class="emoji">⚡</span></div>
-              <div class="title">finished push and pull</div>
-              <span class="tag tag-wait">git pull · git push</span>
-              <div class="bot"><span>0.5h</span><span>Connor</span></div>
-              <template class="card-brief">
-                <p>Practiced git pull and git push against the Tyneside-Software hackathon-site repo.</p>
-              </template>
+            <a class="card todo-index" id="todo-index" href="todo.html">
+              <div class="todo-index-count" id="todo-index-count">13</div>
+              <div class="title">All to-do cards</div>
+              <p class="todo-index-meta" id="todo-index-meta">9 more · all 13 →</p>
             </a>
           </div>
         </div>
@@ -438,9 +268,7 @@
     <!-- /BOARD:KANBAN -->
 
 
-
-
-<h2 style="margin-top:2rem">Who’s who</h2>
+    <h2 style="margin-top:2rem">Who’s who</h2>
     <p class="lede">Hours are every card attributed to that person, whichever column it sits in. Click a row to filter the board.</p>
     <!-- BOARD:WHO -->
     <div class="who-wrap">
@@ -485,9 +313,7 @@
     <!-- /BOARD:WHO -->
 
 
-
-
-<h2>How a card ships</h2>
+    <h2>How a card ships</h2>
     <ol style="color:var(--muted);padding-left:1.2rem;line-height:1.7">
       <li>The increment is visible on the running site (not a branch of theory).</li>
       <li>Home, Map, and Board still load if the new thing is half-finished — fallbacks, never a blank page.</li>

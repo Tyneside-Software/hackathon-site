@@ -4,7 +4,7 @@ Front end for tonight. **GitHub Pages** on push to `main` (`hackathon.tyneside.s
 
 **Site:** https://github.com/Tyneside-Software/hackathon-site  
 **API:** https://github.com/Tyneside-Software/hackathon-api  
-**Board:** [board.html](board.html) — Reeve, Connor, Michael, Lewis, Noah. Done cards: [done.html](done.html). Filter by person. Click a card for the brief. Share with `?person=lewis` or `#t-04`.
+**Board:** [board.html](board.html) — Reeve, Connor, Michael, Lewis, Noah. Backlog: [todo.html](todo.html). Done: [done.html](done.html). Filter by person. Click a card for the brief. Share with `?person=lewis` or `#t-04`.
 
 Move board cards with `python scripts/update_board.py` — see [scripts/README.md](scripts/README.md).
 

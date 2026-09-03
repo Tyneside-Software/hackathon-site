@@ -353,29 +353,37 @@ html.card-modal-open body {
   gap: 0.5rem;
   margin-top: 1rem;
 }
-.done-index {
+.done-index, .todo-index {
   text-align: left;
   padding: 1rem 1.05rem 1.1rem !important;
+}
+.done-index {
   border-color: #047857 !important;
   box-shadow: inset 3px 0 0 #047857;
 }
+.todo-index {
+  border-color: #475569 !important;
+  box-shadow: inset 3px 0 0 #64748b;
+}
 .done-index:hover { border-color: #34d399 !important; }
-.done-index-count {
+.todo-index:hover { border-color: #94a3b8 !important; }
+.done-index-count, .todo-index-count {
   font-size: 2.2rem;
   font-weight: 750;
   letter-spacing: -0.04em;
-  color: #6ee7b7;
   line-height: 1.1;
 }
-.done-index .title { margin-top: 0.35rem; }
-.done-index-meta { color: var(--muted); font-size: 0.82rem; margin: 0.15rem 0 0; }
-.done-archive {
+.done-index-count { color: #6ee7b7; }
+.todo-index-count { color: #cbd5e1; }
+.done-index .title, .todo-index .title { margin-top: 0.35rem; }
+.done-index-meta, .todo-index-meta { color: var(--muted); font-size: 0.82rem; margin: 0.15rem 0 0; }
+.card-archive, .done-archive {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(16.5rem, 1fr));
   gap: 0.75rem;
   margin-top: 0.5rem;
 }
-.done-archive .card { margin-bottom: 0; }
+.card-archive .card, .done-archive .card { margin-bottom: 0; }
 
 /* Lewis log page */
 .lewis-hero h1 { letter-spacing: -0.04em; }
