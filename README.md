@@ -1,10 +1,12 @@
 # Tyneside Logistics — hackathon
 
-Front end for tonight. **GitHub Pages** later; **local first**.
+Front end for tonight. **GitHub Pages** on push to `main` (`hackathon.tyneside.software`); API likewise from `main`. Local still works.
 
 **Site:** https://github.com/Tyneside-Software/hackathon-site  
 **API:** https://github.com/Tyneside-Software/hackathon-api  
-**Board:** [board.html](board.html) — Reeve, Connor, Michael, Lewis, Noah. Filter by person (chips, hour cards, or Who’s who). Click a card for the brief. Share with `?person=lewis` or `#t-04`.
+**Board:** [board.html](board.html) — Reeve, Connor, Michael, Lewis, Noah. Done cards: [done.html](done.html). Filter by person. Click a card for the brief. Share with `?person=lewis` or `#t-04`.
+
+Move board cards with `python scripts/update_board.py` — see [scripts/README.md](scripts/README.md).
 
 Clone from the **Tyneside-Software** org. First cards: Lewis and Reeve get front end **and** back end running; everyone proves **edit → run → push**.
 
@@ -42,7 +44,7 @@ uvicorn app.main:app --reload --port 8080
 
 http://127.0.0.1:8080/health
 
-Michael is away for the first two hours — **no Cloud Run until he is back**. Cards 10–11 are blocked on that.
+Push to `main` deploys the site and the API. Card 11 (persist routes on the API) still follows that.
 
 ## What is already demoable
 

@@ -370,6 +370,29 @@ html.card-modal-open body {
   gap: 0.5rem;
   margin-top: 1rem;
 }
+.done-index {
+  text-align: left;
+  padding: 1rem 1.05rem 1.1rem !important;
+  border-color: #047857 !important;
+  box-shadow: inset 3px 0 0 #047857;
+}
+.done-index:hover { border-color: #34d399 !important; }
+.done-index-count {
+  font-size: 2.2rem;
+  font-weight: 750;
+  letter-spacing: -0.04em;
+  color: #6ee7b7;
+  line-height: 1.1;
+}
+.done-index .title { margin-top: 0.35rem; }
+.done-index-meta { color: var(--muted); font-size: 0.82rem; margin: 0.15rem 0 0; }
+.done-archive {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(16.5rem, 1fr));
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+.done-archive .card { margin-bottom: 0; }
 
 /* Lewis log page */
 .lewis-hero h1 { letter-spacing: -0.04em; }

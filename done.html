@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tyneside Logistics — done</title>
+  <link rel="icon" href="logo.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="site">
+  <nav class="site-nav" aria-label="Primary">
+    <div class="inner">
+      <a href="index.html" class="brand-link">
+        <img src="logo.svg" width="36" height="36" alt="Tyneside">
+        <span>TYNESIDE</span>
+        <span class="brand-sub">LOGISTICS</span>
+      </a>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="app/">Map</a>
+        <a href="board.html">Board</a>
+        <a href="done.html" class="is-current" aria-current="page">Done</a>
+        <a href="onboarding.html">Onboarding</a>
+        <a href="lewis.html">Lewis</a>
+      </div>
+      <a class="btn btn-fill" href="board.html">Back to board</a>
+    </div>
+  </nav>
+
+  <div class="wrap-wide" style="padding: 1.5rem 0 3rem">
+    <p class="hero-kicker">Hackathon night · archive</p>
+    <h1 style="font-size:1.7rem;margin-bottom:0.4rem">Done cards</h1>
+    <p style="color:var(--muted);max-width:42rem">
+      Finished increments live here so the board stays short.
+      <strong>11 cards · 13.5h</strong>.
+      Click a card for the brief. Filter with the chips, hour cards, or <code>?person=lewis</code>.
+    </p>
+
+    <div class="filters" role="toolbar" aria-label="Filter by person">
+      <button type="button" class="filter is-on" data-person="all" aria-pressed="true">Everyone</button>
+      <button type="button" class="filter" data-person="reeve" aria-pressed="false">🧭 Reeve</button>
+      <button type="button" class="filter" data-person="connor" aria-pressed="false">⚡ Connor</button>
+      <button type="button" class="filter" data-person="michael" aria-pressed="false">🏗️ Michael</button>
+      <button type="button" class="filter" data-person="lewis" aria-pressed="false">🌱 Lewis</button>
+      <button type="button" class="filter" data-person="noah" aria-pressed="false">🔧 Noah</button>
+    </div>
+    <p class="filter-status" id="filter-status">Showing everyone.</p>
+
+    <div class="people">
+      <button type="button" class="person" data-person="reeve" aria-pressed="false">
+        <div class="who"><span class="emoji">🧭</span> Reeve</div>
+        <div class="hrs">8.75 <span>hrs</span></div>
+        <div class="meta">3 done · 1 ready · 3 to do</div>
+      </button>
+      <button type="button" class="person" data-person="connor" aria-pressed="false">
+        <div class="who"><span class="emoji">⚡</span> Connor</div>
+        <div class="hrs">6.25 <span>hrs</span></div>
+        <div class="meta">1 ready · 3 to do</div>
+      </button>
+      <button type="button" class="person" data-person="michael" aria-pressed="false">
+        <div class="who"><span class="emoji">🏗️</span> Michael</div>
+        <div class="hrs">10.75 <span>hrs</span></div>
+        <div class="meta">2 done · 2 to do</div>
+      </button>
+      <button type="button" class="person" data-person="lewis" aria-pressed="false">
+        <div class="who"><span class="emoji">🌱</span> Lewis</div>
+        <div class="hrs">8.75 <span>hrs</span></div>
+        <div class="meta">3 done · 4 to do</div>
+      </button>
+      <button type="button" class="person" data-person="noah" aria-pressed="false">
+        <div class="who"><span class="emoji">🔧</span> Noah</div>
+        <div class="hrs">2 <span>hrs</span></div>
+        <div class="meta">3 done</div>
+      </button>
+    </div>
+
+    <div class="done-archive" id="done-archive">
+          <a class="card" id="card-26" href="#t-26" data-person="michael" data-hours="2">
+            <div class="top"><span class="id">26</span><span class="emoji">🏗️</span></div>
+            <div class="title">Site + API deploy on push to main</div>
+            <span class="tag tag-ok">GitHub Pages + Cloud Run</span>
+            <div class="bot"><span>2h</span><span>Michael</span></div>
+            <template class="card-brief">
+              <p>Push to <code>main</code> deploys the static site
+              (<a href="https://hackathon.tyneside.software">hackathon.tyneside.software</a>)
+              and the API. A normal change does not need a manual Cloud Run click or a Pages republish.</p>
+              <h3>Done when</h3>
+              <ul>
+                <li>A push to site <code>main</code> updates the live GitHub Pages site.</li>
+                <li>A push to API <code>main</code> updates the live health endpoint.</li>
+                <li>Local <code>.\start.ps1</code> still works for development.</li>
+              </ul>
+            </template>
+          </a>
+          <a class="card" id="card-10" href="#t-10" data-person="michael" data-hours="4">
+            <div class="top"><span class="id">10</span><span class="emoji">🏗️</span></div>
+            <div class="title">Cloud Run API live + CORS for Pages</div>
+            <span class="tag tag-ok">Cloud Run live</span>
+            <div class="bot"><span>4h</span><span>Michael</span></div>
+            <template class="card-brief">
+              <p>Deploy <code>hackathon-api</code> to Cloud Run in London (<code>europe-west2</code>), allow unauthenticated <code>/health</code>, and CORS for GitHub Pages plus local <code>:5500</code>. Paste the service URL into <code>config.js</code> as <code>window.HACKATHON_API</code>.</p>
+                              <h3>Done when</h3>
+                              <ul>
+                                <li>Public Cloud Run URL serves <code>/health</code>.</li>
+                                <li>The site on Pages (and localhost:5500) can call it without a CORS error.</li>
+                                <li>Local uvicorn still works; Cloud Run is extra, not a replacement for the first hours.</li>
+                              </ul>
+                              <h3>Blocked on</h3>
+                              <ul>
+                                <li>Michael back / GCP project access. Do not burn the first two hours on this.</li>
+                              </ul>
+                              <h3>How</h3>
+                              <ol>
+                                <li>Dockerfile and FastAPI scaffold are already in the API repo.</li>
+                                <li><code>gcloud run deploy hackathon-api --source . --region europe-west2 --allow-unauthenticated</code> with <code>CORS_ORIGINS</code> set.</li>
+                                <li>Point <code>hackathon-site/config.js</code> at the service URL. Include that file from the pages that will call the API.</li>
+                              </ol>
+            </template>
+          </a>
+          <a class="card" id="card-12" href="#t-12" data-person="lewis" data-hours="0.5">
+            <div class="top"><span class="id">12</span><span class="emoji">🌱</span></div>
+            <div class="title">Lewis: get the front end running locally</div>
+            <span class="tag tag-ok">clone org repo · serve.ps1 · home + map + board</span>
+            <div class="bot"><span>0.5h</span><span>Lewis</span></div>
+            <template class="card-brief">
+              <p>Clone the org site repo and prove Home, Map, and Board load on your machine. Do not open HTML as <code>file://</code> — the browser will block the API later.</p>
+                              <h3>Done when</h3>
+                              <ul>
+                                <li><code>http://127.0.0.1:5500/</code> serves the desktop home.</li>
+                                <li>Map and Board open from the nav without a blank page.</li>
+                              </ul>
+                              <h3>How</h3>
+                              <ol>
+                                <li>Clone <a href="https://github.com/Tyneside-Software/hackathon-site">Tyneside-Software/hackathon-site</a> next to <code>hackathon-api</code>.</li>
+                                <li>From the site folder run <code>.\start.ps1</code> (site + API) or <code>python -m http.server 5500</code> (site only). <code>serve.ps1</code> was removed.</li>
+                                <li>Click through Home, Map, Board.</li>
+                              </ol>
+                              <div class="brief-actions"><a class="btn btn-ghost" href="onboarding.html">Onboarding steps</a></div>
+            </template>
+          </a>
+          <a class="card" id="card-15" href="#t-15" data-person="reeve" data-hours="0.5">
+            <div class="top"><span class="id">15</span><span class="emoji">🧭</span></div>
+            <div class="title">Reeve: get the front end running locally</div>
+            <span class="tag tag-ok">clone org repo · serve.ps1 · home + map + board</span>
+            <div class="bot"><span>0.5h</span><span>Reeve</span></div>
+            <template class="card-brief">
+              <p>Same front-end onboarding as the others: org clone, local static server, three pages load. Reeve also owns the map slice, so this is the machine the waypoints run on.</p>
+                              <h3>Done when</h3>
+                              <ul>
+                                <li><code>http://127.0.0.1:5500/</code>, <code>/app/</code>, and <code>/board.html</code> all open.</li>
+                              </ul>
+                              <h3>How</h3>
+                              <ol>
+                                <li>Clone <a href="https://github.com/Tyneside-Software/hackathon-site">hackathon-site</a> as a sibling of the API.</li>
+                                <li>Run <code>.\start.ps1</code> from the site folder (preferred) or <code>python -m http.server 5500</code>.</li>
+                                <li>Do not use <code>file://</code>.</li>
+                              </ol>
+                              <div class="brief-actions"><a class="btn btn-ghost" href="onboarding.html">Onboarding steps</a></div>
+            </template>
+          </a>
+          <a class="card" id="card-16" href="#t-16" data-person="reeve" data-hours="1">
+            <div class="top"><span class="id">16</span><span class="emoji">🧭</span></div>
+            <div class="title">Reeve: get the back end running locally</div>
+            <span class="tag tag-ok">clone api · venv · uvicorn · /health</span>
+            <div class="bot"><span>1h</span><span>Reeve</span></div>
+            <template class="card-brief">
+              <p>Local FastAPI on :8080. Reeve already scaffolded the health route; this card is “it runs on my machine”, not “write the API”.</p>
+                              <h3>Done when</h3>
+                              <ul>
+                                <li><code>http://127.0.0.1:8080/health</code> returns JSON with <code>ok: true</code>.</li>
+                                <li><code>/docs</code> is reachable.</li>
+                              </ul>
+                              <h3>How</h3>
+                              <ol>
+                                <li>Clone <a href="https://github.com/Tyneside-Software/hackathon-api">hackathon-api</a> next to the site.</li>
+                                <li>Create <code>.venv</code>, install <code>requirements.txt</code>, run uvicorn on 8080 — or use <code>.\start.ps1</code>.</li>
+                              </ol>
+                              <div class="brief-actions"><a class="btn btn-ghost" href="onboarding.html">Onboarding steps</a></div>
+            </template>
+          </a>
+          <a class="card" id="card-01" href="#t-01" data-person="lewis" data-hours="0.5">
+            <div class="top"><span class="id">01</span><span class="emoji">🌱</span></div>
+            <div class="title">Serve the site locally</div>
+            <span class="tag tag-ok">serve.ps1 → :5500</span>
+            <div class="bot"><span>0.5h</span><span>Lewis</span></div>
+            <template class="card-brief">
+              <p>First visible increment: a local static server so nobody opens <code>index.html</code> as <code>file://</code>. <code>serve.ps1</code> did this; it has since been removed in favour of <code>start.ps1</code> (site + API) or <code>python -m http.server 5500</code>.</p>
+                              <h3>Done when</h3>
+                              <ul>
+                                <li><code>http://127.0.0.1:5500/</code> serves Home, Map, and Board.</li>
+                              </ul>
+                              <h3>What’s live</h3>
+                              <ul>
+                                <li>Site is static files. <code>.\start.ps1</code> is the one-command path.</li>
+                              </ul>
+                              <div class="brief-actions"><a class="btn btn-ghost" href="onboarding.html">Onboarding steps</a></div>
+            </template>
+          </a>
+          <a class="card" id="card-02" href="#t-02" data-person="reeve" data-hours="1">
+            <div class="top"><span class="id">02</span><span class="emoji">🧭</span></div>
+            <div class="title">Run the API locally and hit /health</div>
+            <span class="tag tag-ok">uvicorn :8080</span>
+            <div class="bot"><span>1h</span><span>Reeve</span></div>
+            <template class="card-brief">
+              <p>FastAPI scaffold so the backend has a real URL on night one. CORS allows localhost:5500 and the GitHub Pages origin. No jobs or route storage yet — that is cards 10–11.</p>
+                              <h3>Done when</h3>
+                              <ul>
+                                <li><code>GET /health</code> returns <code>ok</code> (and now a <code>version</code>, card 25).</li>
+                                <li><code>/docs</code> is available.</li>
+                              </ul>
+                              <h3>What’s live</h3>
+                              <ul>
+                                <li><code>app/main.py</code> — <code>/</code> and <code>/health</code>. Dockerfile ready for Cloud Run.</li>
+                              </ul>
+                              <div class="brief-actions"><a class="btn btn-ghost" href="onboarding.html">Onboarding steps</a></div>
+            </template>
+          </a>
+          <a class="card" id="card-03" href="#t-03" data-person="lewis" data-hours="2">
+            <div class="top"><span class="id">03</span><span class="emoji">🌱</span></div>
+            <div class="title">Desktop home in Tyneside style</div>
+            <span class="tag tag-ok">this site’s index</span>
+            <div class="bot"><span>2h</span><span>Lewis</span></div>
+            <template class="card-brief">
+              <p>Desktop chrome in the Tyneside / logistics family: sticky nav, amber skin, honest copy. The site should look like a product at every step, not a blank repo.</p>
+                              <h3>Done when</h3>
+                              <ul>
+                                <li><code>index.html</code> has nav, hero, increment panels, and links to Map and Board.</li>
+                                <li>It still looks working if later cards are half-finished.</li>
+                              </ul>
+                              <h3>What’s live</h3>
+                              <ul>
+                                <li>Shared <code>styles.css</code> + <code>logo.svg</code>. Same nav family on Map, Board, Onboarding, Lewis log.</li>
+                              </ul>
+                              <div class="brief-actions"><a class="btn btn-fill" href="index.html">Open home →</a></div>
+            </template>
+          </a>
+          <a class="card" id="card-25" href="#t-25" data-person="noah" data-hours="0.5">
+            <div class="top"><span class="id">25</span><span class="emoji">🔧</span></div>
+            <div class="title">Noah: API version on / and /health</div>
+            <span class="tag tag-ok">VERSION on root + health</span>
+            <div class="bot"><span>0.5h</span><span>Noah</span></div>
+            <template class="card-brief">
+              <p>A <code>VERSION</code> constant so local and Cloud Run responses are identifiable. Root and health both return it. Small, releasable, already on <code>main</code>.</p>
+                              <h3>Done when</h3>
+                              <ul>
+                                <li><code>GET /</code> and <code>GET /health</code> include <code>"version": "0.1.0"</code> (or whatever the constant is).</li>
+                              </ul>
+                              <h3>What’s live</h3>
+                              <ul>
+                                <li><code>hackathon-api/app/main.py</code> — <code>VERSION = "0.1.0"</code> wired into both routes.</li>
+                              </ul>
+            </template>
+          </a>
+          <a class="card" id="card-22" href="#t-22" data-person="noah" data-hours="0.5">
+            <div class="top"><span class="id">22</span><span class="emoji">🔧</span></div>
+            <div class="title">Noah: get the front end running locally</div>
+            <span class="tag tag-ok">start.ps1 · home + map + board</span>
+            <div class="bot"><span>0.5h</span><span>Noah</span></div>
+            <template class="card-brief">
+              <p>Noah is new. Same front-end onboarding as Lewis/Reeve/Connor: org clone, local server, three pages load. Prefer <code>start.ps1</code> so the API is there too. Moved to Done — machine is up.</p>
+                              <h3>Done when</h3>
+                              <ul>
+                                <li>Home, Map, and Board all open at <code>http://127.0.0.1:5500/</code>.</li>
+                              </ul>
+                              <h3>How</h3>
+                              <ol>
+                                <li>Clone <a href="https://github.com/Tyneside-Software/hackathon-site">hackathon-site</a> next to the API.</li>
+                                <li>Run <code>.\start.ps1</code>.</li>
+                                <li>Do not use <code>file://</code>.</li>
+                              </ol>
+                              <div class="brief-actions"><a class="btn btn-ghost" href="onboarding.html">Onboarding steps</a></div>
+            </template>
+          </a>
+          <a class="card" id="card-23" href="#t-23" data-person="noah" data-hours="1">
+            <div class="top"><span class="id">23</span><span class="emoji">🔧</span></div>
+            <div class="title">Noah: get the back end running locally</div>
+            <span class="tag tag-ok">uvicorn · /health</span>
+            <div class="bot"><span>1h</span><span>Noah</span></div>
+            <template class="card-brief">
+              <p>Local FastAPI on :8080. Noah already shipped a version field on the API (card 25); this card is the machine setup so he can keep iterating without Cloud Run. Moved to Done.</p>
+                              <h3>Done when</h3>
+                              <ul>
+                                <li><code>http://127.0.0.1:8080/health</code> returns <code>ok</code> and a <code>version</code>.</li>
+                              </ul>
+                              <h3>How</h3>
+                              <ol>
+                                <li>Clone <a href="https://github.com/Tyneside-Software/hackathon-api">hackathon-api</a> as a sibling of the site.</li>
+                                <li>venv · <code>pip install -r requirements.txt</code> · uvicorn :8080, or <code>.\start.ps1</code>.</li>
+                              </ol>
+                              <div class="brief-actions"><a class="btn btn-ghost" href="onboarding.html">Onboarding steps</a></div>
+            </template>
+          </a>
+    </div>
+  </div>
+
+  <footer class="foot">
+    <div class="wrap-wide">Tyneside Logistics hackathon · Reeve · Connor · Michael · Lewis · Noah</div>
+  </footer>
+
+  <dialog class="card-modal" id="card-modal" aria-labelledby="card-modal-title">
+    <div class="card-modal-inner">
+      <button type="button" class="card-modal-close" id="card-modal-close">Close</button>
+      <p class="hero-kicker" id="card-modal-meta"></p>
+      <h2 id="card-modal-title"></h2>
+      <div class="card-modal-body" id="card-modal-body"></div>
+    </div>
+  </dialog>
+  <script src="board.js"></script>
+</body>
+</html>

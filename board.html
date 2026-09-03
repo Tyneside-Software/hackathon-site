@@ -19,7 +19,7 @@
         <a href="index.html">Home</a>
         <a href="app/">Map</a>
         <a href="board.html" class="is-current" aria-current="page">Board</a>
-
+        <a href="done.html">Done</a>
         <a href="onboarding.html">Onboarding</a>
         <a href="lewis.html">Lewis</a>
 
@@ -34,9 +34,11 @@
     <p style="color:var(--muted);max-width:42rem">
       Same idea as the Automatica kanban. Every card is a <strong>releasable increment</strong> —
       the site should still look working when the card lands.
-      First two hours: <strong>local only</strong> (Michael on backend later).
-      Filter the board by person with the chips, the hour cards, or a row in Who’s who.
+      Push to <code>main</code> deploys the site and the API. Done cards live on a
+      <a href="done.html">separate archive</a> so this board stays short.
+      Filter by person with the chips, the hour cards, or a row in Who’s who.
       <strong>Click a card</strong> for the full brief (or share <code>#t-04</code>).
+      Board edits: <code>python scripts/update_board.py</code>.
     </p>
 
     <div class="filters" role="toolbar" aria-label="Filter by person">
@@ -50,7 +52,7 @@
     <p class="filter-status" id="filter-status">Showing everyone.</p>
 
     <div class="board-banner">
-      <div>📋 First: Lewis and Reeve get <strong>front end and back end running</strong>. Everyone (including Connor and new developer Noah) proves the GitHub <strong>edit → run → push</strong> loop. Then the map cards.</div>
+      <div>📋 Site + API deploy from <strong>push to main</strong>. Reeve, Lewis, and Noah have the front end locally; Reeve and Noah have the API too. Connor still proves the GitHub loop, then the map cards.</div>
       <div class="btns">
         <a class="btn btn-fill" href="app/">Map app</a>
         <a class="btn btn-ghost" href="onboarding.html">Onboarding</a>
@@ -58,62 +60,44 @@
       </div>
     </div>
 
+    <!-- BOARD:PEOPLE -->
     <div class="people">
       <button type="button" class="person" data-person="reeve" aria-pressed="false">
         <div class="who"><span class="emoji">🧭</span> Reeve</div>
-        <div class="hrs">9 <span>hrs</span></div>
-        <div class="meta">3 onboarding · start script · map ready</div>
+        <div class="hrs">8.75 <span>hrs</span></div>
+        <div class="meta">3 done · 1 ready · 3 to do</div>
       </button>
       <button type="button" class="person" data-person="connor" aria-pressed="false">
         <div class="who"><span class="emoji">⚡</span> Connor</div>
-        <div class="hrs">6.5 <span>hrs</span></div>
-        <div class="meta">2 onboarding to do · routing ready</div>
+        <div class="hrs">6.25 <span>hrs</span></div>
+        <div class="meta">1 ready · 3 to do</div>
       </button>
       <button type="button" class="person" data-person="michael" aria-pressed="false">
         <div class="who"><span class="emoji">🏗️</span> Michael</div>
-        <div class="hrs">8.5 <span>hrs</span></div>
-        <div class="meta">git loop + Cloud Run after 2h</div>
+        <div class="hrs">10.75 <span>hrs</span></div>
+        <div class="meta">2 done · 2 to do</div>
       </button>
       <button type="button" class="person" data-person="lewis" aria-pressed="false">
         <div class="who"><span class="emoji">🌱</span> Lewis</div>
-        <div class="hrs">9 <span>hrs</span></div>
-        <div class="meta">3 onboarding to do · chrome done</div>
+        <div class="hrs">8.75 <span>hrs</span></div>
+        <div class="meta">3 done · 4 to do</div>
       </button>
       <button type="button" class="person" data-person="noah" aria-pressed="false">
         <div class="who"><span class="emoji">🔧</span> Noah</div>
         <div class="hrs">2 <span>hrs</span></div>
-        <div class="meta">FE + BE local done · API version shipped</div>
+        <div class="meta">3 done</div>
       </button>
     </div>
+    <!-- /BOARD:PEOPLE -->
 
+    <!-- BOARD:KANBAN -->
     <div class="kanban-scroll">
       <div class="kanban">
 
         <div class="col todo">
-          <div class="head"><span class="col-name">To do</span><span class="count">16 · 23h</span></div>
+          <div class="head"><span class="col-name">To do</span><span class="count">12 · 17h</span></div>
           <div class="stack">
             <p class="empty-col is-hidden" data-all="Nothing here."></p>
-            <a class="card" id="card-12" href="#t-12" data-person="lewis" data-hours="0.5">
-              <div class="top"><span class="id">12</span><span class="emoji">🌱</span></div>
-              <div class="title">Lewis: get the front end running locally</div>
-              <span class="tag tag-wait">clone org repo · serve.ps1 · home + map + board</span>
-              <div class="bot"><span>0.5h</span><span>Lewis</span></div>
-              <template class="card-brief">
-                <p>Clone the org site repo and prove Home, Map, and Board load on your machine. Do not open HTML as <code>file://</code> — the browser will block the API later.</p>
-                <h3>Done when</h3>
-                <ul>
-                  <li><code>http://127.0.0.1:5500/</code> serves the desktop home.</li>
-                  <li>Map and Board open from the nav without a blank page.</li>
-                </ul>
-                <h3>How</h3>
-                <ol>
-                  <li>Clone <a href="https://github.com/Tyneside-Software/hackathon-site">Tyneside-Software/hackathon-site</a> next to <code>hackathon-api</code>.</li>
-                  <li>From the site folder run <code>.\start.ps1</code> (site + API) or <code>python -m http.server 5500</code> (site only). <code>serve.ps1</code> was removed.</li>
-                  <li>Click through Home, Map, Board.</li>
-                </ol>
-                <div class="brief-actions"><a class="btn btn-ghost" href="onboarding.html">Onboarding steps</a></div>
-              </template>
-            </a>
             <a class="card" id="card-13" href="#t-13" data-person="lewis" data-hours="1">
               <div class="top"><span class="id">13</span><span class="emoji">🌱</span></div>
               <div class="title">Lewis: get the back end running locally</div>
@@ -121,18 +105,18 @@
               <div class="bot"><span>1h</span><span>Lewis</span></div>
               <template class="card-brief">
                 <p>Clone the API as a sibling of the site and get FastAPI answering on port 8080. This is the health-check loop, not Cloud Run.</p>
-                <h3>Done when</h3>
-                <ul>
-                  <li><code>GET http://127.0.0.1:8080/health</code> returns <code>ok</code>.</li>
-                  <li><code>/docs</code> loads the Swagger UI.</li>
-                </ul>
-                <h3>How</h3>
-                <ol>
-                  <li>Clone <a href="https://github.com/Tyneside-Software/hackathon-api">Tyneside-Software/hackathon-api</a> next to the site.</li>
-                  <li><code>python -m venv .venv</code> then <code>pip install -r requirements.txt</code>.</li>
-                  <li><code>uvicorn app.main:app --reload --port 8080</code> (or just <code>.\start.ps1</code> from the site folder).</li>
-                </ol>
-                <div class="brief-actions"><a class="btn btn-ghost" href="onboarding.html">Onboarding steps</a></div>
+                                <h3>Done when</h3>
+                                <ul>
+                                  <li><code>GET http://127.0.0.1:8080/health</code> returns <code>ok</code>.</li>
+                                  <li><code>/docs</code> loads the Swagger UI.</li>
+                                </ul>
+                                <h3>How</h3>
+                                <ol>
+                                  <li>Clone <a href="https://github.com/Tyneside-Software/hackathon-api">Tyneside-Software/hackathon-api</a> next to the site.</li>
+                                  <li><code>python -m venv .venv</code> then <code>pip install -r requirements.txt</code>.</li>
+                                  <li><code>uvicorn app.main:app --reload --port 8080</code> (or just <code>.\start.ps1</code> from the site folder).</li>
+                                </ol>
+                                <div class="brief-actions"><a class="btn btn-ghost" href="onboarding.html">Onboarding steps</a></div>
               </template>
             </a>
             <a class="card" id="card-14" href="#t-14" data-person="lewis" data-hours="0.75">
@@ -142,60 +126,20 @@
               <div class="bot"><span>0.75h</span><span>Lewis</span></div>
               <template class="card-brief">
                 <p>Prove the org-repo loop on <strong>hackathon-site</strong>: a tiny visible change, still runs, then push to <code>origin/main</code>. Not a personal fork unless you have been told otherwise.</p>
-                <h3>Done when</h3>
-                <ul>
-                  <li>Your commit is on <a href="https://github.com/Tyneside-Software/hackathon-site">Tyneside-Software/hackathon-site</a>.</li>
-                  <li>Home / Map / Board still load after the change.</li>
-                  <li>This card moves to Done.</li>
-                </ul>
-                <h3>How</h3>
-                <ol>
-                  <li>Pull latest <code>main</code>.</li>
-                  <li>Make a small visible edit (name in a comment, README line, harmless label).</li>
-                  <li>Confirm it still runs locally.</li>
-                  <li><code>git add</code> · <code>git commit</code> · <code>git push origin main</code>.</li>
-                </ol>
-                <div class="brief-actions"><a class="btn btn-ghost" href="onboarding.html#git">Git steps</a></div>
-              </template>
-            </a>
-            <a class="card" id="card-15" href="#t-15" data-person="reeve" data-hours="0.5">
-              <div class="top"><span class="id">15</span><span class="emoji">🧭</span></div>
-              <div class="title">Reeve: get the front end running locally</div>
-              <span class="tag tag-wait">clone org repo · serve.ps1 · home + map + board</span>
-              <div class="bot"><span>0.5h</span><span>Reeve</span></div>
-              <template class="card-brief">
-                <p>Same front-end onboarding as the others: org clone, local static server, three pages load. Reeve also owns the map slice, so this is the machine the waypoints run on.</p>
-                <h3>Done when</h3>
-                <ul>
-                  <li><code>http://127.0.0.1:5500/</code>, <code>/app/</code>, and <code>/board.html</code> all open.</li>
-                </ul>
-                <h3>How</h3>
-                <ol>
-                  <li>Clone <a href="https://github.com/Tyneside-Software/hackathon-site">hackathon-site</a> as a sibling of the API.</li>
-                  <li>Run <code>.\start.ps1</code> from the site folder (preferred) or <code>python -m http.server 5500</code>.</li>
-                  <li>Do not use <code>file://</code>.</li>
-                </ol>
-                <div class="brief-actions"><a class="btn btn-ghost" href="onboarding.html">Onboarding steps</a></div>
-              </template>
-            </a>
-            <a class="card" id="card-16" href="#t-16" data-person="reeve" data-hours="1">
-              <div class="top"><span class="id">16</span><span class="emoji">🧭</span></div>
-              <div class="title">Reeve: get the back end running locally</div>
-              <span class="tag tag-wait">clone api · venv · uvicorn · /health</span>
-              <div class="bot"><span>1h</span><span>Reeve</span></div>
-              <template class="card-brief">
-                <p>Local FastAPI on :8080. Reeve already scaffolded the health route; this card is “it runs on my machine”, not “write the API”.</p>
-                <h3>Done when</h3>
-                <ul>
-                  <li><code>http://127.0.0.1:8080/health</code> returns JSON with <code>ok: true</code>.</li>
-                  <li><code>/docs</code> is reachable.</li>
-                </ul>
-                <h3>How</h3>
-                <ol>
-                  <li>Clone <a href="https://github.com/Tyneside-Software/hackathon-api">hackathon-api</a> next to the site.</li>
-                  <li>Create <code>.venv</code>, install <code>requirements.txt</code>, run uvicorn on 8080 — or use <code>.\start.ps1</code>.</li>
-                </ol>
-                <div class="brief-actions"><a class="btn btn-ghost" href="onboarding.html">Onboarding steps</a></div>
+                                <h3>Done when</h3>
+                                <ul>
+                                  <li>Your commit is on <a href="https://github.com/Tyneside-Software/hackathon-site">Tyneside-Software/hackathon-site</a>.</li>
+                                  <li>Home / Map / Board still load after the change.</li>
+                                  <li>This card moves to Done.</li>
+                                </ul>
+                                <h3>How</h3>
+                                <ol>
+                                  <li>Pull latest <code>main</code>.</li>
+                                  <li>Make a small visible edit (name in a comment, README line, harmless label).</li>
+                                  <li>Confirm it still runs locally.</li>
+                                  <li><code>git add</code> · <code>git commit</code> · <code>git push origin main</code>.</li>
+                                </ol>
+                                <div class="brief-actions"><a class="btn btn-ghost" href="onboarding.html#git">Git steps</a></div>
               </template>
             </a>
             <a class="card" id="card-17" href="#t-17" data-person="reeve" data-hours="0.75">
@@ -205,18 +149,18 @@
               <div class="bot"><span>0.75h</span><span>Reeve</span></div>
               <template class="card-brief">
                 <p>Prove the org-repo loop on <strong>hackathon-api</strong>. Tiny change, still serves <code>/health</code>, then push to <code>origin/main</code>.</p>
-                <h3>Done when</h3>
-                <ul>
-                  <li>Commit is visible on <a href="https://github.com/Tyneside-Software/hackathon-api">Tyneside-Software/hackathon-api</a>.</li>
-                  <li><code>/health</code> still works after the change.</li>
-                </ul>
-                <h3>How</h3>
-                <ol>
-                  <li>Pull latest, edit something harmless (comment, README, label).</li>
-                  <li>Hit <code>/health</code> again.</li>
-                  <li><code>git add</code> · <code>git commit</code> · <code>git push origin main</code>.</li>
-                </ol>
-                <div class="brief-actions"><a class="btn btn-ghost" href="onboarding.html#git">Git steps</a></div>
+                                <h3>Done when</h3>
+                                <ul>
+                                  <li>Commit is visible on <a href="https://github.com/Tyneside-Software/hackathon-api">Tyneside-Software/hackathon-api</a>.</li>
+                                  <li><code>/health</code> still works after the change.</li>
+                                </ul>
+                                <h3>How</h3>
+                                <ol>
+                                  <li>Pull latest, edit something harmless (comment, README, label).</li>
+                                  <li>Hit <code>/health</code> again.</li>
+                                  <li><code>git add</code> · <code>git commit</code> · <code>git push origin main</code>.</li>
+                                </ol>
+                                <div class="brief-actions"><a class="btn btn-ghost" href="onboarding.html#git">Git steps</a></div>
               </template>
             </a>
             <a class="card" id="card-21" href="#t-21" data-person="reeve" data-hours="1">
@@ -226,18 +170,18 @@
               <div class="bot"><span>1h</span><span>Reeve</span></div>
               <template class="card-brief">
                 <p><code>start.ps1</code> already lives in the site repo. This card is: a teammate can clone both repos as siblings, run one command, and get site :5500 plus API :8080 without asking anyone.</p>
-                <h3>Done when</h3>
-                <ul>
-                  <li>From <code>hackathon-site</code>, <code>.\start.ps1</code> opens two windows.</li>
-                  <li>Site and <code>/health</code> both work. If the venv is missing, the script creates it.</li>
-                  <li>A teammate who is not Reeve can follow the README and succeed.</li>
-                </ul>
-                <h3>How</h3>
-                <ol>
-                  <li>Keep site and API as sibling folders.</li>
-                  <li>Fix the script if paths, quoting, or venv creation fail on a clean machine.</li>
-                  <li>Document the command in the README (already started).</li>
-                </ol>
+                                <h3>Done when</h3>
+                                <ul>
+                                  <li>From <code>hackathon-site</code>, <code>.\start.ps1</code> opens two windows.</li>
+                                  <li>Site and <code>/health</code> both work. If the venv is missing, the script creates it.</li>
+                                  <li>A teammate who is not Reeve can follow the README and succeed.</li>
+                                </ul>
+                                <h3>How</h3>
+                                <ol>
+                                  <li>Keep site and API as sibling folders.</li>
+                                  <li>Fix the script if paths, quoting, or venv creation fail on a clean machine.</li>
+                                  <li>Document the command in the README (already started).</li>
+                                </ol>
               </template>
             </a>
             <a class="card" id="card-18" href="#t-18" data-person="connor" data-hours="0.5">
@@ -247,17 +191,17 @@
               <div class="bot"><span>0.5h</span><span>Connor</span></div>
               <template class="card-brief">
                 <p>Connor’s first onboarding slice: the desktop site running locally so the routing work can be demoed on his machine.</p>
-                <h3>Done when</h3>
-                <ul>
-                  <li>Home, Map, and Board all load at <code>http://127.0.0.1:5500/</code>.</li>
-                </ul>
-                <h3>How</h3>
-                <ol>
-                  <li>Clone <a href="https://github.com/Tyneside-Software/hackathon-site">hackathon-site</a>.</li>
-                  <li><code>.\start.ps1</code> or <code>python -m http.server 5500</code> from that folder.</li>
-                  <li>Skip <code>file://</code>.</li>
-                </ol>
-                <div class="brief-actions"><a class="btn btn-ghost" href="onboarding.html">Onboarding steps</a></div>
+                                <h3>Done when</h3>
+                                <ul>
+                                  <li>Home, Map, and Board all load at <code>http://127.0.0.1:5500/</code>.</li>
+                                </ul>
+                                <h3>How</h3>
+                                <ol>
+                                  <li>Clone <a href="https://github.com/Tyneside-Software/hackathon-site">hackathon-site</a>.</li>
+                                  <li><code>.\start.ps1</code> or <code>python -m http.server 5500</code> from that folder.</li>
+                                  <li>Skip <code>file://</code>.</li>
+                                </ol>
+                                <div class="brief-actions"><a class="btn btn-ghost" href="onboarding.html">Onboarding steps</a></div>
               </template>
             </a>
             <a class="card" id="card-19" href="#t-19" data-person="connor" data-hours="0.75">
@@ -267,16 +211,16 @@
               <div class="bot"><span>0.75h</span><span>Connor</span></div>
               <template class="card-brief">
                 <p>Prove the org-repo loop on <strong>hackathon-site</strong>. Small visible change, still runs, push to <code>origin/main</code>.</p>
-                <h3>Done when</h3>
-                <ul>
-                  <li>Commit is on <a href="https://github.com/Tyneside-Software/hackathon-site">Tyneside-Software/hackathon-site</a>.</li>
-                  <li>The site still looks working.</li>
-                </ul>
-                <h3>How</h3>
-                <ol>
-                  <li>Pull, edit, run, commit, push — same as the GitHub loop at the bottom of this board.</li>
-                </ol>
-                <div class="brief-actions"><a class="btn btn-ghost" href="onboarding.html#git">Git steps</a></div>
+                                <h3>Done when</h3>
+                                <ul>
+                                  <li>Commit is on <a href="https://github.com/Tyneside-Software/hackathon-site">Tyneside-Software/hackathon-site</a>.</li>
+                                  <li>The site still looks working.</li>
+                                </ul>
+                                <h3>How</h3>
+                                <ol>
+                                  <li>Pull, edit, run, commit, push — same as the GitHub loop at the bottom of this board.</li>
+                                </ol>
+                                <div class="brief-actions"><a class="btn btn-ghost" href="onboarding.html#git">Git steps</a></div>
               </template>
             </a>
             <a class="card" id="card-20" href="#t-20" data-person="michael" data-hours="0.75">
@@ -286,18 +230,18 @@
               <div class="bot"><span>0.75h</span><span>Michael</span></div>
               <template class="card-brief">
                 <p>Michael was away for the first two hours. This card is the same GitHub loop as everyone else, on <strong>both</strong> org repos, before Cloud Run (cards 10–11).</p>
-                <h3>Done when</h3>
-                <ul>
-                  <li>A commit from this machine is on hackathon-site <em>and</em> hackathon-api <code>main</code>.</li>
-                  <li>Local site and <code>/health</code> still run.</li>
-                </ul>
-                <h3>How</h3>
-                <ol>
-                  <li>Pull both remotes.</li>
-                  <li>Tiny visible change in each (or one real increment that happens to touch both).</li>
-                  <li>Run, commit, push <code>origin/main</code>.</li>
-                </ol>
-                <div class="brief-actions"><a class="btn btn-ghost" href="onboarding.html#git">Git steps</a></div>
+                                <h3>Done when</h3>
+                                <ul>
+                                  <li>A commit from this machine is on hackathon-site <em>and</em> hackathon-api <code>main</code>.</li>
+                                  <li>Local site and <code>/health</code> still run.</li>
+                                </ul>
+                                <h3>How</h3>
+                                <ol>
+                                  <li>Pull both remotes.</li>
+                                  <li>Tiny visible change in each (or one real increment that happens to touch both).</li>
+                                  <li>Run, commit, push <code>origin/main</code>.</li>
+                                </ol>
+                                <div class="brief-actions"><a class="btn btn-ghost" href="onboarding.html#git">Git steps</a></div>
               </template>
             </a>
             <a class="card" id="card-06" href="#t-06" data-person="lewis" data-hours="2">
@@ -306,19 +250,19 @@
               <div class="bot"><span>2h</span><span>Lewis</span></div>
               <template class="card-brief">
                 <p>Persist the current waypoint list in the browser so a refresh does not wipe a demo. No API. This is the persistence story until card 11.</p>
-                <h3>Done when</h3>
-                <ul>
-                  <li>Add stops, refresh, they come back on the map and in the sidebar.</li>
-                  <li>Clear still clears, including storage.</li>
-                  <li>Home / Board still load if storage is empty or corrupt — never a blank map.</li>
-                </ul>
-                <h3>How</h3>
-                <ol>
-                  <li>Write waypoints (lat/lng order) to <code>localStorage</code> from <code>app/map.js</code>.</li>
-                  <li>Restore on load, then let the user Calculate route as today.</li>
-                  <li>Do not block on Cloud Run.</li>
-                </ol>
-                <div class="brief-actions"><a class="btn btn-ghost" href="app/">Open map</a></div>
+                                <h3>Done when</h3>
+                                <ul>
+                                  <li>Add stops, refresh, they come back on the map and in the sidebar.</li>
+                                  <li>Clear still clears, including storage.</li>
+                                  <li>Home / Board still load if storage is empty or corrupt — never a blank map.</li>
+                                </ul>
+                                <h3>How</h3>
+                                <ol>
+                                  <li>Write waypoints (lat/lng order) to <code>localStorage</code> from <code>app/map.js</code>.</li>
+                                  <li>Restore on load, then let the user Calculate route as today.</li>
+                                  <li>Do not block on Cloud Run.</li>
+                                </ol>
+                                <div class="brief-actions"><a class="btn btn-ghost" href="app/">Open map</a></div>
               </template>
             </a>
             <a class="card" id="card-07" href="#t-07" data-person="connor" data-hours="2">
@@ -327,19 +271,19 @@
               <div class="bot"><span>2h</span><span>Connor</span></div>
               <template class="card-brief">
                 <p>A job list in the map sidebar, seeded with Howden-shaped work: named jobs, rough Tyneside locations. This is the first hint of dispatch, not a full scheduler.</p>
-                <h3>Done when</h3>
-                <ul>
-                  <li>At least five seed jobs visible beside the map without an API.</li>
-                  <li>Clicking a job does something visible (focus the map, highlight, or drop its waypoint).</li>
-                  <li>The existing waypoint + route flow still works if you ignore the list.</li>
-                </ul>
-                <h3>How</h3>
-                <ol>
-                  <li>Hard-code a small JSON/JS list in the map page (name, area, lat/lng).</li>
-                  <li>Render it in the existing sidebar; keep the layout usable on a laptop.</li>
-                  <li>Shape the names like real cleaning/logistics jobs, not “Test 1”.</li>
-                </ol>
-                <div class="brief-actions"><a class="btn btn-ghost" href="app/">Open map</a></div>
+                                <h3>Done when</h3>
+                                <ul>
+                                  <li>At least five seed jobs visible beside the map without an API.</li>
+                                  <li>Clicking a job does something visible (focus the map, highlight, or drop its waypoint).</li>
+                                  <li>The existing waypoint + route flow still works if you ignore the list.</li>
+                                </ul>
+                                <h3>How</h3>
+                                <ol>
+                                  <li>Hard-code a small JSON/JS list in the map page (name, area, lat/lng).</li>
+                                  <li>Render it in the existing sidebar; keep the layout usable on a laptop.</li>
+                                  <li>Shape the names like real cleaning/logistics jobs, not “Test 1”.</li>
+                                </ol>
+                                <div class="brief-actions"><a class="btn btn-ghost" href="app/">Open map</a></div>
               </template>
             </a>
             <a class="card" id="card-08" href="#t-08" data-person="reeve" data-hours="1.5">
@@ -348,19 +292,19 @@
               <div class="bot"><span>1.5h</span><span>Reeve</span></div>
               <template class="card-brief">
                 <p>One-click demo so nobody has to click the map five times during a show-and-tell. Load a named run with five Tyneside waypoints already placed.</p>
-                <h3>Done when</h3>
-                <ul>
-                  <li>A button (e.g. “Load Tyneside demo”) drops five named stops and a run name.</li>
-                  <li>Calculate route works immediately on that seed.</li>
-                  <li>Clear still returns to an empty map.</li>
-                </ul>
-                <h3>How</h3>
-                <ol>
-                  <li>Pick five real-ish spots around Newcastle / Tyneside (not a straight line down one street).</li>
-                  <li>Give the run a name the operator can see in the sidebar.</li>
-                  <li>Keep the manual click-to-add path working.</li>
-                </ol>
-                <div class="brief-actions"><a class="btn btn-ghost" href="app/">Open map</a></div>
+                                <h3>Done when</h3>
+                                <ul>
+                                  <li>A button (e.g. “Load Tyneside demo”) drops five named stops and a run name.</li>
+                                  <li>Calculate route works immediately on that seed.</li>
+                                  <li>Clear still returns to an empty map.</li>
+                                </ul>
+                                <h3>How</h3>
+                                <ol>
+                                  <li>Pick five real-ish spots around Newcastle / Tyneside (not a straight line down one street).</li>
+                                  <li>Give the run a name the operator can see in the sidebar.</li>
+                                  <li>Keep the manual click-to-add path working.</li>
+                                </ol>
+                                <div class="brief-actions"><a class="btn btn-ghost" href="app/">Open map</a></div>
               </template>
             </a>
             <a class="card" id="card-09" href="#t-09" data-person="lewis" data-hours="2">
@@ -369,42 +313,17 @@
               <div class="bot"><span>2h</span><span>Lewis</span></div>
               <template class="card-brief">
                 <p>No real auth. A display name stored in the browser so the chrome can say who is driving the demo. Later job assignment can reuse it.</p>
-                <h3>Done when</h3>
-                <ul>
-                  <li>You can set a name from the site (prompt, form, or nav control).</li>
-                  <li>It survives refresh.</li>
-                  <li>It is visible in the chrome (nav or map sidebar). Empty name is a valid empty state, not a crash.</li>
-                </ul>
-                <h3>How</h3>
-                <ol>
-                  <li><code>localStorage</code> for the name. Keep it off the API until card 10.</li>
-                  <li>Show it on more than one page if the chrome is shared; otherwise map + home is enough.</li>
-                </ol>
-              </template>
-            </a>
-            <a class="card" id="card-10" href="#t-10" data-person="michael" data-hours="4">
-              <div class="top"><span class="id">10</span><span class="emoji">🏗️</span></div>
-              <div class="title">Cloud Run API live + CORS for Pages</div>
-              <span class="tag tag-wait">blocked — Michael back</span>
-              <div class="bot"><span>4h</span><span>Michael</span></div>
-              <template class="card-brief">
-                <p>Deploy <code>hackathon-api</code> to Cloud Run in London (<code>europe-west2</code>), allow unauthenticated <code>/health</code>, and CORS for GitHub Pages plus local <code>:5500</code>. Paste the service URL into <code>config.js</code> as <code>window.HACKATHON_API</code>.</p>
-                <h3>Done when</h3>
-                <ul>
-                  <li>Public Cloud Run URL serves <code>/health</code>.</li>
-                  <li>The site on Pages (and localhost:5500) can call it without a CORS error.</li>
-                  <li>Local uvicorn still works; Cloud Run is extra, not a replacement for the first hours.</li>
-                </ul>
-                <h3>Blocked on</h3>
-                <ul>
-                  <li>Michael back / GCP project access. Do not burn the first two hours on this.</li>
-                </ul>
-                <h3>How</h3>
-                <ol>
-                  <li>Dockerfile and FastAPI scaffold are already in the API repo.</li>
-                  <li><code>gcloud run deploy hackathon-api --source . --region europe-west2 --allow-unauthenticated</code> with <code>CORS_ORIGINS</code> set.</li>
-                  <li>Point <code>hackathon-site/config.js</code> at the service URL. Include that file from the pages that will call the API.</li>
-                </ol>
+                                <h3>Done when</h3>
+                                <ul>
+                                  <li>You can set a name from the site (prompt, form, or nav control).</li>
+                                  <li>It survives refresh.</li>
+                                  <li>It is visible in the chrome (nav or map sidebar). Empty name is a valid empty state, not a crash.</li>
+                                </ul>
+                                <h3>How</h3>
+                                <ol>
+                                  <li><code>localStorage</code> for the name. Keep it off the API until card 10.</li>
+                                  <li>Show it on more than one page if the chrome is shared; otherwise map + home is enough.</li>
+                                </ol>
               </template>
             </a>
             <a class="card" id="card-11" href="#t-11" data-person="michael" data-hours="4">
@@ -414,22 +333,22 @@
               <div class="bot"><span>4h</span><span>Michael</span></div>
               <template class="card-brief">
                 <p>Replace browser-only route storage with API persistence so two machines can share a run. Card 06 stays as the fallback if the API is down — the map must not go blank.</p>
-                <h3>Done when</h3>
-                <ul>
-                  <li>POST (or PUT) a route, GET it back from the Cloud Run URL.</li>
-                  <li>Save on one browser, load on another.</li>
-                  <li>If the API errors, localStorage or a visible error keeps the page usable.</li>
-                </ul>
-                <h3>Blocked on</h3>
-                <ul>
-                  <li>Card 10 (live API + CORS).</li>
-                </ul>
-                <h3>How</h3>
-                <ol>
-                  <li>Minimal routes resource: id, name, waypoints, maybe duration/distance.</li>
-                  <li>In-memory is acceptable for the hackathon if two requests to the same instance work; say so in the brief if it is not durable.</li>
-                  <li>Wire the map save/load to <code>window.HACKATHON_API</code>.</li>
-                </ol>
+                                <h3>Done when</h3>
+                                <ul>
+                                  <li>POST (or PUT) a route, GET it back from the Cloud Run URL.</li>
+                                  <li>Save on one browser, load on another.</li>
+                                  <li>If the API errors, localStorage or a visible error keeps the page usable.</li>
+                                </ul>
+                                <h3>Blocked on</h3>
+                                <ul>
+                                  <li>Card 10 (live API + CORS).</li>
+                                </ul>
+                                <h3>How</h3>
+                                <ol>
+                                  <li>Minimal routes resource: id, name, waypoints, maybe duration/distance.</li>
+                                  <li>In-memory is acceptable for the hackathon if two requests to the same instance work; say so in the brief if it is not durable.</li>
+                                  <li>Wire the map save/load to <code>window.HACKATHON_API</code>.</li>
+                                </ol>
               </template>
             </a>
           </div>
@@ -453,17 +372,17 @@
               <div class="bot"><span>3h</span><span>Reeve</span></div>
               <template class="card-brief">
                 <p>Leaflet map centred on Newcastle. Click to drop a stop, drag to move it, remove from the list. This is the visual spine of the night: dispatch starts with a map that never looks dead.</p>
-                <h3>Done when</h3>
-                <ul>
-                  <li>Someone else can add two pins without a briefing.</li>
-                  <li>Drag updates the sidebar coordinates.</li>
-                  <li>Clear removes pins and the route line.</li>
-                </ul>
-                <h3>What’s live</h3>
-                <ul>
-                  <li><code>app/index.html</code> + <code>app/map.js</code> — OSM tiles, draggable markers, stop list with remove.</li>
-                </ul>
-                <div class="brief-actions"><a class="btn btn-fill" href="app/">Open map →</a></div>
+                                <h3>Done when</h3>
+                                <ul>
+                                  <li>Someone else can add two pins without a briefing.</li>
+                                  <li>Drag updates the sidebar coordinates.</li>
+                                  <li>Clear removes pins and the route line.</li>
+                                </ul>
+                                <h3>What’s live</h3>
+                                <ul>
+                                  <li><code>app/index.html</code> + <code>app/map.js</code> — OSM tiles, draggable markers, stop list with remove.</li>
+                                </ul>
+                                <div class="brief-actions"><a class="btn btn-fill" href="app/">Open map →</a></div>
               </template>
             </a>
             <a class="card" id="card-05" href="#t-05" data-person="connor" data-hours="3">
@@ -473,147 +392,42 @@
               <div class="bot"><span>3h</span><span>Connor</span></div>
               <template class="card-brief">
                 <p>Calculate a driving route through the waypoints. Public OSRM when the network is up; haversine straight-line fallback if it fails, so the board never looks broken.</p>
-                <h3>Done when</h3>
-                <ul>
-                  <li>Two or more stops + Calculate route draws a line.</li>
-                  <li>Sidebar shows distance, time, and engine (<code>OSRM driving</code> or <code>straight-line</code>).</li>
-                  <li>OSRM down still produces a visible line, not an empty map.</li>
-                </ul>
-                <h3>What’s live</h3>
-                <ul>
-                  <li><code>https://router.project-osrm.org</code> for the driving geometry.</li>
-                  <li>Fallback assumes ~35 km/h for a rough time estimate.</li>
-                </ul>
-                <div class="brief-actions"><a class="btn btn-fill" href="app/">Open map →</a></div>
+                                <h3>Done when</h3>
+                                <ul>
+                                  <li>Two or more stops + Calculate route draws a line.</li>
+                                  <li>Sidebar shows distance, time, and engine (<code>OSRM driving</code> or <code>straight-line</code>).</li>
+                                  <li>OSRM down still produces a visible line, not an empty map.</li>
+                                </ul>
+                                <h3>What’s live</h3>
+                                <ul>
+                                  <li><code>https://router.project-osrm.org</code> for the driving geometry.</li>
+                                  <li>Fallback assumes ~35 km/h for a rough time estimate.</li>
+                                </ul>
+                                <div class="brief-actions"><a class="btn btn-fill" href="app/">Open map →</a></div>
               </template>
             </a>
           </div>
         </div>
 
         <div class="col done">
-          <div class="head"><span class="col-name">Done</span><span class="count">6 · 5.5h</span></div>
+          <div class="head"><span class="col-name">Done</span><span class="count" id="done-col-count">11 · 13.5h</span></div>
           <div class="stack">
-            <p class="empty-col is-hidden" data-all="Nothing here."></p>
-            <a class="card" id="card-01" href="#t-01" data-person="lewis" data-hours="0.5">
-              <div class="top"><span class="id">01</span><span class="emoji">🌱</span></div>
-              <div class="title">Serve the site locally</div>
-              <span class="tag tag-ok">serve.ps1 → :5500</span>
-              <div class="bot"><span>0.5h</span><span>Lewis</span></div>
-              <template class="card-brief">
-                <p>First visible increment: a local static server so nobody opens <code>index.html</code> as <code>file://</code>. <code>serve.ps1</code> did this; it has since been removed in favour of <code>start.ps1</code> (site + API) or <code>python -m http.server 5500</code>.</p>
-                <h3>Done when</h3>
-                <ul>
-                  <li><code>http://127.0.0.1:5500/</code> serves Home, Map, and Board.</li>
-                </ul>
-                <h3>What’s live</h3>
-                <ul>
-                  <li>Site is static files. <code>.\start.ps1</code> is the one-command path.</li>
-                </ul>
-                <div class="brief-actions"><a class="btn btn-ghost" href="onboarding.html">Onboarding steps</a></div>
-              </template>
-            </a>
-            <a class="card" id="card-02" href="#t-02" data-person="reeve" data-hours="1">
-              <div class="top"><span class="id">02</span><span class="emoji">🧭</span></div>
-              <div class="title">Run the API locally and hit /health</div>
-              <span class="tag tag-ok">uvicorn :8080</span>
-              <div class="bot"><span>1h</span><span>Reeve</span></div>
-              <template class="card-brief">
-                <p>FastAPI scaffold so the backend has a real URL on night one. CORS allows localhost:5500 and the GitHub Pages origin. No jobs or route storage yet — that is cards 10–11.</p>
-                <h3>Done when</h3>
-                <ul>
-                  <li><code>GET /health</code> returns <code>ok</code> (and now a <code>version</code>, card 25).</li>
-                  <li><code>/docs</code> is available.</li>
-                </ul>
-                <h3>What’s live</h3>
-                <ul>
-                  <li><code>app/main.py</code> — <code>/</code> and <code>/health</code>. Dockerfile ready for Cloud Run.</li>
-                </ul>
-                <div class="brief-actions"><a class="btn btn-ghost" href="onboarding.html">Onboarding steps</a></div>
-              </template>
-            </a>
-            <a class="card" id="card-03" href="#t-03" data-person="lewis" data-hours="2">
-              <div class="top"><span class="id">03</span><span class="emoji">🌱</span></div>
-              <div class="title">Desktop home in Tyneside style</div>
-              <span class="tag tag-ok">this site’s index</span>
-              <div class="bot"><span>2h</span><span>Lewis</span></div>
-              <template class="card-brief">
-                <p>Desktop chrome in the Tyneside / logistics family: sticky nav, amber skin, honest copy. The site should look like a product at every step, not a blank repo.</p>
-                <h3>Done when</h3>
-                <ul>
-                  <li><code>index.html</code> has nav, hero, increment panels, and links to Map and Board.</li>
-                  <li>It still looks working if later cards are half-finished.</li>
-                </ul>
-                <h3>What’s live</h3>
-                <ul>
-                  <li>Shared <code>styles.css</code> + <code>logo.svg</code>. Same nav family on Map, Board, Onboarding, Lewis log.</li>
-                </ul>
-                <div class="brief-actions"><a class="btn btn-fill" href="index.html">Open home →</a></div>
-              </template>
-            </a>
-            <a class="card" id="card-25" href="#t-25" data-person="noah" data-hours="0.5">
-              <div class="top"><span class="id">25</span><span class="emoji">🔧</span></div>
-              <div class="title">Noah: API version on / and /health</div>
-              <span class="tag tag-ok">VERSION on root + health</span>
-              <div class="bot"><span>0.5h</span><span>Noah</span></div>
-              <template class="card-brief">
-                <p>A <code>VERSION</code> constant so local and Cloud Run responses are identifiable. Root and health both return it. Small, releasable, already on <code>main</code>.</p>
-                <h3>Done when</h3>
-                <ul>
-                  <li><code>GET /</code> and <code>GET /health</code> include <code>"version": "0.1.0"</code> (or whatever the constant is).</li>
-                </ul>
-                <h3>What’s live</h3>
-                <ul>
-                  <li><code>hackathon-api/app/main.py</code> — <code>VERSION = "0.1.0"</code> wired into both routes.</li>
-                </ul>
-              </template>
-            </a>
-            <a class="card" id="card-22" href="#t-22" data-person="noah" data-hours="0.5">
-              <div class="top"><span class="id">22</span><span class="emoji">🔧</span></div>
-              <div class="title">Noah: get the front end running locally</div>
-              <span class="tag tag-ok">start.ps1 · home + map + board</span>
-              <div class="bot"><span>0.5h</span><span>Noah</span></div>
-              <template class="card-brief">
-                <p>Noah is new. Same front-end onboarding as Lewis/Reeve/Connor: org clone, local server, three pages load. Prefer <code>start.ps1</code> so the API is there too. Moved to Done — machine is up.</p>
-                <h3>Done when</h3>
-                <ul>
-                  <li>Home, Map, and Board all open at <code>http://127.0.0.1:5500/</code>.</li>
-                </ul>
-                <h3>How</h3>
-                <ol>
-                  <li>Clone <a href="https://github.com/Tyneside-Software/hackathon-site">hackathon-site</a> next to the API.</li>
-                  <li>Run <code>.\start.ps1</code>.</li>
-                  <li>Do not use <code>file://</code>.</li>
-                </ol>
-                <div class="brief-actions"><a class="btn btn-ghost" href="onboarding.html">Onboarding steps</a></div>
-              </template>
-            </a>
-            <a class="card" id="card-23" href="#t-23" data-person="noah" data-hours="1">
-              <div class="top"><span class="id">23</span><span class="emoji">🔧</span></div>
-              <div class="title">Noah: get the back end running locally</div>
-              <span class="tag tag-ok">uvicorn · /health</span>
-              <div class="bot"><span>1h</span><span>Noah</span></div>
-              <template class="card-brief">
-                <p>Local FastAPI on :8080. Noah already shipped a version field on the API (card 25); this card is the machine setup so he can keep iterating without Cloud Run. Moved to Done.</p>
-                <h3>Done when</h3>
-                <ul>
-                  <li><code>http://127.0.0.1:8080/health</code> returns <code>ok</code> and a <code>version</code>.</li>
-                </ul>
-                <h3>How</h3>
-                <ol>
-                  <li>Clone <a href="https://github.com/Tyneside-Software/hackathon-api">hackathon-api</a> as a sibling of the site.</li>
-                  <li>venv · <code>pip install -r requirements.txt</code> · uvicorn :8080, or <code>.\start.ps1</code>.</li>
-                </ol>
-                <div class="brief-actions"><a class="btn btn-ghost" href="onboarding.html">Onboarding steps</a></div>
-              </template>
+            <script type="application/json" id="done-cards-index">[{"id":"26","person":"michael","hours":2},{"id":"10","person":"michael","hours":4},{"id":"12","person":"lewis","hours":0.5},{"id":"15","person":"reeve","hours":0.5},{"id":"16","person":"reeve","hours":1},{"id":"01","person":"lewis","hours":0.5},{"id":"02","person":"reeve","hours":1},{"id":"03","person":"lewis","hours":2},{"id":"25","person":"noah","hours":0.5},{"id":"22","person":"noah","hours":0.5},{"id":"23","person":"noah","hours":1}]</script>
+            <a class="card done-index" id="done-index" href="done.html">
+              <div class="done-index-count" id="done-index-count">11</div>
+              <div class="title">All done cards</div>
+              <p class="done-index-meta" id="done-index-meta">11 cards · 13.5h · archive →</p>
             </a>
           </div>
         </div>
 
       </div>
     </div>
+    <!-- /BOARD:KANBAN -->
 
-    <h2 style="margin-top:2rem">Who’s who</h2>
+<h2 style="margin-top:2rem">Who’s who</h2>
     <p class="lede">Hours are every card attributed to that person, whichever column it sits in. Click a row to filter the board.</p>
+    <!-- BOARD:WHO -->
     <div class="who-wrap">
     <table class="who-table">
       <thead>
@@ -623,43 +437,45 @@
         <tr data-person="reeve">
           <td>🧭</td>
           <td><strong>Reeve</strong></td>
-          <td>Front end local (0.5h) · Back end local (1h) · GitHub loop on API (0.75h) · Start script for site+API (1h) · Map waypoints (3h, ready) · Demo seed (1.5h) · API health scaffold (1h, done)</td>
-          <td><strong>9h</strong></td>
+          <td>Reeve: get the front end running locally (0.5h, done) · Reeve: get the back end running locally (1h, done) · Reeve: GitHub edit → run → push (API repo) (0.75h) · Reeve: start script for front end and back end together (1h) · Demo seed: 5 Tyneside waypoints + named run (1.5h) · Map with clickable / draggable waypoints (3h, ready) · Run the API locally and hit /health (1h, done)</td>
+          <td><strong>8.75h</strong></td>
         </tr>
         <tr data-person="connor">
           <td>⚡</td>
           <td><strong>Connor</strong></td>
-          <td>Front end local (0.5h) · GitHub loop on site (0.75h) · Route calculation (3h, ready) · Job list beside map (2h)</td>
-          <td><strong>6.5h</strong></td>
+          <td>Connor: get the front end running locally (0.5h) · Connor: GitHub edit → run → push (site repo) (0.75h) · Job list beside the map (seed Howden-shaped jobs) (2h) · Route calculation between waypoints (3h, ready)</td>
+          <td><strong>6.25h</strong></td>
         </tr>
         <tr data-person="michael">
           <td>🏗️</td>
           <td><strong>Michael</strong></td>
-          <td>GitHub loop both repos (0.75h) · Cloud Run + CORS (4h) · Persist routes on API (4h)</td>
-          <td><strong>8.5h</strong></td>
+          <td>Site + API deploy on push to main (2h, done) · Cloud Run API live + CORS for Pages (4h, done) · Michael: GitHub edit → run → push (both repos) (0.75h) · Persist routes on the API (replace localStorage) (4h)</td>
+          <td><strong>10.75h</strong></td>
         </tr>
         <tr data-person="lewis">
           <td>🌱</td>
           <td><strong>Lewis</strong></td>
-          <td>Front end local (0.5h) · Back end local (1h) · GitHub loop on site (0.75h) · Desktop chrome (2h, done) · localStorage (2h) · local account (2h) · serve scaffold (0.5h, done)</td>
-          <td><strong>9h</strong></td>
+          <td>Lewis: get the front end running locally (0.5h, done) · Lewis: get the back end running locally (1h) · Lewis: GitHub edit → run → push (site repo) (0.75h) · Save routes in the browser (localStorage) (2h) · Local “who am I” account (name in the browser) (2h) · Serve the site locally (0.5h, done) · Desktop home in Tyneside style (2h, done)</td>
+          <td><strong>8.75h</strong></td>
         </tr>
         <tr data-person="noah">
           <td>🔧</td>
           <td><strong>Noah</strong></td>
-          <td>Front end local (0.5h, done) · Back end local (1h, done) · API version on / and /health (0.5h, done)</td>
+          <td>Noah: API version on / and /health (0.5h, done) · Noah: get the front end running locally (0.5h, done) · Noah: get the back end running locally (1h, done)</td>
           <td><strong>2h</strong></td>
         </tr>
       </tbody>
     </table>
     </div>
+    <!-- /BOARD:WHO -->
 
-    <h2>How a card ships</h2>
+<h2>How a card ships</h2>
     <ol style="color:var(--muted);padding-left:1.2rem;line-height:1.7">
       <li>The increment is visible on the running site (not a branch of theory).</li>
       <li>Home, Map, and Board still load if the new thing is half-finished — fallbacks, never a blank page.</li>
       <li>Move the card to <em>Ready to demo</em> when someone else can click it without a briefing. The brief on the card is that briefing.</li>
-      <li>No Cloud Run until card 10. LocalStorage is the persistence story until then.</li>
+      <li>Move a card with <code>python scripts/update_board.py done 12</code> (or <code>move 07 doing</code>) — do not hand-edit the kanban HTML.</li>
+      <li>LocalStorage is still the persistence story until card 11. The live API deploys from <code>main</code>.</li>
     </ol>
 
     <h2 style="margin-top:2rem">GitHub loop (cards 14 · 17 · 19 · 20)</h2>

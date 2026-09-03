@@ -39,6 +39,31 @@
     return Number.isInteger(rounded) ? String(rounded) : String(rounded);
   }
 
+  function doneIndex() {
+    const el = document.getElementById("done-cards-index");
+    if (!el) return [];
+    try { return JSON.parse(el.textContent || "[]"); } catch (err) { return []; }
+  }
+
+  function updateDoneSummary(person) {
+    const all = doneIndex();
+    const visible = person === "all" ? all : all.filter(function (c) { return c.person === person; });
+    const hours = visible.reduce(function (sum, c) { return sum + (Number(c.hours) || 0); }, 0);
+    const countEl = document.getElementById("done-col-count");
+    if (countEl) countEl.textContent = visible.length + " · " + fmtHours(hours) + "h";
+    const nEl = document.getElementById("done-index-count");
+    if (nEl) nEl.textContent = String(visible.length);
+    const meta = document.getElementById("done-index-meta");
+    if (meta) {
+      meta.textContent = visible.length + " card" + (visible.length === 1 ? "" : "s") +
+        " · " + fmtHours(hours) + "h · archive →";
+    }
+    const link = document.getElementById("done-index");
+    if (link) {
+      link.setAttribute("href", person === "all" ? "done.html" : "done.html?person=" + person);
+    }
+  }
+
   function apply(person) {
     document.querySelectorAll(".filter").forEach(function (btn) {
       const on = btn.getAttribute("data-person") === person;
@@ -60,6 +85,10 @@
     });
 
     document.querySelectorAll(".col").forEach(function (col) {
+      if (col.classList.contains("done") && document.getElementById("done-cards-index")) {
+        updateDoneSummary(person);
+        return;
+      }
       const cards = Array.prototype.slice.call(col.querySelectorAll(".card[data-person]"));
       const visible = cards.filter(function (c) { return !c.classList.contains("is-hidden"); });
       const hours = visible.reduce(function (sum, c) { return sum + hoursOf(c); }, 0);
@@ -79,11 +108,16 @@
 
     const status = document.getElementById("filter-status");
     if (status) {
+      const live = document.querySelectorAll(".card[data-person]:not(.is-hidden)").length;
+      const doneAll = doneIndex();
+      const doneN = person === "all" ? doneAll.length : doneAll.filter(function (c) { return c.person === person; }).length;
       if (person === "all") {
-        status.textContent = "Showing everyone.";
+        status.textContent = doneAll.length
+          ? "Showing everyone. " + doneAll.length + " done on the archive."
+          : "Showing everyone.";
       } else {
-        const n = document.querySelectorAll(".card[data-person=\"" + person + "\"]").length;
-        status.textContent = "Showing " + NAMES[person] + " — " + n + " card" + (n === 1 ? "" : "s") + ". Click Everyone to clear.";
+        const extra = doneN ? " · " + doneN + " done" : "";
+        status.textContent = "Showing " + NAMES[person] + " — " + live + " card" + (live === 1 ? "" : "s") + extra + ". Click Everyone to clear.";
       }
     }
   }
@@ -175,7 +209,14 @@
 
   function openCard(id) {
     const card = cardById(id);
-    if (!card || !dialog || !titleEl || !bodyEl) return;
+    if (!card) {
+      const onDonePage = /done\.html$/i.test(location.pathname);
+      if (!onDonePage && /^t-\d+$/i.test("t-" + id)) {
+        location.href = "done.html#t-" + id;
+      }
+      return;
+    }
+    if (!dialog || !titleEl || !bodyEl) return;
     if (!dialog.open) lastFocus = document.activeElement;
     fillModal(card);
     if (!dialog.open) {
