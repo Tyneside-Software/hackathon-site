@@ -20,9 +20,7 @@ Three GitHub repos, two hosts, one product. The **site** is static files. The **
 
 Locally the site is `python -m http.server 5500`, the API is `uvicorn` on `:8080`. `.\start.ps1` starts both. The phone is Android Studio / a debug APK.
 
-**11 September 2026:** the Pixel 6a emulator posted `POST /v1/locations` to live Cloud Run and got HTTP 200 `stored=datastore` (device `android-c55e59830b71ba38`). The map draws that phone. Cards 32–34 are done.
-
-**11 September, later:** Noah shipped the device drawer and ping-history path (cards 36–38). `GET /v1/locations?device_id=` reads Firestore, Datastore fallback. Live buses are a map toggle (card 39) — [Buses](#buses). A physical phone is still card 35.
+**11 September 2026:** live phones work end to end (cards 32–34). The emulator POSTs every minute; last-seen is last communication; Newcastle is on the map. Noah shipped the device drawer and ping-history path (36–38). `GET /v1/locations?device_id=` reads Firestore, Datastore fallback. Live buses are a map toggle (39). A physical phone is still card 35.
 
 ## The three repos
 
@@ -67,7 +65,7 @@ hackathon-site/
 hackathon-api/
   app/main.py         Routes, CORS, VERSION
   main.py             Re-export for buildpacks (`main:app`)
-  requirements.txt    fastapi, uvicorn, google-cloud-datastore
+  requirements.txt    fastapi, uvicorn, google-cloud-datastore, google-cloud-firestore
   Dockerfile          Used only if the trigger builds with Docker
   Procfile            web: uvicorn app.main:app …
   project.toml        Python 3.13 + entrypoint for pack
@@ -84,7 +82,7 @@ hackathon-api/
 | `board.js` | Vanilla | Board, todo, done |
 | `app/map.js` | Vanilla + Leaflet | Map |
 
-New UI behaviour goes in **Alpine.js**. Do not add React/Vue/npm. Leaflet stays for the map canvas. See [Alpine.js](#javascript).
+New **chrome** (wiki, API test) goes in **Alpine.js**. New **map** behaviour stays vanilla in `app/map.js`. Do not add React/Vue/npm. Leaflet stays for the map canvas. See [Alpine.js](#javascript) · [The map](#map).
 
 ## How a page talks to the API
 
@@ -93,9 +91,19 @@ New UI behaviour goes in **Alpine.js**. Do not add React/Vue/npm. Leaflet stays 
 3. `fetch(base + "/test_field")` with `Accept: application/json`.
 4. CORS is enforced by the API (`CORS_ORIGINS`). Serve the site from `http://127.0.0.1:5500` or Pages, never `file://`.
 
-Waypoint routing still does **not** call our API — OSM + public OSRM. The map **does** poll `GET /v1/devices` for live phones. Card 11 is still “persist routes on the API”.
+## How the map is put together
 
-Device id on the phone is `Settings.Secure.ANDROID_ID` (not the hardware serial — Android 10+ will not give that to a sideloaded app).
+Full page: [The map](#map).
+
+| Layer | Calls | Default |
+|-------|--------|---------|
+| Waypoints / OSRM | Public OSRM, not our API | On |
+| Phones | `GET /v1/devices` every 8s; drawer `GET /v1/locations?device_id=` | On |
+| Buses | bustimes.org `/vehicles.json` every 15s | **Off** — no fetch until Show buses |
+
+Device id on the phone is `Settings.Secure.ANDROID_ID` (not the hardware serial — Android 10+ will not give that to a sideloaded app). The tracker POSTs every minute while the switch is on, even if the pin has not moved. `recorded_at` is last communication.
+
+New map JS stays vanilla inside the existing `app/map.js` IIFE. Alpine is for wiki and `api-test.html`. Card 11 is still “persist routes on the API”.
 
 ## How the wiki works
 
@@ -123,7 +131,7 @@ The API Dockerfile exists for a Docker-based trigger. The GitHub-connected servi
 
 ## Next
 
-Live phones and buses are on the map. Next product slices: job list, demo seed, localStorage. Board: [Current progress](../progress.html). [Buses](#buses).
+Live phones, drawer, ping history, and buses are on the map. Next product slices: job list, demo seed, localStorage. Board: [Current progress](../progress.html). [The map](#map) · [Buses](#buses).
 
 | Topic | Page |
 |-------|------|

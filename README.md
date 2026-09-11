@@ -19,6 +19,8 @@ Push to `main` deploys this site (GitHub Pages) and the API (Cloud Run). Local s
 | [docs/](docs/) | Wiki home |
 | [docs/#architecture](docs/#architecture) | **How the three repos fit together** |
 | [docs/#android](docs/#android) | Android tracker (emulator test, logcat) |
+| [docs/#map](docs/#map) | Map layers: waypoints, phones, drawer, buses |
+| [docs/#buses](docs/#buses) | Live bus toggle (bustimes.org, 30 miles) |
 | [docs/#grok](docs/#grok) | **For Grok** — briefing Connor (or anyone) points an AI at |
 | [docs/#connor](docs/#connor) | Connor’s wiki shelf |
 | [docs/STACK.md](docs/STACK.md) | HTML/CSS, Alpine.js, Leaflet, OSRM, Pages, board script |

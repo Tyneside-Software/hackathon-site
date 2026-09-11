@@ -49,6 +49,12 @@
           "summary": "HTML, CSS, Alpine, Leaflet, OSRM, Pages."
         },
         {
+          "id": "map",
+          "title": "The map",
+          "file": "map.md",
+          "summary": "Waypoints, phones, drawer, buses — one Leaflet IIFE."
+        },
+        {
           "id": "javascript",
           "title": "Alpine.js",
           "file": "JAVASCRIPT.md",

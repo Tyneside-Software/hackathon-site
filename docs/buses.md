@@ -1,6 +1,6 @@
 # Live buses on the map
 
-A **Show buses** toggle on [the map](../app/). Off by default. While on, the page polls [bustimes.org](https://bustimes.org/data) every 15 seconds and draws line-number markers inside a **30 mile** circle of Newcastle.
+A **Show buses** toggle on [the map](../app/). Off by default. While on, the page polls [bustimes.org](https://bustimes.org/data) every 15 seconds and draws line-number markers inside a **30 mile** circle of Newcastle. How it sits next to waypoints and phones: [The map](#map).
 
 This is a **site** slice. It does **not** call our API, and it does **not** call BODS from the browser (that needs a DfT key and SIRI-VM / GTFS-RT). bustimes.org already ingest BODS (OGL v3.0) plus Stagecoach and others; we reuse their public JSON.
 

@@ -33,7 +33,7 @@ https://github.com/Tyneside-Software/hackathon-site/blob/main/docs/GROK.md
 - Do not invent a second docs tree (no `wiki/`, no Notion export, no `Connor-docs/`).
 - Do not add npm, React, Vue, Svelte, Tailwind, or a bundler.
 - Do not open or rely on `file://` — the wiki `fetch`es markdown.
-- Do not rewrite `board.js` / `app/map.js` in one go; migrate by small card.
+- Do not rewrite `board.js` / `app/map.js` in one go. New map behaviour is a module inside the existing IIFE (phones, buses).
 - Do not impersonate Michael, Reeve, Lewis, or Noah in git author unless that is actually the machine user.
 - Do not copy `C:\Users\MichaelThomson\Desktop\confidential docs` (that is Michael’s private folder, not this repo).
 
@@ -77,8 +77,8 @@ Onboarding (human night notes): `onboarding.html`
 |-------|--------|
 | Pages | Static HTML, GitHub Pages, `CNAME` `hackathon.tyneside.software` |
 | CSS | `styles.css` — Tyneside amber/navy tokens |
-| New JS | **Alpine.js 3.14.8** from jsDelivr, `defer`, `x-data` |
-| Map | Leaflet 1.9.4 + OSM + public OSRM, haversine fallback |
+| New chrome JS | **Alpine.js 3.14.8** from jsDelivr, `defer`, `x-data` (wiki, API test) |
+| Map | Leaflet 1.9.4 + OSM + public OSRM. **Vanilla `app/map.js` IIFE** — append, do not rewrite. Phones, drawer, buses live here |
 | API base | `config.js` → `window.HACKATHON_API` (Cloud Run URL committed) |
 | Board | `scripts/cards.json` + `scripts/update_board.py` (stdlib) |
 
@@ -112,12 +112,13 @@ FastAPI + Uvicorn on Cloud Run `europe-west2`. GitHub deploys with **buildpacks*
 | GET | `/view_field/{key}` |
 | POST | `/v1/locations` (phone GPS) |
 | GET | `/v1/devices` (map poll) |
+| GET | `/v1/locations?device_id=` (ping history; `source` firestore or datastore) |
 
 CORS must allow `https://hackathon.tyneside.software` and `http://127.0.0.1:5500`. If Cloud Run has `CORS_ORIGINS` set, code defaults are ignored.
 
-If live `/test_field` is 404, the Cloud Run revision is behind `main`. Check `/health` for `version` (current code is **0.1.4**). See [API](#api).
+If live `/test_field` is 404, the Cloud Run revision is behind `main`. Check `/health` for `version` (code is **0.1.5**). See [API](#api).
 
-Android tracker: [Android](#android). Emulator posts every minute; map last-seen is last communication. Cards 32–34 are done. Noah shipped the device drawer and ping-history path (36–38). Live buses are a map toggle: [Buses](#buses). History GET is `/v1/locations?device_id=` (Firestore, Datastore fallback).
+Android tracker: [Android](#android). Map surface: [The map](#map). Live buses: [Buses](#buses). Emulator posts every minute; last-seen is last communication. Cards 32–34 and 36–39 are done.
 
 ---
 
@@ -187,4 +188,4 @@ Nav on `todo.html` / `done.html` is generated inside `scripts/update_board.py` (
 
 ## Related wiki pages
 
-[Wiki home](#home) · [Architecture](#architecture) · [Connor’s area](#connor) · [Add a wiki page](#adding) · [Run locally](#local) · [Site stack](#stack) · [Alpine.js](#javascript) · [Kanban](#board) · [API](#api)
+[Wiki home](#home) · [Architecture](#architecture) · [The map](#map) · [Buses](#buses) · [Android](#android) · [Connor’s area](#connor) · [Add a wiki page](#adding) · [Run locally](#local) · [Site stack](#stack) · [Alpine.js](#javascript) · [Kanban](#board) · [API](#api)

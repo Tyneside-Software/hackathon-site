@@ -2,10 +2,12 @@
 
 Sibling repo: [Tyneside-Software/hackathon-api](https://github.com/Tyneside-Software/hackathon-api).
 
-How it fits the site: [Architecture](#architecture). Deploy notes in the API repo: [DEPLOY.md](https://github.com/Tyneside-Software/hackathon-api/blob/main/docs/DEPLOY.md).
+How it fits the site: [Architecture](#architecture). Map consumers: [The map](#map). Deploy notes in the API repo: [DEPLOY.md](https://github.com/Tyneside-Software/hackathon-api/blob/main/docs/DEPLOY.md).
 
 **Live:** `https://hackathon-api-git-975511976696.europe-west2.run.app`  
 The site stores that in `config.js` as `window.HACKATHON_API`.
+
+Code `VERSION` is **0.1.5**. After a deploy, `GET /health` should match that (or later). If live `/test_field` is 404, the Cloud Run revision is behind `main`.
 
 ## How Cloud Run builds this
 
@@ -17,11 +19,11 @@ The GitHub trigger uses **Google Cloud buildpacks** (`pack` on **ubuntu2404**), 
 | `main.py` (repo root) | Re-exports `app` because pack defaults to `main:app` |
 | `Procfile` | `web: uvicorn app.main:app --host 0.0.0.0 --port $PORT` |
 | `.python-version` / `project.toml` | **Python 3.13** — ubuntu2404 has 3.13 and 3.14 only. **3.12 fails the build** |
-| `Dockerfile` | For a Docker-based trigger only. Base image is `mirror.gcr.io/library/python:3.12-slim` |
+| `Dockerfile` | For a Docker-based trigger only |
 
 A Cloud Build log that says `gcr.io/k8s-skaffold/pack` is buildpacks. A log that says `invalid Python version specified: 3.12` means the pin is wrong for that OS.
 
-After a good deploy, `GET /health` should show `"version": "0.1.4"` or later. Live on 11 September 2026 was **0.1.4**.
+`GOOGLE_ENTRYPOINT=app/main.py` on Cloud Run: keep `uvicorn.run(app)` at the bottom of `app/main.py`.
 
 ## Stack
 
@@ -30,10 +32,10 @@ After a good deploy, `GET /health` should show `"version": "0.1.4"` or later. Li
 | Language | Python **3.13** on Cloud Run (laptop may be 3.12 or 3.14) |
 | Framework | FastAPI `>=0.115,<0.117` |
 | Server | Uvicorn `[standard]` `>=0.34,<0.36` |
-| Extra | `google-cloud-datastore` (`/create_field`, `/view_field/{key}`, `/v1/locations`; imported inside the handler) |
+| Extra | `google-cloud-datastore` (fields + Device/LocationPing writes); `google-cloud-firestore` (history reads). Imported inside handlers, not at module top |
 | Auth | None (`--allow-unauthenticated`) |
 
-`/health` and `/test_field` do not need Datastore. Keep `/health` free of extra I/O.
+`/health` and `/test_field` do not need Datastore or Firestore. Keep `/health` free of extra I/O.
 
 ## Routes
 
@@ -47,15 +49,13 @@ After a good deploy, `GET /health` should show `"version": "0.1.4"` or later. Li
 | POST | `/v1/locations` | Phone GPS ping → Device last-known + LocationPing history |
 | GET | `/v1/devices` | All last-known phones (map poll) |
 | GET | `/v1/devices/{id}` | One phone |
-| GET | `/v1/locations?device_id=` | Recent pings for one phone |
+| GET | `/v1/locations?device_id=` | Ping history. JSON includes `source`: `firestore`, `datastore`, or `none` |
 | GET | `/docs` | Swagger UI |
 | GET | `/openapi.json` | OpenAPI |
 
 `VERSION` lives in `app/main.py`.
 
-**Proven 11 September 2026:** emulator `POST /v1/locations` → HTTP 200 `stored=datastore`; `GET /v1/devices` returned that device.
-
-`GET /v1/locations?device_id=` returns ping history (`source` is `firestore` or `datastore`). The map drawer plots that path (card 38). Default map view is last-known from `GET /v1/devices`.
+**Proven 11 September 2026:** emulator `POST /v1/locations` → HTTP 200 `stored=datastore`; `GET /v1/devices` returned that device. History GET is what the map drawer uses (card 38).
 
 CORS methods: `GET`, `POST`, `DELETE`, `OPTIONS`. Add `PUT`/`PATCH` in middleware when a card needs them.
 
@@ -82,9 +82,7 @@ const base = (window.HACKATHON_API || "").replace(/\/$/, "");
 const res = await fetch(base + "/test_field", { headers: { Accept: "application/json" } });
 ```
 
-UI: [Alpine API test](../api-test.html).
-
-If live `/test_field` is 404, the Cloud Run revision is older than `main`. Check `/health` `version`. Local uvicorn on `:8080` has the current routes.
+UI: [Alpine API test](../api-test.html). Phones and history: [The map](#map).
 
 ## Manual deploy
 

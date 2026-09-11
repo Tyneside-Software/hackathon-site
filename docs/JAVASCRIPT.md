@@ -4,7 +4,7 @@
 
 The site is static files on GitHub Pages. Alpine loads from a CDN. No npm, no bundler, no SPA framework.
 
-Leaflet still draws the map. Alpine owns chrome around it (lists, buttons, dialogs, filters) and already runs the wiki and the API test page.
+Leaflet still draws the map. **`app/map.js` is vanilla** (waypoints, phones, drawer, buses) — append inside the IIFE, do not rewrite it, do not Alpine-wrap the canvas. Alpine owns other chrome (wiki, API test, progress pulse).
 
 ## Include it
 

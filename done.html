@@ -128,7 +128,7 @@
               <p>Default view is current location only. A device drawer has <strong>Show history on map</strong>, which plots unique pings as a path. Hide returns to last-known.</p>
               <h3>What’s live</h3>
               <ul>
-                <li>Site drawer + polyline of unique LocationPings.</li>
+                <li>Site drawer + polyline. Consecutive pings at the same place are hidden (<code>df3a789</code>).</li>
                 <li>API <code>GET /v1/locations?device_id=</code> reads Firestore, Datastore fallback, <code>source</code> in the JSON.</li>
               </ul>
               <p>Noah, 11 September 2026.</p>
@@ -151,7 +151,8 @@
               <ul>
                 <li>Pixel 6a emulator: POST HTTP 200 <code>stored=datastore</code>, device <code>android-c55e59830b71ba38</code>.</li>
                 <li>API stores the ping (card 33). Map draws it (card 34). The three-slice path is working.</li>
-                <li>Log tag <code>TynesideTracker</code>. Emulator default location is Google HQ — <code>adb emu geo fix LNG LAT</code> for Tyneside.</li>
+                <li>Log tag <code>TynesideTracker</code>. POSTs every minute (heartbeat) even if lat/lng are unchanged. <code>recorded_at</code> is last communication.</li>
+                <li>This AVD ignores <code>geo fix</code>; the debug app remaps Google HQ last-known to Grey’s Monument, Newcastle.</li>
               </ul>
               <p>A physical phone is card 35.</p>
             </template>
@@ -171,8 +172,8 @@
               </ul>
               <h3>What’s live (11 September 2026)</h3>
               <ul>
-                <li>Cloud Run <strong>0.1.4</strong>: emulator POST HTTP 200 <code>stored=datastore</code>.</li>
-                <li><code>GET /v1/devices</code> returns <code>android-c55e59830b71ba38</code>.</li>
+                <li>Cloud Run: emulator POST HTTP 200 <code>stored=datastore</code>. Code <code>VERSION</code> <strong>0.1.5</strong>.</li>
+                <li><code>GET /v1/devices</code> returns last-known phones. History: <code>GET /v1/locations?device_id=</code> (Firestore, Datastore fallback).</li>
                 <li>Kinds: <code>Device</code> (last-known) and <code>LocationPing</code> (history).</li>
               </ul>
               <p>Shipped on <code>main</code> so the demo works. Repo: <a href="https://github.com/Tyneside-Software/hackathon-api">hackathon-api</a>.</p>
