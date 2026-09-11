@@ -21,7 +21,7 @@ Three GitHub repos, two hosts, one product. The **site** is static files. The **
 
 Locally the site is `python -m http.server 5500`, the API is `uvicorn` on `:8080`. `.\start.ps1` starts both. The phone is Android Studio / a debug APK.
 
-**11 September 2026:** live phones work end to end (cards 32–34). The emulator POSTs every minute; last-seen is last communication; Newcastle is on the map. Noah shipped the device drawer and ping-history path (36–38), then **register / login / Fetch me** (41). Live API **0.1.7**. `GET /v1/locations?device_id=` reads Firestore, Datastore fallback. Live buses are a map toggle (39, 43, 44, **45**): the map reads `GET /v1/buses`; Firestore caches bustimes.org so every tab shares one upstream fetch. A physical phone is still card 35.
+**11 September 2026:** live phones work end to end (cards 32–34). The emulator POSTs every minute; last-seen is last communication; Newcastle is on the map. Noah shipped the device drawer and ping-history path (36–38), then **register / login / Fetch me** (41). Live API **0.1.8**. `GET /v1/locations?device_id=` reads Firestore, Datastore fallback. Live buses are a map toggle (39, 43–46): `GET /v1/buses` from Firestore, with a 10-minute fading trail. A physical phone is still card 35.
 
 ## The three repos
 
@@ -67,7 +67,7 @@ hackathon-site/
 hackathon-api/
   app/main.py         FastAPI app, CORS, includes routers (Noah split, 57a1d44)
   app/routers/        health, auth, fields, locations, devices, buses
-  app/config.py       VERSION 0.1.7, CORS, JWT, bus TTL
+  app/config.py       VERSION 0.1.8, CORS, JWT, bus TTL + 10 min trails
   app/db.py           Datastore / Firestore helpers (devices, pings, User)
   app/models.py       User get/create/authenticate
   app/security.py     pwdlib + JWT

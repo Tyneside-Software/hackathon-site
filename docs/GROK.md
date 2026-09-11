@@ -115,13 +115,13 @@ FastAPI + Uvicorn on Cloud Run `europe-west2`. GitHub deploys with **buildpacks*
 | POST | `/v1/locations` (phone GPS) |
 | GET | `/v1/devices` (map poll) |
 | GET | `/v1/locations?device_id=` (ping history; `source` firestore or datastore) |
-| GET | `/v1/buses` (Firestore `BusCache`; bustimes.org only if the snapshot is stale) |
+| GET | `/v1/buses` (Firestore `BusCache` + 10 min trails; bustimes.org only if the snapshot is stale) |
 
 CORS must allow `https://hackathon.tyneside.software` and `http://127.0.0.1:5500`. If Cloud Run has `CORS_ORIGINS` set, code defaults are ignored.
 
-If live `/test_field` is 404, the Cloud Run revision is behind `main`. Check `/health` for `version` (code is **0.1.7**). See [API](#api).
+If live `/test_field` is 404, the Cloud Run revision is behind `main`. Check `/health` for `version` (code is **0.1.8**). See [API](#api).
 
-Android tracker: [Android](#android). Map surface: [The map](#map). Live buses: [Buses](#buses). Emulator posts every minute; last-seen is last communication. Cards 32–34, 36–41, 43–45 are done. Account page: `/account.html`. Buses: `/v1/buses` (card 45), not bustimes.org from the browser.
+Android tracker: [Android](#android). Map surface: [The map](#map). Live buses: [Buses](#buses). Emulator posts every minute; last-seen is last communication. Cards 32–34, 36–41, 43–46 are done. Account page: `/account.html`. Buses: `/v1/buses` (card 45) with a 10-minute fading trail (46).
 
 ---
 

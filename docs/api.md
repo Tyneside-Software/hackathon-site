@@ -7,7 +7,7 @@ How it fits the site: [Architecture](#architecture). Map consumers: [The map](#m
 **Live:** `https://hackathon-api-git-975511976696.europe-west2.run.app`  
 The site stores that in `config.js` as `window.HACKATHON_API`.
 
-Code `VERSION` is **0.1.7**. After a deploy, `GET /health` should match that (or later). If live `/test_field` is 404, the Cloud Run revision is behind `main`.
+Code `VERSION` is **0.1.8**. After a deploy, `GET /health` should match that (or later). If live `/test_field` is 404, the Cloud Run revision is behind `main`.
 
 Layout: routes live in `app/routers/` (`health`, `auth`, `fields`, `locations`, `devices`, `buses`). `app/main.py` builds the app and still has `uvicorn.run(app)` at the bottom for Cloud Run.
 
@@ -60,7 +60,7 @@ A Cloud Build log that says `gcr.io/k8s-skaffold/pack` is buildpacks. A log that
 | GET | `/v1/devices` | All last-known phones (map poll) |
 | GET | `/v1/devices/{id}` | One phone |
 | GET | `/v1/locations?device_id=` | Ping history. JSON includes `source`: `firestore`, `datastore`, or `none` |
-| GET | `/v1/buses` | Live buses. Firestore `BusCache/newcastle`, TTL 15s. Fetches bustimes.org only when a looking tab finds the snapshot stale. Unauthenticated. |
+| GET | `/v1/buses` | Live buses + `trails` (10 min of `[lng,lat,unix]` per id). Firestore `BusCache/newcastle`, TTL 15s. Fetches bustimes.org only when a looking tab finds the snapshot stale. Unauthenticated. |
 | GET | `/docs` | Swagger UI |
 | GET | `/openapi.json` | OpenAPI |
 

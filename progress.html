@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Current progress · Tyneside Logistics</title>
-  <meta name="description" content="Catch-up snapshot. Live phones work. Buses come from a Firestore cache. Noah shipped register/login. API 0.1.7.">
+  <meta name="description" content="Catch-up snapshot. Live phones work. Buses come from a Firestore cache with a 10-minute trail. Noah shipped register/login. API 0.1.8.">
   <link rel="icon" href="logo.svg" type="image/svg+xml">
   <link rel="stylesheet" href="styles.css">
   <script src="config.js"></script>
@@ -45,9 +45,9 @@
       <h1>CURRENT<br>PROGRESS</h1>
       <p class="hero-tag">Noah shipped accounts. Michael put buses behind our API.</p>
       <p class="hero-lead">
-        Three repos, two hosts, one product. Live API is <strong>0.1.7</strong>.
+        Three repos, two hosts, one product. Live API is <strong>0.1.8</strong>.
         <strong>Noah tonight:</strong> phone cards, device drawer, ping history (36–38), API split into routers (40), then <strong>register / login / Fetch me</strong> on <a href="account.html">Account</a> (41, <code>830036a</code> / <code>625b5dc</code>). No Noah commits after that.
-        <strong>Michael tonight:</strong> readable bus chips (44), then a shared Firestore cache (45) so every map tab hits <code>GET /v1/buses</code> and bustimes.org is fetched at most once per 15s while someone is looking.
+        <strong>Michael tonight:</strong> readable bus chips (44), shared Firestore cache (45), then a <strong>10-minute fading trail</strong> behind each bus (46).
         In flight: nothing. Next product: job list (07), demo seed (08), localStorage (06).
       </p>
       <div class="hero-actions">
@@ -67,7 +67,7 @@
           <span class="progress-dot" :class="dotClass" aria-hidden="true"></span>
           <span>
             <span class="k">API</span>
-            <span class="v" x-text="apiLine">Cloud Run · snapshot 0.1.7</span>
+            <span class="v" x-text="apiLine">Cloud Run · snapshot 0.1.8</span>
           </span>
         </div>
         <div class="progress-live-item">
@@ -132,7 +132,7 @@
         <li>
           <span class="n">03</span>
           <div>
-            <strong>Cloud Run is 0.1.7.</strong>
+            <strong>Cloud Run is 0.1.8.</strong>
             <span>GitHub → Cloud Run uses <em>buildpacks</em> (<code>pack</code> on ubuntu2404), not the Dockerfile.
             Pin is <strong>3.13</strong>. Datastore writes work: fields and GPS pings.</span>
           </div>
@@ -178,9 +178,14 @@
             <h3>Now</h3>
             <p>Empty · pull a card</p>
           </header>
+          <a class="progress-item" href="done.html#t-46">
+            <span class="id">46 · 🏗️ Michael · done</span>
+            <strong>Just landed: 10-minute bus trail</strong>
+            <span>Fades to invisible at 10 minutes. Stored on the Firestore snapshot. Leave Show buses on for a minute to see it grow.</span>
+          </a>
           <a class="progress-item" href="done.html#t-45">
             <span class="id">45 · 🏗️ Michael · done</span>
-            <strong>Just landed: bus cache</strong>
+            <strong>Bus cache</strong>
             <span>Map calls <code>GET /v1/buses</code>. Firestore <code>BusCache/newcastle</code>, TTL 15s. Nobody looking: no bustimes.org hit.</span>
           </a>
           <a class="progress-item" href="done.html#t-41">
@@ -195,11 +200,6 @@
             <h3>Next</h3>
             <p>Demo the map, then fill it</p>
           </header>
-          <a class="progress-item" href="done.html#t-45">
-            <span class="id">45 · 🏗️ Michael · done</span>
-            <strong>Buses from our cache, not bustimes.org</strong>
-            <span>Map calls <code>GET /v1/buses</code>. Firestore snapshot, TTL 15s. Nobody looking: no upstream hit. Hard-refresh <a href="app/">/app/</a>.</span>
-          </a>
           <a class="progress-item" href="done.html#t-44">
             <span class="id">44 · 🏗️ Michael · done</span>
             <strong>Buses you can actually read</strong>
@@ -271,7 +271,7 @@
         <a class="progress-person" href="board.html?person=noah">
           <span class="who"><span class="emoji">🔧</span> Noah</span>
           <span class="hrs">27 <span>hrs</span></span>
-          <span class="focus">Accounts live · API 0.1.7</span>
+          <span class="focus">Accounts live · API 0.1.8</span>
           <span class="meta">9 done. Drawer, history, routers, then register / login / Fetch me (41). Phone and map stay open.</span>
         </a>
         <a class="progress-person" href="board.html?person=reeve">
@@ -306,8 +306,16 @@
     <div class="wrap">
       <p class="hero-kicker">While you were away</p>
       <h2>What already shipped</h2>
-      <p class="lede">35 cards · 66h on Done. Do not redo these.</p>
+      <p class="lede">36 cards · 67.5h on Done. Do not redo these.</p>
       <ol class="progress-rail">
+        <li>
+          <span class="mark" aria-hidden="true"></span>
+          <div class="body">
+            <p class="hero-kicker">11 September · card 46</p>
+            <h3>Fading 10-minute trail behind each bus</h3>
+            <p>Firestore keeps where each vehicle has been for 10 minutes. The map draws it in the bus colour, fading to nothing at 10 minutes. Trails only grow while a tab is looking.</p>
+          </div>
+        </li>
         <li>
           <span class="mark" aria-hidden="true"></span>
           <div class="body">
@@ -377,7 +385,7 @@
           <div class="body">
             <p class="hero-kicker">3 September · card 30</p>
             <h3>Cloud Run builds on Python 3.13 pack</h3>
-            <p>ubuntu2404 has 3.13 and 3.14 only. A 3.12 pin failed Cloud Build. Root <code>main.py</code>, <code>Procfile</code>, and <code>.python-version</code> 3.13 make pack succeed. Code <code>VERSION</code> is <strong>0.1.7</strong>.</p>
+            <p>ubuntu2404 has 3.13 and 3.14 only. A 3.12 pin failed Cloud Build. Root <code>main.py</code>, <code>Procfile</code>, and <code>.python-version</code> 3.13 make pack succeed. Code <code>VERSION</code> is <strong>0.1.8</strong>.</p>
           </div>
         </li>
         <li>
@@ -431,7 +439,7 @@
         <div class="progress-host is-api">
           <p class="hero-kicker">hackathon-api</p>
           <h3>Cloud Run · europe-west2</h3>
-          <p>FastAPI + Uvicorn. Code <strong>0.1.7</strong>. Local: <code>:8080</code>. Buildpacks, not the Dockerfile, on GitHub CD. Buses: <code>GET /v1/buses</code> from Firestore cache. Accounts: <code>/register</code> <code>/login</code> <code>/users/me</code>.</p>
+          <p>FastAPI + Uvicorn. Code <strong>0.1.8</strong>. Local: <code>:8080</code>. Buildpacks, not the Dockerfile, on GitHub CD. Buses: <code>GET /v1/buses</code> from Firestore cache with a 10-minute trail. Accounts: <code>/register</code> <code>/login</code> <code>/users/me</code>.</p>
           <ul>
             <li><code>GET /</code> · <code>/health</code> · <code>/test_field</code></li>
             <li><code>POST /create_field</code> · <code>GET /view_field/{key}</code></li>
@@ -507,7 +515,7 @@
       const raw = (window.HACKATHON_API || "").replace(/\/$/, "");
       return {
         base: raw,
-        apiLine: "Cloud Run · snapshot 0.1.7",
+        apiLine: "Cloud Run · snapshot 0.1.8",
         state: "wait",
         get dotClass() {
           return {
@@ -536,7 +544,7 @@
             this.apiLine = "v" + (data.version || "?") + " · live";
           } catch (err) {
             this.state = "bad";
-            this.apiLine = "Unreachable · snapshot still 0.1.7";
+            this.apiLine = "Unreachable · snapshot still 0.1.8";
           }
         }
       };

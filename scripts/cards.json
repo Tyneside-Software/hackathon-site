@@ -28,6 +28,17 @@
   ],
   "cards": [
     {
+      "id": "46",
+      "person": "michael",
+      "hours": 1.5,
+      "emoji": "🏗️",
+      "title": "10-minute fading trail behind each bus",
+      "column": "done",
+      "tag": "bus trails",
+      "tag_kind": "ok",
+      "brief": "<p>Each live bus keeps where it has been for the last 10 minutes. The trail fades to invisible at 10 minutes.</p>\n<h3>What’s live</h3>\n<ul>\n  <li>API stores <code>trails</code> on Firestore <code>BusCache/newcastle</code> — <code>[lng, lat, unix]</code> per vehicle, pruned at 10 minutes.</li>\n  <li>History only grows while a tab is looking (same lazy fetch as card 45). Idle: no new points.</li>\n  <li>Map draws the trail in the bus’s colour, older segments more transparent. Clicks pass through.</li>\n</ul>\n<p>API <strong>0.1.8</strong>. Hard-refresh <a href=\"app/\">/app/</a>. Wiki: <a href=\"docs/#buses\">Live buses</a>.</p>"
+    },
+    {
       "id": "45",
       "person": "michael",
       "hours": 2,

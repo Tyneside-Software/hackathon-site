@@ -37,7 +37,7 @@
     <h1 style="font-size:1.7rem;margin-bottom:0.4rem">Done cards</h1>
     <p style="color:var(--muted);max-width:42rem">
       Finished increments live here so the board stays short.
-      <strong>35 cards · 66h</strong>.
+      <strong>36 cards · 67.5h</strong>.
       Click a card for the brief. Filter with the chips, hour cards, or <code>?person=lewis</code>.
     </p>
 
@@ -64,8 +64,8 @@
       </button>
       <button type="button" class="person" data-person="michael" aria-pressed="false">
         <div class="who"><span class="emoji">🏗️</span> Michael</div>
-        <div class="hrs">33.75 <span>hrs</span></div>
-        <div class="meta">14 done · 2 to do</div>
+        <div class="hrs">35.25 <span>hrs</span></div>
+        <div class="meta">15 done · 2 to do</div>
       </button>
       <button type="button" class="person" data-person="lewis" aria-pressed="false">
         <div class="who"><span class="emoji">🌱</span> Lewis</div>
@@ -80,6 +80,22 @@
     </div>
 
     <div class="card-archive" id="done-archive">
+          <a class="card" id="card-46" href="#t-46" data-person="michael" data-hours="1.5">
+            <div class="top"><span class="id">46</span><span class="emoji">🏗️</span></div>
+            <div class="title">10-minute fading trail behind each bus</div>
+            <span class="tag tag-ok">bus trails</span>
+            <div class="bot"><span>1.5h</span><span>Michael</span></div>
+            <template class="card-brief">
+              <p>Each live bus keeps where it has been for the last 10 minutes. The trail fades to invisible at 10 minutes.</p>
+              <h3>What’s live</h3>
+              <ul>
+                <li>API stores <code>trails</code> on Firestore <code>BusCache/newcastle</code> — <code>[lng, lat, unix]</code> per vehicle, pruned at 10 minutes.</li>
+                <li>History only grows while a tab is looking (same lazy fetch as card 45). Idle: no new points.</li>
+                <li>Map draws the trail in the bus’s colour, older segments more transparent. Clicks pass through.</li>
+              </ul>
+              <p>API <strong>0.1.8</strong>. Hard-refresh <a href="app/">/app/</a>. Wiki: <a href="docs/#buses">Live buses</a>.</p>
+            </template>
+          </a>
           <a class="card" id="card-45" href="#t-45" data-person="michael" data-hours="2">
             <div class="top"><span class="id">45</span><span class="emoji">🏗️</span></div>
             <div class="title">Cache live buses in Firestore; map reads our API</div>

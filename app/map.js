@@ -502,9 +502,15 @@
   const BUS_POLL_MS = 15000;
   const BUS_STALE_MS = 10 * 60 * 1000;
   const BUS_CHIP_ZOOM = 14;
+  const BUS_TRAIL_S = 10 * 60;
 
+  map.createPane("bus-trails");
+  map.getPane("bus-trails").style.zIndex = 440;
+  map.getPane("bus-trails").style.pointerEvents = "none";
   map.createPane("buses");
   map.getPane("buses").style.zIndex = 450;
+  const trailRenderer = L.canvas({ padding: 0.45, pane: "bus-trails" });
+  const trailLayers = new Map();
 
   const btnBuses = document.getElementById("btn-buses");
   const busStatusEl = document.getElementById("bus-status");
@@ -637,7 +643,13 @@
     }
   }
 
+  function clearTrails() {
+    trailLayers.forEach((group) => map.removeLayer(group));
+    trailLayers.clear();
+  }
+
   function clearBuses() {
+    clearTrails();
     busMarkers.forEach((entry) => map.removeLayer(entry.marker));
     busMarkers.clear();
   }
@@ -722,6 +734,82 @@
     return { inView: seen.size, inCircle, stale, mode, newest };
   }
 
+  function trailWindowS() {
+    const n = busFeed && Number(busFeed.trail_s);
+    return Number.isFinite(n) && n > 0 ? n : BUS_TRAIL_S;
+  }
+
+  function paintTrails() {
+    const trails = (busFeed && busFeed.trails) || {};
+    const windowS = trailWindowS();
+    const now = Date.now() / 1000;
+    const colourById = new Map();
+    (busRows || []).forEach((v) => {
+      if (v && v.id != null) colourById.set(String(v.id), busColour(v));
+    });
+    const keep = new Set();
+    Object.keys(trails).forEach((id) => {
+      const raw = trails[id];
+      if (!Array.isArray(raw) || raw.length < 2) return;
+      const pts = [];
+      raw.forEach((p) => {
+        if (!Array.isArray(p) || p.length < 3) return;
+        const lng = Number(p[0]);
+        const lat = Number(p[1]);
+        const t = Number(p[2]);
+        if (!Number.isFinite(lat) || !Number.isFinite(lng) || !Number.isFinite(t)) return;
+        if (now - t > windowS) return;
+        pts.push({ ll: [lat, lng], t: t });
+      });
+      if (pts.length < 2) return;
+      const parts = [];
+      let cur = null;
+      for (let i = 1; i < pts.length; i++) {
+        const age = now - (pts[i - 1].t + pts[i].t) / 2;
+        const op = Math.max(0, 1 - age / windowS);
+        if (op < 0.05) continue;
+        const bucket = Math.round(op * 8) / 8;
+        if (cur && cur.bucket === bucket) {
+          cur.latlngs.push(pts[i].ll);
+        } else {
+          if (cur) parts.push(cur);
+          cur = { bucket, opacity: bucket, latlngs: [pts[i - 1].ll, pts[i].ll] };
+        }
+      }
+      if (cur) parts.push(cur);
+      const prev = trailLayers.get(id);
+      if (prev) map.removeLayer(prev);
+      if (!parts.length) {
+        trailLayers.delete(id);
+        return;
+      }
+      const group = L.layerGroup();
+      const colour = colourById.get(id) || "#f59e0b";
+      parts.forEach((part) => {
+        L.polyline(part.latlngs, {
+          color: colour,
+          weight: 3,
+          opacity: part.opacity,
+          lineCap: "round",
+          lineJoin: "round",
+          interactive: false,
+          bubblingMouseEvents: false,
+          renderer: trailRenderer,
+          pane: "bus-trails",
+        }).addTo(group);
+      });
+      group.addTo(map);
+      trailLayers.set(id, group);
+      keep.add(id);
+    });
+    Array.from(trailLayers.keys()).forEach((id) => {
+      if (!keep.has(id)) {
+        map.removeLayer(trailLayers.get(id));
+        trailLayers.delete(id);
+      }
+    });
+  }
+
   function busCacheNote() {
     if (!busFeed) return "";
     let extra = "";
@@ -743,6 +831,8 @@
     msg += " · " + n.inCircle + " within " + BUS_MILES + " miles";
     if (n.stale) msg += " · " + n.stale + " stale hidden";
     if (n.newest) msg += " · newest ping " + (ageLabel(new Date(n.newest).toISOString()) || "just now");
+    const trails = (busFeed && busFeed.trails) || {};
+    if (Object.keys(trails).length) msg += " · " + Math.round(trailWindowS() / 60) + " min trail";
     setBusStatus(msg + busCacheNote() + ".");
   }
 
@@ -771,6 +861,7 @@
       busFeed = data && typeof data === "object" ? data : null;
       busRows = busFeed && Array.isArray(busFeed.vehicles) ? busFeed.vehicles : [];
       paintBuses();
+      paintTrails();
     } catch (err) {
       if (err && err.name === "AbortError") return;
       if (!busesOn) return;

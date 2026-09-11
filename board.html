@@ -58,7 +58,7 @@
     <p class="filter-status" id="filter-status">Showing everyone.</p>
 
     <div class="board-banner">
-      <div>📋 <strong>Tonight, both:</strong> Noah — drawer/history (36–38), routers (40), register/login (41, last Noah push <code>625b5dc</code> / <code>830036a</code>). Michael — readable buses (44), then Firestore bus cache (45). Live API <strong>0.1.7</strong>. Doing is empty. Next: job list, demo seed, localStorage.</div>
+      <div>📋 <strong>Tonight, both:</strong> Noah — drawer/history (36–38), routers (40), register/login (41). Michael — chips (44), Firestore bus cache (45), 10-minute fading trail (46). Live API <strong>0.1.8</strong>. Doing is empty. Next: job list, demo seed, localStorage.</div>
       <div class="btns">
         <a class="btn btn-fill" href="app/">Map app</a>
         <a class="btn btn-ghost" href="progress.html">Progress</a>
@@ -81,8 +81,8 @@
       </button>
       <button type="button" class="person" data-person="michael" aria-pressed="false">
         <div class="who"><span class="emoji">🏗️</span> Michael</div>
-        <div class="hrs">33.75 <span>hrs</span></div>
-        <div class="meta">14 done · 2 to do</div>
+        <div class="hrs">35.25 <span>hrs</span></div>
+        <div class="meta">15 done · 2 to do</div>
       </button>
       <button type="button" class="person" data-person="lewis" aria-pressed="false">
         <div class="who"><span class="emoji">🌱</span> Lewis</div>
@@ -96,6 +96,7 @@
       </button>
     </div>
     <!-- /BOARD:PEOPLE -->
+
 
 
 
@@ -274,13 +275,13 @@
         </div>
 
         <div class="col done">
-          <div class="head"><span class="col-name">Done</span><span class="count" id="done-col-count">35 · 66h</span></div>
+          <div class="head"><span class="col-name">Done</span><span class="count" id="done-col-count">36 · 67.5h</span></div>
           <div class="stack">
-            <script type="application/json" id="done-cards-index">[{"id":"45","person":"michael","hours":2},{"id":"41","person":"noah","hours":3},{"id":"44","person":"michael","hours":2},{"id":"43","person":"michael","hours":0.5},{"id":"42","person":"michael","hours":1.5},{"id":"40","person":"noah","hours":2},{"id":"39","person":"michael","hours":2},{"id":"36","person":"noah","hours":2},{"id":"37","person":"noah","hours":3},{"id":"38","person":"noah","hours":3},{"id":"32","person":"michael","hours":4},{"id":"33","person":"michael","hours":3},{"id":"34","person":"michael","hours":3},{"id":"17","person":"reeve","hours":0.75},{"id":"31","person":"noah","hours":12},{"id":"28","person":"michael","hours":1},{"id":"29","person":"michael","hours":2},{"id":"30","person":"michael","hours":1.5},{"id":"14","person":"lewis","hours":0.75},{"id":"18","person":"connor","hours":0.5},{"id":"19","person":"connor","hours":0.75},{"id":"20","person":"michael","hours":0.75},{"id":"21","person":"reeve","hours":1},{"id":"27","person":"connor","hours":0.5},{"id":"26","person":"michael","hours":2},{"id":"10","person":"michael","hours":4},{"id":"12","person":"lewis","hours":0.5},{"id":"15","person":"reeve","hours":0.5},{"id":"16","person":"reeve","hours":1},{"id":"01","person":"lewis","hours":0.5},{"id":"02","person":"reeve","hours":1},{"id":"03","person":"lewis","hours":2},{"id":"25","person":"noah","hours":0.5},{"id":"22","person":"noah","hours":0.5},{"id":"23","person":"noah","hours":1}]</script>
+            <script type="application/json" id="done-cards-index">[{"id":"46","person":"michael","hours":1.5},{"id":"45","person":"michael","hours":2},{"id":"41","person":"noah","hours":3},{"id":"44","person":"michael","hours":2},{"id":"43","person":"michael","hours":0.5},{"id":"42","person":"michael","hours":1.5},{"id":"40","person":"noah","hours":2},{"id":"39","person":"michael","hours":2},{"id":"36","person":"noah","hours":2},{"id":"37","person":"noah","hours":3},{"id":"38","person":"noah","hours":3},{"id":"32","person":"michael","hours":4},{"id":"33","person":"michael","hours":3},{"id":"34","person":"michael","hours":3},{"id":"17","person":"reeve","hours":0.75},{"id":"31","person":"noah","hours":12},{"id":"28","person":"michael","hours":1},{"id":"29","person":"michael","hours":2},{"id":"30","person":"michael","hours":1.5},{"id":"14","person":"lewis","hours":0.75},{"id":"18","person":"connor","hours":0.5},{"id":"19","person":"connor","hours":0.75},{"id":"20","person":"michael","hours":0.75},{"id":"21","person":"reeve","hours":1},{"id":"27","person":"connor","hours":0.5},{"id":"26","person":"michael","hours":2},{"id":"10","person":"michael","hours":4},{"id":"12","person":"lewis","hours":0.5},{"id":"15","person":"reeve","hours":0.5},{"id":"16","person":"reeve","hours":1},{"id":"01","person":"lewis","hours":0.5},{"id":"02","person":"reeve","hours":1},{"id":"03","person":"lewis","hours":2},{"id":"25","person":"noah","hours":0.5},{"id":"22","person":"noah","hours":0.5},{"id":"23","person":"noah","hours":1}]</script>
             <a class="card done-index" id="done-index" href="done.html">
-              <div class="done-index-count" id="done-index-count">35</div>
+              <div class="done-index-count" id="done-index-count">36</div>
               <div class="title">All done cards</div>
-              <p class="done-index-meta" id="done-index-meta">35 cards · 66h · archive →</p>
+              <p class="done-index-meta" id="done-index-meta">36 cards · 67.5h · archive →</p>
             </a>
           </div>
         </div>
@@ -288,6 +289,7 @@
       </div>
     </div>
     <!-- /BOARD:KANBAN -->
+
 
 
 
@@ -333,8 +335,8 @@
         <tr data-person="michael">
           <td>🏗️</td>
           <td><strong>Michael</strong></td>
-          <td>Cache live buses in Firestore; map reads our API (2h, done) · Buses: viewport, dots then chips, no waypoint steal (2h, done) · Show buses actually fetches; ghost buttons hover (0.5h, done) · Tracker POSTs every minute; pin on Newcastle (1.5h, done) · Live buses on the map (toggle, 30 miles of Newcastle) (2h, done) · Android app: tracking toggle, GPS to the API (4h, done) · API stores GPS pings in the database (3h, done) · Map shows the phone’s current coordinates (3h, done) · Alpine.js test page calls GET /test_field (1h, done) · Docs wiki (Docs in the nav) (2h, done) · Cloud Run GitHub builds (buildpacks, Python 3.13) (1.5h, done) · Michael: GitHub edit → run → push (both repos) (0.75h, done) · Site + API deploy on push to main (2h, done) · Cloud Run API live + CORS for Pages (4h, done) · Persist routes on the API (replace localStorage) (4h) · Sideload the tracker APK on a physical phone (0.5h)</td>
-          <td><strong>33.75h</strong></td>
+          <td>10-minute fading trail behind each bus (1.5h, done) · Cache live buses in Firestore; map reads our API (2h, done) · Buses: viewport, dots then chips, no waypoint steal (2h, done) · Show buses actually fetches; ghost buttons hover (0.5h, done) · Tracker POSTs every minute; pin on Newcastle (1.5h, done) · Live buses on the map (toggle, 30 miles of Newcastle) (2h, done) · Android app: tracking toggle, GPS to the API (4h, done) · API stores GPS pings in the database (3h, done) · Map shows the phone’s current coordinates (3h, done) · Alpine.js test page calls GET /test_field (1h, done) · Docs wiki (Docs in the nav) (2h, done) · Cloud Run GitHub builds (buildpacks, Python 3.13) (1.5h, done) · Michael: GitHub edit → run → push (both repos) (0.75h, done) · Site + API deploy on push to main (2h, done) · Cloud Run API live + CORS for Pages (4h, done) · Persist routes on the API (replace localStorage) (4h) · Sideload the tracker APK on a physical phone (0.5h)</td>
+          <td><strong>35.25h</strong></td>
         </tr>
         <tr data-person="lewis">
           <td>🌱</td>
@@ -352,6 +354,7 @@
     </table>
     </div>
     <!-- /BOARD:WHO -->
+
 
 
 

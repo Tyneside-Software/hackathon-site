@@ -18,6 +18,7 @@ The browser does **not** call bustimes.org. It does **not** call BODS. One looki
 | Zoom 14+ | Upright **line-number chips** with a heading pip. |
 | Stale vehicle | Pings older than **10 minutes** are not drawn. |
 | Status | Count in view, 30-mile count, newest ping age, **cache age** or **refreshed**. |
+| Trail | Last **10 minutes** of positions, stored on the Firestore snapshot. Fades to invisible at 10 minutes. Grows only while someone is looking (same lazy fetch). |
 | Click | Popup. Does **not** drop a waypoint. |
 | Feed down | Status line. Waypoints and phones stay. |
 
@@ -51,4 +52,4 @@ Demo URL: [`/app/?buses=1`](../app/?buses=1) (optional `&zoom=14` for chips).
 | `app/map.js` | Poll `/v1/buses`, viewport + zoom mode, chips |
 | `app/map.css` | Dots, chips, heading pip |
 
-API `VERSION` **0.1.7**.
+API `VERSION` **0.1.8**. Card **46** is the trail.
