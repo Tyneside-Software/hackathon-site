@@ -21,7 +21,7 @@ The GitHub trigger uses **Google Cloud buildpacks** (`pack` on **ubuntu2404**), 
 
 A Cloud Build log that says `gcr.io/k8s-skaffold/pack` is buildpacks. A log that says `invalid Python version specified: 3.12` means the pin is wrong for that OS.
 
-After a good deploy, `GET /health` should show `"version": "0.1.3"` or later.
+After a good deploy, `GET /health` should show `"version": "0.1.4"` or later.
 
 ## Stack
 
@@ -30,7 +30,7 @@ After a good deploy, `GET /health` should show `"version": "0.1.3"` or later.
 | Language | Python **3.13** on Cloud Run (laptop may be 3.12 or 3.14) |
 | Framework | FastAPI `>=0.115,<0.117` |
 | Server | Uvicorn `[standard]` `>=0.34,<0.36` |
-| Extra | `google-cloud-datastore` (only `/create_field`; imported inside the handler) |
+| Extra | `google-cloud-datastore` (`/create_field` and `/v1/locations`; imported inside the handler) |
 | Auth | None (`--allow-unauthenticated`) |
 
 `/health` and `/test_field` do not need Datastore. Keep `/health` free of extra I/O.
@@ -43,6 +43,9 @@ After a good deploy, `GET /health` should show `"version": "0.1.3"` or later.
 | GET | `/health` | `ok`, `service`, `utc`, `version` |
 | GET | `/test_field` | `ok`, `key`, `value` |
 | POST | `/create_field` | Datastore write (needs GCP credentials) |
+| POST | `/v1/locations` | Phone GPS ping → Device last-known + LocationPing history |
+| GET | `/v1/devices` | All last-known phones (map poll) |
+| GET | `/v1/devices/{id}` | One phone |
 | GET | `/docs` | Swagger UI |
 | GET | `/openapi.json` | OpenAPI |
 

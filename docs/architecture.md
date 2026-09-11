@@ -8,25 +8,30 @@ Two GitHub repos, two hosts, one product. The **site** is static files. The **AP
      ├─ HTML / CSS / JS  ← GitHub Pages  (hackathon.tyneside.software)
      │     index, progress, map, board, wiki, api-test
      │
-     ├─ OSM tiles + public OSRM          (map only; not our API)
+     ├─ OSM tiles + public OSRM          (map waypoints; not our API)
      │
      └─ fetch(HACKATHON_API + "/…")  ← Cloud Run  (hackathon-api-….run.app)
-           /health  /test_field  /docs
+           /health  /test_field  /v1/devices  /v1/locations  /docs
+
+  Phone (Tyneside Tracker APK)
+     └─ POST /v1/locations  ← same Cloud Run
 ```
 
-Locally the same split: Pages is `python -m http.server 5500`, the API is `uvicorn` on `:8080`. `.\start.ps1` starts both.
+Three GitHub repos, two hosts, one product. The **site** is static files. The **API** is a small FastAPI process. The **phone** is a one-switch Android app. Site and phone only meet the API over HTTP.
+
+Locally the site is `python -m http.server 5500`, the API is `uvicorn` on `:8080`. `.\start.ps1` starts both. The phone is Android Studio / a debug APK.
 
 ## The two repos
 
-Clone them as **siblings**. `start.ps1` finds the API as `../hackathon-api`.
+Clone them as **siblings**. `start.ps1` finds the API as `../hackathon-api`. The Android repo sits beside them as `hackathon-android`.
 
-| | **hackathon-site** | **hackathon-api** |
-|--|--------------------|-------------------|
-| Job | What people see | JSON the browser can call |
-| Code | HTML, CSS, a little JS | Python FastAPI |
-| Host | GitHub Pages | Cloud Run `europe-west2` |
-| Deploy | Push `main` | Push `main` (Cloud Build **buildpacks**, not the Dockerfile) |
-| Live | https://hackathon.tyneside.software | https://hackathon-api-git-975511976696.europe-west2.run.app |
+| | **hackathon-site** | **hackathon-api** | **hackathon-android** |
+|--|--------------------|-------------------|-----------------------|
+| Job | What people see | JSON the browser and phone can call | GPS toggle on a phone |
+| Code | HTML, CSS, a little JS | Python FastAPI | Kotlin |
+| Host | GitHub Pages | Cloud Run `europe-west2` | Sideloaded APK |
+| Deploy | Push `main` | Push `main` (Cloud Build **buildpacks**, not the Dockerfile) | Android Studio / `gradlew assembleDebug` |
+| Live | https://hackathon.tyneside.software | https://hackathon-api-git-975511976696.europe-west2.run.app | `app/build/outputs/apk/debug/app-debug.apk` |
 
 ## Site tree
 
@@ -85,7 +90,9 @@ New UI behaviour goes in **Alpine.js**. Do not add React/Vue/npm. Leaflet stays 
 3. `fetch(base + "/test_field")` with `Accept: application/json`.
 4. CORS is enforced by the API (`CORS_ORIGINS`). Serve the site from `http://127.0.0.1:5500` or Pages, never `file://`.
 
-The map does **not** call our API. It calls OSM and public OSRM. Card 11 is “persist routes on the API”.
+Waypoint routing still does **not** call our API — OSM + public OSRM. The map **does** poll `GET /v1/devices` for live phones. Card 11 is still “persist routes on the API”.
+
+Device id on the phone is `Settings.Secure.ANDROID_ID` (not the hardware serial — Android 10+ will not give that to a sideloaded app).
 
 ## How the wiki works
 

@@ -6,6 +6,7 @@ Static front end for the Tyneside Logistics hackathon: dispatch → field work. 
 **Been away?** [Current progress](https://hackathon.tyneside.software/progress.html)  
 **Repo:** https://github.com/Tyneside-Software/hackathon-site  
 **API:** https://github.com/Tyneside-Software/hackathon-api  
+**Android:** https://github.com/Tyneside-Software/hackathon-android  
 
 Push to `main` deploys this site (GitHub Pages) and the API (Cloud Run). Local still works.
 

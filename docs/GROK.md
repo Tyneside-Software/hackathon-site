@@ -48,11 +48,11 @@ Two **sibling** folders:
 …/hackathon-api      ← FastAPI, Cloud Run
 ```
 
-| | Site | API |
-|--|------|-----|
-| GitHub | https://github.com/Tyneside-Software/hackathon-site | https://github.com/Tyneside-Software/hackathon-api |
-| Live | https://hackathon.tyneside.software | https://hackathon-api-git-975511976696.europe-west2.run.app |
-| Local | http://127.0.0.1:5500/ | http://127.0.0.1:8080/health |
+| | Site | API | Android |
+|--|------|-----|---------|
+| GitHub | https://github.com/Tyneside-Software/hackathon-site | https://github.com/Tyneside-Software/hackathon-api | https://github.com/Tyneside-Software/hackathon-android |
+| Live | https://hackathon.tyneside.software | Cloud Run `/health` | debug APK |
+| Local | http://127.0.0.1:5500/ | http://127.0.0.1:8080/health | Android Studio |
 
 Connor’s clone path may differ from Michael’s (`C:\Users\MichaelThomson\source\…`). Discover it with the workspace root; do not hard-code Michael’s home directory into Connor’s docs.
 

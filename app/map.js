@@ -156,5 +156,98 @@
     setStatus("Cleared. Click the map to add a stop.");
   });
 
+  const DEVICE_COLOUR = "#F5A623";
+  const deviceMarkers = new Map();
+  const devicesEl = document.getElementById("devices");
+  const deviceStatusEl = document.getElementById("device-status");
+
+  function apiBase() {
+    return String(window.HACKATHON_API || "").replace(/\/$/, "");
+  }
+
+  function shortId(id) {
+    const s = String(id || "");
+    if (s.startsWith("android-") && s.length > 16) return s.slice(0, 16) + "…";
+    if (s.length > 18) return s.slice(0, 18) + "…";
+    return s || "phone";
+  }
+
+  function ageLabel(iso) {
+    if (!iso) return "";
+    const t = Date.parse(iso);
+    if (Number.isNaN(t)) return iso;
+    const sec = Math.max(0, Math.round((Date.now() - t) / 1000));
+    if (sec < 45) return "just now";
+    if (sec < 120) return "1 min ago";
+    if (sec < 3600) return Math.round(sec / 60) + " min ago";
+    return Math.round(sec / 3600) + " h ago";
+  }
+
+  function renderDevices(rows) {
+    if (!devicesEl) return;
+    devicesEl.innerHTML = "";
+    rows.forEach((d) => {
+      const li = document.createElement("li");
+      li.textContent = shortId(d.device_id) + " · " + ageLabel(d.last_seen_at);
+      devicesEl.appendChild(li);
+    });
+  }
+
+  async function refreshDevices() {
+    const base = apiBase();
+    if (!base || !deviceStatusEl) return;
+    try {
+      const res = await fetch(base + "/v1/devices", { headers: { Accept: "application/json" } });
+      if (!res.ok) throw new Error("HTTP " + res.status);
+      const data = await res.json();
+      const rows = (data.devices || []).filter(
+        (d) => typeof d.last_lat === "number" && typeof d.last_lng === "number"
+      );
+      const seen = new Set();
+      rows.forEach((d) => {
+        seen.add(d.device_id);
+        const latlng = [d.last_lat, d.last_lng];
+        let marker = deviceMarkers.get(d.device_id);
+        const html =
+          "<strong>" +
+          shortId(d.device_id) +
+          "</strong><br>" +
+          d.last_lat.toFixed(5) +
+          ", " +
+          d.last_lng.toFixed(5) +
+          "<br>" +
+          ageLabel(d.last_seen_at);
+        if (!marker) {
+          marker = L.circleMarker(latlng, {
+            radius: 9,
+            color: "#0B1220",
+            weight: 2,
+            fillColor: DEVICE_COLOUR,
+            fillOpacity: 0.95,
+          }).addTo(map);
+          deviceMarkers.set(d.device_id, marker);
+        } else {
+          marker.setLatLng(latlng);
+        }
+        marker.bindPopup(html);
+      });
+      Array.from(deviceMarkers.keys()).forEach((id) => {
+        if (!seen.has(id)) {
+          map.removeLayer(deviceMarkers.get(id));
+          deviceMarkers.delete(id);
+        }
+      });
+      renderDevices(rows);
+      deviceStatusEl.textContent = rows.length
+        ? rows.length + " phone" + (rows.length === 1 ? "" : "s") + " on the map."
+        : "No phones pinging yet. Flip the tracker on.";
+    } catch (err) {
+      deviceStatusEl.textContent = "Could not read phones from the API.";
+    }
+  }
+
+  refreshDevices();
+  setInterval(refreshDevices, 8000);
+
   renderStops();
 })();
