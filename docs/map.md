@@ -30,7 +30,7 @@ The drawer lists LocationPings. Consecutive pings at the same place are hidden (
 
 ## Buses
 
-**Show buses** / **Hide buses**. Off means no request at all. While on: 30-mile **square** bbox fetch, then haversine-filter to a 30-mile **circle** of Newcastle. Only vehicles in the **current view** are drawn (about 300 live in the circle — a soup if you plot them all). City zoom is coloured dots; zoom 13+ is upright line-number chips with a heading pip. Pings older than 10 minutes stay hidden. Hide aborts the in-flight fetch, stops the timer, removes markers. Hidden tab: skip the tick. Clicking a bus opens a popup and does **not** add a waypoint.
+**Show buses** / **Hide buses**. Off means no request at all. While on: 30-mile **square** bbox fetch, then haversine-filter to a 30-mile **circle** of Newcastle. Only vehicles in the **current view** are drawn (about 300 live in the circle — a soup if you plot them all). City zoom (12–13) is coloured dots; zoom 14+ is upright line-number chips with a heading pip. Pings older than 10 minutes stay hidden. Status shows the newest ping age. Hide aborts the in-flight fetch, stops the timer, removes markers. Hidden tab: skip the tick. Clicking a bus opens a popup and does **not** add a waypoint.
 
 Full page: [Live buses](#buses).
 

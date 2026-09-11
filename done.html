@@ -37,7 +37,7 @@
     <h1 style="font-size:1.7rem;margin-bottom:0.4rem">Done cards</h1>
     <p style="color:var(--muted);max-width:42rem">
       Finished increments live here so the board stays short.
-      <strong>33 cards · 60.5h</strong>.
+      <strong>33 cards · 61h</strong>.
       Click a card for the brief. Filter with the chips, hour cards, or <code>?person=lewis</code>.
     </p>
 
@@ -64,7 +64,7 @@
       </button>
       <button type="button" class="person" data-person="michael" aria-pressed="false">
         <div class="who"><span class="emoji">🏗️</span> Michael</div>
-        <div class="hrs">31.25 <span>hrs</span></div>
+        <div class="hrs">31.75 <span>hrs</span></div>
         <div class="meta">13 done · 2 to do</div>
       </button>
       <button type="button" class="person" data-person="lewis" aria-pressed="false">
@@ -80,22 +80,21 @@
     </div>
 
     <div class="card-archive" id="done-archive">
-          <a class="card" id="card-44" href="#t-44" data-person="michael" data-hours="1.5">
+          <a class="card" id="card-44" href="#t-44" data-person="michael" data-hours="2">
             <div class="top"><span class="id">44</span><span class="emoji">🏗️</span></div>
             <div class="title">Buses: viewport, dots then chips, no waypoint steal</div>
             <span class="tag tag-ok">map polish</span>
-            <div class="bot"><span>1.5h</span><span>Michael</span></div>
+            <div class="bot"><span>2h</span><span>Michael</span></div>
             <template class="card-brief">
-              <p>First buses toggle (39) drew every live vehicle in 30 miles as a rotated line chip — about 300 labels, unreadable at city zoom, and a click dropped a waypoint. Master had not tested it.</p>
+              <p>First buses toggle (39) drew every live vehicle in 30 miles as a rotated line chip — about 300 labels, unreadable at city zoom, and a click dropped a waypoint.</p>
               <h3>What’s live</h3>
               <ul>
                 <li>Draw only what is in the current view. Pan/zoom repaints the last fetch; no extra request.</li>
-                <li>City zoom (12): coloured dots. Zoom 13+: upright line-number chips, heading pip, operator colour.</li>
-                <li>Pings older than 10 minutes stay hidden.</li>
-                <li>Bus click opens a popup and does not add a waypoint. Popup does not pan the map.</li>
-                <li>Status: <code>184 in view as dots · 298 within 30 miles</code> (numbers move with the feed).</li>
+                <li>City zoom (12–13): coloured dots. Zoom 14+: upright line-number chips, heading pip, operator colour.</li>
+                <li>Pings older than 10 minutes stay hidden. Status shows <strong>newest ping</strong> age so the feed is visibly moving.</li>
+                <li>Bus click opens a popup and does not add a waypoint.</li>
               </ul>
-              <p>Hard-refresh <a href="app/">/app/</a>. Demo <a href="app/?buses=1">/app/?buses=1</a>. Wiki: <a href="docs/#buses">Live buses</a>.</p>
+              <p>Hard-refresh <a href="app/">/app/</a>. Demo <a href="app/?buses=1">/app/?buses=1</a> or <a href="app/?buses=1&amp;zoom=14">&amp;zoom=14</a>. Wiki: <a href="docs/#buses">Live buses</a>.</p>
             </template>
           </a>
           <a class="card" id="card-43" href="#t-43" data-person="michael" data-hours="0.5">

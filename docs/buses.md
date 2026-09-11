@@ -14,11 +14,12 @@ This is a **site** slice. It does **not** call our API, and it does **not** call
 | Off | Abort in-flight fetch, stop the timer, remove every bus marker. Status returns to `Off — no data fetched.` |
 | Map view | Do not `fitBounds` to buses — waypoints stay the camera. Pan/zoom repaints from the last fetch (no extra request). |
 | Viewport | Only vehicles in the current map bounds (plus a small pad) are drawn. The rest of the 30-mile circle stays in memory. |
-| City zoom (12) | Coloured **dots**. Status says how many, and that zooming in shows line numbers. |
-| Street zoom (13+) | Upright **line-number chips**. A heading pip rotates; the number stays readable. |
+| City zoom (12–13) | Coloured **dots**. Status says how many, and that zooming in shows line numbers. |
+| Street zoom (14+) | Upright **line-number chips**. A heading pip rotates; the number stays readable. |
 | Zoomed out (&lt; 12) | Markers hidden. Status: zoom in — N live within 30 miles. |
 | Stale | Pings older than **10 minutes** are not drawn. |
-| Click | Opens a popup (service, destination, vehicle, age). Does **not** drop a waypoint. Popup does not pan the map. |
+| Status | Count in view, count in the 30-mile circle, stale hidden, **newest ping** age (so you can see the feed is moving). |
+| Click | Opens a popup (service, destination, vehicle, age). Does **not** drop a waypoint (`bubblingMouseEvents: false` plus a map-click guard). Popup does not pan the map. |
 | Feed down | Status line says so. Waypoints and phones stay. |
 
 Demo URL: [`/app/?buses=1`](../app/?buses=1) (optional `&zoom=14` for chips).
