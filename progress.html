@@ -42,12 +42,12 @@
         · catch-up for anyone who has been away
       </p>
       <h1>CURRENT<br>PROGRESS</h1>
-      <p class="hero-tag">Live phones work. Noah shipped the device drawer and ping history. Buses are a map toggle.</p>
+      <p class="hero-tag">Michael is on the map and tracker. Noah is on phones, history, and splitting the API.</p>
       <p class="hero-lead">
-        Three repos, two hosts, one product. The site is static on GitHub Pages.
-        The API is FastAPI on Cloud Run. The phone POSTs every minute; last-seen is last communication.
-        Noah’s drawer lists phones and plots unique ping history (cards 36–38 done).
-        Live buses are off until you press <strong>Show buses</strong> — bustimes.org, 30 miles of Newcastle (card 39).
+        Three repos, two hosts, one product.
+        <strong>Michael tonight:</strong> live buses (39), POST every minute with last-seen = last communication and a Newcastle pin (42), Show buses actually fetches and ghost buttons hover (43).
+        <strong>Noah tonight:</strong> phone cards, device drawer, ping history (36–38), Firestore history reads, API split into FastAPI routers (40).
+        In flight: Noah’s OAuth2 token stub (41) — imported, not wired to routes yet.
       </p>
       <div class="hero-actions">
         <a class="btn btn-fill" href="app/">Open the map →</a>
@@ -175,12 +175,12 @@
           <header>
             <span class="lane-kicker">In flight</span>
             <h3>Now</h3>
-            <p>0 cards · live map layers shipped</p>
+            <p>1 card · 2h</p>
           </header>
-          <a class="progress-item" href="app/">
-            <span class="id">39 · 🏗️ buses · done</span>
-            <strong>Show buses on the map</strong>
-            <span>Off until you ask. bustimes.org, 30 miles of Newcastle. Noah’s drawer and ping history are also live. Doing is empty — pick a Ready or To-do card.</span>
+          <a class="progress-item" href="board.html#t-41">
+            <span class="id">41 · 🔧 Noah</span>
+            <strong>API user accounts / OAuth2</strong>
+            <span><code>OAuth2PasswordBearer(tokenUrl="token")</code> is imported after the router split. No login route yet. Phone POSTs and map GETs stay open until a card says otherwise.</span>
           </a>
         </article>
         <article class="progress-lane is-next">
@@ -189,6 +189,11 @@
             <h3>Next</h3>
             <p>Demo the map, then fill it</p>
           </header>
+          <a class="progress-item" href="done.html#t-43">
+            <span class="id">43 · 🏗️ Michael · done</span>
+            <strong>Buses fetch + button hover</strong>
+            <span>Show buses was aborting its first request. Ghost buttons now hover. Hard-refresh <a href="app/">/app/</a>.</span>
+          </a>
           <a class="progress-item" href="board.html#t-04">
             <span class="id">04 · 🧭 Reeve · Ready</span>
             <strong>Clickable / draggable waypoints</strong>
@@ -254,9 +259,9 @@
       <div class="progress-who">
         <a class="progress-person" href="board.html?person=noah">
           <span class="who"><span class="emoji">🔧</span> Noah</span>
-          <span class="hrs">22 <span>hrs</span></span>
-          <span class="focus">Drawer + ping history shipped</span>
-          <span class="meta">7 done. Phone cards, device drawer, history path, Firestore location list. No open cards — grab a to-do if he wants another slice.</span>
+          <span class="hrs">26 <span>hrs</span></span>
+          <span class="focus">OAuth2 stub · API routers</span>
+          <span class="meta">8 done · 1 in progress. Drawer, history, Firestore reads, split <code>app/routers/</code>. Accounts next (41).</span>
         </a>
         <a class="progress-person" href="board.html?person=reeve">
           <span class="who"><span class="emoji">🧭</span> Reeve</span>
@@ -278,9 +283,9 @@
         </a>
         <a class="progress-person" href="board.html?person=michael">
           <span class="who"><span class="emoji">🏗️</span> Michael</span>
-          <span class="hrs">27.75 <span>hrs</span></span>
-          <span class="focus">Buses on the map</span>
-          <span class="meta">10 done · 2 to do. Live buses toggle shipped. 35 is a real phone; 11 is persist routes.</span>
+          <span class="hrs">29.75 <span>hrs</span></span>
+          <span class="focus">Buses, heartbeat, Newcastle</span>
+          <span class="meta">12 done · 2 to do. Tracker POSTs every minute. Buses toggle works. 35 physical phone; 11 persist routes.</span>
         </a>
       </div>
     </div>
@@ -290,8 +295,16 @@
     <div class="wrap">
       <p class="hero-kicker">While you were away</p>
       <h2>What already shipped</h2>
-      <p class="lede">29 cards · 55h on Done. Do not redo these.</p>
+      <p class="lede">32 cards · 59h on Done. Do not redo these.</p>
       <ol class="progress-rail">
+        <li>
+          <span class="mark" aria-hidden="true"></span>
+          <div class="body">
+            <p class="hero-kicker">11 September · cards 43 · 42 · 40 · 39</p>
+            <h3>Michael: buses, heartbeat, Newcastle. Noah: API routers</h3>
+            <p>Show buses fetches (first request was aborting). Ghost buttons hover. Tracker POSTs every minute; map age is last communication; debug pin on the Tyne. Noah split <code>app/main.py</code> into <code>app/routers/</code>.</p>
+          </div>
+        </li>
         <li>
           <span class="mark" aria-hidden="true"></span>
           <div class="body">

@@ -63,7 +63,11 @@ hackathon-site/
 
 ```
 hackathon-api/
-  app/main.py         Routes, CORS, VERSION
+  app/main.py         FastAPI app, CORS, includes routers (Noah split, 57a1d44)
+  app/routers/        health, fields, locations, devices
+  app/config.py       VERSION, CORS origins
+  app/db.py           Datastore / Firestore helpers
+  app/dependencies.py OAuth2 stub (card 41 — not wired yet)
   main.py             Re-export for buildpacks (`main:app`)
   requirements.txt    fastapi, uvicorn, google-cloud-datastore, google-cloud-firestore
   Dockerfile          Used only if the trigger builds with Docker

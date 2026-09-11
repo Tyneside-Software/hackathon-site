@@ -36,7 +36,7 @@
     <h1 style="font-size:1.7rem;margin-bottom:0.4rem">Done cards</h1>
     <p style="color:var(--muted);max-width:42rem">
       Finished increments live here so the board stays short.
-      <strong>29 cards · 55h</strong>.
+      <strong>32 cards · 59h</strong>.
       Click a card for the brief. Filter with the chips, hour cards, or <code>?person=lewis</code>.
     </p>
 
@@ -63,8 +63,8 @@
       </button>
       <button type="button" class="person" data-person="michael" aria-pressed="false">
         <div class="who"><span class="emoji">🏗️</span> Michael</div>
-        <div class="hrs">27.75 <span>hrs</span></div>
-        <div class="meta">10 done · 2 to do</div>
+        <div class="hrs">29.75 <span>hrs</span></div>
+        <div class="meta">12 done · 2 to do</div>
       </button>
       <button type="button" class="person" data-person="lewis" aria-pressed="false">
         <div class="who"><span class="emoji">🌱</span> Lewis</div>
@@ -73,12 +73,53 @@
       </button>
       <button type="button" class="person" data-person="noah" aria-pressed="false">
         <div class="who"><span class="emoji">🔧</span> Noah</div>
-        <div class="hrs">22 <span>hrs</span></div>
-        <div class="meta">7 done</div>
+        <div class="hrs">26 <span>hrs</span></div>
+        <div class="meta">8 done · 1 in progress</div>
       </button>
     </div>
 
     <div class="card-archive" id="done-archive">
+          <a class="card" id="card-43" href="#t-43" data-person="michael" data-hours="0.5">
+            <div class="top"><span class="id">43</span><span class="emoji">🏗️</span></div>
+            <div class="title">Show buses actually fetches; ghost buttons hover</div>
+            <span class="tag tag-ok">map buttons</span>
+            <div class="bot"><span>0.5h</span><span>Michael</span></div>
+            <template class="card-brief">
+              <p>Live map: Show buses stayed on “Off — no data fetched” because the first fetch was aborted by <code>stopBusPoll()</code>. Clear and Show buses are <code>btn-ghost</code> and had no hover or pointer, so they felt dead.</p>
+              <h3>What’s live</h3>
+              <ul>
+                <li>First fetch runs, then the 15s poll. Sidebar sits above the map so clicks land.</li>
+                <li>Ghost buttons hover (amber wash) and use <code>cursor: pointer</code>.</li>
+              </ul>
+              <p><code>f596040</code>. Hard-refresh <a href="app/">/app/</a> if the old JS is cached.</p>
+            </template>
+          </a>
+          <a class="card" id="card-42" href="#t-42" data-person="michael" data-hours="1.5">
+            <div class="top"><span class="id">42</span><span class="emoji">🏗️</span></div>
+            <div class="title">Tracker POSTs every minute; pin on Newcastle</div>
+            <span class="tag tag-ok">heartbeat · Tyne</span>
+            <div class="bot"><span>1.5h</span><span>Michael</span></div>
+            <template class="card-brief">
+              <p>Emulator sat still and the map age froze. The app now POSTs every minute even if lat/lng are unchanged. <code>recorded_at</code> is last communication, which is the map timestamp.</p>
+              <p>This AVD ignores console <code>geo fix</code> and caches Google HQ. High-accuracy GPS plus a remap of that HQ default puts the debug pin on Grey’s Monument. A real GPS fix is used as-is.</p>
+              <p>Commits: <code>cc59adc</code> heartbeat, <code>38690d0</code> communication time, <code>0fb80ce</code> Newcastle.</p>
+            </template>
+          </a>
+          <a class="card" id="card-40" href="#t-40" data-person="noah" data-hours="2">
+            <div class="top"><span class="id">40</span><span class="emoji">🔧</span></div>
+            <div class="title">Split the API into FastAPI routers</div>
+            <span class="tag tag-ok">app/routers</span>
+            <div class="bot"><span>2h</span><span>Noah</span></div>
+            <template class="card-brief">
+              <p>Noah split <code>app/main.py</code> into modules so accounts and GPS can grow without one giant file.</p>
+              <ul>
+                <li><code>app/routers/</code> — health, fields, locations, devices</li>
+                <li><code>app/config.py</code> — VERSION, CORS</li>
+                <li><code>app/db.py</code>, <code>app/schemas.py</code>, <code>app/dependencies.py</code></li>
+              </ul>
+              <p><code>57a1d44</code>. Cloud Run still execs <code>app/main.py</code> (<code>uvicorn.run(app)</code> stays at the bottom).</p>
+            </template>
+          </a>
           <a class="card" id="card-39" href="#t-39" data-person="michael" data-hours="2">
             <div class="top"><span class="id">39</span><span class="emoji">🏗️</span></div>
             <div class="title">Live buses on the map (toggle, 30 miles of Newcastle)</div>
@@ -86,7 +127,7 @@
             <div class="bot"><span>2h</span><span>Michael</span></div>
             <template class="card-brief">
               <p>Show buses / Hide buses on <a href="app/">/app/</a>. Off by default — no fetch on page load. While on, poll bustimes.org <code>/vehicles.json</code> every 15s (skip hidden tabs), haversine-filter to a 30-mile circle of Newcastle, line-number markers. Hide aborts the request, stops the timer, removes markers. Do not <code>fitBounds</code> to buses. Feed down: status line, map stays.</p>
-              <p>Not BODS from the browser. Public JSON, CORS open. Wiki: <a href="docs/#buses">Live buses</a>.</p>
+              <p>Not BODS from the browser — that needs a DfT key and SIRI-VM. bustimes.org already ingest BODS; we use their map JSON. First-fetch abort and ghost-button hover: card 43. Wiki: <a href="docs/#buses">Live buses</a>.</p>
             </template>
           </a>
           <a class="card" id="card-36" href="#t-36" data-person="noah" data-hours="2">

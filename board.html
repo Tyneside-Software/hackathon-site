@@ -57,7 +57,7 @@
     <p class="filter-status" id="filter-status">Showing everyone.</p>
 
     <div class="board-banner">
-      <div>📋 Live phones work. Noah shipped the device drawer and ping history (36–38). Michael: live buses toggle on the map (39). Next product: job list, demo seed, localStorage.</div>
+      <div>📋 <strong>Michael</strong> — buses (39), heartbeat + Newcastle pin (42), Show buses fetch + button hover (43). <strong>Noah</strong> — phone drawer/history (36–38), API split into routers (40), OAuth2 stub in flight (41). Next product: job list, demo seed, localStorage.</div>
       <div class="btns">
         <a class="btn btn-fill" href="app/">Map app</a>
         <a class="btn btn-ghost" href="progress.html">Progress</a>
@@ -80,8 +80,8 @@
       </button>
       <button type="button" class="person" data-person="michael" aria-pressed="false">
         <div class="who"><span class="emoji">🏗️</span> Michael</div>
-        <div class="hrs">27.75 <span>hrs</span></div>
-        <div class="meta">10 done · 2 to do</div>
+        <div class="hrs">29.75 <span>hrs</span></div>
+        <div class="meta">12 done · 2 to do</div>
       </button>
       <button type="button" class="person" data-person="lewis" aria-pressed="false">
         <div class="who"><span class="emoji">🌱</span> Lewis</div>
@@ -90,11 +90,12 @@
       </button>
       <button type="button" class="person" data-person="noah" aria-pressed="false">
         <div class="who"><span class="emoji">🔧</span> Noah</div>
-        <div class="hrs">22 <span>hrs</span></div>
-        <div class="meta">7 done</div>
+        <div class="hrs">26 <span>hrs</span></div>
+        <div class="meta">8 done · 1 in progress</div>
       </button>
     </div>
     <!-- /BOARD:PEOPLE -->
+
 
 
 
@@ -213,9 +214,25 @@
         </div>
 
         <div class="col doing">
-          <div class="head"><span class="col-name">In progress</span><span class="count">0 · 0h</span></div>
+          <div class="head"><span class="col-name">In progress</span><span class="count">1 · 2h</span></div>
           <div class="stack">
-            <p class="empty-col" data-all="Empty on purpose. Pull a Ready card and ship it.">Empty on purpose. Pull a Ready card and ship it.</p>
+            <p class="empty-col is-hidden" data-all="Empty on purpose. Pull a Ready card and ship it."></p>
+            <a class="card" id="card-41" href="#t-41" data-person="noah" data-hours="2">
+              <div class="top"><span class="id">41</span><span class="emoji">🔧</span></div>
+              <div class="title">API user accounts / OAuth2 token</div>
+              <span class="tag tag-wait">OAuth2 stub</span>
+              <div class="bot"><span>2h</span><span>Noah</span></div>
+              <template class="card-brief">
+                <p>Noah has started splitting the API toward accounts. <code>app/dependencies.py</code> defines <code>OAuth2PasswordBearer(tokenUrl="token")</code> and <code>app/main.py</code> imports it. There is not yet a login route or token check on the live GPS/field handlers.</p>
+                <h3>Done when</h3>
+                <ul>
+                  <li>A token can be issued (even a hackathon-simple one).</li>
+                  <li>It is documented: which routes need it, which stay open (<code>/health</code>, map reads).</li>
+                  <li>The phone and the map still work unauthenticated unless a card says otherwise.</li>
+                </ul>
+                <p>Repo: <a href="https://github.com/Tyneside-Software/hackathon-api">hackathon-api</a>. Layout after <code>57a1d44</code>: routers in <code>app/routers/</code>.</p>
+              </template>
+            </a>
           </div>
         </div>
 
@@ -268,13 +285,13 @@
         </div>
 
         <div class="col done">
-          <div class="head"><span class="col-name">Done</span><span class="count" id="done-col-count">29 · 55h</span></div>
+          <div class="head"><span class="col-name">Done</span><span class="count" id="done-col-count">32 · 59h</span></div>
           <div class="stack">
-            <script type="application/json" id="done-cards-index">[{"id":"39","person":"michael","hours":2},{"id":"36","person":"noah","hours":2},{"id":"37","person":"noah","hours":3},{"id":"38","person":"noah","hours":3},{"id":"32","person":"michael","hours":4},{"id":"33","person":"michael","hours":3},{"id":"34","person":"michael","hours":3},{"id":"17","person":"reeve","hours":0.75},{"id":"31","person":"noah","hours":12},{"id":"28","person":"michael","hours":1},{"id":"29","person":"michael","hours":2},{"id":"30","person":"michael","hours":1.5},{"id":"14","person":"lewis","hours":0.75},{"id":"18","person":"connor","hours":0.5},{"id":"19","person":"connor","hours":0.75},{"id":"20","person":"michael","hours":0.75},{"id":"21","person":"reeve","hours":1},{"id":"27","person":"connor","hours":0.5},{"id":"26","person":"michael","hours":2},{"id":"10","person":"michael","hours":4},{"id":"12","person":"lewis","hours":0.5},{"id":"15","person":"reeve","hours":0.5},{"id":"16","person":"reeve","hours":1},{"id":"01","person":"lewis","hours":0.5},{"id":"02","person":"reeve","hours":1},{"id":"03","person":"lewis","hours":2},{"id":"25","person":"noah","hours":0.5},{"id":"22","person":"noah","hours":0.5},{"id":"23","person":"noah","hours":1}]</script>
+            <script type="application/json" id="done-cards-index">[{"id":"43","person":"michael","hours":0.5},{"id":"42","person":"michael","hours":1.5},{"id":"40","person":"noah","hours":2},{"id":"39","person":"michael","hours":2},{"id":"36","person":"noah","hours":2},{"id":"37","person":"noah","hours":3},{"id":"38","person":"noah","hours":3},{"id":"32","person":"michael","hours":4},{"id":"33","person":"michael","hours":3},{"id":"34","person":"michael","hours":3},{"id":"17","person":"reeve","hours":0.75},{"id":"31","person":"noah","hours":12},{"id":"28","person":"michael","hours":1},{"id":"29","person":"michael","hours":2},{"id":"30","person":"michael","hours":1.5},{"id":"14","person":"lewis","hours":0.75},{"id":"18","person":"connor","hours":0.5},{"id":"19","person":"connor","hours":0.75},{"id":"20","person":"michael","hours":0.75},{"id":"21","person":"reeve","hours":1},{"id":"27","person":"connor","hours":0.5},{"id":"26","person":"michael","hours":2},{"id":"10","person":"michael","hours":4},{"id":"12","person":"lewis","hours":0.5},{"id":"15","person":"reeve","hours":0.5},{"id":"16","person":"reeve","hours":1},{"id":"01","person":"lewis","hours":0.5},{"id":"02","person":"reeve","hours":1},{"id":"03","person":"lewis","hours":2},{"id":"25","person":"noah","hours":0.5},{"id":"22","person":"noah","hours":0.5},{"id":"23","person":"noah","hours":1}]</script>
             <a class="card done-index" id="done-index" href="done.html">
-              <div class="done-index-count" id="done-index-count">29</div>
+              <div class="done-index-count" id="done-index-count">32</div>
               <div class="title">All done cards</div>
-              <p class="done-index-meta" id="done-index-meta">29 cards · 55h · archive →</p>
+              <p class="done-index-meta" id="done-index-meta">32 cards · 59h · archive →</p>
             </a>
           </div>
         </div>
@@ -282,6 +299,7 @@
       </div>
     </div>
     <!-- /BOARD:KANBAN -->
+
 
 
 
@@ -322,8 +340,8 @@
         <tr data-person="michael">
           <td>🏗️</td>
           <td><strong>Michael</strong></td>
-          <td>Live buses on the map (toggle, 30 miles of Newcastle) (2h, done) · Android app: tracking toggle, GPS to the API (4h, done) · API stores GPS pings in the database (3h, done) · Map shows the phone’s current coordinates (3h, done) · Alpine.js test page calls GET /test_field (1h, done) · Docs wiki (Docs in the nav) (2h, done) · Cloud Run GitHub builds (buildpacks, Python 3.13) (1.5h, done) · Michael: GitHub edit → run → push (both repos) (0.75h, done) · Site + API deploy on push to main (2h, done) · Cloud Run API live + CORS for Pages (4h, done) · Persist routes on the API (replace localStorage) (4h) · Sideload the tracker APK on a physical phone (0.5h)</td>
-          <td><strong>27.75h</strong></td>
+          <td>Show buses actually fetches; ghost buttons hover (0.5h, done) · Tracker POSTs every minute; pin on Newcastle (1.5h, done) · Live buses on the map (toggle, 30 miles of Newcastle) (2h, done) · Android app: tracking toggle, GPS to the API (4h, done) · API stores GPS pings in the database (3h, done) · Map shows the phone’s current coordinates (3h, done) · Alpine.js test page calls GET /test_field (1h, done) · Docs wiki (Docs in the nav) (2h, done) · Cloud Run GitHub builds (buildpacks, Python 3.13) (1.5h, done) · Michael: GitHub edit → run → push (both repos) (0.75h, done) · Site + API deploy on push to main (2h, done) · Cloud Run API live + CORS for Pages (4h, done) · Persist routes on the API (replace localStorage) (4h) · Sideload the tracker APK on a physical phone (0.5h)</td>
+          <td><strong>29.75h</strong></td>
         </tr>
         <tr data-person="lewis">
           <td>🌱</td>
@@ -334,13 +352,14 @@
         <tr data-person="noah">
           <td>🔧</td>
           <td><strong>Noah</strong></td>
-          <td>Review the live-phone path, then take it forward (2h, done) · Several phones on the map, easy to tell apart (3h, done) · Show history as a route on the map (3h, done) · Noah: API talks to Firestore (12h, done) · Noah: API version on / and /health (0.5h, done) · Noah: get the front end running locally (0.5h, done) · Noah: get the back end running locally (1h, done)</td>
-          <td><strong>22h</strong></td>
+          <td>API user accounts / OAuth2 token (2h, in progress) · Split the API into FastAPI routers (2h, done) · Review the live-phone path, then take it forward (2h, done) · Several phones on the map, easy to tell apart (3h, done) · Show history as a route on the map (3h, done) · Noah: API talks to Firestore (12h, done) · Noah: API version on / and /health (0.5h, done) · Noah: get the front end running locally (0.5h, done) · Noah: get the back end running locally (1h, done)</td>
+          <td><strong>26h</strong></td>
         </tr>
       </tbody>
     </table>
     </div>
     <!-- /BOARD:WHO -->
+
 
 
 

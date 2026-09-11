@@ -9,6 +9,8 @@ The site stores that in `config.js` as `window.HACKATHON_API`.
 
 Code `VERSION` is **0.1.5**. After a deploy, `GET /health` should match that (or later). If live `/test_field` is 404, the Cloud Run revision is behind `main`.
 
+Layout (Noah, `57a1d44`): routes live in `app/routers/` (`health`, `fields`, `locations`, `devices`). `app/main.py` builds the app and still has `uvicorn.run(app)` at the bottom for Cloud Run. `app/dependencies.py` has an OAuth2 password-bearer stub (`tokenUrl="token"`) — **not** attached to handlers yet (card 41).
+
 ## How Cloud Run builds this
 
 The GitHub trigger uses **Google Cloud buildpacks** (`pack` on **ubuntu2404**), **not** the Dockerfile.
