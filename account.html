@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tyneside Logistics — Account</title>
+  <link rel="icon" href="logo.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+  <script src="config.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.8/dist/cdn.min.js"></script>
+</head>
+<body class="site">
+  <nav class="site-nav" aria-label="Primary">
+    <div class="inner">
+      <a href="index.html" class="brand-link">
+        <img src="logo.svg" width="36" height="36" alt="Tyneside">
+        <span>TYNESIDE</span>
+        <span class="brand-sub">LOGISTICS</span>
+      </a>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="progress.html" class="nav-now">Progress</a>
+        <a href="app/">Map</a>
+        <a href="board.html">Board</a>
+        <a href="todo.html">To do</a>
+        <a href="done.html">Done</a>
+        <a href="docs/" class="nav-docs">Docs</a>
+        <a href="api-test.html">API test</a>
+        <a href="account.html" class="is-current" aria-current="page">Account</a>
+        <a href="onboarding.html">Onboarding</a>
+        <a href="lewis.html">Lewis</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="wrap" style="padding: 1.5rem 0 3rem" x-data="accountPage()">
+    <p class="hero-kicker">OAuth2 · register / login</p>
+    <h1 style="font-size:1.7rem;margin-bottom:0.4rem">Account</h1>
+    <p class="lede">
+      Create a user, log in, then <strong>Fetch me</strong> hits
+      <code>GET /users/me</code> with the bearer token.
+      API: <code x-text="base"></code>
+    </p>
+
+    <div class="grid-2">
+      <div class="panel">
+        <p class="hero-kicker" style="margin-bottom:0.4rem">Register</p>
+        <p class="lede" style="margin-bottom:0.8rem">Username 3–64 letters/digits <code>._-</code>. Password at least 8 characters.</p>
+        <div class="form-field">
+          <label for="reg-user">Username</label>
+          <input id="reg-user" type="text" autocomplete="username" x-model="regUsername">
+        </div>
+        <div class="form-field">
+          <label for="reg-pass">Password</label>
+          <input id="reg-pass" type="password" autocomplete="new-password" x-model="regPassword">
+        </div>
+        <div class="form-field">
+          <label for="reg-name">Full name (optional)</label>
+          <input id="reg-name" type="text" autocomplete="name" x-model="regFullName">
+        </div>
+        <div class="form-field">
+          <label for="reg-email">Email (optional)</label>
+          <input id="reg-email" type="email" autocomplete="email" x-model="regEmail">
+        </div>
+        <div class="hero-actions" style="margin-top:0">
+          <button type="button" class="btn btn-fill" @click="register()" :disabled="busy">
+            <span x-show="!busy">Create account</span>
+            <span x-show="busy" x-cloak>Creating…</span>
+          </button>
+        </div>
+        <p class="map-status" style="margin:0.8rem 0 0.5rem" :class="regOk ? 'form-ok' : (regError ? 'form-bad' : '')" x-text="regStatus"></p>
+        <pre class="api-json" x-show="regPayload" x-cloak x-text="regPretty"></pre>
+      </div>
+
+      <div class="panel">
+        <p class="hero-kicker" style="margin-bottom:0.4rem">Login</p>
+        <p class="lede" style="margin-bottom:0.8rem">JSON <code>POST /login</code>. Stores the access token in this tab.</p>
+        <div class="form-field">
+          <label for="log-user">Username</label>
+          <input id="log-user" type="text" autocomplete="username" x-model="logUsername">
+        </div>
+        <div class="form-field">
+          <label for="log-pass">Password</label>
+          <input id="log-pass" type="password" autocomplete="current-password" x-model="logPassword">
+        </div>
+        <div class="hero-actions" style="margin-top:0">
+          <button type="button" class="btn btn-fill" @click="login()" :disabled="busy">
+            <span x-show="!busy">Log in</span>
+            <span x-show="busy" x-cloak>Logging in…</span>
+          </button>
+        </div>
+        <p class="map-status" style="margin:0.8rem 0 0.5rem" :class="token ? 'form-ok' : (logError ? 'form-bad' : '')" x-text="logStatus"></p>
+      </div>
+    </div>
+
+    <div class="panel" style="margin-top:0.85rem">
+      <p class="hero-kicker" style="margin-bottom:0.4rem">Session test</p>
+      <p class="lede" style="margin-bottom:0.8rem">
+        Calls <code>GET /users/me</code> with <code>Authorization: Bearer</code>.
+        Logged in: <strong x-text="token ? 'yes' : 'no'"></strong>
+      </p>
+      <div class="hero-actions" style="margin-top:0">
+        <button type="button" class="btn btn-fill" @click="fetchMe()" :disabled="busy">Fetch me</button>
+        <button type="button" class="btn btn-ghost" @click="logout()" :disabled="!token">Clear token</button>
+      </div>
+      <p class="map-status" style="margin:0.8rem 0 0.5rem" :class="meOk ? 'form-ok' : (meError ? 'form-bad' : '')" x-text="meStatus"></p>
+      <pre class="api-json" x-show="mePayload" x-cloak x-text="mePretty"></pre>
+    </div>
+  </div>
+
+  <footer class="foot">
+    <div class="wrap">Tyneside Logistics hackathon · Alpine.js + Cloud Run</div>
+  </footer>
+
+  <script>
+    function accountPage() {
+      const raw = (window.HACKATHON_API || "").replace(/\/$/, "");
+      const TOKEN_KEY = "HACKATHON_TOKEN";
+      return {
+        base: raw || "(missing config.js)",
+        busy: false,
+        regUsername: "",
+        regPassword: "",
+        regFullName: "",
+        regEmail: "",
+        regStatus: "Ready",
+        regOk: false,
+        regError: false,
+        regPayload: null,
+        logUsername: "",
+        logPassword: "",
+        logStatus: sessionStorage.getItem(TOKEN_KEY) ? "Token already in this tab." : "Ready",
+        logError: false,
+        token: sessionStorage.getItem(TOKEN_KEY) || "",
+        meStatus: "Ready",
+        meOk: false,
+        meError: false,
+        mePayload: null,
+        get regPretty() {
+          return this.regPayload ? JSON.stringify(this.regPayload, null, 2) : "";
+        },
+        get mePretty() {
+          return this.mePayload ? JSON.stringify(this.mePayload, null, 2) : "";
+        },
+        async register() {
+          this.busy = true;
+          this.regOk = false;
+          this.regError = false;
+          this.regStatus = "POST /register…";
+          try {
+            const body = {
+              username: this.regUsername.trim(),
+              password: this.regPassword,
+            };
+            if (this.regFullName.trim()) body.full_name = this.regFullName.trim();
+            if (this.regEmail.trim()) body.email = this.regEmail.trim();
+            const res = await fetch(this.base + "/register", {
+              method: "POST",
+              headers: { Accept: "application/json", "Content-Type": "application/json" },
+              body: JSON.stringify(body),
+            });
+            const data = await res.json().catch(() => null);
+            this.regPayload = data;
+            if (res.ok) {
+              this.regOk = true;
+              this.regStatus = "Account created for " + (data && data.username ? data.username : body.username) + ".";
+              this.logUsername = body.username;
+            } else {
+              this.regError = true;
+              this.regStatus = "Account not created — " + ((data && data.detail) || ("HTTP " + res.status));
+            }
+          } catch (err) {
+            this.regError = true;
+            this.regStatus = "Network or CORS failure.";
+            this.regPayload = { error: String(err && err.message ? err.message : err) };
+          } finally {
+            this.busy = false;
+          }
+        },
+        async login() {
+          this.busy = true;
+          this.logError = false;
+          this.logStatus = "POST /login…";
+          try {
+            const res = await fetch(this.base + "/login", {
+              method: "POST",
+              headers: { Accept: "application/json", "Content-Type": "application/json" },
+              body: JSON.stringify({
+                username: this.logUsername.trim(),
+                password: this.logPassword,
+              }),
+            });
+            const data = await res.json().catch(() => null);
+            if (res.ok && data && data.access_token) {
+              this.token = data.access_token;
+              sessionStorage.setItem(TOKEN_KEY, this.token);
+              this.logStatus = "Logged in. Token stored in this tab.";
+            } else {
+              this.logError = true;
+              this.token = "";
+              sessionStorage.removeItem(TOKEN_KEY);
+              this.logStatus = "Login failed — " + ((data && data.detail) || ("HTTP " + res.status));
+            }
+          } catch (err) {
+            this.logError = true;
+            this.logStatus = "Network or CORS failure.";
+          } finally {
+            this.busy = false;
+          }
+        },
+        async fetchMe() {
+          this.busy = true;
+          this.meOk = false;
+          this.meError = false;
+          this.mePayload = null;
+          if (!this.token) {
+            this.meError = true;
+            this.meStatus = "Log in first — no bearer token.";
+            this.busy = false;
+            return;
+          }
+          this.meStatus = "GET /users/me…";
+          try {
+            const res = await fetch(this.base + "/users/me", {
+              method: "GET",
+              headers: { Accept: "application/json", Authorization: "Bearer " + this.token },
+            });
+            const data = await res.json().catch(() => null);
+            this.mePayload = data;
+            if (res.ok) {
+              this.meOk = true;
+              this.meStatus = "Logged in as " + (data && data.username ? data.username : "user") + ".";
+            } else {
+              this.meError = true;
+              this.meStatus = "Not logged in — " + ((data && data.detail) || ("HTTP " + res.status));
+            }
+          } catch (err) {
+            this.meError = true;
+            this.meStatus = "Network or CORS failure.";
+            this.mePayload = { error: String(err && err.message ? err.message : err) };
+          } finally {
+            this.busy = false;
+          }
+        },
+        logout() {
+          this.token = "";
+          sessionStorage.removeItem(TOKEN_KEY);
+          this.logStatus = "Token cleared.";
+          this.meStatus = "Ready";
+          this.meOk = false;
+          this.meError = false;
+          this.mePayload = null;
+        },
+      };
+    }
+  </script>
+</body>
+</html>

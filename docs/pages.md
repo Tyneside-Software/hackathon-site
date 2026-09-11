@@ -9,6 +9,7 @@
 | `/todo.html` | generated | Full to-do list |
 | `/done.html` | generated | Done archive |
 | `/api-test.html` | `api-test.html` | Alpine `GET /test_field` |
+| `/account.html` | `account.html` | Register / login / `GET /users/me` |
 | `/docs/` | `docs/index.html` | This wiki |
 | `/onboarding.html` | `onboarding.html` | Clone / run / git |
 | `/lewis.html` | `lewis.html` | Lewis’s night log |
