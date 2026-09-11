@@ -355,27 +355,16 @@
       const data = await res.json();
       if (selectedDeviceId !== deviceId) return;
       const raw = data.pings || [];
-      historyPings = raw
-        .filter((p) => typeof p.lat === "number" && typeof p.lng === "number")
-        .slice()
-        .sort((a, b) => String(a.recorded_at || "").localeCompare(String(b.recorded_at || "")));
+      historyPings = uniquePings(raw);
       renderPingList();
-      const pathPoints = uniquePings(historyPings);
       if (drawerStatusEl) {
         if (!historyPings.length) drawerStatusEl.textContent = "No pings in LocationPing for this device.";
-        else if (pathPoints.length < historyPings.length)
-          drawerStatusEl.textContent =
-            historyPings.length +
-            " ping" +
-            (historyPings.length === 1 ? "" : "s") +
-            " · " +
-            pathPoints.length +
-            " unique place" +
-            (pathPoints.length === 1 ? "" : "s") +
-            " on the map.";
         else
           drawerStatusEl.textContent =
-            historyPings.length + " ping" + (historyPings.length === 1 ? "" : "s") + ".";
+            historyPings.length +
+            " location" +
+            (historyPings.length === 1 ? "" : "s") +
+            " (same-place updates hidden).";
       }
       setHistoryButton();
       if (historyOnMap) plotHistoryOnMap(false);
