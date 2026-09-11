@@ -36,7 +36,7 @@
     <h1 style="font-size:1.7rem;margin-bottom:0.4rem">Done cards</h1>
     <p style="color:var(--muted);max-width:42rem">
       Finished increments live here so the board stays short.
-      <strong>21 cards · 34.25h</strong>.
+      <strong>22 cards · 35h</strong>.
       Click a card for the brief. Filter with the chips, hour cards, or <code>?person=lewis</code>.
     </p>
 
@@ -54,7 +54,7 @@
       <button type="button" class="person" data-person="reeve" aria-pressed="false">
         <div class="who"><span class="emoji">🧭</span> Reeve</div>
         <div class="hrs">11.75 <span>hrs</span></div>
-        <div class="meta">4 done · 1 ready · 1 in progress · 2 to do</div>
+        <div class="meta">5 done · 1 ready · 1 in progress · 1 to do</div>
       </button>
       <button type="button" class="person" data-person="connor" aria-pressed="false">
         <div class="who"><span class="emoji">⚡</span> Connor</div>
@@ -63,8 +63,8 @@
       </button>
       <button type="button" class="person" data-person="michael" aria-pressed="false">
         <div class="who"><span class="emoji">🏗️</span> Michael</div>
-        <div class="hrs">19.25 <span>hrs</span></div>
-        <div class="meta">6 done · 1 in progress · 1 to do</div>
+        <div class="hrs">19.75 <span>hrs</span></div>
+        <div class="meta">6 done · 1 ready · 2 to do</div>
       </button>
       <button type="button" class="person" data-person="lewis" aria-pressed="false">
         <div class="who"><span class="emoji">🌱</span> Lewis</div>
@@ -79,6 +79,27 @@
     </div>
 
     <div class="card-archive" id="done-archive">
+          <a class="card" id="card-17" href="#t-17" data-person="reeve" data-hours="0.75">
+            <div class="top"><span class="id">17</span><span class="emoji">🧭</span></div>
+            <div class="title">Reeve: GitHub edit → run → push (API repo)</div>
+            <span class="tag tag-ok">API repo loop</span>
+            <div class="bot"><span>0.75h</span><span>Reeve</span></div>
+            <template class="card-brief">
+              <p>Prove the org-repo loop on <strong>hackathon-api</strong>. Tiny change, still serves <code>/health</code>, then push to <code>origin/main</code>.</p>
+                              <h3>Done when</h3>
+                              <ul>
+                                <li>Commit is visible on <a href="https://github.com/Tyneside-Software/hackathon-api">Tyneside-Software/hackathon-api</a>.</li>
+                                <li><code>/health</code> still works after the change.</li>
+                              </ul>
+                              <h3>How</h3>
+                              <ol>
+                                <li>Pull latest, edit something harmless (comment, README, label).</li>
+                                <li>Hit <code>/health</code> again.</li>
+                                <li><code>git add</code> · <code>git commit</code> · <code>git push origin main</code>.</li>
+                              </ol>
+                              <div class="brief-actions"><a class="btn btn-ghost" href="onboarding.html#git">Git steps</a></div>
+            </template>
+          </a>
           <a class="card" id="card-31" href="#t-31" data-person="noah" data-hours="12">
             <div class="top"><span class="id">31</span><span class="emoji">🔧</span></div>
             <div class="title">Noah: API talks to Firestore</div>

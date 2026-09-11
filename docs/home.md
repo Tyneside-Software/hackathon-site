@@ -6,19 +6,21 @@ If you do not know how the site is wired, start with **[Architecture](#architect
 
 **Live:** https://hackathon.tyneside.software  
 **Site:** [Tyneside-Software/hackathon-site](https://github.com/Tyneside-Software/hackathon-site)  
-**API:** [Tyneside-Software/hackathon-api](https://github.com/Tyneside-Software/hackathon-api)
+**API:** [Tyneside-Software/hackathon-api](https://github.com/Tyneside-Software/hackathon-api)  
+**Android:** [Tyneside-Software/hackathon-android](https://github.com/Tyneside-Software/hackathon-android)
 
 ## Go here first
 
 | If you need… | Open |
 |--------------|------|
 | Been away — current picture | [Current progress](../progress.html) |
-| How the two repos fit | [Architecture](#architecture) |
+| How the three repos fit | [Architecture](#architecture) |
 | Clone, run, git (human) | [Onboarding](../onboarding.html) · [Run locally](#local) |
 | Libraries on the site | [Site stack](#stack) |
 | New JavaScript | [Alpine.js](#javascript) |
 | Move a kanban card | [Kanban board](#board) |
 | Call the API | [API](#api) · [Alpine test](../api-test.html) |
+| Android tracker | [Android](#android) |
 | Add a wiki page | [Add a wiki page](#adding) |
 | Connor + Grok | [Connor’s area](#connor) · [For Grok](#grok) |
 
@@ -31,4 +33,4 @@ If you do not know how the site is wired, start with **[Architecture](#architect
 
 ## Repos in one line
 
-The **site** is static HTML on GitHub Pages. The **API** is FastAPI on Cloud Run. They meet only when the browser `fetch`es `window.HACKATHON_API`. [Architecture](#architecture) has the diagram.
+The **site** is static HTML on GitHub Pages. The **API** is FastAPI on Cloud Run. The **phone** is a one-switch Android app. They meet only over HTTP. [Architecture](#architecture) has the diagram. [Android tracker](#android) is the phone repo.

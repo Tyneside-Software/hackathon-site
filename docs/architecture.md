@@ -1,6 +1,6 @@
 # How this project is put together
 
-Two GitHub repos, two hosts, one product. The **site** is static files. The **API** is a small FastAPI process. They only meet in the browser, when a page `fetch`es `window.HACKATHON_API`.
+Three GitHub repos, two hosts, one product. The **site** is static files. The **API** is a small FastAPI process. The **phone** is a one-switch Android app. Site and phone only meet the API over HTTP.
 
 ```
   Browser
@@ -17,11 +17,11 @@ Two GitHub repos, two hosts, one product. The **site** is static files. The **AP
      └─ POST /v1/locations  ← same Cloud Run
 ```
 
-Three GitHub repos, two hosts, one product. The **site** is static files. The **API** is a small FastAPI process. The **phone** is a one-switch Android app. Site and phone only meet the API over HTTP.
-
 Locally the site is `python -m http.server 5500`, the API is `uvicorn` on `:8080`. `.\start.ps1` starts both. The phone is Android Studio / a debug APK.
 
-## The two repos
+**11 September 2026:** the Pixel 6a emulator posted `POST /v1/locations` to live Cloud Run and got HTTP 200 `stored=datastore` (device `android-c55e59830b71ba38`). Card 32 is ready to demo. A physical phone is card 35.
+
+## The three repos
 
 Clone them as **siblings**. `start.ps1` finds the API as `../hackathon-api`. The Android repo sits beside them as `hackathon-android`.
 

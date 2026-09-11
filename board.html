@@ -57,7 +57,7 @@
     <p class="filter-status" id="filter-status">Showing everyone.</p>
 
     <div class="board-banner">
-      <div>📋 Cloud Run <strong>builds again</strong> (Python 3.13 buildpacks). API talks to <strong>Firestore</strong>. Map is ready to demo. Next product slices: job list, demo seed, localStorage, persist routes.</div>
+      <div>📋 Cloud Run <strong>0.1.4</strong>. Firestore is done. Emulator tracker POSTed GPS (card 32 ready). Reeve stores pings (33). Noah draws phones (34). Next on the map: job list, demo seed, localStorage.</div>
       <div class="btns">
         <a class="btn btn-fill" href="app/">Map app</a>
         <a class="btn btn-ghost" href="progress.html">Progress</a>
@@ -71,7 +71,7 @@
       <button type="button" class="person" data-person="reeve" aria-pressed="false">
         <div class="who"><span class="emoji">🧭</span> Reeve</div>
         <div class="hrs">11.75 <span>hrs</span></div>
-        <div class="meta">4 done · 1 ready · 1 in progress · 2 to do</div>
+        <div class="meta">5 done · 1 ready · 1 in progress · 1 to do</div>
       </button>
       <button type="button" class="person" data-person="connor" aria-pressed="false">
         <div class="who"><span class="emoji">⚡</span> Connor</div>
@@ -80,8 +80,8 @@
       </button>
       <button type="button" class="person" data-person="michael" aria-pressed="false">
         <div class="who"><span class="emoji">🏗️</span> Michael</div>
-        <div class="hrs">19.25 <span>hrs</span></div>
-        <div class="meta">6 done · 1 in progress · 1 to do</div>
+        <div class="hrs">19.75 <span>hrs</span></div>
+        <div class="meta">6 done · 1 ready · 2 to do</div>
       </button>
       <button type="button" class="person" data-person="lewis" aria-pressed="false">
         <div class="who"><span class="emoji">🌱</span> Lewis</div>
@@ -104,14 +104,17 @@
 
 
 
+
+
+
     <!-- BOARD:KANBAN -->
     <div class="kanban-scroll">
       <div class="kanban">
 
         <div class="col todo">
-          <div class="head"><span class="col-name">To do</span><span class="count" id="todo-col-count">7 · 13.25h</span></div>
+          <div class="head"><span class="col-name">To do</span><span class="count" id="todo-col-count">7 · 13h</span></div>
           <div class="stack">
-            <script type="application/json" id="todo-cards-index">[{"id":"13","person":"lewis","hours":1},{"id":"17","person":"reeve","hours":0.75},{"id":"06","person":"lewis","hours":2},{"id":"07","person":"connor","hours":2},{"id":"08","person":"reeve","hours":1.5},{"id":"09","person":"lewis","hours":2},{"id":"11","person":"michael","hours":4}]</script>
+            <script type="application/json" id="todo-cards-index">[{"id":"13","person":"lewis","hours":1},{"id":"06","person":"lewis","hours":2},{"id":"07","person":"connor","hours":2},{"id":"08","person":"reeve","hours":1.5},{"id":"09","person":"lewis","hours":2},{"id":"11","person":"michael","hours":4},{"id":"35","person":"michael","hours":0.5}]</script>
             <p class="empty-col is-hidden" data-all="Nothing here."></p>
             <a class="card" id="card-13" href="#t-13" data-person="lewis" data-hours="1">
               <div class="top"><span class="id">13</span><span class="emoji">🌱</span></div>
@@ -132,27 +135,6 @@
                                   <li><code>uvicorn app.main:app --reload --port 8080</code> (or just <code>.\start.ps1</code> from the site folder).</li>
                                 </ol>
                                 <div class="brief-actions"><a class="btn btn-ghost" href="onboarding.html">Onboarding steps</a></div>
-              </template>
-            </a>
-            <a class="card" id="card-17" href="#t-17" data-person="reeve" data-hours="0.75">
-              <div class="top"><span class="id">17</span><span class="emoji">🧭</span></div>
-              <div class="title">Reeve: GitHub edit → run → push (API repo)</div>
-              <span class="tag tag-wait">Tyneside-Software/hackathon-api</span>
-              <div class="bot"><span>0.75h</span><span>Reeve</span></div>
-              <template class="card-brief">
-                <p>Prove the org-repo loop on <strong>hackathon-api</strong>. Tiny change, still serves <code>/health</code>, then push to <code>origin/main</code>.</p>
-                                <h3>Done when</h3>
-                                <ul>
-                                  <li>Commit is visible on <a href="https://github.com/Tyneside-Software/hackathon-api">Tyneside-Software/hackathon-api</a>.</li>
-                                  <li><code>/health</code> still works after the change.</li>
-                                </ul>
-                                <h3>How</h3>
-                                <ol>
-                                  <li>Pull latest, edit something harmless (comment, README, label).</li>
-                                  <li>Hit <code>/health</code> again.</li>
-                                  <li><code>git add</code> · <code>git commit</code> · <code>git push origin main</code>.</li>
-                                </ol>
-                                <div class="brief-actions"><a class="btn btn-ghost" href="onboarding.html#git">Git steps</a></div>
               </template>
             </a>
             <a class="card" id="card-06" href="#t-06" data-person="lewis" data-hours="2">
@@ -197,6 +179,27 @@
                                 <div class="brief-actions"><a class="btn btn-ghost" href="app/">Open map</a></div>
               </template>
             </a>
+            <a class="card" id="card-08" href="#t-08" data-person="reeve" data-hours="1.5">
+              <div class="top"><span class="id">08</span><span class="emoji">🧭</span></div>
+              <div class="title">Demo seed: 5 Tyneside waypoints + named run</div>
+              <div class="bot"><span>1.5h</span><span>Reeve</span></div>
+              <template class="card-brief">
+                <p>One-click demo so nobody has to click the map five times during a show-and-tell. Load a named run with five Tyneside waypoints already placed.</p>
+                                <h3>Done when</h3>
+                                <ul>
+                                  <li>A button (e.g. “Load Tyneside demo”) drops five named stops and a run name.</li>
+                                  <li>Calculate route works immediately on that seed.</li>
+                                  <li>Clear still returns to an empty map.</li>
+                                </ul>
+                                <h3>How</h3>
+                                <ol>
+                                  <li>Pick five real-ish spots around Newcastle / Tyneside (not a straight line down one street).</li>
+                                  <li>Give the run a name the operator can see in the sidebar.</li>
+                                  <li>Keep the manual click-to-add path working.</li>
+                                </ol>
+                                <div class="brief-actions"><a class="btn btn-ghost" href="app/">Open map</a></div>
+              </template>
+            </a>
             <a class="card todo-index" id="todo-index" href="todo.html">
               <div class="todo-index-count" id="todo-index-count">7</div>
               <div class="title">All to-do cards</div>
@@ -206,25 +209,9 @@
         </div>
 
         <div class="col doing">
-          <div class="head"><span class="col-name">In progress</span><span class="count">3 · 10h</span></div>
+          <div class="head"><span class="col-name">In progress</span><span class="count">2 · 6h</span></div>
           <div class="stack">
             <p class="empty-col is-hidden" data-all="Empty on purpose. Pull a Ready card and ship it."></p>
-            <a class="card" id="card-32" href="#t-32" data-person="michael" data-hours="4">
-              <div class="top"><span class="id">32</span><span class="emoji">🏗️</span></div>
-              <div class="title">Android app: tracking toggle, GPS to the API</div>
-              <span class="tag tag-ok">hackathon-android</span>
-              <div class="bot"><span>4h</span><span>Michael</span></div>
-              <template class="card-brief">
-                <p>Michael owns <a href="https://github.com/Tyneside-Software/hackathon-android">hackathon-android</a>. One switch: tracking on or off. While on, the phone reads GPS and POSTs to the API. Device id is Android ID (serial/IMEI are locked on modern Android).</p>
-                <h3>Done when</h3>
-                <ul>
-                  <li>A debug APK installs on a phone.</li>
-                  <li>Toggle on starts a foreground location service; toggle off stops it.</li>
-                  <li>The phone POSTs <code>/v1/locations</code> with device id, lat, lng.</li>
-                </ul>
-                <p>Reeve owns storing that ping. Noah owns drawing it on the map.</p>
-              </template>
-            </a>
             <a class="card" id="card-33" href="#t-33" data-person="reeve" data-hours="3">
               <div class="top"><span class="id">33</span><span class="emoji">🧭</span></div>
               <div class="title">API stores GPS pings in the database</div>
@@ -238,7 +225,13 @@
                   <li><code>GET /v1/devices</code> (or equivalent) returns last-known phones for the map.</li>
                   <li>History can live in a ping kind; last-known is enough for v0.</li>
                 </ul>
-                <p>Repo: <a href="https://github.com/Tyneside-Software/hackathon-api">hackathon-api</a>. Scaffold routes may already exist — make the database write real.</p>
+                <h3>What’s live (11 September 2026)</h3>
+                <ul>
+                  <li>Live Cloud Run <strong>0.1.4</strong> accepted the emulator POST: HTTP 200 <code>stored=datastore</code>.</li>
+                  <li><code>GET /v1/devices</code> returns device <code>android-c55e59830b71ba38</code> at the emulator last-known fix.</li>
+                  <li>Kinds: <code>Device</code> (last-known) and <code>LocationPing</code> (history). In-memory fallback if Datastore is down; <code>/health</code> stays cheap.</li>
+                </ul>
+                <p>Repo: <a href="https://github.com/Tyneside-Software/hackathon-api">hackathon-api</a>. Scaffold is on <code>main</code> — this card stays Reeve’s until he is happy the write is the one he wants.</p>
               </template>
             </a>
             <a class="card" id="card-34" href="#t-34" data-person="noah" data-hours="3">
@@ -254,14 +247,19 @@
                   <li>The marker updates when the API has a newer fix (poll is fine).</li>
                   <li>Waypoint routing still works if the API is quiet.</li>
                 </ul>
-                <p>Repo: <a href="https://github.com/Tyneside-Software/hackathon-site">hackathon-site</a>. <code>GET /v1/devices</code> is the read Reeve is storing.</p>
+                <h3>What’s live (11 September 2026)</h3>
+                <ul>
+                  <li><code>app/map.js</code> already polls <code>GET /v1/devices</code> every 8s and draws amber circle markers plus a Phones list.</li>
+                  <li>One live device is in Datastore from the emulator test. If the map is quiet, check the AVD location (default is Mountain View) and that Pages has the latest <code>map.js</code>.</li>
+                </ul>
+                <p>Repo: <a href="https://github.com/Tyneside-Software/hackathon-site">hackathon-site</a>. Scaffold is on <code>main</code> — this card stays Noah’s to finish and demo.</p>
               </template>
             </a>
           </div>
         </div>
 
         <div class="col ready">
-          <div class="head"><span class="col-name">Ready to demo</span><span class="count">2 · 6h</span></div>
+          <div class="head"><span class="col-name">Ready to demo</span><span class="count">3 · 10h</span></div>
           <div class="stack">
             <p class="empty-col is-hidden" data-all="Nothing here."></p>
             <a class="card" id="card-04" href="#t-04" data-person="reeve" data-hours="3">
@@ -305,17 +303,41 @@
                                 <div class="brief-actions"><a class="btn btn-fill" href="app/">Open map →</a></div>
               </template>
             </a>
+            <a class="card" id="card-32" href="#t-32" data-person="michael" data-hours="4">
+              <div class="top"><span class="id">32</span><span class="emoji">🏗️</span></div>
+              <div class="title">Android app: tracking toggle, GPS to the API</div>
+              <span class="tag tag-ok">emulator · POST 200</span>
+              <div class="bot"><span>4h</span><span>Michael</span></div>
+              <template class="card-brief">
+                <p>Michael owns <a href="https://github.com/Tyneside-Software/hackathon-android">hackathon-android</a>. One switch: tracking on or off. While on, the phone reads GPS and POSTs to the API. Device id is Android ID (serial/IMEI are locked on modern Android).</p>
+                <h3>Done when</h3>
+                <ul>
+                  <li>A debug APK installs on a phone.</li>
+                  <li>Toggle on starts a foreground location service; toggle off stops it.</li>
+                  <li>The phone POSTs <code>/v1/locations</code> with device id, lat, lng.</li>
+                </ul>
+                <h3>What’s live (11 September 2026)</h3>
+                <ul>
+                  <li>Debug APK installs and runs on the Pixel 6a emulator (<code>emulator-5554</code>).</li>
+                  <li>Toggle / <code>am start --ez start_tracking true</code> starts the foreground location service.</li>
+                  <li>POST <code>/v1/locations</code> returned HTTP 200 <code>stored=datastore</code> for device <code>android-c55e59830b71ba38</code>.</li>
+                  <li>One log tag: <code>adb logcat -s TynesideTracker</code>.</li>
+                  <li>Emulator last-known location is Google HQ (Mountain View), not Tyneside. Extended controls → Location, or <code>adb emu geo fix LNG LAT</code>.</li>
+                </ul>
+                <p>Physical phone is a follow-on (card 35). Reeve owns storing the ping. Noah owns drawing it on the map.</p>
+              </template>
+            </a>
           </div>
         </div>
 
         <div class="col done">
-          <div class="head"><span class="col-name">Done</span><span class="count" id="done-col-count">21 · 34.25h</span></div>
+          <div class="head"><span class="col-name">Done</span><span class="count" id="done-col-count">22 · 35h</span></div>
           <div class="stack">
-            <script type="application/json" id="done-cards-index">[{"id":"31","person":"noah","hours":12},{"id":"28","person":"michael","hours":1},{"id":"29","person":"michael","hours":2},{"id":"30","person":"michael","hours":1.5},{"id":"14","person":"lewis","hours":0.75},{"id":"18","person":"connor","hours":0.5},{"id":"19","person":"connor","hours":0.75},{"id":"20","person":"michael","hours":0.75},{"id":"21","person":"reeve","hours":1},{"id":"27","person":"connor","hours":0.5},{"id":"26","person":"michael","hours":2},{"id":"10","person":"michael","hours":4},{"id":"12","person":"lewis","hours":0.5},{"id":"15","person":"reeve","hours":0.5},{"id":"16","person":"reeve","hours":1},{"id":"01","person":"lewis","hours":0.5},{"id":"02","person":"reeve","hours":1},{"id":"03","person":"lewis","hours":2},{"id":"25","person":"noah","hours":0.5},{"id":"22","person":"noah","hours":0.5},{"id":"23","person":"noah","hours":1}]</script>
+            <script type="application/json" id="done-cards-index">[{"id":"17","person":"reeve","hours":0.75},{"id":"31","person":"noah","hours":12},{"id":"28","person":"michael","hours":1},{"id":"29","person":"michael","hours":2},{"id":"30","person":"michael","hours":1.5},{"id":"14","person":"lewis","hours":0.75},{"id":"18","person":"connor","hours":0.5},{"id":"19","person":"connor","hours":0.75},{"id":"20","person":"michael","hours":0.75},{"id":"21","person":"reeve","hours":1},{"id":"27","person":"connor","hours":0.5},{"id":"26","person":"michael","hours":2},{"id":"10","person":"michael","hours":4},{"id":"12","person":"lewis","hours":0.5},{"id":"15","person":"reeve","hours":0.5},{"id":"16","person":"reeve","hours":1},{"id":"01","person":"lewis","hours":0.5},{"id":"02","person":"reeve","hours":1},{"id":"03","person":"lewis","hours":2},{"id":"25","person":"noah","hours":0.5},{"id":"22","person":"noah","hours":0.5},{"id":"23","person":"noah","hours":1}]</script>
             <a class="card done-index" id="done-index" href="done.html">
-              <div class="done-index-count" id="done-index-count">21</div>
+              <div class="done-index-count" id="done-index-count">22</div>
               <div class="title">All done cards</div>
-              <p class="done-index-meta" id="done-index-meta">21 cards · 34.25h · archive →</p>
+              <p class="done-index-meta" id="done-index-meta">22 cards · 35h · archive →</p>
             </a>
           </div>
         </div>
@@ -323,6 +345,9 @@
       </div>
     </div>
     <!-- /BOARD:KANBAN -->
+
+
+
 
 
 
@@ -344,7 +369,7 @@
         <tr data-person="reeve">
           <td>🧭</td>
           <td><strong>Reeve</strong></td>
-          <td>API stores GPS pings in the database (3h, in progress) · Reeve: start script for front end and back end together (1h, done) · Reeve: get the front end running locally (0.5h, done) · Reeve: get the back end running locally (1h, done) · Reeve: GitHub edit → run → push (API repo) (0.75h) · Demo seed: 5 Tyneside waypoints + named run (1.5h) · Map with clickable / draggable waypoints (3h, ready) · Run the API locally and hit /health (1h, done)</td>
+          <td>Reeve: GitHub edit → run → push (API repo) (0.75h, done) · API stores GPS pings in the database (3h, in progress) · Reeve: start script for front end and back end together (1h, done) · Reeve: get the front end running locally (0.5h, done) · Reeve: get the back end running locally (1h, done) · Demo seed: 5 Tyneside waypoints + named run (1.5h) · Map with clickable / draggable waypoints (3h, ready) · Run the API locally and hit /health (1h, done)</td>
           <td><strong>11.75h</strong></td>
         </tr>
         <tr data-person="connor">
@@ -356,8 +381,8 @@
         <tr data-person="michael">
           <td>🏗️</td>
           <td><strong>Michael</strong></td>
-          <td>Android app: tracking toggle, GPS to the API (4h, in progress) · Alpine.js test page calls GET /test_field (1h, done) · Docs wiki (Docs in the nav) (2h, done) · Cloud Run GitHub builds (buildpacks, Python 3.13) (1.5h, done) · Michael: GitHub edit → run → push (both repos) (0.75h, done) · Site + API deploy on push to main (2h, done) · Cloud Run API live + CORS for Pages (4h, done) · Persist routes on the API (replace localStorage) (4h)</td>
-          <td><strong>19.25h</strong></td>
+          <td>Alpine.js test page calls GET /test_field (1h, done) · Docs wiki (Docs in the nav) (2h, done) · Cloud Run GitHub builds (buildpacks, Python 3.13) (1.5h, done) · Michael: GitHub edit → run → push (both repos) (0.75h, done) · Site + API deploy on push to main (2h, done) · Cloud Run API live + CORS for Pages (4h, done) · Persist routes on the API (replace localStorage) (4h) · Android app: tracking toggle, GPS to the API (4h, ready) · Sideload the tracker APK on a physical phone (0.5h)</td>
+          <td><strong>19.75h</strong></td>
         </tr>
         <tr data-person="lewis">
           <td>🌱</td>
@@ -375,6 +400,9 @@
     </table>
     </div>
     <!-- /BOARD:WHO -->
+
+
+
 
 
 

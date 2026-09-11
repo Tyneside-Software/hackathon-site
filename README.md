@@ -1,6 +1,6 @@
 # Tyneside Logistics — hackathon-site
 
-Static front end for the Tyneside Logistics hackathon: dispatch → field work. Amber/navy chrome, a map with waypoints, and a kanban board.
+Static front end for the Tyneside Logistics hackathon: dispatch → field work. Amber/navy chrome, a map with waypoints and live phones, and a kanban board.
 
 **Live:** https://hackathon.tyneside.software  
 **Been away?** [Current progress](https://hackathon.tyneside.software/progress.html)  
@@ -17,7 +17,8 @@ Push to `main` deploys this site (GitHub Pages) and the API (Cloud Run). Local s
 | Doc | Contents |
 |-----|----------|
 | [docs/](docs/) | Wiki home |
-| [docs/#architecture](docs/#architecture) | **How the two repos fit together** |
+| [docs/#architecture](docs/#architecture) | **How the three repos fit together** |
+| [docs/#android](docs/#android) | Android tracker (emulator test, logcat) |
 | [docs/#grok](docs/#grok) | **For Grok** — briefing Connor (or anyone) points an AI at |
 | [docs/#connor](docs/#connor) | Connor’s wiki shelf |
 | [docs/STACK.md](docs/STACK.md) | HTML/CSS, Alpine.js, Leaflet, OSRM, Pages, board script |
@@ -66,7 +67,7 @@ Do **not** open HTML as `file://` — the browser will block the API.
 |-----|------|
 | `/` | Desktop home |
 | `/progress.html` | Catch-up snapshot if you have been away |
-| `/app/` | Map, waypoints, route |
+| `/app/` | Map, waypoints, route, live phones |
 | `/board.html` | Kanban (short to-do + done summary) |
 | `/todo.html` | Full to-do list |
 | `/done.html` | Done archive |

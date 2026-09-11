@@ -4,7 +4,7 @@
 |-----|------|------|
 | `/` | `index.html` | Desktop home |
 | `/progress.html` | `progress.html` | Catch-up snapshot (been away?) |
-| `/app/` | `app/index.html` | Map, waypoints, OSRM (vanilla `map.js`) |
+| `/app/` | `app/index.html` | Map, waypoints, OSRM, live phones (vanilla `map.js`) |
 | `/board.html` | `board.html` + `board.js` | Kanban preview |
 | `/todo.html` | generated | Full to-do list |
 | `/done.html` | generated | Done archive |

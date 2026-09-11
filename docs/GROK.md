@@ -41,11 +41,12 @@ https://github.com/Tyneside-Software/hackathon-site/blob/main/docs/GROK.md
 
 ## Repos and layout
 
-Two **sibling** folders:
+Three **sibling** folders:
 
 ```
-…/hackathon-site     ← this wiki, static Pages site
-…/hackathon-api      ← FastAPI, Cloud Run
+…/hackathon-site       ← this wiki, static Pages site
+…/hackathon-api        ← FastAPI, Cloud Run
+…/hackathon-android    ← Kotlin tracker APK
 ```
 
 | | Site | API | Android |
@@ -107,11 +108,16 @@ FastAPI + Uvicorn on Cloud Run `europe-west2`. GitHub deploys with **buildpacks*
 | GET | `/health` |
 | GET | `/test_field` → `{ ok, key, value }` |
 | GET | `/docs` Swagger |
-| POST | `/create_field` (Datastore; optional) |
+| POST | `/create_field` (Datastore) |
+| GET | `/view_field/{key}` |
+| POST | `/v1/locations` (phone GPS) |
+| GET | `/v1/devices` (map poll) |
 
 CORS must allow `https://hackathon.tyneside.software` and `http://127.0.0.1:5500`. If Cloud Run has `CORS_ORIGINS` set, code defaults are ignored.
 
-If live `/test_field` is 404, the Cloud Run revision is behind `main`. Check `/health` for `version` (current code is **0.1.3**). See [API](#api).
+If live `/test_field` is 404, the Cloud Run revision is behind `main`. Check `/health` for `version` (current code is **0.1.4**). See [API](#api).
+
+Android tracker: [Android](#android). Emulator test on 11 September 2026 posted GPS and got HTTP 200 `stored=datastore`.
 
 ---
 

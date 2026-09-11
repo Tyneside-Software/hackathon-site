@@ -22,7 +22,7 @@
           "id": "architecture",
           "title": "Architecture",
           "file": "architecture.md",
-          "summary": "Two repos, two hosts, how a request flows."
+          "summary": "Three repos, two hosts, how a request flows."
         },
         {
           "id": "local",
@@ -76,7 +76,13 @@
           "id": "api",
           "title": "API stack and routes",
           "file": "api.md",
-          "summary": "FastAPI, CORS, Cloud Run, GET /test_field."
+          "summary": "FastAPI, CORS, Cloud Run, GPS and field routes."
+        },
+        {
+          "id": "android",
+          "title": "Android tracker",
+          "file": "android.md",
+          "summary": "One-switch GPS app, emulator test, logcat."
         },
         {
           "id": "api-test",

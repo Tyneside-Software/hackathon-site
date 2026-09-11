@@ -36,7 +36,7 @@
     <h1 style="font-size:1.7rem;margin-bottom:0.4rem">To-do cards</h1>
     <p style="color:var(--muted);max-width:42rem">
       The board only shows the top few. Everything still open lives here.
-      <strong>7 cards · 13.25h</strong>.
+      <strong>7 cards · 13h</strong>.
       Click a card for the brief. Filter with the chips, hour cards, or <code>?person=lewis</code>.
     </p>
 
@@ -54,7 +54,7 @@
       <button type="button" class="person" data-person="reeve" aria-pressed="false">
         <div class="who"><span class="emoji">🧭</span> Reeve</div>
         <div class="hrs">11.75 <span>hrs</span></div>
-        <div class="meta">4 done · 1 ready · 1 in progress · 2 to do</div>
+        <div class="meta">5 done · 1 ready · 1 in progress · 1 to do</div>
       </button>
       <button type="button" class="person" data-person="connor" aria-pressed="false">
         <div class="who"><span class="emoji">⚡</span> Connor</div>
@@ -63,8 +63,8 @@
       </button>
       <button type="button" class="person" data-person="michael" aria-pressed="false">
         <div class="who"><span class="emoji">🏗️</span> Michael</div>
-        <div class="hrs">19.25 <span>hrs</span></div>
-        <div class="meta">6 done · 1 in progress · 1 to do</div>
+        <div class="hrs">19.75 <span>hrs</span></div>
+        <div class="meta">6 done · 1 ready · 2 to do</div>
       </button>
       <button type="button" class="person" data-person="lewis" aria-pressed="false">
         <div class="who"><span class="emoji">🌱</span> Lewis</div>
@@ -98,27 +98,6 @@
                                 <li><code>uvicorn app.main:app --reload --port 8080</code> (or just <code>.\start.ps1</code> from the site folder).</li>
                               </ol>
                               <div class="brief-actions"><a class="btn btn-ghost" href="onboarding.html">Onboarding steps</a></div>
-            </template>
-          </a>
-          <a class="card" id="card-17" href="#t-17" data-person="reeve" data-hours="0.75">
-            <div class="top"><span class="id">17</span><span class="emoji">🧭</span></div>
-            <div class="title">Reeve: GitHub edit → run → push (API repo)</div>
-            <span class="tag tag-wait">Tyneside-Software/hackathon-api</span>
-            <div class="bot"><span>0.75h</span><span>Reeve</span></div>
-            <template class="card-brief">
-              <p>Prove the org-repo loop on <strong>hackathon-api</strong>. Tiny change, still serves <code>/health</code>, then push to <code>origin/main</code>.</p>
-                              <h3>Done when</h3>
-                              <ul>
-                                <li>Commit is visible on <a href="https://github.com/Tyneside-Software/hackathon-api">Tyneside-Software/hackathon-api</a>.</li>
-                                <li><code>/health</code> still works after the change.</li>
-                              </ul>
-                              <h3>How</h3>
-                              <ol>
-                                <li>Pull latest, edit something harmless (comment, README, label).</li>
-                                <li>Hit <code>/health</code> again.</li>
-                                <li><code>git add</code> · <code>git commit</code> · <code>git push origin main</code>.</li>
-                              </ol>
-                              <div class="brief-actions"><a class="btn btn-ghost" href="onboarding.html#git">Git steps</a></div>
             </template>
           </a>
           <a class="card" id="card-06" href="#t-06" data-person="lewis" data-hours="2">
@@ -226,6 +205,15 @@
                 <li>Prefer Firestore once Noah’s write/read path works; in-memory only if the card says so.</li>
                 <li>Wire the map save/load to <code>window.HACKATHON_API</code>.</li>
               </ol>
+            </template>
+          </a>
+          <a class="card" id="card-35" href="#t-35" data-person="michael" data-hours="0.5">
+            <div class="top"><span class="id">35</span><span class="emoji">🏗️</span></div>
+            <div class="title">Sideload the tracker APK on a physical phone</div>
+            <span class="tag tag-wait">physical phone</span>
+            <div class="bot"><span>0.5h</span><span>Michael</span></div>
+            <template class="card-brief">
+              <p>The tracker is proven on the Pixel 6a emulator (card 32). This card is the same APK on a real phone: USB debugging or sideload <code>app/build/outputs/apk/debug/app-debug.apk</code>, grant location, flip the switch, confirm a new device id on <code>GET /v1/devices</code> and on the map.</p><h3>Done when</h3><ul><li>The debug APK is installed on a physical Android phone.</li><li>Tracking on posts GPS to live Cloud Run.</li><li>The map shows that phone (not only the emulator).</li></ul>
             </template>
           </a>
     </div>

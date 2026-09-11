@@ -28,14 +28,14 @@
   ],
   "cards": [
     {
-      "id": "32",
-      "person": "michael",
-      "hours": 4,
-      "emoji": "🏗️",
-      "title": "Android app: tracking toggle, GPS to the API",
-      "column": "doing",
-      "brief": "<p>Michael owns <a href=\"https://github.com/Tyneside-Software/hackathon-android\">hackathon-android</a>. One switch: tracking on or off. While on, the phone reads GPS and POSTs to the API. Device id is Android ID (serial/IMEI are locked on modern Android).</p>\n<h3>Done when</h3>\n<ul>\n  <li>A debug APK installs on a phone.</li>\n  <li>Toggle on starts a foreground location service; toggle off stops it.</li>\n  <li>The phone POSTs <code>/v1/locations</code> with device id, lat, lng.</li>\n</ul>\n<p>Reeve owns storing that ping. Noah owns drawing it on the map.</p>",
-      "tag": "hackathon-android",
+      "id": "17",
+      "person": "reeve",
+      "hours": 0.75,
+      "emoji": "🧭",
+      "title": "Reeve: GitHub edit → run → push (API repo)",
+      "column": "done",
+      "brief": "<p>Prove the org-repo loop on <strong>hackathon-api</strong>. Tiny change, still serves <code>/health</code>, then push to <code>origin/main</code>.</p>\n                <h3>Done when</h3>\n                <ul>\n                  <li>Commit is visible on <a href=\"https://github.com/Tyneside-Software/hackathon-api\">Tyneside-Software/hackathon-api</a>.</li>\n                  <li><code>/health</code> still works after the change.</li>\n                </ul>\n                <h3>How</h3>\n                <ol>\n                  <li>Pull latest, edit something harmless (comment, README, label).</li>\n                  <li>Hit <code>/health</code> again.</li>\n                  <li><code>git add</code> · <code>git commit</code> · <code>git push origin main</code>.</li>\n                </ol>\n                <div class=\"brief-actions\"><a class=\"btn btn-ghost\" href=\"onboarding.html#git\">Git steps</a></div>",
+      "tag": "API repo loop",
       "tag_kind": "ok"
     },
     {
@@ -45,7 +45,7 @@
       "emoji": "🧭",
       "title": "API stores GPS pings in the database",
       "column": "doing",
-      "brief": "<p>Reeve owns the API side of live phones. Accept <code>POST /v1/locations</code> (device id, lat, lng) and persist last-known position so the map can read it back. Use Datastore/Firestore the same way as the rest of the API. <code>/health</code> stays cheap if the database is down.</p>\n<h3>Done when</h3>\n<ul>\n  <li>A POST from the Android app (or curl) writes a device’s last lat/lng.</li>\n  <li><code>GET /v1/devices</code> (or equivalent) returns last-known phones for the map.</li>\n  <li>History can live in a ping kind; last-known is enough for v0.</li>\n</ul>\n<p>Repo: <a href=\"https://github.com/Tyneside-Software/hackathon-api\">hackathon-api</a>. Scaffold routes may already exist — make the database write real.</p>",
+      "brief": "<p>Reeve owns the API side of live phones. Accept <code>POST /v1/locations</code> (device id, lat, lng) and persist last-known position so the map can read it back. Use Datastore/Firestore the same way as the rest of the API. <code>/health</code> stays cheap if the database is down.</p>\n<h3>Done when</h3>\n<ul>\n  <li>A POST from the Android app (or curl) writes a device’s last lat/lng.</li>\n  <li><code>GET /v1/devices</code> (or equivalent) returns last-known phones for the map.</li>\n  <li>History can live in a ping kind; last-known is enough for v0.</li>\n</ul>\n<h3>What’s live (11 September 2026)</h3>\n<ul>\n  <li>Live Cloud Run <strong>0.1.4</strong> accepted the emulator POST: HTTP 200 <code>stored=datastore</code>.</li>\n  <li><code>GET /v1/devices</code> returns device <code>android-c55e59830b71ba38</code> at the emulator last-known fix.</li>\n  <li>Kinds: <code>Device</code> (last-known) and <code>LocationPing</code> (history). In-memory fallback if Datastore is down; <code>/health</code> stays cheap.</li>\n</ul>\n<p>Repo: <a href=\"https://github.com/Tyneside-Software/hackathon-api\">hackathon-api</a>. Scaffold is on <code>main</code> — this card stays Reeve’s until he is happy the write is the one he wants.</p>",
       "tag": "POST /v1/locations",
       "tag_kind": "ok"
     },
@@ -56,7 +56,7 @@
       "emoji": "🔧",
       "title": "Map shows the phone’s current coordinates",
       "column": "doing",
-      "brief": "<p>Noah owns the map UI. Poll the API for last-known devices and draw each phone on <code>/app/</code> so a live location is visible next to the waypoint pins.</p>\n<h3>Done when</h3>\n<ul>\n  <li>The map shows a marker (or equivalent) for each device that has pinged.</li>\n  <li>The marker updates when the API has a newer fix (poll is fine).</li>\n  <li>Waypoint routing still works if the API is quiet.</li>\n</ul>\n<p>Repo: <a href=\"https://github.com/Tyneside-Software/hackathon-site\">hackathon-site</a>. <code>GET /v1/devices</code> is the read Reeve is storing.</p>",
+      "brief": "<p>Noah owns the map UI. Poll the API for last-known devices and draw each phone on <code>/app/</code> so a live location is visible next to the waypoint pins.</p>\n<h3>Done when</h3>\n<ul>\n  <li>The map shows a marker (or equivalent) for each device that has pinged.</li>\n  <li>The marker updates when the API has a newer fix (poll is fine).</li>\n  <li>Waypoint routing still works if the API is quiet.</li>\n</ul>\n<h3>What’s live (11 September 2026)</h3>\n<ul>\n  <li><code>app/map.js</code> already polls <code>GET /v1/devices</code> every 8s and draws amber circle markers plus a Phones list.</li>\n  <li>One live device is in Datastore from the emulator test. If the map is quiet, check the AVD location (default is Mountain View) and that Pages has the latest <code>map.js</code>.</li>\n</ul>\n<p>Repo: <a href=\"https://github.com/Tyneside-Software/hackathon-site\">hackathon-site</a>. Scaffold is on <code>main</code> — this card stays Noah’s to finish and demo.</p>",
       "tag": "map phones",
       "tag_kind": "ok"
     },
@@ -237,17 +237,6 @@
       "tag_kind": "wait"
     },
     {
-      "id": "17",
-      "person": "reeve",
-      "hours": 0.75,
-      "emoji": "🧭",
-      "title": "Reeve: GitHub edit → run → push (API repo)",
-      "column": "todo",
-      "brief": "<p>Prove the org-repo loop on <strong>hackathon-api</strong>. Tiny change, still serves <code>/health</code>, then push to <code>origin/main</code>.</p>\n                <h3>Done when</h3>\n                <ul>\n                  <li>Commit is visible on <a href=\"https://github.com/Tyneside-Software/hackathon-api\">Tyneside-Software/hackathon-api</a>.</li>\n                  <li><code>/health</code> still works after the change.</li>\n                </ul>\n                <h3>How</h3>\n                <ol>\n                  <li>Pull latest, edit something harmless (comment, README, label).</li>\n                  <li>Hit <code>/health</code> again.</li>\n                  <li><code>git add</code> · <code>git commit</code> · <code>git push origin main</code>.</li>\n                </ol>\n                <div class=\"brief-actions\"><a class=\"btn btn-ghost\" href=\"onboarding.html#git\">Git steps</a></div>",
-      "tag": "Tyneside-Software/hackathon-api",
-      "tag_kind": "wait"
-    },
-    {
       "id": "06",
       "person": "lewis",
       "hours": 2,
@@ -381,6 +370,28 @@
       "brief": "<p>Local FastAPI on :8080. Noah already shipped a version field on the API (card 25); this card is the machine setup so he can keep iterating without Cloud Run. Moved to Done.</p>\n                <h3>Done when</h3>\n                <ul>\n                  <li><code>http://127.0.0.1:8080/health</code> returns <code>ok</code> and a <code>version</code>.</li>\n                </ul>\n                <h3>How</h3>\n                <ol>\n                  <li>Clone <a href=\"https://github.com/Tyneside-Software/hackathon-api\">hackathon-api</a> as a sibling of the site.</li>\n                  <li>venv · <code>pip install -r requirements.txt</code> · uvicorn :8080, or <code>.\\start.ps1</code>.</li>\n                </ol>\n                <div class=\"brief-actions\"><a class=\"btn btn-ghost\" href=\"onboarding.html\">Onboarding steps</a></div>",
       "tag": "uvicorn · /health",
       "tag_kind": "ok"
+    },
+    {
+      "id": "32",
+      "person": "michael",
+      "hours": 4,
+      "emoji": "🏗️",
+      "title": "Android app: tracking toggle, GPS to the API",
+      "column": "ready",
+      "brief": "<p>Michael owns <a href=\"https://github.com/Tyneside-Software/hackathon-android\">hackathon-android</a>. One switch: tracking on or off. While on, the phone reads GPS and POSTs to the API. Device id is Android ID (serial/IMEI are locked on modern Android).</p>\n<h3>Done when</h3>\n<ul>\n  <li>A debug APK installs on a phone.</li>\n  <li>Toggle on starts a foreground location service; toggle off stops it.</li>\n  <li>The phone POSTs <code>/v1/locations</code> with device id, lat, lng.</li>\n</ul>\n<h3>What’s live (11 September 2026)</h3>\n<ul>\n  <li>Debug APK installs and runs on the Pixel 6a emulator (<code>emulator-5554</code>).</li>\n  <li>Toggle / <code>am start --ez start_tracking true</code> starts the foreground location service.</li>\n  <li>POST <code>/v1/locations</code> returned HTTP 200 <code>stored=datastore</code> for device <code>android-c55e59830b71ba38</code>.</li>\n  <li>One log tag: <code>adb logcat -s TynesideTracker</code>.</li>\n  <li>Emulator last-known location is Google HQ (Mountain View), not Tyneside. Extended controls → Location, or <code>adb emu geo fix LNG LAT</code>.</li>\n</ul>\n<p>Physical phone is a follow-on (card 35). Reeve owns storing the ping. Noah owns drawing it on the map.</p>",
+      "tag": "emulator · POST 200",
+      "tag_kind": "ok"
+    },
+    {
+      "id": "35",
+      "person": "michael",
+      "hours": 0.5,
+      "emoji": "🏗️",
+      "title": "Sideload the tracker APK on a physical phone",
+      "column": "todo",
+      "brief": "<p>The tracker is proven on the Pixel 6a emulator (card 32). This card is the same APK on a real phone: USB debugging or sideload <code>app/build/outputs/apk/debug/app-debug.apk</code>, grant location, flip the switch, confirm a new device id on <code>GET /v1/devices</code> and on the map.</p><h3>Done when</h3><ul><li>The debug APK is installed on a physical Android phone.</li><li>Tracking on posts GPS to live Cloud Run.</li><li>The map shows that phone (not only the emulator).</li></ul>",
+      "tag": "physical phone",
+      "tag_kind": "wait"
     }
   ]
 }
