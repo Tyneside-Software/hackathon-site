@@ -173,6 +173,29 @@
   const pingListEl = document.getElementById("ping-list");
   const btnHistory = document.getElementById("btn-history");
   const btnDrawerClose = document.getElementById("drawer-close");
+  const btnPhones = document.getElementById("btn-phones");
+  const PHONES_KEY = "hackathon-map-phones";
+
+  function readPhonesPref() {
+    try {
+      const v = localStorage.getItem(PHONES_KEY);
+      if (v === "0") return false;
+      if (v === "1") return true;
+    } catch (err) {
+      /* private mode */
+    }
+    return true;
+  }
+
+  function writePhonesPref(on) {
+    try {
+      localStorage.setItem(PHONES_KEY, on ? "1" : "0");
+    } catch (err) {
+      /* private mode */
+    }
+  }
+
+  let phonesOn = readPhonesPref();
   let selectedDeviceId = null;
   let historyPings = [];
   let historyLayer = null;
@@ -425,6 +448,79 @@
     markSelected();
   }
 
+  function clearPhoneMarkers() {
+    deviceMarkers.forEach((marker) => map.removeLayer(marker));
+    deviceMarkers.clear();
+  }
+
+  function syncPhonesButton() {
+    if (!btnPhones) return;
+    btnPhones.textContent = phonesOn ? "Hide phones" : "Show phones";
+    btnPhones.setAttribute("aria-pressed", phonesOn ? "true" : "false");
+    btnPhones.classList.toggle("is-on", phonesOn);
+    btnPhones.classList.toggle("btn-fill", phonesOn);
+    btnPhones.classList.toggle("btn-ghost", !phonesOn);
+  }
+
+  function paintPhoneMarkers(rows) {
+    if (!phonesOn) {
+      clearPhoneMarkers();
+      return;
+    }
+    const seen = new Set();
+    rows.forEach((d) => {
+      seen.add(d.device_id);
+      const latlng = [d.last_lat, d.last_lng];
+      let marker = deviceMarkers.get(d.device_id);
+      const html =
+        "<strong>" +
+        shortId(d.device_id) +
+        "</strong><br>" +
+        d.last_lat.toFixed(5) +
+        ", " +
+        d.last_lng.toFixed(5) +
+        "<br>" +
+        ageLabel(d.last_seen_at);
+      if (!marker) {
+        marker = L.circleMarker(latlng, {
+          radius: 9,
+          color: "#0B1220",
+          weight: 2,
+          fillColor: DEVICE_COLOUR,
+          fillOpacity: 0.95,
+        }).addTo(map);
+        deviceMarkers.set(d.device_id, marker);
+      } else {
+        marker.setLatLng(latlng);
+      }
+      marker.bindPopup(html);
+    });
+    Array.from(deviceMarkers.keys()).forEach((id) => {
+      if (!seen.has(id)) {
+        map.removeLayer(deviceMarkers.get(id));
+        deviceMarkers.delete(id);
+      }
+    });
+  }
+
+  function setPhonesOn(on) {
+    phonesOn = !!on;
+    writePhonesPref(phonesOn);
+    syncPhonesButton();
+    if (!phonesOn) {
+      clearPhoneMarkers();
+      clearHistoryLayer();
+      if (deviceStatusEl) {
+        const n = devicesEl ? devicesEl.querySelectorAll(".phone-card").length : 0;
+        deviceStatusEl.textContent = n
+          ? n + " phone" + (n === 1 ? "" : "s") + " hidden on the map."
+          : "Phones hidden.";
+      }
+    } else {
+      refreshDevices();
+    }
+  }
+
   async function refreshDevices() {
     const base = apiBase();
     if (!base || !deviceStatusEl) return;
@@ -435,44 +531,17 @@
       const rows = (data.devices || []).filter(
         (d) => typeof d.last_lat === "number" && typeof d.last_lng === "number"
       );
-      const seen = new Set();
-      rows.forEach((d) => {
-        seen.add(d.device_id);
-        const latlng = [d.last_lat, d.last_lng];
-        let marker = deviceMarkers.get(d.device_id);
-        const html =
-          "<strong>" +
-          shortId(d.device_id) +
-          "</strong><br>" +
-          d.last_lat.toFixed(5) +
-          ", " +
-          d.last_lng.toFixed(5) +
-          "<br>" +
-          ageLabel(d.last_seen_at);
-        if (!marker) {
-          marker = L.circleMarker(latlng, {
-            radius: 9,
-            color: "#0B1220",
-            weight: 2,
-            fillColor: DEVICE_COLOUR,
-            fillOpacity: 0.95,
-          }).addTo(map);
-          deviceMarkers.set(d.device_id, marker);
-        } else {
-          marker.setLatLng(latlng);
-        }
-        marker.bindPopup(html);
-      });
-      Array.from(deviceMarkers.keys()).forEach((id) => {
-        if (!seen.has(id)) {
-          map.removeLayer(deviceMarkers.get(id));
-          deviceMarkers.delete(id);
-        }
-      });
+      paintPhoneMarkers(rows);
       renderDevices(rows);
-      deviceStatusEl.textContent = rows.length
-        ? rows.length + " phone" + (rows.length === 1 ? "" : "s") + " on the map."
-        : "No phones pinging yet. Flip the tracker on.";
+      if (!phonesOn) {
+        deviceStatusEl.textContent = rows.length
+          ? rows.length + " phone" + (rows.length === 1 ? "" : "s") + " hidden on the map."
+          : "Phones hidden.";
+      } else {
+        deviceStatusEl.textContent = rows.length
+          ? rows.length + " phone" + (rows.length === 1 ? "" : "s") + " on the map."
+          : "No phones pinging yet. Flip the tracker on.";
+      }
       if (selectedDeviceId) {
         const still = rows.some((d) => d.device_id === selectedDeviceId);
         if (!still) closeDrawer();
@@ -494,6 +563,8 @@
     if (e.key === "Escape" && selectedDeviceId) closeDrawer();
   });
   setHistoryButton();
+  syncPhonesButton();
+  if (btnPhones) btnPhones.addEventListener("click", () => setPhonesOn(!phonesOn));
 
   // Live buses — GET /v1/buses (Firestore cache; API fetches bustimes.org).
   // Off by default. Poll our API only while the toggle is on.
