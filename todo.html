@@ -36,7 +36,7 @@
     <h1 style="font-size:1.7rem;margin-bottom:0.4rem">To-do cards</h1>
     <p style="color:var(--muted);max-width:42rem">
       The board only shows the top few. Everything still open lives here.
-      <strong>9 cards · 19h</strong>.
+      <strong>7 cards · 13h</strong>.
       Click a card for the brief. Filter with the chips, hour cards, or <code>?person=lewis</code>.
     </p>
 
@@ -63,8 +63,8 @@
       </button>
       <button type="button" class="person" data-person="michael" aria-pressed="false">
         <div class="who"><span class="emoji">🏗️</span> Michael</div>
-        <div class="hrs">25.75 <span>hrs</span></div>
-        <div class="meta">9 done · 2 to do</div>
+        <div class="hrs">27.75 <span>hrs</span></div>
+        <div class="meta">10 done · 2 to do</div>
       </button>
       <button type="button" class="person" data-person="lewis" aria-pressed="false">
         <div class="who"><span class="emoji">🌱</span> Lewis</div>
@@ -74,44 +74,11 @@
       <button type="button" class="person" data-person="noah" aria-pressed="false">
         <div class="who"><span class="emoji">🔧</span> Noah</div>
         <div class="hrs">22 <span>hrs</span></div>
-        <div class="meta">4 done · 1 in progress · 2 to do</div>
+        <div class="meta">7 done</div>
       </button>
     </div>
 
     <div class="card-archive" id="todo-archive">
-          <a class="card" id="card-37" href="#t-37" data-person="noah" data-hours="3">
-            <div class="top"><span class="id">37</span><span class="emoji">🔧</span></div>
-            <div class="title">Several phones on the map, easy to tell apart</div>
-            <span class="tag tag-wait">multi-device</span>
-            <div class="bot"><span>3h</span><span>Noah</span></div>
-            <template class="card-brief">
-              <p>After the review (card 36): last-known markers must still work when two or more devices are pinging. They should be distinguishable — colour, label, list — not a pile of identical amber dots. Waypoint routing stays.</p>
-              <h3>Done when</h3>
-              <ul>
-                <li>Two devices (two emulators, emulator + curl, or emulator + phone) both show on <code>/app/</code>.</li>
-                <li>You can tell which is which without opening a debugger.</li>
-                <li>One device still looks fine. Don’t break the single-phone demo.</li>
-              </ul>
-              <p>Read is <code>GET /v1/devices</code>. Poll already exists in <code>app/map.js</code>.</p>
-            </template>
-          </a>
-          <a class="card" id="card-38" href="#t-38" data-person="noah" data-hours="3">
-            <div class="top"><span class="id">38</span><span class="emoji">🔧</span></div>
-            <div class="title">Show history as a route on the map</div>
-            <span class="tag tag-wait">ping history</span>
-            <div class="bot"><span>3h</span><span>Noah</span></div>
-            <template class="card-brief">
-              <p>Default view stays <strong>current location only</strong> (last-known markers). A Show history control — per device or for the selected phone — plots the recorded pings as a path. Hide history returns to current-only.</p>
-              <h3>Done when</h3>
-              <ul>
-                <li>With history off, the map shows last-known phones only.</li>
-                <li>Show history draws a line through that device’s pings in time order.</li>
-                <li>Hide history removes the line.</li>
-                <li>Waypoint routing still works.</li>
-              </ul>
-              <p>The API already stores history as <code>LocationPing</code>. Prefer <code>GET /v1/locations?device_id=</code> over a new store. A polyline is enough; OSRM is optional.</p>
-            </template>
-          </a>
           <a class="card" id="card-13" href="#t-13" data-person="lewis" data-hours="1">
             <div class="top"><span class="id">13</span><span class="emoji">🌱</span></div>
             <div class="title">Lewis: get the back end running locally</div>

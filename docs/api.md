@@ -55,7 +55,7 @@ After a good deploy, `GET /health` should show `"version": "0.1.4"` or later. Li
 
 **Proven 11 September 2026:** emulator `POST /v1/locations` → HTTP 200 `stored=datastore`; `GET /v1/devices` returned that device.
 
-Card **38** (Show history): the map should call `GET /v1/locations?device_id=` and draw those pings as a path. Default view stays last-known from `GET /v1/devices`. Do not add a second history store unless the review (card 36) says the current GET is wrong.
+`GET /v1/locations?device_id=` returns ping history (`source` is `firestore` or `datastore`). The map drawer plots that path (card 38). Default map view is last-known from `GET /v1/devices`.
 
 CORS methods: `GET`, `POST`, `DELETE`, `OPTIONS`. Add `PUT`/`PATCH` in middleware when a card needs them.
 

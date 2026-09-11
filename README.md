@@ -67,7 +67,7 @@ Do **not** open HTML as `file://` — the browser will block the API.
 |-----|------|
 | `/` | Desktop home |
 | `/progress.html` | Catch-up snapshot if you have been away |
-| `/app/` | Map, waypoints, route, live phones |
+| `/app/` | Map, waypoints, route, live phones, optional buses |
 | `/board.html` | Kanban (short to-do + done summary) |
 | `/todo.html` | Full to-do list |
 | `/done.html` | Done archive |

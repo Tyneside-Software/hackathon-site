@@ -28,15 +28,26 @@
   ],
   "cards": [
     {
+      "id": "39",
+      "person": "michael",
+      "hours": 2,
+      "emoji": "🏗️",
+      "title": "Live buses on the map (toggle, 30 miles of Newcastle)",
+      "column": "done",
+      "tag": "bustimes.org",
+      "tag_kind": "ok",
+      "brief": "<p>Show buses / Hide buses on <a href=\"app/\">/app/</a>. Off by default — no fetch on page load. While on, poll bustimes.org <code>/vehicles.json</code> every 15s (skip hidden tabs), haversine-filter to a 30-mile circle of Newcastle, line-number markers. Hide aborts the request, stops the timer, removes markers. Do not <code>fitBounds</code> to buses. Feed down: status line, map stays.</p>\n<p>Not BODS from the browser. Public JSON, CORS open. Wiki: <a href=\"docs/#buses\">Live buses</a>.</p>"
+    },
+    {
       "id": "36",
       "person": "noah",
       "hours": 2,
       "emoji": "🔧",
       "title": "Review the live-phone path, then take it forward",
-      "column": "doing",
-      "tag": "review · phones",
+      "column": "done",
+      "tag": "phones on map",
       "tag_kind": "ok",
-      "brief": "<p>Michael is on a short break. Noah takes over live phones. First job: evaluate what is already on <code>main</code> — the Android tracker, <code>POST /v1/locations</code>, <code>GET /v1/devices</code>, and the map markers in <code>app/map.js</code>. Confirm it works, that he agrees it is the right shape to build on, and write down anything he will change before cards 37 and 38.</p>\n<h3>Done when</h3>\n<ul>\n  <li>He has run the path (emulator, curl, or both) and seen a phone on <a href=\"app/\">/app/</a>.</li>\n  <li>Agreement or nits are written down (this brief, the wiki, or a follow-on card) — not a silent rewrite of 32–34.</li>\n  <li>He is ready to pick up multiple devices (37) and history (38).</li>\n</ul>\n<h3>Where to look</h3>\n<ul>\n  <li><a href=\"https://github.com/Tyneside-Software/hackathon-android\">hackathon-android</a> — one switch, log tag <code>TynesideTracker</code>.</li>\n  <li><a href=\"https://github.com/Tyneside-Software/hackathon-api\">hackathon-api</a> — <code>Device</code> last-known, <code>LocationPing</code> history, <code>GET /v1/locations?device_id=</code>.</li>\n  <li>Site <code>app/map.js</code> — polls devices every 8s, amber circle markers.</li>\n  <li>Wiki: <a href=\"docs/#android\">Android</a> · <a href=\"docs/#architecture\">Architecture</a> · <a href=\"progress.html\">Progress</a>.</li>\n</ul>"
+      "brief": "<p>Noah took over live phones. He went past review and shipped the next slices on <code>main</code>: phone list cards, a device drawer, and ping history on the map.</p>\n<h3>What’s live (11 September 2026)</h3>\n<ul>\n  <li>Site: <code>76d3a41</code> list cards zoom to last-known; <code>d2a52e6</code> drawer + history path; <code>c6ec189</code> list every LocationPing.</li>\n  <li>API: <code>6995771</code> <code>GET /v1/locations</code> reads Firestore, Datastore fallback.</li>\n  <li>Android: <code>b12a0ec</code> switch state resumes; <code>62e0c0d</code> Gradle.</li>\n</ul>"
     },
     {
       "id": "37",
@@ -44,10 +55,10 @@
       "hours": 3,
       "emoji": "🔧",
       "title": "Several phones on the map, easy to tell apart",
-      "column": "todo",
-      "tag": "multi-device",
-      "tag_kind": "wait",
-      "brief": "<p>After the review (card 36): last-known markers must still work when two or more devices are pinging. They should be distinguishable — colour, label, list — not a pile of identical amber dots. Waypoint routing stays.</p>\n<h3>Done when</h3>\n<ul>\n  <li>Two devices (two emulators, emulator + curl, or emulator + phone) both show on <code>/app/</code>.</li>\n  <li>You can tell which is which without opening a debugger.</li>\n  <li>One device still looks fine. Don’t break the single-phone demo.</li>\n</ul>\n<p>Read is <code>GET /v1/devices</code>. Poll already exists in <code>app/map.js</code>.</p>"
+      "column": "done",
+      "tag": "phone cards",
+      "tag_kind": "ok",
+      "brief": "<p>Last-known markers when two or more devices are pinging, distinguishable without a debugger.</p>\n<h3>What’s live</h3>\n<ul>\n  <li>Sidebar phone cards (not a pile of identical dots). Click zooms to last-known.</li>\n  <li>Fresh / stale styling. Waypoint routing still works.</li>\n</ul>\n<p>Noah, 11 September 2026, <code>76d3a41</code>.</p>"
     },
     {
       "id": "38",
@@ -55,10 +66,10 @@
       "hours": 3,
       "emoji": "🔧",
       "title": "Show history as a route on the map",
-      "column": "todo",
+      "column": "done",
       "tag": "ping history",
-      "tag_kind": "wait",
-      "brief": "<p>Default view stays <strong>current location only</strong> (last-known markers). A Show history control — per device or for the selected phone — plots the recorded pings as a path. Hide history returns to current-only.</p>\n<h3>Done when</h3>\n<ul>\n  <li>With history off, the map shows last-known phones only.</li>\n  <li>Show history draws a line through that device’s pings in time order.</li>\n  <li>Hide history removes the line.</li>\n  <li>Waypoint routing still works.</li>\n</ul>\n<p>The API already stores history as <code>LocationPing</code>. Prefer <code>GET /v1/locations?device_id=</code> over a new store. A polyline is enough; OSRM is optional.</p>"
+      "tag_kind": "ok",
+      "brief": "<p>Default view is current location only. A device drawer has <strong>Show history on map</strong>, which plots unique pings as a path. Hide returns to last-known.</p>\n<h3>What’s live</h3>\n<ul>\n  <li>Site drawer + polyline of unique LocationPings.</li>\n  <li>API <code>GET /v1/locations?device_id=</code> reads Firestore, Datastore fallback, <code>source</code> in the JSON.</li>\n</ul>\n<p>Noah, 11 September 2026.</p>"
     },
     {
       "id": "32",

@@ -42,14 +42,12 @@
         · catch-up for anyone who has been away
       </p>
       <h1>CURRENT<br>PROGRESS</h1>
-      <p class="hero-tag">Live phones work. Michael is on a short break. Noah takes that path forward.</p>
+      <p class="hero-tag">Live phones work. Noah shipped the device drawer and ping history. Buses are a map toggle.</p>
       <p class="hero-lead">
         Three repos, two hosts, one product. The site is static on GitHub Pages.
-        The API is FastAPI on Cloud Run in London, version <strong>0.1.4</strong>.
-        The phone is a one-switch Android app.
-        Emulator → <code>POST /v1/locations</code> → Datastore → map markers is working (cards 32–34 done).
-        Noah’s next: review that code and agree it (36), then several devices on the map (37),
-        then history — current location by default, a Show history control that plots the recorded pings as a path (38).
+        The API is FastAPI on Cloud Run. The phone POSTs every minute; last-seen is last communication.
+        Noah’s drawer lists phones and plots unique ping history (cards 36–38 done).
+        Live buses are off until you press <strong>Show buses</strong> — bustimes.org, 30 miles of Newcastle (card 39).
       </p>
       <div class="hero-actions">
         <a class="btn btn-fill" href="app/">Open the map →</a>
@@ -150,9 +148,9 @@
         <li>
           <span class="n">05</span>
           <div>
-            <strong>Noah takes live phones forward.</strong>
-            <span>Michael is on a short break. Card 36 (in progress): review what is on <code>main</code> and agree it.
-            Then 37: several devices, easy to tell apart. Then 38: Show history plots a path; default stays current location only.</span>
+            <strong>Noah took live phones forward.</strong>
+            <span>Device drawer, phone cards, ping history on the map (36–38). API history reads Firestore with a Datastore fallback.
+            Michael: live buses toggle (39). Next product slices are still the map: job list, demo seed, localStorage.</span>
           </div>
         </li>
         <li>
@@ -177,30 +175,20 @@
           <header>
             <span class="lane-kicker">In flight</span>
             <h3>Now</h3>
-            <p>1 card · 2h</p>
+            <p>0 cards · live map layers shipped</p>
           </header>
-          <a class="progress-item" href="board.html#t-36">
-            <span class="id">36 · 🔧 Noah</span>
-            <strong>Review the live-phone path</strong>
-            <span>Read and run what is on <code>main</code> (app, API, map markers). Agree it, or write the nits. Then take 37 and 38. Michael is on a short break.</span>
+          <a class="progress-item" href="app/">
+            <span class="id">39 · 🏗️ buses · done</span>
+            <strong>Show buses on the map</strong>
+            <span>Off until you ask. bustimes.org, 30 miles of Newcastle. Noah’s drawer and ping history are also live. Doing is empty — pick a Ready or To-do card.</span>
           </a>
         </article>
         <article class="progress-lane is-next">
           <header>
-            <span class="lane-kicker">Noah next, then the map</span>
+            <span class="lane-kicker">Ready + product</span>
             <h3>Next</h3>
-            <p>Several devices, then history, then demo the map</p>
+            <p>Demo the map, then fill it</p>
           </header>
-          <a class="progress-item" href="todo.html#t-37">
-            <span class="id">37 · 🔧 Noah</span>
-            <strong>Several phones, easy to tell apart</strong>
-            <span>Two or more devices on <code>/app/</code> without a pile of identical amber dots. Single-phone demo still works.</span>
-          </a>
-          <a class="progress-item" href="todo.html#t-38">
-            <span class="id">38 · 🔧 Noah</span>
-            <strong>Show history as a route</strong>
-            <span>Default is current location only. Show history draws a line through <code>GET /v1/locations?device_id=</code> pings. Hide history returns to now.</span>
-          </a>
           <a class="progress-item" href="board.html#t-04">
             <span class="id">04 · 🧭 Reeve · Ready</span>
             <strong>Clickable / draggable waypoints</strong>
@@ -231,7 +219,7 @@
           <header>
             <span class="lane-kicker">Waiting or onboarding</span>
             <h3>Later</h3>
-            <p>7 open · 13h · Michael on a break</p>
+            <p>7 open · 13h</p>
           </header>
           <a class="progress-item" href="todo.html#t-35">
             <span class="id">35 · 🏗️ Michael</span>
@@ -267,8 +255,8 @@
         <a class="progress-person" href="board.html?person=noah">
           <span class="who"><span class="emoji">🔧</span> Noah</span>
           <span class="hrs">22 <span>hrs</span></span>
-          <span class="focus">Review phones · then 37 · 38</span>
-          <span class="meta">4 done · 1 in progress · 2 to do. Takes live phones while Michael is on a break. Review first, then several devices, then history.</span>
+          <span class="focus">Drawer + ping history shipped</span>
+          <span class="meta">7 done. Phone cards, device drawer, history path, Firestore location list. No open cards — grab a to-do if he wants another slice.</span>
         </a>
         <a class="progress-person" href="board.html?person=reeve">
           <span class="who"><span class="emoji">🧭</span> Reeve</span>
@@ -290,9 +278,9 @@
         </a>
         <a class="progress-person" href="board.html?person=michael">
           <span class="who"><span class="emoji">🏗️</span> Michael</span>
-          <span class="hrs">25.75 <span>hrs</span></span>
-          <span class="focus">On a short break</span>
-          <span class="meta">9 done · 2 to do. Live phones shipped. Noah has the next slices. 35 is a real phone; 11 is persist routes — after the break.</span>
+          <span class="hrs">27.75 <span>hrs</span></span>
+          <span class="focus">Buses on the map</span>
+          <span class="meta">10 done · 2 to do. Live buses toggle shipped. 35 is a real phone; 11 is persist routes.</span>
         </a>
       </div>
     </div>
@@ -302,8 +290,24 @@
     <div class="wrap">
       <p class="hero-kicker">While you were away</p>
       <h2>What already shipped</h2>
-      <p class="lede">25 cards · 45h on Done. Do not redo these.</p>
+      <p class="lede">29 cards · 55h on Done. Do not redo these.</p>
       <ol class="progress-rail">
+        <li>
+          <span class="mark" aria-hidden="true"></span>
+          <div class="body">
+            <p class="hero-kicker">11 September · card 39</p>
+            <h3>Live buses, off until you ask</h3>
+            <p>Show buses polls bustimes.org every 15s inside 30 miles of Newcastle. Hide stops the feed. Waypoints and phones stay. Wiki: <a href="docs/#buses">Buses</a>.</p>
+          </div>
+        </li>
+        <li>
+          <span class="mark" aria-hidden="true"></span>
+          <div class="body">
+            <p class="hero-kicker">11 September · cards 36 · 37 · 38</p>
+            <h3>Noah: device drawer and ping history</h3>
+            <p>Phone list cards, a slide-over drawer, Show history plots unique LocationPings. API history reads Firestore with a Datastore fallback.</p>
+          </div>
+        </li>
         <li>
           <span class="mark" aria-hidden="true"></span>
           <div class="body">
@@ -421,7 +425,7 @@
         <article>
           <span class="k">A session</span>
           <h3>Ship a slice</h3>
-          <p>Noah: review the live-phone path (36), then several devices (37), then Show history (38). Reeve: demo seed (08). Connor: job list (07). Lewis: localStorage or local <code>/health</code>. Michael is on a short break. Push <code>origin/main</code> — that deploys site and API.</p>
+          <p>Open the map: waypoints, phones, optional buses. Reeve: demo seed (08). Connor: job list (07). Lewis: localStorage or local <code>/health</code>. Michael: physical phone (35) or persist routes (11). Push <code>origin/main</code> — that deploys site and API.</p>
         </article>
       </div>
       <div class="progress-jumps">

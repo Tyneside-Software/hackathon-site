@@ -117,7 +117,7 @@ CORS must allow `https://hackathon.tyneside.software` and `http://127.0.0.1:5500
 
 If live `/test_field` is 404, the Cloud Run revision is behind `main`. Check `/health` for `version` (current code is **0.1.4**). See [API](#api).
 
-Android tracker: [Android](#android). Emulator test on 11 September 2026 posted GPS, got HTTP 200 `stored=datastore`, and the map draws the phone. Cards 32–34 are done. Noah’s next: review (36), several devices (37), Show history as a route (38). History GET is `/v1/locations?device_id=`.
+Android tracker: [Android](#android). Emulator posts every minute; map last-seen is last communication. Cards 32–34 are done. Noah shipped the device drawer and ping-history path (36–38). Live buses are a map toggle: [Buses](#buses). History GET is `/v1/locations?device_id=` (Firestore, Datastore fallback).
 
 ---
 

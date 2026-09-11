@@ -21,6 +21,7 @@ If you do not know how the site is wired, start with **[Architecture](#architect
 | Move a kanban card | [Kanban board](#board) |
 | Call the API | [API](#api) · [Alpine test](../api-test.html) |
 | Android tracker | [Android](#android) |
+| Live buses on the map | [Buses](#buses) |
 | Add a wiki page | [Add a wiki page](#adding) |
 | Connor + Grok | [Connor’s area](#connor) · [For Grok](#grok) |
 

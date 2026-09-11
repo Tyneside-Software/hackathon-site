@@ -169,3 +169,34 @@
   .map-shell { grid-template-columns: 1fr; }
   .map-stage { height: 55vh; min-height: 0; }
 }
+#btn-buses.is-on {
+  background: var(--accent);
+  color: #0c1219;
+  border-color: #d97706;
+}
+.bus-marker {
+  background: none;
+  border: 0;
+}
+.bus-marker-inner {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font: 700 10px/1 system-ui, sans-serif;
+  letter-spacing: 0.01em;
+  box-shadow: 0 0 0 2px #0b1220, 0 2px 6px rgba(0, 0, 0, 0.45);
+}
+.bus-marker-inner.is-rotated {
+  border-radius: 8px 8px 4px 8px;
+}
+.bus-marker-label {
+  display: block;
+  max-width: 26px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: center;
+}

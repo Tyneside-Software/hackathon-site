@@ -65,6 +65,12 @@
           "title": "Pages on the site",
           "file": "pages.md",
           "summary": "Home, map, board, todo, done, API test."
+        },
+        {
+          "id": "buses",
+          "title": "Live buses",
+          "file": "buses.md",
+          "summary": "Show buses toggle, bustimes.org, 30-mile circle."
         }
       ]
     },

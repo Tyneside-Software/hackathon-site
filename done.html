@@ -36,7 +36,7 @@
     <h1 style="font-size:1.7rem;margin-bottom:0.4rem">Done cards</h1>
     <p style="color:var(--muted);max-width:42rem">
       Finished increments live here so the board stays short.
-      <strong>25 cards · 45h</strong>.
+      <strong>29 cards · 55h</strong>.
       Click a card for the brief. Filter with the chips, hour cards, or <code>?person=lewis</code>.
     </p>
 
@@ -63,8 +63,8 @@
       </button>
       <button type="button" class="person" data-person="michael" aria-pressed="false">
         <div class="who"><span class="emoji">🏗️</span> Michael</div>
-        <div class="hrs">25.75 <span>hrs</span></div>
-        <div class="meta">9 done · 2 to do</div>
+        <div class="hrs">27.75 <span>hrs</span></div>
+        <div class="meta">10 done · 2 to do</div>
       </button>
       <button type="button" class="person" data-person="lewis" aria-pressed="false">
         <div class="who"><span class="emoji">🌱</span> Lewis</div>
@@ -74,11 +74,66 @@
       <button type="button" class="person" data-person="noah" aria-pressed="false">
         <div class="who"><span class="emoji">🔧</span> Noah</div>
         <div class="hrs">22 <span>hrs</span></div>
-        <div class="meta">4 done · 1 in progress · 2 to do</div>
+        <div class="meta">7 done</div>
       </button>
     </div>
 
     <div class="card-archive" id="done-archive">
+          <a class="card" id="card-39" href="#t-39" data-person="michael" data-hours="2">
+            <div class="top"><span class="id">39</span><span class="emoji">🏗️</span></div>
+            <div class="title">Live buses on the map (toggle, 30 miles of Newcastle)</div>
+            <span class="tag tag-ok">bustimes.org</span>
+            <div class="bot"><span>2h</span><span>Michael</span></div>
+            <template class="card-brief">
+              <p>Show buses / Hide buses on <a href="app/">/app/</a>. Off by default — no fetch on page load. While on, poll bustimes.org <code>/vehicles.json</code> every 15s (skip hidden tabs), haversine-filter to a 30-mile circle of Newcastle, line-number markers. Hide aborts the request, stops the timer, removes markers. Do not <code>fitBounds</code> to buses. Feed down: status line, map stays.</p>
+              <p>Not BODS from the browser. Public JSON, CORS open. Wiki: <a href="docs/#buses">Live buses</a>.</p>
+            </template>
+          </a>
+          <a class="card" id="card-36" href="#t-36" data-person="noah" data-hours="2">
+            <div class="top"><span class="id">36</span><span class="emoji">🔧</span></div>
+            <div class="title">Review the live-phone path, then take it forward</div>
+            <span class="tag tag-ok">phones on map</span>
+            <div class="bot"><span>2h</span><span>Noah</span></div>
+            <template class="card-brief">
+              <p>Noah took over live phones. He went past review and shipped the next slices on <code>main</code>: phone list cards, a device drawer, and ping history on the map.</p>
+              <h3>What’s live (11 September 2026)</h3>
+              <ul>
+                <li>Site: <code>76d3a41</code> list cards zoom to last-known; <code>d2a52e6</code> drawer + history path; <code>c6ec189</code> list every LocationPing.</li>
+                <li>API: <code>6995771</code> <code>GET /v1/locations</code> reads Firestore, Datastore fallback.</li>
+                <li>Android: <code>b12a0ec</code> switch state resumes; <code>62e0c0d</code> Gradle.</li>
+              </ul>
+            </template>
+          </a>
+          <a class="card" id="card-37" href="#t-37" data-person="noah" data-hours="3">
+            <div class="top"><span class="id">37</span><span class="emoji">🔧</span></div>
+            <div class="title">Several phones on the map, easy to tell apart</div>
+            <span class="tag tag-ok">phone cards</span>
+            <div class="bot"><span>3h</span><span>Noah</span></div>
+            <template class="card-brief">
+              <p>Last-known markers when two or more devices are pinging, distinguishable without a debugger.</p>
+              <h3>What’s live</h3>
+              <ul>
+                <li>Sidebar phone cards (not a pile of identical dots). Click zooms to last-known.</li>
+                <li>Fresh / stale styling. Waypoint routing still works.</li>
+              </ul>
+              <p>Noah, 11 September 2026, <code>76d3a41</code>.</p>
+            </template>
+          </a>
+          <a class="card" id="card-38" href="#t-38" data-person="noah" data-hours="3">
+            <div class="top"><span class="id">38</span><span class="emoji">🔧</span></div>
+            <div class="title">Show history as a route on the map</div>
+            <span class="tag tag-ok">ping history</span>
+            <div class="bot"><span>3h</span><span>Noah</span></div>
+            <template class="card-brief">
+              <p>Default view is current location only. A device drawer has <strong>Show history on map</strong>, which plots unique pings as a path. Hide returns to last-known.</p>
+              <h3>What’s live</h3>
+              <ul>
+                <li>Site drawer + polyline of unique LocationPings.</li>
+                <li>API <code>GET /v1/locations?device_id=</code> reads Firestore, Datastore fallback, <code>source</code> in the JSON.</li>
+              </ul>
+              <p>Noah, 11 September 2026.</p>
+            </template>
+          </a>
           <a class="card" id="card-32" href="#t-32" data-person="michael" data-hours="4">
             <div class="top"><span class="id">32</span><span class="emoji">🏗️</span></div>
             <div class="title">Android app: tracking toggle, GPS to the API</div>

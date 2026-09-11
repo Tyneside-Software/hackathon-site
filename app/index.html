@@ -36,7 +36,7 @@
     <aside class="map-side">
       <p class="hero-kicker">Ops · route visualiser</p>
       <h1>Waypoints</h1>
-      <p class="lede">Click the map to add a stop. Drag a pin to move it. Route uses public OSRM; if that fails you still get a line so the board never looks dead.</p>
+      <p class="lede">Click the map to add a stop. Drag a pin to move it. Route uses public OSRM; if that fails you still get a line so the board never looks dead. Live buses are a separate toggle; they use bustimes.org (BODS).</p>
       <div class="map-actions">
         <button type="button" class="btn btn-fill" id="btn-route">Calculate route</button>
         <button type="button" class="btn btn-ghost" id="btn-clear">Clear</button>
@@ -49,6 +49,12 @@
         <div><dt>Engine</dt><dd id="stat-engine">—</dd></div>
       </dl>
       <ol class="stops" id="stops"></ol>
+      <p class="hero-kicker" style="margin-top:1.25rem">Buses</p>
+      <p class="lede" style="font-size:0.88rem">Live positions within 30 miles of Newcastle. Off until you ask — we do not poll bustimes.org in the background.</p>
+      <div class="map-actions">
+        <button type="button" class="btn btn-ghost" id="btn-buses" aria-pressed="false">Show buses</button>
+      </div>
+      <p class="map-status" id="bus-status">Off — no data fetched.</p>
       <p class="hero-kicker" style="margin-top:1.25rem">Phones</p>
       <p class="map-status" id="device-status">Waiting for tracker pings.</p>
       <ul class="phone-list" id="devices"></ul>

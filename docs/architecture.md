@@ -9,6 +9,7 @@ Three GitHub repos, two hosts, one product. The **site** is static files. The **
      │     index, progress, map, board, wiki, api-test
      │
      ├─ OSM tiles + public OSRM          (map waypoints; not our API)
+     │     optional: bustimes.org /vehicles.json (live buses, off by default)
      │
      └─ fetch(HACKATHON_API + "/…")  ← Cloud Run  (hackathon-api-….run.app)
            /health  /test_field  /v1/devices  /v1/locations  /docs
@@ -21,7 +22,7 @@ Locally the site is `python -m http.server 5500`, the API is `uvicorn` on `:8080
 
 **11 September 2026:** the Pixel 6a emulator posted `POST /v1/locations` to live Cloud Run and got HTTP 200 `stored=datastore` (device `android-c55e59830b71ba38`). The map draws that phone. Cards 32–34 are done.
 
-**Next (Noah, while Michael is on a short break):** review that path (card 36), then several devices easy to tell apart (37), then Show history as a route — current location by default (38). History read already exists: `GET /v1/locations?device_id=`. A physical phone is still card 35.
+**11 September, later:** Noah shipped the device drawer and ping-history path (cards 36–38). `GET /v1/locations?device_id=` reads Firestore, Datastore fallback. Live buses are a map toggle (card 39) — [Buses](#buses). A physical phone is still card 35.
 
 ## The three repos
 
@@ -122,7 +123,7 @@ The API Dockerfile exists for a Docker-based trigger. The GitHub-connected servi
 
 ## Next
 
-Live phones: Noah reviews cards 32–34, then [Android tracker](#android) cards 37 (several devices) and 38 (history path). Board: [Current progress](../progress.html).
+Live phones and buses are on the map. Next product slices: job list, demo seed, localStorage. Board: [Current progress](../progress.html). [Buses](#buses).
 
 | Topic | Page |
 |-------|------|

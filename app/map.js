@@ -15,7 +15,7 @@
   const map = L.map("map").setView(NEWCASTLE, 12);
   L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
     maxZoom: 19,
-    attribution: "&copy; OpenStreetMap",
+    attribution: '&copy; OpenStreetMap. Bus positions from <a href="https://bustimes.org/data">bustimes.org</a> / BODS',
   }).addTo(map);
 
   const markers = [];
@@ -492,6 +492,229 @@
     if (e.key === "Escape" && selectedDeviceId) closeDrawer();
   });
   setHistoryButton();
+
+  // Live buses — bustimes.org /vehicles.json (BODS underneath).
+  // Off by default. Fetch + poll only while the toggle is on.
+  const BUS_MILES = 30;
+  const BUS_KM = BUS_MILES * 1.609344;
+  const BUS_POLL_MS = 15000;
+  const BUS_BBOX = {
+    ymin: 54.5446,
+    ymax: 55.4120,
+    xmin: -2.3740,
+    xmax: -0.8616,
+  };
+  const BUS_URL =
+    "https://bustimes.org/vehicles.json" +
+    "?ymin=" + BUS_BBOX.ymin +
+    "&ymax=" + BUS_BBOX.ymax +
+    "&xmin=" + BUS_BBOX.xmin +
+    "&xmax=" + BUS_BBOX.xmax;
+
+  const btnBuses = document.getElementById("btn-buses");
+  const busStatusEl = document.getElementById("bus-status");
+  const busMarkers = new Map();
+  let busesOn = false;
+  let busTimer = null;
+  let busAbort = null;
+
+  function setBusStatus(msg) {
+    if (busStatusEl) busStatusEl.textContent = msg;
+  }
+
+  function escapeHtml(value) {
+    return String(value ?? "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
+  }
+
+  function busLine(v) {
+    return (v && v.service && v.service.line_name) || "?";
+  }
+
+  function busColour(v) {
+    const c = v && v.vehicle && (v.vehicle.colour || v.vehicle.css);
+    if (c && /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/.test(c)) return c;
+    return "#f59e0b";
+  }
+
+  function contrastText(hex) {
+    const h = hex.replace("#", "");
+    const full = h.length === 3 ? h[0] + h[0] + h[1] + h[1] + h[2] + h[2] : h;
+    const r = parseInt(full.slice(0, 2), 16);
+    const g = parseInt(full.slice(2, 4), 16);
+    const b = parseInt(full.slice(4, 6), 16);
+    const yiq = (r * 299 + g * 587 + b * 114) / 1000;
+    return yiq >= 150 ? "#0c1219" : "#fff";
+  }
+
+  function withinNewcastle(lat, lng) {
+    return haversineKm({ lat, lng }, { lat: NEWCASTLE[0], lng: NEWCASTLE[1] }) <= BUS_KM;
+  }
+
+  function busIcon(v) {
+    const line = escapeHtml(busLine(v));
+    const fill = busColour(v);
+    const text = contrastText(fill);
+    const heading = typeof v.heading === "number" ? v.heading : 0;
+    const rotate = typeof v.heading === "number";
+    return L.divIcon({
+      className: "bus-marker",
+      iconSize: [28, 28],
+      iconAnchor: [14, 14],
+      popupAnchor: [0, -14],
+      html:
+        '<div class="bus-marker-inner' +
+        (rotate ? " is-rotated" : "") +
+        '" style="background:' +
+        fill +
+        ";color:" +
+        text +
+        (rotate ? ";transform:rotate(" + heading + "deg)" : "") +
+        '"><span class="bus-marker-label"' +
+        (rotate ? ' style="transform:rotate(' + -heading + 'deg)"' : "") +
+        ">" +
+        line +
+        "</span></div>",
+    });
+  }
+
+  function busPopup(v) {
+    const line = escapeHtml(busLine(v));
+    const dest = escapeHtml(v.destination || "Unknown destination");
+    const name = escapeHtml((v.vehicle && v.vehicle.name) || "");
+    const when = v.datetime ? escapeHtml(ageLabel(v.datetime) || v.datetime) : "";
+    const href = v.service && v.service.url
+      ? "https://bustimes.org" + v.service.url
+      : "https://bustimes.org/map";
+    return (
+      "<strong>Service " +
+      line +
+      "</strong><br>" +
+      dest +
+      (name ? "<br>" + name : "") +
+      (when ? "<br>" + when : "") +
+      '<br><a href="' +
+      href +
+      '" target="_blank" rel="noopener">bustimes.org</a>'
+    );
+  }
+
+  function clearBuses() {
+    busMarkers.forEach((marker) => map.removeLayer(marker));
+    busMarkers.clear();
+  }
+
+  function stopBusPoll() {
+    if (busTimer) {
+      clearInterval(busTimer);
+      busTimer = null;
+    }
+    if (busAbort) {
+      busAbort.abort();
+      busAbort = null;
+    }
+  }
+
+  function syncBusButton() {
+    if (!btnBuses) return;
+    btnBuses.textContent = busesOn ? "Hide buses" : "Show buses";
+    btnBuses.setAttribute("aria-pressed", busesOn ? "true" : "false");
+    btnBuses.classList.toggle("is-on", busesOn);
+    btnBuses.classList.toggle("btn-fill", busesOn);
+    btnBuses.classList.toggle("btn-ghost", !busesOn);
+  }
+
+  function upsertBuses(rows) {
+    const seen = new Set();
+    rows.forEach((v) => {
+      const coords = v && v.coordinates;
+      if (!Array.isArray(coords) || coords.length < 2) return;
+      const lng = Number(coords[0]);
+      const lat = Number(coords[1]);
+      if (!Number.isFinite(lat) || !Number.isFinite(lng)) return;
+      if (!withinNewcastle(lat, lng)) return;
+      const id = String(v.id != null ? v.id : lat + "," + lng);
+      seen.add(id);
+      const latlng = [lat, lng];
+      let marker = busMarkers.get(id);
+      if (!marker) {
+        marker = L.marker(latlng, {
+          icon: busIcon(v),
+          title: busLine(v),
+          keyboard: false,
+        }).addTo(map);
+        busMarkers.set(id, marker);
+      } else {
+        marker.setLatLng(latlng);
+        marker.setIcon(busIcon(v));
+      }
+      marker.bindPopup(busPopup(v));
+    });
+    Array.from(busMarkers.keys()).forEach((id) => {
+      if (!seen.has(id)) {
+        map.removeLayer(busMarkers.get(id));
+        busMarkers.delete(id);
+      }
+    });
+    return seen.size;
+  }
+
+  async function refreshBuses() {
+    if (!busesOn) return;
+    if (document.hidden) {
+      setBusStatus("Paused while this tab is in the background.");
+      return;
+    }
+    if (busAbort) busAbort.abort();
+    busAbort = new AbortController();
+    setBusStatus(busMarkers.size ? "Updating buses…" : "Loading buses…");
+    try {
+      const res = await fetch(BUS_URL, {
+        headers: { Accept: "application/json" },
+        signal: busAbort.signal,
+      });
+      if (!res.ok) throw new Error("HTTP " + res.status);
+      const data = await res.json();
+      if (!busesOn) return;
+      const rows = Array.isArray(data) ? data : [];
+      const n = upsertBuses(rows);
+      setBusStatus(
+        n
+          ? n + " bus" + (n === 1 ? "" : "es") + " within " + BUS_MILES + " miles of Newcastle."
+          : "No live buses in the 30-mile circle right now."
+      );
+    } catch (err) {
+      if (err && err.name === "AbortError") return;
+      if (!busesOn) return;
+      setBusStatus("Could not reach bustimes.org. Layer stays on — try again shortly.");
+    }
+  }
+
+  function setBusesOn(on) {
+    busesOn = !!on;
+    syncBusButton();
+    if (!busesOn) {
+      stopBusPoll();
+      clearBuses();
+      setBusStatus("Off — no data fetched.");
+      return;
+    }
+    setBusStatus("Loading buses…");
+    refreshBuses();
+    stopBusPoll();
+    busTimer = setInterval(refreshBuses, BUS_POLL_MS);
+  }
+
+  if (btnBuses) {
+    btnBuses.addEventListener("click", () => setBusesOn(!busesOn));
+  }
+  document.addEventListener("visibilitychange", () => {
+    if (busesOn && !document.hidden) refreshBuses();
+  });
+  syncBusButton();
 
   refreshDevices();
   setInterval(refreshDevices, 8000);
