@@ -42,7 +42,7 @@
         · catch-up for anyone who has been away
       </p>
       <h1>CURRENT<br>PROGRESS</h1>
-      <p class="hero-tag">The map is demoable. The API is live at 0.1.4. The phone path works on the emulator.</p>
+      <p class="hero-tag">The map is demoable. The API is live at 0.1.4. Live phones work end to end.</p>
       <p class="hero-lead">
         Three repos, two hosts, one product. The site is static on GitHub Pages.
         The API is FastAPI on Cloud Run in London, version <strong>0.1.4</strong>,
@@ -51,8 +51,8 @@
         They only meet over HTTP:
         the phone <code>POST</code>s <code>/v1/locations</code>,
         the map polls <code>GET /v1/devices</code>.
-        An emulator ping already landed in Datastore.
-        Reeve owns making that write the one he wants; Noah owns the map markers.
+        That path is working: emulator ping in Datastore, amber marker on the map.
+        Cards 32–34 are done. A physical phone is card 35.
       </p>
       <div class="hero-actions">
         <a class="btn btn-fill" href="app/">Open the map →</a>
@@ -144,18 +144,18 @@
         <li>
           <span class="n">04</span>
           <div>
-            <strong>The phone path is proven on the emulator.</strong>
+            <strong>The phone path works end to end.</strong>
             <span>Pixel 6a posted <code>/v1/locations</code>, HTTP 200 <code>stored=datastore</code>,
-            device <code>android-c55e59830b71ba38</code>.
-            Card 32 is ready to demo. A physical phone is card 35.</span>
+            device <code>android-c55e59830b71ba38</code>, marker on the map.
+            Cards 32–34 are done. A physical phone is card 35.</span>
           </div>
         </li>
         <li>
           <span class="n">05</span>
           <div>
-            <strong>Ownership of the live-phone slice.</strong>
-            <span>Michael: Android app (card 32 ready). Reeve: store GPS (card 33).
-            Noah: draw it on the map (card 34). Card 31 (Firestore) is done.</span>
+            <strong>Live phones are done.</strong>
+            <span>Android app (32), API store (33), map markers (34) all on <code>main</code>.
+            Card 31 (Firestore) was already done. Next product slices are still the map: job list, demo seed, localStorage.</span>
           </div>
         </li>
         <li>
@@ -180,30 +180,20 @@
           <header>
             <span class="lane-kicker">In flight</span>
             <h3>Now</h3>
-            <p>2 cards · 6h</p>
+            <p>0 cards · live phones shipped</p>
           </header>
-          <a class="progress-item" href="board.html#t-33">
-            <span class="id">33 · 🧭 Reeve</span>
-            <strong>API stores GPS pings</strong>
-            <span>Live POST already writes Datastore (<code>Device</code> + <code>LocationPing</code>) and <code>GET /v1/devices</code> returns the emulator phone. This card stays Reeve’s until he is happy with that write.</span>
-          </a>
-          <a class="progress-item" href="board.html#t-34">
-            <span class="id">34 · 🔧 Noah</span>
-            <strong>Map shows the phone</strong>
-            <span><code>app/map.js</code> already polls every 8s and draws amber markers. Noah owns finishing and demoing it.</span>
+          <a class="progress-item" href="done.html#t-32">
+            <span class="id">32–34 · 🏗️ done</span>
+            <strong>Live phones</strong>
+            <span>App posts GPS, API stores it, map draws it. Nothing left in Doing. Pick a Ready or To-do card.</span>
           </a>
         </article>
         <article class="progress-lane is-next">
           <header>
             <span class="lane-kicker">Ready + product</span>
             <h3>Next</h3>
-            <p>Demo the map and the phone, then fill the map</p>
+            <p>Demo the map, then fill it</p>
           </header>
-          <a class="progress-item" href="board.html#t-32">
-            <span class="id">32 · 🏗️ Michael · Ready</span>
-            <strong>Android tracker</strong>
-            <span>One switch. Emulator POST 200 to live Cloud Run. Log tag <code>TynesideTracker</code>.</span>
-          </a>
           <a class="progress-item" href="board.html#t-04">
             <span class="id">04 · 🧭 Reeve · Ready</span>
             <strong>Clickable / draggable waypoints</strong>
@@ -269,15 +259,15 @@
       <div class="progress-who">
         <a class="progress-person" href="board.html?person=noah">
           <span class="who"><span class="emoji">🔧</span> Noah</span>
-          <span class="hrs">17 <span>hrs</span></span>
-          <span class="focus">Map phones · card 34</span>
-          <span class="meta">4 done · 1 in progress. Firestore (31) is done. Draw the live device on <code>/app/</code>.</span>
+          <span class="hrs">14 <span>hrs</span></span>
+          <span class="focus">Firestore done · pick a map slice</span>
+          <span class="meta">4 done. Card 31 is done. Live phones (34) shipped on main. No open cards — grab a to-do from the board if you want another slice.</span>
         </a>
         <a class="progress-person" href="board.html?person=reeve">
           <span class="who"><span class="emoji">🧭</span> Reeve</span>
-          <span class="hrs">11.75 <span>hrs</span></span>
-          <span class="focus">GPS in the database · card 33</span>
-          <span class="meta">5 done · 1 ready · 1 in progress · 1 to do. Live POST already stores; this card is his to finish. Demo seed is next on the map.</span>
+          <span class="hrs">8.75 <span>hrs</span></span>
+          <span class="focus">Demo seed · card 08</span>
+          <span class="meta">5 done · 1 ready · 1 to do. Waypoints are ready. GPS store (33) shipped on main. Demo seed is the map unlock.</span>
         </a>
         <a class="progress-person" href="board.html?person=connor">
           <span class="who"><span class="emoji">⚡</span> Connor</span>
@@ -293,9 +283,9 @@
         </a>
         <a class="progress-person" href="board.html?person=michael">
           <span class="who"><span class="emoji">🏗️</span> Michael</span>
-          <span class="hrs">19.75 <span>hrs</span></span>
-          <span class="focus">Android ready · physical phone</span>
-          <span class="meta">6 done · 1 ready · 2 to do. Tracker works on the emulator. Card 35 is a real phone; card 11 is persist routes.</span>
+          <span class="hrs">25.75 <span>hrs</span></span>
+          <span class="focus">Live phones done · physical phone</span>
+          <span class="meta">9 done · 2 to do. App + API store + map markers shipped. Card 35 is a real phone; card 11 is persist routes.</span>
         </a>
       </div>
     </div>
@@ -305,14 +295,14 @@
     <div class="wrap">
       <p class="hero-kicker">While you were away</p>
       <h2>What already shipped</h2>
-      <p class="lede">22 cards · 35h on Done. Do not redo these.</p>
+      <p class="lede">25 cards · 45h on Done. Do not redo these.</p>
       <ol class="progress-rail">
         <li>
           <span class="mark" aria-hidden="true"></span>
           <div class="body">
             <p class="hero-kicker">11 September · cards 32 · 33 · 34</p>
-            <h3>Live phones, split by owner</h3>
-            <p>Android tracker POSTs GPS. API stores last-known in Datastore. Map polls devices. Proven on the Pixel 6a emulator: HTTP 200 <code>stored=datastore</code>, device <code>android-c55e59830b71ba38</code>. Card 32 is ready; 33 and 34 stay with Reeve and Noah.</p>
+            <h3>Live phones work end to end</h3>
+            <p>Android tracker POSTs GPS. API stores last-known in Datastore. Map polls devices and draws amber markers. Proven on the Pixel 6a emulator: HTTP 200 <code>stored=datastore</code>, device <code>android-c55e59830b71ba38</code>. All three cards done. Physical phone is card 35.</p>
           </div>
         </li>
         <li>
@@ -424,7 +414,7 @@
         <article>
           <span class="k">A session</span>
           <h3>Ship a slice</h3>
-          <p>Noah: phones on the map (34). Reeve: GPS write (33) then demo seed (08). Connor: job list. Lewis: localStorage or local <code>/health</code>. Michael: physical phone (35) or persist routes (11). Push <code>origin/main</code> — that deploys site and API.</p>
+          <p>Reeve: demo seed (08). Connor: job list (07). Lewis: localStorage or local <code>/health</code>. Michael: physical phone (35) or persist routes (11). Live phones are already on <code>main</code>. Push <code>origin/main</code> — that deploys site and API.</p>
         </article>
       </div>
       <div class="progress-jumps">

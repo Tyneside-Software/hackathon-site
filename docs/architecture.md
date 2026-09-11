@@ -19,7 +19,7 @@ Three GitHub repos, two hosts, one product. The **site** is static files. The **
 
 Locally the site is `python -m http.server 5500`, the API is `uvicorn` on `:8080`. `.\start.ps1` starts both. The phone is Android Studio / a debug APK.
 
-**11 September 2026:** the Pixel 6a emulator posted `POST /v1/locations` to live Cloud Run and got HTTP 200 `stored=datastore` (device `android-c55e59830b71ba38`). Card 32 is ready to demo. A physical phone is card 35.
+**11 September 2026:** the Pixel 6a emulator posted `POST /v1/locations` to live Cloud Run and got HTTP 200 `stored=datastore` (device `android-c55e59830b71ba38`). The map draws that phone. Cards 32–34 are done. A physical phone is card 35.
 
 ## The three repos
 

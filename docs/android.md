@@ -2,7 +2,7 @@
 
 Sibling repo: [Tyneside-Software/hackathon-android](https://github.com/Tyneside-Software/hackathon-android).
 
-How it fits: [Architecture](#architecture). Board: card **32** (ready to demo on the emulator), card **35** (physical phone).
+How it fits: [Architecture](#architecture). Board: cards **32–34** done (app, API store, map). Card **35** is a physical phone.
 
 ```
 phone  --POST /v1/locations-->  hackathon-api  -->  Datastore (Device + LocationPing)
@@ -19,6 +19,7 @@ Pixel 6a emulator (`emulator-5554`):
 - `POST /v1/locations` → HTTP **200** `stored=datastore`
 - `GET /v1/devices` listed that phone
 - Last-known fix was the AVD default (Google HQ, Mountain View), not Tyneside
+- Map at `/app/` draws that device (amber marker, 8s poll)
 
 To put a pin on the Tyne: Android Studio Extended controls → Location, or `adb emu geo fix LNG LAT`, then wait up to a minute.
 
@@ -59,11 +60,13 @@ $env:ANDROID_HOME = "$env:LOCALAPPDATA\Android\Sdk"
 
 Output: `app/build/outputs/apk/debug/app-debug.apk`.
 
-## Ownership
+## Board
 
-| Card | Owner | Slice |
+| Card | Status | Slice |
 |------|--------|--------|
-| 32 | Michael | App: toggle, GPS, POST |
-| 33 | Reeve | API stores the ping |
-| 34 | Noah | Map draws last-known phones |
-| 35 | Michael | Same APK on a physical phone |
+| 32 | Done | App: toggle, GPS, POST |
+| 33 | Done | API stores the ping |
+| 34 | Done | Map draws last-known phones |
+| 35 | To do | Same APK on a physical phone |
+
+The three live-phone slices are on `main` and working. A real device is the leftover.

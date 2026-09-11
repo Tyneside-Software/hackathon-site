@@ -117,7 +117,7 @@ CORS must allow `https://hackathon.tyneside.software` and `http://127.0.0.1:5500
 
 If live `/test_field` is 404, the Cloud Run revision is behind `main`. Check `/health` for `version` (current code is **0.1.4**). See [API](#api).
 
-Android tracker: [Android](#android). Emulator test on 11 September 2026 posted GPS and got HTTP 200 `stored=datastore`.
+Android tracker: [Android](#android). Emulator test on 11 September 2026 posted GPS, got HTTP 200 `stored=datastore`, and the map draws the phone. Cards 32–34 are done.
 
 ---
 
