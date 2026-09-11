@@ -57,7 +57,7 @@
     <p class="filter-status" id="filter-status">Showing everyone.</p>
 
     <div class="board-banner">
-      <div>📋 Live phones work end to end: emulator → API Datastore → map. Cards 32–34 done. Cloud Run <strong>0.1.4</strong>. Next on the map: job list, demo seed, localStorage.</div>
+      <div>📋 Live phones work (32–34 done). Michael on a short break. <strong>Noah</strong> reviews that path (36), then several devices (37) and ping history on the map (38).</div>
       <div class="btns">
         <a class="btn btn-fill" href="app/">Map app</a>
         <a class="btn btn-ghost" href="progress.html">Progress</a>
@@ -90,11 +90,12 @@
       </button>
       <button type="button" class="person" data-person="noah" aria-pressed="false">
         <div class="who"><span class="emoji">🔧</span> Noah</div>
-        <div class="hrs">14 <span>hrs</span></div>
-        <div class="meta">4 done</div>
+        <div class="hrs">22 <span>hrs</span></div>
+        <div class="meta">4 done · 1 in progress · 2 to do</div>
       </button>
     </div>
     <!-- /BOARD:PEOPLE -->
+
 
 
 
@@ -113,10 +114,43 @@
       <div class="kanban">
 
         <div class="col todo">
-          <div class="head"><span class="col-name">To do</span><span class="count" id="todo-col-count">7 · 13h</span></div>
+          <div class="head"><span class="col-name">To do</span><span class="count" id="todo-col-count">9 · 19h</span></div>
           <div class="stack">
-            <script type="application/json" id="todo-cards-index">[{"id":"13","person":"lewis","hours":1},{"id":"06","person":"lewis","hours":2},{"id":"07","person":"connor","hours":2},{"id":"08","person":"reeve","hours":1.5},{"id":"09","person":"lewis","hours":2},{"id":"11","person":"michael","hours":4},{"id":"35","person":"michael","hours":0.5}]</script>
+            <script type="application/json" id="todo-cards-index">[{"id":"37","person":"noah","hours":3},{"id":"38","person":"noah","hours":3},{"id":"13","person":"lewis","hours":1},{"id":"06","person":"lewis","hours":2},{"id":"07","person":"connor","hours":2},{"id":"08","person":"reeve","hours":1.5},{"id":"09","person":"lewis","hours":2},{"id":"11","person":"michael","hours":4},{"id":"35","person":"michael","hours":0.5}]</script>
             <p class="empty-col is-hidden" data-all="Nothing here."></p>
+            <a class="card" id="card-37" href="#t-37" data-person="noah" data-hours="3">
+              <div class="top"><span class="id">37</span><span class="emoji">🔧</span></div>
+              <div class="title">Several phones on the map, easy to tell apart</div>
+              <span class="tag tag-wait">multi-device</span>
+              <div class="bot"><span>3h</span><span>Noah</span></div>
+              <template class="card-brief">
+                <p>After the review (card 36): last-known markers must still work when two or more devices are pinging. They should be distinguishable — colour, label, list — not a pile of identical amber dots. Waypoint routing stays.</p>
+                <h3>Done when</h3>
+                <ul>
+                  <li>Two devices (two emulators, emulator + curl, or emulator + phone) both show on <code>/app/</code>.</li>
+                  <li>You can tell which is which without opening a debugger.</li>
+                  <li>One device still looks fine. Don’t break the single-phone demo.</li>
+                </ul>
+                <p>Read is <code>GET /v1/devices</code>. Poll already exists in <code>app/map.js</code>.</p>
+              </template>
+            </a>
+            <a class="card" id="card-38" href="#t-38" data-person="noah" data-hours="3">
+              <div class="top"><span class="id">38</span><span class="emoji">🔧</span></div>
+              <div class="title">Show history as a route on the map</div>
+              <span class="tag tag-wait">ping history</span>
+              <div class="bot"><span>3h</span><span>Noah</span></div>
+              <template class="card-brief">
+                <p>Default view stays <strong>current location only</strong> (last-known markers). A Show history control — per device or for the selected phone — plots the recorded pings as a path. Hide history returns to current-only.</p>
+                <h3>Done when</h3>
+                <ul>
+                  <li>With history off, the map shows last-known phones only.</li>
+                  <li>Show history draws a line through that device’s pings in time order.</li>
+                  <li>Hide history removes the line.</li>
+                  <li>Waypoint routing still works.</li>
+                </ul>
+                <p>The API already stores history as <code>LocationPing</code>. Prefer <code>GET /v1/locations?device_id=</code> over a new store. A polyline is enough; OSRM is optional.</p>
+              </template>
+            </a>
             <a class="card" id="card-13" href="#t-13" data-person="lewis" data-hours="1">
               <div class="top"><span class="id">13</span><span class="emoji">🌱</span></div>
               <div class="title">Lewis: get the back end running locally</div>
@@ -159,60 +193,40 @@
                                 <div class="brief-actions"><a class="btn btn-ghost" href="app/">Open map</a></div>
               </template>
             </a>
-            <a class="card" id="card-07" href="#t-07" data-person="connor" data-hours="2">
-              <div class="top"><span class="id">07</span><span class="emoji">⚡</span></div>
-              <div class="title">Job list beside the map (seed Howden-shaped jobs)</div>
-              <div class="bot"><span>2h</span><span>Connor</span></div>
-              <template class="card-brief">
-                <p>A job list in the map sidebar, seeded with Howden-shaped work: named jobs, rough Tyneside locations. This is the first hint of dispatch, not a full scheduler.</p>
-                                <h3>Done when</h3>
-                                <ul>
-                                  <li>At least five seed jobs visible beside the map without an API.</li>
-                                  <li>Clicking a job does something visible (focus the map, highlight, or drop its waypoint).</li>
-                                  <li>The existing waypoint + route flow still works if you ignore the list.</li>
-                                </ul>
-                                <h3>How</h3>
-                                <ol>
-                                  <li>Hard-code a small JSON/JS list in the map page (name, area, lat/lng).</li>
-                                  <li>Render it in the existing sidebar; keep the layout usable on a laptop.</li>
-                                  <li>Shape the names like real cleaning/logistics jobs, not “Test 1”.</li>
-                                </ol>
-                                <div class="brief-actions"><a class="btn btn-ghost" href="app/">Open map</a></div>
-              </template>
-            </a>
-            <a class="card" id="card-08" href="#t-08" data-person="reeve" data-hours="1.5">
-              <div class="top"><span class="id">08</span><span class="emoji">🧭</span></div>
-              <div class="title">Demo seed: 5 Tyneside waypoints + named run</div>
-              <div class="bot"><span>1.5h</span><span>Reeve</span></div>
-              <template class="card-brief">
-                <p>One-click demo so nobody has to click the map five times during a show-and-tell. Load a named run with five Tyneside waypoints already placed.</p>
-                                <h3>Done when</h3>
-                                <ul>
-                                  <li>A button (e.g. “Load Tyneside demo”) drops five named stops and a run name.</li>
-                                  <li>Calculate route works immediately on that seed.</li>
-                                  <li>Clear still returns to an empty map.</li>
-                                </ul>
-                                <h3>How</h3>
-                                <ol>
-                                  <li>Pick five real-ish spots around Newcastle / Tyneside (not a straight line down one street).</li>
-                                  <li>Give the run a name the operator can see in the sidebar.</li>
-                                  <li>Keep the manual click-to-add path working.</li>
-                                </ol>
-                                <div class="brief-actions"><a class="btn btn-ghost" href="app/">Open map</a></div>
-              </template>
-            </a>
             <a class="card todo-index" id="todo-index" href="todo.html">
-              <div class="todo-index-count" id="todo-index-count">7</div>
+              <div class="todo-index-count" id="todo-index-count">9</div>
               <div class="title">All to-do cards</div>
-              <p class="todo-index-meta" id="todo-index-meta">3 more · all 7 →</p>
+              <p class="todo-index-meta" id="todo-index-meta">5 more · all 9 →</p>
             </a>
           </div>
         </div>
 
         <div class="col doing">
-          <div class="head"><span class="col-name">In progress</span><span class="count">0 · 0h</span></div>
+          <div class="head"><span class="col-name">In progress</span><span class="count">1 · 2h</span></div>
           <div class="stack">
-            <p class="empty-col" data-all="Empty on purpose. Pull a Ready card and ship it.">Empty on purpose. Pull a Ready card and ship it.</p>
+            <p class="empty-col is-hidden" data-all="Empty on purpose. Pull a Ready card and ship it."></p>
+            <a class="card" id="card-36" href="#t-36" data-person="noah" data-hours="2">
+              <div class="top"><span class="id">36</span><span class="emoji">🔧</span></div>
+              <div class="title">Review the live-phone path, then take it forward</div>
+              <span class="tag tag-ok">review · phones</span>
+              <div class="bot"><span>2h</span><span>Noah</span></div>
+              <template class="card-brief">
+                <p>Michael is on a short break. Noah takes over live phones. First job: evaluate what is already on <code>main</code> — the Android tracker, <code>POST /v1/locations</code>, <code>GET /v1/devices</code>, and the map markers in <code>app/map.js</code>. Confirm it works, that he agrees it is the right shape to build on, and write down anything he will change before cards 37 and 38.</p>
+                <h3>Done when</h3>
+                <ul>
+                  <li>He has run the path (emulator, curl, or both) and seen a phone on <a href="app/">/app/</a>.</li>
+                  <li>Agreement or nits are written down (this brief, the wiki, or a follow-on card) — not a silent rewrite of 32–34.</li>
+                  <li>He is ready to pick up multiple devices (37) and history (38).</li>
+                </ul>
+                <h3>Where to look</h3>
+                <ul>
+                  <li><a href="https://github.com/Tyneside-Software/hackathon-android">hackathon-android</a> — one switch, log tag <code>TynesideTracker</code>.</li>
+                  <li><a href="https://github.com/Tyneside-Software/hackathon-api">hackathon-api</a> — <code>Device</code> last-known, <code>LocationPing</code> history, <code>GET /v1/locations?device_id=</code>.</li>
+                  <li>Site <code>app/map.js</code> — polls devices every 8s, amber circle markers.</li>
+                  <li>Wiki: <a href="docs/#android">Android</a> · <a href="docs/#architecture">Architecture</a> · <a href="progress.html">Progress</a>.</li>
+                </ul>
+              </template>
+            </a>
           </div>
         </div>
 
@@ -292,6 +306,7 @@
 
 
 
+
     <h2 style="margin-top:2rem">Who’s who</h2>
     <p class="lede">Hours are every card attributed to that person, whichever column it sits in. Click a row to filter the board.</p>
     <!-- BOARD:WHO -->
@@ -328,13 +343,14 @@
         <tr data-person="noah">
           <td>🔧</td>
           <td><strong>Noah</strong></td>
-          <td>Noah: API talks to Firestore (12h, done) · Noah: API version on / and /health (0.5h, done) · Noah: get the front end running locally (0.5h, done) · Noah: get the back end running locally (1h, done)</td>
-          <td><strong>14h</strong></td>
+          <td>Review the live-phone path, then take it forward (2h, in progress) · Several phones on the map, easy to tell apart (3h) · Show history as a route on the map (3h) · Noah: API talks to Firestore (12h, done) · Noah: API version on / and /health (0.5h, done) · Noah: get the front end running locally (0.5h, done) · Noah: get the back end running locally (1h, done)</td>
+          <td><strong>22h</strong></td>
         </tr>
       </tbody>
     </table>
     </div>
     <!-- /BOARD:WHO -->
+
 
 
 

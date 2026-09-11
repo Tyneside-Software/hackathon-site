@@ -2,7 +2,7 @@
 
 Sibling repo: [Tyneside-Software/hackathon-android](https://github.com/Tyneside-Software/hackathon-android).
 
-How it fits: [Architecture](#architecture). Board: cards **32–34** done (app, API store, map). Card **35** is a physical phone.
+How it fits: [Architecture](#architecture). Board: cards **32–34** done. Noah takes the path forward (36 review, 37 several devices, 38 history). Card **35** is a physical phone (Michael, after the break).
 
 ```
 phone  --POST /v1/locations-->  hackathon-api  -->  Datastore (Device + LocationPing)
@@ -62,11 +62,14 @@ Output: `app/build/outputs/apk/debug/app-debug.apk`.
 
 ## Board
 
-| Card | Status | Slice |
-|------|--------|--------|
-| 32 | Done | App: toggle, GPS, POST |
-| 33 | Done | API stores the ping |
-| 34 | Done | Map draws last-known phones |
-| 35 | To do | Same APK on a physical phone |
+| Card | Who | Status | Slice |
+|------|-----|--------|--------|
+| 32 | Michael | Done | App: toggle, GPS, POST |
+| 33 | Michael | Done | API stores the ping |
+| 34 | Michael | Done | Map draws last-known phones |
+| 36 | Noah | In progress | Review that path and agree it |
+| 37 | Noah | To do | Several phones, easy to tell apart |
+| 38 | Noah | To do | Show history as a route (current location by default) |
+| 35 | Michael | To do | Same APK on a physical phone |
 
-The three live-phone slices are on `main` and working. A real device is the leftover.
+Michael is on a short break. Noah: start at 36, then 37, then 38. History read is already `GET /v1/locations?device_id=`.

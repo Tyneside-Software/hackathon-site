@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Current progress · Tyneside Logistics</title>
-  <meta name="description" content="Catch-up snapshot for the Tyneside Logistics hackathon. Map is demoable, Cloud Run is live at 0.1.4, the Android tracker POSTs GPS from the emulator.">
+  <meta name="description" content="Catch-up snapshot. Live phones work. Noah reviews that path, then several devices and ping history on the map.">
   <link rel="icon" href="logo.svg" type="image/svg+xml">
   <link rel="stylesheet" href="styles.css">
   <script src="config.js"></script>
@@ -42,17 +42,14 @@
         · catch-up for anyone who has been away
       </p>
       <h1>CURRENT<br>PROGRESS</h1>
-      <p class="hero-tag">The map is demoable. The API is live at 0.1.4. Live phones work end to end.</p>
+      <p class="hero-tag">Live phones work. Michael is on a short break. Noah takes that path forward.</p>
       <p class="hero-lead">
         Three repos, two hosts, one product. The site is static on GitHub Pages.
-        The API is FastAPI on Cloud Run in London, version <strong>0.1.4</strong>,
-        Python 3.13 pack.
+        The API is FastAPI on Cloud Run in London, version <strong>0.1.4</strong>.
         The phone is a one-switch Android app.
-        They only meet over HTTP:
-        the phone <code>POST</code>s <code>/v1/locations</code>,
-        the map polls <code>GET /v1/devices</code>.
-        That path is working: emulator ping in Datastore, amber marker on the map.
-        Cards 32–34 are done. A physical phone is card 35.
+        Emulator → <code>POST /v1/locations</code> → Datastore → map markers is working (cards 32–34 done).
+        Noah’s next: review that code and agree it (36), then several devices on the map (37),
+        then history — current location by default, a Show history control that plots the recorded pings as a path (38).
       </p>
       <div class="hero-actions">
         <a class="btn btn-fill" href="app/">Open the map →</a>
@@ -153,9 +150,9 @@
         <li>
           <span class="n">05</span>
           <div>
-            <strong>Live phones are done.</strong>
-            <span>Android app (32), API store (33), map markers (34) all on <code>main</code>.
-            Card 31 (Firestore) was already done. Next product slices are still the map: job list, demo seed, localStorage.</span>
+            <strong>Noah takes live phones forward.</strong>
+            <span>Michael is on a short break. Card 36 (in progress): review what is on <code>main</code> and agree it.
+            Then 37: several devices, easy to tell apart. Then 38: Show history plots a path; default stays current location only.</span>
           </div>
         </li>
         <li>
@@ -180,20 +177,30 @@
           <header>
             <span class="lane-kicker">In flight</span>
             <h3>Now</h3>
-            <p>0 cards · live phones shipped</p>
+            <p>1 card · 2h</p>
           </header>
-          <a class="progress-item" href="done.html#t-32">
-            <span class="id">32–34 · 🏗️ done</span>
-            <strong>Live phones</strong>
-            <span>App posts GPS, API stores it, map draws it. Nothing left in Doing. Pick a Ready or To-do card.</span>
+          <a class="progress-item" href="board.html#t-36">
+            <span class="id">36 · 🔧 Noah</span>
+            <strong>Review the live-phone path</strong>
+            <span>Read and run what is on <code>main</code> (app, API, map markers). Agree it, or write the nits. Then take 37 and 38. Michael is on a short break.</span>
           </a>
         </article>
         <article class="progress-lane is-next">
           <header>
-            <span class="lane-kicker">Ready + product</span>
+            <span class="lane-kicker">Noah next, then the map</span>
             <h3>Next</h3>
-            <p>Demo the map, then fill it</p>
+            <p>Several devices, then history, then demo the map</p>
           </header>
+          <a class="progress-item" href="todo.html#t-37">
+            <span class="id">37 · 🔧 Noah</span>
+            <strong>Several phones, easy to tell apart</strong>
+            <span>Two or more devices on <code>/app/</code> without a pile of identical amber dots. Single-phone demo still works.</span>
+          </a>
+          <a class="progress-item" href="todo.html#t-38">
+            <span class="id">38 · 🔧 Noah</span>
+            <strong>Show history as a route</strong>
+            <span>Default is current location only. Show history draws a line through <code>GET /v1/locations?device_id=</code> pings. Hide history returns to now.</span>
+          </a>
           <a class="progress-item" href="board.html#t-04">
             <span class="id">04 · 🧭 Reeve · Ready</span>
             <strong>Clickable / draggable waypoints</strong>
@@ -224,7 +231,7 @@
           <header>
             <span class="lane-kicker">Waiting or onboarding</span>
             <h3>Later</h3>
-            <p>7 open · 13h</p>
+            <p>7 open · 13h · Michael on a break</p>
           </header>
           <a class="progress-item" href="todo.html#t-35">
             <span class="id">35 · 🏗️ Michael</span>
@@ -259,9 +266,9 @@
       <div class="progress-who">
         <a class="progress-person" href="board.html?person=noah">
           <span class="who"><span class="emoji">🔧</span> Noah</span>
-          <span class="hrs">14 <span>hrs</span></span>
-          <span class="focus">Firestore done · pick a map slice</span>
-          <span class="meta">4 done. Card 31 is done. Live phones (34) shipped on main. No open cards — grab a to-do from the board if you want another slice.</span>
+          <span class="hrs">22 <span>hrs</span></span>
+          <span class="focus">Review phones · then 37 · 38</span>
+          <span class="meta">4 done · 1 in progress · 2 to do. Takes live phones while Michael is on a break. Review first, then several devices, then history.</span>
         </a>
         <a class="progress-person" href="board.html?person=reeve">
           <span class="who"><span class="emoji">🧭</span> Reeve</span>
@@ -284,8 +291,8 @@
         <a class="progress-person" href="board.html?person=michael">
           <span class="who"><span class="emoji">🏗️</span> Michael</span>
           <span class="hrs">25.75 <span>hrs</span></span>
-          <span class="focus">Live phones done · physical phone</span>
-          <span class="meta">9 done · 2 to do. App + API store + map markers shipped. Card 35 is a real phone; card 11 is persist routes.</span>
+          <span class="focus">On a short break</span>
+          <span class="meta">9 done · 2 to do. Live phones shipped. Noah has the next slices. 35 is a real phone; 11 is persist routes — after the break.</span>
         </a>
       </div>
     </div>
@@ -414,7 +421,7 @@
         <article>
           <span class="k">A session</span>
           <h3>Ship a slice</h3>
-          <p>Reeve: demo seed (08). Connor: job list (07). Lewis: localStorage or local <code>/health</code>. Michael: physical phone (35) or persist routes (11). Live phones are already on <code>main</code>. Push <code>origin/main</code> — that deploys site and API.</p>
+          <p>Noah: review the live-phone path (36), then several devices (37), then Show history (38). Reeve: demo seed (08). Connor: job list (07). Lewis: localStorage or local <code>/health</code>. Michael is on a short break. Push <code>origin/main</code> — that deploys site and API.</p>
         </article>
       </div>
       <div class="progress-jumps">

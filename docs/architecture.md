@@ -19,7 +19,9 @@ Three GitHub repos, two hosts, one product. The **site** is static files. The **
 
 Locally the site is `python -m http.server 5500`, the API is `uvicorn` on `:8080`. `.\start.ps1` starts both. The phone is Android Studio / a debug APK.
 
-**11 September 2026:** the Pixel 6a emulator posted `POST /v1/locations` to live Cloud Run and got HTTP 200 `stored=datastore` (device `android-c55e59830b71ba38`). The map draws that phone. Cards 32–34 are done. A physical phone is card 35.
+**11 September 2026:** the Pixel 6a emulator posted `POST /v1/locations` to live Cloud Run and got HTTP 200 `stored=datastore` (device `android-c55e59830b71ba38`). The map draws that phone. Cards 32–34 are done.
+
+**Next (Noah, while Michael is on a short break):** review that path (card 36), then several devices easy to tell apart (37), then Show history as a route — current location by default (38). History read already exists: `GET /v1/locations?device_id=`. A physical phone is still card 35.
 
 ## The three repos
 
@@ -119,6 +121,8 @@ Device id on the phone is `Settings.Secure.ANDROID_ID` (not the hardware serial 
 The API Dockerfile exists for a Docker-based trigger. The GitHub-connected service **does not use it**; it uses buildpacks. That is why `main.py` at the repo root and `.python-version` = `3.13` exist. Pinning 3.12 failed: that builder has no 3.12. See [API](#api).
 
 ## Next
+
+Live phones: Noah reviews cards 32–34, then [Android tracker](#android) cards 37 (several devices) and 38 (history path). Board: [Current progress](../progress.html).
 
 | Topic | Page |
 |-------|------|
