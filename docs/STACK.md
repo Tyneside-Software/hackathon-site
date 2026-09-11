@@ -50,7 +50,7 @@ Details: [Alpine.js](#javascript).
 
 Default centre: Newcastle `[54.9783, -1.6178]`.
 
-The map **does** call our API for phones (`GET /v1/devices`, `GET /v1/locations?device_id=`). Waypoints do not. Buses call bustimes.org, not us. Full picture: [The map](#map).
+The map **does** call our API for phones (`GET /v1/devices`, `GET /v1/locations?device_id=`) and buses (`GET /v1/buses`). Waypoints do not. The browser never calls bustimes.org — the API caches that feed in Firestore. Full picture: [The map](#map).
 
 ## Our API from the browser
 

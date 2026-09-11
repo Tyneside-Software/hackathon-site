@@ -47,7 +47,7 @@
       "column": "done",
       "tag": "register · login",
       "tag_kind": "ok",
-      "brief": "<p>Noah shipped register, login, and <code>GET /users/me</code>. Live <code>/health</code> is <strong>0.1.6</strong>.</p>\n<h3>What’s live</h3>\n<ul>\n  <li>API <code>830036a</code>: <code>POST /register</code>, <code>POST /login</code> (JSON), <code>POST /token</code> (OAuth2 form), <code>GET /users/me</code> (bearer). Users persist in Firestore, Datastore fallback, process cache.</li>\n  <li>Site <code>625b5dc</code>: <a href=\"account.html\">/account.html</a> — create account, log in, Fetch me. Token in <code>sessionStorage</code>.</li>\n  <li>Phone GPS and map GETs stay open. Only <code>/users/me</code> requires a token.</li>\n  <li>Set <code>JWT_SECRET_KEY</code> on Cloud Run so tokens survive a new revision.</li>\n</ul>\n<p>Wiki: <a href=\"docs/#api\">API</a>.</p>"
+      "brief": "<p>Noah shipped register, login, and <code>GET /users/me</code> on API <strong>0.1.6</strong> (<code>830036a</code>). Live <code>/health</code> is now <strong>0.1.7</strong> (buses cache on top). No further Noah commits after this card.</p>\n<h3>What’s live</h3>\n<ul>\n  <li>API: <code>POST /register</code>, <code>POST /login</code> (JSON), <code>POST /token</code> (OAuth2 form), <code>GET /users/me</code> (bearer). Users persist in Firestore, Datastore fallback, process cache.</li>\n  <li>Site <code>625b5dc</code>: <a href=\"account.html\">/account.html</a> — create account, log in, Fetch me. Token in <code>sessionStorage</code>.</li>\n  <li>Phone GPS, map GETs, and <code>/v1/buses</code> stay open. Only <code>/users/me</code> requires a token.</li>\n  <li>Set <code>JWT_SECRET_KEY</code> on Cloud Run so tokens survive a new revision.</li>\n</ul>\n<p>Wiki: <a href=\"docs/#api\">API</a>.</p>"
     },
     {
       "id": "44",
@@ -91,7 +91,7 @@
       "column": "done",
       "tag": "app/routers",
       "tag_kind": "ok",
-      "brief": "<p>Noah split <code>app/main.py</code> into modules so accounts and GPS can grow without one giant file.</p>\n<ul>\n  <li><code>app/routers/</code> — health, fields, locations, devices</li>\n  <li><code>app/config.py</code> — VERSION, CORS</li>\n  <li><code>app/db.py</code>, <code>app/schemas.py</code>, <code>app/dependencies.py</code></li>\n</ul>\n<p><code>57a1d44</code>. Cloud Run still execs <code>app/main.py</code> (<code>uvicorn.run(app)</code> stays at the bottom).</p>"
+      "brief": "<p>Noah split <code>app/main.py</code> into modules so accounts and GPS can grow without one giant file.</p>\n<ul>\n  <li><code>app/routers/</code> — health, fields, locations, devices (then <code>auth</code> in 41, <code>buses</code> in 45)</li>\n  <li><code>app/config.py</code> — VERSION, CORS</li>\n  <li><code>app/db.py</code>, <code>app/schemas.py</code>, <code>app/dependencies.py</code></li>\n</ul>\n<p><code>57a1d44</code>. Cloud Run still execs <code>app/main.py</code> (<code>uvicorn.run(app)</code> stays at the bottom).</p>"
     },
     {
       "id": "39",
@@ -102,7 +102,7 @@
       "column": "done",
       "tag": "bustimes.org",
       "tag_kind": "ok",
-      "brief": "<p>Show buses / Hide buses on <a href=\"app/\">/app/</a>. Off by default — no fetch on page load. While on, poll bustimes.org <code>/vehicles.json</code> every 15s (skip hidden tabs), haversine-filter to a 30-mile circle of Newcastle, line-number markers. Hide aborts the request, stops the timer, removes markers. Do not <code>fitBounds</code> to buses. Feed down: status line, map stays.</p>\n<p>Not BODS from the browser — that needs a DfT key and SIRI-VM. bustimes.org already ingest BODS; we use their map JSON. First-fetch abort and ghost-button hover: card 43. Wiki: <a href=\"docs/#buses\">Live buses</a>.</p>"
+      "brief": "<p>Show buses / Hide buses on <a href=\"app/\">/app/</a>. Off by default. First version polled bustimes.org from the browser. That fetch path is now card <strong>45</strong>: the map calls our <code>GET /v1/buses</code>, and the API caches Firestore.</p>\n<p>Toggle, 30-mile circle, no <code>fitBounds</code>, feed-down status: still this card. Readable chips: 44. Shared cache: 45. Wiki: <a href=\"docs/#buses\">Live buses</a>.</p>"
     },
     {
       "id": "36",
