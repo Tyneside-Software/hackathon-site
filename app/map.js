@@ -702,9 +702,9 @@
       setBusStatus("Off — no data fetched.");
       return;
     }
+    stopBusPoll();
     setBusStatus("Loading buses…");
     refreshBuses();
-    stopBusPoll();
     busTimer = setInterval(refreshBuses, BUS_POLL_MS);
   }
 

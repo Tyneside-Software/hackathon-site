@@ -9,7 +9,7 @@ This is a **site** slice. It does **not** call our API, and it does **not** call
 | | |
 |--|--|
 | Default | Off. No `vehicles.json` request on page load. |
-| On | Fetch once, then every 15s while the tab is visible. |
+| On | Fetch once immediately, then every 15s while the tab is visible. |
 | Hidden tab | Skip the tick; fetch again when the tab is shown. |
 | Off | Abort in-flight fetch, stop the timer, remove every bus marker. |
 | Map view | Do not `fitBounds` to buses — waypoints stay the camera. |

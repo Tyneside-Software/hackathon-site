@@ -4,6 +4,8 @@
   min-height: calc(100vh - 4.1rem);
 }
 .map-side {
+  position: relative;
+  z-index: 2;
   padding: 1.15rem 1.2rem 2rem;
   border-right: 1px solid var(--border);
   background: rgba(12, 18, 25, 0.92);
