@@ -248,7 +248,8 @@
 
   function plotHistoryOnMap(fit) {
     clearHistoryLayer();
-    const pts = historyPings.map((p) => [p.lat, p.lng]);
+    const path = uniquePings(historyPings);
+    const pts = path.map((p) => [p.lat, p.lng]);
     if (!pts.length) return;
     const layers = [];
     if (pts.length >= 2) {
@@ -258,8 +259,8 @@
       );
       layers.push(L.polyline(pts, { ...lineOpts, color: HISTORY_COLOUR, weight: 4, opacity: 1 }));
     }
-    historyPings.forEach((p, i) => {
-      const last = i === historyPings.length - 1;
+    path.forEach((p, i) => {
+      const last = i === path.length - 1;
       layers.push(
         L.circleMarker([p.lat, p.lng], {
           radius: last ? 8 : 5,
@@ -271,7 +272,7 @@
           "<strong>" +
             (i + 1) +
             " / " +
-            historyPings.length +
+            path.length +
             "</strong><br>" +
             p.lat.toFixed(5) +
             ", " +
@@ -301,7 +302,9 @@
         coords.textContent = p.lat.toFixed(5) + ", " + p.lng.toFixed(5);
         const age = document.createElement("div");
         age.className = "ping-item-age";
-        age.textContent = ageLabel(p.recorded_at) || "unknown time";
+        age.textContent =
+          (p.recorded_at ? String(p.recorded_at).replace("T", " ").replace("Z", " UTC") : "unknown time") +
+          (ageLabel(p.recorded_at) ? " · " + ageLabel(p.recorded_at) : "");
         li.appendChild(coords);
         li.appendChild(age);
         pingListEl.appendChild(li);
@@ -345,31 +348,34 @@
     if (!quiet && drawerStatusEl) drawerStatusEl.textContent = "Loading history…";
     try {
       const res = await fetch(
-        base + "/v1/locations?device_id=" + encodeURIComponent(deviceId) + "&limit=100",
+        base + "/v1/locations?device_id=" + encodeURIComponent(deviceId) + "&limit=500",
         { headers: { Accept: "application/json" } }
       );
       if (!res.ok) throw new Error("HTTP " + res.status);
       const data = await res.json();
       if (selectedDeviceId !== deviceId) return;
       const raw = data.pings || [];
-      historyPings = uniquePings(raw);
+      historyPings = raw
+        .filter((p) => typeof p.lat === "number" && typeof p.lng === "number")
+        .slice()
+        .sort((a, b) => String(a.recorded_at || "").localeCompare(String(b.recorded_at || "")));
       renderPingList();
-      const hidden = raw.length - historyPings.length;
+      const pathPoints = uniquePings(historyPings);
       if (drawerStatusEl) {
-        if (!historyPings.length) drawerStatusEl.textContent = "No pings for this device.";
-        else if (hidden > 0)
+        if (!historyPings.length) drawerStatusEl.textContent = "No pings in LocationPing for this device.";
+        else if (pathPoints.length < historyPings.length)
           drawerStatusEl.textContent =
             historyPings.length +
-            " location" +
+            " ping" +
             (historyPings.length === 1 ? "" : "s") +
-            " · skipped " +
-            hidden +
-            " stay-put ping" +
-            (hidden === 1 ? "" : "s") +
-            ".";
+            " · " +
+            pathPoints.length +
+            " unique place" +
+            (pathPoints.length === 1 ? "" : "s") +
+            " on the map.";
         else
           drawerStatusEl.textContent =
-            historyPings.length + " location" + (historyPings.length === 1 ? "" : "s") + ".";
+            historyPings.length + " ping" + (historyPings.length === 1 ? "" : "s") + ".";
       }
       setHistoryButton();
       if (historyOnMap) plotHistoryOnMap(false);
