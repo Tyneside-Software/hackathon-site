@@ -30,7 +30,7 @@ The drawer lists LocationPings. Consecutive pings at the same place are hidden (
 
 ## Buses
 
-**Show buses** / **Hide buses**. Off means no request at all. While on: `GET /v1/buses` every 15s. The API serves a Firestore snapshot (TTL 15s) or, if that snapshot is stale, fetches bustimes.org once and writes it. Only vehicles in the **current view** are drawn. City zoom (12–13) is coloured dots; zoom 14+ is upright line-number chips. Hidden tab: skip the tick. Clicking a bus opens a popup and does **not** add a waypoint.
+**Show buses** / **Hide buses**. Off means no request at all. While on: `GET /v1/buses` every 15s. The API serves a Firestore snapshot (TTL 15s) or, if that snapshot is stale, fetches bustimes.org once and writes it. Buses stay on the map at **every zoom**. Below 14 they are coloured dots; 14+ they are upright line-number chips. Only vehicles in the **current view** are drawn (at a wide zoom that is the whole 30-mile circle). Hidden tab: skip the tick. Clicking a bus opens a popup and does **not** add a waypoint.
 
 Full page: [Live buses](#buses).
 

@@ -13,9 +13,9 @@ The browser does **not** call bustimes.org. It does **not** call BODS. One looki
 | Hidden tab | Skip the tick; fetch again when the tab is shown. |
 | Off | Abort in-flight fetch, stop the timer, remove every bus marker. Status returns to `Off — no data fetched.` |
 | Map view | Do not `fitBounds` to buses — waypoints stay the camera. Pan/zoom repaints from the last payload (no extra request). |
-| Viewport | Only vehicles in the current map bounds (plus a small pad) are drawn. |
-| City zoom (12–13) | Coloured **dots**. |
-| Street zoom (14+) | Upright **line-number chips** with a heading pip. |
+| Viewport | Only vehicles in the current map bounds (plus a small pad) are drawn. Zoomed out, that is the whole 30-mile circle. |
+| Any zoom below 14 | Coloured **dots** — still drawn, including when the map is wide. |
+| Zoom 14+ | Upright **line-number chips** with a heading pip. |
 | Stale vehicle | Pings older than **10 minutes** are not drawn. |
 | Status | Count in view, 30-mile count, newest ping age, **cache age** or **refreshed**. |
 | Click | Popup. Does **not** drop a waypoint. |

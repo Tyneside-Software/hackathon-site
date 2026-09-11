@@ -501,7 +501,6 @@
   const BUS_KM = BUS_MILES * 1.609344;
   const BUS_POLL_MS = 15000;
   const BUS_STALE_MS = 10 * 60 * 1000;
-  const BUS_MIN_ZOOM = 12;
   const BUS_CHIP_ZOOM = 14;
 
   map.createPane("buses");
@@ -562,10 +561,7 @@
   }
 
   function busMode() {
-    const z = map.getZoom();
-    if (z < BUS_MIN_ZOOM) return "hidden";
-    if (z < BUS_CHIP_ZOOM) return "dot";
-    return "chip";
+    return map.getZoom() < BUS_CHIP_ZOOM ? "dot" : "chip";
   }
 
   function busLook(v, mode) {
@@ -677,21 +673,6 @@
       const t = Date.parse(v && v.datetime);
       if (!Number.isNaN(t) && t > newest) newest = t;
     }
-    if (mode === "hidden") {
-      clearBuses();
-      (rows || []).forEach((v) => {
-        const coords = v && v.coordinates;
-        if (!Array.isArray(coords) || coords.length < 2) return;
-        const lng = Number(coords[0]);
-        const lat = Number(coords[1]);
-        if (!Number.isFinite(lat) || !Number.isFinite(lng)) return;
-        if (!withinNewcastle(lat, lng)) return;
-        inCircle += 1;
-        noteTime(v);
-        if (!busIsFresh(v)) stale += 1;
-      });
-      return { inView: 0, inCircle, stale, mode, newest };
-    }
     (rows || []).forEach((v) => {
       const coords = v && v.coordinates;
       if (!Array.isArray(coords) || coords.length < 2) return;
@@ -755,12 +736,6 @@
     const n = upsertBuses(busRows);
     if (!n.inCircle) {
       setBusStatus("No live buses in the 30-mile circle right now." + busCacheNote());
-      return;
-    }
-    if (n.mode === "hidden") {
-      let msg = "Zoom in to see buses — " + n.inCircle + " live within " + BUS_MILES + " miles";
-      if (n.newest) msg += " · newest ping " + (ageLabel(new Date(n.newest).toISOString()) || "just now");
-      setBusStatus(msg + busCacheNote() + ".");
       return;
     }
     let msg = n.inView + " in view";
