@@ -93,8 +93,79 @@
     box-shadow: 0 0 0 3px rgba(52, 211, 153, 0.3);
   }
 }
-#map { min-height: 28rem; background: #0a1016; }
+.phone-card.is-selected {
+  outline: 2px solid var(--heading);
+  outline-offset: 2px;
+}
+.map-stage {
+  position: relative;
+  min-width: 0;
+  min-height: 28rem;
+}
+#map {
+  position: absolute;
+  inset: 0;
+  background: #0a1016;
+}
+.phone-drawer {
+  position: absolute;
+  inset: 0 0 0 auto;
+  width: min(22rem, 92%);
+  background: rgba(12, 18, 25, 0.96);
+  border-left: 1px solid var(--border);
+  transform: translateX(110%);
+  transition: transform 0.28s ease;
+  z-index: 850;
+  overflow: auto;
+  pointer-events: none;
+}
+.phone-drawer.is-open {
+  transform: translateX(0);
+  pointer-events: auto;
+}
+.phone-drawer-inner { padding: 1.15rem 1.2rem 2rem; }
+.phone-drawer-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.6rem;
+  margin-bottom: 0.7rem;
+}
+.phone-drawer-head h2 {
+  font-size: 1.05rem;
+  line-height: 1.3;
+  word-break: break-all;
+  margin: 0;
+}
+.phone-drawer .map-actions { margin-top: 0; }
+.phone-drawer .map-actions .btn { width: 100%; }
+.ping-list {
+  list-style: none;
+  padding: 0;
+  margin: 0.55rem 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+.ping-item {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.65rem 0.75rem;
+}
+.ping-item-coords {
+  font-weight: 700;
+  font-size: 0.88rem;
+  color: var(--heading);
+}
+.ping-item-age {
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+@media (prefers-reduced-motion: reduce) {
+  .phone-drawer { transition: none; }
+}
 @media (max-width: 800px) {
   .map-shell { grid-template-columns: 1fr; }
-  #map { height: 55vh; }
+  .map-stage { height: 55vh; min-height: 0; }
 }

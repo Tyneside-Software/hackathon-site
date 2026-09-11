@@ -53,7 +53,25 @@
       <p class="map-status" id="device-status">Waiting for tracker pings.</p>
       <ul class="phone-list" id="devices"></ul>
     </aside>
-    <div id="map" role="application" aria-label="Tyneside route map"></div>
+    <div class="map-stage">
+      <div id="map" role="application" aria-label="Tyneside route map"></div>
+      <aside class="phone-drawer" id="phone-drawer" aria-hidden="true" aria-labelledby="drawer-title">
+        <div class="phone-drawer-inner">
+          <div class="phone-drawer-head">
+            <div>
+              <p class="hero-kicker">Device</p>
+              <h2 id="drawer-title">—</h2>
+            </div>
+            <button type="button" class="btn btn-ghost" id="drawer-close">Close</button>
+          </div>
+          <div class="map-actions">
+            <button type="button" class="btn btn-fill" id="btn-history">Show history on map</button>
+          </div>
+          <p class="map-status" id="drawer-status"></p>
+          <ol class="ping-list" id="ping-list"></ol>
+        </div>
+      </aside>
+    </div>
   </div>
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>

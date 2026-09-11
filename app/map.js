@@ -157,11 +157,24 @@
   });
 
   const DEVICE_COLOUR = "#F5A623";
+  const HISTORY_COLOUR = "#34d399";
+  const HISTORY_OUTLINE = "#065f46";
   const FRESH_MS = 2 * 60 * 1000;
   const PHONE_ZOOM = 16;
+  const SAME_PLACE = 1e-6;
   const deviceMarkers = new Map();
   const devicesEl = document.getElementById("devices");
   const deviceStatusEl = document.getElementById("device-status");
+  const drawerEl = document.getElementById("phone-drawer");
+  const drawerTitleEl = document.getElementById("drawer-title");
+  const drawerStatusEl = document.getElementById("drawer-status");
+  const pingListEl = document.getElementById("ping-list");
+  const btnHistory = document.getElementById("btn-history");
+  const btnDrawerClose = document.getElementById("drawer-close");
+  let selectedDeviceId = null;
+  let historyPings = [];
+  let historyLayer = null;
+  let historyOnMap = false;
 
   function apiBase() {
     return String(window.HACKATHON_API || "").replace(/\/$/, "");
@@ -191,12 +204,196 @@
     return Date.now() - t < FRESH_MS;
   }
 
+  function samePlace(a, b) {
+    return Math.abs(a.lat - b.lat) < SAME_PLACE && Math.abs(a.lng - b.lng) < SAME_PLACE;
+  }
+
+  function uniquePings(pings) {
+    const ordered = (pings || [])
+      .filter((p) => typeof p.lat === "number" && typeof p.lng === "number")
+      .slice()
+      .sort((a, b) => String(a.recorded_at || "").localeCompare(String(b.recorded_at || "")));
+    const out = [];
+    ordered.forEach((p) => {
+      const prev = out[out.length - 1];
+      if (prev && samePlace(prev, p)) return;
+      out.push(p);
+    });
+    return out;
+  }
+
   function zoomToPhone(lat, lng, deviceId) {
     const reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (reduce) map.setView([lat, lng], PHONE_ZOOM);
     else map.flyTo([lat, lng], PHONE_ZOOM, { duration: 0.7 });
     const marker = deviceMarkers.get(deviceId);
     if (marker) marker.openPopup();
+  }
+
+  function setHistoryButton() {
+    if (!btnHistory) return;
+    btnHistory.textContent = historyOnMap ? "Hide history" : "Show history on map";
+    btnHistory.className = "btn " + (historyOnMap ? "btn-ghost" : "btn-fill");
+    btnHistory.disabled = !historyPings.length;
+  }
+
+  function clearHistoryLayer() {
+    if (historyLayer) {
+      map.removeLayer(historyLayer);
+      historyLayer = null;
+    }
+    historyOnMap = false;
+    setHistoryButton();
+  }
+
+  function plotHistoryOnMap(fit) {
+    clearHistoryLayer();
+    const pts = historyPings.map((p) => [p.lat, p.lng]);
+    if (!pts.length) return;
+    const layers = [];
+    if (pts.length >= 2) {
+      const lineOpts = { lineJoin: "round", lineCap: "round" };
+      layers.push(
+        L.polyline(pts, { ...lineOpts, color: HISTORY_OUTLINE, weight: 8, opacity: 0.9 })
+      );
+      layers.push(L.polyline(pts, { ...lineOpts, color: HISTORY_COLOUR, weight: 4, opacity: 1 }));
+    }
+    historyPings.forEach((p, i) => {
+      const last = i === historyPings.length - 1;
+      layers.push(
+        L.circleMarker([p.lat, p.lng], {
+          radius: last ? 8 : 5,
+          color: "#0B1220",
+          weight: 2,
+          fillColor: last ? HISTORY_COLOUR : "#fbbf24",
+          fillOpacity: 0.95,
+        }).bindPopup(
+          "<strong>" +
+            (i + 1) +
+            " / " +
+            historyPings.length +
+            "</strong><br>" +
+            p.lat.toFixed(5) +
+            ", " +
+            p.lng.toFixed(5) +
+            "<br>" +
+            (ageLabel(p.recorded_at) || "")
+        )
+      );
+    });
+    historyLayer = L.layerGroup(layers).addTo(map);
+    historyOnMap = true;
+    setHistoryButton();
+    if (fit !== false) map.fitBounds(L.latLngBounds(pts).pad(0.18));
+  }
+
+  function renderPingList() {
+    if (!pingListEl) return;
+    pingListEl.innerHTML = "";
+    historyPings
+      .slice()
+      .reverse()
+      .forEach((p) => {
+        const li = document.createElement("li");
+        li.className = "ping-item";
+        const coords = document.createElement("div");
+        coords.className = "ping-item-coords";
+        coords.textContent = p.lat.toFixed(5) + ", " + p.lng.toFixed(5);
+        const age = document.createElement("div");
+        age.className = "ping-item-age";
+        age.textContent = ageLabel(p.recorded_at) || "unknown time";
+        li.appendChild(coords);
+        li.appendChild(age);
+        pingListEl.appendChild(li);
+      });
+  }
+
+  function openDrawer(deviceId) {
+    if (!drawerEl) return;
+    if (drawerTitleEl) drawerTitleEl.textContent = deviceId || "phone";
+    drawerEl.classList.add("is-open");
+    drawerEl.setAttribute("aria-hidden", "false");
+  }
+
+  function closeDrawer() {
+    selectedDeviceId = null;
+    historyPings = [];
+    clearHistoryLayer();
+    if (drawerEl) {
+      drawerEl.classList.remove("is-open");
+      drawerEl.setAttribute("aria-hidden", "true");
+    }
+    if (pingListEl) pingListEl.innerHTML = "";
+    if (drawerStatusEl) drawerStatusEl.textContent = "";
+    if (drawerTitleEl) drawerTitleEl.textContent = "—";
+    markSelected();
+    setHistoryButton();
+  }
+
+  function markSelected() {
+    if (!devicesEl) return;
+    devicesEl.querySelectorAll(".phone-card").forEach((btn) => {
+      const on = btn.getAttribute("data-device-id") === selectedDeviceId;
+      btn.classList.toggle("is-selected", on);
+      btn.setAttribute("aria-pressed", on ? "true" : "false");
+    });
+  }
+
+  async function loadHistory(deviceId, quiet) {
+    const base = apiBase();
+    if (!base || !deviceId) return;
+    if (!quiet && drawerStatusEl) drawerStatusEl.textContent = "Loading history…";
+    try {
+      const res = await fetch(
+        base + "/v1/locations?device_id=" + encodeURIComponent(deviceId) + "&limit=100",
+        { headers: { Accept: "application/json" } }
+      );
+      if (!res.ok) throw new Error("HTTP " + res.status);
+      const data = await res.json();
+      if (selectedDeviceId !== deviceId) return;
+      const raw = data.pings || [];
+      historyPings = uniquePings(raw);
+      renderPingList();
+      const hidden = raw.length - historyPings.length;
+      if (drawerStatusEl) {
+        if (!historyPings.length) drawerStatusEl.textContent = "No pings for this device.";
+        else if (hidden > 0)
+          drawerStatusEl.textContent =
+            historyPings.length +
+            " location" +
+            (historyPings.length === 1 ? "" : "s") +
+            " · skipped " +
+            hidden +
+            " stay-put ping" +
+            (hidden === 1 ? "" : "s") +
+            ".";
+        else
+          drawerStatusEl.textContent =
+            historyPings.length + " location" + (historyPings.length === 1 ? "" : "s") + ".";
+      }
+      setHistoryButton();
+      if (historyOnMap) plotHistoryOnMap(false);
+    } catch (err) {
+      if (selectedDeviceId !== deviceId) return;
+      historyPings = [];
+      renderPingList();
+      if (drawerStatusEl) drawerStatusEl.textContent = "Could not load ping history.";
+      setHistoryButton();
+    }
+  }
+
+  function selectDevice(d) {
+    const switching = selectedDeviceId !== d.device_id;
+    selectedDeviceId = d.device_id;
+    markSelected();
+    openDrawer(d.device_id);
+    zoomToPhone(d.last_lat, d.last_lng, d.device_id);
+    if (switching) {
+      historyPings = [];
+      clearHistoryLayer();
+      if (pingListEl) pingListEl.innerHTML = "";
+    }
+    loadHistory(d.device_id);
   }
 
   function renderDevices(rows) {
@@ -210,9 +407,11 @@
       const age = ageLabel(d.last_seen_at) || "no ping time";
       btn.type = "button";
       btn.className = "phone-card " + (fresh ? "is-fresh" : "is-stale");
+      btn.setAttribute("data-device-id", d.device_id);
+      btn.setAttribute("aria-pressed", "false");
       btn.setAttribute(
         "aria-label",
-        "Zoom to " + label + ", last seen " + age + (fresh ? ", live" : ", stale")
+        "Open " + label + ", last seen " + age + (fresh ? ", live" : ", stale")
       );
       const idEl = document.createElement("span");
       idEl.className = "phone-card-id";
@@ -222,10 +421,11 @@
       ageEl.textContent = age;
       btn.appendChild(idEl);
       btn.appendChild(ageEl);
-      btn.addEventListener("click", () => zoomToPhone(d.last_lat, d.last_lng, d.device_id));
+      btn.addEventListener("click", () => selectDevice(d));
       li.appendChild(btn);
       devicesEl.appendChild(li);
     });
+    markSelected();
   }
 
   async function refreshDevices() {
@@ -276,13 +476,31 @@
       deviceStatusEl.textContent = rows.length
         ? rows.length + " phone" + (rows.length === 1 ? "" : "s") + " on the map."
         : "No phones pinging yet. Flip the tracker on.";
+      if (selectedDeviceId) {
+        const still = rows.some((d) => d.device_id === selectedDeviceId);
+        if (!still) closeDrawer();
+        else loadHistory(selectedDeviceId, true);
+      }
     } catch (err) {
       deviceStatusEl.textContent = "Could not read phones from the API.";
     }
   }
 
+  if (btnHistory) {
+    btnHistory.addEventListener("click", () => {
+      if (historyOnMap) clearHistoryLayer();
+      else plotHistoryOnMap();
+    });
+  }
+  if (btnDrawerClose) btnDrawerClose.addEventListener("click", closeDrawer);
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && selectedDeviceId) closeDrawer();
+  });
+  setHistoryButton();
+
   refreshDevices();
   setInterval(refreshDevices, 8000);
+  setTimeout(() => map.invalidateSize(), 0);
 
   renderStops();
 })();
