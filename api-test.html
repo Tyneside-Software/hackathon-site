@@ -41,23 +41,54 @@
       It calls the Cloud Run API at <code x-text="base"></code>.
     </p>
 
-    <div class="panel">
-      <p class="hero-kicker" style="margin-bottom:0.4rem">GET /test_field</p>
-      <p class="lede" style="margin-bottom:0.8rem">
-        Base: <code x-text="base"></code>
-      </p>
-      <div class="hero-actions" style="margin-top:0">
-        <button type="button" class="btn btn-fill" @click="load()" :disabled="loading">
-          <span x-show="!loading">Call API</span>
-          <span x-show="loading" x-cloak>Calling…</span>
-        </button>
+      <div class="panel">
+        <p class="hero-kicker" style="margin-bottom:0.4rem">GET /test_field</p>
+        <p class="lede" style="margin-bottom:0.8rem">
+          Base: <code x-text="base"></code>
+        </p>
+        <div class="hero-actions" style="margin-top:0">
+          <button type="button" class="btn btn-fill" @click="loadTestField()" :disabled="loading">
+            <span x-show="!loading">Call test_field</span>
+            <span x-show="loading" x-cloak>Calling…</span>
+          </button>
+        </div>
+        <p class="map-status" style="margin:0.8rem 0 0.5rem" x-text="status"></p>
+        <pre class="api-json" x-show="payload" x-cloak x-text="pretty"></pre>
+        <p x-show="error" x-cloak style="color:#fca5a5;margin-top:0.6rem" x-text="error"></p>
       </div>
-      <p class="map-status" style="margin:0.8rem 0 0.5rem" x-text="status"></p>
-      <pre class="api-json" x-show="payload" x-cloak x-text="pretty"></pre>
-      <p x-show="error" x-cloak style="color:#fca5a5;margin-top:0.6rem" x-text="error"></p>
-    </div>
+
+      <div class="panel">
+        <p class="hero-kicker" style="margin-bottom:0.4rem">POST /create_field</p>
+        <label for="create-key">Key</label>
+        <input id="create-key" x-model="createKey" style="width:100%;margin-bottom:0.6rem" />
+        <label for="create-value">Value</label>
+        <input id="create-value" x-model="createValue" style="width:100%;margin-bottom:0.8rem" />
+        <div class="hero-actions" style="margin-top:0">
+          <button type="button" class="btn btn-fill" @click="createField()" :disabled="loading">
+            <span x-show="!loading">Send key/value</span>
+            <span x-show="loading" x-cloak>Sending…</span>
+          </button>
+        </div>
+        <p class="map-status" style="margin:0.8rem 0 0.5rem" x-text="createStatus"></p>
+        <pre class="api-json" x-show="createPayload" x-cloak x-text="createPretty"></pre>
+      </div>
+
+      <div class="panel">
+        <p class="hero-kicker" style="margin-bottom:0.4rem">GET /view_field/{key}</p>
+        <label for="view-key">Key</label>
+        <input id="view-key" x-model="viewKey" style="width:100%;margin-bottom:0.8rem" />
+        <div class="hero-actions" style="margin-top:0">
+          <button type="button" class="btn btn-fill" @click="viewField()" :disabled="loading">
+            <span x-show="!loading">Fetch value</span>
+            <span x-show="loading" x-cloak>Fetching…</span>
+          </button>
+        </div>
+        <p class="map-status" style="margin:0.8rem 0 0.5rem" x-text="viewStatus"></p>
+        <pre class="api-json" x-show="viewPayload" x-cloak x-text="viewPretty"></pre>
+      </div>
     </div>
   </div>
+
 
   <footer class="foot">
     <div class="wrap">Tyneside Logistics hackathon · Alpine.js + Cloud Run</div>
@@ -69,13 +100,29 @@
       return {
         base: raw || "(missing config.js)",
         loading: false,
-        status: "Calling GET /test_field…",
+        status: "Ready",
         payload: null,
+        createKey: "",
+        createValue: "",
+        createStatus: "Ready",
+        createPayload: null,
+        viewKey: "",
+        viewStatus: "Ready",
+        viewPayload: null,
         error: "",
         get pretty() {
           return this.payload ? JSON.stringify(this.payload, null, 2) : "";
         },
+        get createPretty() {
+          return this.createPayload ? JSON.stringify(this.createPayload, null, 2) : "";
+        },
+        get viewPretty() {
+          return this.viewPayload ? JSON.stringify(this.viewPayload, null, 2) : "";
+        },
         async load() {
+          return this.loadTestField();
+        },
+        async loadTestField() {
           this.loading = true;
           this.error = "";
           this.status = "Calling GET /test_field…";
@@ -99,6 +146,48 @@
             this.error = String(err && err.message ? err.message : err);
             this.status = "Network or CORS failure.";
             this.payload = null;
+          } finally {
+            this.loading = false;
+          }
+        },
+        async createField() {
+          this.loading = true;
+          this.error = "";
+          this.createStatus = "Sending POST /create_field…";
+          try {
+            const res = await fetch(this.base + "/create_field", {
+              method: "POST",
+              headers: { Accept: "application/json", "Content-Type": "application/json" },
+              body: JSON.stringify({ key: this.createKey, value: this.createValue }),
+            });
+            const data = await res.json();
+            this.createPayload = data;
+            this.createStatus = res.ok ? "Stored key/value." : "Request failed.";
+            if (res.ok) {
+              this.viewKey = this.createKey;
+            }
+          } catch (err) {
+            this.error = String(err && err.message ? err.message : err);
+            this.createStatus = "Network or CORS failure.";
+          } finally {
+            this.loading = false;
+          }
+        },
+        async viewField() {
+          this.loading = true;
+          this.error = "";
+          this.viewStatus = "Calling GET /view_field/{key}…";
+          try {
+            const res = await fetch(this.base + "/view_field/" + encodeURIComponent(this.viewKey), {
+              method: "GET",
+              headers: { Accept: "application/json" },
+            });
+            const data = await res.json();
+            this.viewPayload = data;
+            this.viewStatus = res.ok ? "Fetched value." : "Request failed.";
+          } catch (err) {
+            this.error = String(err && err.message ? err.message : err);
+            this.viewStatus = "Network or CORS failure.";
           } finally {
             this.loading = false;
           }
