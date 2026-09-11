@@ -37,7 +37,7 @@
     <h1 style="font-size:1.7rem;margin-bottom:0.4rem">Done cards</h1>
     <p style="color:var(--muted);max-width:42rem">
       Finished increments live here so the board stays short.
-      <strong>33 cards · 61h</strong>.
+      <strong>34 cards · 64h</strong>.
       Click a card for the brief. Filter with the chips, hour cards, or <code>?person=lewis</code>.
     </p>
 
@@ -74,12 +74,29 @@
       </button>
       <button type="button" class="person" data-person="noah" aria-pressed="false">
         <div class="who"><span class="emoji">🔧</span> Noah</div>
-        <div class="hrs">26 <span>hrs</span></div>
-        <div class="meta">8 done · 1 in progress</div>
+        <div class="hrs">27 <span>hrs</span></div>
+        <div class="meta">9 done</div>
       </button>
     </div>
 
     <div class="card-archive" id="done-archive">
+          <a class="card" id="card-41" href="#t-41" data-person="noah" data-hours="3">
+            <div class="top"><span class="id">41</span><span class="emoji">🔧</span></div>
+            <div class="title">API user accounts / OAuth2 token</div>
+            <span class="tag tag-ok">register · login</span>
+            <div class="bot"><span>3h</span><span>Noah</span></div>
+            <template class="card-brief">
+              <p>Noah shipped register, login, and <code>GET /users/me</code>. Live <code>/health</code> is <strong>0.1.6</strong>.</p>
+              <h3>What’s live</h3>
+              <ul>
+                <li>API <code>830036a</code>: <code>POST /register</code>, <code>POST /login</code> (JSON), <code>POST /token</code> (OAuth2 form), <code>GET /users/me</code> (bearer). Users persist in Firestore, Datastore fallback, process cache.</li>
+                <li>Site <code>625b5dc</code>: <a href="account.html">/account.html</a> — create account, log in, Fetch me. Token in <code>sessionStorage</code>.</li>
+                <li>Phone GPS and map GETs stay open. Only <code>/users/me</code> requires a token.</li>
+                <li>Set <code>JWT_SECRET_KEY</code> on Cloud Run so tokens survive a new revision.</li>
+              </ul>
+              <p>Wiki: <a href="docs/#api">API</a>.</p>
+            </template>
+          </a>
           <a class="card" id="card-44" href="#t-44" data-person="michael" data-hours="2">
             <div class="top"><span class="id">44</span><span class="emoji">🏗️</span></div>
             <div class="title">Buses: viewport, dots then chips, no waypoint steal</div>

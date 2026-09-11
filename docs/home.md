@@ -23,6 +23,7 @@ If you do not know how the site is wired, start with **[Architecture](#architect
 | Android tracker | [Android](#android) |
 | The map (waypoints, phones, buses) | [The map](#map) |
 | Live buses on the map | [Buses](#buses) |
+| Register / login | [Account](../account.html) · [API](#api) |
 | Add a wiki page | [Add a wiki page](#adding) |
 | Connor + Grok | [Connor’s area](#connor) · [For Grok](#grok) |
 

@@ -6,13 +6,14 @@ Three GitHub repos, two hosts, one product. The **site** is static files. The **
   Browser
      │
      ├─ HTML / CSS / JS  ← GitHub Pages  (hackathon.tyneside.software)
-     │     index, progress, map, board, wiki, api-test
+     │     index, progress, map, board, wiki, api-test, account
      │
      ├─ OSM tiles + public OSRM          (map waypoints; not our API)
      │     optional: bustimes.org /vehicles.json (live buses, off by default)
      │
      └─ fetch(HACKATHON_API + "/…")  ← Cloud Run  (hackathon-api-….run.app)
-           /health  /test_field  /v1/devices  /v1/locations  /docs
+           /health  /test_field  /register  /login  /users/me
+           /v1/devices  /v1/locations  /docs
 
   Phone (Tyneside Tracker APK)
      └─ POST /v1/locations  ← same Cloud Run
@@ -20,7 +21,7 @@ Three GitHub repos, two hosts, one product. The **site** is static files. The **
 
 Locally the site is `python -m http.server 5500`, the API is `uvicorn` on `:8080`. `.\start.ps1` starts both. The phone is Android Studio / a debug APK.
 
-**11 September 2026:** live phones work end to end (cards 32–34). The emulator POSTs every minute; last-seen is last communication; Newcastle is on the map. Noah shipped the device drawer and ping-history path (36–38). `GET /v1/locations?device_id=` reads Firestore, Datastore fallback. Live buses are a map toggle (39, 43, **44**): viewport only, dots at city zoom, chips when you zoom in. A physical phone is still card 35.
+**11 September 2026:** live phones work end to end (cards 32–34). The emulator POSTs every minute; last-seen is last communication; Newcastle is on the map. Noah shipped the device drawer and ping-history path (36–38), then **register / login / Fetch me** (41) — live API **0.1.6**. `GET /v1/locations?device_id=` reads Firestore, Datastore fallback. Live buses are a map toggle (39, 43, **44**): viewport only, dots at city zoom, chips when you zoom in. A physical phone is still card 35.
 
 ## The three repos
 
@@ -46,6 +47,7 @@ hackathon-site/
   todo.html           All to-do cards (generated)
   done.html           All done cards (generated)
   api-test.html       Alpine.js GET /test_field
+  account.html        Register / login / Fetch me (Noah, 41)
   docs/               This wiki
   onboarding.html     Clone / run / git (humans)
   lewis.html          Lewis’s log
@@ -64,12 +66,14 @@ hackathon-site/
 ```
 hackathon-api/
   app/main.py         FastAPI app, CORS, includes routers (Noah split, 57a1d44)
-  app/routers/        health, fields, locations, devices
-  app/config.py       VERSION, CORS origins
-  app/db.py           Datastore / Firestore helpers
-  app/dependencies.py OAuth2 stub (card 41 — not wired yet)
+  app/routers/        health, auth, fields, locations, devices
+  app/config.py       VERSION 0.1.6, CORS, JWT_SECRET_KEY
+  app/db.py           Datastore / Firestore helpers (devices, pings, User)
+  app/models.py       User get/create/authenticate
+  app/security.py     pwdlib + JWT
+  app/dependencies.py get_current_active_user (wired to /users/me)
   main.py             Re-export for buildpacks (`main:app`)
-  requirements.txt    fastapi, uvicorn, google-cloud-datastore, google-cloud-firestore
+  requirements.txt    fastapi, uvicorn, google-cloud-*, pwdlib, PyJWT
   Dockerfile          Used only if the trigger builds with Docker
   Procfile            web: uvicorn app.main:app …
   project.toml        Python 3.13 + entrypoint for pack
@@ -135,7 +139,7 @@ The API Dockerfile exists for a Docker-based trigger. The GitHub-connected servi
 
 ## Next
 
-Live phones, drawer, ping history, and live buses (dots then chips) are on the map. Next product slices: job list, demo seed, localStorage. Board: [Current progress](../progress.html). [The map](#map) · [Buses](#buses).
+Live phones, drawer, ping history, live buses (dots then chips), and accounts (register / login / Fetch me) are on the map and the Account page. Next product slices: job list, demo seed, localStorage. Board: [Current progress](../progress.html). [The map](#map) · [Buses](#buses) · [API](#api).
 
 | Topic | Page |
 |-------|------|

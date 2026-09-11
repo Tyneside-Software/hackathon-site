@@ -28,6 +28,17 @@
   ],
   "cards": [
     {
+      "id": "41",
+      "person": "noah",
+      "hours": 3,
+      "emoji": "🔧",
+      "title": "API user accounts / OAuth2 token",
+      "column": "done",
+      "tag": "register · login",
+      "tag_kind": "ok",
+      "brief": "<p>Noah shipped register, login, and <code>GET /users/me</code>. Live <code>/health</code> is <strong>0.1.6</strong>.</p>\n<h3>What’s live</h3>\n<ul>\n  <li>API <code>830036a</code>: <code>POST /register</code>, <code>POST /login</code> (JSON), <code>POST /token</code> (OAuth2 form), <code>GET /users/me</code> (bearer). Users persist in Firestore, Datastore fallback, process cache.</li>\n  <li>Site <code>625b5dc</code>: <a href=\"account.html\">/account.html</a> — create account, log in, Fetch me. Token in <code>sessionStorage</code>.</li>\n  <li>Phone GPS and map GETs stay open. Only <code>/users/me</code> requires a token.</li>\n  <li>Set <code>JWT_SECRET_KEY</code> on Cloud Run so tokens survive a new revision.</li>\n</ul>\n<p>Wiki: <a href=\"docs/#api\">API</a>.</p>"
+    },
+    {
       "id": "44",
       "person": "michael",
       "hours": 2,
@@ -37,17 +48,6 @@
       "tag": "map polish",
       "tag_kind": "ok",
       "brief": "<p>First buses toggle (39) drew every live vehicle in 30 miles as a rotated line chip — about 300 labels, unreadable at city zoom, and a click dropped a waypoint.</p>\n<h3>What’s live</h3>\n<ul>\n  <li>Draw only what is in the current view. Pan/zoom repaints the last fetch; no extra request.</li>\n  <li>City zoom (12–13): coloured dots. Zoom 14+: upright line-number chips, heading pip, operator colour.</li>\n  <li>Pings older than 10 minutes stay hidden. Status shows <strong>newest ping</strong> age so the feed is visibly moving.</li>\n  <li>Bus click opens a popup and does not add a waypoint.</li>\n</ul>\n<p>Hard-refresh <a href=\"app/\">/app/</a>. Demo <a href=\"app/?buses=1\">/app/?buses=1</a> or <a href=\"app/?buses=1&amp;zoom=14\">&amp;zoom=14</a>. Wiki: <a href=\"docs/#buses\">Live buses</a>.</p>"
-    },
-    {
-      "id": "41",
-      "person": "noah",
-      "hours": 2,
-      "emoji": "🔧",
-      "title": "API user accounts / OAuth2 token",
-      "column": "doing",
-      "tag": "OAuth2 stub",
-      "tag_kind": "wait",
-      "brief": "<p>Noah has started splitting the API toward accounts. <code>app/dependencies.py</code> defines <code>OAuth2PasswordBearer(tokenUrl=\"token\")</code> and <code>app/main.py</code> imports it. There is not yet a login route or token check on the live GPS/field handlers.</p>\n<p>Checked 11 September evening: no new Noah commits on site, API, or Android since the drawer (<code>df3a789</code>) and the router split (<code>57a1d44</code>). This card is still in flight.</p>\n<h3>Done when</h3>\n<ul>\n  <li>A token can be issued (even a hackathon-simple one).</li>\n  <li>It is documented: which routes need it, which stay open (<code>/health</code>, map reads).</li>\n  <li>The phone and the map still work unauthenticated unless a card says otherwise.</li>\n</ul>\n<p>Repo: <a href=\"https://github.com/Tyneside-Software/hackathon-api\">hackathon-api</a>. Layout after <code>57a1d44</code>: routers in <code>app/routers/</code>.</p>"
     },
     {
       "id": "43",

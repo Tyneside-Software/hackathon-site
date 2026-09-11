@@ -7,9 +7,13 @@ How it fits the site: [Architecture](#architecture). Map consumers: [The map](#m
 **Live:** `https://hackathon-api-git-975511976696.europe-west2.run.app`  
 The site stores that in `config.js` as `window.HACKATHON_API`.
 
-Code `VERSION` is **0.1.5**. After a deploy, `GET /health` should match that (or later). If live `/test_field` is 404, the Cloud Run revision is behind `main`.
+Code `VERSION` is **0.1.6**. After a deploy, `GET /health` should match that (or later). If live `/test_field` is 404, the Cloud Run revision is behind `main`.
 
-Layout (Noah, `57a1d44`): routes live in `app/routers/` (`health`, `fields`, `locations`, `devices`). `app/main.py` builds the app and still has `uvicorn.run(app)` at the bottom for Cloud Run. `app/dependencies.py` has an OAuth2 password-bearer stub (`tokenUrl="token"`) — **not** attached to handlers yet (card 41).
+Layout: routes live in `app/routers/` (`health`, `auth`, `fields`, `locations`, `devices`). `app/main.py` builds the app and still has `uvicorn.run(app)` at the bottom for Cloud Run.
+
+Accounts (Noah, `830036a`, card **41**): `POST /register`, `POST /login` (JSON), `POST /token` (OAuth2 password form for Swagger Authorize), `GET /users/me` (bearer). Users are a `User` model in Firestore (`User` documents), Datastore fallback, process cache. Passwords hashed with pwdlib; JWT via PyJWT. Set `JWT_SECRET_KEY` on Cloud Run or tokens die on a new revision. Site page: [account.html](../account.html).
+
+GPS, fields, `/health`, and map reads stay **unauthenticated**.
 
 ## How Cloud Run builds this
 
@@ -34,8 +38,8 @@ A Cloud Build log that says `gcr.io/k8s-skaffold/pack` is buildpacks. A log that
 | Language | Python **3.13** on Cloud Run (laptop may be 3.12 or 3.14) |
 | Framework | FastAPI `>=0.115,<0.117` |
 | Server | Uvicorn `[standard]` `>=0.34,<0.36` |
-| Extra | `google-cloud-datastore` (fields + Device/LocationPing writes); `google-cloud-firestore` (history reads). Imported inside handlers, not at module top |
-| Auth | None (`--allow-unauthenticated`) |
+| Extra | `google-cloud-datastore` (fields + Device/LocationPing + User writes); `google-cloud-firestore` (history + User reads). Imported inside handlers, not at module top |
+| Auth | Cloud Run still `--allow-unauthenticated`. App-level JWT on `/users/me` only. `pwdlib` + `PyJWT` |
 
 `/health` and `/test_field` do not need Datastore or Firestore. Keep `/health` free of extra I/O.
 
@@ -43,9 +47,13 @@ A Cloud Build log that says `gcr.io/k8s-skaffold/pack` is buildpacks. A log that
 
 | Method | Path | Returns |
 |--------|------|---------|
-| GET | `/` | `service`, `docs`, `health`, `test_field`, `locations`, `devices`, `version` |
+| GET | `/` | `service`, `docs`, `health`, `test_field`, `register`, `login`, `token`, `users_me`, `locations`, `devices`, `version` |
 | GET | `/health` | `ok`, `service`, `utc`, `version` |
 | GET | `/test_field` | `ok`, `key`, `value` |
+| POST | `/register` | Create a user (JSON). 201 + public user |
+| POST | `/login` | JSON username/password → `{ access_token, token_type }` |
+| POST | `/token` | OAuth2 form (Swagger Authorize) → same token |
+| GET | `/users/me` | Bearer required. Public user |
 | POST | `/create_field` | Datastore write (needs GCP credentials) |
 | GET | `/view_field/{key}` | Datastore read |
 | POST | `/v1/locations` | Phone GPS ping → Device last-known + LocationPing history |
@@ -55,7 +63,7 @@ A Cloud Build log that says `gcr.io/k8s-skaffold/pack` is buildpacks. A log that
 | GET | `/docs` | Swagger UI |
 | GET | `/openapi.json` | OpenAPI |
 
-`VERSION` lives in `app/main.py`.
+`VERSION` lives in `app/config.py`.
 
 **Proven 11 September 2026:** emulator `POST /v1/locations` → HTTP 200 `stored=datastore`; `GET /v1/devices` returned that device. History GET is what the map drawer uses (card 38).
 

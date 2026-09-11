@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Current progress · Tyneside Logistics</title>
-  <meta name="description" content="Catch-up snapshot. Live phones work. Buses on the map are dots at city zoom, line chips when you zoom in. Noah is on API accounts.">
+  <meta name="description" content="Catch-up snapshot. Live phones work. Buses are dots then chips. Noah shipped register/login. API 0.1.6.">
   <link rel="icon" href="logo.svg" type="image/svg+xml">
   <link rel="stylesheet" href="styles.css">
   <script src="config.js"></script>
@@ -43,12 +43,12 @@
         · catch-up for anyone who has been away
       </p>
       <h1>CURRENT<br>PROGRESS</h1>
-      <p class="hero-tag">Michael is on the map and tracker. Noah is on phones, history, and splitting the API.</p>
+      <p class="hero-tag">Michael is on the map and tracker. Noah shipped accounts.</p>
       <p class="hero-lead">
         Three repos, two hosts, one product.
         <strong>Michael tonight:</strong> live buses you can actually read (44) — viewport only, dots at city zoom, line chips when you zoom in; first toggle (39), fetch/hover fix (43); tracker POST every minute and a Newcastle pin (42).
-        <strong>Noah tonight:</strong> phone cards, device drawer, ping history (36–38), Firestore history reads, API split into FastAPI routers (40).
-        In flight: Noah’s OAuth2 token stub (41) — imported, not wired to routes yet.
+        <strong>Noah tonight:</strong> phone cards, device drawer, ping history (36–38), API routers (40), then <strong>register / login / Fetch me</strong> (41). Live API is <strong>0.1.6</strong>.
+        In flight: nothing — pull a Ready or To-do card.
       </p>
       <div class="hero-actions">
         <a class="btn btn-fill" href="app/">Open the map →</a>
@@ -67,7 +67,7 @@
           <span class="progress-dot" :class="dotClass" aria-hidden="true"></span>
           <span>
             <span class="k">API</span>
-            <span class="v" x-text="apiLine">Cloud Run · snapshot 0.1.5</span>
+            <span class="v" x-text="apiLine">Cloud Run · snapshot 0.1.6</span>
           </span>
         </div>
         <div class="progress-live-item">
@@ -132,7 +132,7 @@
         <li>
           <span class="n">03</span>
           <div>
-            <strong>Cloud Run is 0.1.5.</strong>
+            <strong>Cloud Run is 0.1.6.</strong>
             <span>GitHub → Cloud Run uses <em>buildpacks</em> (<code>pack</code> on ubuntu2404), not the Dockerfile.
             Pin is <strong>3.13</strong>. Datastore writes work: fields and GPS pings.</span>
           </div>
@@ -176,12 +176,12 @@
           <header>
             <span class="lane-kicker">In flight</span>
             <h3>Now</h3>
-            <p>1 card · 2h</p>
+            <p>Empty · pull a card</p>
           </header>
-          <a class="progress-item" href="board.html#t-41">
-            <span class="id">41 · 🔧 Noah</span>
-            <strong>API user accounts / OAuth2</strong>
-            <span><code>OAuth2PasswordBearer(tokenUrl="token")</code> is imported after the router split. No login route yet. Phone POSTs and map GETs stay open until a card says otherwise. Pulled 11 September evening: no new Noah commits since <code>df3a789</code> / <code>57a1d44</code>.</span>
+          <a class="progress-item" href="done.html#t-41">
+            <span class="id">41 · 🔧 Noah · done</span>
+            <strong>Register / login / Fetch me</strong>
+            <span>Just landed. <a href="account.html">Account</a> page plus API 0.1.6: <code>POST /register</code>, <code>/login</code>, <code>/token</code>, <code>GET /users/me</code>. Phone and map stay open.</span>
           </a>
         </article>
         <article class="progress-lane is-next">
@@ -260,9 +260,9 @@
       <div class="progress-who">
         <a class="progress-person" href="board.html?person=noah">
           <span class="who"><span class="emoji">🔧</span> Noah</span>
-          <span class="hrs">26 <span>hrs</span></span>
-          <span class="focus">OAuth2 stub · API routers</span>
-          <span class="meta">8 done · 1 in progress. Drawer, history, Firestore reads, split <code>app/routers/</code>. Accounts next (41).</span>
+          <span class="hrs">27 <span>hrs</span></span>
+          <span class="focus">Accounts live · API 0.1.6</span>
+          <span class="meta">9 done. Drawer, history, routers, then register / login / Fetch me (41). Phone and map stay open.</span>
         </a>
         <a class="progress-person" href="board.html?person=reeve">
           <span class="who"><span class="emoji">🧭</span> Reeve</span>
@@ -296,8 +296,16 @@
     <div class="wrap">
       <p class="hero-kicker">While you were away</p>
       <h2>What already shipped</h2>
-      <p class="lede">33 cards · 61h on Done. Do not redo these.</p>
+      <p class="lede">34 cards · 64h on Done. Do not redo these.</p>
       <ol class="progress-rail">
+        <li>
+          <span class="mark" aria-hidden="true"></span>
+          <div class="body">
+            <p class="hero-kicker">11 September · card 41</p>
+            <h3>Noah: register, login, Fetch me</h3>
+            <p>Live API <strong>0.1.6</strong>. <a href="account.html">Account</a> creates a user, logs in, and calls <code>GET /users/me</code> with a bearer token. GPS and map reads stay open. Set <code>JWT_SECRET_KEY</code> on Cloud Run so tokens survive a new revision.</p>
+          </div>
+        </li>
         <li>
           <span class="mark" aria-hidden="true"></span>
           <div class="body">
@@ -351,7 +359,7 @@
           <div class="body">
             <p class="hero-kicker">3 September · card 30</p>
             <h3>Cloud Run builds on Python 3.13 pack</h3>
-            <p>ubuntu2404 has 3.13 and 3.14 only. A 3.12 pin failed Cloud Build. Root <code>main.py</code>, <code>Procfile</code>, and <code>.python-version</code> 3.13 make pack succeed. Code <code>VERSION</code> is <strong>0.1.5</strong>.</p>
+            <p>ubuntu2404 has 3.13 and 3.14 only. A 3.12 pin failed Cloud Build. Root <code>main.py</code>, <code>Procfile</code>, and <code>.python-version</code> 3.13 make pack succeed. Code <code>VERSION</code> is <strong>0.1.6</strong>.</p>
           </div>
         </li>
         <li>
@@ -405,7 +413,7 @@
         <div class="progress-host is-api">
           <p class="hero-kicker">hackathon-api</p>
           <h3>Cloud Run · europe-west2</h3>
-          <p>FastAPI + Uvicorn. Code <strong>0.1.5</strong>. Local: <code>:8080</code>. Buildpacks, not the Dockerfile, on GitHub CD. History GET reads Firestore, Datastore fallback.</p>
+          <p>FastAPI + Uvicorn. Code <strong>0.1.6</strong>. Local: <code>:8080</code>. Buildpacks, not the Dockerfile, on GitHub CD. History GET reads Firestore, Datastore fallback. Accounts: <code>/register</code> <code>/login</code> <code>/users/me</code>.</p>
           <ul>
             <li><code>GET /</code> · <code>/health</code> · <code>/test_field</code></li>
             <li><code>POST /create_field</code> · <code>GET /view_field/{key}</code></li>
@@ -480,7 +488,7 @@
       const raw = (window.HACKATHON_API || "").replace(/\/$/, "");
       return {
         base: raw,
-        apiLine: "Cloud Run · snapshot 0.1.5",
+        apiLine: "Cloud Run · snapshot 0.1.6",
         state: "wait",
         get dotClass() {
           return {
@@ -509,7 +517,7 @@
             this.apiLine = "v" + (data.version || "?") + " · live";
           } catch (err) {
             this.state = "bad";
-            this.apiLine = "Unreachable · snapshot still 0.1.5";
+            this.apiLine = "Unreachable · snapshot still 0.1.6";
           }
         }
       };

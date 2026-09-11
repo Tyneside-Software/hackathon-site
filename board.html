@@ -58,7 +58,7 @@
     <p class="filter-status" id="filter-status">Showing everyone.</p>
 
     <div class="board-banner">
-      <div>📋 <strong>Michael</strong> — buses you can read (44: dots then chips, newest ping on the status). <strong>Noah</strong> — still 41 (OAuth2 stub); no new push since drawer <code>df3a789</code> and routers <code>57a1d44</code>. Next product: job list, demo seed, localStorage.</div>
+      <div>📋 <strong>Michael</strong> — buses you can read (44). <strong>Noah</strong> — register / login / Fetch me (41), live API 0.1.6. Doing is empty. Next product: job list, demo seed, localStorage.</div>
       <div class="btns">
         <a class="btn btn-fill" href="app/">Map app</a>
         <a class="btn btn-ghost" href="progress.html">Progress</a>
@@ -91,11 +91,12 @@
       </button>
       <button type="button" class="person" data-person="noah" aria-pressed="false">
         <div class="who"><span class="emoji">🔧</span> Noah</div>
-        <div class="hrs">26 <span>hrs</span></div>
-        <div class="meta">8 done · 1 in progress</div>
+        <div class="hrs">27 <span>hrs</span></div>
+        <div class="meta">9 done</div>
       </button>
     </div>
     <!-- /BOARD:PEOPLE -->
+
 
 
 
@@ -215,26 +216,9 @@
         </div>
 
         <div class="col doing">
-          <div class="head"><span class="col-name">In progress</span><span class="count">1 · 2h</span></div>
+          <div class="head"><span class="col-name">In progress</span><span class="count">0 · 0h</span></div>
           <div class="stack">
-            <p class="empty-col is-hidden" data-all="Empty on purpose. Pull a Ready card and ship it."></p>
-            <a class="card" id="card-41" href="#t-41" data-person="noah" data-hours="2">
-              <div class="top"><span class="id">41</span><span class="emoji">🔧</span></div>
-              <div class="title">API user accounts / OAuth2 token</div>
-              <span class="tag tag-wait">OAuth2 stub</span>
-              <div class="bot"><span>2h</span><span>Noah</span></div>
-              <template class="card-brief">
-                <p>Noah has started splitting the API toward accounts. <code>app/dependencies.py</code> defines <code>OAuth2PasswordBearer(tokenUrl="token")</code> and <code>app/main.py</code> imports it. There is not yet a login route or token check on the live GPS/field handlers.</p>
-                <p>Checked 11 September evening: no new Noah commits on site, API, or Android since the drawer (<code>df3a789</code>) and the router split (<code>57a1d44</code>). This card is still in flight.</p>
-                <h3>Done when</h3>
-                <ul>
-                  <li>A token can be issued (even a hackathon-simple one).</li>
-                  <li>It is documented: which routes need it, which stay open (<code>/health</code>, map reads).</li>
-                  <li>The phone and the map still work unauthenticated unless a card says otherwise.</li>
-                </ul>
-                <p>Repo: <a href="https://github.com/Tyneside-Software/hackathon-api">hackathon-api</a>. Layout after <code>57a1d44</code>: routers in <code>app/routers/</code>.</p>
-              </template>
-            </a>
+            <p class="empty-col" data-all="Empty on purpose. Pull a Ready card and ship it.">Empty on purpose. Pull a Ready card and ship it.</p>
           </div>
         </div>
 
@@ -287,13 +271,13 @@
         </div>
 
         <div class="col done">
-          <div class="head"><span class="col-name">Done</span><span class="count" id="done-col-count">33 · 61h</span></div>
+          <div class="head"><span class="col-name">Done</span><span class="count" id="done-col-count">34 · 64h</span></div>
           <div class="stack">
-            <script type="application/json" id="done-cards-index">[{"id":"44","person":"michael","hours":2},{"id":"43","person":"michael","hours":0.5},{"id":"42","person":"michael","hours":1.5},{"id":"40","person":"noah","hours":2},{"id":"39","person":"michael","hours":2},{"id":"36","person":"noah","hours":2},{"id":"37","person":"noah","hours":3},{"id":"38","person":"noah","hours":3},{"id":"32","person":"michael","hours":4},{"id":"33","person":"michael","hours":3},{"id":"34","person":"michael","hours":3},{"id":"17","person":"reeve","hours":0.75},{"id":"31","person":"noah","hours":12},{"id":"28","person":"michael","hours":1},{"id":"29","person":"michael","hours":2},{"id":"30","person":"michael","hours":1.5},{"id":"14","person":"lewis","hours":0.75},{"id":"18","person":"connor","hours":0.5},{"id":"19","person":"connor","hours":0.75},{"id":"20","person":"michael","hours":0.75},{"id":"21","person":"reeve","hours":1},{"id":"27","person":"connor","hours":0.5},{"id":"26","person":"michael","hours":2},{"id":"10","person":"michael","hours":4},{"id":"12","person":"lewis","hours":0.5},{"id":"15","person":"reeve","hours":0.5},{"id":"16","person":"reeve","hours":1},{"id":"01","person":"lewis","hours":0.5},{"id":"02","person":"reeve","hours":1},{"id":"03","person":"lewis","hours":2},{"id":"25","person":"noah","hours":0.5},{"id":"22","person":"noah","hours":0.5},{"id":"23","person":"noah","hours":1}]</script>
+            <script type="application/json" id="done-cards-index">[{"id":"41","person":"noah","hours":3},{"id":"44","person":"michael","hours":2},{"id":"43","person":"michael","hours":0.5},{"id":"42","person":"michael","hours":1.5},{"id":"40","person":"noah","hours":2},{"id":"39","person":"michael","hours":2},{"id":"36","person":"noah","hours":2},{"id":"37","person":"noah","hours":3},{"id":"38","person":"noah","hours":3},{"id":"32","person":"michael","hours":4},{"id":"33","person":"michael","hours":3},{"id":"34","person":"michael","hours":3},{"id":"17","person":"reeve","hours":0.75},{"id":"31","person":"noah","hours":12},{"id":"28","person":"michael","hours":1},{"id":"29","person":"michael","hours":2},{"id":"30","person":"michael","hours":1.5},{"id":"14","person":"lewis","hours":0.75},{"id":"18","person":"connor","hours":0.5},{"id":"19","person":"connor","hours":0.75},{"id":"20","person":"michael","hours":0.75},{"id":"21","person":"reeve","hours":1},{"id":"27","person":"connor","hours":0.5},{"id":"26","person":"michael","hours":2},{"id":"10","person":"michael","hours":4},{"id":"12","person":"lewis","hours":0.5},{"id":"15","person":"reeve","hours":0.5},{"id":"16","person":"reeve","hours":1},{"id":"01","person":"lewis","hours":0.5},{"id":"02","person":"reeve","hours":1},{"id":"03","person":"lewis","hours":2},{"id":"25","person":"noah","hours":0.5},{"id":"22","person":"noah","hours":0.5},{"id":"23","person":"noah","hours":1}]</script>
             <a class="card done-index" id="done-index" href="done.html">
-              <div class="done-index-count" id="done-index-count">33</div>
+              <div class="done-index-count" id="done-index-count">34</div>
               <div class="title">All done cards</div>
-              <p class="done-index-meta" id="done-index-meta">33 cards · 61h · archive →</p>
+              <p class="done-index-meta" id="done-index-meta">34 cards · 64h · archive →</p>
             </a>
           </div>
         </div>
@@ -301,6 +285,7 @@
       </div>
     </div>
     <!-- /BOARD:KANBAN -->
+
 
 
 
@@ -354,13 +339,14 @@
         <tr data-person="noah">
           <td>🔧</td>
           <td><strong>Noah</strong></td>
-          <td>API user accounts / OAuth2 token (2h, in progress) · Split the API into FastAPI routers (2h, done) · Review the live-phone path, then take it forward (2h, done) · Several phones on the map, easy to tell apart (3h, done) · Show history as a route on the map (3h, done) · Noah: API talks to Firestore (12h, done) · Noah: API version on / and /health (0.5h, done) · Noah: get the front end running locally (0.5h, done) · Noah: get the back end running locally (1h, done)</td>
-          <td><strong>26h</strong></td>
+          <td>API user accounts / OAuth2 token (3h, done) · Split the API into FastAPI routers (2h, done) · Review the live-phone path, then take it forward (2h, done) · Several phones on the map, easy to tell apart (3h, done) · Show history as a route on the map (3h, done) · Noah: API talks to Firestore (12h, done) · Noah: API version on / and /health (0.5h, done) · Noah: get the front end running locally (0.5h, done) · Noah: get the back end running locally (1h, done)</td>
+          <td><strong>27h</strong></td>
         </tr>
       </tbody>
     </table>
     </div>
     <!-- /BOARD:WHO -->
+
 
 
 
