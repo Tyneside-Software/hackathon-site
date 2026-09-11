@@ -28,6 +28,17 @@
   ],
   "cards": [
     {
+      "id": "31",
+      "person": "noah",
+      "hours": 12,
+      "emoji": "🔧",
+      "title": "Noah: API talks to Firestore",
+      "column": "done",
+      "tag": "Datastore / Firestore",
+      "tag_kind": "ok",
+      "brief": "<p>Wire <code>hackathon-api</code> to Firestore (code currently imports Datastore in <code>POST /create_field</code>). The handler should take a real key/value, write it, and read it back. Cloud Run is live; this is persistence, not deploy.</p>\n<h3>Done when</h3>\n<ul>\n  <li><code>POST /create_field</code> (or a clearer route) stores a field in GCP and returns an id.</li>\n  <li>A GET can read that field back from the live API.</li>\n  <li><code>/health</code> still works if Firestore is down.</li>\n  <li>The Cloud Run service account has datastore/firestore access.</li>\n</ul>\n<h3>How</h3>\n<ol>\n  <li>Use the official client (<code>google-cloud-firestore</code> or Datastore — pick one and document it).</li>\n  <li>Do not import the client at module top if that can crash Cloud Run when credentials are missing — lazy import or catch and return 503.</li>\n  <li>Add a GET so Alpine can prove the round-trip (extend <code>api-test.html</code> or a new island).</li>\n</ol>"
+    },
+    {
       "id": "28",
       "person": "michael",
       "hours": 1,
@@ -337,17 +348,6 @@
       "brief": "<p>Local FastAPI on :8080. Noah already shipped a version field on the API (card 25); this card is the machine setup so he can keep iterating without Cloud Run. Moved to Done.</p>\n                <h3>Done when</h3>\n                <ul>\n                  <li><code>http://127.0.0.1:8080/health</code> returns <code>ok</code> and a <code>version</code>.</li>\n                </ul>\n                <h3>How</h3>\n                <ol>\n                  <li>Clone <a href=\"https://github.com/Tyneside-Software/hackathon-api\">hackathon-api</a> as a sibling of the site.</li>\n                  <li>venv · <code>pip install -r requirements.txt</code> · uvicorn :8080, or <code>.\\start.ps1</code>.</li>\n                </ol>\n                <div class=\"brief-actions\"><a class=\"btn btn-ghost\" href=\"onboarding.html\">Onboarding steps</a></div>",
       "tag": "uvicorn · /health",
       "tag_kind": "ok"
-    },
-    {
-      "id": "31",
-      "person": "noah",
-      "hours": 4,
-      "emoji": "🔧",
-      "title": "Noah: API talks to Firestore",
-      "column": "doing",
-      "tag": "Datastore / Firestore",
-      "tag_kind": "wait",
-      "brief": "<p>Wire <code>hackathon-api</code> to Firestore (code currently imports Datastore in <code>POST /create_field</code>). The handler should take a real key/value, write it, and read it back. Cloud Run is live; this is persistence, not deploy.</p>\n<h3>Done when</h3>\n<ul>\n  <li><code>POST /create_field</code> (or a clearer route) stores a field in GCP and returns an id.</li>\n  <li>A GET can read that field back from the live API.</li>\n  <li><code>/health</code> still works if Firestore is down.</li>\n  <li>The Cloud Run service account has datastore/firestore access.</li>\n</ul>\n<h3>How</h3>\n<ol>\n  <li>Use the official client (<code>google-cloud-firestore</code> or Datastore — pick one and document it).</li>\n  <li>Do not import the client at module top if that can crash Cloud Run when credentials are missing — lazy import or catch and return 503.</li>\n  <li>Add a GET so Alpine can prove the round-trip (extend <code>api-test.html</code> or a new island).</li>\n</ol>"
     }
   ]
 }

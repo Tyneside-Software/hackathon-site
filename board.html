@@ -57,7 +57,7 @@
     <p class="filter-status" id="filter-status">Showing everyone.</p>
 
     <div class="board-banner">
-      <div>📋 Cloud Run <strong>builds again</strong> (Python 3.13 buildpacks). Noah is wiring the API to <strong>Firestore</strong>. Map is ready to demo. Next product slices: job list, demo seed, localStorage, persist routes.</div>
+      <div>📋 Cloud Run <strong>builds again</strong> (Python 3.13 buildpacks). API talks to <strong>Firestore</strong>. Map is ready to demo. Next product slices: job list, demo seed, localStorage, persist routes.</div>
       <div class="btns">
         <a class="btn btn-fill" href="app/">Map app</a>
         <a class="btn btn-ghost" href="progress.html">Progress</a>
@@ -90,11 +90,13 @@
       </button>
       <button type="button" class="person" data-person="noah" aria-pressed="false">
         <div class="who"><span class="emoji">🔧</span> Noah</div>
-        <div class="hrs">6 <span>hrs</span></div>
-        <div class="meta">3 done · 1 in progress</div>
+        <div class="hrs">14 <span>hrs</span></div>
+        <div class="meta">4 done</div>
       </button>
     </div>
     <!-- /BOARD:PEOPLE -->
+
+
 
 
 
@@ -202,31 +204,9 @@
         </div>
 
         <div class="col doing">
-          <div class="head"><span class="col-name">In progress</span><span class="count">1 · 4h</span></div>
+          <div class="head"><span class="col-name">In progress</span><span class="count">0 · 0h</span></div>
           <div class="stack">
-            <p class="empty-col is-hidden" data-all="Empty on purpose. Pull a Ready card and ship it."></p>
-            <a class="card" id="card-31" href="#t-31" data-person="noah" data-hours="4">
-              <div class="top"><span class="id">31</span><span class="emoji">🔧</span></div>
-              <div class="title">Noah: API talks to Firestore</div>
-              <span class="tag tag-wait">Datastore / Firestore</span>
-              <div class="bot"><span>4h</span><span>Noah</span></div>
-              <template class="card-brief">
-                <p>Wire <code>hackathon-api</code> to Firestore (code currently imports Datastore in <code>POST /create_field</code>). The handler should take a real key/value, write it, and read it back. Cloud Run is live; this is persistence, not deploy.</p>
-                <h3>Done when</h3>
-                <ul>
-                  <li><code>POST /create_field</code> (or a clearer route) stores a field in GCP and returns an id.</li>
-                  <li>A GET can read that field back from the live API.</li>
-                  <li><code>/health</code> still works if Firestore is down.</li>
-                  <li>The Cloud Run service account has datastore/firestore access.</li>
-                </ul>
-                <h3>How</h3>
-                <ol>
-                  <li>Use the official client (<code>google-cloud-firestore</code> or Datastore — pick one and document it).</li>
-                  <li>Do not import the client at module top if that can crash Cloud Run when credentials are missing — lazy import or catch and return 503.</li>
-                  <li>Add a GET so Alpine can prove the round-trip (extend <code>api-test.html</code> or a new island).</li>
-                </ol>
-              </template>
-            </a>
+            <p class="empty-col" data-all="Empty on purpose. Pull a Ready card and ship it.">Empty on purpose. Pull a Ready card and ship it.</p>
           </div>
         </div>
 
@@ -279,13 +259,13 @@
         </div>
 
         <div class="col done">
-          <div class="head"><span class="col-name">Done</span><span class="count" id="done-col-count">20 · 22.25h</span></div>
+          <div class="head"><span class="col-name">Done</span><span class="count" id="done-col-count">21 · 34.25h</span></div>
           <div class="stack">
-            <script type="application/json" id="done-cards-index">[{"id":"28","person":"michael","hours":1},{"id":"29","person":"michael","hours":2},{"id":"30","person":"michael","hours":1.5},{"id":"14","person":"lewis","hours":0.75},{"id":"18","person":"connor","hours":0.5},{"id":"19","person":"connor","hours":0.75},{"id":"20","person":"michael","hours":0.75},{"id":"21","person":"reeve","hours":1},{"id":"27","person":"connor","hours":0.5},{"id":"26","person":"michael","hours":2},{"id":"10","person":"michael","hours":4},{"id":"12","person":"lewis","hours":0.5},{"id":"15","person":"reeve","hours":0.5},{"id":"16","person":"reeve","hours":1},{"id":"01","person":"lewis","hours":0.5},{"id":"02","person":"reeve","hours":1},{"id":"03","person":"lewis","hours":2},{"id":"25","person":"noah","hours":0.5},{"id":"22","person":"noah","hours":0.5},{"id":"23","person":"noah","hours":1}]</script>
+            <script type="application/json" id="done-cards-index">[{"id":"31","person":"noah","hours":12},{"id":"28","person":"michael","hours":1},{"id":"29","person":"michael","hours":2},{"id":"30","person":"michael","hours":1.5},{"id":"14","person":"lewis","hours":0.75},{"id":"18","person":"connor","hours":0.5},{"id":"19","person":"connor","hours":0.75},{"id":"20","person":"michael","hours":0.75},{"id":"21","person":"reeve","hours":1},{"id":"27","person":"connor","hours":0.5},{"id":"26","person":"michael","hours":2},{"id":"10","person":"michael","hours":4},{"id":"12","person":"lewis","hours":0.5},{"id":"15","person":"reeve","hours":0.5},{"id":"16","person":"reeve","hours":1},{"id":"01","person":"lewis","hours":0.5},{"id":"02","person":"reeve","hours":1},{"id":"03","person":"lewis","hours":2},{"id":"25","person":"noah","hours":0.5},{"id":"22","person":"noah","hours":0.5},{"id":"23","person":"noah","hours":1}]</script>
             <a class="card done-index" id="done-index" href="done.html">
-              <div class="done-index-count" id="done-index-count">20</div>
+              <div class="done-index-count" id="done-index-count">21</div>
               <div class="title">All done cards</div>
-              <p class="done-index-meta" id="done-index-meta">20 cards · 22.25h · archive →</p>
+              <p class="done-index-meta" id="done-index-meta">21 cards · 34.25h · archive →</p>
             </a>
           </div>
         </div>
@@ -293,6 +273,8 @@
       </div>
     </div>
     <!-- /BOARD:KANBAN -->
+
+
 
 
 
@@ -334,13 +316,15 @@
         <tr data-person="noah">
           <td>🔧</td>
           <td><strong>Noah</strong></td>
-          <td>Noah: API version on / and /health (0.5h, done) · Noah: get the front end running locally (0.5h, done) · Noah: get the back end running locally (1h, done) · Noah: API talks to Firestore (4h, in progress)</td>
-          <td><strong>6h</strong></td>
+          <td>Noah: API talks to Firestore (12h, done) · Noah: API version on / and /health (0.5h, done) · Noah: get the front end running locally (0.5h, done) · Noah: get the back end running locally (1h, done)</td>
+          <td><strong>14h</strong></td>
         </tr>
       </tbody>
     </table>
     </div>
     <!-- /BOARD:WHO -->
+
+
 
 
 

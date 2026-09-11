@@ -36,7 +36,7 @@
     <h1 style="font-size:1.7rem;margin-bottom:0.4rem">Done cards</h1>
     <p style="color:var(--muted);max-width:42rem">
       Finished increments live here so the board stays short.
-      <strong>20 cards · 22.25h</strong>.
+      <strong>21 cards · 34.25h</strong>.
       Click a card for the brief. Filter with the chips, hour cards, or <code>?person=lewis</code>.
     </p>
 
@@ -73,12 +73,34 @@
       </button>
       <button type="button" class="person" data-person="noah" aria-pressed="false">
         <div class="who"><span class="emoji">🔧</span> Noah</div>
-        <div class="hrs">6 <span>hrs</span></div>
-        <div class="meta">3 done · 1 in progress</div>
+        <div class="hrs">14 <span>hrs</span></div>
+        <div class="meta">4 done</div>
       </button>
     </div>
 
     <div class="card-archive" id="done-archive">
+          <a class="card" id="card-31" href="#t-31" data-person="noah" data-hours="12">
+            <div class="top"><span class="id">31</span><span class="emoji">🔧</span></div>
+            <div class="title">Noah: API talks to Firestore</div>
+            <span class="tag tag-ok">Datastore / Firestore</span>
+            <div class="bot"><span>12h</span><span>Noah</span></div>
+            <template class="card-brief">
+              <p>Wire <code>hackathon-api</code> to Firestore (code currently imports Datastore in <code>POST /create_field</code>). The handler should take a real key/value, write it, and read it back. Cloud Run is live; this is persistence, not deploy.</p>
+              <h3>Done when</h3>
+              <ul>
+                <li><code>POST /create_field</code> (or a clearer route) stores a field in GCP and returns an id.</li>
+                <li>A GET can read that field back from the live API.</li>
+                <li><code>/health</code> still works if Firestore is down.</li>
+                <li>The Cloud Run service account has datastore/firestore access.</li>
+              </ul>
+              <h3>How</h3>
+              <ol>
+                <li>Use the official client (<code>google-cloud-firestore</code> or Datastore — pick one and document it).</li>
+                <li>Do not import the client at module top if that can crash Cloud Run when credentials are missing — lazy import or catch and return 503.</li>
+                <li>Add a GET so Alpine can prove the round-trip (extend <code>api-test.html</code> or a new island).</li>
+              </ol>
+            </template>
+          </a>
           <a class="card" id="card-28" href="#t-28" data-person="michael" data-hours="1">
             <div class="top"><span class="id">28</span><span class="emoji">🏗️</span></div>
             <div class="title">Alpine.js test page calls GET /test_field</div>
