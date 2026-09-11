@@ -121,7 +121,7 @@ CORS must allow `https://hackathon.tyneside.software` and `http://127.0.0.1:5500
 
 If live `/test_field` is 404, the Cloud Run revision is behind `main`. Check `/health` for `version` (code is **0.1.8**). See [API](#api).
 
-Android tracker: [Android](#android). Map surface: [The map](#map). Live buses: [Buses](#buses). Emulator posts every minute; last-seen is last communication. Cards 32–34, 36–41, 43–46 are done. Account page: `/account.html`. Buses: `/v1/buses` (card 45) with a 10-minute fading trail (46).
+Android tracker: [Android](#android). Map surface: [The map](#map). Live buses: [Buses](#buses). Emulator posts every minute; last-seen is last communication. Cards 32–34, 36–41, 43–48 are done. Account page: `/account.html`. Buses: `/v1/buses` (card 45) with a 10-minute fading trail (46) snapped to streets via OSRM (48). Noah: phone show/hide (47).
 
 ---
 

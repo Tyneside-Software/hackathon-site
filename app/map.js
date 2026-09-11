@@ -810,6 +810,182 @@
     return Number.isFinite(n) && n > 0 ? n : BUS_TRAIL_S;
   }
 
+  const SNAP_MAX = 2;
+  const SNAP_WAYPOINTS = 20;
+  const snapCache = new Map();
+  const snapPending = new Set();
+  const snapQueue = [];
+  let snapRunning = 0;
+
+  function trailSig(id, pts) {
+    return id + ":" + pts[0].t + ":" + pts[pts.length - 1].t + ":" + pts.length;
+  }
+
+  function downsampleTrail(pts, maxN) {
+    if (pts.length <= maxN) return pts;
+    const out = [pts[0]];
+    const step = (pts.length - 1) / (maxN - 1);
+    for (let i = 1; i < maxN - 1; i++) out.push(pts[Math.round(i * step)]);
+    out.push(pts[pts.length - 1]);
+    return out;
+  }
+
+  function trailInView(pts) {
+    const bounds = map.getBounds().pad(0.12);
+    for (let i = 0; i < pts.length; i++) {
+      if (bounds.contains(pts[i].ll)) return true;
+    }
+    return false;
+  }
+
+  function llObj(ll) {
+    return { lat: ll[0], lng: ll[1] };
+  }
+
+  function splitSnappedTrail(coords, pts) {
+    if (!coords || coords.length < 2 || pts.length < 2) return [];
+    let gpsTotal = 0;
+    const gpsSeg = [];
+    for (let i = 1; i < pts.length; i++) {
+      const d = haversineKm(llObj(pts[i - 1].ll), llObj(pts[i].ll));
+      gpsSeg.push(d);
+      gpsTotal += d;
+    }
+    let snapTotal = 0;
+    for (let i = 1; i < coords.length; i++) {
+      snapTotal += haversineKm(llObj(coords[i - 1]), llObj(coords[i]));
+    }
+    if (snapTotal < 1e-6) return [];
+    const pieces = [];
+    let coordI = 0;
+    let distAlong = 0;
+    for (let g = 0; g < gpsSeg.length; g++) {
+      const share = gpsTotal > 0 ? (gpsSeg[g] / gpsTotal) * snapTotal : snapTotal / gpsSeg.length;
+      const target = distAlong + share;
+      const latlngs = [coords[Math.min(coordI, coords.length - 1)]];
+      while (coordI < coords.length - 1 && distAlong < target - 0.002) {
+        distAlong += haversineKm(llObj(coords[coordI]), llObj(coords[coordI + 1]));
+        coordI += 1;
+        latlngs.push(coords[coordI]);
+      }
+      if (latlngs.length < 2 && coordI < coords.length - 1) {
+        coordI += 1;
+        latlngs.push(coords[coordI]);
+      }
+      if (latlngs.length >= 2) pieces.push({ latlngs: latlngs, t0: pts[g].t, t1: pts[g + 1].t });
+    }
+    return pieces;
+  }
+
+  function partsFromGps(pts, windowS, now) {
+    const parts = [];
+    let cur = null;
+    for (let i = 1; i < pts.length; i++) {
+      const age = now - (pts[i - 1].t + pts[i].t) / 2;
+      const op = Math.max(0, 1 - age / windowS);
+      if (op < 0.05) continue;
+      const bucket = Math.round(op * 8) / 8;
+      if (cur && cur.bucket === bucket) cur.latlngs.push(pts[i].ll);
+      else {
+        if (cur) parts.push(cur);
+        cur = { bucket: bucket, opacity: bucket, latlngs: [pts[i - 1].ll, pts[i].ll] };
+      }
+    }
+    if (cur) parts.push(cur);
+    return parts;
+  }
+
+  function partsFromSnap(snap, pts, windowS, now) {
+    const pieces = splitSnappedTrail(snap.coords, pts);
+    if (!pieces.length) return partsFromGps(pts, windowS, now);
+    const parts = [];
+    pieces.forEach((piece) => {
+      const age = now - (piece.t0 + piece.t1) / 2;
+      const op = Math.max(0, 1 - age / windowS);
+      if (op < 0.05 || piece.latlngs.length < 2) return;
+      parts.push({ opacity: Math.round(op * 8) / 8, latlngs: piece.latlngs });
+    });
+    return parts.length ? parts : partsFromGps(pts, windowS, now);
+  }
+
+  function enqueueTrailSnap(id, pts) {
+    const sampled = downsampleTrail(pts, SNAP_WAYPOINTS);
+    const sig = trailSig(id, sampled);
+    if (snapCache.has(sig) || snapPending.has(sig)) return;
+    snapPending.add(sig);
+    snapQueue.push({ id: id, pts: sampled, sig: sig });
+    pumpTrailSnap();
+  }
+
+  function pumpTrailSnap() {
+    while (snapRunning < SNAP_MAX && snapQueue.length) {
+      const job = snapQueue.shift();
+      snapRunning += 1;
+      snapOneTrail(job).then(
+        function () {},
+        function () {}
+      ).then(function () {
+        snapRunning -= 1;
+        pumpTrailSnap();
+      });
+    }
+  }
+
+  async function snapOneTrail(job) {
+    const path = job.pts
+      .map(function (p) {
+        return p.ll[1].toFixed(5) + "," + p.ll[0].toFixed(5);
+      })
+      .join(";");
+    const url = OSRM + path + "?overview=full&geometries=geojson";
+    try {
+      const res = await fetch(url);
+      if (!res.ok) throw new Error("HTTP " + res.status);
+      const data = await res.json();
+      const route = data.routes && data.routes[0];
+      if (!route || !route.geometry || !route.geometry.coordinates) throw new Error("no route");
+      const coords = route.geometry.coordinates.map(function (c) {
+        return [c[1], c[0]];
+      });
+      if (coords.length < 2) throw new Error("short");
+      snapCache.set(job.sig, { coords: coords });
+      if (snapCache.size > 250) {
+        const first = snapCache.keys().next().value;
+        snapCache.delete(first);
+      }
+    } catch (err) {
+      snapCache.set(job.sig, { coords: job.pts.map(function (p) { return p.ll; }), straight: true });
+    } finally {
+      snapPending.delete(job.sig);
+      if (busesOn) paintTrails();
+    }
+  }
+
+  function drawTrailGroup(id, parts, colour) {
+    const prev = trailLayers.get(id);
+    if (prev) map.removeLayer(prev);
+    if (!parts.length) {
+      trailLayers.delete(id);
+      return;
+    }
+    const group = L.layerGroup();
+    parts.forEach(function (part) {
+      L.polyline(part.latlngs, {
+        color: colour,
+        weight: 3,
+        opacity: part.opacity,
+        lineCap: "round",
+        lineJoin: "round",
+        interactive: false,
+        bubblingMouseEvents: false,
+        renderer: trailRenderer,
+        pane: "bus-trails",
+      }).addTo(group);
+    });
+    group.addTo(map);
+    trailLayers.set(id, group);
+  }
+
   function paintTrails() {
     const trails = (busFeed && busFeed.trails) || {};
     const windowS = trailWindowS();
@@ -833,45 +1009,17 @@
         pts.push({ ll: [lat, lng], t: t });
       });
       if (pts.length < 2) return;
-      const parts = [];
-      let cur = null;
-      for (let i = 1; i < pts.length; i++) {
-        const age = now - (pts[i - 1].t + pts[i].t) / 2;
-        const op = Math.max(0, 1 - age / windowS);
-        if (op < 0.05) continue;
-        const bucket = Math.round(op * 8) / 8;
-        if (cur && cur.bucket === bucket) {
-          cur.latlngs.push(pts[i].ll);
-        } else {
-          if (cur) parts.push(cur);
-          cur = { bucket, opacity: bucket, latlngs: [pts[i - 1].ll, pts[i].ll] };
-        }
-      }
-      if (cur) parts.push(cur);
-      const prev = trailLayers.get(id);
-      if (prev) map.removeLayer(prev);
-      if (!parts.length) {
-        trailLayers.delete(id);
-        return;
-      }
-      const group = L.layerGroup();
+      if (!trailInView(pts)) return;
+      const sampled = downsampleTrail(pts, SNAP_WAYPOINTS);
+      const sig = trailSig(id, sampled);
+      const snap = snapCache.get(sig);
       const colour = colourById.get(id) || "#f59e0b";
-      parts.forEach((part) => {
-        L.polyline(part.latlngs, {
-          color: colour,
-          weight: 3,
-          opacity: part.opacity,
-          lineCap: "round",
-          lineJoin: "round",
-          interactive: false,
-          bubblingMouseEvents: false,
-          renderer: trailRenderer,
-          pane: "bus-trails",
-        }).addTo(group);
-      });
-      group.addTo(map);
-      trailLayers.set(id, group);
+      const parts = snap && snap.coords
+        ? partsFromSnap(snap, sampled, windowS, now)
+        : partsFromGps(pts, windowS, now);
+      drawTrailGroup(id, parts, colour);
       keep.add(id);
+      if (!snap) enqueueTrailSnap(id, pts);
     });
     Array.from(trailLayers.keys()).forEach((id) => {
       if (!keep.has(id)) {

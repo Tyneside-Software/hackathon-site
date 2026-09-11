@@ -37,7 +37,7 @@
     <h1 style="font-size:1.7rem;margin-bottom:0.4rem">Done cards</h1>
     <p style="color:var(--muted);max-width:42rem">
       Finished increments live here so the board stays short.
-      <strong>36 cards · 67.5h</strong>.
+      <strong>38 cards · 70h</strong>.
       Click a card for the brief. Filter with the chips, hour cards, or <code>?person=lewis</code>.
     </p>
 
@@ -64,8 +64,8 @@
       </button>
       <button type="button" class="person" data-person="michael" aria-pressed="false">
         <div class="who"><span class="emoji">🏗️</span> Michael</div>
-        <div class="hrs">35.25 <span>hrs</span></div>
-        <div class="meta">15 done · 2 to do</div>
+        <div class="hrs">36.75 <span>hrs</span></div>
+        <div class="meta">16 done · 2 to do</div>
       </button>
       <button type="button" class="person" data-person="lewis" aria-pressed="false">
         <div class="who"><span class="emoji">🌱</span> Lewis</div>
@@ -74,12 +74,38 @@
       </button>
       <button type="button" class="person" data-person="noah" aria-pressed="false">
         <div class="who"><span class="emoji">🔧</span> Noah</div>
-        <div class="hrs">27 <span>hrs</span></div>
-        <div class="meta">9 done</div>
+        <div class="hrs">28 <span>hrs</span></div>
+        <div class="meta">10 done</div>
       </button>
     </div>
 
     <div class="card-archive" id="done-archive">
+          <a class="card" id="card-48" href="#t-48" data-person="michael" data-hours="1.5">
+            <div class="top"><span class="id">48</span><span class="emoji">🏗️</span></div>
+            <div class="title">Snap bus trails to the streets (OSRM)</div>
+            <span class="tag tag-ok">OSRM trails</span>
+            <div class="bot"><span>1.5h</span><span>Michael</span></div>
+            <template class="card-brief">
+              <p>The 10-minute bus trail was a straight line between GPS pings. It now uses the same public OSRM driving router as <strong>Calculate route</strong>.</p>
+              <h3>What’s live</h3>
+              <ul>
+                <li>One OSRM request per in-view bus (trail waypoints, max 20). Queued two at a time so we do not hammer the public router.</li>
+                <li>Straight line first, then it snaps when OSRM answers. Result is cached until the trail changes.</li>
+                <li>Fade still runs along the snapped path. Trail clicks do not add waypoints.</li>
+              </ul>
+              <p>Hard-refresh <a href="app/">/app/</a>. Wiki: <a href="docs/#buses">Live buses</a>.</p>
+            </template>
+          </a>
+          <a class="card" id="card-47" href="#t-47" data-person="noah" data-hours="1">
+            <div class="top"><span class="id">47</span><span class="emoji">🔧</span></div>
+            <div class="title">Show / hide phones on the map, remembered</div>
+            <span class="tag tag-ok">phone toggle</span>
+            <div class="bot"><span>1h</span><span>Noah</span></div>
+            <template class="card-brief">
+              <p>Noah added a Show phones / Hide phones control, same pattern as buses. Preference is stored in <code>localStorage</code> (<code>hackathon-map-phones</code>) so it survives a refresh.</p>
+              <p><code>f35b560</code>. Hard-refresh <a href="app/">/app/</a>.</p>
+            </template>
+          </a>
           <a class="card" id="card-46" href="#t-46" data-person="michael" data-hours="1.5">
             <div class="top"><span class="id">46</span><span class="emoji">🏗️</span></div>
             <div class="title">10-minute fading trail behind each bus</div>

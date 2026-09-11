@@ -28,6 +28,28 @@
   ],
   "cards": [
     {
+      "id": "48",
+      "person": "michael",
+      "hours": 1.5,
+      "emoji": "🏗️",
+      "title": "Snap bus trails to the streets (OSRM)",
+      "column": "done",
+      "tag": "OSRM trails",
+      "tag_kind": "ok",
+      "brief": "<p>The 10-minute bus trail was a straight line between GPS pings. It now uses the same public OSRM driving router as <strong>Calculate route</strong>.</p>\n<h3>What’s live</h3>\n<ul>\n  <li>One OSRM request per in-view bus (trail waypoints, max 20). Queued two at a time so we do not hammer the public router.</li>\n  <li>Straight line first, then it snaps when OSRM answers. Result is cached until the trail changes.</li>\n  <li>Fade still runs along the snapped path. Trail clicks do not add waypoints.</li>\n</ul>\n<p>Hard-refresh <a href=\"app/\">/app/</a>. Wiki: <a href=\"docs/#buses\">Live buses</a>.</p>"
+    },
+    {
+      "id": "47",
+      "person": "noah",
+      "hours": 1,
+      "emoji": "🔧",
+      "title": "Show / hide phones on the map, remembered",
+      "column": "done",
+      "tag": "phone toggle",
+      "tag_kind": "ok",
+      "brief": "<p>Noah added a Show phones / Hide phones control, same pattern as buses. Preference is stored in <code>localStorage</code> (<code>hackathon-map-phones</code>) so it survives a refresh.</p>\n<p><code>f35b560</code>. Hard-refresh <a href=\"app/\">/app/</a>.</p>"
+    },
+    {
       "id": "46",
       "person": "michael",
       "hours": 1.5,

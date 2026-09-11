@@ -18,7 +18,7 @@ The browser does **not** call bustimes.org. It does **not** call BODS. One looki
 | Zoom 14+ | Upright **line-number chips** with a heading pip. |
 | Stale vehicle | Pings older than **10 minutes** are not drawn. |
 | Status | Count in view, 30-mile count, newest ping age, **cache age** or **refreshed**. |
-| Trail | Last **10 minutes** of positions, stored on the Firestore snapshot. Fades to invisible at 10 minutes. Grows only while someone is looking (same lazy fetch). |
+| Trail | Last **10 minutes** of positions, stored on the Firestore snapshot. Snapped to streets with the same public OSRM driving router as **Calculate route** (in-view buses only, queued, cached). Fades to invisible at 10 minutes. Straight line until OSRM answers, so the trail still appears immediately. |
 | Click | Popup. Does **not** drop a waypoint. |
 | Feed down | Status line. Waypoints and phones stay. |
 
