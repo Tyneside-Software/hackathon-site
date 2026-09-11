@@ -32,10 +32,32 @@
       "person": "michael",
       "hours": 4,
       "emoji": "🏗️",
-      "title": "Android tracker posts GPS; map shows last known",
-      "column": "done",
-      "brief": "<p>Third repo hackathon-android. One switch. Phone POSTs /v1/locations. Map polls /v1/devices. Device id is Android ID.</p>",
+      "title": "Android app: tracking toggle, GPS to the API",
+      "column": "doing",
+      "brief": "<p>Michael owns <a href=\"https://github.com/Tyneside-Software/hackathon-android\">hackathon-android</a>. One switch: tracking on or off. While on, the phone reads GPS and POSTs to the API. Device id is Android ID (serial/IMEI are locked on modern Android).</p>\n<h3>Done when</h3>\n<ul>\n  <li>A debug APK installs on a phone.</li>\n  <li>Toggle on starts a foreground location service; toggle off stops it.</li>\n  <li>The phone POSTs <code>/v1/locations</code> with device id, lat, lng.</li>\n</ul>\n<p>Reeve owns storing that ping. Noah owns drawing it on the map.</p>",
       "tag": "hackathon-android",
+      "tag_kind": "ok"
+    },
+    {
+      "id": "33",
+      "person": "reeve",
+      "hours": 3,
+      "emoji": "🧭",
+      "title": "API stores GPS pings in the database",
+      "column": "doing",
+      "brief": "<p>Reeve owns the API side of live phones. Accept <code>POST /v1/locations</code> (device id, lat, lng) and persist last-known position so the map can read it back. Use Datastore/Firestore the same way as the rest of the API. <code>/health</code> stays cheap if the database is down.</p>\n<h3>Done when</h3>\n<ul>\n  <li>A POST from the Android app (or curl) writes a device’s last lat/lng.</li>\n  <li><code>GET /v1/devices</code> (or equivalent) returns last-known phones for the map.</li>\n  <li>History can live in a ping kind; last-known is enough for v0.</li>\n</ul>\n<p>Repo: <a href=\"https://github.com/Tyneside-Software/hackathon-api\">hackathon-api</a>. Scaffold routes may already exist — make the database write real.</p>",
+      "tag": "POST /v1/locations",
+      "tag_kind": "ok"
+    },
+    {
+      "id": "34",
+      "person": "noah",
+      "hours": 3,
+      "emoji": "🔧",
+      "title": "Map shows the phone’s current coordinates",
+      "column": "doing",
+      "brief": "<p>Noah owns the map UI. Poll the API for last-known devices and draw each phone on <code>/app/</code> so a live location is visible next to the waypoint pins.</p>\n<h3>Done when</h3>\n<ul>\n  <li>The map shows a marker (or equivalent) for each device that has pinged.</li>\n  <li>The marker updates when the API has a newer fix (poll is fine).</li>\n  <li>Waypoint routing still works if the API is quiet.</li>\n</ul>\n<p>Repo: <a href=\"https://github.com/Tyneside-Software/hackathon-site\">hackathon-site</a>. <code>GET /v1/devices</code> is the read Reeve is storing.</p>",
+      "tag": "map phones",
       "tag_kind": "ok"
     },
     {

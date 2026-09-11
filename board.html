@@ -70,8 +70,8 @@
     <div class="people">
       <button type="button" class="person" data-person="reeve" aria-pressed="false">
         <div class="who"><span class="emoji">🧭</span> Reeve</div>
-        <div class="hrs">8.75 <span>hrs</span></div>
-        <div class="meta">4 done · 1 ready · 2 to do</div>
+        <div class="hrs">11.75 <span>hrs</span></div>
+        <div class="meta">4 done · 1 ready · 1 in progress · 2 to do</div>
       </button>
       <button type="button" class="person" data-person="connor" aria-pressed="false">
         <div class="who"><span class="emoji">⚡</span> Connor</div>
@@ -81,7 +81,7 @@
       <button type="button" class="person" data-person="michael" aria-pressed="false">
         <div class="who"><span class="emoji">🏗️</span> Michael</div>
         <div class="hrs">19.25 <span>hrs</span></div>
-        <div class="meta">7 done · 1 to do</div>
+        <div class="meta">6 done · 1 in progress · 1 to do</div>
       </button>
       <button type="button" class="person" data-person="lewis" aria-pressed="false">
         <div class="who"><span class="emoji">🌱</span> Lewis</div>
@@ -90,11 +90,12 @@
       </button>
       <button type="button" class="person" data-person="noah" aria-pressed="false">
         <div class="who"><span class="emoji">🔧</span> Noah</div>
-        <div class="hrs">14 <span>hrs</span></div>
-        <div class="meta">4 done</div>
+        <div class="hrs">17 <span>hrs</span></div>
+        <div class="meta">4 done · 1 in progress</div>
       </button>
     </div>
     <!-- /BOARD:PEOPLE -->
+
 
 
 
@@ -205,9 +206,57 @@
         </div>
 
         <div class="col doing">
-          <div class="head"><span class="col-name">In progress</span><span class="count">0 · 0h</span></div>
+          <div class="head"><span class="col-name">In progress</span><span class="count">3 · 10h</span></div>
           <div class="stack">
-            <p class="empty-col" data-all="Empty on purpose. Pull a Ready card and ship it.">Empty on purpose. Pull a Ready card and ship it.</p>
+            <p class="empty-col is-hidden" data-all="Empty on purpose. Pull a Ready card and ship it."></p>
+            <a class="card" id="card-32" href="#t-32" data-person="michael" data-hours="4">
+              <div class="top"><span class="id">32</span><span class="emoji">🏗️</span></div>
+              <div class="title">Android app: tracking toggle, GPS to the API</div>
+              <span class="tag tag-ok">hackathon-android</span>
+              <div class="bot"><span>4h</span><span>Michael</span></div>
+              <template class="card-brief">
+                <p>Michael owns <a href="https://github.com/Tyneside-Software/hackathon-android">hackathon-android</a>. One switch: tracking on or off. While on, the phone reads GPS and POSTs to the API. Device id is Android ID (serial/IMEI are locked on modern Android).</p>
+                <h3>Done when</h3>
+                <ul>
+                  <li>A debug APK installs on a phone.</li>
+                  <li>Toggle on starts a foreground location service; toggle off stops it.</li>
+                  <li>The phone POSTs <code>/v1/locations</code> with device id, lat, lng.</li>
+                </ul>
+                <p>Reeve owns storing that ping. Noah owns drawing it on the map.</p>
+              </template>
+            </a>
+            <a class="card" id="card-33" href="#t-33" data-person="reeve" data-hours="3">
+              <div class="top"><span class="id">33</span><span class="emoji">🧭</span></div>
+              <div class="title">API stores GPS pings in the database</div>
+              <span class="tag tag-ok">POST /v1/locations</span>
+              <div class="bot"><span>3h</span><span>Reeve</span></div>
+              <template class="card-brief">
+                <p>Reeve owns the API side of live phones. Accept <code>POST /v1/locations</code> (device id, lat, lng) and persist last-known position so the map can read it back. Use Datastore/Firestore the same way as the rest of the API. <code>/health</code> stays cheap if the database is down.</p>
+                <h3>Done when</h3>
+                <ul>
+                  <li>A POST from the Android app (or curl) writes a device’s last lat/lng.</li>
+                  <li><code>GET /v1/devices</code> (or equivalent) returns last-known phones for the map.</li>
+                  <li>History can live in a ping kind; last-known is enough for v0.</li>
+                </ul>
+                <p>Repo: <a href="https://github.com/Tyneside-Software/hackathon-api">hackathon-api</a>. Scaffold routes may already exist — make the database write real.</p>
+              </template>
+            </a>
+            <a class="card" id="card-34" href="#t-34" data-person="noah" data-hours="3">
+              <div class="top"><span class="id">34</span><span class="emoji">🔧</span></div>
+              <div class="title">Map shows the phone’s current coordinates</div>
+              <span class="tag tag-ok">map phones</span>
+              <div class="bot"><span>3h</span><span>Noah</span></div>
+              <template class="card-brief">
+                <p>Noah owns the map UI. Poll the API for last-known devices and draw each phone on <code>/app/</code> so a live location is visible next to the waypoint pins.</p>
+                <h3>Done when</h3>
+                <ul>
+                  <li>The map shows a marker (or equivalent) for each device that has pinged.</li>
+                  <li>The marker updates when the API has a newer fix (poll is fine).</li>
+                  <li>Waypoint routing still works if the API is quiet.</li>
+                </ul>
+                <p>Repo: <a href="https://github.com/Tyneside-Software/hackathon-site">hackathon-site</a>. <code>GET /v1/devices</code> is the read Reeve is storing.</p>
+              </template>
+            </a>
           </div>
         </div>
 
@@ -260,13 +309,13 @@
         </div>
 
         <div class="col done">
-          <div class="head"><span class="col-name">Done</span><span class="count" id="done-col-count">22 · 38.25h</span></div>
+          <div class="head"><span class="col-name">Done</span><span class="count" id="done-col-count">21 · 34.25h</span></div>
           <div class="stack">
-            <script type="application/json" id="done-cards-index">[{"id":"32","person":"michael","hours":4},{"id":"31","person":"noah","hours":12},{"id":"28","person":"michael","hours":1},{"id":"29","person":"michael","hours":2},{"id":"30","person":"michael","hours":1.5},{"id":"14","person":"lewis","hours":0.75},{"id":"18","person":"connor","hours":0.5},{"id":"19","person":"connor","hours":0.75},{"id":"20","person":"michael","hours":0.75},{"id":"21","person":"reeve","hours":1},{"id":"27","person":"connor","hours":0.5},{"id":"26","person":"michael","hours":2},{"id":"10","person":"michael","hours":4},{"id":"12","person":"lewis","hours":0.5},{"id":"15","person":"reeve","hours":0.5},{"id":"16","person":"reeve","hours":1},{"id":"01","person":"lewis","hours":0.5},{"id":"02","person":"reeve","hours":1},{"id":"03","person":"lewis","hours":2},{"id":"25","person":"noah","hours":0.5},{"id":"22","person":"noah","hours":0.5},{"id":"23","person":"noah","hours":1}]</script>
+            <script type="application/json" id="done-cards-index">[{"id":"31","person":"noah","hours":12},{"id":"28","person":"michael","hours":1},{"id":"29","person":"michael","hours":2},{"id":"30","person":"michael","hours":1.5},{"id":"14","person":"lewis","hours":0.75},{"id":"18","person":"connor","hours":0.5},{"id":"19","person":"connor","hours":0.75},{"id":"20","person":"michael","hours":0.75},{"id":"21","person":"reeve","hours":1},{"id":"27","person":"connor","hours":0.5},{"id":"26","person":"michael","hours":2},{"id":"10","person":"michael","hours":4},{"id":"12","person":"lewis","hours":0.5},{"id":"15","person":"reeve","hours":0.5},{"id":"16","person":"reeve","hours":1},{"id":"01","person":"lewis","hours":0.5},{"id":"02","person":"reeve","hours":1},{"id":"03","person":"lewis","hours":2},{"id":"25","person":"noah","hours":0.5},{"id":"22","person":"noah","hours":0.5},{"id":"23","person":"noah","hours":1}]</script>
             <a class="card done-index" id="done-index" href="done.html">
-              <div class="done-index-count" id="done-index-count">22</div>
+              <div class="done-index-count" id="done-index-count">21</div>
               <div class="title">All done cards</div>
-              <p class="done-index-meta" id="done-index-meta">22 cards · 38.25h · archive →</p>
+              <p class="done-index-meta" id="done-index-meta">21 cards · 34.25h · archive →</p>
             </a>
           </div>
         </div>
@@ -274,6 +323,7 @@
       </div>
     </div>
     <!-- /BOARD:KANBAN -->
+
 
 
 
@@ -294,8 +344,8 @@
         <tr data-person="reeve">
           <td>🧭</td>
           <td><strong>Reeve</strong></td>
-          <td>Reeve: start script for front end and back end together (1h, done) · Reeve: get the front end running locally (0.5h, done) · Reeve: get the back end running locally (1h, done) · Reeve: GitHub edit → run → push (API repo) (0.75h) · Demo seed: 5 Tyneside waypoints + named run (1.5h) · Map with clickable / draggable waypoints (3h, ready) · Run the API locally and hit /health (1h, done)</td>
-          <td><strong>8.75h</strong></td>
+          <td>API stores GPS pings in the database (3h, in progress) · Reeve: start script for front end and back end together (1h, done) · Reeve: get the front end running locally (0.5h, done) · Reeve: get the back end running locally (1h, done) · Reeve: GitHub edit → run → push (API repo) (0.75h) · Demo seed: 5 Tyneside waypoints + named run (1.5h) · Map with clickable / draggable waypoints (3h, ready) · Run the API locally and hit /health (1h, done)</td>
+          <td><strong>11.75h</strong></td>
         </tr>
         <tr data-person="connor">
           <td>⚡</td>
@@ -306,7 +356,7 @@
         <tr data-person="michael">
           <td>🏗️</td>
           <td><strong>Michael</strong></td>
-          <td>Android tracker posts GPS; map shows last known (4h, done) · Alpine.js test page calls GET /test_field (1h, done) · Docs wiki (Docs in the nav) (2h, done) · Cloud Run GitHub builds (buildpacks, Python 3.13) (1.5h, done) · Michael: GitHub edit → run → push (both repos) (0.75h, done) · Site + API deploy on push to main (2h, done) · Cloud Run API live + CORS for Pages (4h, done) · Persist routes on the API (replace localStorage) (4h)</td>
+          <td>Android app: tracking toggle, GPS to the API (4h, in progress) · Alpine.js test page calls GET /test_field (1h, done) · Docs wiki (Docs in the nav) (2h, done) · Cloud Run GitHub builds (buildpacks, Python 3.13) (1.5h, done) · Michael: GitHub edit → run → push (both repos) (0.75h, done) · Site + API deploy on push to main (2h, done) · Cloud Run API live + CORS for Pages (4h, done) · Persist routes on the API (replace localStorage) (4h)</td>
           <td><strong>19.25h</strong></td>
         </tr>
         <tr data-person="lewis">
@@ -318,13 +368,14 @@
         <tr data-person="noah">
           <td>🔧</td>
           <td><strong>Noah</strong></td>
-          <td>Noah: API talks to Firestore (12h, done) · Noah: API version on / and /health (0.5h, done) · Noah: get the front end running locally (0.5h, done) · Noah: get the back end running locally (1h, done)</td>
-          <td><strong>14h</strong></td>
+          <td>Map shows the phone’s current coordinates (3h, in progress) · Noah: API talks to Firestore (12h, done) · Noah: API version on / and /health (0.5h, done) · Noah: get the front end running locally (0.5h, done) · Noah: get the back end running locally (1h, done)</td>
+          <td><strong>17h</strong></td>
         </tr>
       </tbody>
     </table>
     </div>
     <!-- /BOARD:WHO -->
+
 
 
 
