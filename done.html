@@ -37,7 +37,7 @@
     <h1 style="font-size:1.7rem;margin-bottom:0.4rem">Done cards</h1>
     <p style="color:var(--muted);max-width:42rem">
       Finished increments live here so the board stays short.
-      <strong>34 cards · 64h</strong>.
+      <strong>35 cards · 66h</strong>.
       Click a card for the brief. Filter with the chips, hour cards, or <code>?person=lewis</code>.
     </p>
 
@@ -64,8 +64,8 @@
       </button>
       <button type="button" class="person" data-person="michael" aria-pressed="false">
         <div class="who"><span class="emoji">🏗️</span> Michael</div>
-        <div class="hrs">31.75 <span>hrs</span></div>
-        <div class="meta">13 done · 2 to do</div>
+        <div class="hrs">33.75 <span>hrs</span></div>
+        <div class="meta">14 done · 2 to do</div>
       </button>
       <button type="button" class="person" data-person="lewis" aria-pressed="false">
         <div class="who"><span class="emoji">🌱</span> Lewis</div>
@@ -80,6 +80,23 @@
     </div>
 
     <div class="card-archive" id="done-archive">
+          <a class="card" id="card-45" href="#t-45" data-person="michael" data-hours="2">
+            <div class="top"><span class="id">45</span><span class="emoji">🏗️</span></div>
+            <div class="title">Cache live buses in Firestore; map reads our API</div>
+            <span class="tag tag-ok">BusCache</span>
+            <div class="bot"><span>2h</span><span>Michael</span></div>
+            <template class="card-brief">
+              <p>Every map tab was calling bustimes.org every 15s. That does not scale, and it hammers someone else’s feed.</p>
+              <h3>What’s live</h3>
+              <ul>
+                <li>Map <code>GET /v1/buses</code> only while Show buses is on. Hidden tab and Off: no request.</li>
+                <li>API serves Firestore <code>BusCache/newcastle</code> if it is younger than 15s. Otherwise it fetches bustimes.org once, slims the payload, writes the snapshot.</li>
+                <li>Unlimited looking tabs, one upstream refresh. Nobody looking: no refresh.</li>
+                <li>Phone GPS and map GETs stay open. Bustimes.org is never called from the browser.</li>
+              </ul>
+              <p>API <strong>0.1.7</strong>. Wiki: <a href="docs/#buses">Live buses</a>.</p>
+            </template>
+          </a>
           <a class="card" id="card-41" href="#t-41" data-person="noah" data-hours="3">
             <div class="top"><span class="id">41</span><span class="emoji">🔧</span></div>
             <div class="title">API user accounts / OAuth2 token</div>

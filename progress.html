@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Current progress · Tyneside Logistics</title>
-  <meta name="description" content="Catch-up snapshot. Live phones work. Buses are dots then chips. Noah shipped register/login. API 0.1.6.">
+  <meta name="description" content="Catch-up snapshot. Live phones work. Buses come from a Firestore cache. Noah shipped register/login. API 0.1.7.">
   <link rel="icon" href="logo.svg" type="image/svg+xml">
   <link rel="stylesheet" href="styles.css">
   <script src="config.js"></script>
@@ -46,8 +46,8 @@
       <p class="hero-tag">Michael is on the map and tracker. Noah shipped accounts.</p>
       <p class="hero-lead">
         Three repos, two hosts, one product.
-        <strong>Michael tonight:</strong> live buses you can actually read (44) — viewport only, dots at city zoom, line chips when you zoom in; first toggle (39), fetch/hover fix (43); tracker POST every minute and a Newcastle pin (42).
-        <strong>Noah tonight:</strong> phone cards, device drawer, ping history (36–38), API routers (40), then <strong>register / login / Fetch me</strong> (41). Live API is <strong>0.1.6</strong>.
+        <strong>Michael tonight:</strong> buses via our API (45) — Firestore cache, one bustimes.org fetch shared by every tab; readable chips (44).
+        <strong>Noah tonight:</strong> phone drawer, API routers, then <strong>register / login / Fetch me</strong> (41). Live API is <strong>0.1.7</strong>.
         In flight: nothing — pull a Ready or To-do card.
       </p>
       <div class="hero-actions">
@@ -67,7 +67,7 @@
           <span class="progress-dot" :class="dotClass" aria-hidden="true"></span>
           <span>
             <span class="k">API</span>
-            <span class="v" x-text="apiLine">Cloud Run · snapshot 0.1.6</span>
+            <span class="v" x-text="apiLine">Cloud Run · snapshot 0.1.7</span>
           </span>
         </div>
         <div class="progress-live-item">
@@ -132,7 +132,7 @@
         <li>
           <span class="n">03</span>
           <div>
-            <strong>Cloud Run is 0.1.6.</strong>
+            <strong>Cloud Run is 0.1.7.</strong>
             <span>GitHub → Cloud Run uses <em>buildpacks</em> (<code>pack</code> on ubuntu2404), not the Dockerfile.
             Pin is <strong>3.13</strong>. Datastore writes work: fields and GPS pings.</span>
           </div>
@@ -181,7 +181,7 @@
           <a class="progress-item" href="done.html#t-41">
             <span class="id">41 · 🔧 Noah · done</span>
             <strong>Register / login / Fetch me</strong>
-            <span>Just landed. <a href="account.html">Account</a> page plus API 0.1.6: <code>POST /register</code>, <code>/login</code>, <code>/token</code>, <code>GET /users/me</code>. Phone and map stay open.</span>
+            <span>Landed. <a href="account.html">Account</a> page plus API 0.1.7: <code>POST /register</code>, <code>/login</code>, <code>/token</code>, <code>GET /users/me</code>. Phone and map stay open.</span>
           </a>
         </article>
         <article class="progress-lane is-next">
@@ -190,6 +190,11 @@
             <h3>Next</h3>
             <p>Demo the map, then fill it</p>
           </header>
+          <a class="progress-item" href="done.html#t-45">
+            <span class="id">45 · 🏗️ Michael · done</span>
+            <strong>Buses from our cache, not bustimes.org</strong>
+            <span>Map calls <code>GET /v1/buses</code>. Firestore snapshot, TTL 15s. Nobody looking: no upstream hit. Hard-refresh <a href="app/">/app/</a>.</span>
+          </a>
           <a class="progress-item" href="done.html#t-44">
             <span class="id">44 · 🏗️ Michael · done</span>
             <strong>Buses you can actually read</strong>
@@ -261,7 +266,7 @@
         <a class="progress-person" href="board.html?person=noah">
           <span class="who"><span class="emoji">🔧</span> Noah</span>
           <span class="hrs">27 <span>hrs</span></span>
-          <span class="focus">Accounts live · API 0.1.6</span>
+          <span class="focus">Accounts live · API 0.1.7</span>
           <span class="meta">9 done. Drawer, history, routers, then register / login / Fetch me (41). Phone and map stay open.</span>
         </a>
         <a class="progress-person" href="board.html?person=reeve">
@@ -296,14 +301,22 @@
     <div class="wrap">
       <p class="hero-kicker">While you were away</p>
       <h2>What already shipped</h2>
-      <p class="lede">34 cards · 64h on Done. Do not redo these.</p>
+      <p class="lede">35 cards · 66h on Done. Do not redo these.</p>
       <ol class="progress-rail">
+        <li>
+          <span class="mark" aria-hidden="true"></span>
+          <div class="body">
+            <p class="hero-kicker">11 September · card 45</p>
+            <h3>Buses from a shared Firestore cache</h3>
+            <p>The map no longer calls bustimes.org. <code>GET /v1/buses</code> serves <code>BusCache/newcastle</code> if it is under 15s old; otherwise the API fetches once and writes. No looking tabs, no upstream hit. API <strong>0.1.7</strong>.</p>
+          </div>
+        </li>
         <li>
           <span class="mark" aria-hidden="true"></span>
           <div class="body">
             <p class="hero-kicker">11 September · card 41</p>
             <h3>Noah: register, login, Fetch me</h3>
-            <p>Live API <strong>0.1.6</strong>. <a href="account.html">Account</a> creates a user, logs in, and calls <code>GET /users/me</code> with a bearer token. GPS and map reads stay open. Set <code>JWT_SECRET_KEY</code> on Cloud Run so tokens survive a new revision.</p>
+            <p>Accounts landed on API <strong>0.1.6</strong>. <a href="account.html">Account</a> creates a user, logs in, and calls <code>GET /users/me</code> with a bearer token. GPS and map reads stay open. Set <code>JWT_SECRET_KEY</code> on Cloud Run so tokens survive a new revision.</p>
           </div>
         </li>
         <li>
@@ -359,7 +372,7 @@
           <div class="body">
             <p class="hero-kicker">3 September · card 30</p>
             <h3>Cloud Run builds on Python 3.13 pack</h3>
-            <p>ubuntu2404 has 3.13 and 3.14 only. A 3.12 pin failed Cloud Build. Root <code>main.py</code>, <code>Procfile</code>, and <code>.python-version</code> 3.13 make pack succeed. Code <code>VERSION</code> is <strong>0.1.6</strong>.</p>
+            <p>ubuntu2404 has 3.13 and 3.14 only. A 3.12 pin failed Cloud Build. Root <code>main.py</code>, <code>Procfile</code>, and <code>.python-version</code> 3.13 make pack succeed. Code <code>VERSION</code> is <strong>0.1.7</strong>.</p>
           </div>
         </li>
         <li>
@@ -413,7 +426,7 @@
         <div class="progress-host is-api">
           <p class="hero-kicker">hackathon-api</p>
           <h3>Cloud Run · europe-west2</h3>
-          <p>FastAPI + Uvicorn. Code <strong>0.1.6</strong>. Local: <code>:8080</code>. Buildpacks, not the Dockerfile, on GitHub CD. History GET reads Firestore, Datastore fallback. Accounts: <code>/register</code> <code>/login</code> <code>/users/me</code>.</p>
+          <p>FastAPI + Uvicorn. Code <strong>0.1.7</strong>. Local: <code>:8080</code>. Buildpacks, not the Dockerfile, on GitHub CD. Buses: <code>GET /v1/buses</code> from Firestore cache. Accounts: <code>/register</code> <code>/login</code> <code>/users/me</code>.</p>
           <ul>
             <li><code>GET /</code> · <code>/health</code> · <code>/test_field</code></li>
             <li><code>POST /create_field</code> · <code>GET /view_field/{key}</code></li>
@@ -488,7 +501,7 @@
       const raw = (window.HACKATHON_API || "").replace(/\/$/, "");
       return {
         base: raw,
-        apiLine: "Cloud Run · snapshot 0.1.6",
+        apiLine: "Cloud Run · snapshot 0.1.7",
         state: "wait",
         get dotClass() {
           return {
@@ -517,7 +530,7 @@
             this.apiLine = "v" + (data.version || "?") + " · live";
           } catch (err) {
             this.state = "bad";
-            this.apiLine = "Unreachable · snapshot still 0.1.6";
+            this.apiLine = "Unreachable · snapshot still 0.1.7";
           }
         }
       };

@@ -9,11 +9,11 @@ Three GitHub repos, two hosts, one product. The **site** is static files. The **
      │     index, progress, map, board, wiki, api-test, account
      │
      ├─ OSM tiles + public OSRM          (map waypoints; not our API)
-     │     optional: bustimes.org /vehicles.json (live buses, off by default)
      │
      └─ fetch(HACKATHON_API + "/…")  ← Cloud Run  (hackathon-api-….run.app)
            /health  /test_field  /register  /login  /users/me
-           /v1/devices  /v1/locations  /docs
+           /v1/devices  /v1/locations  /v1/buses  /docs
+           buses: Firestore BusCache; API fetches bustimes.org only when a tab is looking
 
   Phone (Tyneside Tracker APK)
      └─ POST /v1/locations  ← same Cloud Run
@@ -21,7 +21,7 @@ Three GitHub repos, two hosts, one product. The **site** is static files. The **
 
 Locally the site is `python -m http.server 5500`, the API is `uvicorn` on `:8080`. `.\start.ps1` starts both. The phone is Android Studio / a debug APK.
 
-**11 September 2026:** live phones work end to end (cards 32–34). The emulator POSTs every minute; last-seen is last communication; Newcastle is on the map. Noah shipped the device drawer and ping-history path (36–38), then **register / login / Fetch me** (41) — live API **0.1.6**. `GET /v1/locations?device_id=` reads Firestore, Datastore fallback. Live buses are a map toggle (39, 43, **44**): viewport only, dots at city zoom, chips when you zoom in. A physical phone is still card 35.
+**11 September 2026:** live phones work end to end (cards 32–34). The emulator POSTs every minute; last-seen is last communication; Newcastle is on the map. Noah shipped the device drawer and ping-history path (36–38), then **register / login / Fetch me** (41). Live API **0.1.7**. `GET /v1/locations?device_id=` reads Firestore, Datastore fallback. Live buses are a map toggle (39, 43, 44, **45**): the map reads `GET /v1/buses`; Firestore caches bustimes.org so every tab shares one upstream fetch. A physical phone is still card 35.
 
 ## The three repos
 
@@ -66,8 +66,8 @@ hackathon-site/
 ```
 hackathon-api/
   app/main.py         FastAPI app, CORS, includes routers (Noah split, 57a1d44)
-  app/routers/        health, auth, fields, locations, devices
-  app/config.py       VERSION 0.1.6, CORS, JWT_SECRET_KEY
+  app/routers/        health, auth, fields, locations, devices, buses
+  app/config.py       VERSION 0.1.7, CORS, JWT, bus TTL
   app/db.py           Datastore / Firestore helpers (devices, pings, User)
   app/models.py       User get/create/authenticate
   app/security.py     pwdlib + JWT
@@ -107,7 +107,7 @@ Full page: [The map](#map).
 |-------|--------|---------|
 | Waypoints / OSRM | Public OSRM, not our API | On |
 | Phones | `GET /v1/devices` every 8s; drawer `GET /v1/locations?device_id=` | On |
-| Buses | bustimes.org `/vehicles.json` every 15s | **Off** — no fetch until Show buses |
+| Buses | Our `GET /v1/buses` every 15s | **Off** — no fetch until Show buses. API caches in Firestore, TTL 15s |
 
 Device id on the phone is `Settings.Secure.ANDROID_ID` (not the hardware serial — Android 10+ will not give that to a sideloaded app). The tracker POSTs every minute while the switch is on, even if the pin has not moved. `recorded_at` is last communication.
 
@@ -139,7 +139,7 @@ The API Dockerfile exists for a Docker-based trigger. The GitHub-connected servi
 
 ## Next
 
-Live phones, drawer, ping history, live buses (dots then chips), and accounts (register / login / Fetch me) are on the map and the Account page. Next product slices: job list, demo seed, localStorage. Board: [Current progress](../progress.html). [The map](#map) · [Buses](#buses) · [API](#api).
+Live phones, drawer, ping history, live buses from a Firestore cache, and accounts are on the map and the Account page. Next product slices: job list, demo seed, localStorage. Board: [Current progress](../progress.html). [The map](#map) · [Buses](#buses) · [API](#api).
 
 | Topic | Page |
 |-------|------|

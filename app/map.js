@@ -495,26 +495,14 @@
   });
   setHistoryButton();
 
-  // Live buses — bustimes.org /vehicles.json (they ingest BODS).
-  // Off by default. Fetch + poll only while the toggle is on.
+  // Live buses — GET /v1/buses (Firestore cache; API fetches bustimes.org).
+  // Off by default. Poll our API only while the toggle is on.
   const BUS_MILES = 30;
   const BUS_KM = BUS_MILES * 1.609344;
   const BUS_POLL_MS = 15000;
   const BUS_STALE_MS = 10 * 60 * 1000;
   const BUS_MIN_ZOOM = 12;
   const BUS_CHIP_ZOOM = 14;
-  const BUS_BBOX = {
-    ymin: 54.5446,
-    ymax: 55.4120,
-    xmin: -2.3740,
-    xmax: -0.8616,
-  };
-  const BUS_URL =
-    "https://bustimes.org/vehicles.json" +
-    "?ymin=" + BUS_BBOX.ymin +
-    "&ymax=" + BUS_BBOX.ymax +
-    "&xmin=" + BUS_BBOX.xmin +
-    "&xmax=" + BUS_BBOX.xmax;
 
   map.createPane("buses");
   map.getPane("buses").style.zIndex = 450;
@@ -526,6 +514,7 @@
   let busTimer = null;
   let busAbort = null;
   let busRows = [];
+  let busFeed = null;
 
   function setBusStatus(msg) {
     if (busStatusEl) busStatusEl.textContent = msg;
@@ -752,17 +741,26 @@
     return { inView: seen.size, inCircle, stale, mode, newest };
   }
 
+  function busCacheNote() {
+    if (!busFeed) return "";
+    let extra = "";
+    if (busFeed.refreshed) extra += " · refreshed";
+    else if (typeof busFeed.age_s === "number") extra += " · cache " + Math.round(busFeed.age_s) + "s";
+    if (busFeed.stale) extra += " · stale snapshot";
+    return extra;
+  }
+
   function paintBuses() {
     if (!busesOn) return;
     const n = upsertBuses(busRows);
     if (!n.inCircle) {
-      setBusStatus("No live buses in the 30-mile circle right now.");
+      setBusStatus("No live buses in the 30-mile circle right now." + busCacheNote());
       return;
     }
     if (n.mode === "hidden") {
       let msg = "Zoom in to see buses — " + n.inCircle + " live within " + BUS_MILES + " miles";
       if (n.newest) msg += " · newest ping " + (ageLabel(new Date(n.newest).toISOString()) || "just now");
-      setBusStatus(msg + ".");
+      setBusStatus(msg + busCacheNote() + ".");
       return;
     }
     let msg = n.inView + " in view";
@@ -770,7 +768,7 @@
     msg += " · " + n.inCircle + " within " + BUS_MILES + " miles";
     if (n.stale) msg += " · " + n.stale + " stale hidden";
     if (n.newest) msg += " · newest ping " + (ageLabel(new Date(n.newest).toISOString()) || "just now");
-    setBusStatus(msg + ".");
+    setBusStatus(msg + busCacheNote() + ".");
   }
 
   async function refreshBuses() {
@@ -782,20 +780,26 @@
     if (busAbort) busAbort.abort();
     busAbort = new AbortController();
     if (!busRows.length) setBusStatus("Loading buses…");
+    const base = apiBase();
+    if (!base) {
+      setBusStatus("No API URL in config.js.");
+      return;
+    }
     try {
-      const res = await fetch(BUS_URL, {
+      const res = await fetch(base + "/v1/buses", {
         headers: { Accept: "application/json" },
         signal: busAbort.signal,
       });
       if (!res.ok) throw new Error("HTTP " + res.status);
       const data = await res.json();
       if (!busesOn) return;
-      busRows = Array.isArray(data) ? data : [];
+      busFeed = data && typeof data === "object" ? data : null;
+      busRows = busFeed && Array.isArray(busFeed.vehicles) ? busFeed.vehicles : [];
       paintBuses();
     } catch (err) {
       if (err && err.name === "AbortError") return;
       if (!busesOn) return;
-      setBusStatus("Could not reach bustimes.org. Layer stays on — try again shortly.");
+      setBusStatus("Could not reach our API for buses. Layer stays on — try again shortly.");
     }
   }
 
@@ -806,6 +810,7 @@
       stopBusPoll();
       clearBuses();
       busRows = [];
+      busFeed = null;
       setBusStatus("Off — no data fetched.");
       return;
     }

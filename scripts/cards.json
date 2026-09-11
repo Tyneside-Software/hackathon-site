@@ -28,6 +28,17 @@
   ],
   "cards": [
     {
+      "id": "45",
+      "person": "michael",
+      "hours": 2,
+      "emoji": "🏗️",
+      "title": "Cache live buses in Firestore; map reads our API",
+      "column": "done",
+      "tag": "BusCache",
+      "tag_kind": "ok",
+      "brief": "<p>Every map tab was calling bustimes.org every 15s. That does not scale, and it hammers someone else’s feed.</p>\n<h3>What’s live</h3>\n<ul>\n  <li>Map <code>GET /v1/buses</code> only while Show buses is on. Hidden tab and Off: no request.</li>\n  <li>API serves Firestore <code>BusCache/newcastle</code> if it is younger than 15s. Otherwise it fetches bustimes.org once, slims the payload, writes the snapshot.</li>\n  <li>Unlimited looking tabs, one upstream refresh. Nobody looking: no refresh.</li>\n  <li>Phone GPS and map GETs stay open. Bustimes.org is never called from the browser.</li>\n</ul>\n<p>API <strong>0.1.7</strong>. Wiki: <a href=\"docs/#buses\">Live buses</a>.</p>"
+    },
+    {
       "id": "41",
       "person": "noah",
       "hours": 3,

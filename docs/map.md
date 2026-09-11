@@ -10,7 +10,7 @@ Centre: Newcastle `[54.9783, -1.6178]`.
 |-------|---------|------|------|
 | Waypoints + route | On | Clicks on the map. Public OSRM driving geometry; haversine straight-line if OSRM fails | None |
 | Phones | On | Our API `GET /v1/devices` last-known. Drawer: `GET /v1/locations?device_id=` | 8s |
-| Buses | **Off** | bustimes.org `GET /vehicles.json` (BODS underneath). Not our API | 15s, only while the toggle is on |
+| Buses | **Off** | Our API `GET /v1/buses` (Firestore cache of bustimes.org). Browser never calls bustimes.org | 15s, only while the toggle is on |
 
 None of these `fitBounds` over the others except: clicking a phone card flies to that device, and **Show history on map** may pad to the ping path. **Show buses** must not steal the camera.
 
@@ -30,7 +30,9 @@ The drawer lists LocationPings. Consecutive pings at the same place are hidden (
 
 ## Buses
 
-**Show buses** / **Hide buses**. Off means no request at all. While on: 30-mile **square** bbox fetch, then haversine-filter to a 30-mile **circle** of Newcastle. Only vehicles in the **current view** are drawn (about 300 live in the circle — a soup if you plot them all). City zoom (12–13) is coloured dots; zoom 14+ is upright line-number chips with a heading pip. Pings older than 10 minutes stay hidden. Status shows the newest ping age. Hide aborts the in-flight fetch, stops the timer, removes markers. Hidden tab: skip the tick. Clicking a bus opens a popup and does **not** add a waypoint.
+**Show buses** / **Hide buses**. Off means no request at all. While on: `GET /v1/buses` every 15s. The API serves a Firestore snapshot (TTL 15s) or, if that snapshot is stale, fetches bustimes.org once and writes it. Only vehicles in the **current view** are drawn. City zoom (12–13) is coloured dots; zoom 14+ is upright line-number chips. Hidden tab: skip the tick. Clicking a bus opens a popup and does **not** add a waypoint.
+
+Full page: [Live buses](#buses).
 
 Full page: [Live buses](#buses).
 
