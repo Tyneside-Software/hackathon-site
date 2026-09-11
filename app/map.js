@@ -157,6 +157,8 @@
   });
 
   const DEVICE_COLOUR = "#F5A623";
+  const FRESH_MS = 2 * 60 * 1000;
+  const PHONE_ZOOM = 16;
   const deviceMarkers = new Map();
   const devicesEl = document.getElementById("devices");
   const deviceStatusEl = document.getElementById("device-status");
@@ -183,12 +185,45 @@
     return Math.round(sec / 3600) + " h ago";
   }
 
+  function isFresh(iso) {
+    const t = Date.parse(iso);
+    if (Number.isNaN(t)) return false;
+    return Date.now() - t < FRESH_MS;
+  }
+
+  function zoomToPhone(lat, lng, deviceId) {
+    const reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduce) map.setView([lat, lng], PHONE_ZOOM);
+    else map.flyTo([lat, lng], PHONE_ZOOM, { duration: 0.7 });
+    const marker = deviceMarkers.get(deviceId);
+    if (marker) marker.openPopup();
+  }
+
   function renderDevices(rows) {
     if (!devicesEl) return;
     devicesEl.innerHTML = "";
     rows.forEach((d) => {
       const li = document.createElement("li");
-      li.textContent = shortId(d.device_id) + " · " + ageLabel(d.last_seen_at);
+      const btn = document.createElement("button");
+      const fresh = isFresh(d.last_seen_at);
+      const label = shortId(d.device_id);
+      const age = ageLabel(d.last_seen_at) || "no ping time";
+      btn.type = "button";
+      btn.className = "phone-card " + (fresh ? "is-fresh" : "is-stale");
+      btn.setAttribute(
+        "aria-label",
+        "Zoom to " + label + ", last seen " + age + (fresh ? ", live" : ", stale")
+      );
+      const idEl = document.createElement("span");
+      idEl.className = "phone-card-id";
+      idEl.textContent = label;
+      const ageEl = document.createElement("span");
+      ageEl.className = "phone-card-age";
+      ageEl.textContent = age;
+      btn.appendChild(idEl);
+      btn.appendChild(ageEl);
+      btn.addEventListener("click", () => zoomToPhone(d.last_lat, d.last_lng, d.device_id));
+      li.appendChild(btn);
       devicesEl.appendChild(li);
     });
   }
