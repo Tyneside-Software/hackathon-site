@@ -5,9 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Tyneside Logistics · Routes</title>
   <link rel="icon" href="../logo.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="../styles.css?v=20260911-buses4">
+  <link rel="stylesheet" href="../styles.css?v=20260911-buses5">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
-  <link rel="stylesheet" href="map.css?v=20260911-buses4">
+  <link rel="stylesheet" href="map.css?v=20260911-buses5">
 </head>
 <body class="site">
   <nav class="site-nav" aria-label="Primary">
@@ -51,7 +51,7 @@
       </dl>
       <ol class="stops" id="stops"></ol>
       <p class="hero-kicker" style="margin-top:1.25rem">Buses</p>
-      <p class="lede" style="font-size:0.88rem">Live positions from bustimes.org (they ingest BODS). Off until you ask. We only draw what is in the current view, inside 30 miles of Newcastle. City zoom is coloured dots; zoom in for line numbers. Stale pings (over 10 minutes) stay hidden. Clicking a bus does not add a waypoint.</p>
+      <p class="lede" style="font-size:0.88rem">Live positions from bustimes.org (they ingest BODS). Off until you ask. We only draw what is in the current view, inside 30 miles of Newcastle. City zoom is coloured dots; zoom in twice for line numbers. Stale pings (over 10 minutes) stay hidden. Status shows the newest ping so you can see the feed is moving. Clicking a bus does not add a waypoint.</p>
       <div class="map-actions">
         <button type="button" class="btn btn-ghost" id="btn-buses" aria-pressed="false">Show buses</button>
       </div>
@@ -83,6 +83,6 @@
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
   <script src="../config.js"></script>
-  <script src="map.js?v=20260911-buses4"></script>
+  <script src="map.js?v=20260911-buses5"></script>
 </body>
 </html>

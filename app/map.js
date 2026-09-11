@@ -502,7 +502,7 @@
   const BUS_POLL_MS = 15000;
   const BUS_STALE_MS = 10 * 60 * 1000;
   const BUS_MIN_ZOOM = 12;
-  const BUS_CHIP_ZOOM = 13;
+  const BUS_CHIP_ZOOM = 14;
   const BUS_BBOX = {
     ymin: 54.5446,
     ymax: 55.4120,
@@ -644,8 +644,12 @@
 
   function bindBusMarker(marker, v) {
     const html = busPopup(v);
-    if (marker.getPopup()) marker.setPopupContent(html);
-    else marker.bindPopup(html, { closeButton: true, autoPan: false });
+    const popup = marker.getPopup();
+    if (popup) {
+      if (popup.getContent() !== html) popup.setContent(html);
+    } else {
+      marker.bindPopup(html, { closeButton: true, autoPan: false });
+    }
   }
 
   function clearBuses() {
@@ -679,6 +683,11 @@
     const seen = new Set();
     let inCircle = 0;
     let stale = 0;
+    let newest = 0;
+    function noteTime(v) {
+      const t = Date.parse(v && v.datetime);
+      if (!Number.isNaN(t) && t > newest) newest = t;
+    }
     if (mode === "hidden") {
       clearBuses();
       (rows || []).forEach((v) => {
@@ -689,9 +698,10 @@
         if (!Number.isFinite(lat) || !Number.isFinite(lng)) return;
         if (!withinNewcastle(lat, lng)) return;
         inCircle += 1;
+        noteTime(v);
         if (!busIsFresh(v)) stale += 1;
       });
-      return { inView: 0, inCircle, stale, mode };
+      return { inView: 0, inCircle, stale, mode, newest };
     }
     (rows || []).forEach((v) => {
       const coords = v && v.coordinates;
@@ -701,6 +711,7 @@
       if (!Number.isFinite(lat) || !Number.isFinite(lng)) return;
       if (!withinNewcastle(lat, lng)) return;
       inCircle += 1;
+      noteTime(v);
       if (!busLine(v)) return;
       if (!busIsFresh(v)) {
         stale += 1;
@@ -721,8 +732,6 @@
           riseOnHover: true,
           bubblingMouseEvents: false,
         }).addTo(map);
-        const el = marker.getElement();
-        if (el) L.DomEvent.disableClickPropagation(el);
         bindBusMarker(marker, v);
         busMarkers.set(id, { marker, look });
       } else {
@@ -740,7 +749,7 @@
         busMarkers.delete(id);
       }
     });
-    return { inView: seen.size, inCircle, stale, mode };
+    return { inView: seen.size, inCircle, stale, mode, newest };
   }
 
   function paintBuses() {
@@ -751,15 +760,16 @@
       return;
     }
     if (n.mode === "hidden") {
-      setBusStatus(
-        "Zoom in to see buses — " + n.inCircle + " live within " + BUS_MILES + " miles."
-      );
+      let msg = "Zoom in to see buses — " + n.inCircle + " live within " + BUS_MILES + " miles";
+      if (n.newest) msg += " · newest ping " + (ageLabel(new Date(n.newest).toISOString()) || "just now");
+      setBusStatus(msg + ".");
       return;
     }
     let msg = n.inView + " in view";
     if (n.mode === "dot") msg += " as dots · zoom in for line numbers";
     msg += " · " + n.inCircle + " within " + BUS_MILES + " miles";
     if (n.stale) msg += " · " + n.stale + " stale hidden";
+    if (n.newest) msg += " · newest ping " + (ageLabel(new Date(n.newest).toISOString()) || "just now");
     setBusStatus(msg + ".");
   }
 
