@@ -135,6 +135,8 @@
   }
 
   map.on("click", (e) => {
+    const t = e.originalEvent && e.originalEvent.target;
+    if (t && t.closest && t.closest(".bus-marker, .bus-chip-wrap, .bus-chip, .bus-dot, .leaflet-popup")) return;
     const n = markers.length + 1;
     const marker = L.marker(e.latlng, { draggable: true, title: "Stop " + n }).addTo(map);
     marker.on("dragend", () => {
@@ -493,11 +495,14 @@
   });
   setHistoryButton();
 
-  // Live buses — bustimes.org /vehicles.json (BODS underneath).
+  // Live buses — bustimes.org /vehicles.json (they ingest BODS).
   // Off by default. Fetch + poll only while the toggle is on.
   const BUS_MILES = 30;
   const BUS_KM = BUS_MILES * 1.609344;
   const BUS_POLL_MS = 15000;
+  const BUS_STALE_MS = 10 * 60 * 1000;
+  const BUS_MIN_ZOOM = 12;
+  const BUS_CHIP_ZOOM = 13;
   const BUS_BBOX = {
     ymin: 54.5446,
     ymax: 55.4120,
@@ -511,19 +516,23 @@
     "&xmin=" + BUS_BBOX.xmin +
     "&xmax=" + BUS_BBOX.xmax;
 
+  map.createPane("buses");
+  map.getPane("buses").style.zIndex = 450;
+
   const btnBuses = document.getElementById("btn-buses");
   const busStatusEl = document.getElementById("bus-status");
   const busMarkers = new Map();
   let busesOn = false;
   let busTimer = null;
   let busAbort = null;
+  let busRows = [];
 
   function setBusStatus(msg) {
     if (busStatusEl) busStatusEl.textContent = msg;
   }
 
   function escapeHtml(value) {
-    return String(value ?? "")
+    return String(value == null ? "" : value)
       .replace(/&/g, "&amp;")
       .replace(/</g, "&lt;")
       .replace(/>/g, "&gt;")
@@ -531,7 +540,8 @@
   }
 
   function busLine(v) {
-    return (v && v.service && v.service.line_name) || "?";
+    const line = v && v.service && v.service.line_name;
+    return line ? String(line) : "";
   }
 
   function busColour(v) {
@@ -540,8 +550,10 @@
     return "#f59e0b";
   }
 
-  function contrastText(hex) {
-    const h = hex.replace("#", "");
+  function busTextColour(v, fill) {
+    const t = v && v.vehicle && v.vehicle.text_colour;
+    if (t && /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/.test(t)) return t;
+    const h = fill.replace("#", "");
     const full = h.length === 3 ? h[0] + h[0] + h[1] + h[1] + h[2] + h[2] : h;
     const r = parseInt(full.slice(0, 2), 16);
     const g = parseInt(full.slice(2, 4), 16);
@@ -554,35 +566,63 @@
     return haversineKm({ lat, lng }, { lat: NEWCASTLE[0], lng: NEWCASTLE[1] }) <= BUS_KM;
   }
 
-  function busIcon(v) {
-    const line = escapeHtml(busLine(v));
+  function busIsFresh(v) {
+    const t = Date.parse(v && v.datetime);
+    if (Number.isNaN(t)) return true;
+    return Date.now() - t < BUS_STALE_MS;
+  }
+
+  function busMode() {
+    const z = map.getZoom();
+    if (z < BUS_MIN_ZOOM) return "hidden";
+    if (z < BUS_CHIP_ZOOM) return "dot";
+    return "chip";
+  }
+
+  function busLook(v, mode) {
+    const heading = typeof v.heading === "number" ? Math.round(v.heading / 15) * 15 : "";
+    return mode + "|" + busLine(v) + "|" + busColour(v) + "|" + heading;
+  }
+
+  function busIcon(v, mode) {
+    const line = escapeHtml(busLine(v) || "?");
     const fill = busColour(v);
-    const text = contrastText(fill);
-    const heading = typeof v.heading === "number" ? v.heading : 0;
-    const rotate = typeof v.heading === "number";
+    const text = busTextColour(v, fill);
+    if (mode === "dot") {
+      return L.divIcon({
+        className: "bus-marker",
+        iconSize: [12, 12],
+        iconAnchor: [6, 6],
+        popupAnchor: [0, -8],
+        html: '<div class="bus-dot" style="background:' + fill + '"></div>',
+      });
+    }
+    const hasH = typeof v.heading === "number";
+    const heading = hasH ? v.heading : 0;
     return L.divIcon({
       className: "bus-marker",
-      iconSize: [28, 28],
-      iconAnchor: [14, 14],
-      popupAnchor: [0, -14],
+      iconSize: [32, 36],
+      iconAnchor: [16, 22],
+      popupAnchor: [0, -20],
       html:
-        '<div class="bus-marker-inner' +
-        (rotate ? " is-rotated" : "") +
-        '" style="background:' +
+        '<div class="bus-chip-wrap">' +
+        (hasH
+          ? '<span class="bus-heading" style="transform:rotate(' +
+            heading +
+            'deg)"><span class="bus-nose"></span></span>'
+          : "") +
+        '<div class="bus-chip" style="background:' +
         fill +
         ";color:" +
         text +
-        (rotate ? ";transform:rotate(" + heading + "deg)" : "") +
-        '"><span class="bus-marker-label"' +
-        (rotate ? ' style="transform:rotate(' + -heading + 'deg)"' : "") +
-        ">" +
+        '"><span class="bus-marker-label">' +
         line +
-        "</span></div>",
+        "</span></div></div>",
     });
   }
 
   function busPopup(v) {
-    const line = escapeHtml(busLine(v));
+    const line = escapeHtml(busLine(v) || "?");
     const dest = escapeHtml(v.destination || "Unknown destination");
     const name = escapeHtml((v.vehicle && v.vehicle.name) || "");
     const when = v.datetime ? escapeHtml(ageLabel(v.datetime) || v.datetime) : "";
@@ -602,8 +642,14 @@
     );
   }
 
+  function bindBusMarker(marker, v) {
+    const html = busPopup(v);
+    if (marker.getPopup()) marker.setPopupContent(html);
+    else marker.bindPopup(html, { closeButton: true, autoPan: false });
+  }
+
   function clearBuses() {
-    busMarkers.forEach((marker) => map.removeLayer(marker));
+    busMarkers.forEach((entry) => map.removeLayer(entry.marker));
     busMarkers.clear();
   }
 
@@ -628,38 +674,93 @@
   }
 
   function upsertBuses(rows) {
+    const mode = busMode();
+    const bounds = map.getBounds().pad(0.06);
     const seen = new Set();
-    rows.forEach((v) => {
+    let inCircle = 0;
+    let stale = 0;
+    if (mode === "hidden") {
+      clearBuses();
+      (rows || []).forEach((v) => {
+        const coords = v && v.coordinates;
+        if (!Array.isArray(coords) || coords.length < 2) return;
+        const lng = Number(coords[0]);
+        const lat = Number(coords[1]);
+        if (!Number.isFinite(lat) || !Number.isFinite(lng)) return;
+        if (!withinNewcastle(lat, lng)) return;
+        inCircle += 1;
+        if (!busIsFresh(v)) stale += 1;
+      });
+      return { inView: 0, inCircle, stale, mode };
+    }
+    (rows || []).forEach((v) => {
       const coords = v && v.coordinates;
       if (!Array.isArray(coords) || coords.length < 2) return;
       const lng = Number(coords[0]);
       const lat = Number(coords[1]);
       if (!Number.isFinite(lat) || !Number.isFinite(lng)) return;
       if (!withinNewcastle(lat, lng)) return;
+      inCircle += 1;
+      if (!busLine(v)) return;
+      if (!busIsFresh(v)) {
+        stale += 1;
+        return;
+      }
+      if (!bounds.contains([lat, lng])) return;
       const id = String(v.id != null ? v.id : lat + "," + lng);
       seen.add(id);
       const latlng = [lat, lng];
-      let marker = busMarkers.get(id);
-      if (!marker) {
-        marker = L.marker(latlng, {
-          icon: busIcon(v),
+      const look = busLook(v, mode);
+      let entry = busMarkers.get(id);
+      if (!entry) {
+        const marker = L.marker(latlng, {
+          icon: busIcon(v, mode),
           title: busLine(v),
           keyboard: false,
+          pane: "buses",
+          riseOnHover: true,
+          bubblingMouseEvents: false,
         }).addTo(map);
-        busMarkers.set(id, marker);
+        const el = marker.getElement();
+        if (el) L.DomEvent.disableClickPropagation(el);
+        bindBusMarker(marker, v);
+        busMarkers.set(id, { marker, look });
       } else {
-        marker.setLatLng(latlng);
-        marker.setIcon(busIcon(v));
+        entry.marker.setLatLng(latlng);
+        if (entry.look !== look) {
+          entry.marker.setIcon(busIcon(v, mode));
+          entry.look = look;
+        }
+        bindBusMarker(entry.marker, v);
       }
-      marker.bindPopup(busPopup(v));
     });
     Array.from(busMarkers.keys()).forEach((id) => {
       if (!seen.has(id)) {
-        map.removeLayer(busMarkers.get(id));
+        map.removeLayer(busMarkers.get(id).marker);
         busMarkers.delete(id);
       }
     });
-    return seen.size;
+    return { inView: seen.size, inCircle, stale, mode };
+  }
+
+  function paintBuses() {
+    if (!busesOn) return;
+    const n = upsertBuses(busRows);
+    if (!n.inCircle) {
+      setBusStatus("No live buses in the 30-mile circle right now.");
+      return;
+    }
+    if (n.mode === "hidden") {
+      setBusStatus(
+        "Zoom in to see buses — " + n.inCircle + " live within " + BUS_MILES + " miles."
+      );
+      return;
+    }
+    let msg = n.inView + " in view";
+    if (n.mode === "dot") msg += " as dots · zoom in for line numbers";
+    msg += " · " + n.inCircle + " within " + BUS_MILES + " miles";
+    if (n.stale) msg += " · " + n.stale + " stale hidden";
+    setBusStatus(msg + ".");
   }
 
   async function refreshBuses() {
@@ -670,7 +771,7 @@
     }
     if (busAbort) busAbort.abort();
     busAbort = new AbortController();
-    setBusStatus(busMarkers.size ? "Updating buses…" : "Loading buses…");
+    if (!busRows.length) setBusStatus("Loading buses…");
     try {
       const res = await fetch(BUS_URL, {
         headers: { Accept: "application/json" },
@@ -679,13 +780,8 @@
       if (!res.ok) throw new Error("HTTP " + res.status);
       const data = await res.json();
       if (!busesOn) return;
-      const rows = Array.isArray(data) ? data : [];
-      const n = upsertBuses(rows);
-      setBusStatus(
-        n
-          ? n + " bus" + (n === 1 ? "" : "es") + " within " + BUS_MILES + " miles of Newcastle."
-          : "No live buses in the 30-mile circle right now."
-      );
+      busRows = Array.isArray(data) ? data : [];
+      paintBuses();
     } catch (err) {
       if (err && err.name === "AbortError") return;
       if (!busesOn) return;
@@ -699,6 +795,7 @@
     if (!busesOn) {
       stopBusPoll();
       clearBuses();
+      busRows = [];
       setBusStatus("Off — no data fetched.");
       return;
     }
@@ -714,7 +811,16 @@
   document.addEventListener("visibilitychange", () => {
     if (busesOn && !document.hidden) refreshBuses();
   });
+  map.on("moveend", () => {
+    if (busesOn && busRows.length) paintBuses();
+  });
   syncBusButton();
+  const busParams = new URLSearchParams(location.search);
+  const busZoom = Number(busParams.get("zoom"));
+  if (Number.isFinite(busZoom) && busZoom >= 1 && busZoom <= 19) {
+    map.setView(NEWCASTLE, busZoom);
+  }
+  if (busParams.get("buses") === "1" || location.hash === "#buses") setBusesOn(true);
 
   refreshDevices();
   setInterval(refreshDevices, 8000);

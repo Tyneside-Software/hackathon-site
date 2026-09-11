@@ -180,10 +180,42 @@
   background: none;
   border: 0;
 }
-.bus-marker-inner {
-  width: 28px;
-  height: 28px;
-  border-radius: 6px;
+.bus-dot {
+  width: 10px;
+  height: 10px;
+  margin: 1px;
+  border-radius: 50%;
+  box-shadow: 0 0 0 2px #0b1220, 0 1px 4px rgba(0, 0, 0, 0.45);
+}
+.bus-chip-wrap {
+  position: relative;
+  width: 32px;
+  height: 36px;
+}
+.bus-heading {
+  position: absolute;
+  inset: 0;
+  transform-origin: 50% 50%;
+  pointer-events: none;
+}
+.bus-nose {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 0;
+  height: 0;
+  margin-left: -4px;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-bottom: 7px solid #0b1220;
+}
+.bus-chip {
+  position: absolute;
+  left: 1px;
+  top: 7px;
+  width: 30px;
+  height: 22px;
+  border-radius: 5px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -191,12 +223,9 @@
   letter-spacing: 0.01em;
   box-shadow: 0 0 0 2px #0b1220, 0 2px 6px rgba(0, 0, 0, 0.45);
 }
-.bus-marker-inner.is-rotated {
-  border-radius: 8px 8px 4px 8px;
-}
 .bus-marker-label {
   display: block;
-  max-width: 26px;
+  max-width: 28px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
