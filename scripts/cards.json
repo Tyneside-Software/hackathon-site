@@ -28,6 +28,17 @@
   ],
   "cards": [
     {
+      "id": "32",
+      "person": "michael",
+      "hours": 4,
+      "emoji": "🏗️",
+      "title": "Android tracker posts GPS; map shows last known",
+      "column": "done",
+      "brief": "<p>Third repo hackathon-android. One switch. Phone POSTs /v1/locations. Map polls /v1/devices. Device id is Android ID.</p>",
+      "tag": "hackathon-android",
+      "tag_kind": "ok"
+    },
+    {
       "id": "31",
       "person": "noah",
       "hours": 12,

@@ -36,7 +36,7 @@
     <h1 style="font-size:1.7rem;margin-bottom:0.4rem">Done cards</h1>
     <p style="color:var(--muted);max-width:42rem">
       Finished increments live here so the board stays short.
-      <strong>21 cards · 34.25h</strong>.
+      <strong>22 cards · 38.25h</strong>.
       Click a card for the brief. Filter with the chips, hour cards, or <code>?person=lewis</code>.
     </p>
 
@@ -63,8 +63,8 @@
       </button>
       <button type="button" class="person" data-person="michael" aria-pressed="false">
         <div class="who"><span class="emoji">🏗️</span> Michael</div>
-        <div class="hrs">15.25 <span>hrs</span></div>
-        <div class="meta">6 done · 1 to do</div>
+        <div class="hrs">19.25 <span>hrs</span></div>
+        <div class="meta">7 done · 1 to do</div>
       </button>
       <button type="button" class="person" data-person="lewis" aria-pressed="false">
         <div class="who"><span class="emoji">🌱</span> Lewis</div>
@@ -79,6 +79,15 @@
     </div>
 
     <div class="card-archive" id="done-archive">
+          <a class="card" id="card-32" href="#t-32" data-person="michael" data-hours="4">
+            <div class="top"><span class="id">32</span><span class="emoji">🏗️</span></div>
+            <div class="title">Android tracker posts GPS; map shows last known</div>
+            <span class="tag tag-ok">hackathon-android</span>
+            <div class="bot"><span>4h</span><span>Michael</span></div>
+            <template class="card-brief">
+              <p>Third repo hackathon-android. One switch. Phone POSTs /v1/locations. Map polls /v1/devices. Device id is Android ID.</p>
+            </template>
+          </a>
           <a class="card" id="card-31" href="#t-31" data-person="noah" data-hours="12">
             <div class="top"><span class="id">31</span><span class="emoji">🔧</span></div>
             <div class="title">Noah: API talks to Firestore</div>
