@@ -28,6 +28,17 @@
   ],
   "cards": [
     {
+      "id": "44",
+      "person": "michael",
+      "hours": 1.5,
+      "emoji": "🏗️",
+      "title": "Buses: viewport, dots then chips, no waypoint steal",
+      "column": "done",
+      "tag": "map polish",
+      "tag_kind": "ok",
+      "brief": "<p>First buses toggle (39) drew every live vehicle in 30 miles as a rotated line chip — about 300 labels, unreadable at city zoom, and a click dropped a waypoint. Master had not tested it.</p>\n<h3>What’s live</h3>\n<ul>\n  <li>Draw only what is in the current view. Pan/zoom repaints the last fetch; no extra request.</li>\n  <li>City zoom (12): coloured dots. Zoom 13+: upright line-number chips, heading pip, operator colour.</li>\n  <li>Pings older than 10 minutes stay hidden.</li>\n  <li>Bus click opens a popup and does not add a waypoint. Popup does not pan the map.</li>\n  <li>Status: <code>184 in view as dots · 298 within 30 miles</code> (numbers move with the feed).</li>\n</ul>\n<p>Hard-refresh <a href=\"app/\">/app/</a>. Demo <a href=\"app/?buses=1\">/app/?buses=1</a>. Wiki: <a href=\"docs/#buses\">Live buses</a>.</p>"
+    },
+    {
       "id": "41",
       "person": "noah",
       "hours": 2,

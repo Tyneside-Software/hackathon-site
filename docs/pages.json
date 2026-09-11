@@ -76,7 +76,7 @@
           "id": "buses",
           "title": "Live buses",
           "file": "buses.md",
-          "summary": "Show buses toggle, bustimes.org, 30-mile circle."
+          "summary": "Show buses toggle, viewport dots then chips, 30-mile circle."
         }
       ]
     },

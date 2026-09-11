@@ -20,7 +20,7 @@ Three GitHub repos, two hosts, one product. The **site** is static files. The **
 
 Locally the site is `python -m http.server 5500`, the API is `uvicorn` on `:8080`. `.\start.ps1` starts both. The phone is Android Studio / a debug APK.
 
-**11 September 2026:** live phones work end to end (cards 32–34). The emulator POSTs every minute; last-seen is last communication; Newcastle is on the map. Noah shipped the device drawer and ping-history path (36–38). `GET /v1/locations?device_id=` reads Firestore, Datastore fallback. Live buses are a map toggle (39). A physical phone is still card 35.
+**11 September 2026:** live phones work end to end (cards 32–34). The emulator POSTs every minute; last-seen is last communication; Newcastle is on the map. Noah shipped the device drawer and ping-history path (36–38). `GET /v1/locations?device_id=` reads Firestore, Datastore fallback. Live buses are a map toggle (39, 43, **44**): viewport only, dots at city zoom, chips when you zoom in. A physical phone is still card 35.
 
 ## The three repos
 
@@ -135,7 +135,7 @@ The API Dockerfile exists for a Docker-based trigger. The GitHub-connected servi
 
 ## Next
 
-Live phones, drawer, ping history, and buses are on the map. Next product slices: job list, demo seed, localStorage. Board: [Current progress](../progress.html). [The map](#map) · [Buses](#buses).
+Live phones, drawer, ping history, and live buses (dots then chips) are on the map. Next product slices: job list, demo seed, localStorage. Board: [Current progress](../progress.html). [The map](#map) · [Buses](#buses).
 
 | Topic | Page |
 |-------|------|

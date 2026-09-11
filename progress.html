@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Current progress · Tyneside Logistics</title>
-  <meta name="description" content="Catch-up snapshot. Live phones work. Noah reviews that path, then several devices and ping history on the map.">
+  <meta name="description" content="Catch-up snapshot. Live phones work. Buses on the map are dots at city zoom, line chips when you zoom in. Noah is on API accounts.">
   <link rel="icon" href="logo.svg" type="image/svg+xml">
   <link rel="stylesheet" href="styles.css">
   <script src="config.js"></script>
@@ -45,7 +45,7 @@
       <p class="hero-tag">Michael is on the map and tracker. Noah is on phones, history, and splitting the API.</p>
       <p class="hero-lead">
         Three repos, two hosts, one product.
-        <strong>Michael tonight:</strong> live buses (39), POST every minute with last-seen = last communication and a Newcastle pin (42), Show buses actually fetches and ghost buttons hover (43).
+        <strong>Michael tonight:</strong> live buses you can actually read (44) — viewport only, dots at city zoom, line chips when you zoom in; first toggle (39), fetch/hover fix (43); tracker POST every minute and a Newcastle pin (42).
         <strong>Noah tonight:</strong> phone cards, device drawer, ping history (36–38), Firestore history reads, API split into FastAPI routers (40).
         In flight: Noah’s OAuth2 token stub (41) — imported, not wired to routes yet.
       </p>
@@ -150,7 +150,7 @@
           <div>
             <strong>Noah took live phones forward.</strong>
             <span>Device drawer, phone cards, ping history on the map (36–38). API history reads Firestore with a Datastore fallback.
-            Michael: live buses toggle (39). Next product slices are still the map: job list, demo seed, localStorage.</span>
+            Michael: live buses you can read (39, 43, 44). Next product slices are still the map: job list, demo seed, localStorage.</span>
           </div>
         </li>
         <li>
@@ -189,10 +189,10 @@
             <h3>Next</h3>
             <p>Demo the map, then fill it</p>
           </header>
-          <a class="progress-item" href="done.html#t-43">
-            <span class="id">43 · 🏗️ Michael · done</span>
-            <strong>Buses fetch + button hover</strong>
-            <span>Show buses was aborting its first request. Ghost buttons now hover. Hard-refresh <a href="app/">/app/</a>.</span>
+          <a class="progress-item" href="done.html#t-44">
+            <span class="id">44 · 🏗️ Michael · done</span>
+            <strong>Buses you can actually read</strong>
+            <span>Viewport only. Dots at city zoom, line chips when you zoom in. Clicking a bus does not add a waypoint. Hard-refresh <a href="app/">/app/</a> or open <a href="app/?buses=1">?buses=1</a>.</span>
           </a>
           <a class="progress-item" href="board.html#t-04">
             <span class="id">04 · 🧭 Reeve · Ready</span>
@@ -295,8 +295,16 @@
     <div class="wrap">
       <p class="hero-kicker">While you were away</p>
       <h2>What already shipped</h2>
-      <p class="lede">32 cards · 59h on Done. Do not redo these.</p>
+      <p class="lede">33 cards · 60.5h on Done. Do not redo these.</p>
       <ol class="progress-rail">
+        <li>
+          <span class="mark" aria-hidden="true"></span>
+          <div class="body">
+            <p class="hero-kicker">11 September · card 44</p>
+            <h3>Buses you can actually read</h3>
+            <p>About 300 live vehicles in 30 miles. We draw the current view only: coloured dots at city zoom, upright line chips when you zoom in. Stale pings hidden. A bus click does not drop a waypoint. Wiki: <a href="docs/#buses">Buses</a>.</p>
+          </div>
+        </li>
         <li>
           <span class="mark" aria-hidden="true"></span>
           <div class="body">
@@ -386,7 +394,7 @@
           <ul>
             <li>Home, this page, map, board, wiki</li>
             <li><code>config.js</code> sets <code>window.HACKATHON_API</code></li>
-            <li>Waypoints: OSM + public OSRM. Phones: <code>GET /v1/devices</code>. Buses: bustimes.org, off by default</li>
+            <li>Waypoints: OSM + public OSRM. Phones: <code>GET /v1/devices</code>. Buses: bustimes.org, off by default, viewport dots then chips</li>
           </ul>
         </div>
         <div class="progress-join" aria-hidden="true">
@@ -438,7 +446,7 @@
         <article>
           <span class="k">A session</span>
           <h3>Ship a slice</h3>
-          <p>Open the map: waypoints, phones, optional buses. Reeve: demo seed (08). Connor: job list (07). Lewis: localStorage or local <code>/health</code>. Michael: physical phone (35) or persist routes (11). Push <code>origin/main</code> — that deploys site and API.</p>
+          <p>Open the map: waypoints, phones, optional buses (<a href="app/?buses=1">?buses=1</a>). Reeve: demo seed (08). Connor: job list (07). Lewis: localStorage or local <code>/health</code>. Michael: physical phone (35) or persist routes (11). Push <code>origin/main</code> — that deploys site and API.</p>
         </article>
       </div>
       <div class="progress-jumps">

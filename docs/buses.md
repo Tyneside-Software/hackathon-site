@@ -1,6 +1,6 @@
 # Live buses on the map
 
-A **Show buses** toggle on [the map](../app/). Off by default. While on, the page polls [bustimes.org](https://bustimes.org/data) every 15 seconds and draws line-number markers inside a **30 mile** circle of Newcastle. How it sits next to waypoints and phones: [The map](#map).
+A **Show buses** toggle on [the map](../app/). Off by default. While on, the page polls [bustimes.org](https://bustimes.org/data) every 15 seconds and draws vehicles inside a **30 mile** circle of Newcastle. How it sits next to waypoints and phones: [The map](#map).
 
 This is a **site** slice. It does **not** call our API, and it does **not** call BODS from the browser (that needs a DfT key and SIRI-VM / GTFS-RT). bustimes.org already ingest BODS (OGL v3.0) plus Stagecoach and others; we reuse their public JSON.
 
@@ -11,9 +11,19 @@ This is a **site** slice. It does **not** call our API, and it does **not** call
 | Default | Off. No `vehicles.json` request on page load. |
 | On | Fetch once immediately, then every 15s while the tab is visible. |
 | Hidden tab | Skip the tick; fetch again when the tab is shown. |
-| Off | Abort in-flight fetch, stop the timer, remove every bus marker. |
-| Map view | Do not `fitBounds` to buses — waypoints stay the camera. |
+| Off | Abort in-flight fetch, stop the timer, remove every bus marker. Status returns to `Off — no data fetched.` |
+| Map view | Do not `fitBounds` to buses — waypoints stay the camera. Pan/zoom repaints from the last fetch (no extra request). |
+| Viewport | Only vehicles in the current map bounds (plus a small pad) are drawn. The rest of the 30-mile circle stays in memory. |
+| City zoom (12) | Coloured **dots**. Status says how many, and that zooming in shows line numbers. |
+| Street zoom (13+) | Upright **line-number chips**. A heading pip rotates; the number stays readable. |
+| Zoomed out (&lt; 12) | Markers hidden. Status: zoom in — N live within 30 miles. |
+| Stale | Pings older than **10 minutes** are not drawn. |
+| Click | Opens a popup (service, destination, vehicle, age). Does **not** drop a waypoint. Popup does not pan the map. |
 | Feed down | Status line says so. Waypoints and phones stay. |
+
+Demo URL: [`/app/?buses=1`](../app/?buses=1) (optional `&zoom=14` for chips).
+
+The feed is about **300** vehicles in the 30-mile circle. Drawing all of them as labels at city zoom was unreadable. Viewport + dots-then-chips is the fix. Card **44**.
 
 ## Feed
 
@@ -25,7 +35,9 @@ That bbox is a 30-mile **square**. After the fetch we haversine-filter to a 30-m
 
 `coordinates` is **`[lng, lat]`**. Leaflet wants `[lat, lng]`.
 
-CORS on `/vehicles.json` is `Access-Control-Allow-Origin: *`.
+CORS on `/vehicles.json` is `Access-Control-Allow-Origin: *`. Confirmed from the browser.
+
+Operator colour comes from `vehicle.css` (or `vehicle.colour`) when it is a hex. Chip text uses `vehicle.text_colour` when present.
 
 ## Code
 
@@ -33,8 +45,8 @@ Vanilla JS inside the existing `app/map.js` IIFE — same pattern as the phone l
 
 | File | What |
 |------|------|
-| `app/index.html` | Buses kicker, Show buses button, `#bus-status` |
-| `app/map.js` | Fetch, circle filter, `L.divIcon` markers, poll |
-| `app/map.css` | Marker chip + toggle on-state |
+| `app/index.html` | Buses kicker, Show buses button, `#bus-status`. Cache-bust query on map assets. |
+| `app/map.js` | Fetch, circle + viewport filter, zoom mode, `L.divIcon` dots/chips, poll |
+| `app/map.css` | Dots, upright chips, heading pip, toggle on-state |
 
-Board: card **39**.
+Board: cards **39** (first toggle), **43** (first fetch was aborting), **44** (this polish).
