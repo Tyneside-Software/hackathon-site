@@ -488,7 +488,7 @@ def render_archive_page(cards: list[dict], column: str) -> str:
         <a href="onboarding.html">Onboarding</a>
         <a href="lewis.html">Lewis</a>
       </div>
-      <a class="btn btn-fill" href="board.html">Back to board</a>
+      <a class="btn btn-fill" href="app/">Open map →</a>
     </div>
   </nav>
 
