@@ -197,6 +197,7 @@
 
   let phonesOn = readPhonesPref();
   let selectedDeviceId = null;
+  let historyStamp = null;
   let historyPings = [];
   let historyLayer = null;
   let historyOnMap = false;
@@ -345,6 +346,7 @@
 
   function closeDrawer() {
     selectedDeviceId = null;
+    historyStamp = null;
     historyPings = [];
     clearHistoryLayer();
     if (drawerEl) {
@@ -413,6 +415,7 @@
       clearHistoryLayer();
       if (pingListEl) pingListEl.innerHTML = "";
     }
+    historyStamp = d.last_seen_at || null;
     loadHistory(d.device_id);
   }
 
@@ -543,9 +546,12 @@
           : "No phones pinging yet. Flip the tracker on.";
       }
       if (selectedDeviceId) {
-        const still = rows.some((d) => d.device_id === selectedDeviceId);
+        const still = rows.find((d) => d.device_id === selectedDeviceId);
         if (!still) closeDrawer();
-        else loadHistory(selectedDeviceId, true);
+        else if ((still.last_seen_at || null) !== historyStamp) {
+          historyStamp = still.last_seen_at || null;
+          loadHistory(selectedDeviceId, true);
+        }
       }
     } catch (err) {
       deviceStatusEl.textContent = "Could not read phones from the API.";
