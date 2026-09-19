@@ -283,7 +283,7 @@ html.is-dark .product {
   color: #fce7f3;
   border-color: #c084fc;
 }
-html.is-dark .product h2 { color: #fff; }
+html.is-dark .product h2 { color: #72cefc; }
 html.is-dark .product .meta { color: #ff8ac4; }
 html.is-dark .search-empty {
   background: #1e1530;
@@ -545,6 +545,7 @@ a.more-card .meta {
   font-weight: 650;
   margin-top: 0.2rem;
   line-height: 1.3;
+  color: #72cefc;
 }
 .product .meta {
   color: var(--pink);
