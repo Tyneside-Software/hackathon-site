@@ -290,9 +290,10 @@ html.is-dark .nav a.is-on {
   color: #fda4af;
 }
 html.is-dark .product {
-  background: #1e1530;
+  background:
+    linear-gradient(#1e1530, #1e1530) padding-box,
+    var(--rainbow) border-box;
   color: #fce7f3;
-  border-color: #c084fc;
 }
 html.is-dark .product h2 { color: #72cefc; }
 html.is-dark .product .meta { color: #ff8ac4; }
@@ -417,8 +418,10 @@ html.is-dark .foot a { color: #fda4af; }
 .product {
   min-width: 0;
   scroll-snap-align: start;
-  background: #f0c0e5;
-  border: 5px solid #782d87;
+  background:
+    linear-gradient(#f0c0e5, #f0c0e5) padding-box,
+    var(--rainbow) border-box;
+  border: 5px solid transparent;
   border-radius: 16px;
   padding: 0.7rem 0.7rem 0.85rem;
   box-shadow: 0 10px 22px rgba(17, 17, 17, 0.08);
