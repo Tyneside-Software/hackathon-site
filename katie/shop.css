@@ -54,6 +54,23 @@ a:hover { color: var(--purple); }
   background: var(--rainbow);
 }
 
+body.shop::before {
+  content: "lewis was here";
+  position: fixed;
+  top: 0.9rem;
+  right: 0.7rem;
+  z-index: 40;
+  color: var(--pink);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  line-height: 1;
+  white-space: nowrap;
+  pointer-events: none;
+  transform: rotate(-6deg);
+  text-shadow: 0 1px 0 #fff, 0 0 8px rgba(255, 77, 166, 0.55);
+}
+
 .top {
   background: #fff;
   position: sticky;
