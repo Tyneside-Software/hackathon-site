@@ -395,8 +395,13 @@ html.is-dark .search input {
   color: #fce7f3;
 }
 html.is-dark .nav a { color: #fce7f3; }
+html.is-dark .page-head h1,
+html.is-dark .group-head h2 {
+  color: #e9d5ff;
+  text-shadow: 0 1px 4px rgba(17, 17, 17, 0.45);
+}
 html.is-dark .group-head a {
-  color: #ffe4f3;
+  color: #e9d5ff;
   text-shadow: 0 1px 4px rgba(17, 17, 17, 0.45);
 }
 html.is-dark .nav a:hover,
@@ -457,8 +462,8 @@ html.is-dark .foot a { color: #fda4af; }
   font-weight: 750;
   letter-spacing: -0.03em;
   margin-bottom: 0.3rem;
-  color: #fff;
-  text-shadow: 0 2px 10px rgba(17, 17, 17, 0.28);
+  color: #4c1d95;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.45);
 }
 .page-head p {
   color: #fce7f3;
@@ -497,16 +502,16 @@ html.is-dark .foot a { color: #fda4af; }
 .group-head h2 {
   font-size: 1.35rem;
   letter-spacing: -0.03em;
-  color: #fff;
-  text-shadow: 0 2px 8px rgba(17, 17, 17, 0.25);
+  color: #4c1d95;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.45);
 }
 .group-head a {
   font-weight: 750;
   font-size: 0.9rem;
   text-decoration: none;
   white-space: nowrap;
-  color: var(--pink-deep);
-  text-shadow: 0 1px 4px rgba(255, 255, 255, 0.35);
+  color: #4c1d95;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.45);
 }
 .group-head a:hover { text-decoration: underline; }
 
