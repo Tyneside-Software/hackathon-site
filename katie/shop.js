@@ -398,7 +398,43 @@
   }
 
   function productUrl(id) {
-    return new URL("product.html?id=" + encodeURIComponent(id), location.href).href;
+    try {
+      return new URL("product.html?id=" + encodeURIComponent(id), location.href).href;
+    } catch (e) {
+      return "product.html?id=" + encodeURIComponent(id);
+    }
+  }
+
+  function copyProductLink(url, btn) {
+    function copied() {
+      if (!btn) return;
+      btn.textContent = "Link copied";
+      setTimeout(function () { btn.textContent = "Share"; }, 1800);
+    }
+    function fallback() {
+      window.prompt("Copy this link", url);
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(url).then(copied).catch(function () {
+        try {
+          var ta = document.createElement("textarea");
+          ta.value = url;
+          ta.setAttribute("readonly", "");
+          ta.style.position = "fixed";
+          ta.style.left = "-9999px";
+          document.body.appendChild(ta);
+          ta.select();
+          var ok = document.execCommand("copy");
+          document.body.removeChild(ta);
+          if (ok) copied();
+          else fallback();
+        } catch (e) {
+          fallback();
+        }
+      });
+      return;
+    }
+    fallback();
   }
 
   function reviewEntryHtml(r) {
@@ -494,21 +530,27 @@
         "</div>";
       var shareBtn = info.querySelector("[data-share]");
       if (shareBtn) {
-        shareBtn.addEventListener("click", function () {
+        shareBtn.addEventListener("click", function (e) {
+          e.preventDefault();
+          e.stopPropagation();
           var url = productUrl(item.id);
-          var payload = { title: item.name + " · fidget squish", text: item.meta || item.name, url: url };
-          if (navigator.share) {
-            navigator.share(payload).catch(function () {});
-            return;
+          var payload = {
+            title: item.name + " · fidget squish",
+            text: (item.meta || item.name) + "\n" + url,
+            url: url
+          };
+          var canShare = typeof navigator.share === "function";
+          if (canShare && navigator.canShare) {
+            try { canShare = navigator.canShare(payload); } catch (err) { canShare = false; }
           }
-          if (navigator.clipboard && navigator.clipboard.writeText) {
-            navigator.clipboard.writeText(url).then(function () {
-              shareBtn.textContent = "Link copied";
-              setTimeout(function () { shareBtn.textContent = "Share"; }, 1600);
+          if (canShare) {
+            navigator.share(payload).catch(function (err) {
+              if (err && err.name === "AbortError") return;
+              copyProductLink(url, shareBtn);
             });
             return;
           }
-          window.prompt("Copy this link", url);
+          copyProductLink(url, shareBtn);
         });
       }
     }
