@@ -232,19 +232,22 @@
     return s;
   }
 
-  function reviewSummaryHtml(p) {
+  function reviewStats(p) {
     var list = reviewsFor(p.id);
-    if (!list.length) {
-      return '<p class="stars"><a href="reviews.html?item=' + encodeURIComponent(p.id) + '">Write a review</a></p>';
-    }
     var sum = 0;
     list.forEach(function (r) { sum += Number(r.stars) || 0; });
-    var avg = sum / list.length;
-    var label = list.length === 1 ? "1 review" : list.length + " reviews";
+    var avg = list.length ? sum / list.length : 0;
+    return { list: list, avg: avg, count: list.length };
+  }
+
+  function reviewSummaryHtml(p) {
+    var stats = reviewStats(p);
+    var countLabel = stats.count === 1 ? "1 review" : stats.count + " reviews";
     return (
-      '<p class="stars"><span class="star-row" aria-label="' + avg.toFixed(1) + ' out of 5">' +
-      starChars(avg) + "</span> " + avg.toFixed(1) +
-      ' · <a href="reviews.html?item=' + encodeURIComponent(p.id) + '">' + label + "</a></p>"
+      '<p class="stars">' +
+        '<span class="star-row" aria-label="' + stats.avg.toFixed(1) + ' out of 5">' + starChars(stats.avg) + "</span>" +
+        '<span class="star-avg"> ' + stats.avg.toFixed(1) + " out of 5 · " + countLabel + "</span>" +
+      "</p>"
     );
   }
 
@@ -260,7 +263,7 @@
       ? '<a class="buy" href="' + mail + '">Email to buy</a>'
       : '<span class="buy is-off">Out of stock</span>';
     return (
-      '<article class="product' + (p.inStock ? " is-in" : " is-out") + '" data-name="' + esc(p.name) + '">' +
+      '<article class="product is-clickable' + (p.inStock ? " is-in" : " is-out") + '" data-id="' + esc(p.id) + '" data-name="' + esc(p.name) + '">' +
         (p.inStock ? burstHtml() : "") +
         galleryHtml(p) +
         '<p class="price">' + esc(p.price) + "</p>" +
@@ -293,6 +296,12 @@
     }
     for (var d = 0; d < dots.length; d++) {
       dots[d].classList.toggle("is-on", d === i);
+    }
+    var wrap = gallery.closest("[data-pdp-gallery]") || gallery.parentElement;
+    if (wrap) {
+      wrap.querySelectorAll("[data-thumb]").forEach(function (thumb, t) {
+        thumb.classList.toggle("is-on", t === i);
+      });
     }
   }
 
@@ -334,6 +343,149 @@
         if (next) next.hidden = true;
       }
     });
+    (root || document).querySelectorAll("[data-thumbs]").forEach(function (thumbs) {
+      if (thumbs.dataset.bound) return;
+      thumbs.dataset.bound = "1";
+      var wrap = thumbs.closest("[data-pdp-gallery]") || thumbs.parentElement;
+      var gallery = wrap && wrap.querySelector("[data-gallery]");
+      if (!gallery) return;
+      thumbs.querySelectorAll("[data-thumb]").forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          var i = Number(btn.dataset.thumb);
+          show(gallery, i);
+          thumbs.querySelectorAll("[data-thumb]").forEach(function (b) {
+            b.classList.toggle("is-on", b === btn);
+          });
+        });
+      });
+    });
+  }
+
+  function bindProductLinks(root) {
+    (root || document).querySelectorAll(".product.is-clickable").forEach(function (el) {
+      if (el.dataset.linkBound) return;
+      el.dataset.linkBound = "1";
+      el.addEventListener("click", function (e) {
+        if (e.target.closest("a, button, label, input, textarea, select")) return;
+        var id = el.dataset.id;
+        if (id) location.href = "product.html?id=" + encodeURIComponent(id);
+      });
+    });
+  }
+
+  function productUrl(id) {
+    return new URL("product.html?id=" + encodeURIComponent(id), location.href).href;
+  }
+
+  function reviewEntryHtml(r) {
+    var photo = r.photo ? '<img class="review-photo" src="' + esc(r.photo) + '" alt="">' : "";
+    return (
+      '<article class="review-card">' +
+        photo +
+        "<div>" +
+          '<p class="stars"><span class="star-row">' + starChars(r.stars) + "</span> " + esc(r.stars) + " / 5</p>" +
+          '<p class="meta">' + esc(r.text) + "</p>" +
+        "</div>" +
+      "</article>"
+    );
+  }
+
+  function thumbsHtml(p) {
+    var photos = p.photos || [];
+    if (photos.length < 2) return "";
+    return (
+      '<div class="thumbs" data-thumbs>' +
+        photos.map(function (src, i) {
+          return (
+            '<button type="button" class="thumb' + (i === 0 ? " is-on" : "") + '" data-thumb="' + i + '" aria-label="Photo ' + (i + 1) + '">' +
+              '<img src="' + esc(assetUrl(src)) + '" alt="">' +
+            "</button>"
+          );
+        }).join("") +
+      "</div>"
+    );
+  }
+
+  function suggestedItems(current) {
+    var same = PRODUCTS.filter(function (p) { return p.id !== current.id && p.group === current.group; });
+    var other = PRODUCTS.filter(function (p) { return p.id !== current.id && p.group !== current.group; });
+    return same.concat(other).slice(0, 6);
+  }
+
+  function renderProductPage() {
+    var view = document.querySelector("[data-product-page]");
+    if (!view) return;
+    var id = "";
+    try { id = new URLSearchParams(location.search).get("id") || ""; } catch (e) {}
+    var item = null;
+    PRODUCTS.forEach(function (p) { if (p.id === id) item = p; });
+    var missing = view.querySelector("[data-product-missing]");
+    var body = view.querySelector("[data-product-view]");
+    if (!item) {
+      if (missing) missing.hidden = false;
+      if (body) body.hidden = true;
+      return;
+    }
+    if (missing) missing.hidden = true;
+    if (body) body.hidden = false;
+    document.title = item.name + " · fidget squish";
+    var gallery = view.querySelector("[data-pdp-gallery]");
+    var info = view.querySelector("[data-pdp-info]");
+    var reviewsEl = view.querySelector("[data-pdp-reviews]");
+    var suggestEl = view.querySelector("[data-suggested]");
+    var stats = reviewStats(item);
+    var mail = "mailto:katie@tyneside.software?subject=" + encodeURIComponent(item.mail || ("Order " + item.name));
+    var buy = item.inStock
+      ? '<a class="buy" href="' + mail + '">Email to buy</a>'
+      : '<span class="buy is-off">Out of stock</span>';
+    if (gallery) {
+      gallery.innerHTML = galleryHtml(item) + thumbsHtml(item);
+      bindGalleries(gallery);
+    }
+    if (info) {
+      info.innerHTML =
+        "<h1>" + esc(item.name) + "</h1>" +
+        reviewSummaryHtml(item) +
+        '<p class="price">' + esc(item.price) + "</p>" +
+        stockHtml(item) +
+        '<p class="meta">' + esc(item.meta) + "</p>" +
+        '<div class="pdp-actions">' + buy +
+          '<button type="button" class="share-btn" data-share>Share</button>' +
+          '<a class="write-review" href="reviews.html?item=' + encodeURIComponent(item.id) + '">Write a review</a>' +
+        "</div>";
+      var shareBtn = info.querySelector("[data-share]");
+      if (shareBtn) {
+        shareBtn.addEventListener("click", function () {
+          var url = productUrl(item.id);
+          var payload = { title: item.name + " · fidget squish", text: item.meta || item.name, url: url };
+          if (navigator.share) {
+            navigator.share(payload).catch(function () {});
+            return;
+          }
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(url).then(function () {
+              shareBtn.textContent = "Link copied";
+              setTimeout(function () { shareBtn.textContent = "Share"; }, 1600);
+            });
+            return;
+          }
+          window.prompt("Copy this link", url);
+        });
+      }
+    }
+    if (reviewsEl) {
+      if (!stats.list.length) {
+        reviewsEl.innerHTML = '<p class="review-empty">No reviews yet. <a href="reviews.html?item=' + encodeURIComponent(item.id) + '">Write the first one</a>.</p>';
+      } else {
+        reviewsEl.innerHTML = stats.list.map(reviewEntryHtml).join("");
+      }
+    }
+    if (suggestEl) {
+      var ideas = suggestedItems(item);
+      suggestEl.innerHTML = ideas.map(cardHtml).join("");
+      bindGalleries(suggestEl);
+      bindProductLinks(suggestEl);
+    }
   }
 
   function moreCardHtml(p) {
@@ -368,6 +520,7 @@
       });
       el.innerHTML = items.map(cardHtml).join("");
       bindGalleries(el);
+      bindProductLinks(el);
       shown += items.length;
       var section = el.closest(".group");
       if (section) section.hidden = items.length === 0;
@@ -500,6 +653,19 @@
 
   bindModeToggle();
   REVIEWS = readReviews();
+
+  if (document.querySelector("[data-product-page]")) {
+    PRODUCTS = readLocal() || defaultItems();
+    renderProductPage();
+    if (!readLocal()) {
+      fetchStock(function (items) {
+        if (items && items.length) {
+          PRODUCTS = items;
+          renderProductPage();
+        }
+      });
+    }
+  }
 
   if (document.querySelector("[data-products]") || document.querySelector("[data-more]") || document.querySelector("[data-reviews]")) {
     PRODUCTS = readLocal() || defaultItems();

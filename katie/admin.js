@@ -50,11 +50,33 @@
 
   function pencilHtml() {
     return (
-      '<label class="admin-pencil" title="Replace picture">' +
-        '<span class="sr-only">Replace picture</span>' +
-        '<input type="file" accept="image/jpeg,image/png,image/webp,image/gif,image/*" data-photo-file>' +
+      '<label class="admin-pencil" title="Add pictures">' +
+        '<span class="sr-only">Add pictures</span>' +
+        '<input type="file" accept="image/jpeg,image/png,image/webp,image/gif,image/*" multiple data-photo-file>' +
         '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 0 0 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>' +
       "</label>"
+    );
+  }
+
+  function photosHtml(item) {
+    var thumbs = (item.photos || []).map(function (src, i) {
+      return (
+        '<div class="admin-thumb' + (i === 0 ? " is-main" : "") + '" data-photo-i="' + i + '">' +
+          '<img src="' + shop.esc(shop.assetUrl(src)) + '" alt="">' +
+          '<button type="button" class="admin-thumb-x" data-photo-remove="' + i + '" aria-label="Remove picture">×</button>' +
+        "</div>"
+      );
+    }).join("");
+    return (
+      '<div class="wide admin-photos">' +
+        '<p class="admin-photos-label">Pictures <span>(add as many as you like · tap a picture to make it the main one)</span></p>' +
+        '<div class="admin-thumbs" data-thumbs>' +
+          thumbs +
+          '<label class="admin-add-photos">+ Add pictures' +
+            '<input type="file" accept="image/jpeg,image/png,image/webp,image/gif,image/*" multiple data-photo-files>' +
+          "</label>" +
+        "</div>" +
+      "</div>"
     );
   }
 
@@ -74,9 +96,7 @@
             '<option value="homemade"' + (item.group === "homemade" ? " selected" : "") + ">Homemade</option>" +
             '<option value="slime"' + (item.group === "slime" ? " selected" : "") + ">Slime</option>" +
           "</select></label>" +
-          '<label class="wide">Extra photo paths <span>(optional, one per line)</span>' +
-            '<textarea data-field="photos">' + shop.esc(typedPhotos(item).join("\n")) + "</textarea>" +
-          "</label>" +
+          photosHtml(item) +
           '<label>How many in stock<input data-field="stock" type="number" min="0" step="1" value="' + shop.esc(item.stock) + '"></label>' +
           '<p class="admin-stock-note wide">' + (item.stock > 0 ? "In stock" : "Out of stock") + "</p>" +
         "</div>" +
@@ -129,10 +149,7 @@
     card.querySelectorAll("[data-field]").forEach(function (field) {
       var key = field.dataset.field;
       if (key === "stock") item.stock = field.value;
-      else if (key === "photos") {
-        var picked = (item.photos || []).filter(isPickedPhoto);
-        item.photos = picked.concat(field.value);
-      } else item[key] = field.value;
+      else item[key] = field.value;
     });
     items[index] = shop.normalize(item);
   }
@@ -191,21 +208,24 @@
     img.src = url;
   }
 
-  function replacePhoto(card, file) {
+  function addPhotos(card, files) {
     var index = Number(card.dataset.index);
     var item = items[index];
     if (!item) return;
-    setStatus("Reading picture…");
-    fileToDataUrl(file, function (dataUrl, error) {
-      if (!dataUrl) {
-        setStatus(error || "Could not read that picture.", true);
-        return;
-      }
-      var extra = typedPhotos(item);
-      item.photos = [dataUrl].concat(extra);
-      items[index] = shop.normalize(item);
-      setPreview(card, items[index]);
-      persist("Replaced the picture for “" + items[index].name + "”.");
+    var list = Array.prototype.slice.call(files || []);
+    var left = list.length;
+    if (!left) return;
+    setStatus("Reading pictures…");
+    list.forEach(function (file) {
+      fileToDataUrl(file, function (dataUrl, error) {
+        left -= 1;
+        if (dataUrl) item.photos.push(dataUrl);
+        else if (error) setStatus(error, true);
+        if (left > 0) return;
+        items[index] = shop.normalize(item);
+        persist("Updated pictures for “" + items[index].name + "”.");
+        renderList();
+      });
     });
   }
 
@@ -263,9 +283,6 @@
         var card = e.target.closest(".admin-card");
         if (!card) return;
         readCard(card);
-        if (e.target.dataset.field === "photos") {
-          setPreview(card, items[Number(card.dataset.index)]);
-        }
         if (e.target.dataset.field === "stock") {
           var note = card.querySelector(".admin-stock-note");
           var qty = items[Number(card.dataset.index)];
@@ -276,10 +293,10 @@
       list.addEventListener("change", function (e) {
         var card = e.target.closest(".admin-card");
         if (!card) return;
-        if (e.target.matches("[data-photo-file]")) {
-          var file = e.target.files && e.target.files[0];
+        if (e.target.matches("[data-photo-file], [data-photo-files]")) {
+          var files = e.target.files;
           e.target.value = "";
-          if (file) replacePhoto(card, file);
+          if (files && files.length) addPhotos(card, files);
           return;
         }
         readCard(card);
@@ -287,6 +304,34 @@
         scheduleSave();
       });
       list.addEventListener("click", function (e) {
+        var photoRm = e.target.closest("[data-photo-remove]");
+        if (photoRm) {
+          e.preventDefault();
+          var card = photoRm.closest(".admin-card");
+          var index = Number(card && card.dataset.index);
+          var item = items[index];
+          if (!item) return;
+          var slot = Number(photoRm.dataset.photoRemove);
+          item.photos.splice(slot, 1);
+          items[index] = shop.normalize(item);
+          persist("Removed a picture.");
+          renderList();
+          return;
+        }
+        var thumb = e.target.closest("[data-photo-i]");
+        if (thumb) {
+          var card2 = thumb.closest(".admin-card");
+          var index2 = Number(card2 && card2.dataset.index);
+          var item2 = items[index2];
+          var slot2 = Number(thumb.dataset.photoI);
+          if (!item2 || slot2 <= 0) return;
+          var moved = item2.photos.splice(slot2, 1)[0];
+          item2.photos.unshift(moved);
+          items[index2] = shop.normalize(item2);
+          persist("Set the main picture.");
+          renderList();
+          return;
+        }
         var btn = e.target.closest("[data-remove]");
         if (!btn) return;
         var card = btn.closest(".admin-card");
