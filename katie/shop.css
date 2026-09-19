@@ -1725,6 +1725,17 @@ html.is-dark .profile-ph { border-color: #fce7f3; }
 html.is-dark .auth-switch { color: #fce7f3; }
 html.is-dark .auth-switch button { color: #ff8ac4; }
 .auth-wrap.is-in { max-width: 28rem; }
+.admin-people {
+  margin: 1.2rem 0 1.6rem;
+  max-width: 28rem;
+}
+.admin-people h2 {
+  font-family: "Fredoka", var(--font);
+  font-size: 1.5rem;
+  color: #36042b !important;
+  margin-bottom: 0.4rem;
+}
+html.is-dark .admin-people h2 { color: #e9d5ff !important; }
 .friend-results,
 .friend-list {
   display: grid;

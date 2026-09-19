@@ -194,6 +194,13 @@
     return h;
   }
 
+  function adminHeaders() {
+    var h = authHeaders();
+    var tok = getToken();
+    if (tok) h["X-Katie-Admin"] = tok;
+    return h;
+  }
+
   function isAdmin() {
     return getToken().length > 20;
   }
@@ -808,6 +815,7 @@
     loginAdmin: loginAdmin,
     verifyAdmin: verifyAdmin,
     getToken: getToken,
+    adminHeaders: adminHeaders,
     isAdmin: isAdmin,
     setAdmin: setAdmin,
     loadCatalog: loadCatalog,

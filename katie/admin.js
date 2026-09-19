@@ -2,6 +2,11 @@
   var shop = window.FidgetSquish;
   if (!shop) return;
 
+  function api() {
+    var raw = window.HACKATHON_API || "https://hackathon-api-git-975511976696.europe-west2.run.app";
+    return String(raw).replace(/\/$/, "");
+  }
+
   var items = [];
   var saveTimer = 0;
   var bound = false;
@@ -12,6 +17,9 @@
   var gate;
   var errorEl;
   var passwordInput;
+  var adminPicked = null;
+  var adminNames = {};
+  var adminSearchTimer = 0;
 
   function cacheEls() {
     lock = document.querySelector("[data-lock]");
@@ -258,8 +266,140 @@
     });
   }
 
+  function adminAvatar(photo) {
+    if (photo) return '<img src="' + shop.esc(photo) + '" alt="">';
+    return '<span class="friend-ph" aria-hidden="true">💗</span>';
+  }
+
+  function setAdminPic(imgSel, phSel, src) {
+    var img = document.querySelector(imgSel);
+    var ph = document.querySelector(phSel);
+    if (img) {
+      if (src) {
+        img.src = src;
+        img.hidden = false;
+      } else {
+        img.removeAttribute("src");
+        img.hidden = true;
+      }
+    }
+    if (ph) ph.hidden = !!src;
+  }
+
+  function showAdminStatus(text, warn) {
+    var el = document.querySelector("[data-admin-status]");
+    if (!el) return;
+    el.hidden = !text;
+    el.textContent = text || "";
+    el.classList.toggle("is-warn", !!warn);
+  }
+
+  function setAdminPicked(user) {
+    adminPicked = user || null;
+    var box = document.querySelector("[data-admin-picked]");
+    if (!box) return;
+    if (!adminPicked) {
+      box.hidden = true;
+      return;
+    }
+    box.hidden = false;
+    var nameEl = document.querySelector("[data-admin-picked-name]");
+    if (nameEl) nameEl.textContent = adminPicked.username || "";
+    setAdminPic("[data-admin-picked-pic]", "[data-admin-picked-ph]", adminPicked.photo || "");
+    var addBtn = document.querySelector("[data-admin-add]");
+    if (addBtn) {
+      var already = !!(adminPicked.admin || adminNames[adminPicked.username]);
+      addBtn.textContent = already ? "Already an Admin" : "Add Admin";
+      addBtn.disabled = already;
+    }
+    document.querySelectorAll("[data-admin-results] .friend-hit").forEach(function (btn) {
+      btn.classList.toggle("is-on", btn.dataset.user === adminPicked.username);
+    });
+  }
+
+  function renderAdminHits(users) {
+    var box = document.querySelector("[data-admin-results]");
+    if (!box) return;
+    if (!users || !users.length) {
+      box.innerHTML = '<p class="friend-empty">No accounts match that.</p>';
+      box.hidden = false;
+      return;
+    }
+    box.innerHTML = users.map(function (u) {
+      var on = adminPicked && adminPicked.username === u.username ? " is-on" : "";
+      var tag = u.admin ? '<span class="tag">Admin</span>' : "";
+      return (
+        '<button type="button" class="friend-hit' + on + '" data-user="' + shop.esc(u.username) + '">' +
+          adminAvatar(u.photo) +
+          '<span class="name">' + shop.esc(u.username) + "</span>" +
+          tag +
+        "</button>"
+      );
+    }).join("");
+    box.hidden = false;
+    box.querySelectorAll("[data-user]").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        var found = users.filter(function (u) { return u.username === btn.dataset.user; })[0];
+        setAdminPicked(found || { username: btn.dataset.user, photo: "", admin: !!adminNames[btn.dataset.user] });
+      });
+    });
+  }
+
+  function loadAdmins() {
+    var listEl = document.querySelector("[data-admin-list]");
+    if (!listEl || !shop.adminHeaders) return;
+    fetch(api() + "/katie/admin/people", {
+      headers: shop.adminHeaders()
+    }).then(function (r) { return r.ok ? r.json() : Promise.reject(); })
+      .then(function (data) {
+        var users = (data && data.users) || [];
+        adminNames = {};
+        users.forEach(function (u) { adminNames[u.username] = true; });
+        if (!users.length) {
+          listEl.innerHTML = '<p class="friend-empty">No Admins yet.</p>';
+          return;
+        }
+        listEl.innerHTML = users.map(function (u) {
+          var rm = u.founder
+            ? '<span class="tag">First Admin</span>'
+            : '<button type="button" class="unfriend" data-unadmin="' + shop.esc(u.username) + '">Remove</button>';
+          return (
+            '<div class="friend-hit">' +
+              adminAvatar(u.photo) +
+              '<span class="name">' + shop.esc(u.username) + "</span>" +
+              rm +
+            "</div>"
+          );
+        }).join("");
+        listEl.querySelectorAll("[data-unadmin]").forEach(function (btn) {
+          btn.addEventListener("click", function () {
+            fetch(api() + "/katie/admin/people/" + encodeURIComponent(btn.dataset.unadmin), {
+              method: "DELETE",
+              headers: shop.adminHeaders()
+            }).then(function (r) {
+              return r.json().then(function (body) {
+                if (!r.ok) throw new Error((body && body.detail) || "Could not remove");
+                if (adminPicked && adminPicked.username === btn.dataset.unadmin) {
+                  adminPicked.admin = false;
+                  setAdminPicked(adminPicked);
+                }
+                loadAdmins();
+              });
+            }).catch(function (err) {
+              showAdminStatus(err.message || "Could not remove that Admin.", true);
+            });
+          });
+        });
+        if (adminPicked) setAdminPicked(adminPicked);
+      })
+      .catch(function () {
+        listEl.innerHTML = '<p class="friend-empty">Could not load Admins just now.</p>';
+      });
+  }
+
   function openEditor() {
     showEditor(true);
+    loadAdmins();
     shop.loadCatalog(function (loaded) {
       items = (loaded && loaded.length ? loaded : shop.defaultItems()).map(shop.normalize);
       renderList();
@@ -419,6 +559,58 @@
         shop.setAdmin(false);
         showEditor(false);
         if (passwordInput) passwordInput.focus();
+      });
+    }
+    var adminQ = document.querySelector("[data-admin-q]");
+    if (adminQ) {
+      adminQ.addEventListener("input", function () {
+        clearTimeout(adminSearchTimer);
+        var q = adminQ.value.trim();
+        var box = document.querySelector("[data-admin-results]");
+        if (!q) {
+          if (box) {
+            box.hidden = true;
+            box.innerHTML = "";
+          }
+          return;
+        }
+        adminSearchTimer = setTimeout(function () {
+          fetch(api() + "/katie/admin/people/search?q=" + encodeURIComponent(q), { headers: shop.adminHeaders() })
+            .then(function (r) { return r.ok ? r.json() : Promise.reject(); })
+            .then(function (data) { renderAdminHits((data && data.users) || []); })
+            .catch(function () {
+              if (box) {
+                box.hidden = false;
+                box.innerHTML = '<p class="friend-empty">Could not search just now.</p>';
+              }
+            });
+        }, 160);
+      });
+    }
+    var adminAdd = document.querySelector("[data-admin-add]");
+    if (adminAdd) {
+      adminAdd.addEventListener("click", function () {
+        if (!adminPicked || !adminPicked.username) {
+          showAdminStatus("Pick someone from the search first.", true);
+          return;
+        }
+        showAdminStatus("Adding…");
+        fetch(api() + "/katie/admin/people", {
+          method: "POST",
+          headers: shop.adminHeaders(),
+          body: JSON.stringify({ username: adminPicked.username })
+        }).then(function (r) {
+          return r.json().then(function (data) {
+            if (!r.ok) throw new Error((data && data.detail) || "Could not add Admin");
+            adminPicked = data;
+            adminPicked.admin = true;
+            showAdminStatus("Added " + (adminPicked.username || "") + " as an Admin.");
+            setAdminPicked(adminPicked);
+            loadAdmins();
+          });
+        }).catch(function (err) {
+          showAdminStatus(err.message || "Could not add Admin", true);
+        });
       });
     }
   }

@@ -6,7 +6,7 @@
   <title>Admin · fidget squish</title>
   <meta name="robots" content="noindex">
   <link rel="icon" href="logo.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="shop.css?v=20260920friends">
+  <link rel="stylesheet" href="shop.css?v=20260920admins">
   <script>try{if(localStorage.getItem("fidget-squish-dark")==="1")document.documentElement.classList.add("is-dark")}catch(e){}</script>
 </head>
 <body class="shop" data-admin-page>
@@ -44,7 +44,7 @@
     <section class="admin-gate" data-lock>
       <img class="admin-welcome" src="photos/admin-welcome.jpg?v=capup" alt="">
       <h1>Shop admin</h1>
-      <p>Password to change names, prices, photos, stock, and add or remove items. Only the LewisThomson account can open it — <a href="account.html">log in on Account</a> first.</p>
+      <p>Password to change names, prices, photos, stock, and add or remove items. Only Admins can open it — <a href="account.html">log in on Account</a> first.</p>
       <form data-gate>
         <label class="sr-only" for="pw">Password</label>
         <input id="pw" name="password" type="password" autocomplete="current-password" required>
@@ -70,6 +70,24 @@
         Add as many pictures as you like with the pencil or + Add pictures.
         Tap a thumbnail to make it the main photo.
       </p>
+      <section class="auth-card admin-people" data-admins>
+        <p class="auth-kicker">Who can get in</p>
+        <h2>Admins</h2>
+        <p class="auth-lede">Search for an account. Their picture pops up as you type — tap one to pick them, then add them as an Admin. They still need the Admin password.</p>
+        <label>Search accounts
+          <input type="search" data-admin-q placeholder="Type a username…" autocomplete="off">
+        </label>
+        <div class="friend-results" data-admin-results hidden></div>
+        <div class="friend-picked" data-admin-picked hidden>
+          <img data-admin-picked-pic alt="" hidden>
+          <span class="friend-ph" data-admin-picked-ph aria-hidden="true">💗</span>
+          <strong data-admin-picked-name></strong>
+          <button type="button" class="auth-go" data-admin-add>Add Admin</button>
+        </div>
+        <p class="auth-status" data-admin-status hidden></p>
+        <h3 class="friend-sub">Admins</h3>
+        <div class="friend-list" data-admin-list></div>
+      </section>
       <div class="admin-list" data-list></div>
       <button type="button" class="admin-add" data-add>Add another item</button>
     </section>
@@ -83,7 +101,7 @@
     </div>
   </footer>
   <script src="../config.js"></script>
-  <script src="shop.js?v=20260920adminuser"></script>
-  <script src="admin.js?v=20260920adminuser"></script>
+  <script src="shop.js?v=20260920admins"></script>
+  <script src="admin.js?v=20260920admins"></script>
 </body>
 </html>
