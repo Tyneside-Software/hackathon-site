@@ -217,6 +217,14 @@
     });
   }
 
+  function start() {
+    if (!document.body.hasAttribute("data-admin-page")) return;
+    cacheEls();
+    bind();
+    if (shop.isAdmin()) openEditor();
+    else showEditor(false);
+  }
+
   function addItem() {
     items.push(shop.normalize({
       name: "New item",
@@ -231,36 +239,6 @@
     if (list && list.lastElementChild) {
       list.lastElementChild.scrollIntoView({ behavior: "smooth", block: "center" });
     }
-  }
-
-  function panelHtml() {
-    return (
-      '<div class="admin-bar">' +
-        "<h2>Shop admin</h2>" +
-        '<div data-lock>' +
-          '<form data-gate>' +
-            '<label class="sr-only" for="pw">Password</label>' +
-            '<input id="pw" name="password" type="password" autocomplete="current-password" required>' +
-            '<button type="submit">Open</button>' +
-          "</form>" +
-          '<p class="admin-error" data-error hidden>Wrong password.</p>' +
-        "</div>" +
-      "</div>" +
-      '<div data-editor hidden>' +
-        '<div class="admin-toolbar">' +
-          '<p class="admin-status" data-status>Ready.</p>' +
-          '<div class="admin-actions">' +
-            '<button type="button" data-add>Add item</button>' +
-            '<button type="button" class="ghost" data-download>Download catalog</button>' +
-            '<button type="button" class="ghost" data-reset>Reset to website catalog</button>' +
-            '<button type="button" class="ghost" data-logout>Log out</button>' +
-          "</div>" +
-        "</div>" +
-        '<p class="admin-hint">Tap the pencil on a picture to replace it. On a phone that opens your gallery; on a computer it opens picture files in File Explorer. Changes save on this computer and show in the shop straight away.</p>' +
-        '<div class="admin-list" data-list></div>' +
-        '<button type="button" class="admin-add" data-add>Add another item</button>' +
-      "</div>"
-    );
   }
 
   function bind() {
@@ -355,26 +333,5 @@
     }
   }
 
-  function mount() {
-    var main = document.querySelector("main.wrap");
-    if (!main) return;
-    if (!document.getElementById("admin")) {
-      var section = document.createElement("section");
-      section.id = "admin";
-      section.className = "admin-panel";
-      section.setAttribute("aria-label", "Shop admin");
-      section.innerHTML = panelHtml();
-      main.insertBefore(section, main.firstChild);
-    }
-    cacheEls();
-    bind();
-    if (shop.isAdmin()) openEditor();
-    else showEditor(false);
-    if (location.hash === "#admin") {
-      var panel = document.getElementById("admin");
-      if (panel) panel.scrollIntoView();
-    }
-  }
-
-  mount();
+  start();
 })();

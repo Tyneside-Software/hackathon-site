@@ -380,6 +380,10 @@
     newId: newId
   };
 
+  if (!document.body.hasAttribute("data-admin-page")) {
+    setAdmin(false);
+  }
+
   if (document.querySelector("[data-products]") || document.querySelector("[data-more]")) {
     PRODUCTS = readLocal() || defaultItems();
     bindSearch();
