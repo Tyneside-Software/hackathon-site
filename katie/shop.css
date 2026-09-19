@@ -699,6 +699,36 @@ html.is-dark .pdp {
   font-size: 1.6rem;
 }
 
+.flag {
+  position: absolute;
+  top: 0.55rem;
+  left: 0.55rem;
+  z-index: 5;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 0.18rem 0.5rem;
+  border-radius: 999px;
+  border: 2px solid #111;
+  pointer-events: none;
+}
+.flag-new {
+  background: #72cefc;
+  color: #111;
+}
+.flag-featured {
+  background: #ffe566;
+  color: #111;
+}
+.pdp-info .flag {
+  position: static;
+  display: inline-block;
+  margin-bottom: 0.4rem;
+  pointer-events: none;
+}
+html.is-dark .flag { border-color: #fff; }
+
 .product {
   position: relative;
   min-width: 0;

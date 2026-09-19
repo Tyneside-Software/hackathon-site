@@ -8,7 +8,8 @@
       "meta": "Glow in the dark mystery dumpling",
       "photos": ["photos/mystery-dumpling.jpeg"],
       "stock": 1,
-      "inStock": true
+      "inStock": true,
+      "badge": "featured"
     },
     {
       "id": "mini-pack",
@@ -68,7 +69,8 @@
       "meta": "Homemade balloon squishies.",
       "photos": [],
       "stock": 1,
-      "inStock": true
+      "inStock": true,
+      "badge": "new"
     },
     {
       "id": "homemade-squishie",

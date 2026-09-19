@@ -31,13 +31,13 @@
 
   function defaultItems() {
     return [
-      { id: "dumpling", group: "squishies", name: "Dumpling", price: "£4", meta: "Glow in the dark mystery dumpling", photos: ["photos/mystery-dumpling.jpeg"], stock: 1 },
+      { id: "dumpling", group: "squishies", name: "Dumpling", price: "£4", meta: "Glow in the dark mystery dumpling", photos: ["photos/mystery-dumpling.jpeg"], stock: 1, badge: "featured" },
       { id: "mini-pack", group: "squishies", name: "4 pack of mini squishies", price: "Email for price", meta: "Four mini squishies in a pack.", photos: ["photos/4-pack-of-mini-squishies.jpeg"], stock: 1 },
       { id: "santa-popit", group: "squishies", name: "Santa popit", price: "£5.49", meta: "Red and white popit", photos: ["photos/santa-popit.jpeg"], stock: 1 },
       { id: "popit", group: "squishies", name: "Popit", price: "£4.99", meta: "Fidget dice popit", photos: ["photos/popit-die.jpeg"], stock: 1 },
       { id: "fidget-spinner", group: "squishies", name: "Fidget spinner", price: "£3.99", meta: "Earth fidget spinner", photos: ["photos/earth-fidget-spinner.jpeg"], stock: 1 },
       { id: "cheese", group: "squishies", name: "Cheese", price: "£4.99", meta: "Super slow-rise cheese", photos: ["photos/slowrise-cheese.jpeg"], stock: 1 },
-      { id: "balloon-squishies", group: "homemade", name: "Homemade balloon squishies", price: "50p", meta: "Homemade balloon squishies.", photos: [], stock: 1 },
+      { id: "balloon-squishies", group: "homemade", name: "Homemade balloon squishies", price: "50p", meta: "Homemade balloon squishies.", photos: [], stock: 1, badge: "new" },
       { id: "homemade-squishie", group: "homemade", name: "Homemade squishie", price: "£2", meta: "Homemade squishie.", photos: [], stock: 1 },
       { id: "squishie-skin", group: "homemade", name: "Squishie skin", price: "£1", meta: "Squishie skin.", photos: [], stock: 1 },
       { id: "water-slime", group: "slime", name: "Water slime", price: "Email for price", meta: "At some point. Matches the photo.", photos: [], stock: 1 },
@@ -95,6 +95,8 @@
     photos = photos.map(function (p) { return String(p || "").trim(); }).filter(Boolean);
     var group = item && item.group;
     if (group !== "homemade" && group !== "slime" && group !== "mystery" && group !== "fidgets") group = "squishies";
+    var badge = item && item.badge;
+    if (badge !== "new" && badge !== "featured") badge = "";
     return {
       id: (item && item.id) || newId(name),
       group: group,
@@ -104,6 +106,7 @@
       photos: photos,
       stock: stockQty(item),
       inStock: stockQty(item) > 0,
+      badge: badge,
       mail: (item && item.mail) || ("Order " + name)
     };
   }
@@ -274,6 +277,12 @@
     );
   }
 
+  function flagHtml(p) {
+    if (p.badge === "new") return '<span class="flag flag-new">New</span>';
+    if (p.badge === "featured") return '<span class="flag flag-featured">Featured</span>';
+    return "";
+  }
+
   function burstHtml() {
     var bits = "";
     for (var i = 0; i < 10; i++) bits += "<span></span>";
@@ -289,6 +298,7 @@
     return (
       '<article class="product is-clickable' + (inStock ? " is-in" : " is-out") + '" data-id="' + esc(p.id) + '" data-name="' + esc(p.name) + '">' +
         (inStock ? burstHtml() : "") +
+        flagHtml(p) +
         galleryHtml(p) +
         '<p class="price">' + esc(p.price) + "</p>" +
         stockHtml(p) +
@@ -519,6 +529,7 @@
     }
     if (info) {
       info.innerHTML =
+        flagHtml(item) +
         "<h1>" + esc(item.name) + "</h1>" +
         reviewSummaryHtml(item) +
         '<p class="price">' + esc(item.price) + "</p>" +
@@ -648,6 +659,12 @@
 
   function applyCatalog(items) {
     PRODUCTS = (items && items.length ? items : defaultItems()).map(normalize);
+    if (!PRODUCTS.some(function (p) { return p.badge; })) {
+      PRODUCTS.forEach(function (p) {
+        if (p.id === "dumpling") p.badge = "featured";
+        if (p.id === "balloon-squishies") p.badge = "new";
+      });
+    }
     return PRODUCTS;
   }
 

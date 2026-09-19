@@ -100,6 +100,11 @@
           "</select></label>" +
           photosHtml(item) +
           '<label>How many in stock<input data-field="stock" type="number" min="0" step="1" value="' + shop.esc(item.stock) + '"></label>' +
+          '<label>Badge<select data-field="badge">' +
+            '<option value=""' + (!item.badge ? " selected" : "") + ">None</option>" +
+            '<option value="new"' + (item.badge === "new" ? " selected" : "") + ">New</option>" +
+            '<option value="featured"' + (item.badge === "featured" ? " selected" : "") + ">Featured</option>" +
+          "</select></label>" +
           '<p class="admin-stock-note wide">' + (item.stock > 0 ? "In stock" : "Out of stock") + "</p>" +
         "</div>" +
         '<div class="admin-card-foot"><button type="button" class="remove" data-remove>Remove</button></div>' +
