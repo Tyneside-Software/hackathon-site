@@ -303,14 +303,16 @@
         e.preventDefault();
         var btn = gate.querySelector("button[type='submit']");
         if (btn) btn.disabled = true;
-        shop.loginAdmin(passwordInput && passwordInput.value).then(function (ok) {
+        shop.loginAdmin(passwordInput && passwordInput.value).then(function (result) {
           if (btn) btn.disabled = false;
+          var ok = result && result.ok;
           if (ok) {
             if (errorEl) errorEl.hidden = true;
             if (passwordInput) passwordInput.value = "";
             openEditor();
           } else if (errorEl) {
             errorEl.hidden = false;
+            errorEl.textContent = (result && result.detail) || "Wrong password.";
           }
         });
       });

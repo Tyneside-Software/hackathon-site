@@ -183,6 +183,17 @@
     }
   }
 
+  function userToken() {
+    try { return localStorage.getItem("fidget-squish-user-token") || ""; } catch (e) { return ""; }
+  }
+
+  function authHeaders() {
+    var h = { "Content-Type": "application/json", Accept: "application/json" };
+    var tok = userToken();
+    if (tok) h.Authorization = "Bearer " + tok;
+    return h;
+  }
+
   function isAdmin() {
     return getToken().length > 20;
   }
@@ -197,15 +208,17 @@
   function loginAdmin(password) {
     return fetch(apiBase() + "/katie/admin/login", {
       method: "POST",
-      headers: { "Content-Type": "application/json", Accept: "application/json" },
+      headers: authHeaders(),
       body: JSON.stringify({ password: String(password || "") })
     }).then(function (r) {
       return r.json().then(function (data) {
-        if (!r.ok || !data || !data.token) return false;
+        if (!r.ok || !data || !data.token) {
+          return { ok: false, detail: (data && data.detail) || "Wrong password." };
+        }
         setAdmin(true, data.token);
-        return true;
-      }).catch(function () { return false; });
-    }).catch(function () { return false; });
+        return { ok: true };
+      }).catch(function () { return { ok: false, detail: "Could not reach Admin." }; });
+    }).catch(function () { return { ok: false, detail: "Could not reach Admin." }; });
   }
 
   function verifyAdmin() {
@@ -213,7 +226,7 @@
     if (!token) return Promise.resolve(false);
     return fetch(apiBase() + "/katie/admin/verify", {
       method: "POST",
-      headers: { "Content-Type": "application/json", Accept: "application/json" },
+      headers: authHeaders(),
       body: JSON.stringify({ token: token })
     }).then(function (r) {
       return r.json().then(function (data) {
