@@ -604,6 +604,134 @@ a.more-card .meta {
   font-size: 0.8rem;
   margin-top: 0.15rem;
 }
+.stars {
+  margin-top: 0.35rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--ink);
+}
+.star-row {
+  color: #f5c518;
+  letter-spacing: 0.06em;
+}
+.stars a {
+  font-weight: 750;
+  text-decoration: none;
+}
+.review-form {
+  display: grid;
+  gap: 0.7rem;
+  margin: 0 0 1.6rem;
+  padding: 1rem 1.05rem 1.15rem;
+  background:
+    linear-gradient(#f0c0e5, #f0c0e5) padding-box,
+    var(--rainbow) border-box;
+  border: 5px solid transparent;
+  border-radius: 16px;
+  max-width: 40rem;
+}
+.review-form label,
+.review-form fieldset {
+  display: grid;
+  gap: 0.25rem;
+  font-size: 0.8rem;
+  font-weight: 750;
+  color: var(--muted);
+  border: 0;
+}
+.review-form .wide { grid-column: 1 / -1; }
+.review-form input,
+.review-form select,
+.review-form textarea {
+  font: inherit;
+  font-weight: 500;
+  color: var(--ink);
+  border: 2px solid var(--line);
+  border-radius: 8px;
+  padding: 0.5rem 0.6rem;
+  width: 100%;
+  background: #f0c0e5;
+}
+.star-pick [data-star-pick] {
+  display: flex;
+  gap: 0.15rem;
+}
+.star-pick button {
+  border: 0;
+  background: none;
+  padding: 0;
+  font-size: 1.7rem;
+  line-height: 1;
+  color: #d1d5db;
+  cursor: pointer;
+}
+.star-pick button.is-on { color: #f5c518; }
+.review-form button[type="submit"] {
+  justify-self: start;
+  border: 0;
+  background: var(--pink);
+  color: #fff;
+  font: inherit;
+  font-weight: 800;
+  padding: 0.55rem 1.1rem;
+  border-radius: 999px;
+  cursor: pointer;
+}
+.review-form button[type="submit"]:hover { background: var(--pink-deep); }
+.review-status {
+  font-weight: 750;
+  font-size: 0.88rem;
+  color: #166534;
+  margin: 0;
+}
+.review-status.is-warn { color: #9a3412; }
+.review-list { display: grid; gap: 1rem; }
+.review-empty { color: #fce7f3; font-weight: 700; }
+.review-card {
+  display: grid;
+  grid-template-columns: 7.5rem 1fr;
+  gap: 0.85rem;
+  padding: 0.85rem;
+  background:
+    linear-gradient(#f0c0e5, #f0c0e5) padding-box,
+    var(--rainbow) border-box;
+  border: 5px solid transparent;
+  border-radius: 16px;
+}
+@media (max-width: 640px) {
+  .review-card { grid-template-columns: 1fr; }
+}
+.review-photo {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: 10px;
+  display: block;
+}
+.review-card h2 {
+  font-size: 1rem;
+  margin: 0.2rem 0;
+  color: #72cefc;
+}
+.review-card .meta {
+  color: var(--pink);
+  font-weight: 650;
+  white-space: pre-wrap;
+}
+html.is-dark .review-form,
+html.is-dark .review-card {
+  background:
+    linear-gradient(#1e1530, #1e1530) padding-box,
+    var(--rainbow) border-box;
+}
+html.is-dark .review-form input,
+html.is-dark .review-form select,
+html.is-dark .review-form textarea {
+  background: #241834;
+  color: #fce7f3;
+  border-color: #782d87;
+}
+html.is-dark .stars { color: #fce7f3; }
 .buy {
   display: inline-block;
   margin-top: 0.55rem;

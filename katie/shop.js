@@ -3,6 +3,8 @@
   var AUTH_KEY = "fidget-squish-admin";
   var PASSWORD = "cassiethecat";
   var PRODUCTS = [];
+  var REVIEW_KEY = "fidget-squish-reviews";
+  var REVIEWS = [];
   var MORE = {
     group: [
       { name: "Tyneside Group", meta: "All the Tyneside doors", href: "https://tyneside.group/", img: "more/group.svg" },
@@ -198,6 +200,54 @@
     return '<p class="stock is-out">Out of stock</p>';
   }
 
+  function readReviews() {
+    try {
+      var raw = localStorage.getItem(REVIEW_KEY);
+      if (!raw) return [];
+      var data = JSON.parse(raw);
+      return Array.isArray(data) ? data : (data && data.reviews) || [];
+    } catch (e) {
+      return [];
+    }
+  }
+
+  function writeReviews(list) {
+    REVIEWS = list || [];
+    try {
+      localStorage.setItem(REVIEW_KEY, JSON.stringify(REVIEWS));
+    } catch (e) {
+      return "Could not save the review. Try a smaller photo.";
+    }
+    return null;
+  }
+
+  function reviewsFor(id) {
+    return REVIEWS.filter(function (r) { return r.itemId === id; });
+  }
+
+  function starChars(n) {
+    var s = "";
+    var rounded = Math.round(Number(n) || 0);
+    for (var i = 1; i <= 5; i++) s += i <= rounded ? "★" : "☆";
+    return s;
+  }
+
+  function reviewSummaryHtml(p) {
+    var list = reviewsFor(p.id);
+    if (!list.length) {
+      return '<p class="stars"><a href="reviews.html?item=' + encodeURIComponent(p.id) + '">Write a review</a></p>';
+    }
+    var sum = 0;
+    list.forEach(function (r) { sum += Number(r.stars) || 0; });
+    var avg = sum / list.length;
+    var label = list.length === 1 ? "1 review" : list.length + " reviews";
+    return (
+      '<p class="stars"><span class="star-row" aria-label="' + avg.toFixed(1) + ' out of 5">' +
+      starChars(avg) + "</span> " + avg.toFixed(1) +
+      ' · <a href="reviews.html?item=' + encodeURIComponent(p.id) + '">' + label + "</a></p>"
+    );
+  }
+
   function burstHtml() {
     var bits = "";
     for (var i = 0; i < 10; i++) bits += "<span></span>";
@@ -217,6 +267,7 @@
         stockHtml(p) +
         "<h2>" + esc(p.name) + "</h2>" +
         '<p class="meta">' + esc(p.meta) + "</p>" +
+        reviewSummaryHtml(p) +
         buy +
       "</article>"
     );
@@ -394,7 +445,12 @@
     refresh: refresh,
     esc: esc,
     assetUrl: assetUrl,
-    newId: newId
+    newId: newId,
+    getProducts: function () { return PRODUCTS; },
+    readReviews: readReviews,
+    writeReviews: writeReviews,
+    reviewsFor: reviewsFor,
+    starChars: starChars
   };
 
   var DARK_KEY = "fidget-squish-dark";
@@ -443,8 +499,9 @@
   }
 
   bindModeToggle();
+  REVIEWS = readReviews();
 
-  if (document.querySelector("[data-products]") || document.querySelector("[data-more]")) {
+  if (document.querySelector("[data-products]") || document.querySelector("[data-more]") || document.querySelector("[data-reviews]")) {
     PRODUCTS = readLocal() || defaultItems();
     bindSearch();
     render();
