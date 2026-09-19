@@ -1142,10 +1142,11 @@ html.is-dark .stars { color: #fce7f3; }
 
 .policies {
   margin-top: 2.2rem;
-  padding: 1.1rem 1.15rem;
-  border-radius: 14px;
+  padding: 1.45rem 1.5rem 1.25rem;
+  border-radius: 16px;
   color: var(--ink);
-  font-size: 0.85rem;
+  font-size: 0.92rem;
+  line-height: 1.6;
   background:
     linear-gradient(#f0c0e5, #f0c0e5) padding-box,
     var(--rainbow) border-box;
@@ -1153,14 +1154,20 @@ html.is-dark .stars { color: #fce7f3; }
 }
 .policies h2 {
   color: var(--ink);
-  font-size: 0.95rem;
-  margin-bottom: 0.4rem;
+  font-size: 1.08rem;
+  margin-bottom: 0.75rem;
+  letter-spacing: -0.02em;
 }
-.policies ul { padding-left: 1.15rem; display: grid; gap: 0.35rem; }
+.policies ul {
+  padding-left: 1.25rem;
+  display: grid;
+  gap: 0.65rem;
+}
+.policies li { max-width: 48rem; }
 .lewis-here {
   display: block;
   text-align: center;
-  margin: 1.1rem 0 0.2rem;
+  margin: 1.5rem 0 0.4rem;
   font-weight: 800;
   font-size: 1.05rem;
   color: var(--pink);
@@ -1169,7 +1176,7 @@ html.is-dark .stars { color: #fce7f3; }
 
 .foot {
   border-top: 0;
-  padding: 0 0 1.6rem;
+  padding: 0 0 2.2rem;
   color: #e0e7ff;
   font-size: 0.8rem;
 }
@@ -1178,15 +1185,22 @@ html.is-dark .stars { color: #fce7f3; }
   margin: 0 auto;
   display: flex;
   flex-wrap: wrap;
-  gap: 0.4rem 1rem;
+  gap: 0.55rem 1.2rem;
   justify-content: space-between;
-  padding-top: 1rem;
+  padding-top: 1.35rem;
 }
 .foot a { color: #fbcfe8; text-decoration: none; font-weight: 650; }
 .foot a:hover { color: #fff; }
 .foot .policies {
   width: min(1180px, calc(100% - 2rem));
-  margin: 1.4rem auto 0.4rem;
+  margin: 1.8rem auto 0.6rem;
+}
+@media (max-width: 640px) {
+  .foot .policies {
+    padding: 1.2rem 1.05rem 1.1rem;
+    margin-top: 1.4rem;
+  }
+  .policies ul { gap: 0.7rem; }
 }
 
 .about-kicker {
