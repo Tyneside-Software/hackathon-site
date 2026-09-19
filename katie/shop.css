@@ -503,6 +503,14 @@ a.more-card .meta {
   border-radius: 16px;
   text-align: center;
 }
+.admin-welcome {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: 12px;
+  margin-bottom: 1rem;
+}
 .admin-gate h1 {
   font-size: 1.6rem;
   letter-spacing: -0.03em;
