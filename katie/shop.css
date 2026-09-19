@@ -1724,6 +1724,95 @@ html.is-dark .profile-pic-wrap img,
 html.is-dark .profile-ph { border-color: #fce7f3; }
 html.is-dark .auth-switch { color: #fce7f3; }
 html.is-dark .auth-switch button { color: #ff8ac4; }
+.auth-wrap.is-in { max-width: 28rem; }
+.friend-results,
+.friend-list {
+  display: grid;
+  gap: 0.45rem;
+  margin-top: 0.55rem;
+}
+.friend-hit {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  width: 100%;
+  text-align: left;
+  border: 2px solid #36042b;
+  background: #fff;
+  color: #111;
+  border-radius: 999px;
+  padding: 0.35rem 0.55rem 0.35rem 0.35rem;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 750;
+}
+.friend-hit:hover { filter: brightness(0.98); }
+.friend-hit.is-on {
+  border-color: var(--pink);
+  box-shadow: 0 0 0 3px rgba(255, 77, 166, 0.35);
+}
+.friend-hit img,
+.friend-ph {
+  width: 2.6rem;
+  height: 2.6rem;
+  border-radius: 50%;
+  object-fit: cover;
+  flex: 0 0 auto;
+  border: 2px solid #36042b;
+  background: #fff;
+}
+.friend-ph {
+  display: grid;
+  place-items: center;
+  font-size: 1.2rem;
+  background: linear-gradient(#fff, #fce7f3);
+}
+.friend-hit span.name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.friend-hit .tag {
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: var(--pink-deep);
+  margin-right: 0.35rem;
+}
+.friend-picked {
+  display: grid;
+  justify-items: center;
+  gap: 0.45rem;
+  margin-top: 0.9rem;
+  text-align: center;
+}
+.friend-picked img,
+.friend-picked .friend-ph {
+  width: 5.2rem;
+  height: 5.2rem;
+  font-size: 2rem;
+}
+.friend-picked strong {
+  color: #36042b;
+  font-size: 1.05rem;
+}
+.friend-picked .auth-go { width: 100%; }
+.friend-sub {
+  font-size: 1.05rem;
+  color: #36042b !important;
+  margin: 1.15rem 0 0.2rem;
+}
+.friend-empty { color: var(--muted); font-weight: 650; margin-top: 0.4rem; }
+.friend-hit .unfriend {
+  border: 0;
+  background: transparent;
+  color: var(--pink-deep);
+  font: inherit;
+  font-weight: 800;
+  font-size: 0.78rem;
+  cursor: pointer;
+  padding: 0.35rem 0.55rem;
+}
+html.is-dark .friend-hit { background: #2a1d40; color: #fce7f3; border-color: #e9d5ff; }
+html.is-dark .friend-hit img,
+html.is-dark .friend-ph { border-color: #fce7f3; }
+html.is-dark .friend-picked strong,
+html.is-dark .friend-sub { color: #e9d5ff !important; }
 @media (max-width: 640px) {
   .auth-wrap { padding-top: 0.5rem; padding-bottom: 1.6rem; }
   .auth-card { padding: 1.25rem 1rem 1.2rem; border-radius: 20px; }

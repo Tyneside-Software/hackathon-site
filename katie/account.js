@@ -12,6 +12,17 @@
   var switchSignup = document.querySelector("[data-switch-signup]");
   var providers = {};
   var pendingPhoto = "";
+  var authWrap = document.querySelector(".auth-wrap");
+  var friendsBox = document.querySelector("[data-friends]");
+  var friendQ = document.querySelector("[data-friend-q]");
+  var friendResults = document.querySelector("[data-friend-results]");
+  var friendPicked = document.querySelector("[data-friend-picked]");
+  var friendList = document.querySelector("[data-friend-list]");
+  var friendStatus = document.querySelector("[data-friend-status]");
+  var friendAdd = document.querySelector("[data-friend-add]");
+  var picked = null;
+  var searchTimer = 0;
+  var friendNames = {};
 
   function api() {
     var raw = window.HACKATHON_API || "https://hackathon-api-git-975511976696.europe-west2.run.app";
@@ -90,15 +101,21 @@
   function showProfile(user) {
     if (gate) gate.hidden = true;
     if (profile) profile.hidden = false;
+    if (friendsBox) friendsBox.hidden = false;
+    if (authWrap) authWrap.classList.add("is-in");
     if (!profileForm || !user) return;
     profileForm.username.value = user.username || "";
     profileForm.email.value = user.email || "";
     setPic("[data-profile-pic]", "[data-profile-pic-ph]", user.photo || "");
+    loadFriends();
   }
 
   function showGate() {
     if (gate) gate.hidden = false;
     if (profile) profile.hidden = true;
+    if (friendsBox) friendsBox.hidden = true;
+    if (authWrap) authWrap.classList.remove("is-in");
+    picked = null;
   }
 
   function saveSession(data) {
@@ -435,6 +452,177 @@
       }
     })
     .catch(function () { providers = {}; });
+
+  function escHtml(s) {
+    if (shop && shop.esc) return shop.esc(s);
+    return String(s || "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
+  }
+
+  function avatarHtml(photo) {
+    if (photo) return '<img src="' + escHtml(photo) + '" alt="">';
+    return '<span class="friend-ph" aria-hidden="true">💗</span>';
+  }
+
+  function setPicked(user) {
+    picked = user || null;
+    if (!friendPicked) return;
+    if (!picked) {
+      friendPicked.hidden = true;
+      return;
+    }
+    friendPicked.hidden = false;
+    var nameEl = document.querySelector("[data-picked-name]");
+    if (nameEl) nameEl.textContent = picked.username || "";
+    setPic("[data-picked-pic]", "[data-picked-ph]", picked.photo || "");
+    if (friendAdd) {
+      var already = !!(picked.friend || friendNames[picked.username]);
+      friendAdd.textContent = already ? "Friends" : "Add friend";
+      friendAdd.disabled = already;
+    }
+    if (friendResults) {
+      friendResults.querySelectorAll(".friend-hit").forEach(function (btn) {
+        btn.classList.toggle("is-on", btn.dataset.user === picked.username);
+      });
+    }
+  }
+
+  function renderHits(users) {
+    if (!friendResults) return;
+    if (!users || !users.length) {
+      friendResults.hidden = true;
+      friendResults.innerHTML = '<p class="friend-empty">No accounts match that.</p>';
+      friendResults.hidden = false;
+      return;
+    }
+    friendResults.innerHTML = users.map(function (u) {
+      var on = picked && picked.username === u.username ? " is-on" : "";
+      var tag = u.friend ? '<span class="tag">Friends</span>' : "";
+      return (
+        '<button type="button" class="friend-hit' + on + '" data-user="' + escHtml(u.username) + '">' +
+          avatarHtml(u.photo) +
+          '<span class="name">' + escHtml(u.username) + "</span>" +
+          tag +
+        "</button>"
+      );
+    }).join("");
+    friendResults.hidden = false;
+    friendResults.querySelectorAll("[data-user]").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        var name = btn.dataset.user;
+        var found = users.filter(function (u) { return u.username === name; })[0];
+        setPicked(found || { username: name, photo: "", friend: !!friendNames[name] });
+      });
+    });
+  }
+
+  function runSearch(q) {
+    if (!q) {
+      if (friendResults) {
+        friendResults.hidden = true;
+        friendResults.innerHTML = "";
+      }
+      return;
+    }
+    fetch(api() + "/katie/users/search?q=" + encodeURIComponent(q), { headers: headers(true) })
+      .then(function (r) { return r.ok ? r.json() : Promise.reject(); })
+      .then(function (data) { renderHits((data && data.users) || []); })
+      .catch(function () {
+        if (friendResults) {
+          friendResults.hidden = false;
+          friendResults.innerHTML = '<p class="friend-empty">Could not search just now.</p>';
+        }
+      });
+  }
+
+  function loadFriends() {
+    if (!token() || !friendList) return;
+    fetch(api() + "/katie/friends", { headers: headers(true) })
+      .then(function (r) { return r.ok ? r.json() : Promise.reject(); })
+      .then(function (data) {
+        var users = (data && data.users) || [];
+        friendNames = {};
+        users.forEach(function (u) { friendNames[u.username] = true; });
+        if (!users.length) {
+          friendList.innerHTML = '<p class="friend-empty">No friends yet. Search above and pick someone.</p>';
+          return;
+        }
+        friendList.innerHTML = users.map(function (u) {
+          return (
+            '<div class="friend-hit">' +
+              avatarHtml(u.photo) +
+              '<span class="name">' + escHtml(u.username) + "</span>" +
+              '<button type="button" class="unfriend" data-unfriend="' + escHtml(u.username) + '">Remove</button>' +
+            "</div>"
+          );
+        }).join("");
+        friendList.querySelectorAll("[data-unfriend]").forEach(function (btn) {
+          btn.addEventListener("click", function () {
+            fetch(api() + "/katie/friends/" + encodeURIComponent(btn.dataset.unfriend), {
+              method: "DELETE",
+              headers: headers(true)
+            }).then(function (r) {
+              if (!r.ok) throw new Error("Could not remove");
+              if (picked && picked.username === btn.dataset.unfriend) {
+                picked.friend = false;
+                setPicked(picked);
+              }
+              loadFriends();
+            }).catch(function () {
+              showStatus(friendStatus, "Could not remove that friend.", true);
+            });
+          });
+        });
+        if (picked) setPicked(picked);
+      })
+      .catch(function () {
+        friendList.innerHTML = '<p class="friend-empty">Could not load friends just now.</p>';
+      });
+  }
+
+  if (friendQ) {
+    friendQ.addEventListener("input", function () {
+      clearTimeout(searchTimer);
+      var q = friendQ.value.trim();
+      if (!q) {
+        if (friendResults) {
+          friendResults.hidden = true;
+          friendResults.innerHTML = "";
+        }
+        return;
+      }
+      searchTimer = setTimeout(function () { runSearch(q); }, 160);
+    });
+  }
+
+  if (friendAdd) {
+    friendAdd.addEventListener("click", function () {
+      if (!picked || !picked.username) {
+        showStatus(friendStatus, "Pick someone from the search first.", true);
+        return;
+      }
+      showStatus(friendStatus, "Adding…");
+      fetch(api() + "/katie/friends", {
+        method: "POST",
+        headers: headers(true),
+        body: JSON.stringify({ username: picked.username })
+      }).then(function (r) {
+        return r.json().then(function (data) {
+          if (!r.ok) throw new Error(detailOf(data, "Could not add friend"));
+          picked = data;
+          picked.friend = true;
+          showStatus(friendStatus, "Added " + (picked.username || "") + ".");
+          setPicked(picked);
+          loadFriends();
+        });
+      }).catch(function (err) {
+        showStatus(friendStatus, err.message || "Could not add friend", true);
+      });
+    });
+  }
 
   if (/[?&]tab=signup(?:&|$)/.test(location.search)) setTab("signup");
   loadMe();

@@ -6,7 +6,7 @@
   <title>Account · fidget squish</title>
   <meta name="description" content="Log in or create a fidget squish account.">
   <link rel="icon" href="logo.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="shop.css?v=20260920acct2">
+  <link rel="stylesheet" href="shop.css?v=20260920friends">
   <script>try{if(localStorage.getItem("fidget-squish-dark")==="1")document.documentElement.classList.add("is-dark")}catch(e){}</script>
   <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
@@ -120,6 +120,25 @@
       </form>
       <p class="auth-status" data-profile-status hidden></p>
     </section>
+
+    <section class="auth-card" data-friends hidden>
+      <p class="auth-kicker">Squishy friends</p>
+      <h1>Find friends</h1>
+      <p class="auth-lede">Search for other accounts. Their picture pops up as you type — tap one to pick them, then add them.</p>
+      <label>Search accounts
+        <input type="search" data-friend-q placeholder="Type a username…" autocomplete="off">
+      </label>
+      <div class="friend-results" data-friend-results hidden></div>
+      <div class="friend-picked" data-friend-picked hidden>
+        <img data-picked-pic alt="" hidden>
+        <span class="friend-ph" data-picked-ph aria-hidden="true">💗</span>
+        <strong data-picked-name></strong>
+        <button type="button" class="auth-go" data-friend-add>Add friend</button>
+      </div>
+      <p class="auth-status" data-friend-status hidden></p>
+      <h2 class="friend-sub">Your friends</h2>
+      <div class="friend-list" data-friend-list></div>
+    </section>
   </main>
 
   <footer class="foot">
@@ -132,6 +151,6 @@
   </footer>
   <script src="../config.js"></script>
   <script src="shop.js?v=20260920adminuser"></script>
-  <script src="account.js?v=20260920userhint"></script>
+  <script src="account.js?v=20260920friends"></script>
 </body>
 </html>
