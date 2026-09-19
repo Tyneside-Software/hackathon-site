@@ -407,6 +407,13 @@
   function openEditor() {
     showEditor(true);
     loadAdmins();
+    var adminQ = document.querySelector("[data-admin-q]");
+    if (adminQ) {
+      fetch(api() + "/katie/admin/people/search?q=", { headers: shop.adminHeaders() })
+        .then(function (r) { return r.ok ? r.json() : Promise.reject(); })
+        .then(function (data) { renderAdminHits((data && data.users) || []); })
+        .catch(function () {});
+    }
     shop.loadCatalog(function (loaded) {
       items = (loaded && loaded.length ? loaded : shop.defaultItems()).map(shop.normalize);
       renderList();
@@ -570,28 +577,24 @@
     }
     var adminQ = document.querySelector("[data-admin-q]");
     if (adminQ) {
+      function runAdminSearch(q) {
+        var box = document.querySelector("[data-admin-results]");
+        fetch(api() + "/katie/admin/people/search?q=" + encodeURIComponent(q || ""), { headers: shop.adminHeaders() })
+          .then(function (r) { return r.ok ? r.json() : Promise.reject(); })
+          .then(function (data) { renderAdminHits((data && data.users) || []); })
+          .catch(function () {
+            if (box) {
+              box.hidden = false;
+              box.innerHTML = '<p class="friend-empty">Could not search just now.</p>';
+            }
+          });
+      }
       adminQ.addEventListener("input", function () {
         clearTimeout(adminSearchTimer);
-        var q = adminQ.value.trim();
-        var box = document.querySelector("[data-admin-results]");
-        if (!q) {
-          if (box) {
-            box.hidden = true;
-            box.innerHTML = "";
-          }
-          return;
-        }
-        adminSearchTimer = setTimeout(function () {
-          fetch(api() + "/katie/admin/people/search?q=" + encodeURIComponent(q), { headers: shop.adminHeaders() })
-            .then(function (r) { return r.ok ? r.json() : Promise.reject(); })
-            .then(function (data) { renderAdminHits((data && data.users) || []); })
-            .catch(function () {
-              if (box) {
-                box.hidden = false;
-                box.innerHTML = '<p class="friend-empty">Could not search just now.</p>';
-              }
-            });
-        }, 160);
+        adminSearchTimer = setTimeout(function () { runAdminSearch(adminQ.value.trim()); }, 160);
+      });
+      adminQ.addEventListener("focus", function () {
+        runAdminSearch(adminQ.value.trim());
       });
     }
     var adminAdd = document.querySelector("[data-admin-add]");

@@ -107,6 +107,7 @@
     profileForm.username.value = user.username || "";
     profileForm.email.value = user.email || "";
     setPic("[data-profile-pic]", "[data-profile-pic-ph]", user.photo || "");
+    runSearch("");
     var nameEl = document.querySelector("[data-profile-name]");
     if (nameEl) nameEl.textContent = user.username || "";
     var badge = document.querySelector("[data-admin-badge]");
@@ -531,14 +532,7 @@
   }
 
   function runSearch(q) {
-    if (!q) {
-      if (friendResults) {
-        friendResults.hidden = true;
-        friendResults.innerHTML = "";
-      }
-      return;
-    }
-    fetch(api() + "/katie/users/search?q=" + encodeURIComponent(q), { headers: headers(true) })
+    fetch(api() + "/katie/users/search?q=" + encodeURIComponent(q || ""), { headers: headers(true) })
       .then(function (r) { return r.ok ? r.json() : Promise.reject(); })
       .then(function (data) { renderHits((data && data.users) || []); })
       .catch(function () {
@@ -598,14 +592,10 @@
     friendQ.addEventListener("input", function () {
       clearTimeout(searchTimer);
       var q = friendQ.value.trim();
-      if (!q) {
-        if (friendResults) {
-          friendResults.hidden = true;
-          friendResults.innerHTML = "";
-        }
-        return;
-      }
       searchTimer = setTimeout(function () { runSearch(q); }, 160);
+    });
+    friendQ.addEventListener("focus", function () {
+      runSearch(friendQ.value.trim());
     });
   }
 
