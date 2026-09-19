@@ -74,6 +74,38 @@
     return base + src;
   }
 
+  function asList(val) {
+    if (Array.isArray(val)) return val.slice();
+    if (val) return [val];
+    return [];
+  }
+
+  function normalizeGroups(item) {
+    var allowed = { squishies: 1, homemade: 1, mystery: 1, fidgets: 1, slime: 1 };
+    var out = [];
+    asList(item && (item.groups || item.group)).forEach(function (g) {
+      if (allowed[g] && out.indexOf(g) === -1) out.push(g);
+    });
+    if (!out.length) out.push("squishies");
+    return out;
+  }
+
+  function normalizeBadges(item) {
+    var out = [];
+    asList(item && (item.badges || item.badge)).forEach(function (b) {
+      if ((b === "new" || b === "featured") && out.indexOf(b) === -1) out.push(b);
+    });
+    return out;
+  }
+
+  function hasGroup(p, key) {
+    return (p.groups || [p.group]).indexOf(key) !== -1;
+  }
+
+  function hasBadge(p, key) {
+    return (p.badges || (p.badge ? [p.badge] : [])).indexOf(key) !== -1;
+  }
+
   function stockQty(item) {
     if (!item) return 0;
     var raw = item.stock;
@@ -92,20 +124,20 @@
     }
     if (!Array.isArray(photos)) photos = [];
     photos = photos.map(function (p) { return String(p || "").trim(); }).filter(Boolean);
-    var group = item && item.group;
-    if (group !== "homemade" && group !== "slime" && group !== "mystery" && group !== "fidgets") group = "squishies";
-    var badge = item && item.badge;
-    if (badge !== "new" && badge !== "featured") badge = "";
+    var groups = normalizeGroups(item);
+    var badges = normalizeBadges(item);
     return {
       id: (item && item.id) || newId(name),
-      group: group,
+      group: groups[0],
+      groups: groups,
       name: name,
       price: (item && item.price) || "Email for price",
       meta: (item && (item.meta || item.description)) || "",
       photos: photos,
       stock: stockQty(item),
       inStock: stockQty(item) > 0,
-      badge: badge,
+      badge: badges[0] || "",
+      badges: badges,
       mail: (item && item.mail) || ("Order " + name)
     };
   }
@@ -204,7 +236,7 @@
 
   function matches(p, q) {
     if (!q) return true;
-    return (p.name + " " + p.meta + " " + p.group + " " + p.price).toLowerCase().indexOf(q) !== -1;
+    return (p.name + " " + p.meta + " " + (p.groups || [p.group]).join(" ") + " " + (p.badges || []).join(" ") + " " + p.price).toLowerCase().indexOf(q) !== -1;
   }
 
   function galleryHtml(p) {
@@ -307,9 +339,11 @@
   }
 
   function flagHtml(p) {
-    if (p.badge === "new") return '<span class="flag flag-new">New</span>';
-    if (p.badge === "featured") return '<span class="flag flag-featured">Featured</span>';
-    return "";
+    var bits = "";
+    if (hasBadge(p, "featured")) bits += '<span class="flag flag-featured">Featured</span>';
+    if (hasBadge(p, "new")) bits += '<span class="flag flag-new">New</span>';
+    if (!bits) return "";
+    return '<div class="flags">' + bits + "</div>";
   }
 
   function burstHtml() {
@@ -523,8 +557,15 @@
   }
 
   function suggestedItems(current) {
-    var same = PRODUCTS.filter(function (p) { return p.id !== current.id && p.group === current.group; });
-    var other = PRODUCTS.filter(function (p) { return p.id !== current.id && p.group !== current.group; });
+    var curGroups = current.groups || [current.group];
+    var same = PRODUCTS.filter(function (p) {
+      if (p.id === current.id) return false;
+      return (p.groups || [p.group]).some(function (g) { return curGroups.indexOf(g) !== -1; });
+    });
+    var other = PRODUCTS.filter(function (p) {
+      if (p.id === current.id) return false;
+      return (p.groups || [p.group]).every(function (g) { return curGroups.indexOf(g) === -1; });
+    });
     return same.concat(other).slice(0, 6);
   }
 
@@ -649,9 +690,9 @@
   }
 
   function shelfItems(key) {
-    if (key === "featured") return PRODUCTS.filter(function (p) { return p.badge === "featured"; });
-    if (key === "new") return PRODUCTS.filter(function (p) { return p.badge === "new"; });
-    return PRODUCTS.filter(function (p) { return p.group === key; });
+    if (key === "featured") return PRODUCTS.filter(function (p) { return hasBadge(p, "featured"); });
+    if (key === "new") return PRODUCTS.filter(function (p) { return hasBadge(p, "new"); });
+    return PRODUCTS.filter(function (p) { return hasGroup(p, key); });
   }
 
   function render() {
@@ -711,10 +752,10 @@
 
   function applyCatalog(items) {
     PRODUCTS = (items && items.length ? items : defaultItems()).map(normalize);
-    if (!PRODUCTS.some(function (p) { return p.badge; })) {
+    if (!PRODUCTS.some(function (p) { return (p.badges && p.badges.length) || p.badge; })) {
       PRODUCTS.forEach(function (p) {
-        if (p.id === "dumpling") p.badge = "featured";
-        if (p.id === "balloon-squishies") p.badge = "new";
+        if (p.id === "dumpling") { p.badge = "featured"; p.badges = ["featured"]; }
+        if (p.id === "balloon-squishies") { p.badge = "new"; p.badges = ["new"]; }
       });
     }
     return PRODUCTS;

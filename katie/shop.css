@@ -706,11 +706,18 @@ html.is-dark .pdp {
   font-size: 1.6rem;
 }
 
-.flag {
+.flags {
   position: absolute;
-  top: 0.55rem;
-  left: 0.55rem;
+  top: 0.5rem;
+  left: 0.5rem;
   z-index: 5;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.28rem;
+  pointer-events: none;
+}
+.flag {
   font-size: 0.68rem;
   font-weight: 800;
   letter-spacing: 0.05em;
@@ -728,11 +735,11 @@ html.is-dark .pdp {
   background: #ffe566;
   color: #111;
 }
-.pdp-info .flag {
+.pdp-info .flags {
   position: static;
-  display: inline-block;
-  margin-bottom: 0.4rem;
-  pointer-events: none;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin-bottom: 0.45rem;
 }
 html.is-dark .flag { border-color: #fff; }
 
@@ -1481,14 +1488,26 @@ html.is-dark .about-facts strong { color: #fff; }
   width: 100%;
 }
 .admin-fields textarea { min-height: 4.2rem; resize: vertical; }
+.admin-checks {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.45rem 0.85rem;
+}
+.admin-checks > span {
+  width: 100%;
+  font-size: 0.78rem;
+  font-weight: 750;
+  color: var(--muted);
+}
 .admin-check {
   display: flex;
   align-items: center;
-  gap: 0.45rem;
-  font-size: 0.92rem;
+  gap: 0.35rem;
+  font-size: 0.88rem;
   font-weight: 750;
   color: var(--ink);
-  margin-top: 0.35rem;
+  margin: 0;
 }
 .admin-check input { width: 1.05rem; height: 1.05rem; }
 .admin-stock-note {

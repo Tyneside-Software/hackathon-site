@@ -58,6 +58,28 @@
     );
   }
 
+  function on(list, key) {
+    return (list || []).indexOf(key) !== -1 ? " checked" : "";
+  }
+
+  function checksHtml(item) {
+    var groups = item.groups || (item.group ? [item.group] : []);
+    var badges = item.badges || (item.badge ? [item.badge] : []);
+    return (
+      '<div class="wide admin-checks"><span>Categories</span>' +
+        '<label class="admin-check"><input type="checkbox" data-group="squishies"' + on(groups, "squishies") + "> Squishies</label>" +
+        '<label class="admin-check"><input type="checkbox" data-group="homemade"' + on(groups, "homemade") + "> Homemade</label>" +
+        '<label class="admin-check"><input type="checkbox" data-group="mystery"' + on(groups, "mystery") + "> Mystery</label>" +
+        '<label class="admin-check"><input type="checkbox" data-group="fidgets"' + on(groups, "fidgets") + "> Fidgets</label>" +
+        '<label class="admin-check"><input type="checkbox" data-group="slime"' + on(groups, "slime") + "> Slime</label>" +
+      "</div>" +
+      '<div class="wide admin-checks"><span>Badges</span>' +
+        '<label class="admin-check"><input type="checkbox" data-badge="featured"' + on(badges, "featured") + "> Featured</label>" +
+        '<label class="admin-check"><input type="checkbox" data-badge="new"' + on(badges, "new") + "> New</label>" +
+      "</div>"
+    );
+  }
+
   function photosHtml(item) {
     var thumbs = (item.photos || []).map(function (src, i) {
       return (
@@ -91,20 +113,9 @@
           '<label>Name<input data-field="name" type="text" value="' + shop.esc(item.name) + '"></label>' +
           '<label>Price<input data-field="price" type="text" value="' + shop.esc(item.price) + '"></label>' +
           '<label class="wide">Description<input data-field="meta" type="text" value="' + shop.esc(item.meta) + '"></label>' +
-          '<label>Section<select data-field="group">' +
-            '<option value="squishies"' + (item.group === "squishies" ? " selected" : "") + ">Squishies</option>" +
-            '<option value="homemade"' + (item.group === "homemade" ? " selected" : "") + ">Homemade</option>" +
-            '<option value="mystery"' + (item.group === "mystery" ? " selected" : "") + ">Mystery</option>" +
-            '<option value="fidgets"' + (item.group === "fidgets" ? " selected" : "") + ">Fidgets</option>" +
-            '<option value="slime"' + (item.group === "slime" ? " selected" : "") + ">Slime</option>" +
-          "</select></label>" +
+          checksHtml(item) +
           photosHtml(item) +
           '<label>How many in stock<input data-field="stock" type="number" min="0" step="1" value="' + shop.esc(item.stock) + '"></label>' +
-          '<label>Badge<select data-field="badge">' +
-            '<option value=""' + (!item.badge ? " selected" : "") + ">None</option>" +
-            '<option value="new"' + (item.badge === "new" ? " selected" : "") + ">New</option>" +
-            '<option value="featured"' + (item.badge === "featured" ? " selected" : "") + ">Featured</option>" +
-          "</select></label>" +
           '<p class="admin-stock-note wide">' + (item.stock > 0 ? "In stock" : "Out of stock") + "</p>" +
         "</div>" +
         '<div class="admin-card-foot"><button type="button" class="remove" data-remove>Remove</button></div>' +
@@ -160,6 +171,14 @@
         item.stock = isNaN(n) || n < 0 ? 0 : n;
       }
       else item[key] = field.value;
+    });
+    item.groups = [];
+    card.querySelectorAll("[data-group]").forEach(function (box) {
+      if (box.checked) item.groups.push(box.dataset.group);
+    });
+    item.badges = [];
+    card.querySelectorAll("[data-badge]").forEach(function (box) {
+      if (box.checked) item.badges.push(box.dataset.badge);
     });
     items[index] = shop.normalize(item);
   }
@@ -319,7 +338,6 @@
           return;
         }
         readCard(card);
-        if (e.target.dataset.field === "group") renderList();
         scheduleSave();
       });
       list.addEventListener("click", function (e) {
