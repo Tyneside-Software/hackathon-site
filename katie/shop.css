@@ -78,7 +78,7 @@ a:hover { color: var(--purple); }
 }
 
 body.shop::before {
-  content: "a tyneside software co";
+  content: "built by lewis";
   position: fixed;
   top: 0.9rem;
   right: 0.7rem;
@@ -949,7 +949,7 @@ html.is-dark .stars { color: #fce7f3; }
   margin-top: 2.2rem;
   padding: 1.1rem 1.15rem;
   border-radius: 14px;
-  color: var(--muted);
+  color: var(--ink);
   font-size: 0.85rem;
   background:
     linear-gradient(#f0c0e5, #f0c0e5) padding-box,
@@ -961,7 +961,16 @@ html.is-dark .stars { color: #fce7f3; }
   font-size: 0.95rem;
   margin-bottom: 0.4rem;
 }
-.policies ul { padding-left: 1.15rem; display: grid; gap: 0.2rem; }
+.policies ul { padding-left: 1.15rem; display: grid; gap: 0.35rem; }
+.lewis-here {
+  display: block;
+  text-align: center;
+  margin: 1.1rem 0 0.2rem;
+  font-weight: 800;
+  font-size: 1.05rem;
+  color: var(--pink);
+  transform: rotate(-4deg);
+}
 
 .foot {
   border-top: 0;
@@ -980,6 +989,10 @@ html.is-dark .stars { color: #fce7f3; }
 }
 .foot a { color: #fbcfe8; text-decoration: none; font-weight: 650; }
 .foot a:hover { color: #fff; }
+.foot .policies {
+  width: min(1180px, calc(100% - 2rem));
+  margin: 1.4rem auto 0.4rem;
+}
 
 .admin-gate {
   max-width: 26rem;

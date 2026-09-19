@@ -645,6 +645,33 @@
     }
   }
 
+  function bindLegal() {
+    if (document.querySelector("[data-legal]")) return;
+    var foot = document.querySelector(".foot");
+    var block = document.createElement("section");
+    block.className = "policies";
+    block.setAttribute("data-legal", "");
+    block.innerHTML =
+      "<h2>Terms &amp; conditions</h2>" +
+      "<ul>" +
+        "<li>This is Katie’s fidget squish shop. Email katie@tyneside.software to buy.</li>" +
+        "<li>Prices are shown on each item. How many are in stock can change.</li>" +
+        "<li>Orders are agreed by email. Payment and how you get the item will be set out in that email.</li>" +
+        "<li>Homemade items are handmade, so they may look a bit different from the photos.</li>" +
+        "<li>If something is wrong with an order, email us and we will help.</li>" +
+        "<li>Reviews are written by customers. Photos in reviews belong to the person who posted them.</li>" +
+        "<li>This site is provided as-is for browsing and ordering by email. We may update items, prices and these terms at any time.</li>" +
+      "</ul>" +
+      '<p class="lewis-here">lewis was here</p>';
+    if (foot) {
+      var inner = foot.querySelector(".inner");
+      if (inner) inner.insertAdjacentElement("afterend", block);
+      else foot.appendChild(block);
+    } else {
+      document.body.appendChild(block);
+    }
+  }
+
   function bindModeToggle() {
     applyDark(isDark());
     if (document.querySelector("[data-mode-toggle]")) return;
@@ -665,6 +692,7 @@
   }
 
   bindModeToggle();
+  bindLegal();
   REVIEWS = readReviews();
 
   if (document.querySelector("[data-product-page]")) {
