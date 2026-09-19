@@ -1,19 +1,26 @@
 (function () {
-  var PRODUCTS = [
-    { group: "squishies", name: "Dumpling", price: "£4", meta: "Glow in the dark mystery dumpling", photos: ["photos/mystery-dumpling.jpeg"], mail: "Order Dumpling" },
-    { group: "squishies", name: "4 pack of mini squishies", price: "Email for price", meta: "Four mini squishies in a pack.", photos: ["photos/4-pack-of-mini-squishies.jpeg"], mail: "Order 4 pack of mini squishies" },
-    { group: "squishies", name: "Santa popit", price: "£5.49", meta: "Red and white popit", photos: ["photos/santa-popit.jpeg"], mail: "Order Santa popit" },
-    { group: "squishies", name: "Popit", price: "£4.99", meta: "Fidget dice popit", photos: ["photos/popit-die.jpeg"], mail: "Order Popit" },
-    { group: "squishies", name: "Fidget spinner", price: "£3.99", meta: "Earth fidget spinner", photos: ["photos/earth-fidget-spinner.jpeg"], mail: "Order Fidget spinner" },
-    { group: "squishies", name: "Cheese", price: "£4.99", meta: "Super slow-rise cheese", photos: ["photos/slowrise-cheese.jpeg"], mail: "Order Cheese" },
-    { group: "homemade", name: "Homemade balloon squishies", price: "50p", meta: "Homemade balloon squishies.", photos: [], mail: "Order homemade balloon squishies" },
-    { group: "homemade", name: "Homemade squishie", price: "£2", meta: "Homemade squishie.", photos: [], mail: "Order homemade squishie" },
-    { group: "homemade", name: "Squishie skin", price: "£1", meta: "Squishie skin.", photos: [], mail: "Order squishie skin" },
-    { group: "slime", name: "Water slime", price: "Email for price", meta: "At some point. Matches the photo.", photos: [], mail: "Order water slime" },
-    { group: "slime", name: "Cloud slime", price: "Email for price", meta: "At some point. Matches the photo.", photos: [], mail: "Order cloud slime" },
-    { group: "slime", name: "Normal slime", price: "Email for price", meta: "A few for sale.", photos: [], mail: "Order normal slime" },
-    { group: "slime", name: "Homemade slime", price: "Email for price", meta: "There might be homemade slimes too.", photos: [], mail: "Order homemade slime" }
-  ];
+  var STORAGE_KEY = "fidget-squish-catalog";
+  var AUTH_KEY = "fidget-squish-admin";
+  var PASSWORD = "cassiethecat";
+  var PRODUCTS = [];
+
+  function defaultItems() {
+    return [
+      { id: "dumpling", group: "squishies", name: "Dumpling", price: "£4", meta: "Glow in the dark mystery dumpling", photos: ["photos/mystery-dumpling.jpeg"], inStock: true },
+      { id: "mini-pack", group: "squishies", name: "4 pack of mini squishies", price: "Email for price", meta: "Four mini squishies in a pack.", photos: ["photos/4-pack-of-mini-squishies.jpeg"], inStock: true },
+      { id: "santa-popit", group: "squishies", name: "Santa popit", price: "£5.49", meta: "Red and white popit", photos: ["photos/santa-popit.jpeg"], inStock: true },
+      { id: "popit", group: "squishies", name: "Popit", price: "£4.99", meta: "Fidget dice popit", photos: ["photos/popit-die.jpeg"], inStock: true },
+      { id: "fidget-spinner", group: "squishies", name: "Fidget spinner", price: "£3.99", meta: "Earth fidget spinner", photos: ["photos/earth-fidget-spinner.jpeg"], inStock: true },
+      { id: "cheese", group: "squishies", name: "Cheese", price: "£4.99", meta: "Super slow-rise cheese", photos: ["photos/slowrise-cheese.jpeg"], inStock: true },
+      { id: "balloon-squishies", group: "homemade", name: "Homemade balloon squishies", price: "50p", meta: "Homemade balloon squishies.", photos: [], inStock: true },
+      { id: "homemade-squishie", group: "homemade", name: "Homemade squishie", price: "£2", meta: "Homemade squishie.", photos: [], inStock: true },
+      { id: "squishie-skin", group: "homemade", name: "Squishie skin", price: "£1", meta: "Squishie skin.", photos: [], inStock: true },
+      { id: "water-slime", group: "slime", name: "Water slime", price: "Email for price", meta: "At some point. Matches the photo.", photos: [], inStock: true },
+      { id: "cloud-slime", group: "slime", name: "Cloud slime", price: "Email for price", meta: "At some point. Matches the photo.", photos: [], inStock: true },
+      { id: "normal-slime", group: "slime", name: "Normal slime", price: "Email for price", meta: "A few for sale.", photos: [], inStock: true },
+      { id: "homemade-slime", group: "slime", name: "Homemade slime", price: "Email for price", meta: "There might be homemade slimes too.", photos: [], inStock: true }
+    ];
+  }
 
   function esc(s) {
     return String(s)
@@ -23,13 +30,89 @@
       .replace(/"/g, "&quot;");
   }
 
+  function slug(s) {
+    var t = String(s || "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+    return t || "item";
+  }
+
+  function newId(name) {
+    return slug(name) + "-" + Date.now().toString(36);
+  }
+
   function assetUrl(src) {
+    if (!src) return src;
+    if (/^(https?:|data:|blob:)/i.test(src)) return src;
     var el = document.querySelector('script[src*="shop.js"]');
     var base = "";
     if (el && el.src) {
       base = el.src.replace(/shop\.js(\?.*)?$/, "");
     }
     return base + src;
+  }
+
+  function normalize(item) {
+    var name = (item && item.name) || "Untitled";
+    var photos = item && item.photos;
+    if (typeof photos === "string") {
+      photos = photos.split(/\r?\n|,/).map(function (p) { return p.trim(); });
+    }
+    if (!Array.isArray(photos)) photos = [];
+    photos = photos.map(function (p) { return String(p || "").trim(); }).filter(Boolean);
+    var group = item && item.group;
+    if (group !== "homemade" && group !== "slime") group = "squishies";
+    return {
+      id: (item && item.id) || newId(name),
+      group: group,
+      name: name,
+      price: (item && item.price) || "Email for price",
+      meta: (item && (item.meta || item.description)) || "",
+      photos: photos,
+      inStock: !(item && item.inStock === false),
+      mail: (item && item.mail) || ("Order " + name)
+    };
+  }
+
+  function readLocal() {
+    try {
+      var raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return null;
+      var data = JSON.parse(raw);
+      var items = Array.isArray(data) ? data : data && data.items;
+      if (!Array.isArray(items) || !items.length) return null;
+      return items.map(normalize);
+    } catch (e) {
+      return null;
+    }
+  }
+
+  function writeLocal(items) {
+    var payload = { items: (items || []).map(normalize) };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
+    return payload;
+  }
+
+  function clearLocal() {
+    localStorage.removeItem(STORAGE_KEY);
+  }
+
+  function passwordOk(value) {
+    var typed = String(value || "").trim();
+    return typed === PASSWORD || typed === '"' + PASSWORD;
+  }
+
+  function isAdmin() {
+    try {
+      return sessionStorage.getItem(AUTH_KEY) === "1";
+    } catch (e) {
+      return false;
+    }
+  }
+
+  function setAdmin(on) {
+    try {
+      if (on) sessionStorage.setItem(AUTH_KEY, "1");
+      else sessionStorage.removeItem(AUTH_KEY);
+    } catch (e) {}
   }
 
   function query() {
@@ -67,15 +150,29 @@
     return '<div class="gallery" data-gallery><div class="slides">' + slides.join("") + "</div>" + nav + "</div>";
   }
 
+  function stockHtml(p) {
+    if (p.group === "homemade") {
+      return p.inStock
+        ? '<p class="stock is-in">In stock</p>'
+        : '<p class="stock is-out">Out of stock</p>';
+    }
+    if (!p.inStock) return '<p class="stock is-out">Out of stock</p>';
+    return "";
+  }
+
   function cardHtml(p) {
-    var mail = "mailto:katie@tyneside.software?subject=" + encodeURIComponent(p.mail);
+    var mail = "mailto:katie@tyneside.software?subject=" + encodeURIComponent(p.mail || ("Order " + p.name));
+    var buy = p.inStock
+      ? '<a class="buy" href="' + mail + '">Email to buy</a>'
+      : '<span class="buy is-off">Out of stock</span>';
     return (
-      '<article class="product" data-name="' + esc(p.name) + '">' +
+      '<article class="product' + (p.inStock ? "" : " is-out") + '" data-name="' + esc(p.name) + '">' +
         galleryHtml(p) +
         '<p class="price">' + esc(p.price) + "</p>" +
+        stockHtml(p) +
         "<h2>" + esc(p.name) + "</h2>" +
         '<p class="meta">' + esc(p.meta) + "</p>" +
-        '<a class="buy" href="' + mail + '">Email to buy</a>' +
+        buy +
       "</article>"
     );
   }
@@ -174,6 +271,61 @@
     }
   }
 
-  bindSearch();
-  render();
+  function fetchStock(done) {
+    fetch(assetUrl("stock.json"), { cache: "no-store" })
+      .then(function (r) { return r.ok ? r.json() : Promise.reject(); })
+      .then(function (data) {
+        var items = Array.isArray(data) ? data : data && data.items;
+        if (!Array.isArray(items) || !items.length) {
+          done(null);
+          return;
+        }
+        done(items.map(normalize));
+      })
+      .catch(function () { done(null); });
+  }
+
+  function loadCatalog(done) {
+    var local = readLocal();
+    if (local) {
+      PRODUCTS = local;
+      if (done) done(PRODUCTS);
+      return;
+    }
+    fetchStock(function (items) {
+      PRODUCTS = items && items.length ? items : defaultItems();
+      if (done) done(PRODUCTS);
+    });
+  }
+
+  window.FidgetSquish = {
+    STORAGE_KEY: STORAGE_KEY,
+    defaultItems: defaultItems,
+    normalize: normalize,
+    readLocal: readLocal,
+    writeLocal: writeLocal,
+    clearLocal: clearLocal,
+    passwordOk: passwordOk,
+    isAdmin: isAdmin,
+    setAdmin: setAdmin,
+    loadCatalog: loadCatalog,
+    fetchStock: fetchStock,
+    esc: esc,
+    assetUrl: assetUrl,
+    newId: newId
+  };
+
+  if (document.querySelector("[data-products]")) {
+    PRODUCTS = readLocal() || defaultItems();
+    bindSearch();
+    render();
+    if (!readLocal()) {
+      fetchStock(function (items) {
+        if (items && items.length) {
+          PRODUCTS = items;
+          render();
+        }
+      });
+    }
+  }
 })();

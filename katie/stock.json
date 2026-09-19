@@ -1,58 +1,121 @@
 {
   "items": [
     {
+      "id": "dumpling",
+      "group": "squishies",
       "name": "Dumpling",
-      "description": "Glow in the dark mystery dumpling",
       "price": "£4",
-      "photos": ["photos/mystery-dumpling.jpeg"]
+      "meta": "Glow in the dark mystery dumpling",
+      "photos": ["photos/mystery-dumpling.jpeg"],
+      "inStock": true
     },
     {
+      "id": "mini-pack",
+      "group": "squishies",
       "name": "4 pack of mini squishies",
-      "description": "Four mini squishies in a pack.",
       "price": "Email for price",
-      "photos": ["photos/4-pack-of-mini-squishies.jpeg"]
+      "meta": "Four mini squishies in a pack.",
+      "photos": ["photos/4-pack-of-mini-squishies.jpeg"],
+      "inStock": true
     },
     {
+      "id": "santa-popit",
+      "group": "squishies",
       "name": "Santa popit",
-      "description": "Red and white popit",
       "price": "£5.49",
-      "photos": ["photos/santa-popit.jpeg"]
+      "meta": "Red and white popit",
+      "photos": ["photos/santa-popit.jpeg"],
+      "inStock": true
     },
     {
+      "id": "popit",
+      "group": "squishies",
       "name": "Popit",
-      "description": "Fidget dice popit",
       "price": "£4.99",
-      "photos": ["photos/popit-die.jpeg"]
+      "meta": "Fidget dice popit",
+      "photos": ["photos/popit-die.jpeg"],
+      "inStock": true
     },
     {
+      "id": "fidget-spinner",
+      "group": "squishies",
       "name": "Fidget spinner",
-      "description": "Earth fidget spinner",
       "price": "£3.99",
-      "photos": ["photos/earth-fidget-spinner.jpeg"]
+      "meta": "Earth fidget spinner",
+      "photos": ["photos/earth-fidget-spinner.jpeg"],
+      "inStock": true
     },
     {
+      "id": "cheese",
+      "group": "squishies",
       "name": "Cheese",
-      "description": "Super slow-rise cheese",
       "price": "£4.99",
-      "photos": ["photos/slowrise-cheese.jpeg"]
+      "meta": "Super slow-rise cheese",
+      "photos": ["photos/slowrise-cheese.jpeg"],
+      "inStock": true
     },
     {
+      "id": "balloon-squishies",
+      "group": "homemade",
       "name": "Homemade balloon squishies",
-      "description": "Homemade balloon squishies.",
       "price": "50p",
-      "photos": []
+      "meta": "Homemade balloon squishies.",
+      "photos": [],
+      "inStock": true
     },
     {
+      "id": "homemade-squishie",
+      "group": "homemade",
       "name": "Homemade squishie",
-      "description": "Homemade squishie.",
       "price": "£2",
-      "photos": []
+      "meta": "Homemade squishie.",
+      "photos": [],
+      "inStock": true
     },
     {
+      "id": "squishie-skin",
+      "group": "homemade",
       "name": "Squishie skin",
-      "description": "Squishie skin.",
       "price": "£1",
-      "photos": []
+      "meta": "Squishie skin.",
+      "photos": [],
+      "inStock": true
+    },
+    {
+      "id": "water-slime",
+      "group": "slime",
+      "name": "Water slime",
+      "price": "Email for price",
+      "meta": "At some point. Matches the photo.",
+      "photos": [],
+      "inStock": true
+    },
+    {
+      "id": "cloud-slime",
+      "group": "slime",
+      "name": "Cloud slime",
+      "price": "Email for price",
+      "meta": "At some point. Matches the photo.",
+      "photos": [],
+      "inStock": true
+    },
+    {
+      "id": "normal-slime",
+      "group": "slime",
+      "name": "Normal slime",
+      "price": "Email for price",
+      "meta": "A few for sale.",
+      "photos": [],
+      "inStock": true
+    },
+    {
+      "id": "homemade-slime",
+      "group": "slime",
+      "name": "Homemade slime",
+      "price": "Email for price",
+      "meta": "There might be homemade slimes too.",
+      "photos": [],
+      "inStock": true
     }
   ]
 }

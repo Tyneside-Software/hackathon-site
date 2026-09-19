@@ -373,6 +373,33 @@ body.shop::before {
   font-weight: 800;
   color: #b12704;
 }
+.stock {
+  display: inline-block;
+  margin-top: 0.35rem;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 0.18rem 0.55rem;
+  border-radius: 999px;
+}
+.stock.is-in {
+  background: #dcfce7;
+  color: #166534;
+}
+.stock.is-out {
+  background: #fee2e2;
+  color: #991b1b;
+}
+.product.is-out {
+  opacity: 0.78;
+}
+.buy.is-off {
+  background: #e5e5e5;
+  color: #666;
+  pointer-events: none;
+  cursor: default;
+}
 .product h2 {
   font-size: 0.92rem;
   font-weight: 650;
@@ -433,3 +460,165 @@ body.shop::before {
 }
 .foot a { color: var(--muted); text-decoration: none; font-weight: 650; }
 .foot a:hover { color: var(--ink); }
+
+.admin-gate {
+  max-width: 26rem;
+  margin: 3rem auto 2rem;
+  padding: 1.4rem 1.3rem 1.5rem;
+  background:
+    linear-gradient(#fff, #fff) padding-box,
+    var(--rainbow) border-box;
+  border: 5px solid transparent;
+  border-radius: 16px;
+  text-align: center;
+}
+.admin-gate h1 {
+  font-size: 1.6rem;
+  letter-spacing: -0.03em;
+  margin-bottom: 0.35rem;
+}
+.admin-gate p { color: var(--muted); margin-bottom: 0.9rem; }
+.admin-gate input {
+  width: 100%;
+  border: 3px solid var(--navy);
+  border-radius: 8px;
+  padding: 0.7rem 0.8rem;
+  font: inherit;
+  margin-bottom: 0.7rem;
+}
+.admin-gate button,
+.admin-actions button,
+.admin-card .remove,
+.admin-add {
+  border: 0;
+  background: var(--pink);
+  color: #fff;
+  font: inherit;
+  font-weight: 800;
+  padding: 0.55rem 1rem;
+  border-radius: 999px;
+  cursor: pointer;
+}
+.admin-gate button:hover,
+.admin-actions button:hover,
+.admin-add:hover { background: var(--pink-deep); }
+.admin-error {
+  color: #991b1b;
+  font-weight: 700;
+  margin: 0.7rem 0 0;
+}
+.admin-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem 0.75rem;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0.4rem 0 1.1rem;
+}
+.admin-actions { display: flex; flex-wrap: wrap; gap: 0.45rem; }
+.admin-actions .ghost,
+.admin-card .remove {
+  background: #fff;
+  color: var(--ink);
+  border: 2px solid var(--line);
+}
+.admin-actions .ghost:hover { background: #ffe4f3; color: var(--pink-deep); }
+.admin-card .remove { background: #fff; color: #991b1b; border-color: #fecaca; }
+.admin-card .remove:hover { background: #fee2e2; }
+.admin-status {
+  font-weight: 750;
+  font-size: 0.88rem;
+  color: #166534;
+}
+.admin-status.is-warn { color: #9a3412; }
+.admin-hint {
+  color: var(--muted);
+  font-size: 0.9rem;
+  max-width: 46rem;
+  margin-bottom: 1rem;
+}
+.admin-list { display: grid; gap: 1rem; }
+.admin-card {
+  background:
+    linear-gradient(#fff, #fff) padding-box,
+    var(--rainbow) border-box;
+  border: 5px solid transparent;
+  border-radius: 16px;
+  padding: 0.9rem;
+  display: grid;
+  grid-template-columns: 7.5rem 1fr;
+  gap: 0.85rem 1rem;
+}
+@media (max-width: 640px) {
+  .admin-card { grid-template-columns: 1fr; }
+}
+.admin-preview {
+  aspect-ratio: 1 / 1;
+  background: #f3f3f3;
+  border-radius: 10px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.admin-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.admin-preview .empty {
+  text-align: center;
+  color: #8a8a8a;
+  font-size: 0.78rem;
+  font-weight: 650;
+  padding: 0.5rem;
+}
+.admin-fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.55rem 0.7rem;
+}
+@media (max-width: 640px) {
+  .admin-fields { grid-template-columns: 1fr; }
+}
+.admin-fields label {
+  display: grid;
+  gap: 0.2rem;
+  font-size: 0.78rem;
+  font-weight: 750;
+  color: var(--muted);
+}
+.admin-fields .wide { grid-column: 1 / -1; }
+.admin-fields input,
+.admin-fields select,
+.admin-fields textarea {
+  font: inherit;
+  font-weight: 500;
+  color: var(--ink);
+  border: 2px solid var(--line);
+  border-radius: 8px;
+  padding: 0.45rem 0.55rem;
+  width: 100%;
+}
+.admin-fields textarea { min-height: 4.2rem; resize: vertical; }
+.admin-check {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.92rem;
+  font-weight: 750;
+  color: var(--ink);
+  margin-top: 0.35rem;
+}
+.admin-check input { width: 1.05rem; height: 1.05rem; }
+.admin-card-foot {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: flex-end;
+}
+.admin-add {
+  margin: 0.2rem 0 1.5rem;
+  background: var(--navy);
+}
+.admin-add:hover { background: var(--purple); }
