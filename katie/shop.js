@@ -400,8 +400,9 @@
     var btn = document.querySelector("[data-mode-toggle]");
     if (btn) {
       btn.classList.toggle("is-on", on);
+      btn.textContent = on ? "Light mode" : "Dark mode";
       btn.setAttribute("aria-pressed", on ? "true" : "false");
-      btn.title = on ? "Turn dark mode off" : "Turn dark mode on";
+      btn.title = on ? "Turn light mode on" : "Turn dark mode on";
     }
   }
 

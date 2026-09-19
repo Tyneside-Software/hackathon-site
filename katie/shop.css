@@ -4,7 +4,7 @@
   --ink: #111111;
   --muted: #5c5c5c;
   --line: #f0d4e8;
-  --panel: #fff;
+  --panel: #f0c0e5;
   --purple: #6d28d9;
   --blue: #2563eb;
   --pink: #ff4da6;
@@ -20,6 +20,16 @@
     #3b82f6 66%,
     #8b5cf6 83%,
     #ec4899 100%
+  );
+  --rainbow-pastel: linear-gradient(
+    90deg,
+    #fecaca 0%,
+    #fed7aa 16%,
+    #fef08a 33%,
+    #bbf7d0 50%,
+    #bfdbfe 66%,
+    #ddd6fe 83%,
+    #fbcfe8 100%
   );
 }
 
@@ -81,7 +91,7 @@ body.shop::before {
 }
 
 .top {
-  background: #fff;
+  background: #f0c0e5;
   position: sticky;
   top: 0;
   z-index: 20;
@@ -149,7 +159,7 @@ body.shop::before {
   border: 3px solid var(--navy);
   border-radius: 8px;
   overflow: hidden;
-  background: #fff;
+  background: #f0c0e5;
 }
 
 .search input {
@@ -160,6 +170,7 @@ body.shop::before {
   font: inherit;
   font-size: 1rem;
   outline: none;
+  background: #f0c0e5;
 }
 
 .search button {
@@ -212,9 +223,9 @@ body.shop::before {
   top: 0.85rem;
   left: 0.7rem;
   z-index: 60;
-  border: 4px solid #9ca3af;
-  background: #c5c5c5;
-  color: #6b7280;
+  border: 4px solid #fff;
+  background: var(--rainbow-pastel);
+  color: #4c1d95;
   font: inherit;
   font-size: 1.05rem;
   font-weight: 800;
@@ -222,13 +233,9 @@ body.shop::before {
   padding: 0.65rem 1.15rem;
   border-radius: 999px;
   cursor: pointer;
-  box-shadow: 0 8px 20px rgba(17, 17, 17, 0.2);
-  filter: grayscale(1);
-  opacity: 0.82;
+  box-shadow: 0 8px 20px rgba(17, 17, 17, 0.18);
 }
 .mode-toggle.is-on {
-  filter: none;
-  opacity: 1;
   border: 4px solid #fff;
   background: var(--rainbow);
   color: #111;
@@ -342,7 +349,7 @@ html.is-dark .foot a { color: #fda4af; }
   display: none;
   margin: 1rem 0;
   padding: 1rem 1.1rem;
-  background: #fff;
+  background: #f0c0e5;
   border: 2px dashed var(--pink);
   border-radius: 12px;
   font-weight: 700;
@@ -406,7 +413,7 @@ html.is-dark .foot a { color: #fda4af; }
 .product {
   min-width: 0;
   scroll-snap-align: start;
-  background: #fff;
+  background: #f0c0e5;
   border: 5px solid #782d87;
   border-radius: 16px;
   padding: 0.7rem 0.7rem 0.85rem;
@@ -461,7 +468,7 @@ html.is-dark .foot a { color: #fda4af; }
   width: 2rem;
   height: 2rem;
   border: 1px solid #ddd;
-  background: #fff;
+  background: #f0c0e5;
   cursor: pointer;
   font-size: 1rem;
   line-height: 1;
@@ -568,12 +575,11 @@ a.more-card .meta {
 .policies {
   margin-top: 2.2rem;
   padding: 1.1rem 1.15rem;
-  background: #fff;
   border-radius: 14px;
   color: var(--muted);
   font-size: 0.85rem;
   background:
-    linear-gradient(#fff, #fff) padding-box,
+    linear-gradient(#f0c0e5, #f0c0e5) padding-box,
     var(--rainbow) border-box;
   border: 4px solid transparent;
 }
@@ -607,7 +613,7 @@ a.more-card .meta {
   margin: 2.4rem auto 2rem;
   padding: 1.4rem 1.3rem 1.5rem;
   background:
-    linear-gradient(#fff, #fff) padding-box,
+    linear-gradient(#f0c0e5, #f0c0e5) padding-box,
     var(--rainbow) border-box;
   border: 5px solid transparent;
   border-radius: 16px;
@@ -674,12 +680,12 @@ a.more-card .meta {
 .admin-actions { display: flex; flex-wrap: wrap; gap: 0.45rem; }
 .admin-actions .ghost,
 .admin-card .remove {
-  background: #fff;
+  background: #f0c0e5;
   color: var(--ink);
   border: 2px solid var(--line);
 }
 .admin-actions .ghost:hover { background: #ffe4f3; color: var(--pink-deep); }
-.admin-card .remove { background: #fff; color: #991b1b; border-color: #fecaca; }
+.admin-card .remove { background: #f0c0e5; color: #991b1b; border-color: #fecaca; }
 .admin-card .remove:hover { background: #fee2e2; }
 .admin-status {
   font-weight: 750;
@@ -696,7 +702,7 @@ a.more-card .meta {
 .admin-list { display: grid; gap: 1rem; }
 .admin-card {
   background:
-    linear-gradient(#fff, #fff) padding-box,
+    linear-gradient(#f0c0e5, #f0c0e5) padding-box,
     var(--rainbow) border-box;
   border: 5px solid transparent;
   border-radius: 16px;
@@ -743,7 +749,7 @@ a.more-card .meta {
   width: 2.6rem;
   height: 2.6rem;
   border-radius: 50%;
-  background: #fff;
+  background: #f0c0e5;
   color: var(--ink);
   box-shadow: 0 2px 10px rgba(17, 17, 17, 0.22);
   display: flex;
