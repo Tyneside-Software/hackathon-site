@@ -118,6 +118,7 @@ body.shop::before {
   text-decoration: none;
   color: inherit;
   margin-bottom: 0.75rem;
+  animation: shop-bob 2.2s ease-in-out infinite;
 }
 
 .brand-row:hover { text-decoration: none; color: inherit; }
@@ -136,8 +137,8 @@ body.shop::before {
 
 .brand-row > span:not(.giant-heart) {
   display: inline-block;
+  transform: rotate(-6deg);
   transform-origin: left center;
-  animation: shop-bob 2.2s ease-in-out infinite;
 }
 
 .shop-name {
@@ -179,15 +180,12 @@ body.shop::before {
 }
 
 @keyframes shop-bob {
-  0%, 100% { transform: rotate(-6deg) translateY(0); }
-  50% { transform: rotate(-6deg) translateY(-0.55rem); }
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-0.55rem); }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .brand-row > span:not(.giant-heart) {
-    animation: none;
-    transform: rotate(-6deg);
-  }
+  .brand-row { animation: none; }
 }
 
 .search {
