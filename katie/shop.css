@@ -134,8 +134,14 @@ body.shop::before {
   display: inline-block;
 }
 
-.shop-name {
+.brand-row > span:not(.giant-heart) {
   display: inline-block;
+  transform-origin: left center;
+  animation: shop-bob 2.2s ease-in-out infinite;
+}
+
+.shop-name {
+  display: block;
   font-family: Fredoka, "Segoe UI Rounded", "Arial Rounded MT Bold", sans-serif;
   font-size: clamp(2.1rem, 7vw, 3.6rem);
   font-weight: 700;
@@ -145,7 +151,6 @@ body.shop::before {
   background: none;
   -webkit-background-clip: unset;
   background-clip: unset;
-  transform: rotate(-6deg);
   text-shadow:
     0 -2px 0 #ffd6ec,
     0 -1px 0 #ffb3d9,
@@ -158,14 +163,31 @@ body.shop::before {
 
 .shop-by {
   display: block;
-  margin-top: 0.2rem;
+  margin-top: -0.05rem;
+  font-family: Fredoka, "Segoe UI Rounded", "Arial Rounded MT Bold", sans-serif;
   font-size: 0.95rem;
   font-weight: 700;
-  letter-spacing: 0.04em;
-  color: var(--pink-deep);
+  letter-spacing: 0.02em;
+  color: #ff4da6;
   background: none;
   -webkit-background-clip: unset;
   background-clip: unset;
+  text-shadow:
+    0 -1px 0 #ffd6ec,
+    0 2px 0 #db2777,
+    0 4px 8px rgba(219, 39, 119, 0.35);
+}
+
+@keyframes shop-bob {
+  0%, 100% { transform: rotate(-6deg) translateY(0); }
+  50% { transform: rotate(-6deg) translateY(-0.55rem); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .brand-row > span:not(.giant-heart) {
+    animation: none;
+    transform: rotate(-6deg);
+  }
 }
 
 .search {
