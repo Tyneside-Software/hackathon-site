@@ -436,14 +436,19 @@
     var missing = view.querySelector("[data-product-missing]");
     var oos = view.querySelector("[data-product-oos]");
     var body = view.querySelector("[data-product-view]");
+    function showNote(el, on) {
+      if (!el) return;
+      el.hidden = !on;
+      el.classList.toggle("is-on", !!on);
+    }
     if (!item) {
-      if (missing) missing.hidden = false;
-      if (oos) oos.hidden = true;
+      showNote(missing, true);
+      showNote(oos, false);
       if (body) body.hidden = true;
       return;
     }
-    if (missing) missing.hidden = true;
-    if (oos) oos.hidden = item.inStock;
+    showNote(missing, false);
+    showNote(oos, !(item.inStock && item.stock > 0));
     if (body) body.hidden = false;
     document.title = item.name + " · fidget squish";
     var gallery = view.querySelector("[data-pdp-gallery]");
