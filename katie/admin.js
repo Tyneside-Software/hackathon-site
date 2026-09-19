@@ -186,8 +186,8 @@
     }
     var name = file.name || "";
     var type = file.type || "";
-    var looksImage = type.indexOf("image/") === 0 || /\.(jpe?g|png|gif|webp|heic|heif|bmp)$/i.test(name);
-    if (!looksImage) {
+    var looksImage = !type || type.indexOf("image/") === 0 || /\.(jpe?g|png|gif|webp|heic|heif|bmp)$/i.test(name);
+    if (type && type.indexOf("image/") !== 0 && !/\.(jpe?g|png|gif|webp|heic|heif|bmp)$/i.test(name)) {
       done(null, "Please pick a picture.");
       return;
     }
@@ -280,6 +280,7 @@
     }
     if (list) {
       list.addEventListener("input", function (e) {
+        if (e.target.matches("[data-photo-file], [data-photo-files]")) return;
         var card = e.target.closest(".admin-card");
         if (!card) return;
         readCard(card);
@@ -294,9 +295,9 @@
         var card = e.target.closest(".admin-card");
         if (!card) return;
         if (e.target.matches("[data-photo-file], [data-photo-files]")) {
-          var files = e.target.files;
+          var files = Array.prototype.slice.call(e.target.files || []);
           e.target.value = "";
-          if (files && files.length) addPhotos(card, files);
+          if (files.length) addPhotos(card, files);
           return;
         }
         readCard(card);
