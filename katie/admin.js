@@ -4,13 +4,24 @@
 
   var items = [];
   var saveTimer = 0;
-  var lock = document.querySelector("[data-lock]");
-  var editor = document.querySelector("[data-editor]");
-  var list = document.querySelector("[data-list]");
-  var statusEl = document.querySelector("[data-status]");
-  var gate = document.querySelector("[data-gate]");
-  var errorEl = document.querySelector("[data-error]");
-  var passwordInput = document.getElementById("pw");
+  var bound = false;
+  var lock;
+  var editor;
+  var list;
+  var statusEl;
+  var gate;
+  var errorEl;
+  var passwordInput;
+
+  function cacheEls() {
+    lock = document.querySelector("[data-lock]");
+    editor = document.querySelector("[data-editor]");
+    list = document.querySelector("[data-list]");
+    statusEl = document.querySelector("[data-status]");
+    gate = document.querySelector("[data-gate]");
+    errorEl = document.querySelector("[data-error]");
+    passwordInput = document.getElementById("pw");
+  }
 
   function setStatus(text, warn) {
     if (!statusEl) return;
@@ -99,6 +110,7 @@
 
   function persist(message) {
     var result = shop.writeLocal(items);
+    if (shop.refresh) shop.refresh(items);
     if (result && result.error) setStatus(result.error, true);
     else setStatus(message || "Saved on this computer.");
   }
@@ -205,57 +217,6 @@
     });
   }
 
-  if (gate) {
-    gate.addEventListener("submit", function (e) {
-      e.preventDefault();
-      if (shop.passwordOk(passwordInput && passwordInput.value)) {
-        shop.setAdmin(true);
-        if (errorEl) errorEl.hidden = true;
-        if (passwordInput) passwordInput.value = "";
-        openEditor();
-      } else if (errorEl) {
-        errorEl.hidden = false;
-      }
-    });
-  }
-
-  if (list) {
-    list.addEventListener("input", function (e) {
-      var card = e.target.closest(".admin-card");
-      if (!card) return;
-      readCard(card);
-      if (e.target.dataset.field === "photos") {
-        setPreview(card, items[Number(card.dataset.index)]);
-      }
-      scheduleSave();
-    });
-    list.addEventListener("change", function (e) {
-      var card = e.target.closest(".admin-card");
-      if (!card) return;
-      if (e.target.matches("[data-photo-file]")) {
-        var file = e.target.files && e.target.files[0];
-        e.target.value = "";
-        if (file) replacePhoto(card, file);
-        return;
-      }
-      readCard(card);
-      if (e.target.dataset.field === "group") renderList();
-      scheduleSave();
-    });
-    list.addEventListener("click", function (e) {
-      var btn = e.target.closest("[data-remove]");
-      if (!btn) return;
-      var card = btn.closest(".admin-card");
-      var index = Number(card && card.dataset.index);
-      var item = items[index];
-      if (!item) return;
-      if (!confirm("Remove “" + item.name + "” from the shop?")) return;
-      items.splice(index, 1);
-      persist("Removed “" + item.name + "”.");
-      renderList();
-    });
-  }
-
   function addItem() {
     items.push(shop.normalize({
       name: "New item",
@@ -272,46 +233,148 @@
     }
   }
 
-  document.querySelectorAll("[data-add]").forEach(function (btn) {
-    btn.addEventListener("click", addItem);
-  });
-
-  var downloadBtn = document.querySelector("[data-download]");
-  if (downloadBtn) {
-    downloadBtn.addEventListener("click", function () {
-      var payload = shop.writeLocal(items);
-      var blob = new Blob([JSON.stringify({ items: payload.items }, null, 2)], { type: "application/json" });
-      var a = document.createElement("a");
-      a.href = URL.createObjectURL(blob);
-      a.download = "stock.json";
-      a.click();
-      URL.revokeObjectURL(a.href);
-      setStatus("Downloaded stock.json. Replace katie/stock.json and push to update the live shop for everyone.");
-    });
+  function panelHtml() {
+    return (
+      '<div class="admin-bar">' +
+        "<h2>Shop admin</h2>" +
+        '<div data-lock>' +
+          '<form data-gate>' +
+            '<label class="sr-only" for="pw">Password</label>' +
+            '<input id="pw" name="password" type="password" autocomplete="current-password" required>' +
+            '<button type="submit">Open</button>' +
+          "</form>" +
+          '<p class="admin-error" data-error hidden>Wrong password.</p>' +
+        "</div>" +
+      "</div>" +
+      '<div data-editor hidden>' +
+        '<div class="admin-toolbar">' +
+          '<p class="admin-status" data-status>Ready.</p>' +
+          '<div class="admin-actions">' +
+            '<button type="button" data-add>Add item</button>' +
+            '<button type="button" class="ghost" data-download>Download catalog</button>' +
+            '<button type="button" class="ghost" data-reset>Reset to website catalog</button>' +
+            '<button type="button" class="ghost" data-logout>Log out</button>' +
+          "</div>" +
+        "</div>" +
+        '<p class="admin-hint">Tap the pencil on a picture to replace it. On a phone that opens your gallery; on a computer it opens picture files in File Explorer. Changes save on this computer and show in the shop straight away.</p>' +
+        '<div class="admin-list" data-list></div>' +
+        '<button type="button" class="admin-add" data-add>Add another item</button>' +
+      "</div>"
+    );
   }
 
-  var resetBtn = document.querySelector("[data-reset]");
-  if (resetBtn) {
-    resetBtn.addEventListener("click", function () {
-      if (!confirm("Throw away the catalog saved on this computer and reload the website catalog?")) return;
-      shop.clearLocal();
-      shop.fetchStock(function (loaded) {
-        items = (loaded && loaded.length ? loaded : shop.defaultItems()).map(shop.normalize);
-        renderList();
-        setStatus("Reset to the website catalog.", true);
+  function bind() {
+    if (bound) return;
+    bound = true;
+    if (gate) {
+      gate.addEventListener("submit", function (e) {
+        e.preventDefault();
+        if (shop.passwordOk(passwordInput && passwordInput.value)) {
+          shop.setAdmin(true);
+          if (errorEl) errorEl.hidden = true;
+          if (passwordInput) passwordInput.value = "";
+          openEditor();
+        } else if (errorEl) {
+          errorEl.hidden = false;
+        }
       });
+    }
+    if (list) {
+      list.addEventListener("input", function (e) {
+        var card = e.target.closest(".admin-card");
+        if (!card) return;
+        readCard(card);
+        if (e.target.dataset.field === "photos") {
+          setPreview(card, items[Number(card.dataset.index)]);
+        }
+        scheduleSave();
+      });
+      list.addEventListener("change", function (e) {
+        var card = e.target.closest(".admin-card");
+        if (!card) return;
+        if (e.target.matches("[data-photo-file]")) {
+          var file = e.target.files && e.target.files[0];
+          e.target.value = "";
+          if (file) replacePhoto(card, file);
+          return;
+        }
+        readCard(card);
+        if (e.target.dataset.field === "group") renderList();
+        scheduleSave();
+      });
+      list.addEventListener("click", function (e) {
+        var btn = e.target.closest("[data-remove]");
+        if (!btn) return;
+        var card = btn.closest(".admin-card");
+        var index = Number(card && card.dataset.index);
+        var item = items[index];
+        if (!item) return;
+        if (!confirm("Remove “" + item.name + "” from the shop?")) return;
+        items.splice(index, 1);
+        persist("Removed “" + item.name + "”.");
+        renderList();
+      });
+    }
+    document.querySelectorAll("[data-add]").forEach(function (btn) {
+      btn.addEventListener("click", addItem);
     });
+    var downloadBtn = document.querySelector("[data-download]");
+    if (downloadBtn) {
+      downloadBtn.addEventListener("click", function () {
+        var payload = shop.writeLocal(items);
+        if (shop.refresh) shop.refresh(items);
+        var blob = new Blob([JSON.stringify({ items: payload.items }, null, 2)], { type: "application/json" });
+        var a = document.createElement("a");
+        a.href = URL.createObjectURL(blob);
+        a.download = "stock.json";
+        a.click();
+        URL.revokeObjectURL(a.href);
+        setStatus("Downloaded stock.json. Replace katie/stock.json and push to update the live shop for everyone.");
+      });
+    }
+    var resetBtn = document.querySelector("[data-reset]");
+    if (resetBtn) {
+      resetBtn.addEventListener("click", function () {
+        if (!confirm("Throw away the catalog saved on this computer and reload the website catalog?")) return;
+        shop.clearLocal();
+        shop.fetchStock(function (loaded) {
+          items = (loaded && loaded.length ? loaded : shop.defaultItems()).map(shop.normalize);
+          renderList();
+          if (shop.refresh) shop.refresh(items);
+          setStatus("Reset to the website catalog.", true);
+        });
+      });
+    }
+    var logoutBtn = document.querySelector("[data-logout]");
+    if (logoutBtn) {
+      logoutBtn.addEventListener("click", function () {
+        shop.setAdmin(false);
+        showEditor(false);
+        if (passwordInput) passwordInput.focus();
+      });
+    }
   }
 
-  var logoutBtn = document.querySelector("[data-logout]");
-  if (logoutBtn) {
-    logoutBtn.addEventListener("click", function () {
-      shop.setAdmin(false);
-      showEditor(false);
-      if (passwordInput) passwordInput.focus();
-    });
+  function mount() {
+    var main = document.querySelector("main.wrap");
+    if (!main) return;
+    if (!document.getElementById("admin")) {
+      var section = document.createElement("section");
+      section.id = "admin";
+      section.className = "admin-panel";
+      section.setAttribute("aria-label", "Shop admin");
+      section.innerHTML = panelHtml();
+      main.insertBefore(section, main.firstChild);
+    }
+    cacheEls();
+    bind();
+    if (shop.isAdmin()) openEditor();
+    else showEditor(false);
+    if (location.hash === "#admin") {
+      var panel = document.getElementById("admin");
+      if (panel) panel.scrollIntoView();
+    }
   }
 
-  if (shop.isAdmin()) openEditor();
-  else showEditor(false);
+  mount();
 })();

@@ -303,6 +303,11 @@
     });
   }
 
+  function refresh(next) {
+    if (next) PRODUCTS = next.map(normalize);
+    render();
+  }
+
   window.FidgetSquish = {
     STORAGE_KEY: STORAGE_KEY,
     defaultItems: defaultItems,
@@ -315,6 +320,7 @@
     setAdmin: setAdmin,
     loadCatalog: loadCatalog,
     fetchStock: fetchStock,
+    refresh: refresh,
     esc: esc,
     assetUrl: assetUrl,
     newId: newId

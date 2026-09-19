@@ -461,32 +461,60 @@ body.shop::before {
 .foot a { color: var(--muted); text-decoration: none; font-weight: 650; }
 .foot a:hover { color: var(--ink); }
 
-.admin-gate {
-  max-width: 26rem;
-  margin: 3rem auto 2rem;
-  padding: 1.4rem 1.3rem 1.5rem;
+.admin-panel {
+  margin: 0 0 1.35rem;
+  padding: 0.85rem 1rem 0.95rem;
   background:
     linear-gradient(#fff, #fff) padding-box,
     var(--rainbow) border-box;
   border: 5px solid transparent;
   border-radius: 16px;
-  text-align: center;
+  scroll-margin-top: 9rem;
 }
-.admin-gate h1 {
-  font-size: 1.6rem;
+.admin-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.75rem;
+}
+.admin-bar h2 {
+  font-size: 1.2rem;
   letter-spacing: -0.03em;
-  margin-bottom: 0.35rem;
+  margin: 0 auto 0 0;
 }
-.admin-gate p { color: var(--muted); margin-bottom: 0.9rem; }
-.admin-gate input {
-  width: 100%;
+.admin-bar [data-lock] {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem 0.55rem;
+  flex: 1;
+  min-width: 13rem;
+}
+.admin-bar [data-lock][hidden],
+.admin-panel [data-editor][hidden] {
+  display: none;
+}
+.admin-bar form {
+  display: flex;
+  flex: 1;
+  gap: 0.4rem;
+  min-width: 12rem;
+  max-width: 26rem;
+}
+.admin-bar input[type="password"] {
+  flex: 1;
+  min-width: 0;
   border: 3px solid var(--navy);
   border-radius: 8px;
-  padding: 0.7rem 0.8rem;
+  padding: 0.5rem 0.7rem;
   font: inherit;
-  margin-bottom: 0.7rem;
 }
-.admin-gate button,
+.admin-panel [data-editor] {
+  margin-top: 0.85rem;
+  padding-top: 0.85rem;
+  border-top: 2px dashed var(--line);
+}
+.admin-bar button,
 .admin-actions button,
 .admin-card .remove,
 .admin-add {
@@ -499,7 +527,7 @@ body.shop::before {
   border-radius: 999px;
   cursor: pointer;
 }
-.admin-gate button:hover,
+.admin-bar button:hover,
 .admin-actions button:hover,
 .admin-add:hover { background: var(--pink-deep); }
 .admin-error {
