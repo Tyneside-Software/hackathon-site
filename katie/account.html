@@ -6,7 +6,7 @@
   <title>Account · fidget squish</title>
   <meta name="description" content="Log in or create a fidget squish account.">
   <link rel="icon" href="logo.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="shop.css?v=20260920admins">
+  <link rel="stylesheet" href="shop.css?v=20260920badge">
   <script>try{if(localStorage.getItem("fidget-squish-dark")==="1")document.documentElement.classList.add("is-dark")}catch(e){}</script>
   <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
@@ -109,6 +109,10 @@
           <span>Change picture</span>
           <input name="photo" type="file" accept="image/*">
         </label>
+        <div class="profile-who">
+          <p class="profile-handle" data-profile-name></p>
+          <span class="admin-badge" data-admin-badge hidden>Admin</span>
+        </div>
         <label>Username <span>(letters, numbers, dots, _ and - only — no spaces)</span>
           <input name="username" type="text" minlength="3" maxlength="64" pattern="[A-Za-z0-9._-]+" title="Usernames can only use letters, numbers, dots, underscores and hyphens — no spaces." required>
         </label>
@@ -133,6 +137,7 @@
         <img data-picked-pic alt="" hidden>
         <span class="friend-ph" data-picked-ph aria-hidden="true">💗</span>
         <strong data-picked-name></strong>
+        <span class="admin-badge" data-picked-admin hidden>Admin</span>
         <button type="button" class="auth-go" data-friend-add>Add friend</button>
       </div>
       <p class="auth-status" data-friend-status hidden></p>
@@ -150,7 +155,7 @@
     </div>
   </footer>
   <script src="../config.js"></script>
-  <script src="shop.js?v=20260920admins"></script>
-  <script src="account.js?v=20260920friends"></script>
+  <script src="shop.js?v=20260920badge"></script>
+  <script src="account.js?v=20260920badge"></script>
 </body>
 </html>

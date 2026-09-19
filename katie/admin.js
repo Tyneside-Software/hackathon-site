@@ -271,6 +271,11 @@
     return '<span class="friend-ph" aria-hidden="true">💗</span>';
   }
 
+  function adminWho(u) {
+    var badge = u && u.admin ? '<span class="admin-badge">Admin</span>' : "";
+    return '<span class="who"><span class="name">' + shop.esc(u.username) + "</span>" + badge + "</span>";
+  }
+
   function setAdminPic(imgSel, phSel, src) {
     var img = document.querySelector(imgSel);
     var ph = document.querySelector(phSel);
@@ -306,6 +311,8 @@
     var nameEl = document.querySelector("[data-admin-picked-name]");
     if (nameEl) nameEl.textContent = adminPicked.username || "";
     setAdminPic("[data-admin-picked-pic]", "[data-admin-picked-ph]", adminPicked.photo || "");
+    var badge = document.querySelector("[data-admin-picked-badge]");
+    if (badge) badge.hidden = !adminPicked.admin;
     var addBtn = document.querySelector("[data-admin-add]");
     if (addBtn) {
       var already = !!(adminPicked.admin || adminNames[adminPicked.username]);
@@ -331,7 +338,7 @@
       return (
         '<button type="button" class="friend-hit' + on + '" data-user="' + shop.esc(u.username) + '">' +
           adminAvatar(u.photo) +
-          '<span class="name">' + shop.esc(u.username) + "</span>" +
+          adminWho(u) +
           tag +
         "</button>"
       );
@@ -366,7 +373,7 @@
           return (
             '<div class="friend-hit">' +
               adminAvatar(u.photo) +
-              '<span class="name">' + shop.esc(u.username) + "</span>" +
+              adminWho(u) +
               rm +
             "</div>"
           );

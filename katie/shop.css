@@ -1692,6 +1692,42 @@ html.is-dark .about-facts strong { color: #fff; }
   background: linear-gradient(#fff, #fce7f3);
 }
 .profile-pic-wrap input { display: none; }
+.profile-who {
+  display: grid;
+  justify-items: center;
+  gap: 0.28rem;
+  margin: 0.15rem 0 0.85rem;
+  text-align: center;
+}
+.profile-handle {
+  font-weight: 800;
+  font-size: 1.15rem;
+  color: #36042b;
+}
+.admin-badge {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: var(--pink);
+  color: #fff;
+  border-radius: 999px;
+  padding: 0.16rem 0.52rem;
+}
+.friend-hit .who {
+  display: grid;
+  justify-items: start;
+  gap: 0.12rem;
+  flex: 1;
+  min-width: 0;
+}
+.friend-hit .who .name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
+}
 .account-chip {
   display: inline-flex !important;
   align-items: center;
@@ -1724,6 +1760,7 @@ html.is-dark .profile-pic-wrap img,
 html.is-dark .profile-ph { border-color: #fce7f3; }
 html.is-dark .auth-switch { color: #fce7f3; }
 html.is-dark .auth-switch button { color: #ff8ac4; }
+html.is-dark .profile-handle { color: #e9d5ff; }
 .auth-wrap.is-in { max-width: 28rem; }
 .admin-people {
   margin: 1.2rem 0 1.6rem;

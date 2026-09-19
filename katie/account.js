@@ -107,6 +107,10 @@
     profileForm.username.value = user.username || "";
     profileForm.email.value = user.email || "";
     setPic("[data-profile-pic]", "[data-profile-pic-ph]", user.photo || "");
+    var nameEl = document.querySelector("[data-profile-name]");
+    if (nameEl) nameEl.textContent = user.username || "";
+    var badge = document.querySelector("[data-admin-badge]");
+    if (badge) badge.hidden = !user.admin;
     loadFriends();
   }
 
@@ -467,6 +471,11 @@
     return '<span class="friend-ph" aria-hidden="true">💗</span>';
   }
 
+  function whoHtml(u) {
+    var badge = u && u.admin ? '<span class="admin-badge">Admin</span>' : "";
+    return '<span class="who"><span class="name">' + escHtml(u.username) + "</span>" + badge + "</span>";
+  }
+
   function setPicked(user) {
     picked = user || null;
     if (!friendPicked) return;
@@ -478,6 +487,8 @@
     var nameEl = document.querySelector("[data-picked-name]");
     if (nameEl) nameEl.textContent = picked.username || "";
     setPic("[data-picked-pic]", "[data-picked-ph]", picked.photo || "");
+    var badge = document.querySelector("[data-picked-admin]");
+    if (badge) badge.hidden = !picked.admin;
     if (friendAdd) {
       var already = !!(picked.friend || friendNames[picked.username]);
       friendAdd.textContent = already ? "Friends" : "Add friend";
@@ -504,7 +515,7 @@
       return (
         '<button type="button" class="friend-hit' + on + '" data-user="' + escHtml(u.username) + '">' +
           avatarHtml(u.photo) +
-          '<span class="name">' + escHtml(u.username) + "</span>" +
+          whoHtml(u) +
           tag +
         "</button>"
       );
@@ -554,7 +565,7 @@
           return (
             '<div class="friend-hit">' +
               avatarHtml(u.photo) +
-              '<span class="name">' + escHtml(u.username) + "</span>" +
+              whoHtml(u) +
               '<button type="button" class="unfriend" data-unfriend="' + escHtml(u.username) + '">Remove</button>' +
             "</div>"
           );
