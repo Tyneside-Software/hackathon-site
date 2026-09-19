@@ -77,7 +77,8 @@
           '<label class="wide">Extra photo paths <span>(optional, one per line)</span>' +
             '<textarea data-field="photos">' + shop.esc(typedPhotos(item).join("\n")) + "</textarea>" +
           "</label>" +
-          '<label class="admin-check wide"><input data-field="inStock" type="checkbox"' + (item.inStock ? " checked" : "") + "> In stock</label>" +
+          '<label>How many in stock<input data-field="stock" type="number" min="0" step="1" value="' + shop.esc(item.stock) + '"></label>' +
+          '<p class="admin-stock-note wide">' + (item.stock > 0 ? "In stock" : "Out of stock") + "</p>" +
         "</div>" +
         '<div class="admin-card-foot"><button type="button" class="remove" data-remove>Remove</button></div>' +
       "</article>"
@@ -127,7 +128,7 @@
     if (!item) return;
     card.querySelectorAll("[data-field]").forEach(function (field) {
       var key = field.dataset.field;
-      if (key === "inStock") item.inStock = field.checked;
+      if (key === "stock") item.stock = field.value;
       else if (key === "photos") {
         var picked = (item.photos || []).filter(isPickedPhoto);
         item.photos = picked.concat(field.value);
@@ -232,7 +233,7 @@
       meta: "",
       group: "homemade",
       photos: [],
-      inStock: true
+      stock: 1
     }));
     persist("Added a new item. Change the name, price and photo when you have them.");
     renderList();
@@ -264,6 +265,11 @@
         readCard(card);
         if (e.target.dataset.field === "photos") {
           setPreview(card, items[Number(card.dataset.index)]);
+        }
+        if (e.target.dataset.field === "stock") {
+          var note = card.querySelector(".admin-stock-note");
+          var qty = items[Number(card.dataset.index)];
+          if (note && qty) note.textContent = qty.stock > 0 ? "In stock" : "Out of stock";
         }
         scheduleSave();
       });

@@ -29,19 +29,19 @@
 
   function defaultItems() {
     return [
-      { id: "dumpling", group: "squishies", name: "Dumpling", price: "£4", meta: "Glow in the dark mystery dumpling", photos: ["photos/mystery-dumpling.jpeg"], inStock: true },
-      { id: "mini-pack", group: "squishies", name: "4 pack of mini squishies", price: "Email for price", meta: "Four mini squishies in a pack.", photos: ["photos/4-pack-of-mini-squishies.jpeg"], inStock: true },
-      { id: "santa-popit", group: "squishies", name: "Santa popit", price: "£5.49", meta: "Red and white popit", photos: ["photos/santa-popit.jpeg"], inStock: true },
-      { id: "popit", group: "squishies", name: "Popit", price: "£4.99", meta: "Fidget dice popit", photos: ["photos/popit-die.jpeg"], inStock: true },
-      { id: "fidget-spinner", group: "squishies", name: "Fidget spinner", price: "£3.99", meta: "Earth fidget spinner", photos: ["photos/earth-fidget-spinner.jpeg"], inStock: true },
-      { id: "cheese", group: "squishies", name: "Cheese", price: "£4.99", meta: "Super slow-rise cheese", photos: ["photos/slowrise-cheese.jpeg"], inStock: true },
-      { id: "balloon-squishies", group: "homemade", name: "Homemade balloon squishies", price: "50p", meta: "Homemade balloon squishies.", photos: [], inStock: true },
-      { id: "homemade-squishie", group: "homemade", name: "Homemade squishie", price: "£2", meta: "Homemade squishie.", photos: [], inStock: true },
-      { id: "squishie-skin", group: "homemade", name: "Squishie skin", price: "£1", meta: "Squishie skin.", photos: [], inStock: true },
-      { id: "water-slime", group: "slime", name: "Water slime", price: "Email for price", meta: "At some point. Matches the photo.", photos: [], inStock: true },
-      { id: "cloud-slime", group: "slime", name: "Cloud slime", price: "Email for price", meta: "At some point. Matches the photo.", photos: [], inStock: true },
-      { id: "normal-slime", group: "slime", name: "Normal slime", price: "Email for price", meta: "A few for sale.", photos: [], inStock: true },
-      { id: "homemade-slime", group: "slime", name: "Homemade slime", price: "Email for price", meta: "There might be homemade slimes too.", photos: [], inStock: true }
+      { id: "dumpling", group: "squishies", name: "Dumpling", price: "£4", meta: "Glow in the dark mystery dumpling", photos: ["photos/mystery-dumpling.jpeg"], stock: 1 },
+      { id: "mini-pack", group: "squishies", name: "4 pack of mini squishies", price: "Email for price", meta: "Four mini squishies in a pack.", photos: ["photos/4-pack-of-mini-squishies.jpeg"], stock: 1 },
+      { id: "santa-popit", group: "squishies", name: "Santa popit", price: "£5.49", meta: "Red and white popit", photos: ["photos/santa-popit.jpeg"], stock: 1 },
+      { id: "popit", group: "squishies", name: "Popit", price: "£4.99", meta: "Fidget dice popit", photos: ["photos/popit-die.jpeg"], stock: 1 },
+      { id: "fidget-spinner", group: "squishies", name: "Fidget spinner", price: "£3.99", meta: "Earth fidget spinner", photos: ["photos/earth-fidget-spinner.jpeg"], stock: 1 },
+      { id: "cheese", group: "squishies", name: "Cheese", price: "£4.99", meta: "Super slow-rise cheese", photos: ["photos/slowrise-cheese.jpeg"], stock: 1 },
+      { id: "balloon-squishies", group: "homemade", name: "Homemade balloon squishies", price: "50p", meta: "Homemade balloon squishies.", photos: [], stock: 1 },
+      { id: "homemade-squishie", group: "homemade", name: "Homemade squishie", price: "£2", meta: "Homemade squishie.", photos: [], stock: 1 },
+      { id: "squishie-skin", group: "homemade", name: "Squishie skin", price: "£1", meta: "Squishie skin.", photos: [], stock: 1 },
+      { id: "water-slime", group: "slime", name: "Water slime", price: "Email for price", meta: "At some point. Matches the photo.", photos: [], stock: 1 },
+      { id: "cloud-slime", group: "slime", name: "Cloud slime", price: "Email for price", meta: "At some point. Matches the photo.", photos: [], stock: 1 },
+      { id: "normal-slime", group: "slime", name: "Normal slime", price: "Email for price", meta: "A few for sale.", photos: [], stock: 1 },
+      { id: "homemade-slime", group: "slime", name: "Homemade slime", price: "Email for price", meta: "There might be homemade slimes too.", photos: [], stock: 1 }
     ];
   }
 
@@ -73,6 +73,16 @@
     return base + src;
   }
 
+  function stockQty(item) {
+    if (!item) return 0;
+    var raw = item.stock;
+    if (raw == null) raw = item.stockCount;
+    if (raw == null) raw = item.inStock === false ? 0 : 1;
+    var n = parseInt(raw, 10);
+    if (isNaN(n) || n < 0) n = 0;
+    return n;
+  }
+
   function normalize(item) {
     var name = (item && item.name) || "Untitled";
     var photos = item && item.photos;
@@ -90,7 +100,8 @@
       price: (item && item.price) || "Email for price",
       meta: (item && (item.meta || item.description)) || "",
       photos: photos,
-      inStock: !(item && item.inStock === false),
+      stock: stockQty(item),
+      inStock: stockQty(item) > 0,
       mail: (item && item.mail) || ("Order " + name)
     };
   }
@@ -179,13 +190,18 @@
   }
 
   function stockHtml(p) {
-    if (p.group === "homemade") {
-      return p.inStock
-        ? '<p class="stock is-in">In stock</p>'
-        : '<p class="stock is-out">Out of stock</p>';
+    if (p.inStock) {
+      var n = p.stock;
+      var label = n === 1 ? "1 in stock" : n + " in stock";
+      return '<p class="stock is-in">' + label + "</p>";
     }
-    if (!p.inStock) return '<p class="stock is-out">Out of stock</p>';
-    return "";
+    return '<p class="stock is-out">Out of stock</p>';
+  }
+
+  function burstHtml() {
+    var bits = "";
+    for (var i = 0; i < 10; i++) bits += "<span></span>";
+    return '<div class="burst" aria-hidden="true">' + bits + "</div>";
   }
 
   function cardHtml(p) {
@@ -194,7 +210,8 @@
       ? '<a class="buy" href="' + mail + '">Email to buy</a>'
       : '<span class="buy is-off">Out of stock</span>';
     return (
-      '<article class="product' + (p.inStock ? "" : " is-out") + '" data-name="' + esc(p.name) + '">' +
+      '<article class="product' + (p.inStock ? " is-in" : " is-out") + '" data-name="' + esc(p.name) + '">' +
+        (p.inStock ? burstHtml() : "") +
         galleryHtml(p) +
         '<p class="price">' + esc(p.price) + "</p>" +
         stockHtml(p) +

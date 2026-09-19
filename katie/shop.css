@@ -416,6 +416,7 @@ html.is-dark .foot a { color: #fda4af; }
 }
 
 .product {
+  position: relative;
   min-width: 0;
   scroll-snap-align: start;
   background:
@@ -425,6 +426,43 @@ html.is-dark .foot a { color: #fda4af; }
   border-radius: 16px;
   padding: 0.7rem 0.7rem 0.85rem;
   box-shadow: 0 10px 22px rgba(17, 17, 17, 0.08);
+}
+.burst {
+  position: absolute;
+  inset: 0.15rem 0.15rem auto 0.15rem;
+  height: auto;
+  aspect-ratio: 1 / 1;
+  pointer-events: none;
+  z-index: 4;
+}
+.burst span {
+  position: absolute;
+  width: 13px;
+  height: 13px;
+  background: #ffe566;
+  clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+  animation: burst-pop 1.15s ease-in-out infinite;
+  filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.8));
+}
+.burst span:nth-child(odd) { background: #fff7ae; }
+.burst span:nth-child(3n) { background: #ff8ac4; }
+.burst span:nth-child(4n) { background: #72cefc; }
+.burst span:nth-child(1) { top: 4%; left: 8%; }
+.burst span:nth-child(2) { top: 3%; right: 10%; animation-delay: 0.1s; }
+.burst span:nth-child(3) { top: 18%; left: 2%; animation-delay: 0.2s; }
+.burst span:nth-child(4) { top: 16%; right: 3%; animation-delay: 0.3s; }
+.burst span:nth-child(5) { top: 42%; left: 1%; animation-delay: 0.15s; }
+.burst span:nth-child(6) { top: 40%; right: 1%; animation-delay: 0.25s; }
+.burst span:nth-child(7) { top: 68%; left: 3%; animation-delay: 0.35s; }
+.burst span:nth-child(8) { top: 66%; right: 4%; animation-delay: 0.05s; }
+.burst span:nth-child(9) { top: 86%; left: 12%; animation-delay: 0.22s; }
+.burst span:nth-child(10) { top: 84%; right: 12%; animation-delay: 0.32s; }
+@keyframes burst-pop {
+  0%, 100% { transform: scale(0.4) rotate(0deg); opacity: 0.35; }
+  50% { transform: scale(1.2) rotate(22deg); opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .burst span { animation: none; opacity: 0.85; transform: scale(1); }
 }
 
 .gallery {
@@ -821,6 +859,12 @@ a.more-card .meta {
   margin-top: 0.35rem;
 }
 .admin-check input { width: 1.05rem; height: 1.05rem; }
+.admin-stock-note {
+  font-size: 0.8rem;
+  font-weight: 750;
+  color: #166534;
+  margin: 0;
+}
 .admin-card-foot {
   grid-column: 1 / -1;
   display: flex;

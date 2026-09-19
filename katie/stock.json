@@ -7,6 +7,7 @@
       "price": "£4",
       "meta": "Glow in the dark mystery dumpling",
       "photos": ["photos/mystery-dumpling.jpeg"],
+      "stock": 1,
       "inStock": true
     },
     {
@@ -16,6 +17,7 @@
       "price": "Email for price",
       "meta": "Four mini squishies in a pack.",
       "photos": ["photos/4-pack-of-mini-squishies.jpeg"],
+      "stock": 1,
       "inStock": true
     },
     {
@@ -25,6 +27,7 @@
       "price": "£5.49",
       "meta": "Red and white popit",
       "photos": ["photos/santa-popit.jpeg"],
+      "stock": 1,
       "inStock": true
     },
     {
@@ -34,6 +37,7 @@
       "price": "£4.99",
       "meta": "Fidget dice popit",
       "photos": ["photos/popit-die.jpeg"],
+      "stock": 1,
       "inStock": true
     },
     {
@@ -43,6 +47,7 @@
       "price": "£3.99",
       "meta": "Earth fidget spinner",
       "photos": ["photos/earth-fidget-spinner.jpeg"],
+      "stock": 1,
       "inStock": true
     },
     {
@@ -52,6 +57,7 @@
       "price": "£4.99",
       "meta": "Super slow-rise cheese",
       "photos": ["photos/slowrise-cheese.jpeg"],
+      "stock": 1,
       "inStock": true
     },
     {
@@ -61,6 +67,7 @@
       "price": "50p",
       "meta": "Homemade balloon squishies.",
       "photos": [],
+      "stock": 1,
       "inStock": true
     },
     {
@@ -70,6 +77,7 @@
       "price": "£2",
       "meta": "Homemade squishie.",
       "photos": [],
+      "stock": 1,
       "inStock": true
     },
     {
@@ -79,6 +87,7 @@
       "price": "£1",
       "meta": "Squishie skin.",
       "photos": [],
+      "stock": 1,
       "inStock": true
     },
     {
@@ -88,6 +97,7 @@
       "price": "Email for price",
       "meta": "At some point. Matches the photo.",
       "photos": [],
+      "stock": 1,
       "inStock": true
     },
     {
@@ -97,6 +107,7 @@
       "price": "Email for price",
       "meta": "At some point. Matches the photo.",
       "photos": [],
+      "stock": 1,
       "inStock": true
     },
     {
@@ -106,6 +117,7 @@
       "price": "Email for price",
       "meta": "A few for sale.",
       "photos": [],
+      "stock": 1,
       "inStock": true
     },
     {
@@ -115,6 +127,7 @@
       "price": "Email for price",
       "meta": "There might be homemade slimes too.",
       "photos": [],
+      "stock": 1,
       "inStock": true
     }
   ]
