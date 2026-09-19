@@ -137,7 +137,7 @@ body.shop::before {
   font-weight: 800;
   letter-spacing: -0.04em;
   line-height: 0.95;
-  background: linear-gradient(90deg, var(--purple), var(--blue), var(--pink-deep));
+  background: linear-gradient(90deg, #ffb3d9, #ff4da6, #ff8ac4, #db2777);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
