@@ -817,6 +817,7 @@
   var FOUNDER = "lewisthomson";
   var DEFAULT_ADMINS = ["lewisthomson", "katiethomson"];
   var accountBook = { users: [], friends: {}, admins: DEFAULT_ADMINS.slice(), updated: 0 };
+  var photoMap = {};
 
   function emptyAccountBook() {
     return { users: [], friends: {}, admins: DEFAULT_ADMINS.slice(), updated: 0 };
@@ -878,14 +879,22 @@
     return (accountBook.admins || []).indexOf(name) !== -1;
   }
 
+  function photoFor(name) {
+    name = normaliseAccountName(name);
+    var u = findAccount(name);
+    if (u && u.photo) return u.photo;
+    return photoMap[name] || "";
+  }
+
   function publicAccount(u) {
     if (!u) return null;
+    var name = normaliseAccountName(u.username);
     return {
-      username: u.username,
+      username: name || u.username,
       email: u.email || "",
       full_name: u.full_name || null,
-      photo: u.photo || "",
-      admin: isShopAdminName(u.username)
+      photo: u.photo || photoMap[name] || "",
+      admin: isShopAdminName(name || u.username)
     };
   }
 
@@ -955,8 +964,41 @@
           updated: Math.max(file.updated || 0, (local && local.updated) || 0)
         };
         writeAccountBook();
-        if (done) done(accountBook);
+        fetchProfiles().then(function () {
+          if (done) done(accountBook);
+        });
       });
+  }
+
+  function fetchProfiles() {
+    return fetch(apiBase() + "/katie/profiles")
+      .then(function (r) { return r.ok ? r.json() : { users: [] }; })
+      .then(function (data) {
+        ((data && data.users) || []).forEach(function (p) {
+          var name = normaliseAccountName(p && p.username);
+          if (!name || !p.photo) return;
+          photoMap[name] = p.photo;
+          var row = findAccount(name);
+          if (row && !row.photo) row.photo = p.photo;
+        });
+      })
+      .catch(function () {});
+  }
+
+  function publishProfile(user) {
+    if (!user || !user.username) return;
+    var name = normaliseAccountName(user.username);
+    var photo = user.photo || photoFor(name);
+    if (photo) photoMap[name] = photo;
+    fetch(apiBase() + "/katie/profiles", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Accept: "application/json" },
+      body: JSON.stringify({
+        username: name,
+        photo: photo || "",
+        full_name: user.full_name || ""
+      })
+    }).catch(function () {});
   }
 
   function registerLocal(payload) {
@@ -983,7 +1025,9 @@
       var saved = writeAccountBook();
       if (saved.error) throw new Error(saved.error);
       setUserSession(username);
-      return publicAccount(findAccount(username));
+      var me = publicAccount(findAccount(username));
+      publishProfile(me);
+      return me;
     });
   }
 
@@ -993,7 +1037,9 @@
     return hashPass(password, row.salt).then(function (h) {
       if (h !== row.pass) throw new Error("Incorrect email, username or password");
       setUserSession(row.username);
-      return publicAccount(row);
+      var me = publicAccount(row);
+      publishProfile(me);
+      return me;
     });
   }
 
@@ -1027,7 +1073,9 @@
     }
     var saved = writeAccountBook();
     if (saved.error) return Promise.reject(new Error(saved.error));
-    return Promise.resolve(publicAccount(row));
+    var me = publicAccount(row);
+    publishProfile(me);
+    return Promise.resolve(me);
   }
 
   function knownNames() {
@@ -1062,7 +1110,7 @@
       var card = publicAccount(findAccount(name)) || {
         username: name,
         email: "",
-        photo: "",
+        photo: photoFor(name),
         admin: isShopAdminName(name)
       };
       card.friend = friends.indexOf(name) !== -1;
@@ -1077,7 +1125,7 @@
 
   function listFriendsLocal() {
     return friendNamesFor(sessionUsername()).map(function (name) {
-      var card = publicAccount(findAccount(name)) || { username: name, photo: "", admin: isShopAdminName(name) };
+      var card = publicAccount(findAccount(name)) || { username: name, photo: photoFor(name), admin: isShopAdminName(name) };
       card.friend = true;
       return card;
     });
@@ -1110,7 +1158,7 @@
 
   function listAdminsLocal() {
     return (accountBook.admins || []).map(function (name) {
-      var card = publicAccount(findAccount(name)) || { username: name, photo: "", admin: true };
+      var card = publicAccount(findAccount(name)) || { username: name, photo: photoFor(name), admin: true };
       card.admin = true;
       card.founder = name === FOUNDER;
       return card;
