@@ -2,33 +2,51 @@
   <defs>
     <linearGradient id="sky" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0%" stop-color="#4aa3ff"/>
-      <stop offset="42%" stop-color="#2563eb"/>
-      <stop offset="100%" stop-color="#7c3aed"/>
-    </linearGradient>
-    <linearGradient id="pink" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#ff8ac4"/>
+      <stop offset="28%" stop-color="#3b82f6"/>
+      <stop offset="58%" stop-color="#c026d3"/>
       <stop offset="100%" stop-color="#ff4da6"/>
     </linearGradient>
+    <radialGradient id="hot" cx="78%" cy="82%" r="55%">
+      <stop offset="0%" stop-color="#ff4da6" stop-opacity="0.95"/>
+      <stop offset="45%" stop-color="#ff4da6" stop-opacity="0.45"/>
+      <stop offset="100%" stop-color="#ff4da6" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="hot2" cx="18%" cy="12%" r="42%">
+      <stop offset="0%" stop-color="#ff8ac4" stop-opacity="0.85"/>
+      <stop offset="55%" stop-color="#ff4da6" stop-opacity="0.28"/>
+      <stop offset="100%" stop-color="#3b82f6" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="ribbon" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#ffd0ea"/>
+      <stop offset="40%" stop-color="#ff4da6"/>
+      <stop offset="100%" stop-color="#db2777"/>
+    </linearGradient>
+    <filter id="soft" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="22"/>
+    </filter>
+    <filter id="glow" x="-10%" y="-10%" width="120%" height="120%">
+      <feGaussianBlur stdDeviation="6"/>
+    </filter>
   </defs>
   <rect width="1600" height="900" fill="url(#sky)"/>
-  <g fill="none" stroke="url(#pink)" stroke-linecap="round">
-    <path d="M-40 180c120-90 260 40 220 160s-220 80-180 200 240 90 200 210" stroke-width="64" opacity="0.28"/>
-    <path d="M220 40c80 120 260 40 300 180s-140 220 40 300 280-40 360 120" stroke-width="90" opacity="0.22"/>
-    <path d="M980 -40c40 160 260 80 220 240s-260 120-140 260 300 80 240 240" stroke-width="78" opacity="0.26"/>
-    <path d="M1480 80c-140 40-80 220-220 260s-40 220-200 200" stroke-width="70" opacity="0.24"/>
-    <path d="M80 720c160-40 120-220 300-200s180 200 360 140 160-220 340-120" stroke-width="82" opacity="0.3"/>
-    <path d="M700 500c80-140 260-20 240 140s-240 100-180 220" stroke-width="56" opacity="0.34"/>
-    <path d="M1240 640c-120 80-40 200 80 220" stroke-width="48" opacity="0.28"/>
+  <rect width="1600" height="900" fill="url(#hot)"/>
+  <rect width="1600" height="900" fill="url(#hot2)"/>
+  <g filter="url(#soft)" fill="#ff4da6" opacity="0.55">
+    <ellipse cx="240" cy="220" rx="260" ry="180"/>
+    <ellipse cx="1280" cy="720" rx="340" ry="220"/>
+    <ellipse cx="900" cy="160" rx="220" ry="140"/>
+    <ellipse cx="520" cy="760" rx="280" ry="160"/>
   </g>
-  <g fill="#ff4da6">
-    <path d="M180 260c80-10 90 90 20 120-90 40-110-50-70-90 20-20 50-20 50-30z" opacity="0.35"/>
-    <path d="M1180 220c90 10 80 110 0 130-90 20-110-70-60-110 18-16 50-16 60-20z" opacity="0.32"/>
-    <path d="M860 740c70-8 80 80 10 110-80 34-100-46-60-82 16-16 44-16 50-28z" opacity="0.3"/>
-    <path d="M1420 500c60 20 40 90-20 96-70 8-80-60-40-86 16-10 44-8 60-10z" opacity="0.26"/>
+  <g fill="none" stroke="url(#ribbon)" stroke-linecap="round" filter="url(#glow)">
+    <path d="M-60 200c140-110 300 50 250 180s-250 90-200 220 280 100 230 230" stroke-width="72" opacity="0.7"/>
+    <path d="M180 20c100 140 300 50 340 200s-150 240 50 320 300-30 390 140" stroke-width="96" opacity="0.62"/>
+    <path d="M960 -30c50 170 280 90 240 260s-280 130-150 280 320 90 260 250" stroke-width="84" opacity="0.68"/>
+    <path d="M70 740c180-50 140-240 330-220s200 220 390 150 180-240 370-130" stroke-width="88" opacity="0.72"/>
+    <path d="M680 480c90-160 290-20 270 160s-270 110-200 240" stroke-width="64" opacity="0.75"/>
   </g>
-  <g fill="none" stroke="#fff" stroke-linecap="round" opacity="0.18">
-    <path d="M300 300c40-60 140-20 130 50s-110 40-80 100" stroke-width="10"/>
-    <path d="M1100 420c50-70 160 10 140 80s-130 50-90 120" stroke-width="12"/>
-    <path d="M620 160c30-50 110-10 100 40" stroke-width="8"/>
+  <g fill="none" stroke="#ffe4f3" stroke-linecap="round" opacity="0.45">
+    <path d="M280 280c50-70 160-20 150 55s-120 45-90 110" stroke-width="14"/>
+    <path d="M1080 400c60-80 180 10 160 90s-140 55-100 130" stroke-width="16"/>
+    <path d="M600 150c40-60 130-10 120 45" stroke-width="11"/>
   </g>
 </svg>
