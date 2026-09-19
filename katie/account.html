@@ -79,8 +79,8 @@
           <span>Add a profile picture <em>(optional)</em></span>
           <input name="photo" type="file" accept="image/*">
         </label>
-        <label>Username
-          <input name="username" type="text" autocomplete="username" minlength="3" maxlength="64" pattern="[A-Za-z0-9._-]+" required>
+        <label>Username <span>(letters, numbers, dots, _ and - only — no spaces)</span>
+          <input name="username" type="text" autocomplete="username" minlength="3" maxlength="64" pattern="[A-Za-z0-9._-]+" title="Usernames can only use letters, numbers, dots, underscores and hyphens — no spaces." required>
         </label>
         <label>Email
           <input name="email" type="email" autocomplete="email" required>
@@ -109,8 +109,8 @@
           <span>Change picture</span>
           <input name="photo" type="file" accept="image/*">
         </label>
-        <label>Username
-          <input name="username" type="text" minlength="3" maxlength="64" pattern="[A-Za-z0-9._-]+" required>
+        <label>Username <span>(letters, numbers, dots, _ and - only — no spaces)</span>
+          <input name="username" type="text" minlength="3" maxlength="64" pattern="[A-Za-z0-9._-]+" title="Usernames can only use letters, numbers, dots, underscores and hyphens — no spaces." required>
         </label>
         <label>Email
           <input name="email" type="email" readonly>
@@ -132,6 +132,6 @@
   </footer>
   <script src="../config.js"></script>
   <script src="shop.js?v=20260920acct2"></script>
-  <script src="account.js?v=20260920acct3"></script>
+  <script src="account.js?v=20260920userhint"></script>
 </body>
 </html>

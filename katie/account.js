@@ -42,12 +42,34 @@
     el.classList.toggle("is-warn", !!warn);
   }
 
+  var USERNAME_HINT = "Usernames can only use letters, numbers, dots, underscores and hyphens — no spaces.";
+
+  function usernameOk(value) {
+    return /^[A-Za-z0-9._-]{3,64}$/.test(String(value || "").trim());
+  }
+
   function detailOf(data, fallback) {
     var detail = data && data.detail;
+    var text = "";
     if (Array.isArray(detail)) {
-      detail = detail.map(function (d) { return d.msg || d; }).join(" ");
+      text = detail.map(function (d) { return d.msg || d; }).join(" ");
+    } else if (detail) {
+      text = String(detail);
     }
-    return detail || fallback;
+    if (/pattern|should match|A-Za-z0-9/i.test(text)) return USERNAME_HINT;
+    text = text.replace(/^Value error,\s*/i, "");
+    return text || fallback;
+  }
+
+  function bindUsernameHint(input) {
+    if (!input) return;
+    function sync() {
+      var v = input.value.trim();
+      if (!v || usernameOk(v) || input.validity.tooShort) input.setCustomValidity("");
+      else input.setCustomValidity(USERNAME_HINT);
+    }
+    input.addEventListener("input", sync);
+    input.addEventListener("invalid", sync);
   }
 
   function setPic(imgSel, phSel, src) {
@@ -179,8 +201,13 @@
         });
       });
     }
+    bindUsernameHint(signupForm.username);
     signupForm.addEventListener("submit", function (e) {
       e.preventDefault();
+      if (!usernameOk(signupForm.username.value)) {
+        showStatus(statusEl, USERNAME_HINT, true);
+        return;
+      }
       showStatus(statusEl, "Making your squishy account…");
       fetch(api() + "/register", {
         method: "POST",
@@ -235,8 +262,13 @@
         });
       });
     }
+    bindUsernameHint(profileForm.username);
     profileForm.addEventListener("submit", function (e) {
       e.preventDefault();
+      if (!usernameOk(profileForm.username.value)) {
+        showStatus(profileStatus, USERNAME_HINT, true);
+        return;
+      }
       showStatus(profileStatus, "Saving…");
       var body = { username: profileForm.username.value.trim() };
       if (pendingPhoto) body.photo = pendingPhoto;
