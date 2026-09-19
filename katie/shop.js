@@ -232,6 +232,18 @@
     return s;
   }
 
+  function starRowHtml(n, label) {
+    var score = Math.max(0, Math.min(5, Number(n) || 0));
+    var pct = (score / 5) * 100;
+    var aria = label || (score.toFixed(1) + " out of 5");
+    return (
+      '<span class="star-row" aria-label="' + esc(aria) + '">' +
+        '<span class="star-back">★★★★★</span>' +
+        '<span class="star-fill" style="width:' + pct.toFixed(2) + '%">★★★★★</span>' +
+      "</span>"
+    );
+  }
+
   function reviewStats(p) {
     var list = reviewsFor(p.id);
     var sum = 0;
@@ -245,7 +257,7 @@
     var countLabel = stats.count === 1 ? "1 review" : stats.count + " reviews";
     return (
       '<p class="stars">' +
-        '<span class="star-row" aria-label="' + stats.avg.toFixed(1) + ' out of 5">' + starChars(stats.avg) + "</span>" +
+        starRowHtml(stats.avg, stats.avg.toFixed(1) + " out of 5") +
         '<span class="star-avg"> ' + stats.avg.toFixed(1) + " out of 5 · " + countLabel + "</span>" +
       "</p>"
     );
@@ -383,7 +395,7 @@
       '<article class="review-card">' +
         photo +
         "<div>" +
-          '<p class="stars"><span class="star-row">' + starChars(r.stars) + "</span> " + esc(r.stars) + " / 5</p>" +
+          '<p class="stars">' + starRowHtml(r.stars, r.stars + " out of 5") + " " + esc(r.stars) + " / 5</p>" +
           '<p class="meta">' + esc(r.text) + "</p>" +
         "</div>" +
       "</article>"
@@ -603,7 +615,8 @@
     readReviews: readReviews,
     writeReviews: writeReviews,
     reviewsFor: reviewsFor,
-    starChars: starChars
+    starChars: starChars,
+    starRowHtml: starRowHtml
   };
 
   var DARK_KEY = "fidget-squish-dark";

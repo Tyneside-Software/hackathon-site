@@ -45,7 +45,7 @@
       '<article class="review-card" id="review-' + shop.esc(r.id) + '">' +
         photo +
         '<div>' +
-          '<p class="stars"><span class="star-row">' + shop.starChars(r.stars) + "</span> " + shop.esc(r.stars) + " / 5</p>" +
+          '<p class="stars">' + shop.starRowHtml(r.stars, r.stars + " out of 5") + " " + shop.esc(r.stars) + " / 5</p>" +
           "<h2>" + shop.esc(r.itemName || "Item") + "</h2>" +
           '<p class="meta">' + shop.esc(r.text) + "</p>" +
         "</div>" +
