@@ -252,8 +252,12 @@
     if (!document.body.hasAttribute("data-admin-page")) return;
     cacheEls();
     bind();
-    if (shop.isAdmin()) openEditor();
-    else showEditor(false);
+    if (shop.getToken && shop.getToken()) {
+      shop.verifyAdmin().then(function (ok) {
+        if (ok) openEditor();
+        else showEditor(false);
+      });
+    } else showEditor(false);
   }
 
   function addItem() {
@@ -278,9 +282,11 @@
     if (gate) {
       gate.addEventListener("submit", function (e) {
         e.preventDefault();
-        shop.passwordOk(passwordInput && passwordInput.value).then(function (ok) {
+        var btn = gate.querySelector("button[type='submit']");
+        if (btn) btn.disabled = true;
+        shop.loginAdmin(passwordInput && passwordInput.value).then(function (ok) {
+          if (btn) btn.disabled = false;
           if (ok) {
-            shop.setAdmin(true);
             if (errorEl) errorEl.hidden = true;
             if (passwordInput) passwordInput.value = "";
             openEditor();

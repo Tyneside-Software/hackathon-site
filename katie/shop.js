@@ -1,7 +1,6 @@
 (function () {
   var STORAGE_KEY = "fidget-squish-catalog";
   var AUTH_KEY = "fidget-squish-admin";
-  var GATE = "ba2e9c211c2fb80bc79e8f0bb68adad38ae0258dc544101186258eb3981d215c";
   var PRODUCTS = [];
   var REVIEW_KEY = "fidget-squish-reviews";
   var REVIEWS = [];
@@ -139,36 +138,63 @@
     localStorage.removeItem(STORAGE_KEY);
   }
 
-  function hexFromBuffer(buf) {
-    return Array.prototype.map.call(new Uint8Array(buf), function (b) {
-      return ("0" + b.toString(16)).slice(-2);
-    }).join("");
+  function apiBase() {
+    var raw = window.HACKATHON_API || "https://hackathon-api-git-975511976696.europe-west2.run.app";
+    return String(raw).replace(/\/$/, "");
   }
 
-  function passwordOk(value) {
-    var typed = String(value || "").trim();
-    if (!window.crypto || !crypto.subtle || !window.TextEncoder) {
-      return Promise.resolve(false);
+  function getToken() {
+    try {
+      return sessionStorage.getItem(AUTH_KEY) || "";
+    } catch (e) {
+      return "";
     }
-    var bytes = new TextEncoder().encode("fs-admin-v1\0" + typed);
-    return crypto.subtle.digest("SHA-256", bytes).then(function (buf) {
-      return hexFromBuffer(buf) === GATE;
-    });
   }
 
   function isAdmin() {
-    try {
-      return sessionStorage.getItem(AUTH_KEY) === "1";
-    } catch (e) {
-      return false;
-    }
+    return getToken().length > 20;
   }
 
-  function setAdmin(on) {
+  function setAdmin(on, token) {
     try {
-      if (on) sessionStorage.setItem(AUTH_KEY, "1");
+      if (on && token) sessionStorage.setItem(AUTH_KEY, token);
       else sessionStorage.removeItem(AUTH_KEY);
     } catch (e) {}
+  }
+
+  function loginAdmin(password) {
+    return fetch(apiBase() + "/katie/admin/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Accept: "application/json" },
+      body: JSON.stringify({ password: String(password || "") })
+    }).then(function (r) {
+      return r.json().then(function (data) {
+        if (!r.ok || !data || !data.token) return false;
+        setAdmin(true, data.token);
+        return true;
+      }).catch(function () { return false; });
+    }).catch(function () { return false; });
+  }
+
+  function verifyAdmin() {
+    var token = getToken();
+    if (!token) return Promise.resolve(false);
+    return fetch(apiBase() + "/katie/admin/verify", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Accept: "application/json" },
+      body: JSON.stringify({ token: token })
+    }).then(function (r) {
+      return r.json().then(function (data) {
+        var ok = !!(r.ok && data && data.ok);
+        if (!ok) setAdmin(false);
+        return ok;
+      }).catch(function () {
+        setAdmin(false);
+        return false;
+      });
+    }).catch(function () {
+      return false;
+    });
   }
 
   function query() {
@@ -717,7 +743,9 @@
     readLocal: readLocal,
     writeLocal: writeLocal,
     clearLocal: clearLocal,
-    passwordOk: passwordOk,
+    loginAdmin: loginAdmin,
+    verifyAdmin: verifyAdmin,
+    getToken: getToken,
     isAdmin: isAdmin,
     setAdmin: setAdmin,
     loadCatalog: loadCatalog,
