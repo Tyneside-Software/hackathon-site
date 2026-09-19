@@ -648,13 +648,19 @@
     return (p.name + " " + p.meta).toLowerCase().indexOf(q) !== -1;
   }
 
+  function shelfItems(key) {
+    if (key === "featured") return PRODUCTS.filter(function (p) { return p.badge === "featured"; });
+    if (key === "new") return PRODUCTS.filter(function (p) { return p.badge === "new"; });
+    return PRODUCTS.filter(function (p) { return p.group === key; });
+  }
+
   function render() {
     var q = query();
     var shown = 0;
     document.querySelectorAll("[data-products]").forEach(function (el) {
       var group = el.dataset.products;
-      var items = PRODUCTS.filter(function (p) {
-        return p.group === group && matches(p, q);
+      var items = shelfItems(group).filter(function (p) {
+        return matches(p, q);
       });
       el.innerHTML = items.map(cardHtml).join("");
       bindGalleries(el);

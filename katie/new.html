@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>More · fidget squish</title>
-  <meta name="description" content="Other Tyneside Group websites and hackathon pages.">
+  <title>New · fidget squish</title>
+  <meta name="description" content="New items from fidget squish.">
   <link rel="icon" href="logo.svg" type="image/svg+xml">
   <link rel="stylesheet" href="shop.css?v=20260920c360">
   <script>try{if(localStorage.getItem("fidget-squish-dark")==="1")document.documentElement.classList.add("is-dark")}catch(e){}</script>
@@ -21,14 +21,14 @@
         </span>
       </a>
       <form class="search" role="search" data-search>
-        <label class="sr-only" for="q">Search more</label>
-        <input id="q" type="search" placeholder="Search Tyneside and hackathon…" autocomplete="off">
+        <label class="sr-only" for="q">Search new</label>
+        <input id="q" type="search" placeholder="Search new…" autocomplete="off">
         <button type="submit">Search</button>
       </form>
       <nav class="nav" aria-label="Shop">
         <a href="index.html">All</a>
         <a href="featured.html">Featured</a>
-        <a href="new.html">New</a>
+        <a href="new.html" class="is-on" aria-current="page">New</a>
         <a href="squishies.html">Squishies</a>
         <a href="homemade.html">Homemade</a>
         <a href="mystery.html">Mystery</a>
@@ -36,9 +36,9 @@
         <a href="slime.html">Slime</a>
         <a href="reviews.html">Reviews</a>
         <a href="about.html">About</a>
-        <a href="more.html" class="is-on" aria-current="page">More</a>
+        <a href="more.html">More</a>
         <a href="admin.html">Admin</a>
-        <a class="buy-nav" href="mailto:katie@tyneside.software?subject=Order%20from%20fidget%20squish">Email to buy</a>
+        <a class="buy-nav" href="mailto:katie@tyneside.software?subject=Order%20new">Email to buy</a>
       </nav>
     </div>
     <div class="rainbow-bar" aria-hidden="true"></div>
@@ -46,23 +46,16 @@
 
   <main class="wrap">
     <div class="page-head">
-      <h1>More</h1>
-      <p>Other Tyneside Group websites, and the hackathon pages. Tap a card to open it.</p>
+      <h1>New</h1>
+      <p>Everything with a New badge. Email katie@tyneside.software to buy.</p>
     </div>
-    <p class="search-empty" data-search-empty>Nothing matches that search.</p>
+    <p class="search-empty" data-search-empty>No new items match that search.</p>
 
     <section class="group">
       <div class="group-head">
-        <h2>Tyneside Group</h2>
+        <h2>New</h2>
       </div>
-      <div class="grid" data-more="group"></div>
-    </section>
-
-    <section class="group">
-      <div class="group-head">
-        <h2>Hackathon</h2>
-      </div>
-      <div class="grid" data-more="hackathon"></div>
+      <div class="grid" data-products="new"></div>
     </section>
   </main>
 
