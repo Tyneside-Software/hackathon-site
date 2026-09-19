@@ -380,9 +380,51 @@
     newId: newId
   };
 
+  var DARK_KEY = "fidget-squish-dark";
+
+  function isDark() {
+    try {
+      return localStorage.getItem(DARK_KEY) === "1";
+    } catch (e) {
+      return document.documentElement.classList.contains("is-dark");
+    }
+  }
+
+  function applyDark(on) {
+    document.documentElement.classList.toggle("is-dark", on);
+    if (document.body) document.body.classList.toggle("is-dark", on);
+    try {
+      if (on) localStorage.setItem(DARK_KEY, "1");
+      else localStorage.removeItem(DARK_KEY);
+    } catch (e) {}
+    var btn = document.querySelector("[data-mode-toggle]");
+    if (btn) {
+      btn.classList.toggle("is-on", on);
+      btn.setAttribute("aria-pressed", on ? "true" : "false");
+      btn.title = on ? "Turn dark mode off" : "Turn dark mode on";
+    }
+  }
+
+  function bindModeToggle() {
+    applyDark(isDark());
+    if (document.querySelector("[data-mode-toggle]")) return;
+    var btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "mode-toggle";
+    btn.setAttribute("data-mode-toggle", "");
+    btn.textContent = "Dark mode";
+    btn.addEventListener("click", function () {
+      applyDark(!document.documentElement.classList.contains("is-dark"));
+    });
+    document.body.appendChild(btn);
+    applyDark(isDark());
+  }
+
   if (!document.body.hasAttribute("data-admin-page")) {
     setAdmin(false);
   }
+
+  bindModeToggle();
 
   if (document.querySelector("[data-products]") || document.querySelector("[data-more]")) {
     PRODUCTS = readLocal() || defaultItems();
