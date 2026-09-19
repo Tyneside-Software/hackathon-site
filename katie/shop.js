@@ -808,7 +808,8 @@
     writeReviews: writeReviews,
     reviewsFor: reviewsFor,
     starChars: starChars,
-    starRowHtml: starRowHtml
+    starRowHtml: starRowHtml,
+    refreshAccountNav: function () { bindAccountNav(); }
   };
 
   var DARK_KEY = "fidget-squish-dark";
@@ -864,6 +865,30 @@
     }
   }
 
+  function bindAccountNav() {
+    var links = document.querySelectorAll('nav a[href="account.html"]');
+    if (!links.length) return;
+    var tok = "";
+    try { tok = localStorage.getItem("fidget-squish-user-token") || ""; } catch (e) {}
+    if (!tok) {
+      links.forEach(function (link) {
+        link.textContent = "Account";
+        link.classList.remove("account-chip");
+      });
+      return;
+    }
+    fetch(apiBase() + "/users/me", { headers: { Accept: "application/json", Authorization: "Bearer " + tok } })
+      .then(function (r) { return r.ok ? r.json() : Promise.reject(); })
+      .then(function (user) {
+        if (!user || !user.username) return;
+        links.forEach(function (link) {
+          link.classList.add("account-chip");
+          link.innerHTML = (user.photo ? '<img src="' + esc(user.photo) + '" alt="">' : "") + esc(user.username);
+        });
+      })
+      .catch(function () {});
+  }
+
   function bindModeToggle() {
     applyDark(isDark());
     if (document.querySelector("[data-mode-toggle]")) return;
@@ -884,6 +909,7 @@
   }
 
   bindModeToggle();
+  bindAccountNav();
   bindLegal();
   REVIEWS = readReviews();
 
