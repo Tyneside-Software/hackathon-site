@@ -406,11 +406,12 @@
     if (!img || img.dataset.waitBound) return;
     img.dataset.waitBound = "1";
     function done() { img.classList.remove("is-loading"); }
-    if (img.complete && img.naturalWidth) {
+    if (img.complete) {
       done();
       return;
     }
     img.addEventListener("load", done);
+    img.addEventListener("error", done);
   }
 
   function waitImgs(root) {
@@ -670,7 +671,7 @@
   function moreCardHtml(p) {
     return (
       '<a class="product more-card" href="' + esc(p.href) + '">' +
-        '<div class="gallery"><div class="slides"><div class="slide is-on">' +
+        '<div class="gallery" data-gallery><div class="slides"><div class="slide is-on">' +
           '<img class="is-loading" src="' + esc(assetUrl(p.img)) + '" alt="' + esc(p.name) + '">' +
         "</div></div></div>" +
         "<h2>" + esc(p.name) + "</h2>" +
@@ -715,6 +716,7 @@
         return matchesMore(p, q);
       });
       el.innerHTML = items.map(moreCardHtml).join("");
+      bindGalleries(el);
       shown += items.length;
       var section = el.closest(".group");
       if (section) section.hidden = items.length === 0;
