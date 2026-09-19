@@ -55,7 +55,7 @@ a:hover { color: var(--purple); }
 }
 
 body.shop::before {
-  content: "lewis was here";
+  content: "a tyneside software co";
   position: fixed;
   top: 0.9rem;
   right: 0.7rem;
