@@ -1118,8 +1118,8 @@ html.is-dark .about-facts strong { color: #fff; }
 .admin-welcome {
   display: block;
   width: 100%;
-  aspect-ratio: 1 / 1;
-  object-fit: cover;
+  height: auto;
+  object-fit: contain;
   border-radius: 12px;
   margin-bottom: 1rem;
 }
