@@ -11,7 +11,7 @@
   --pink-deep: #db2777;
   --navy: #232f3e;
   --font: "Segoe UI", system-ui, -apple-system, sans-serif;
-  --rainbow: linear-gradient(
+  --rainbow-bright: linear-gradient(
     90deg,
     #ef4444 0%,
     #f97316 16%,
@@ -31,6 +31,10 @@
     #ddd6fe 83%,
     #fbcfe8 100%
   );
+  --rainbow: var(--rainbow-pastel);
+}
+html.is-dark {
+  --rainbow: var(--rainbow-bright);
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -224,7 +228,7 @@ body.shop::before {
   left: 0.7rem;
   z-index: 60;
   border: 4px solid #fff;
-  background: var(--rainbow-pastel);
+  background: var(--rainbow);
   color: #4c1d95;
   font: inherit;
   font-size: 1.05rem;
