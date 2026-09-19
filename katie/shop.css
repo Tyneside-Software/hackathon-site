@@ -1,6 +1,6 @@
 /* fidget squish — Katie's Amazon-ish shop */
 :root {
-  --bg: #89d4ff;
+  --bg: #9ad8ff;
   --ink: #111111;
   --muted: #5c5c5c;
   --line: #f0d4e8;
@@ -33,10 +33,11 @@ body.shop {
   color: var(--ink);
   background-color: var(--bg);
   background-image:
-    url("swirls.svg?v=baby"),
-    radial-gradient(ellipse at 8% 0%, rgba(191, 239, 255, 0.85), transparent 48%),
-    radial-gradient(ellipse at 100% 100%, rgba(255, 77, 166, 0.7), transparent 52%),
-    linear-gradient(160deg, #c8ecff 0%, #7dd3fc 22%, #5aa7ff 42%, #d946ef 72%, #ff4da6 100%);
+    url("swirls.svg?v=equal"),
+    radial-gradient(ellipse at 10% 8%, rgba(191, 239, 255, 0.9), transparent 50%),
+    radial-gradient(ellipse at 50% 48%, rgba(167, 139, 250, 0.45), transparent 55%),
+    radial-gradient(ellipse at 92% 92%, rgba(255, 77, 166, 0.62), transparent 50%),
+    linear-gradient(160deg, #d6f3ff 0%, #7dd3fc 28%, #a78bfa 52%, #e879f9 76%, #ff6bb5 100%);
   background-size: cover;
   background-attachment: fixed;
   background-position: center;
