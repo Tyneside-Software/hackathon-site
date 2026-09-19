@@ -393,6 +393,7 @@ html.is-dark .foot a { color: #fda4af; }
   font-weight: 700;
 }
 .search-empty.is-on { display: block; }
+.search-empty[hidden] { display: none !important; }
 
 .group {
   margin: 1.35rem 0 1.8rem;

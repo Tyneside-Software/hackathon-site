@@ -430,15 +430,20 @@
     var id = "";
     try { id = new URLSearchParams(location.search).get("id") || ""; } catch (e) {}
     var item = null;
-    PRODUCTS.forEach(function (p) { if (p.id === id) item = p; });
+    PRODUCTS.forEach(function (p) {
+      if (p.id === id || slug(p.name) === id) item = p;
+    });
     var missing = view.querySelector("[data-product-missing]");
+    var oos = view.querySelector("[data-product-oos]");
     var body = view.querySelector("[data-product-view]");
     if (!item) {
       if (missing) missing.hidden = false;
+      if (oos) oos.hidden = true;
       if (body) body.hidden = true;
       return;
     }
     if (missing) missing.hidden = true;
+    if (oos) oos.hidden = item.inStock;
     if (body) body.hidden = false;
     document.title = item.name + " · fidget squish";
     var gallery = view.querySelector("[data-pdp-gallery]");
