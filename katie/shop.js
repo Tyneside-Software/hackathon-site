@@ -87,7 +87,12 @@
 
   function writeLocal(items) {
     var payload = { items: (items || []).map(normalize) };
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
+      payload.error = null;
+    } catch (e) {
+      payload.error = "Could not save pictures. Try a smaller photo.";
+    }
     return payload;
   }
 

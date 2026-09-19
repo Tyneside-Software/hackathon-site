@@ -553,10 +553,15 @@ body.shop::before {
   .admin-card { grid-template-columns: 1fr; }
 }
 .admin-preview {
+  position: relative;
   aspect-ratio: 1 / 1;
   background: #f3f3f3;
   border-radius: 10px;
   overflow: hidden;
+}
+.admin-preview-pic {
+  width: 100%;
+  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -573,6 +578,41 @@ body.shop::before {
   font-size: 0.78rem;
   font-weight: 650;
   padding: 0.5rem;
+}
+.admin-pencil {
+  position: absolute;
+  top: 0.4rem;
+  right: 0.4rem;
+  z-index: 3;
+  width: 2.6rem;
+  height: 2.6rem;
+  border-radius: 50%;
+  background: #fff;
+  color: var(--ink);
+  box-shadow: 0 2px 10px rgba(17, 17, 17, 0.22);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  overflow: hidden;
+}
+.admin-pencil:hover { background: #ffe4f3; color: var(--pink-deep); }
+.admin-pencil svg {
+  width: 1.15rem;
+  height: 1.15rem;
+  pointer-events: none;
+}
+.admin-pencil input[type="file"] {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  cursor: pointer;
+  font-size: 1.6rem;
 }
 .admin-fields {
   display: grid;
