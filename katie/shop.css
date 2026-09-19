@@ -1743,24 +1743,46 @@ html.is-dark .auth-card {
   background:
     linear-gradient(#1e1530, #1e1530) padding-box,
     var(--rainbow) border-box;
+  color: #fff;
 }
-html.is-dark .auth-card,
-html.is-dark .auth-social,
-html.is-dark .auth-card input {
-  color: #fce7f3;
+html.is-dark .auth-card h1,
+html.is-dark .auth-lede,
+html.is-dark .auth-kicker,
+html.is-dark .auth-card label,
+html.is-dark .auth-card label span,
+html.is-dark .auth-card label em,
+html.is-dark .auth-or,
+html.is-dark .auth-switch,
+html.is-dark .profile-handle,
+html.is-dark .profile-who,
+html.is-dark .friend-empty,
+html.is-dark .friend-picked strong,
+html.is-dark .friend-sub,
+html.is-dark .admin-people h2,
+html.is-dark .auth-ghost {
+  color: #fff !important;
+}
+html.is-dark .auth-card a { color: #ffb4d9; }
+html.is-dark .auth-switch button,
+html.is-dark .friend-hit .tag,
+html.is-dark .friend-hit .unfriend {
+  color: #ffb4d9 !important;
 }
 html.is-dark .auth-social { background: #fff; color: #111; }
 html.is-dark .auth-apple { background: #111; color: #fff; }
 html.is-dark .auth-facebook { background: #1877F2; color: #fff; }
-html.is-dark .auth-card input { background: #2a1d40; border-color: #e9d5ff; }
-html.is-dark .auth-card input[readonly] { background: #3b2758; }
-html.is-dark .auth-card h1 { color: #e9d5ff !important; }
-html.is-dark .auth-ghost { color: #fce7f3; border-color: #fce7f3; }
+html.is-dark .auth-card input,
+html.is-dark .auth-card input[readonly] {
+  background: #2a1d40;
+  border-color: #fff;
+  color: #fff;
+}
+html.is-dark .auth-card input::placeholder {
+  color: rgba(255, 255, 255, 0.7);
+}
+html.is-dark .auth-ghost { border-color: #fff; }
 html.is-dark .profile-pic-wrap img,
-html.is-dark .profile-ph { border-color: #fce7f3; }
-html.is-dark .auth-switch { color: #fce7f3; }
-html.is-dark .auth-switch button { color: #ff8ac4; }
-html.is-dark .profile-handle { color: #e9d5ff; }
+html.is-dark .profile-ph { border-color: #fff; }
 .auth-wrap.is-in { max-width: 28rem; }
 .admin-people {
   margin: 1.2rem 0 1.6rem;
@@ -1772,7 +1794,7 @@ html.is-dark .profile-handle { color: #e9d5ff; }
   color: #36042b !important;
   margin-bottom: 0.4rem;
 }
-html.is-dark .admin-people h2 { color: #e9d5ff !important; }
+html.is-dark .admin-people h2 { color: #fff !important; }
 .friend-results,
 .friend-list {
   display: grid;
@@ -1856,11 +1878,20 @@ html.is-dark .admin-people h2 { color: #e9d5ff !important; }
   cursor: pointer;
   padding: 0.35rem 0.55rem;
 }
-html.is-dark .friend-hit { background: #2a1d40; color: #fce7f3; border-color: #e9d5ff; }
+html.is-dark .friend-hit {
+  background: #2a1d40;
+  color: #fff;
+  border-color: #fff;
+}
+html.is-dark .friend-hit .who,
+html.is-dark .friend-hit .who .name,
+html.is-dark .friend-hit span.name {
+  color: #fff;
+}
 html.is-dark .friend-hit img,
-html.is-dark .friend-ph { border-color: #fce7f3; }
+html.is-dark .friend-ph { border-color: #fff; }
 html.is-dark .friend-picked strong,
-html.is-dark .friend-sub { color: #e9d5ff !important; }
+html.is-dark .friend-sub { color: #fff !important; }
 @media (max-width: 640px) {
   .auth-wrap { padding-top: 0.5rem; padding-bottom: 1.6rem; }
   .auth-card { padding: 1.25rem 1rem 1.2rem; border-radius: 20px; }
