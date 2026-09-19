@@ -94,6 +94,8 @@
           '<label>Section<select data-field="group">' +
             '<option value="squishies"' + (item.group === "squishies" ? " selected" : "") + ">Squishies</option>" +
             '<option value="homemade"' + (item.group === "homemade" ? " selected" : "") + ">Homemade</option>" +
+            '<option value="mystery"' + (item.group === "mystery" ? " selected" : "") + ">Mystery</option>" +
+            '<option value="fidgets"' + (item.group === "fidgets" ? " selected" : "") + ">Fidgets</option>" +
             '<option value="slime"' + (item.group === "slime" ? " selected" : "") + ">Slime</option>" +
           "</select></label>" +
           photosHtml(item) +

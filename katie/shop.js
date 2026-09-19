@@ -94,7 +94,7 @@
     if (!Array.isArray(photos)) photos = [];
     photos = photos.map(function (p) { return String(p || "").trim(); }).filter(Boolean);
     var group = item && item.group;
-    if (group !== "homemade" && group !== "slime") group = "squishies";
+    if (group !== "homemade" && group !== "slime" && group !== "mystery" && group !== "fidgets") group = "squishies";
     return {
       id: (item && item.id) || newId(name),
       group: group,

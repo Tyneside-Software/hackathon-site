@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Item · fidget squish</title>
-  <meta name="description" content="fidget squish product">
+  <title>Fidgets · fidget squish</title>
+  <meta name="description" content="Fidgets from fidget squish. Email katie@tyneside.software to buy.">
   <link rel="icon" href="logo.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="shop.css?v=20260919outline2">
+  <link rel="stylesheet" href="shop.css?v=20260919photofix">
   <script>try{if(localStorage.getItem("fidget-squish-dark")==="1")document.documentElement.classList.add("is-dark")}catch(e){}</script>
 </head>
 <body class="shop">
@@ -20,43 +20,41 @@
           <span class="shop-by">Katie’s shop</span>
         </span>
       </a>
+      <form class="search" role="search" data-search>
+        <label class="sr-only" for="q">Search fidgets</label>
+        <input id="q" type="search" placeholder="Search fidgets…" autocomplete="off">
+        <button type="submit">Search</button>
+      </form>
       <nav class="nav" aria-label="Shop">
         <a href="index.html">All</a>
         <a href="squishies.html">Squishies</a>
         <a href="homemade.html">Homemade</a>
         <a href="mystery.html">Mystery</a>
-        <a href="fidgets.html">Fidgets</a>
+        <a href="fidgets.html" class="is-on" aria-current="page">Fidgets</a>
         <a href="slime.html">Slime</a>
         <a href="reviews.html">Reviews</a>
         <a href="more.html">More</a>
         <a href="admin.html">Admin</a>
-        <a class="buy-nav" href="mailto:katie@tyneside.software?subject=Order%20from%20fidget%20squish">Email to buy</a>
+        <a class="buy-nav" href="mailto:katie@tyneside.software?subject=Order%20fidget">Email to buy</a>
       </nav>
     </div>
     <div class="rainbow-bar" aria-hidden="true"></div>
   </header>
 
-  <main class="wrap" data-product-page>
-    <p class="search-empty is-on" data-product-missing hidden>That item is not in the shop. <a href="index.html">Back to all items</a>.</p>
-    <div data-product-view hidden>
-      <p class="crumb"><a href="index.html">All</a> · Item</p>
-      <div class="pdp">
-        <div class="pdp-gallery" data-pdp-gallery></div>
-        <div class="pdp-info" data-pdp-info></div>
-      </div>
-      <section class="group">
-        <div class="group-head">
-          <h2>Reviews</h2>
-        </div>
-        <div class="review-list" data-pdp-reviews></div>
-      </section>
-      <section class="group">
-        <div class="group-head">
-          <h2>Suggested</h2>
-        </div>
-        <div class="group-row" data-suggested></div>
-      </section>
+  <main class="wrap">
+    <div class="page-head">
+      <h1>Fidgets</h1>
+      <p>Fidgets. Each card shows the price and whether it is in stock. Email katie@tyneside.software to buy.</p>
     </div>
+    <p class="search-empty" data-search-empty>No fidgets match that search.</p>
+
+    <section class="group">
+      <div class="group-head">
+        <h2>Fidgets</h2>
+      </div>
+      <div class="grid" data-products="fidgets"></div>
+    </section>
+
   </main>
 
   <footer class="foot">
