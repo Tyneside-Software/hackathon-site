@@ -454,8 +454,7 @@
   function renderHits(users) {
     if (!friendResults) return;
     if (!users || !users.length) {
-      friendResults.hidden = true;
-      friendResults.innerHTML = '<p class="friend-empty">No accounts match that.</p>';
+      friendResults.innerHTML = '<p class="friend-empty">No other accounts to show yet.</p>';
       friendResults.hidden = false;
       return;
     }

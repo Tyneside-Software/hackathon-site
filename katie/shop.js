@@ -942,7 +942,7 @@
 
   function loadAccountBook(done) {
     var local = readAccountBook();
-    fetch("accounts.json?v=20260920katieadmin")
+    fetch("accounts.json?v=20260920searchfix")
       .then(function (r) { return r.ok ? r.json() : emptyAccountBook(); })
       .catch(function () { return emptyAccountBook(); })
       .then(function (file) {
@@ -1030,24 +1030,42 @@
     return Promise.resolve(publicAccount(row));
   }
 
+  function knownNames() {
+    var names = {};
+    (accountBook.users || []).forEach(function (u) {
+      var n = normaliseAccountName(u && u.username);
+      if (n) names[n] = true;
+    });
+    (accountBook.admins || []).forEach(function (a) {
+      var n = normaliseAccountName(a);
+      if (n) names[n] = true;
+    });
+    return Object.keys(names).sort();
+  }
+
   function searchLocal(q, exclude) {
     var needle = normaliseAccountName(q);
     exclude = normaliseAccountName(exclude || sessionUsername());
-    var hits = (accountBook.users || []).filter(function (u) {
-      if (u.username === exclude) return false;
+    var friends = friendNamesFor(sessionUsername());
+    var hits = knownNames().filter(function (name) {
+      if (name === exclude) return false;
       if (!needle) return true;
-      return u.username.indexOf(needle) !== -1;
+      return name.indexOf(needle) !== -1;
     });
     hits.sort(function (a, b) {
-      var as = needle && a.username.indexOf(needle) === 0 ? 0 : 1;
-      var bs = needle && b.username.indexOf(needle) === 0 ? 0 : 1;
+      var as = needle && a.indexOf(needle) === 0 ? 0 : 1;
+      var bs = needle && b.indexOf(needle) === 0 ? 0 : 1;
       if (as !== bs) return as - bs;
-      return a.username < b.username ? -1 : 1;
+      return a < b ? -1 : 1;
     });
-    var friends = friendNamesFor(exclude);
-    return hits.slice(0, needle ? 8 : 24).map(function (u) {
-      var card = publicAccount(u);
-      card.friend = friends.indexOf(u.username) !== -1;
+    return hits.slice(0, needle ? 12 : 24).map(function (name) {
+      var card = publicAccount(findAccount(name)) || {
+        username: name,
+        email: "",
+        photo: "",
+        admin: isShopAdminName(name)
+      };
+      card.friend = friends.indexOf(name) !== -1;
       return card;
     });
   }
@@ -1070,7 +1088,9 @@
     username = normaliseAccountName(username);
     if (!me) return Promise.reject(new Error("Log in first."));
     if (username === me) return Promise.reject(new Error("That’s you."));
-    if (!findAccount(username)) return Promise.reject(new Error("No account with that name."));
+    if (!findAccount(username) && !isShopAdminName(username)) {
+      return Promise.reject(new Error("No account with that name."));
+    }
     var list = accountBook.friends[me] || [];
     if (list.indexOf(username) === -1) list.push(username);
     accountBook.friends[me] = list;

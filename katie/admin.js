@@ -328,7 +328,7 @@
     var box = document.querySelector("[data-admin-results]");
     if (!box) return;
     if (!users || !users.length) {
-      box.innerHTML = '<p class="friend-empty">No accounts match that.</p>';
+      box.innerHTML = '<p class="friend-empty">No other accounts to show yet.</p>';
       box.hidden = false;
       return;
     }
