@@ -1,4 +1,6 @@
 /* fidget squish — Katie's Amazon-ish shop */
+@import url("https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700&display=swap");
+
 :root {
   --bg: #9ad8ff;
   --ink: #111111;
@@ -133,14 +135,25 @@ body.shop::before {
 }
 
 .shop-name {
+  display: inline-block;
+  font-family: Fredoka, "Segoe UI Rounded", "Arial Rounded MT Bold", sans-serif;
   font-size: clamp(2.1rem, 7vw, 3.6rem);
-  font-weight: 800;
-  letter-spacing: -0.04em;
+  font-weight: 700;
+  letter-spacing: -0.02em;
   line-height: 0.95;
-  background: linear-gradient(90deg, #ffb3d9, #ff4da6, #ff8ac4, #db2777);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+  color: #ff4da6;
+  background: none;
+  -webkit-background-clip: unset;
+  background-clip: unset;
+  transform: rotate(-6deg);
+  text-shadow:
+    0 -2px 0 #ffd6ec,
+    0 -1px 0 #ffb3d9,
+    1px 0 0 #ff8ac4,
+    -1px 0 0 #ff8ac4,
+    0 3px 0 #db2777,
+    0 5px 0 #be185d,
+    0 10px 16px rgba(219, 39, 119, 0.4);
 }
 
 .shop-by {
