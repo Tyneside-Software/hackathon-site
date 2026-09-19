@@ -400,6 +400,19 @@ body.shop::before {
   pointer-events: none;
   cursor: default;
 }
+a.more-card {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+a.more-card:hover {
+  color: inherit;
+  text-decoration: none;
+  transform: translateY(-3px);
+}
+a.more-card .meta {
+  font-weight: 650;
+}
 .product h2 {
   font-size: 0.92rem;
   font-weight: 650;

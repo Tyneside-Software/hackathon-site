@@ -3,6 +3,29 @@
   var AUTH_KEY = "fidget-squish-admin";
   var PASSWORD = "cassiethecat";
   var PRODUCTS = [];
+  var MORE = {
+    group: [
+      { name: "Tyneside Group", meta: "All the Tyneside doors", href: "https://tyneside.group/", img: "more/group.svg" },
+      { name: "Tyneside Software", meta: "Evening project · websites and tools", href: "https://tyneside.software/", img: "more/software.svg" },
+      { name: "Tyneside Cleaning", meta: "Local cleaning in Howden Ward", href: "https://tyneside.cleaning/", img: "more/cleaning.svg" },
+      { name: "Tyneside Charity", meta: "Welcome-home cleans for new parents", href: "https://tyneside.charity/", img: "more/charity.svg" },
+      { name: "Tyneside Technology", meta: "Cheap working computers", href: "https://tyneside.technology/", img: "more/technology.svg" },
+      { name: "Tyneside Games", meta: "Games Lewis built", href: "https://tyneside.games/", img: "more/games.svg" }
+    ],
+    hackathon: [
+      { name: "Tyneside Logistics", meta: "Hackathon home", href: "../index.html", img: "more/logistics.svg" },
+      { name: "Progress", meta: "Catch-up for anyone who’s been away", href: "../progress.html", img: "more/progress.svg" },
+      { name: "Map", meta: "Routes, phones and buses", href: "../app/", img: "more/map.svg" },
+      { name: "Board", meta: "Hackathon kanban", href: "../board.html", img: "more/board.svg" },
+      { name: "To do", meta: "Open cards", href: "../todo.html", img: "more/todo.svg" },
+      { name: "Done", meta: "Finished cards", href: "../done.html", img: "more/done.svg" },
+      { name: "Docs", meta: "Wiki and how it fits together", href: "../docs/", img: "more/docs.svg" },
+      { name: "API test", meta: "Call the live API", href: "../api-test.html", img: "more/api.svg" },
+      { name: "Account", meta: "Register, login, fetch me", href: "../account.html", img: "more/account.svg" },
+      { name: "Onboarding", meta: "Clone, run and git", href: "../onboarding.html", img: "more/onboarding.svg" },
+      { name: "Lewis", meta: "Lewis’s log", href: "../lewis.html", img: "more/lewis.svg" }
+    ]
+  };
 
   function defaultItems() {
     return [
@@ -245,6 +268,28 @@
     });
   }
 
+  function moreCardHtml(p) {
+    return (
+      '<a class="product more-card" href="' + esc(p.href) + '">' +
+        '<div class="gallery"><div class="slides"><div class="slide is-on">' +
+          '<img src="' + esc(assetUrl(p.img)) + '" alt="' + esc(p.name) + '">' +
+        "</div></div></div>" +
+        "<h2>" + esc(p.name) + "</h2>" +
+        '<p class="meta">' + esc(p.meta) + "</p>" +
+      "</a>"
+    );
+  }
+
+  function moreItems(key) {
+    if (key === "all") return MORE.group.concat(MORE.hackathon);
+    return MORE[key] || [];
+  }
+
+  function matchesMore(p, q) {
+    if (!q) return true;
+    return (p.name + " " + p.meta).toLowerCase().indexOf(q) !== -1;
+  }
+
   function render() {
     var q = query();
     var shown = 0;
@@ -255,6 +300,15 @@
       });
       el.innerHTML = items.map(cardHtml).join("");
       bindGalleries(el);
+      shown += items.length;
+      var section = el.closest(".group");
+      if (section) section.hidden = items.length === 0;
+    });
+    document.querySelectorAll("[data-more]").forEach(function (el) {
+      var items = moreItems(el.dataset.more).filter(function (p) {
+        return matchesMore(p, q);
+      });
+      el.innerHTML = items.map(moreCardHtml).join("");
       shown += items.length;
       var section = el.closest(".group");
       if (section) section.hidden = items.length === 0;
@@ -326,11 +380,11 @@
     newId: newId
   };
 
-  if (document.querySelector("[data-products]")) {
+  if (document.querySelector("[data-products]") || document.querySelector("[data-more]")) {
     PRODUCTS = readLocal() || defaultItems();
     bindSearch();
     render();
-    if (!readLocal()) {
+    if (document.querySelector("[data-products]") && !readLocal()) {
       fetchStock(function (items) {
         if (items && items.length) {
           PRODUCTS = items;
