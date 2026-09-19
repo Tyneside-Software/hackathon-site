@@ -187,7 +187,7 @@
     if (photos.length) {
       slides = photos.map(function (src, i) {
         var on = i === 0 ? " is-on" : "";
-        return '<div class="slide' + on + '"><img src="' + esc(assetUrl(src)) + '" alt="' + esc(p.name) + '"></div>';
+        return '<div class="slide' + on + '"><img class="is-loading" src="' + esc(assetUrl(src)) + '" alt="' + esc(p.name) + '"></div>';
       });
     } else {
       slides = ['<div class="slide is-on"><div class="empty"><strong>Photo</strong>Picture coming</div></div>'];
@@ -342,6 +342,21 @@
     }
   }
 
+  function waitImg(img) {
+    if (!img || img.dataset.waitBound) return;
+    img.dataset.waitBound = "1";
+    function done() { img.classList.remove("is-loading"); }
+    if (img.complete && img.naturalWidth) {
+      done();
+      return;
+    }
+    img.addEventListener("load", done);
+  }
+
+  function waitImgs(root) {
+    (root || document).querySelectorAll(".slide img, .thumb img, .more-card img, .review-photo").forEach(waitImg);
+  }
+
   function bindGalleries(root) {
     (root || document).querySelectorAll("[data-gallery]").forEach(function (gallery) {
       if (gallery.dataset.bound) return;
@@ -350,6 +365,7 @@
       show(gallery, 0);
 
       gallery.querySelectorAll("img").forEach(function (img) {
+        waitImg(img);
         img.addEventListener("error", function () {
           var empty = document.createElement("div");
           empty.className = "empty";
@@ -396,6 +412,7 @@
         });
       });
     });
+    waitImgs(root);
   }
 
   function bindProductLinks(root) {
@@ -451,7 +468,7 @@
   }
 
   function reviewEntryHtml(r) {
-    var photo = r.photo ? '<img class="review-photo" src="' + esc(r.photo) + '" alt="">' : "";
+    var photo = r.photo ? '<img class="review-photo is-loading" src="' + esc(r.photo) + '" alt="">' : "";
     return (
       '<article class="review-card">' +
         photo +
@@ -471,7 +488,7 @@
         photos.map(function (src, i) {
           return (
             '<button type="button" class="thumb' + (i === 0 ? " is-on" : "") + '" data-thumb="' + i + '" aria-label="Photo ' + (i + 1) + '">' +
-              '<img src="' + esc(assetUrl(src)) + '" alt="">' +
+              '<img class="is-loading" src="' + esc(assetUrl(src)) + '" alt="">' +
             "</button>"
           );
         }).join("") +
@@ -587,7 +604,7 @@
     return (
       '<a class="product more-card" href="' + esc(p.href) + '">' +
         '<div class="gallery"><div class="slides"><div class="slide is-on">' +
-          '<img src="' + esc(assetUrl(p.img)) + '" alt="' + esc(p.name) + '">' +
+          '<img class="is-loading" src="' + esc(assetUrl(p.img)) + '" alt="' + esc(p.name) + '">' +
         "</div></div></div>" +
         "<h2>" + esc(p.name) + "</h2>" +
         '<p class="meta">' + esc(p.meta) + "</p>" +

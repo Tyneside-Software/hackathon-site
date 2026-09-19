@@ -39,7 +39,7 @@
 
   function reviewCard(r) {
     var photo = r.photo
-      ? '<img class="review-photo" src="' + shop.esc(r.photo) + '" alt="">'
+      ? '<img class="review-photo is-loading" src="' + shop.esc(r.photo) + '" alt="">'
       : "";
     return (
       '<article class="review-card" id="review-' + shop.esc(r.id) + '">' +
