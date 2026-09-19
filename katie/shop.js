@@ -204,10 +204,9 @@
   }
 
   function stockHtml(p) {
-    if (p.inStock) {
-      var n = p.stock;
-      var label = n === 1 ? "1 in stock" : n + " in stock";
-      return '<p class="stock is-in">' + label + "</p>";
+    var n = stockQty(p);
+    if (n > 0) {
+      return '<p class="stock is-in">' + n + (n === 1 ? " in stock" : " in stock") + "</p>";
     }
     return '<p class="stock is-out">Out of stock</p>';
   }
@@ -283,12 +282,13 @@
 
   function cardHtml(p) {
     var mail = "mailto:katie@tyneside.software?subject=" + encodeURIComponent(p.mail || ("Order " + p.name));
-    var buy = p.inStock
+    var inStock = stockQty(p) > 0;
+    var buy = inStock
       ? '<a class="buy" href="' + mail + '">Email to buy</a>'
       : '<span class="buy is-off">Out of stock</span>';
     return (
-      '<article class="product is-clickable' + (p.inStock ? " is-in" : " is-out") + '" data-id="' + esc(p.id) + '" data-name="' + esc(p.name) + '">' +
-        (p.inStock ? burstHtml() : "") +
+      '<article class="product is-clickable' + (inStock ? " is-in" : " is-out") + '" data-id="' + esc(p.id) + '" data-name="' + esc(p.name) + '">' +
+        (inStock ? burstHtml() : "") +
         galleryHtml(p) +
         '<p class="price">' + esc(p.price) + "</p>" +
         stockHtml(p) +
@@ -443,8 +443,13 @@
     try { id = new URLSearchParams(location.search).get("id") || ""; } catch (e) {}
     var item = null;
     PRODUCTS.forEach(function (p) {
-      if (p.id === id || slug(p.name) === id) item = p;
+      if (p.id === id) item = p;
     });
+    if (!item) {
+      PRODUCTS.forEach(function (p) {
+        if (slug(p.name) === id) item = p;
+      });
+    }
     var missing = view.querySelector("[data-product-missing]");
     var oos = view.querySelector("[data-product-oos]");
     var body = view.querySelector("[data-product-view]");
@@ -460,7 +465,7 @@
       return;
     }
     showNote(missing, false);
-    showNote(oos, !(item.inStock && item.stock > 0));
+    showNote(oos, stockQty(item) < 1);
     if (body) body.hidden = false;
     document.title = item.name + " · fidget squish";
     var gallery = view.querySelector("[data-pdp-gallery]");
@@ -469,7 +474,7 @@
     var suggestEl = view.querySelector("[data-suggested]");
     var stats = reviewStats(item);
     var mail = "mailto:katie@tyneside.software?subject=" + encodeURIComponent(item.mail || ("Order " + item.name));
-    var buy = item.inStock
+    var buy = stockQty(item) > 0
       ? '<a class="buy" href="' + mail + '">Email to buy</a>'
       : '<span class="buy is-off">Out of stock</span>';
     if (gallery) {
@@ -599,22 +604,31 @@
       .catch(function () { done(null); });
   }
 
+  function applyCatalog(items) {
+    PRODUCTS = (items && items.length ? items : defaultItems()).map(normalize);
+    return PRODUCTS;
+  }
+
   function loadCatalog(done) {
     var local = readLocal();
-    if (local) {
-      PRODUCTS = local;
+    if (local && local.length) {
+      applyCatalog(local);
       if (done) done(PRODUCTS);
       return;
     }
+    applyCatalog(defaultItems());
+    if (done) done(PRODUCTS);
     fetchStock(function (items) {
-      PRODUCTS = items && items.length ? items : defaultItems();
+      if (readLocal()) return;
+      if (items && items.length) applyCatalog(items);
       if (done) done(PRODUCTS);
     });
   }
 
   function refresh(next) {
-    if (next) PRODUCTS = next.map(normalize);
+    if (next) applyCatalog(next);
     render();
+    renderProductPage();
   }
 
   window.FidgetSquish = {
@@ -717,30 +731,9 @@
   bindLegal();
   REVIEWS = readReviews();
 
-  if (document.querySelector("[data-product-page]")) {
-    PRODUCTS = readLocal() || defaultItems();
-    renderProductPage();
-    if (!readLocal()) {
-      fetchStock(function (items) {
-        if (items && items.length) {
-          PRODUCTS = items;
-          renderProductPage();
-        }
-      });
-    }
-  }
-
-  if (document.querySelector("[data-products]") || document.querySelector("[data-more]") || document.querySelector("[data-reviews]")) {
-    PRODUCTS = readLocal() || defaultItems();
-    bindSearch();
+  bindSearch();
+  loadCatalog(function () {
     render();
-    if (document.querySelector("[data-products]") && !readLocal()) {
-      fetchStock(function (items) {
-        if (items && items.length) {
-          PRODUCTS = items;
-          render();
-        }
-      });
-    }
-  }
+    renderProductPage();
+  });
 })();

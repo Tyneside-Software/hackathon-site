@@ -150,7 +150,10 @@
     if (!item) return;
     card.querySelectorAll("[data-field]").forEach(function (field) {
       var key = field.dataset.field;
-      if (key === "stock") item.stock = field.value;
+      if (key === "stock") {
+        var n = parseInt(field.value, 10);
+        item.stock = isNaN(n) || n < 0 ? 0 : n;
+      }
       else item[key] = field.value;
     });
     items[index] = shop.normalize(item);
