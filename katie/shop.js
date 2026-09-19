@@ -815,10 +815,11 @@
   var ACCOUNT_KEY = "fidget-squish-accounts";
   var USER_SESSION = "fidget-squish-user-token";
   var FOUNDER = "lewisthomson";
-  var accountBook = { users: [], friends: {}, admins: [FOUNDER], updated: 0 };
+  var DEFAULT_ADMINS = ["lewisthomson", "katiethomson"];
+  var accountBook = { users: [], friends: {}, admins: DEFAULT_ADMINS.slice(), updated: 0 };
 
   function emptyAccountBook() {
-    return { users: [], friends: {}, admins: [FOUNDER], updated: 0 };
+    return { users: [], friends: {}, admins: DEFAULT_ADMINS.slice(), updated: 0 };
   }
 
   function normaliseAccountName(name) {
@@ -837,11 +838,33 @@
     }
   }
 
+  function dedupeUsers(list) {
+    var byName = {};
+    (list || []).forEach(function (u) {
+      if (!u || !u.username) return;
+      u.username = normaliseAccountName(u.username);
+      byName[u.username] = u;
+    });
+    return Object.keys(byName).sort().map(function (k) { return byName[k]; });
+  }
+
+  function unionAdmins() {
+    var lists = Array.prototype.slice.call(arguments);
+    var out = [];
+    DEFAULT_ADMINS.forEach(function (a) { out.push(a); });
+    lists.forEach(function (list) {
+      (list || []).forEach(function (a) {
+        a = normaliseAccountName(a);
+        if (a && out.indexOf(a) === -1) out.push(a);
+      });
+    });
+    return out;
+  }
+
   function writeAccountBook() {
     accountBook.updated = Date.now();
-    if ((accountBook.admins || []).indexOf(FOUNDER) === -1) {
-      accountBook.admins = [FOUNDER].concat(accountBook.admins || []);
-    }
+    accountBook.users = dedupeUsers(accountBook.users);
+    accountBook.admins = unionAdmins(accountBook.admins);
     try {
       localStorage.setItem(ACCOUNT_KEY, JSON.stringify(accountBook));
       return { error: null };
@@ -872,7 +895,9 @@
     var users = accountBook.users || [];
     for (var i = 0; i < users.length; i++) {
       var u = users[i];
-      if (u.username === q || (u.email && String(u.email).toLowerCase() === q)) return u;
+      var name = normaliseAccountName(u.username);
+      var email = String(u.email || "").toLowerCase();
+      if (name === q || (email && email === q)) return u;
     }
     return null;
   }
@@ -917,36 +942,18 @@
 
   function loadAccountBook(done) {
     var local = readAccountBook();
-    fetch("accounts.json?v=20260920pc")
+    fetch("accounts.json?v=20260920katieadmin")
       .then(function (r) { return r.ok ? r.json() : emptyAccountBook(); })
       .catch(function () { return emptyAccountBook(); })
       .then(function (file) {
         if (!file || !Array.isArray(file.users)) file = emptyAccountBook();
-        var localNewer = local && (local.updated || 0) >= (file.updated || 0) && local.users && local.users.length;
-        if (localNewer) {
-          accountBook = local;
-        } else {
-          accountBook = {
-            users: file.users.slice(),
-            friends: file.friends || {},
-            admins: (file.admins && file.admins.length) ? file.admins.slice() : [FOUNDER],
-            updated: file.updated || 0
-          };
-          if (local && local.users) {
-            var have = {};
-            accountBook.users.forEach(function (u) { have[u.username] = true; });
-            local.users.forEach(function (u) {
-              if (!have[u.username]) accountBook.users.push(u);
-            });
-            Object.keys(local.friends || {}).forEach(function (k) {
-              if (!accountBook.friends[k]) accountBook.friends[k] = local.friends[k];
-            });
-            (local.admins || []).forEach(function (a) {
-              if (accountBook.admins.indexOf(a) === -1) accountBook.admins.push(a);
-            });
-          }
-        }
-        if (accountBook.admins.indexOf(FOUNDER) === -1) accountBook.admins.unshift(FOUNDER);
+        var localUsers = (local && local.users) || [];
+        accountBook = {
+          users: dedupeUsers((file.users || []).concat(localUsers)),
+          friends: Object.assign({}, file.friends || {}, (local && local.friends) || {}),
+          admins: unionAdmins(file.admins, local && local.admins),
+          updated: Math.max(file.updated || 0, (local && local.updated) || 0)
+        };
         writeAccountBook();
         if (done) done(accountBook);
       });
@@ -961,8 +968,8 @@
     }
     if (!email || email.indexOf("@") === -1) return Promise.reject(new Error("Enter a real email"));
     if (password.length < 8) return Promise.reject(new Error("Password must be at least 8 characters."));
-    if (findAccount(username)) return Promise.reject(new Error("Username already registered"));
-    if (findAccount(email)) return Promise.reject(new Error("Email already registered"));
+    if (findAccount(username)) return Promise.reject(new Error("That username is taken. Pick another."));
+    if (findAccount(email)) return Promise.reject(new Error("That email already has an account."));
     var salt = newSalt();
     return hashPass(password, salt).then(function (pass) {
       accountBook.users.push({
@@ -1005,7 +1012,7 @@
       if (!/^[a-z0-9._-]{3,64}$/.test(next)) {
         return Promise.reject(new Error("Usernames can only use letters, numbers, dots, underscores and hyphens — no spaces."));
       }
-      if (next !== old && findAccount(next)) return Promise.reject(new Error("Username already registered"));
+      if (next !== old && findAccount(next)) return Promise.reject(new Error("That username is taken. Pick another."));
       if (next !== old) {
         row.username = next;
         var pals = accountBook.friends[old] || [];
