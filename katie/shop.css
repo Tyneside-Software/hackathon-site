@@ -462,7 +462,7 @@ html.is-dark .foot a { color: #fda4af; }
   font-weight: 750;
   letter-spacing: -0.03em;
   margin-bottom: 0.3rem;
-  color: #4c1d95;
+  color: #36042b;
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.45);
 }
 .page-head p {
@@ -502,7 +502,7 @@ html.is-dark .foot a { color: #fda4af; }
 .group-head h2 {
   font-size: 1.35rem;
   letter-spacing: -0.03em;
-  color: #4c1d95;
+  color: #36042b;
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.45);
 }
 .group-head a {
@@ -510,7 +510,7 @@ html.is-dark .foot a { color: #fda4af; }
   font-size: 0.9rem;
   text-decoration: none;
   white-space: nowrap;
-  color: #4c1d95;
+  color: #36042b;
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.45);
 }
 .group-head a:hover { text-decoration: underline; }
