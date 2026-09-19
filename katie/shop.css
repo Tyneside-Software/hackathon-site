@@ -934,18 +934,23 @@ a.more-card .meta {
   gap: 0.35rem 0.5rem;
 }
 .star-row {
-  position: relative;
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.06em;
   font-size: 1.55rem;
   line-height: 1;
-  letter-spacing: 0.08em;
   vertical-align: middle;
 }
 .pdp-info .star-row,
 .review-card .star-row {
   font-size: 1.85rem;
 }
-.star-back { color: #c5c5c5; white-space: nowrap; }
+.star-slot {
+  position: relative;
+  display: inline-block;
+  line-height: 1;
+}
+.star-back { color: #c5c5c5; }
 .star-fill {
   position: absolute;
   left: 0;

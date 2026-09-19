@@ -248,14 +248,17 @@
 
   function starRowHtml(n, label) {
     var score = Math.max(0, Math.min(5, Number(n) || 0));
-    var pct = (score / 5) * 100;
     var aria = label || (score.toFixed(1) + " out of 5");
-    return (
-      '<span class="star-row" aria-label="' + esc(aria) + '">' +
-        '<span class="star-back">★★★★★</span>' +
-        '<span class="star-fill" style="width:' + pct.toFixed(2) + '%">★★★★★</span>' +
-      "</span>"
-    );
+    var slots = "";
+    for (var i = 1; i <= 5; i++) {
+      var fill = Math.max(0, Math.min(1, score - (i - 1))) * 100;
+      slots +=
+        '<span class="star-slot">' +
+          '<span class="star-back">★</span>' +
+          '<span class="star-fill" style="width:' + fill.toFixed(2) + '%">★</span>' +
+        "</span>";
+    }
+    return '<span class="star-row" aria-label="' + esc(aria) + '">' + slots + "</span>";
   }
 
   function reviewStats(p) {
