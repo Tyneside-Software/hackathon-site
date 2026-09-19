@@ -1,7 +1,7 @@
 (function () {
   var STORAGE_KEY = "fidget-squish-catalog";
   var AUTH_KEY = "fidget-squish-admin";
-  var PASSWORD = "cassiethecat";
+  var GATE = "ba2e9c211c2fb80bc79e8f0bb68adad38ae0258dc544101186258eb3981d215c";
   var PRODUCTS = [];
   var REVIEW_KEY = "fidget-squish-reviews";
   var REVIEWS = [];
@@ -136,9 +136,21 @@
     localStorage.removeItem(STORAGE_KEY);
   }
 
+  function hexFromBuffer(buf) {
+    return Array.prototype.map.call(new Uint8Array(buf), function (b) {
+      return ("0" + b.toString(16)).slice(-2);
+    }).join("");
+  }
+
   function passwordOk(value) {
     var typed = String(value || "").trim();
-    return typed === PASSWORD || typed === '"' + PASSWORD;
+    if (!window.crypto || !crypto.subtle || !window.TextEncoder) {
+      return Promise.resolve(false);
+    }
+    var bytes = new TextEncoder().encode("fs-admin-v1\0" + typed);
+    return crypto.subtle.digest("SHA-256", bytes).then(function (buf) {
+      return hexFromBuffer(buf) === GATE;
+    });
   }
 
   function isAdmin() {

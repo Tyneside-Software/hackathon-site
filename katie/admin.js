@@ -270,14 +270,16 @@
     if (gate) {
       gate.addEventListener("submit", function (e) {
         e.preventDefault();
-        if (shop.passwordOk(passwordInput && passwordInput.value)) {
-          shop.setAdmin(true);
-          if (errorEl) errorEl.hidden = true;
-          if (passwordInput) passwordInput.value = "";
-          openEditor();
-        } else if (errorEl) {
-          errorEl.hidden = false;
-        }
+        shop.passwordOk(passwordInput && passwordInput.value).then(function (ok) {
+          if (ok) {
+            shop.setAdmin(true);
+            if (errorEl) errorEl.hidden = true;
+            if (passwordInput) passwordInput.value = "";
+            openEditor();
+          } else if (errorEl) {
+            errorEl.hidden = false;
+          }
+        });
       });
     }
     if (list) {
