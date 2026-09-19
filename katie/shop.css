@@ -45,6 +45,7 @@ html { scroll-behavior: smooth; }
 
 body.shop {
   min-height: 100vh;
+  overflow-x: hidden;
   font-family: var(--font);
   color: var(--ink);
   background-color: var(--bg);
@@ -106,6 +107,7 @@ body.shop::before {
 
 .top .inner {
   width: min(1180px, calc(100% - 2rem));
+  max-width: 100%;
   margin: 0 auto;
   padding: 0.85rem 0 0.7rem;
 }
@@ -218,6 +220,8 @@ body.shop::before {
   font-weight: 800;
   padding: 0 1.15rem;
   cursor: pointer;
+  flex-shrink: 0;
+  min-width: 4.6rem;
 }
 
 .search button:hover { background: var(--pink-deep); }
@@ -228,6 +232,8 @@ body.shop::before {
   justify-content: center;
   gap: 0.25rem;
   padding-bottom: 0.55rem;
+  width: 100%;
+  max-width: 100%;
 }
 
 .nav a {
@@ -237,6 +243,7 @@ body.shop::before {
   font-weight: 700;
   padding: 0.35rem 0.75rem;
   border-radius: 999px;
+  white-space: nowrap;
 }
 
 .nav a:hover, .nav a.is-on {
@@ -282,12 +289,83 @@ body.shop::before {
     0 0 24px rgba(59, 130, 246, 0.55);
 }
 @media (max-width: 640px) {
-  .mode-toggle {
-    font-size: 0.88rem;
-    padding: 0.5rem 0.85rem;
-    top: 0.55rem;
-    left: 0.4rem;
+  body.shop {
+    background-attachment: scroll;
   }
+  body.shop::before {
+    top: 0.35rem;
+    right: 0.35rem;
+    font-size: 0.58rem;
+  }
+  .mode-toggle {
+    font-size: 0.78rem;
+    padding: 0.4rem 0.7rem;
+    top: 0.4rem;
+    left: 0.35rem;
+  }
+  .brand-row {
+    flex-wrap: wrap;
+    padding-top: 2.1rem;
+    gap: 0.35rem 0.55rem;
+    margin-bottom: 0.55rem;
+  }
+  .giant-heart { font-size: 2.55rem; }
+  .shop-name { font-size: 1.55rem; }
+  .shop-by { font-size: 0.82rem; }
+  .top .inner { width: calc(100% - 1.1rem); padding-top: 0.55rem; }
+  .nav {
+    gap: 0.2rem;
+  }
+  .nav a {
+    font-size: 0.78rem;
+    padding: 0.28rem 0.5rem;
+  }
+  .nav a.buy-nav {
+    margin-left: 0;
+  }
+  .search {
+    flex-wrap: wrap;
+  }
+  .search input {
+    flex: 1 1 100%;
+  }
+  .search button {
+    flex: 1 1 100%;
+    width: 100%;
+    min-width: 0;
+    padding: 0.55rem 1rem;
+  }
+  .page-head p,
+  .page-head h1 {
+    overflow-wrap: anywhere;
+    word-break: break-all;
+  }
+  .group-head h2 { font-size: 1.15rem; }
+  .group-head a {
+    white-space: normal;
+    font-size: 0.78rem;
+  }
+  .group-row {
+    grid-auto-columns: minmax(168px, 72vw);
+    gap: 0.65rem;
+  }
+  .product {
+    padding: 0.55rem 0.55rem 0.7rem;
+  }
+  .product h2,
+  .product .meta {
+    overflow-wrap: anywhere;
+  }
+  .stars {
+    font-size: 0.75rem;
+    gap: 0.15rem 0.3rem;
+  }
+  .star-row { font-size: 1.2rem; }
+  .wrap {
+    width: calc(100% - 1.1rem);
+  }
+  html.is-dark .search input::placeholder { color: #e9d5ff; }
+  html.is-dark .nav a.buy-nav { color: #fff; }
 }
 
 html.is-dark body.shop {
@@ -317,6 +395,10 @@ html.is-dark .search input {
   color: #fce7f3;
 }
 html.is-dark .nav a { color: #fce7f3; }
+html.is-dark .group-head a {
+  color: #ffe4f3;
+  text-shadow: 0 1px 4px rgba(17, 17, 17, 0.45);
+}
 html.is-dark .nav a:hover,
 html.is-dark .nav a.is-on {
   background: #3b0764;
@@ -364,6 +446,8 @@ html.is-dark .foot a { color: #fda4af; }
 
 .wrap {
   width: min(1180px, calc(100% - 2rem));
+  max-width: 100%;
+  min-width: 0;
   margin: 0 auto;
   padding: 1.2rem 0 3rem;
 }
@@ -381,6 +465,8 @@ html.is-dark .foot a { color: #fda4af; }
   max-width: 42rem;
   margin-bottom: 0.5rem;
   text-shadow: 0 1px 6px rgba(17, 17, 17, 0.22);
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .search-empty {
@@ -402,9 +488,10 @@ html.is-dark .foot a { color: #fda4af; }
 
 .group-head {
   display: flex;
+  flex-wrap: wrap;
   align-items: baseline;
   justify-content: space-between;
-  gap: 0.75rem;
+  gap: 0.45rem 0.75rem;
   margin-bottom: 0.7rem;
 }
 .group-head h2 {
@@ -418,7 +505,8 @@ html.is-dark .foot a { color: #fda4af; }
   font-size: 0.9rem;
   text-decoration: none;
   white-space: nowrap;
-  color: #ffe4f3;
+  color: var(--pink-deep);
+  text-shadow: 0 1px 4px rgba(255, 255, 255, 0.35);
 }
 .group-head a:hover { text-decoration: underline; }
 
@@ -428,8 +516,11 @@ html.is-dark .foot a { color: #fda4af; }
   grid-auto-columns: minmax(200px, 230px);
   gap: 0.9rem;
   overflow-x: auto;
+  min-width: 0;
+  max-width: 100%;
   padding: 0.35rem 0.15rem 0.85rem;
   scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
 }
 .group-row::-webkit-scrollbar { height: 8px; }
 .group-row::-webkit-scrollbar-thumb {
