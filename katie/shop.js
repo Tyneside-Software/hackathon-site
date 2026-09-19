@@ -213,6 +213,13 @@
   }
 
   function loginAdmin(password) {
+    var me = meLocal();
+    if (!me || !isShopAdminName(me.username)) {
+      return Promise.resolve({
+        ok: false,
+        detail: "Only Admins can open Admin. Log in on Account first."
+      });
+    }
     return fetch(apiBase() + "/katie/admin/login", {
       method: "POST",
       headers: authHeaders(),
@@ -805,6 +812,321 @@
     renderProductPage();
   }
 
+  var ACCOUNT_KEY = "fidget-squish-accounts";
+  var USER_SESSION = "fidget-squish-user-token";
+  var FOUNDER = "lewisthomson";
+  var accountBook = { users: [], friends: {}, admins: [FOUNDER], updated: 0 };
+
+  function emptyAccountBook() {
+    return { users: [], friends: {}, admins: [FOUNDER], updated: 0 };
+  }
+
+  function normaliseAccountName(name) {
+    return String(name || "").trim().toLowerCase();
+  }
+
+  function readAccountBook() {
+    try {
+      var raw = localStorage.getItem(ACCOUNT_KEY);
+      if (!raw) return null;
+      var data = JSON.parse(raw);
+      if (!data || !Array.isArray(data.users)) return null;
+      return data;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  function writeAccountBook() {
+    accountBook.updated = Date.now();
+    if ((accountBook.admins || []).indexOf(FOUNDER) === -1) {
+      accountBook.admins = [FOUNDER].concat(accountBook.admins || []);
+    }
+    try {
+      localStorage.setItem(ACCOUNT_KEY, JSON.stringify(accountBook));
+      return { error: null };
+    } catch (e) {
+      return { error: "Could not save accounts on this computer." };
+    }
+  }
+
+  function isShopAdminName(name) {
+    name = normaliseAccountName(name);
+    return (accountBook.admins || []).indexOf(name) !== -1;
+  }
+
+  function publicAccount(u) {
+    if (!u) return null;
+    return {
+      username: u.username,
+      email: u.email || "",
+      full_name: u.full_name || null,
+      photo: u.photo || "",
+      admin: isShopAdminName(u.username)
+    };
+  }
+
+  function findAccount(nameOrEmail) {
+    var q = normaliseAccountName(nameOrEmail);
+    if (!q) return null;
+    var users = accountBook.users || [];
+    for (var i = 0; i < users.length; i++) {
+      var u = users[i];
+      if (u.username === q || (u.email && String(u.email).toLowerCase() === q)) return u;
+    }
+    return null;
+  }
+
+  function hexBytes(buf) {
+    return Array.prototype.map.call(new Uint8Array(buf), function (b) {
+      return ("0" + b.toString(16)).slice(-2);
+    }).join("");
+  }
+
+  function newSalt() {
+    var a = new Uint8Array(16);
+    crypto.getRandomValues(a);
+    return hexBytes(a);
+  }
+
+  function hashPass(password, salt) {
+    var enc = new TextEncoder();
+    return crypto.subtle.digest("SHA-256", enc.encode(salt + "\n" + password)).then(hexBytes);
+  }
+
+  function setUserSession(username) {
+    try {
+      if (username) localStorage.setItem(USER_SESSION, "local:" + normaliseAccountName(username));
+      else localStorage.removeItem(USER_SESSION);
+    } catch (e) {}
+  }
+
+  function sessionUsername() {
+    try {
+      var t = localStorage.getItem(USER_SESSION) || "";
+      if (t.indexOf("local:") === 0) return t.slice(6);
+      return "";
+    } catch (e) {
+      return "";
+    }
+  }
+
+  function meLocal() {
+    return publicAccount(findAccount(sessionUsername()));
+  }
+
+  function loadAccountBook(done) {
+    var local = readAccountBook();
+    fetch("accounts.json?v=20260920pc")
+      .then(function (r) { return r.ok ? r.json() : emptyAccountBook(); })
+      .catch(function () { return emptyAccountBook(); })
+      .then(function (file) {
+        if (!file || !Array.isArray(file.users)) file = emptyAccountBook();
+        var localNewer = local && (local.updated || 0) >= (file.updated || 0) && local.users && local.users.length;
+        if (localNewer) {
+          accountBook = local;
+        } else {
+          accountBook = {
+            users: file.users.slice(),
+            friends: file.friends || {},
+            admins: (file.admins && file.admins.length) ? file.admins.slice() : [FOUNDER],
+            updated: file.updated || 0
+          };
+          if (local && local.users) {
+            var have = {};
+            accountBook.users.forEach(function (u) { have[u.username] = true; });
+            local.users.forEach(function (u) {
+              if (!have[u.username]) accountBook.users.push(u);
+            });
+            Object.keys(local.friends || {}).forEach(function (k) {
+              if (!accountBook.friends[k]) accountBook.friends[k] = local.friends[k];
+            });
+            (local.admins || []).forEach(function (a) {
+              if (accountBook.admins.indexOf(a) === -1) accountBook.admins.push(a);
+            });
+          }
+        }
+        if (accountBook.admins.indexOf(FOUNDER) === -1) accountBook.admins.unshift(FOUNDER);
+        writeAccountBook();
+        if (done) done(accountBook);
+      });
+  }
+
+  function registerLocal(payload) {
+    var username = normaliseAccountName(payload.username);
+    var email = String(payload.email || "").trim().toLowerCase();
+    var password = String(payload.password || "");
+    if (!/^[a-z0-9._-]{3,64}$/.test(username)) {
+      return Promise.reject(new Error("Usernames can only use letters, numbers, dots, underscores and hyphens — no spaces."));
+    }
+    if (!email || email.indexOf("@") === -1) return Promise.reject(new Error("Enter a real email"));
+    if (password.length < 8) return Promise.reject(new Error("Password must be at least 8 characters."));
+    if (findAccount(username)) return Promise.reject(new Error("Username already registered"));
+    if (findAccount(email)) return Promise.reject(new Error("Email already registered"));
+    var salt = newSalt();
+    return hashPass(password, salt).then(function (pass) {
+      accountBook.users.push({
+        username: username,
+        email: email,
+        full_name: payload.full_name || null,
+        photo: payload.photo || "",
+        salt: salt,
+        pass: pass
+      });
+      var saved = writeAccountBook();
+      if (saved.error) throw new Error(saved.error);
+      setUserSession(username);
+      return publicAccount(findAccount(username));
+    });
+  }
+
+  function loginLocal(user, password) {
+    var row = findAccount(user);
+    if (!row) return Promise.reject(new Error("Incorrect email, username or password"));
+    return hashPass(password, row.salt).then(function (h) {
+      if (h !== row.pass) throw new Error("Incorrect email, username or password");
+      setUserSession(row.username);
+      return publicAccount(row);
+    });
+  }
+
+  function logoutLocal() {
+    setUserSession("");
+  }
+
+  function patchLocal(payload) {
+    var row = findAccount(sessionUsername());
+    if (!row) return Promise.reject(new Error("Log in first."));
+    var old = row.username;
+    if (payload.photo != null) row.photo = payload.photo;
+    if (payload.full_name != null) row.full_name = payload.full_name;
+    if (payload.username) {
+      var next = normaliseAccountName(payload.username);
+      if (!/^[a-z0-9._-]{3,64}$/.test(next)) {
+        return Promise.reject(new Error("Usernames can only use letters, numbers, dots, underscores and hyphens — no spaces."));
+      }
+      if (next !== old && findAccount(next)) return Promise.reject(new Error("Username already registered"));
+      if (next !== old) {
+        row.username = next;
+        var pals = accountBook.friends[old] || [];
+        delete accountBook.friends[old];
+        accountBook.friends[next] = pals;
+        Object.keys(accountBook.friends).forEach(function (k) {
+          accountBook.friends[k] = (accountBook.friends[k] || []).map(function (n) { return n === old ? next : n; });
+        });
+        accountBook.admins = (accountBook.admins || []).map(function (n) { return n === old ? next : n; });
+        setUserSession(next);
+      }
+    }
+    var saved = writeAccountBook();
+    if (saved.error) return Promise.reject(new Error(saved.error));
+    return Promise.resolve(publicAccount(row));
+  }
+
+  function searchLocal(q, exclude) {
+    var needle = normaliseAccountName(q);
+    exclude = normaliseAccountName(exclude || sessionUsername());
+    var hits = (accountBook.users || []).filter(function (u) {
+      if (u.username === exclude) return false;
+      if (!needle) return true;
+      return u.username.indexOf(needle) !== -1;
+    });
+    hits.sort(function (a, b) {
+      var as = needle && a.username.indexOf(needle) === 0 ? 0 : 1;
+      var bs = needle && b.username.indexOf(needle) === 0 ? 0 : 1;
+      if (as !== bs) return as - bs;
+      return a.username < b.username ? -1 : 1;
+    });
+    var friends = friendNamesFor(exclude);
+    return hits.slice(0, needle ? 8 : 24).map(function (u) {
+      var card = publicAccount(u);
+      card.friend = friends.indexOf(u.username) !== -1;
+      return card;
+    });
+  }
+
+  function friendNamesFor(username) {
+    username = normaliseAccountName(username);
+    return (accountBook.friends[username] || []).slice();
+  }
+
+  function listFriendsLocal() {
+    return friendNamesFor(sessionUsername()).map(function (name) {
+      var card = publicAccount(findAccount(name)) || { username: name, photo: "", admin: isShopAdminName(name) };
+      card.friend = true;
+      return card;
+    });
+  }
+
+  function addFriendLocal(username) {
+    var me = sessionUsername();
+    username = normaliseAccountName(username);
+    if (!me) return Promise.reject(new Error("Log in first."));
+    if (username === me) return Promise.reject(new Error("That’s you."));
+    if (!findAccount(username)) return Promise.reject(new Error("No account with that name."));
+    var list = accountBook.friends[me] || [];
+    if (list.indexOf(username) === -1) list.push(username);
+    accountBook.friends[me] = list;
+    writeAccountBook();
+    var card = publicAccount(findAccount(username));
+    card.friend = true;
+    return Promise.resolve(card);
+  }
+
+  function removeFriendLocal(username) {
+    var me = sessionUsername();
+    username = normaliseAccountName(username);
+    accountBook.friends[me] = (accountBook.friends[me] || []).filter(function (n) { return n !== username; });
+    writeAccountBook();
+    return Promise.resolve({ ok: true });
+  }
+
+  function listAdminsLocal() {
+    return (accountBook.admins || []).map(function (name) {
+      var card = publicAccount(findAccount(name)) || { username: name, photo: "", admin: true };
+      card.admin = true;
+      card.founder = name === FOUNDER;
+      return card;
+    });
+  }
+
+  function addAdminLocal(username) {
+    username = normaliseAccountName(username);
+    if (username === sessionUsername()) return Promise.reject(new Error("That’s you — you’re already an Admin."));
+    if (!findAccount(username)) return Promise.reject(new Error("No account with that name."));
+    if ((accountBook.admins || []).indexOf(username) === -1) accountBook.admins.push(username);
+    writeAccountBook();
+    var card = publicAccount(findAccount(username));
+    card.admin = true;
+    card.founder = username === FOUNDER;
+    return Promise.resolve(card);
+  }
+
+  function removeAdminLocal(username) {
+    username = normaliseAccountName(username);
+    if (username === FOUNDER) return Promise.reject(new Error("LewisThomson has to stay an Admin."));
+    var next = (accountBook.admins || []).filter(function (n) { return n !== username; });
+    if (!next.length) return Promise.reject(new Error("There has to be at least one Admin."));
+    accountBook.admins = next;
+    writeAccountBook();
+    return Promise.resolve({ ok: true });
+  }
+
+  function downloadAccounts() {
+    writeAccountBook();
+    var blob = new Blob([JSON.stringify({
+      users: accountBook.users,
+      friends: accountBook.friends,
+      admins: accountBook.admins,
+      updated: accountBook.updated
+    }, null, 2)], { type: "application/json" });
+    var a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "accounts.json";
+    a.click();
+    URL.revokeObjectURL(a.href);
+  }
+
   window.FidgetSquish = {
     STORAGE_KEY: STORAGE_KEY,
     defaultItems: defaultItems,
@@ -818,6 +1140,21 @@
     adminHeaders: adminHeaders,
     isAdmin: isAdmin,
     setAdmin: setAdmin,
+    loadAccountBook: loadAccountBook,
+    meLocal: meLocal,
+    registerLocal: registerLocal,
+    loginLocal: loginLocal,
+    logoutLocal: logoutLocal,
+    patchLocal: patchLocal,
+    searchLocal: searchLocal,
+    listFriendsLocal: listFriendsLocal,
+    addFriendLocal: addFriendLocal,
+    removeFriendLocal: removeFriendLocal,
+    listAdminsLocal: listAdminsLocal,
+    addAdminLocal: addAdminLocal,
+    removeAdminLocal: removeAdminLocal,
+    downloadAccounts: downloadAccounts,
+    isShopAdminName: isShopAdminName,
     loadCatalog: loadCatalog,
     fetchStock: fetchStock,
     refresh: refresh,
@@ -889,25 +1226,18 @@
   function bindAccountNav() {
     var links = document.querySelectorAll('nav a[href="account.html"]');
     if (!links.length) return;
-    var tok = "";
-    try { tok = localStorage.getItem("fidget-squish-user-token") || ""; } catch (e) {}
-    if (!tok) {
+    var user = meLocal();
+    if (!user) {
       links.forEach(function (link) {
         link.textContent = "Account";
         link.classList.remove("account-chip");
       });
       return;
     }
-    fetch(apiBase() + "/users/me", { headers: { Accept: "application/json", Authorization: "Bearer " + tok } })
-      .then(function (r) { return r.ok ? r.json() : Promise.reject(); })
-      .then(function (user) {
-        if (!user || !user.username) return;
-        links.forEach(function (link) {
-          link.classList.add("account-chip");
-          link.innerHTML = (user.photo ? '<img src="' + esc(user.photo) + '" alt="">' : "") + esc(user.username);
-        });
-      })
-      .catch(function () {});
+    links.forEach(function (link) {
+      link.classList.add("account-chip");
+      link.innerHTML = (user.photo ? '<img src="' + esc(user.photo) + '" alt="">' : "") + esc(user.username);
+    });
   }
 
   function bindModeToggle() {
@@ -930,8 +1260,10 @@
   }
 
   bindModeToggle();
-  bindAccountNav();
   bindLegal();
+  loadAccountBook(function () {
+    bindAccountNav();
+  });
   REVIEWS = readReviews();
 
   bindSearch();

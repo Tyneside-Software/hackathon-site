@@ -130,17 +130,15 @@
   }
 
   function loadMe() {
-    if (!token()) {
+    if (!shop) {
       showGate();
       return;
     }
-    fetch(api() + "/users/me", { headers: headers(true) })
-      .then(function (r) { return r.ok ? r.json() : Promise.reject(); })
-      .then(showProfile)
-      .catch(function () {
-        setToken("");
-        showGate();
-      });
+    shop.loadAccountBook(function () {
+      var me = shop.meLocal && shop.meLocal();
+      if (me) showProfile(me);
+      else showGate();
+    });
   }
 
   function fileToDataUrl(file, done) {
@@ -189,23 +187,10 @@
     loginForm.addEventListener("submit", function (e) {
       e.preventDefault();
       showStatus(statusEl, "Squeezing you in…");
-      fetch(api() + "/login", {
-        method: "POST",
-        headers: headers(false),
-        body: JSON.stringify({
-          username: loginForm.user.value.trim(),
-          password: loginForm.password.value
-        })
-      }).then(function (r) {
-        return r.json().then(function (data) {
-          if (!r.ok) throw new Error(detailOf(data, "Could not log in"));
-          setToken(data.access_token);
-          return fetch(api() + "/users/me", { headers: headers(true) });
-        });
-      }).then(function (r) { return r.json(); })
+      shop.loginLocal(loginForm.user.value.trim(), loginForm.password.value)
         .then(function (user) {
           showStatus(statusEl, "");
-          saveSession(Object.assign(user, { access_token: token() }));
+          saveSession(user);
         })
         .catch(function (err) {
           showStatus(statusEl, err.message || "Could not log in", true);
@@ -231,46 +216,17 @@
         return;
       }
       showStatus(statusEl, "Making your squishy account…");
-      fetch(api() + "/register", {
-        method: "POST",
-        headers: headers(false),
-        body: JSON.stringify({
-          username: signupForm.username.value.trim(),
-          email: signupForm.email.value.trim(),
-          password: signupForm.password.value
-        })
-      }).then(function (r) {
-        return r.json().then(function (data) {
-          if (!r.ok) {
-            throw new Error(detailOf(data, "Could not create account"));
-          }
-          return fetch(api() + "/login", {
-            method: "POST",
-            headers: headers(false),
-            body: JSON.stringify({
-              username: signupForm.username.value.trim(),
-              password: signupForm.password.value
-            })
-          });
-        });
-      }).then(function (r) { return r.json(); })
-        .then(function (data) {
-          if (!data.access_token) throw new Error("Could not log in");
-          setToken(data.access_token);
-          if (!pendingPhoto) return fetch(api() + "/users/me", { headers: headers(true) }).then(function (r) { return r.json(); });
-          return fetch(api() + "/users/me", {
-            method: "PATCH",
-            headers: headers(true),
-            body: JSON.stringify({ photo: pendingPhoto })
-          }).then(function (r) { return r.json(); });
-        })
-        .then(function (user) {
-          showStatus(statusEl, "");
-          saveSession(Object.assign(user, { access_token: token() }));
-        })
-        .catch(function (err) {
-          showStatus(statusEl, err.message || "Could not create account", true);
-        });
+      shop.registerLocal({
+        username: signupForm.username.value.trim(),
+        email: signupForm.email.value.trim(),
+        password: signupForm.password.value,
+        photo: pendingPhoto || ""
+      }).then(function (user) {
+        showStatus(statusEl, "");
+        saveSession(user);
+      }).catch(function (err) {
+        showStatus(statusEl, err.message || "Could not create account", true);
+      });
     });
   }
 
@@ -294,17 +250,9 @@
       showStatus(profileStatus, "Saving…");
       var body = { username: profileForm.username.value.trim() };
       if (pendingPhoto) body.photo = pendingPhoto;
-      fetch(api() + "/users/me", {
-        method: "PATCH",
-        headers: headers(true),
-        body: JSON.stringify(body)
-      }).then(function (r) {
-        return r.json().then(function (data) {
-          if (!r.ok) throw new Error(detailOf(data, "Could not save"));
-          if (data.access_token) setToken(data.access_token);
-          showStatus(profileStatus, "Saved. Looking squishy.");
-          saveSession(data);
-        });
+      shop.patchLocal(body).then(function (user) {
+        showStatus(profileStatus, "Saved. Looking squishy.");
+        saveSession(user);
       }).catch(function (err) {
         showStatus(profileStatus, err.message || "Could not save", true);
       });
@@ -314,6 +262,7 @@
   var logoutBtn = document.querySelector("[data-logout]");
   if (logoutBtn) {
     logoutBtn.addEventListener("click", function () {
+      if (shop.logoutLocal) shop.logoutLocal();
       setToken("");
       pendingPhoto = "";
       showGate();
@@ -532,60 +481,42 @@
   }
 
   function runSearch(q) {
-    fetch(api() + "/katie/users/search?q=" + encodeURIComponent(q || ""), { headers: headers(true) })
-      .then(function (r) { return r.ok ? r.json() : Promise.reject(); })
-      .then(function (data) { renderHits((data && data.users) || []); })
-      .catch(function () {
-        if (friendResults) {
-          friendResults.hidden = false;
-          friendResults.innerHTML = '<p class="friend-empty">Could not search just now.</p>';
-        }
-      });
+    var users = shop.searchLocal ? shop.searchLocal(q) : [];
+    renderHits(users);
   }
 
   function loadFriends() {
-    if (!token() || !friendList) return;
-    fetch(api() + "/katie/friends", { headers: headers(true) })
-      .then(function (r) { return r.ok ? r.json() : Promise.reject(); })
-      .then(function (data) {
-        var users = (data && data.users) || [];
-        friendNames = {};
-        users.forEach(function (u) { friendNames[u.username] = true; });
-        if (!users.length) {
-          friendList.innerHTML = '<p class="friend-empty">No friends yet. Search above and pick someone.</p>';
-          return;
-        }
-        friendList.innerHTML = users.map(function (u) {
-          return (
-            '<div class="friend-hit">' +
-              avatarHtml(u.photo) +
-              whoHtml(u) +
-              '<button type="button" class="unfriend" data-unfriend="' + escHtml(u.username) + '">Remove</button>' +
-            "</div>"
-          );
-        }).join("");
-        friendList.querySelectorAll("[data-unfriend]").forEach(function (btn) {
-          btn.addEventListener("click", function () {
-            fetch(api() + "/katie/friends/" + encodeURIComponent(btn.dataset.unfriend), {
-              method: "DELETE",
-              headers: headers(true)
-            }).then(function (r) {
-              if (!r.ok) throw new Error("Could not remove");
-              if (picked && picked.username === btn.dataset.unfriend) {
-                picked.friend = false;
-                setPicked(picked);
-              }
-              loadFriends();
-            }).catch(function () {
-              showStatus(friendStatus, "Could not remove that friend.", true);
-            });
-          });
+    if (!friendList || !shop.listFriendsLocal) return;
+    var users = shop.listFriendsLocal() || [];
+    friendNames = {};
+    users.forEach(function (u) { friendNames[u.username] = true; });
+    if (!users.length) {
+      friendList.innerHTML = '<p class="friend-empty">No friends yet. Search above and pick someone.</p>';
+      return;
+    }
+    friendList.innerHTML = users.map(function (u) {
+      return (
+        '<div class="friend-hit">' +
+          avatarHtml(u.photo) +
+          whoHtml(u) +
+          '<button type="button" class="unfriend" data-unfriend="' + escHtml(u.username) + '">Remove</button>' +
+        "</div>"
+      );
+    }).join("");
+    friendList.querySelectorAll("[data-unfriend]").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        shop.removeFriendLocal(btn.dataset.unfriend).then(function () {
+          if (picked && picked.username === btn.dataset.unfriend) {
+            picked.friend = false;
+            setPicked(picked);
+          }
+          loadFriends();
+        }).catch(function () {
+          showStatus(friendStatus, "Could not remove that friend.", true);
         });
-        if (picked) setPicked(picked);
-      })
-      .catch(function () {
-        friendList.innerHTML = '<p class="friend-empty">Could not load friends just now.</p>';
       });
+    });
+    if (picked) setPicked(picked);
   }
 
   if (friendQ) {
@@ -606,19 +537,12 @@
         return;
       }
       showStatus(friendStatus, "Adding…");
-      fetch(api() + "/katie/friends", {
-        method: "POST",
-        headers: headers(true),
-        body: JSON.stringify({ username: picked.username })
-      }).then(function (r) {
-        return r.json().then(function (data) {
-          if (!r.ok) throw new Error(detailOf(data, "Could not add friend"));
-          picked = data;
-          picked.friend = true;
-          showStatus(friendStatus, "Added " + (picked.username || "") + ".");
-          setPicked(picked);
-          loadFriends();
-        });
+      shop.addFriendLocal(picked.username).then(function (data) {
+        picked = data;
+        picked.friend = true;
+        showStatus(friendStatus, "Added " + (picked.username || "") + ".");
+        setPicked(picked);
+        loadFriends();
       }).catch(function (err) {
         showStatus(friendStatus, err.message || "Could not add friend", true);
       });
