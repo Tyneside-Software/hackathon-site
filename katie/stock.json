@@ -1,0 +1,58 @@
+{
+  "items": [
+    {
+      "name": "Dumpling",
+      "description": "Glow in the dark mystery dumpling",
+      "price": "£4",
+      "photos": ["photos/mystery-dumpling.jpeg"]
+    },
+    {
+      "name": "4 pack of mini squishies",
+      "description": "Four mini squishies in a pack.",
+      "price": "Email for price",
+      "photos": ["photos/4-pack-of-mini-squishies.jpeg"]
+    },
+    {
+      "name": "Santa popit",
+      "description": "Red and white popit",
+      "price": "£5.49",
+      "photos": ["photos/santa-popit.jpeg"]
+    },
+    {
+      "name": "Popit",
+      "description": "Fidget dice popit",
+      "price": "£4.99",
+      "photos": ["photos/popit-die.jpeg"]
+    },
+    {
+      "name": "Fidget spinner",
+      "description": "Earth fidget spinner",
+      "price": "£3.99",
+      "photos": ["photos/earth-fidget-spinner.jpeg"]
+    },
+    {
+      "name": "Cheese",
+      "description": "Super slow-rise cheese",
+      "price": "£4.99",
+      "photos": ["photos/slowrise-cheese.jpeg"]
+    },
+    {
+      "name": "Homemade balloon squishies",
+      "description": "Homemade balloon squishies.",
+      "price": "50p",
+      "photos": []
+    },
+    {
+      "name": "Homemade squishie",
+      "description": "Homemade squishie.",
+      "price": "£2",
+      "photos": []
+    },
+    {
+      "name": "Squishie skin",
+      "description": "Squishie skin.",
+      "price": "£1",
+      "photos": []
+    }
+  ]
+}
