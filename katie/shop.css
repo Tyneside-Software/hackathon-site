@@ -396,13 +396,10 @@ html.is-dark .search input {
 }
 html.is-dark .nav a { color: #fce7f3; }
 html.is-dark .page-head h1,
-html.is-dark .group-head h2 {
-  color: #e9d5ff;
-  text-shadow: 0 1px 4px rgba(17, 17, 17, 0.45);
-}
+html.is-dark .group-head h2,
 html.is-dark .group-head a {
-  color: #e9d5ff;
-  text-shadow: 0 1px 4px rgba(17, 17, 17, 0.45);
+  color: #36042b !important;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.35);
 }
 html.is-dark .nav a:hover,
 html.is-dark .nav a.is-on {
@@ -462,8 +459,13 @@ html.is-dark .foot a { color: #fda4af; }
   font-weight: 750;
   letter-spacing: -0.03em;
   margin-bottom: 0.3rem;
-  color: #36042b;
+  color: #36042b !important;
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.45);
+}
+.page-head h1,
+.group-head h2,
+.group-head a {
+  color: #36042b !important;
 }
 .page-head p {
   color: #fce7f3;
