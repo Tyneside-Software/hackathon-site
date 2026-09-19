@@ -709,6 +709,11 @@ html.is-dark .pdp {
   text-transform: uppercase;
   padding: 0.18rem 0.55rem;
   border-radius: 999px;
+  border: 2px solid #111;
+  box-shadow: none;
+}
+html.is-dark .stock {
+  border-color: #fff;
 }
 .stock.is-in {
   background: #dcfce7;
@@ -784,6 +789,15 @@ a.more-card .meta {
   color: #f5c518;
   pointer-events: none;
 }
+.star-back,
+.star-fill {
+  -webkit-text-stroke: 1.15px #111;
+  paint-order: stroke fill;
+}
+html.is-dark .star-back,
+html.is-dark .star-fill {
+  -webkit-text-stroke: 1.15px #fff;
+}
 .stars a {
   font-weight: 750;
   text-decoration: none;
@@ -834,8 +848,13 @@ a.more-card .meta {
   line-height: 1;
   color: #d1d5db;
   cursor: pointer;
+  -webkit-text-stroke: 1.15px #111;
+  paint-order: stroke fill;
 }
 .star-pick button.is-on { color: #f5c518; }
+html.is-dark .star-pick button {
+  -webkit-text-stroke: 1.15px #fff;
+}
 .review-form button[type="submit"] {
   justify-self: start;
   border: 0;
