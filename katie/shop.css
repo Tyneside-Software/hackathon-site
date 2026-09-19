@@ -296,10 +296,8 @@ body.shop::before {
 .product {
   min-width: 0;
   scroll-snap-align: start;
-  background:
-    linear-gradient(#fff, #fff) padding-box,
-    var(--rainbow) border-box;
-  border: 5px solid transparent;
+  background: #fff;
+  border: 5px solid #4c1d95;
   border-radius: 16px;
   padding: 0.7rem 0.7rem 0.85rem;
   box-shadow: 0 10px 22px rgba(17, 17, 17, 0.08);
@@ -439,7 +437,7 @@ a.more-card .meta {
   line-height: 1.3;
 }
 .product .meta {
-  color: var(--muted);
+  color: var(--pink);
   font-size: 0.8rem;
   margin-top: 0.15rem;
 }
