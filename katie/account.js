@@ -275,12 +275,25 @@
   }
 
   function finishSocial(data) {
-    if (!data || !data.access_token) {
+    if (!data || !data.email) {
+      socialFail("That sign-in did not share an email.");
+      return;
+    }
+    if (!shop || !shop.loginFromSocial) {
       socialFail("Could not finish sign-in.");
       return;
     }
-    showStatus(statusEl, "");
-    saveSession(data);
+    shop.loginFromSocial({
+      email: data.email,
+      full_name: data.full_name || data.username || "",
+      photo: data.photo || "",
+      provider: data.provider || ""
+    }).then(function (user) {
+      showStatus(statusEl, "");
+      saveSession(user);
+    }).catch(function (err) {
+      socialFail(err.message || "Could not finish sign-in.");
+    });
   }
 
   function loadScript(src) {
@@ -294,28 +307,59 @@
     });
   }
 
+  function sendGoogle(body) {
+    return fetch(api() + "/katie/auth/google", {
+      method: "POST",
+      headers: headers(false),
+      body: JSON.stringify(body)
+    }).then(function (r) {
+      return r.json().then(function (data) {
+        if (!r.ok) throw new Error(detailOf(data, "Google sign-in failed"));
+        finishSocial(data);
+      });
+    });
+  }
+
   var googleBtn = document.querySelector("[data-google]");
   if (googleBtn) {
     googleBtn.addEventListener("click", function () {
-      if (!providers.google_client_id) {
-        socialFail("Google isn’t switched on for this shop yet. Use email for now.");
+      var clientId = providers.google_client_id;
+      if (!clientId) {
+        socialFail("Google isn’t switched on yet. Add a Google Client ID in config.js.");
         return;
       }
-      if (!window.google || !google.accounts || !google.accounts.id) {
+      if (!window.google || !google.accounts) {
         socialFail("Google is still loading. Try again in a second.");
         return;
       }
+      showStatus(statusEl, "Opening Google…");
+      if (google.accounts.oauth2 && google.accounts.oauth2.initTokenClient) {
+        var tokenClient = google.accounts.oauth2.initTokenClient({
+          client_id: clientId,
+          scope: "openid email profile",
+          callback: function (resp) {
+            if (!resp || resp.error || !resp.access_token) {
+              socialFail((resp && resp.error) || "Google sign-in was cancelled.");
+              return;
+            }
+            sendGoogle({ access_token: resp.access_token }).catch(function (err) {
+              socialFail(err.message || "Google sign-in failed");
+            });
+          }
+        });
+        tokenClient.requestAccessToken({ prompt: "select_account" });
+        return;
+      }
+      if (!google.accounts.id) {
+        socialFail("Google sign-in did not load.");
+        return;
+      }
       google.accounts.id.initialize({
-        client_id: providers.google_client_id,
+        client_id: clientId,
         callback: function (resp) {
-          fetch(api() + "/katie/auth/google", {
-            method: "POST",
-            headers: headers(false),
-            body: JSON.stringify({ credential: resp.credential })
-          }).then(function (r) { return r.json().then(function (data) {
-            if (!r.ok) throw new Error(detailOf(data, "Google sign-in failed"));
-            finishSocial(data);
-          }); }).catch(function (err) { socialFail(err.message); });
+          sendGoogle({ credential: resp.credential }).catch(function (err) {
+            socialFail(err.message || "Google sign-in failed");
+          });
         }
       });
       google.accounts.id.prompt();
@@ -326,7 +370,7 @@
   if (appleBtn) {
     appleBtn.addEventListener("click", function () {
       if (!providers.apple_client_id) {
-        socialFail("Apple isn’t switched on for this shop yet. Use email for now.");
+        socialFail("Apple isn’t switched on yet. Add an Apple Services ID in config.js.");
         return;
       }
       var start = window.AppleID
@@ -370,7 +414,7 @@
   if (fbBtn) {
     fbBtn.addEventListener("click", function () {
       if (!providers.facebook_app_id) {
-        socialFail("Facebook isn’t switched on for this shop yet. Use email for now.");
+        socialFail("Facebook isn’t switched on yet. Add a Facebook App ID in config.js.");
         return;
       }
       if (!window.FB) {
@@ -397,7 +441,11 @@
   fetch(api() + "/katie/auth/providers")
     .then(function (r) { return r.ok ? r.json() : {}; })
     .then(function (data) {
-      providers = data || {};
+      providers = {
+        google_client_id: (data && data.google_client_id) || window.GOOGLE_CLIENT_ID || "",
+        apple_client_id: (data && data.apple_client_id) || window.APPLE_CLIENT_ID || "",
+        facebook_app_id: (data && data.facebook_app_id) || window.FACEBOOK_APP_ID || ""
+      };
       if (providers.facebook_app_id && !window.FB) {
         window.fbAsyncInit = function () {
           FB.init({ appId: providers.facebook_app_id, cookie: true, xfbml: false, version: "v21.0" });
@@ -405,7 +453,13 @@
         loadScript("https://connect.facebook.net/en_US/sdk.js").catch(function () {});
       }
     })
-    .catch(function () { providers = {}; });
+    .catch(function () {
+      providers = {
+        google_client_id: window.GOOGLE_CLIENT_ID || "",
+        apple_client_id: window.APPLE_CLIENT_ID || "",
+        facebook_app_id: window.FACEBOOK_APP_ID || ""
+      };
+    });
 
   function escHtml(s) {
     if (shop && shop.esc) return shop.esc(s);

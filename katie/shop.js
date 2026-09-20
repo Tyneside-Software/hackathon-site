@@ -1031,6 +1031,52 @@
     });
   }
 
+  function loginFromSocial(info) {
+    var email = String((info && info.email) || "").trim().toLowerCase();
+    if (!email || email.indexOf("@") === -1) {
+      return Promise.reject(new Error("That sign-in did not share an email."));
+    }
+    var photo = (info && info.photo) || "";
+    var row = findAccount(email);
+    if (row) {
+      if (photo && !row.photo) row.photo = photo;
+      if (info.full_name && !row.full_name) row.full_name = info.full_name;
+      row.provider = (info && info.provider) || row.provider;
+      writeAccountBook();
+      setUserSession(row.username);
+      var existing = publicAccount(row);
+      publishProfile(existing);
+      return Promise.resolve(existing);
+    }
+    var base = email.split("@")[0].toLowerCase().replace(/[^a-z0-9._-]/g, "") || "user";
+    base = base.slice(0, 64);
+    if (base.length < 3) base = (base + "user").slice(0, 64);
+    var name = base;
+    var n = 0;
+    while (findAccount(name)) {
+      n += 1;
+      var suffix = String(n);
+      name = base.slice(0, Math.max(3, 64 - suffix.length)) + suffix;
+    }
+    var salt = newSalt();
+    return hashPass(newSalt(), salt).then(function (pass) {
+      accountBook.users.push({
+        username: name,
+        email: email,
+        full_name: (info && info.full_name) || null,
+        photo: photo,
+        salt: salt,
+        pass: pass,
+        provider: (info && info.provider) || ""
+      });
+      writeAccountBook();
+      setUserSession(name);
+      var me = publicAccount(findAccount(name));
+      publishProfile(me);
+      return me;
+    });
+  }
+
   function loginLocal(user, password) {
     var row = findAccount(user);
     if (!row) return Promise.reject(new Error("Incorrect email, username or password"));
@@ -1219,6 +1265,7 @@
     meLocal: meLocal,
     registerLocal: registerLocal,
     loginLocal: loginLocal,
+    loginFromSocial: loginFromSocial,
     logoutLocal: logoutLocal,
     patchLocal: patchLocal,
     searchLocal: searchLocal,
