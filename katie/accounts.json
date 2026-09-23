@@ -1,0 +1,9 @@
+{
+  "users": [
+    { "username": "lewisthomson", "email": "", "photo": "", "full_name": null },
+    { "username": "katiethomson", "email": "", "photo": "", "full_name": null }
+  ],
+  "friends": {},
+  "admins": ["lewisthomson", "katiethomson"],
+  "updated": 1758312100000
+}

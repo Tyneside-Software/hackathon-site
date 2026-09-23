@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Reviews · fidget squish</title>
+  <meta name="description" content="Reviews of fidget squish items. Rate out of 5 stars, add a photo and a description.">
+  <link rel="icon" href="logo.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="shop.css?v=20260920darktext">
+  <script>try{if(localStorage.getItem("fidget-squish-dark")==="1")document.documentElement.classList.add("is-dark")}catch(e){}</script>
+</head>
+<body class="shop">
+  <div class="rainbow-bar" aria-hidden="true"></div>
+  <header class="top">
+    <div class="inner">
+      <a class="brand-row" href="index.html">
+        <span class="giant-heart" aria-hidden="true">💗</span>
+        <span>
+          <span class="shop-name">fidget squish</span>
+          <span class="shop-by">Katie’s shop</span>
+        </span>
+      </a>
+      <nav class="nav" aria-label="Shop">
+        <a href="index.html">All</a>
+        <a href="featured.html">Featured</a>
+        <a href="new.html">New</a>
+        <a href="squishies.html">Squishies</a>
+        <a href="homemade.html">Homemade</a>
+        <a href="mystery.html">Mystery</a>
+        <a href="fidgets.html">Fidgets</a>
+        <a href="slime.html">Slime</a>
+        <a href="reviews.html" class="is-on" aria-current="page">Reviews</a>
+        <a href="about.html">About</a>
+        <a href="more.html">More</a>
+        <a href="account.html">Account</a>
+        <a href="admin.html">Admin</a>
+        <a class="buy-nav" href="mailto:katie@tyneside.software?subject=Order%20from%20fidget%20squish">Email to buy</a>
+      </nav>
+    </div>
+    <div class="rainbow-bar" aria-hidden="true"></div>
+  </header>
+
+  <main class="wrap" data-reviews>
+    <div class="page-head">
+      <h1>Reviews</h1>
+      <p>Rate an item out of 5 stars. You can add a photo and a description.</p>
+    </div>
+
+    <form class="review-form" data-review-form>
+      <label>Item
+        <select name="item" data-item-select required>
+          <option value="">Pick an item</option>
+        </select>
+      </label>
+      <fieldset class="star-pick">
+        <legend>Stars out of 5</legend>
+        <div data-star-pick>
+          <button type="button" data-star="1" aria-label="1 star">★</button>
+          <button type="button" data-star="2" aria-label="2 stars">★</button>
+          <button type="button" data-star="3" aria-label="3 stars">★</button>
+          <button type="button" data-star="4" aria-label="4 stars">★</button>
+          <button type="button" data-star="5" aria-label="5 stars">★</button>
+        </div>
+        <input type="hidden" name="stars" value="0" required>
+      </fieldset>
+      <label class="wide">Your review
+        <textarea name="text" rows="4" required placeholder="What did you think?"></textarea>
+      </label>
+      <label class="wide">Photo <span>(optional)</span>
+        <input type="file" name="photo" accept="image/jpeg,image/png,image/webp,image/gif,image/*">
+      </label>
+      <p class="review-status" data-review-status hidden></p>
+      <button type="submit">Post review</button>
+    </form>
+
+    <section class="group">
+      <div class="group-head">
+        <h2>All reviews</h2>
+      </div>
+      <div class="review-list" data-review-list></div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <div class="rainbow-bar" aria-hidden="true"></div>
+    <div class="inner">
+      <span>fidget squish · Katie · tyneside.store</span>
+      <a href="mailto:katie@tyneside.software">katie@tyneside.software</a>
+      <a href="admin.html">Admin</a>
+    </div>
+  </footer>
+  <script src="shop.js?v=20260920social"></script>
+  <script src="reviews.js?v=20260919skel"></script>
+</body>
+</html>

@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>About · fidget squish</title>
+  <meta name="description" content="How we made Katie’s fidget squish shop, step by step.">
+  <link rel="icon" href="logo.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="shop.css?v=20260920darktext">
+  <script>try{if(localStorage.getItem("fidget-squish-dark")==="1")document.documentElement.classList.add("is-dark")}catch(e){}</script>
+</head>
+<body class="shop">
+  <div class="rainbow-bar" aria-hidden="true"></div>
+  <header class="top">
+    <div class="inner">
+      <a class="brand-row" href="index.html">
+        <span class="giant-heart" aria-hidden="true">💗</span>
+        <span>
+          <span class="shop-name">fidget squish</span>
+          <span class="shop-by">Katie’s shop</span>
+        </span>
+      </a>
+      <nav class="nav" aria-label="Shop">
+        <a href="index.html">All</a>
+        <a href="featured.html">Featured</a>
+        <a href="new.html">New</a>
+        <a href="squishies.html">Squishies</a>
+        <a href="homemade.html">Homemade</a>
+        <a href="mystery.html">Mystery</a>
+        <a href="fidgets.html">Fidgets</a>
+        <a href="slime.html">Slime</a>
+        <a href="reviews.html">Reviews</a>
+        <a href="about.html" class="is-on" aria-current="page">About</a>
+        <a href="more.html">More</a>
+        <a href="account.html">Account</a>
+        <a href="admin.html">Admin</a>
+        <a class="buy-nav" href="mailto:katie@tyneside.software?subject=Order%20from%20fidget%20squish">Email to buy</a>
+      </nav>
+    </div>
+    <div class="rainbow-bar" aria-hidden="true"></div>
+  </header>
+
+  <main class="wrap">
+    <!-- When the shop changes, add a new numbered <li> to ol.about-facts. Newest at the bottom. -->
+    <div class="page-head">
+      <p class="about-kicker">Snapshot · 19 September 2026 · how we built it</p>
+      <h1>About this shop</h1>
+      <p>
+        Katie’s fidget squish shop, built on the Tyneside hackathon site.
+        Same idea as the Logistics progress page: the steps, in order, so nobody has to guess what already landed.
+      </p>
+    </div>
+
+    <nav class="about-jump" aria-label="On this page">
+      <a href="#sells">What Katie sells</a>
+      <a href="#steps">The steps</a>
+      <a href="#stack">How it is wired</a>
+      <a href="#live">Live</a>
+    </nav>
+
+    <section class="group" id="sells">
+      <div class="group-head">
+        <h2>What Katie sells</h2>
+      </div>
+      <p class="about-live">
+        Squishies, fidgets, slime, homemade bits, and mystery items. Each card shows the price and how many are in stock. Homemade things are made by hand, so they may look a little different from the photos. Email <a href="mailto:katie@tyneside.software">katie@tyneside.software</a> to buy.
+      </p>
+    </section>
+
+    <section class="group" id="steps">
+      <div class="group-head">
+        <h2>The steps</h2>
+      </div>
+      <ol class="about-facts">
+        <li>
+          <span class="n">01</span>
+          <div>
+            <strong>Put the shop on the live hackathon site.</strong>
+            <span>Katie’s pages were copied onto Tyneside-Software/hackathon-site so they serve at hackathon.tyneside.software/katie. A root katie.html sends /katie to the folder.</span>
+          </div>
+        </li>
+        <li>
+          <span class="n">02</span>
+          <div>
+            <strong>Homemade items show in stock or out of stock.</strong>
+            <span>Each homemade card got a stock label so you can see what is for sale.</span>
+          </div>
+        </li>
+        <li>
+          <span class="n">03</span>
+          <div>
+            <strong>Password Admin.</strong>
+            <span>A locked Admin page lets you change names, prices, photos, stock, and add or remove items. Admin is its own menu item; leaving it logs you out.</span>
+          </div>
+        </li>
+        <li>
+          <span class="n">04</span>
+          <div>
+            <strong>Pencil to pick pictures.</strong>
+            <span>On a phone the pencil opens the gallery. On a computer it opens picture files. You can add more than one photo per item.</span>
+          </div>
+        </li>
+        <li>
+          <span class="n">05</span>
+          <div>
+            <strong>Blue, baby blue, purple and pink background.</strong>
+            <span>The old white page became a swirl gradient. Light-mode panels are pink #f0c0e5. Rainbow bits are pastel in light mode and bright in dark mode.</span>
+          </div>
+        </li>
+        <li>
+          <span class="n">06</span>
+          <div>
+            <strong>Dark mode toggle.</strong>
+            <span>Top-left. Light mode: pastel rainbow, says Dark mode. Dark mode: bright rainbow, says Light mode.</span>
+          </div>
+        </li>
+        <li>
+          <span class="n">07</span>
+          <div>
+            <strong>Stock counts and a star burst.</strong>
+            <span>Admin sets how many of an item are in stock. Cards show the number. In-stock photos get an animated star burst. Squishies show stock labels too.</span>
+          </div>
+        </li>
+        <li>
+          <span class="n">08</span>
+          <div>
+            <strong>Reviews.</strong>
+            <span>Rate an item out of 5, write a description, optionally add a photo. Cards show the average, including half stars.</span>
+          </div>
+        </li>
+        <li>
+          <span class="n">09</span>
+          <div>
+            <strong>Product pages, like a mini Amazon.</strong>
+            <span>Tap a card for the full item: all pictures, share, reviews, and suggested products underneath. Item names are #72cefc. The title next to the heart is the same pinks as the heart.</span>
+          </div>
+        </li>
+        <li>
+          <span class="n">10</span>
+          <div>
+            <strong>Mystery and Fidgets.</strong>
+            <span>Two extra categories in the menu, with their own pages. Add items to them in Admin.</span>
+          </div>
+        </li>
+        <li>
+          <span class="n">11</span>
+          <div>
+            <strong>Built by Lewis, plus the legal bit.</strong>
+            <span>The top-right note says built by lewis. Scroll to the bottom for terms and conditions and lewis was here.</span>
+          </div>
+        </li>
+        <li>
+          <span class="n">12</span>
+          <div>
+            <strong>This About page.</strong>
+            <span>A running list of how the shop was made, in the shop’s own theme. New work gets a new step.</span>
+          </div>
+        </li>
+        <li>
+          <span class="n">13</span>
+          <div>
+            <strong>Bubbly title like the heart.</strong>
+            <span>fidget squish uses a round font and stacked pinks: light pink on top, middle pink in the middle, dark pink underneath — same idea as the heart beside it.</span>
+          </div>
+        </li>
+        <li>
+          <span class="n">14</span>
+          <div>
+            <strong>Manager cap on the Admin picture.</strong>
+            <span>The Admin welcome picture still has the character eating the dumpling, now wearing a black MANAGER cap.</span>
+          </div>
+        </li>
+        <li>
+          <span class="n">15</span>
+          <div>
+            <strong>The title bobs.</strong>
+            <span>fidget squish and Katie’s shop are stuck together, same round font, both slanted, and they bob up and down.</span>
+          </div>
+        </li>
+        <li>
+          <span class="n">16</span>
+          <div>
+            <strong>Fixed the Admin cap picture.</strong>
+            <span>The picture is taller so the MANAGER cap sits on the head above the eyes. The eyes stay above the mouth, and he is still eating the dumpling.</span>
+          </div>
+        </li>
+        <li>
+          <span class="n">17</span>
+          <div>
+            <strong>The heart bobs with the title.</strong>
+            <span>The heart is attached to the fidget squish sign, so it bobs up and down with Katie’s shop too.</span>
+          </div>
+        </li>
+        <li>
+          <span class="n">18</span>
+          <div>
+            <strong>Out of stock message on the item page.</strong>
+            <span>Clicking an item opens it as usual. The “not in stock” note only appears when there are 0 left.</span>
+          </div>
+        </li>
+        <li>
+          <span class="n">19</span>
+          <div>
+            <strong>Admin password is not sitting in the page as plain text.</strong>
+            <span>The Admin check uses a hash, so opening the JavaScript file does not show the password itself.</span>
+          </div>
+        </li>
+        <li>
+          <span class="n">20</span>
+          <div>
+            <strong>Dropped the video slide line.</strong>
+            <span>The intro no longer says to slide the photos to get to the video.</span>
+          </div>
+        </li>
+        <li>
+          <span class="n">21</span>
+          <div>
+            <strong>Admin stock drives every page.</strong>
+            <span>The number you set in Admin is what cards and item pages both use, so an item cannot be in stock on one page and out of stock on another.</span>
+          </div>
+        </li>
+        <li>
+          <span class="n">22</span>
+          <div>
+            <strong>Mobile layout tidy-up.</strong>
+            <span>Nav, cards and dark mode were overflowing or cramped on phones. Spacing and wrapping are tighter so nothing runs off the screen.</span>
+          </div>
+        </li>
+        <li>
+          <span class="n">23</span>
+          <div>
+            <strong>What Katie sells, on About.</strong>
+            <span>The About page now has a short blurb at the top about squishies, fidgets, slime, homemade and mystery items, plus how to buy.</span>
+          </div>
+        </li>
+        <li>
+          <span class="n">24</span>
+          <div>
+            <strong>Share actually copies or shares the link.</strong>
+            <span>On phones it uses the share sheet. On a computer it copies the item link and the button says Link copied. If that is blocked, a copy box still appears.</span>
+          </div>
+        </li>
+        <li>
+          <span class="n">25</span>
+          <div>
+            <strong>New and Featured badges.</strong>
+            <span>Dumpling is Featured and homemade balloon squishies are New. You can change badges in Admin.</span>
+          </div>
+        </li>
+        <li>
+          <span class="n">26</span>
+          <div>
+            <strong>Half stars fill the right amount of one star.</strong>
+            <span>A 4.5 rating is four gold stars and half of the fifth, with the rest grey — not a rounded whole star.</span>
+          </div>
+        </li>
+        <li>
+          <span class="n">27</span>
+          <div>
+            <strong>Tiny photo loading skeleton.</strong>
+            <span>While product pictures load, a soft pink shimmer shows, then the photo fades in.</span>
+          </div>
+        </li>
+        <li>
+          <span class="n">28</span>
+          <div>
+            <strong>Roomier terms in the footer.</strong>
+            <span>The T&amp;C block has more padding and space between lines so it is easier to read.</span>
+          </div>
+        </li>
+        <li>
+          <span class="n">29</span>
+          <div>
+            <strong>Section titles in dark purple.</strong>
+            <span>Squishies, Homemade, Mystery, Fidgets, Slime and the other section headings are #36042b so they stand out on the background.</span>
+          </div>
+        </li>
+        <li>
+          <span class="n">30</span>
+          <div>
+            <strong>Admin login is checked on the server.</strong>
+            <span>The shop asks the hackathon API to check the Admin password. The page only unlocks after a session token comes back, and that token is cleared when you leave Admin.</span>
+          </div>
+        </li>
+        <li>
+          <span class="n">31</span>
+          <div>
+            <strong>Featured and New categories.</strong>
+            <span>Menu pages list every item with a Featured badge, and every item with a New badge. Change the badge in Admin and it shows up there.</span>
+          </div>
+        </li>
+        <li>
+          <span class="n">32</span>
+          <div>
+            <strong>Multiple categories and badges.</strong>
+            <span>In Admin you can tick more than one category and both Featured and New on the same item, so it shows in every matching section.</span>
+          </div>
+        </li>
+        <li>
+          <span class="n">33</span>
+          <div>
+            <strong>More-page pictures show again.</strong>
+            <span>The More cards were stuck on the loading shimmer. They now fade the SVGs in like the rest of the shop.</span>
+          </div>
+        </li>
+        <li>
+          <span class="n">34</span>
+          <div>
+            <strong>Shop accounts, Vinted-style.</strong>
+            <span>Account in the nav lets you make a fidget squish login with email, pick a username and profile picture, or continue with Google, Apple or Facebook. Same pink squishy look, different words.</span>
+          </div>
+        </li>
+        <li>
+          <span class="n">35</span>
+          <div>
+            <strong>Plain username hint.</strong>
+            <span>If a username has a space or other extra character, the account page says usernames can only use letters, numbers, dots, underscores and hyphens — no spaces. It does not show a pattern code.</span>
+          </div>
+        </li>
+        <li>
+          <span class="n">36</span>
+          <div>
+            <strong>Admin is only for LewisThomson.</strong>
+            <span>The Admin password still has to be right, and the shop then only opens Admin if you are logged in as LewisThomson.</span>
+          </div>
+        </li>
+        <li>
+          <span class="n">37</span>
+          <div>
+            <strong>Search accounts and add friends.</strong>
+            <span>When you are logged in, Account has a search box. Other people’s usernames and profile pictures come up as you type. Tap one to pick them, then add them as a friend.</span>
+          </div>
+        </li>
+        <li>
+          <span class="n">38</span>
+          <div>
+            <strong>Admins can add more Admins.</strong>
+            <span>Inside Admin there is the same live search as friends. Pick an account by their picture and add them as an Admin. They can then open Admin with the password too. LewisThomson stays an Admin.</span>
+          </div>
+        </li>
+        <li>
+          <span class="n">39</span>
+          <div>
+            <strong>Admin badge on profiles.</strong>
+            <span>If you are an Admin, a pink Admin badge sits under your username on your profile. It also shows under names in friend search and the friends list.</span>
+          </div>
+        </li>
+        <li>
+          <span class="n">40</span>
+          <div>
+            <strong>Accounts stay saved.</strong>
+            <span>Shop accounts are stored in Google Firestore so they are not wiped when the API restarts. Friend search also lists other people as soon as you open it, not only after you type.</span>
+          </div>
+        </li>
+        <li>
+          <span class="n">41</span>
+          <div>
+            <strong>Accounts live in the shop folder.</strong>
+            <span>Sign-up is saved on this computer and in katie/accounts.json, next to stock.json. In Admin, Download accounts.json and put that file in the katie folder, then push, so other devices see the same people.</span>
+          </div>
+        </li>
+        <li>
+          <span class="n">42</span>
+          <div>
+            <strong>KatieThomson is an Admin, and usernames are unique.</strong>
+            <span>KatieThomson can open Admin the same way LewisThomson can. You cannot make two accounts with the same username.</span>
+          </div>
+        </li>
+        <li>
+          <span class="n">43</span>
+          <div>
+            <strong>People show up in search.</strong>
+            <span>Find friends and the Admin people search list other accounts as soon as you open them, including LewisThomson and KatieThomson, not only names saved on that one computer.</span>
+          </div>
+        </li>
+        <li>
+          <span class="n">44</span>
+          <div>
+            <strong>Account pages readable in dark mode.</strong>
+            <span>Create account, Find friends, and Add Admins use white text in dark mode so the words are not lost on the dark cards.</span>
+          </div>
+        </li>
+        <li>
+          <span class="n">45</span>
+          <div>
+            <strong>Profile pictures show for other people.</strong>
+            <span>When you set a picture, it is shared so it appears next to your name in friend search, the friends list, and Admin people search on other computers too.</span>
+          </div>
+        </li>
+        <li>
+          <span class="n">46</span>
+          <div>
+            <strong>Google, Apple and Facebook log you into the shop.</strong>
+            <span>Continue with Google / Apple / Facebook now creates or opens a fidget squish account after the provider confirms your email. Each button needs a Client ID or App ID in config.js (and on the API) before the popup can open.</span>
+          </div>
+        </li>
+      </ol>
+    </section>
+
+    <section class="group" id="stack">
+      <div class="group-head">
+        <h2>How it is wired</h2>
+      </div>
+      <ol class="about-facts">
+        <li>
+          <span class="n">01</span>
+          <div>
+            <strong>Static files on GitHub Pages.</strong>
+            <span>HTML, CSS and a little JavaScript in the katie folder. Push main and it goes live at hackathon.tyneside.software/katie.</span>
+          </div>
+        </li>
+        <li>
+          <span class="n">02</span>
+          <div>
+            <strong>Admin and reviews save on this computer.</strong>
+            <span>Catalog edits and reviews live in the browser. Download stock.json from Admin if you want the live shop for everyone to match.</span>
+          </div>
+        </li>
+        <li>
+          <span class="n">03</span>
+          <div>
+            <strong>Buy is email.</strong>
+            <span>Email to buy goes to katie@tyneside.software. There is no checkout cart.</span>
+          </div>
+        </li>
+      </ol>
+    </section>
+
+    <section class="group" id="live">
+      <div class="group-head">
+        <h2>Live</h2>
+      </div>
+      <p class="about-live">
+        Shop · <a href="index.html">hackathon.tyneside.software/katie</a><br>
+        Group door · <a href="https://tyneside.group/">tyneside.group</a><br>
+        Repo · Tyneside-Software/hackathon-site
+      </p>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <div class="rainbow-bar" aria-hidden="true"></div>
+    <div class="inner">
+      <span>fidget squish · Katie · tyneside.store</span>
+      <a href="mailto:katie@tyneside.software">katie@tyneside.software</a>
+      <a href="admin.html">Admin</a>
+    </div>
+  </footer>
+  <script src="shop.js?v=20260920social"></script>
+</body>
+</html>

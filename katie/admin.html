@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Admin · fidget squish</title>
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="logo.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="shop.css?v=20260920darktext">
+  <script>try{if(localStorage.getItem("fidget-squish-dark")==="1")document.documentElement.classList.add("is-dark")}catch(e){}</script>
+</head>
+<body class="shop" data-admin-page>
+  <div class="rainbow-bar" aria-hidden="true"></div>
+  <header class="top">
+    <div class="inner">
+      <a class="brand-row" href="index.html">
+        <span class="giant-heart" aria-hidden="true">💗</span>
+        <span>
+          <span class="shop-name">fidget squish</span>
+          <span class="shop-by">Katie’s shop</span>
+        </span>
+      </a>
+      <nav class="nav" aria-label="Shop">
+        <a href="index.html">All</a>
+        <a href="featured.html">Featured</a>
+        <a href="new.html">New</a>
+        <a href="squishies.html">Squishies</a>
+        <a href="homemade.html">Homemade</a>
+        <a href="mystery.html">Mystery</a>
+        <a href="fidgets.html">Fidgets</a>
+        <a href="slime.html">Slime</a>
+        <a href="reviews.html">Reviews</a>
+        <a href="about.html">About</a>
+        <a href="more.html">More</a>
+        <a href="account.html">Account</a>
+        <a href="admin.html" class="is-on" aria-current="page">Admin</a>
+        <a class="buy-nav" href="mailto:katie@tyneside.software?subject=Order%20from%20fidget%20squish">Email to buy</a>
+      </nav>
+    </div>
+    <div class="rainbow-bar" aria-hidden="true"></div>
+  </header>
+
+  <main class="wrap">
+    <section class="admin-gate" data-lock>
+      <img class="admin-welcome" src="photos/admin-welcome.jpg?v=capup" alt="">
+      <h1>Shop admin</h1>
+      <p>Password to change names, prices, photos, stock, and add or remove items. Only Admins can open it — <a href="account.html">log in on Account</a> first.</p>
+      <form data-gate>
+        <label class="sr-only" for="pw">Password</label>
+        <input id="pw" name="password" type="password" autocomplete="current-password" required>
+        <button type="submit">Open</button>
+        <p class="admin-error" data-error hidden>Wrong password.</p>
+      </form>
+    </section>
+
+    <section class="admin-panel" data-editor hidden>
+      <div class="page-head">
+        <h1>Configure items</h1>
+      </div>
+      <div class="admin-toolbar">
+        <p class="admin-status" data-status>Ready.</p>
+        <div class="admin-actions">
+          <button type="button" data-add>Add item</button>
+          <button type="button" class="ghost" data-download>Download catalog</button>
+          <button type="button" class="ghost" data-download-accounts>Download accounts.json</button>
+          <button type="button" class="ghost" data-reset>Reset to website catalog</button>
+          <button type="button" class="ghost" data-logout>Log out</button>
+        </div>
+      </div>
+      <p class="admin-hint">
+        Add as many pictures as you like with the pencil or + Add pictures.
+        Tap a thumbnail to make it the main photo.
+      </p>
+      <section class="auth-card admin-people" data-admins>
+        <p class="auth-kicker">Who can get in</p>
+        <h2>Admins</h2>
+        <p class="auth-lede">Search for an account. Their picture pops up as you type — tap one to pick them, then add them as an Admin. They still need the Admin password. Download accounts.json and put it in the katie folder (next to stock.json) so the website keeps the accounts.</p>
+        <label>Search accounts
+          <input type="search" data-admin-q placeholder="Type a username — other accounts show up here" autocomplete="off">
+        </label>
+        <div class="friend-results" data-admin-results hidden></div>
+        <div class="friend-picked" data-admin-picked hidden>
+          <img data-admin-picked-pic alt="" hidden>
+          <span class="friend-ph" data-admin-picked-ph aria-hidden="true">💗</span>
+          <strong data-admin-picked-name></strong>
+          <span class="admin-badge" data-admin-picked-badge hidden>Admin</span>
+          <button type="button" class="auth-go" data-admin-add>Add Admin</button>
+        </div>
+        <p class="auth-status" data-admin-status hidden></p>
+        <h3 class="friend-sub">Admins</h3>
+        <div class="friend-list" data-admin-list></div>
+      </section>
+      <div class="admin-list" data-list></div>
+      <button type="button" class="admin-add" data-add>Add another item</button>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <div class="rainbow-bar" aria-hidden="true"></div>
+    <div class="inner">
+      <span>fidget squish · Katie · tyneside.store</span>
+      <a href="index.html">Back to shop</a>
+    </div>
+  </footer>
+  <script src="../config.js"></script>
+  <script src="shop.js?v=20260920social"></script>
+  <script src="admin.js?v=20260920pc"></script>
+</body>
+</html>
