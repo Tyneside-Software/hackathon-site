@@ -568,6 +568,17 @@
       "brief": "<p>Create a group, send invites, and accept invites so location sharing can be scoped to a group.</p>",
       "tag": "app",
       "tag_kind": "wait"
+    },
+    {
+      "id": "52",
+      "person": "noah",
+      "hours": 2,
+      "emoji": "🔧",
+      "title": "Allow user to choose if their location is public on the map",
+      "column": "todo",
+      "brief": "<p>The phone owner can hide their live location from the public map, or show it. Private by default unless they opt in.</p>",
+      "tag": "app",
+      "tag_kind": "wait"
     }
   ]
 }

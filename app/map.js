@@ -13,6 +13,8 @@
   const statEngine = document.getElementById("stat-engine");
 
   const map = L.map("map").setView(NEWCASTLE, 12);
+  map.createPane("phones");
+  map.getPane("phones").style.zIndex = 560;
   L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
     maxZoom: 19,
     attribution: '&copy; OpenStreetMap. Bus positions from <a href="https://bustimes.org/data">bustimes.org</a> / BODS',
@@ -196,6 +198,7 @@
   }
 
   let phonesOn = readPhonesPref();
+  let fittedPhones = false;
   let selectedDeviceId = null;
   let historyStamp = null;
   let historyPings = [];
@@ -211,6 +214,12 @@
     if (s.startsWith("android-") && s.length > 16) return s.slice(0, 16) + "…";
     if (s.length > 18) return s.slice(0, 18) + "…";
     return s || "phone";
+  }
+
+  function phoneLabel(d) {
+    const nick = d && typeof d.nickname === "string" ? d.nickname.trim() : "";
+    if (nick) return nick;
+    return shortId(d && d.device_id);
   }
 
   function ageLabel(iso) {
@@ -408,7 +417,8 @@
     const switching = selectedDeviceId !== d.device_id;
     selectedDeviceId = d.device_id;
     markSelected();
-    openDrawer(d.device_id);
+    openDrawer(phoneLabel(d));
+    paintOnePhone(d);
     zoomToPhone(d.last_lat, d.last_lng, d.device_id);
     if (switching) {
       historyPings = [];
@@ -426,7 +436,7 @@
       const li = document.createElement("li");
       const btn = document.createElement("button");
       const fresh = isFresh(d.last_seen_at);
-      const label = shortId(d.device_id);
+      const label = phoneLabel(d);
       const age = ageLabel(d.last_seen_at) || "no ping time";
       btn.type = "button";
       btn.className = "phone-card " + (fresh ? "is-fresh" : "is-stale");
@@ -465,38 +475,50 @@
     btnPhones.classList.toggle("btn-ghost", !phonesOn);
   }
 
+  function paintOnePhone(d) {
+    const lat = Number(d.last_lat);
+    const lng = Number(d.last_lng);
+    if (!Number.isFinite(lat) || !Number.isFinite(lng)) return;
+    const latlng = [lat, lng];
+    let marker = deviceMarkers.get(d.device_id);
+    const html =
+      "<strong>" +
+      phoneLabel(d) +
+      "</strong><br>" +
+      lat.toFixed(5) +
+      ", " +
+      lng.toFixed(5) +
+      "<br>" +
+      ageLabel(d.last_seen_at);
+    if (!marker) {
+      marker = L.circleMarker(latlng, {
+        pane: "phones",
+        radius: 11,
+        color: "#0B1220",
+        weight: 3,
+        fillColor: DEVICE_COLOUR,
+        fillOpacity: 1,
+      }).addTo(map);
+      deviceMarkers.set(d.device_id, marker);
+    } else {
+      marker.setLatLng(latlng);
+    }
+    marker.bindPopup(html);
+  }
+
   function paintPhoneMarkers(rows) {
     if (!phonesOn) {
       clearPhoneMarkers();
+      if (selectedDeviceId) {
+        const selected = rows.find((d) => d.device_id === selectedDeviceId);
+        if (selected) paintOnePhone(selected);
+      }
       return;
     }
     const seen = new Set();
     rows.forEach((d) => {
       seen.add(d.device_id);
-      const latlng = [d.last_lat, d.last_lng];
-      let marker = deviceMarkers.get(d.device_id);
-      const html =
-        "<strong>" +
-        shortId(d.device_id) +
-        "</strong><br>" +
-        d.last_lat.toFixed(5) +
-        ", " +
-        d.last_lng.toFixed(5) +
-        "<br>" +
-        ageLabel(d.last_seen_at);
-      if (!marker) {
-        marker = L.circleMarker(latlng, {
-          radius: 9,
-          color: "#0B1220",
-          weight: 2,
-          fillColor: DEVICE_COLOUR,
-          fillOpacity: 0.95,
-        }).addTo(map);
-        deviceMarkers.set(d.device_id, marker);
-      } else {
-        marker.setLatLng(latlng);
-      }
-      marker.bindPopup(html);
+      paintOnePhone(d);
     });
     Array.from(deviceMarkers.keys()).forEach((id) => {
       if (!seen.has(id)) {
@@ -504,6 +526,18 @@
         deviceMarkers.delete(id);
       }
     });
+    if (!fittedPhones && rows.length) {
+      const pts = rows
+        .map((d) => [Number(d.last_lat), Number(d.last_lng)])
+        .filter((p) => Number.isFinite(p[0]) && Number.isFinite(p[1]));
+      if (pts.length) {
+        const bounds = L.latLngBounds(pts);
+        if (pts.length === 1 || !map.getBounds().intersects(bounds)) {
+          map.fitBounds(bounds.pad(pts.length === 1 ? 0.4 : 0.25));
+        }
+        fittedPhones = true;
+      }
+    }
   }
 
   function setPhonesOn(on) {
@@ -531,9 +565,13 @@
       const res = await fetch(base + "/v1/devices", { headers: { Accept: "application/json" } });
       if (!res.ok) throw new Error("HTTP " + res.status);
       const data = await res.json();
-      const rows = (data.devices || []).filter(
-        (d) => typeof d.last_lat === "number" && typeof d.last_lng === "number"
-      );
+      const rows = (data.devices || [])
+        .map((d) => ({
+          ...d,
+          last_lat: Number(d.last_lat),
+          last_lng: Number(d.last_lng),
+        }))
+        .filter((d) => Number.isFinite(d.last_lat) && Number.isFinite(d.last_lng));
       paintPhoneMarkers(rows);
       renderDevices(rows);
       if (!phonesOn) {
