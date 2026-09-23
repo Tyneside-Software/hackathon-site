@@ -535,6 +535,39 @@
       "brief": "<p>The tracker is proven on the Pixel 6a emulator (card 32). This card is the same APK on a real phone: USB debugging or sideload <code>app/build/outputs/apk/debug/app-debug.apk</code>, grant location, flip the switch, confirm a new device id on <code>GET /v1/devices</code> and on the map.</p><h3>Done when</h3><ul><li>The debug APK is installed on a physical Android phone.</li><li>Tracking on posts GPS to live Cloud Run.</li><li>The map shows that phone (not only the emulator).</li></ul>",
       "tag": "physical phone",
       "tag_kind": "wait"
+    },
+    {
+      "id": "49",
+      "person": "noah",
+      "hours": 2,
+      "emoji": "🔧",
+      "title": "Allow user to login on app",
+      "column": "todo",
+      "brief": "<p>Login on the map/app with the existing API accounts (register/token), not only account.html.</p>",
+      "tag": "app",
+      "tag_kind": "wait"
+    },
+    {
+      "id": "50",
+      "person": "noah",
+      "hours": 2,
+      "emoji": "🔧",
+      "title": "Allow user to set who can view their location",
+      "column": "todo",
+      "brief": "<p>The phone owner chooses who can see their live location (nobody, friends, a group, or everyone on the map).</p>",
+      "tag": "app",
+      "tag_kind": "wait"
+    },
+    {
+      "id": "51",
+      "person": "noah",
+      "hours": 2,
+      "emoji": "🔧",
+      "title": "Allow user to accept group invites and create groups",
+      "column": "todo",
+      "brief": "<p>Create a group, send invites, and accept invites so location sharing can be scoped to a group.</p>",
+      "tag": "app",
+      "tag_kind": "wait"
     }
   ]
 }
