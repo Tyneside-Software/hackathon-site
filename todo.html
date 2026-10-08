@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Tyneside Logistics — to do</title>
   <link rel="icon" href="logo.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="styles.css?v=20261008-board3">
+  <link rel="stylesheet" href="styles.css?v=20261008-board4">
 </head>
 <body class="site" data-board-view="todo">
   <nav class="site-nav" aria-label="Primary">
@@ -67,7 +67,7 @@
       <span class="clear-assignees" draggable="true" title="Drag onto a card to clear its people" @dragstart="onPersonDragStart($event, '')" @dragend="onDragEnd()">—</span>
       <button type="button" class="btn btn-fill" @click="showAdd = !showAdd; if (showAdd) adding = blankAdd()" :disabled="busy">Add a card</button>
     </div>
-    <p class="board-hint">Drag a person’s mark onto a card to add them. × removes that one person. Drag — onto a card to clear everyone. To backlog parks a card without a reason. Undo steps back the last save in this browser.</p>
+    <p class="board-hint">Drag a person’s mark onto a card to add them. × removes that one person. Drag — onto a card to clear everyone. A card can move to any column, including back. Undo steps back the last save in this browser.</p>
 
     <form class="board-form" x-show="showAdd" @submit.prevent="addCard()">
       <label class="span-all">Title
@@ -206,7 +206,7 @@
     </template>
 
     <template x-if="view !== 'board'">
-    <div class="card-archive" @dragover="onDragOver($event, view)" @drop.prevent="onDrop($event, view)">
+    <div class="card-archive" :class="{ 'is-drop': dropColumn === view }" @dragover="onDragOver($event, view)" @dragleave="onDragLeave($event, view)" @drop.prevent="onDrop($event, view)">
       <template x-for="col in shownColumns()" :key="'list-' + col.id">
         <div class="stack" style="display:contents">
           <p class="empty-col" x-show="visible(col.id).length === 0" x-text="emptyText(col)"></p>
@@ -284,7 +284,7 @@
         <li>Home, Map, and Board still load if the new thing is half-finished — fallbacks, never a blank page.</li>
         <li>Drag the card to <em>Ready to deploy</em> when someone else can click it without a briefing. The brief on the card is that briefing.</li>
         <li>Open the card and move it to Done, or run <code>python scripts/update_board.py done 12 --by michael</code> while the API is up.</li>
-        <li>Moving a card back among To do, Next, In progress, Ready to deploy, and Done asks for a reason. Parking it on the backlog does not. The reason stays on the card history.</li>
+        <li>A card can move to any column, including back. The backlog is the side pile, off this board.</li>
       </ol>
 
       <h2 style="margin-top:2rem">GitHub loop</h2>
@@ -347,9 +347,6 @@
                 <option value="ok">Done</option>
               </select>
             </label>
-            <label class="span-all" x-show="selected && isBackward(selected.column, draft.column)">Why it is moving back
-              <textarea x-model="draft.reason" rows="3" placeholder="What changed?"></textarea>
-            </label>
             <label class="span-all">Brief
               <textarea x-model="draft.brief" placeholder="Plain text is wrapped. HTML is kept when it starts with <."></textarea>
             </label>
@@ -406,26 +403,13 @@
       </div>
     </dialog>
 
-    <dialog class="card-modal" x-ref="reason" aria-labelledby="reason-title" @cancel.prevent="cancelReason()">
-      <div class="card-modal-inner">
-        <h2 id="reason-title">Why is this moving back?</h2>
-        <p style="color:var(--muted)">A move to an earlier column keeps a reason on the card history.</p>
-        <label>Reason
-          <textarea x-model="reason" rows="4" placeholder="What changed?"></textarea>
-        </label>
-        <div class="edit-row">
-          <button type="button" class="btn btn-fill" @click="confirmReason()" :disabled="busy">Move back</button>
-          <button type="button" class="btn btn-ghost" @click="cancelReason()">Cancel</button>
-        </div>
-      </div>
-    </dialog>
   </div>
 
   <footer class="foot">
     <div class="wrap-wide">Tyneside Logistics hackathon · Reeve · Connor · Michael · Lewis · Noah</div>
   </footer>
   <script src="config.js"></script>
-  <script defer src="board-app.js?v=20261008-board3"></script>
+  <script defer src="board-app.js?v=20261008-board4"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.8/dist/cdn.min.js"></script>
 </body>
 </html>

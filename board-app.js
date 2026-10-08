@@ -17,8 +17,6 @@ document.addEventListener("alpine:init", function () {
       editing: false,
       showAdd: false,
       adding: { title: "", person: "", hours: "", column: "todo", brief: "", tag: "", tag_kind: "wait", value: 3 },
-      pending: null,
-      reason: "",
       notice: "",
       error: "",
       busy: false,
@@ -152,15 +150,15 @@ document.addEventListener("alpine:init", function () {
 
       intro() {
         if (this.view === "backlog") {
-          return "Work that is not on the board yet. To board puts a card on To do. Parking a card here does not need a reason. Moving backwards among the work columns does.";
+          return "Work that is not on the board yet. To board puts a card on To do. A card can move to any column, including back.";
         }
         if (this.view === "todo") {
           return "Everything still to do. Drag to reorder, or send a card to the backlog. Open a card for the note, the people on it, and the history.";
         }
         if (this.view === "done") {
-          return "Finished increments. Open a card for the note, any commit recorded on it, and the history. Moving one back onto the board asks for a reason.";
+          return "Finished increments. Open a card for the note, any commit recorded on it, and the history. Drag a card back onto the board when it is not finished.";
         }
-        return "Drag a card to move it. Drag a person’s mark onto a card to add them. A move back among To do, Next, In progress, Ready to deploy, and Done asks for a reason. The backlog is a side pile, so parking a card there does not.";
+        return "Drag a card to move it, including back to an earlier column. Drag a person’s mark onto a card to add them. The backlog is a side pile.";
       },
 
       statusText() {
@@ -202,11 +200,6 @@ document.addEventListener("alpine:init", function () {
         }).filter(Boolean);
       },
 
-      columnIndex(id) {
-        var idx = this.columns.findIndex(function (col) { return col.id === id; });
-        return idx === -1 ? 99 : idx;
-      },
-
       personName(id) {
         var person = this.people.find(function (row) { return row.id === id; });
         return person ? person.name : (id || "");
@@ -239,15 +232,6 @@ document.addEventListener("alpine:init", function () {
         var self = this;
         var names = this.cardOwners(card).map(function (id) { return self.personName(id); });
         return names.length ? names.join(", ") : "Unassigned";
-      },
-
-      isBackward(from, to) {
-        if (!from || !to || from === to || from === "backlog" || to === "backlog") return false;
-        var order = ["todo", "next", "doing", "ready", "done"];
-        var start = order.indexOf(from);
-        var dest = order.indexOf(to);
-        if (start === -1 || dest === -1) return this.columnIndex(to) < this.columnIndex(from);
-        return dest < start;
       },
 
       plainNote(card) {
@@ -490,7 +474,10 @@ document.addEventListener("alpine:init", function () {
       },
 
       onDragLeave(event, columnId) {
-        if (event.currentTarget.contains(event.relatedTarget)) return;
+        var next = event.relatedTarget;
+        if (next && event.currentTarget.contains(next)) return;
+        var under = document.elementFromPoint(event.clientX, event.clientY);
+        if (under && event.currentTarget.contains(under)) return;
         if (this.dropColumn === columnId) this.dropColumn = "";
       },
 
@@ -554,34 +541,7 @@ document.addEventListener("alpine:init", function () {
         if (!card) return;
         if (card.column === columnId && (!beforeId || beforeId === id)) return;
         var order = this.orderAfter(columnId, id, beforeId);
-        var backward = card.column !== columnId && this.isBackward(card.column, columnId);
-        if (backward) {
-          this.pending = { id: id, columnId: columnId, order: order };
-          this.reason = "";
-          this.error = "";
-          this.$refs.reason.showModal();
-          return;
-        }
         this.commitMove(id, columnId, order, "");
-      },
-
-      async confirmReason() {
-        var why = (this.reason || "").trim();
-        if (!why) {
-          this.error = "A move back needs a reason.";
-          return;
-        }
-        var pending = this.pending;
-        this.pending = null;
-        if (this.$refs.reason.open) this.$refs.reason.close();
-        if (!pending) return;
-        await this.commitMove(pending.id, pending.columnId, pending.order, why);
-      },
-
-      cancelReason() {
-        this.pending = null;
-        this.reason = "";
-        if (this.$refs.reason && this.$refs.reason.open) this.$refs.reason.close();
       },
 
       async commitMove(id, columnId, order, reason) {
@@ -604,7 +564,7 @@ document.addEventListener("alpine:init", function () {
               op: "move",
               id: id,
               column: fromColumn,
-              reason: this.isBackward(columnId, fromColumn) ? "Undo." : "",
+              reason: "",
               order: fromOrder
             }, {
               op: "move",
@@ -670,8 +630,7 @@ document.addEventListener("alpine:init", function () {
           tag_kind: card.tag_kind || "wait",
           brief: card.brief || "",
           value: card.value == null ? "" : card.value,
-          column: card.column,
-          reason: ""
+          column: card.column
         };
         this.editing = false;
         this.removeArmed = false;
@@ -799,11 +758,6 @@ document.addEventListener("alpine:init", function () {
         if (!this.selected || !this.requireMe()) return;
         var previous = this.snapshotCard(this.selected);
         var nextColumn = this.draft.column || previous.column;
-        var why = (this.draft.reason || "").trim();
-        if (nextColumn !== previous.column && this.isBackward(previous.column, nextColumn) && !why) {
-          this.error = "A move back needs a reason.";
-          return;
-        }
         var hours = this.draft.hours === "" || this.draft.hours == null ? null : Number(this.draft.hours);
         var body = {
           title: this.draft.title,
@@ -813,8 +767,7 @@ document.addEventListener("alpine:init", function () {
           tag: this.draft.tag,
           tag_kind: this.draft.tag ? (this.draft.tag_kind || "wait") : "",
           value: this.draft.value === "" || this.draft.value == null ? null : Number(this.draft.value),
-          column: nextColumn,
-          reason: why
+          column: nextColumn
         };
         this._keptApi = this.api;
         this.busy = true;
@@ -822,12 +775,10 @@ document.addEventListener("alpine:init", function () {
           await this.send("PATCH", "/v1/board/cards/" + encodeURIComponent(previous.id), Object.assign({ by: this.me }, body));
           var after = this.cards.find(function (card) { return card.id === previous.id; });
           if (after) {
-            var redoReason = this.isBackward(previous.column, after.column) ? why : "";
-            var undoReason = this.isBackward(after.column, previous.column) ? "Undo." : "";
             this.remember(
               "Edit " + previous.id,
-              { op: "patch", id: previous.id, body: this.patchBody(previous, undoReason) },
-              { op: "patch", id: previous.id, body: this.patchBody(this.snapshotCard(after), redoReason) }
+              { op: "patch", id: previous.id, body: this.patchBody(previous, "") },
+              { op: "patch", id: previous.id, body: this.patchBody(this.snapshotCard(after), "") }
             );
           }
           this.editing = false;

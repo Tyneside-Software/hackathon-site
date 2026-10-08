@@ -6,7 +6,7 @@ The board, backlog, to-do list, and done list are one SQLite board on the API (`
 
 A card can have more than one person. Drag a person’s mark onto a card to add them, use × to remove one person, or drag — onto a card to clear everyone. The first person is the group the card sits under. Find matches a title or a note. Undo and Redo step back the last saves in this browser.
 
-Value is 1 to 5. Hours can be blank, which shows as no estimate. A commit can be recorded on a card (`repo` and sha). Moving a card back among To do, Next, In progress, Ready to deploy, and Done asks for a reason. The backlog is a side pile: parking a card there, or putting it back on the board, does not.
+Value is 1 to 5. Hours can be blank, which shows as no estimate. A commit can be recorded on a card (`repo` and sha). A card can move to any column, including back, with no reason. The backlog is a side pile.
 
 | Page | What it shows |
 |------|----------------|

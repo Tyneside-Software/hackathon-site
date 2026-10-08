@@ -1245,7 +1245,14 @@ details.fix p:last-child { margin-bottom: 0; }
   }
 }
 .col.backlog { border-color: #475569; }
-.col.is-drop { outline: 2px dashed var(--accent); outline-offset: -3px; }
+/* Same landing mark as Hermione's .kbody.over. overflow:hidden on .col would clip it. */
+.board-ui .col.is-drop { overflow: visible; }
+.board-ui .col.is-drop .stack,
+.board-ui .card-archive.is-drop {
+  outline: 2px dashed #8b5cf6;
+  outline-offset: -4px;
+  border-radius: 0.75rem;
+}
 .card.is-dragging { opacity: 0.45; }
 .drag-handle {
   color: #64748b; cursor: grab; font-size: 0.85rem; padding: 0 0.15rem; line-height: 1;
