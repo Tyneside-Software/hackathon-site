@@ -21,9 +21,12 @@ document.addEventListener("alpine:init", function () {
       busy: false,
       draggingId: "",
       dragKind: "",
-      draggingPerson: "",
-      assignOver: "",
       dropColumn: "",
+      whoFor: "",
+      whoCardId: "",
+      whoSlot: "",
+      whoLeft: 8,
+      whoTop: 8,
       undoStack: [],
       redoStack: [],
       removeArmed: false,
@@ -37,6 +40,9 @@ document.addEventListener("alpine:init", function () {
         this.filter = this.readFilter();
         this.adding = this.blankAdd();
         this.loadHist();
+        var self = this;
+        window.addEventListener("scroll", function () { if (self.whoFor) self.closeWho(); }, true);
+        window.addEventListener("resize", function () { if (self.whoFor) self.closeWho(); });
         await this.load();
         this.openFromHash();
       },
@@ -150,12 +156,12 @@ document.addEventListener("alpine:init", function () {
           return "Work that is not on the board yet. To board puts a card on To do. A card can move to any column, including back.";
         }
         if (this.view === "todo") {
-          return "Everything still to do. Drag to reorder, or send a card to the backlog. Open a card for the note and the people on it.";
+          return "Everything still to do. Drag to reorder, or send a card to the backlog. Click a name tag to switch the person. Open a card for the note.";
         }
         if (this.view === "done") {
           return "Finished increments. Open a card for the note. Drag a card back onto the board when it is not finished.";
         }
-        return "Drag a card between columns, or onto the Done count to finish it. Done cards stay on the done page. To do is the wide column, two cards to a row. Drag a person’s mark onto a card to add them. The backlog is a side pile.";
+        return "Drag a card between columns, or onto the Done count to finish it. Done cards stay on the done page. To do is the wide column, two cards to a row. Click a name tag to switch the person. The backlog is a side pile.";
       },
 
       statusText() {
@@ -218,11 +224,6 @@ document.addEventListener("alpine:init", function () {
         if (!card) return [];
         if (Array.isArray(card.owners)) return card.owners.filter(Boolean);
         return card.person ? [card.person] : [];
-      },
-
-      personEmoji(id) {
-        var person = this.people.find(function (row) { return row.id === id; });
-        return person ? person.emoji : "";
       },
 
       ownerLine(card) {
@@ -304,7 +305,6 @@ document.addEventListener("alpine:init", function () {
           return {
             key: key || "none",
             name: person ? person.name : "Unassigned",
-            emoji: person ? person.emoji : "—",
             cards: mine,
             hours: self.hoursLabel(mine)
           };
@@ -403,40 +403,12 @@ document.addEventListener("alpine:init", function () {
           event.preventDefault();
           return;
         }
-        var chip = node && node.closest ? node.closest(".owner-chip") : null;
-        if (chip && event.currentTarget.contains(chip)) {
-          this.onPersonDragStart(event, chip.getAttribute("data-person") || "");
-          return;
-        }
         this.dragKind = "card";
         this.draggingId = card.id;
         this._heldId = card.id;
-        this.draggingPerson = "";
-        this._heldPerson = "";
         this.suppressClick = true;
         try { event.dataTransfer.setData("text/plain", card.id); } catch (err) {}
         event.dataTransfer.effectAllowed = "move";
-      },
-
-      onPersonDragStart(event, personId) {
-        if (!this.writable()) {
-          event.preventDefault();
-          return;
-        }
-        var node = event.target && event.target.nodeType === 1 ? event.target : (event.target && event.target.parentElement);
-        var fromGlyph = node && node.closest && node.closest(".glyph");
-        if (!fromGlyph && node && node.closest && node.closest("button")) {
-          event.preventDefault();
-          return;
-        }
-        this.dragKind = "person";
-        this.draggingPerson = personId || "";
-        this._heldPerson = personId || "";
-        this.draggingId = "";
-        this._heldId = "";
-        this.suppressClick = true;
-        try { event.dataTransfer.setData("text/plain", "person:" + (personId || "")); } catch (err) {}
-        event.dataTransfer.effectAllowed = "copy";
       },
 
       onDragEnd() {
@@ -444,16 +416,13 @@ document.addEventListener("alpine:init", function () {
         setTimeout(function () {
           self.draggingId = "";
           self.dragKind = "";
-          self.draggingPerson = "";
           self._heldId = "";
-          self._heldPerson = "";
           self.dropColumn = "";
-          self.assignOver = "";
         }, 0);
       },
 
       onDragOver(event, columnId) {
-        if (!this.writable() || this.dragKind === "person") return;
+        if (!this.writable()) return;
         if (this.dragKind !== "card" && !this._heldId) return;
         event.preventDefault();
         if (event.dataTransfer) event.dataTransfer.dropEffect = "move";
@@ -468,35 +437,13 @@ document.addEventListener("alpine:init", function () {
         if (this.dropColumn === columnId) this.dropColumn = "";
       },
 
-      onCardDragOver(event, card) {
-        if (this.dragKind !== "person") return;
-        event.preventDefault();
-        event.stopPropagation();
-        this.assignOver = card.id;
-      },
-
-      onCardDragLeave(event, card) {
-        if (this.assignOver === card.id) this.assignOver = "";
-      },
-
-      onCardDrop(event, card) {
-        if (this.dragKind !== "person") return;
-        event.preventDefault();
-        event.stopPropagation();
-        var person = this.draggingPerson;
-        this.assignOver = "";
-        this.dragKind = "";
-        this.draggingPerson = "";
-        this.applyAssign(card, person);
-      },
-
       onDrop(event, columnId) {
-        if (!columnId || this.dragKind === "person") return;
+        if (!columnId) return;
         event.preventDefault();
         var raw = "";
         try { raw = event.dataTransfer ? event.dataTransfer.getData("text/plain") : ""; } catch (err) { raw = ""; }
         var id = this._heldId || this.draggingId || raw;
-        if (!id || String(id).indexOf("person:") === 0) return;
+        if (!id) return;
         var el = event.target.closest ? event.target.closest("[data-card-id]") : null;
         var beforeId = el ? el.getAttribute("data-card-id") : "";
         this.dropColumn = "";
@@ -724,14 +671,6 @@ document.addEventListener("alpine:init", function () {
         }
       },
 
-      toggleOwner(id) {
-        var list = (this.draft.owners || []).slice();
-        var at = list.indexOf(id);
-        if (at === -1) list.push(id);
-        else list.splice(at, 1);
-        this.draft.owners = list;
-      },
-
       async saveEdit() {
         if (!this.selected) return;
         var previous = this.snapshotCard(this.selected);
@@ -812,45 +751,98 @@ document.addEventListener("alpine:init", function () {
         }
       },
 
-      async applyAssign(card, personId) {
-        if (!this.writable()) return;
+      whoMenuStyle() {
+        return "left:" + this.whoLeft + "px;top:" + this.whoTop + "px;";
+      },
+
+      toggleWho(event, card, slot) {
+        if (!this.writable() || !card) return;
+        var key = card.id + ":" + (slot || "");
+        if (this.whoFor === key) {
+          this.closeWho();
+          return;
+        }
+        var rect = event.currentTarget.getBoundingClientRect();
+        var width = 196;
+        var height = 248;
+        var left = rect.left;
+        if (left + width > window.innerWidth - 8) left = window.innerWidth - width - 8;
+        if (left < 8) left = 8;
+        var top = rect.bottom + 6;
+        if (top + height > window.innerHeight - 8) top = Math.max(8, rect.top - height - 6);
+        this.whoLeft = left;
+        this.whoTop = top;
+        this.whoFor = key;
+        this.whoCardId = card.id;
+        this.whoSlot = slot || "";
+        var menu = this.$refs.whoMenu;
+        if (!menu) return;
+        menu.style.left = left + "px";
+        menu.style.top = top + "px";
+        if (!menu.matches(":popover-open") && menu.showPopover) menu.showPopover();
+      },
+
+      closeWho() {
+        this.whoFor = "";
+        this.whoCardId = "";
+        this.whoSlot = "";
+        var menu = this.$refs.whoMenu;
+        if (menu && menu.hidePopover && menu.matches(":popover-open")) menu.hidePopover();
+      },
+
+      onWhoAway(event) {
+        if (!this.whoFor) return;
+        var node = event.target;
+        if (node && node.closest && (node.closest(".who-menu") || node.closest(".who-tag"))) return;
+        this.closeWho();
+      },
+
+      onDialogCancel() {
+        if (this.whoFor) {
+          this.closeWho();
+          return;
+        }
+        this.closeCard();
+      },
+
+      async choosePerson(personId) {
+        var card = this.cards.find(function (item) { return item.id === this.whoCardId; }, this);
+        var slot = this.whoSlot;
+        this.closeWho();
+        if (!card || !this.writable()) return;
         var have = this.cardOwners(card);
         var next;
         if (!personId) {
-          if (!have.length) return;
-          next = [];
-        } else if (have.indexOf(personId) !== -1) {
+          if (!slot) return;
+          next = have.filter(function (id) { return id !== slot; });
+        } else if (!slot) {
+          next = [personId];
+        } else if (slot === personId) {
           return;
         } else {
-          next = have.concat([personId]);
+          var seen = {};
+          next = [];
+          have.forEach(function (id) {
+            var use = id === slot ? personId : id;
+            if (seen[use]) return;
+            seen[use] = true;
+            next.push(use);
+          });
         }
+        if (next.join("|") === have.join("|")) return;
         this._keptApi = this.api;
         this.busy = true;
         try {
           await this.send("PATCH", "/v1/board/cards/" + encodeURIComponent(card.id), { owners: next });
-          var label = personId ? ("Add " + this.personName(personId)) : "Clear assignees";
-          this.remember(label + " on " + card.id, { op: "patch", id: card.id, body: { owners: have } }, { op: "patch", id: card.id, body: { owners: next } });
-          this.flash(personId ? (this.personName(personId) + " is on card " + card.id + ".") : ("Cleared card " + card.id + "."));
-        } catch (err) {
-          this.error = err.message;
-        } finally {
-          this.busy = false;
-        }
-      },
-
-      async removeOwner(card, personId) {
-        var next = this.cardOwners(card).filter(function (id) { return id !== personId; });
-        var have = this.cardOwners(card);
-        if (next.length === have.length) return;
-        this._keptApi = this.api;
-        this.busy = true;
-        try {
-          await this.send("PATCH", "/v1/board/cards/" + encodeURIComponent(card.id), { owners: next });
-          this.remember(
-            "Remove " + this.personName(personId) + " from " + card.id,
-            { op: "patch", id: card.id, body: { owners: have } },
-            { op: "patch", id: card.id, body: { owners: next } }
-          );
+          var label = !next.length
+            ? ("No one on " + card.id)
+            : (personId ? (this.personName(personId) + " on " + card.id) : (this.personName(slot) + " off " + card.id));
+          this.remember(label, { op: "patch", id: card.id, body: { owners: have } }, { op: "patch", id: card.id, body: { owners: next } });
+          if (this.selected && this.selected.id === card.id) this.draft.owners = next.slice();
+          var said = !next.length
+            ? ("No one is on card " + card.id + ".")
+            : (personId ? (this.personName(personId) + " is on card " + card.id + ".") : (this.personName(slot) + " is off card " + card.id + "."));
+          this.flash(said);
         } catch (err) {
           this.error = err.message;
         } finally {
@@ -964,6 +956,12 @@ document.addEventListener("alpine:init", function () {
       },
 
       onKey(event) {
+        if (event.key === "Escape" && this.whoFor) {
+          event.preventDefault();
+          event.stopPropagation();
+          this.closeWho();
+          return;
+        }
         var tag = event.target && event.target.tagName;
         if (tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT") return;
         if (!(event.ctrlKey || event.metaKey)) return;

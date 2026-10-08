@@ -4,7 +4,7 @@ How this sits in the product: [Architecture](#architecture).
 
 The board, backlog, to-do list, and done list are one SQLite board on the API (`GET /v1/board`). Drag a card by its body, or open it and use the buttons. The board does not ask who you are, and it does not keep a card history.
 
-A card can have more than one person. Drag a person’s mark onto a card to add them, use × to remove one person, or drag — onto a card to clear everyone. The first person is the group the card sits under. Find matches a title or a note. Undo and Redo step back the last saves in this browser.
+Click a name tag to switch that person. Michael is light purple, Reeve is teal, Connor is blue, Lewis is amber, and Noah is rose. No one clears that name. A card that already has several people keeps a tag for each, and the menu changes the one that was clicked. The first person is the group the card sits under. Find matches a title or a note. Undo and Redo step back the last saves in this browser.
 
 Value is 1 to 5. Hours can be blank, which shows as no estimate. A card can move to any column, including back, with no reason. The backlog is a side pile. On the work board, Done is a count with a link to the done page. Drop a card on that count to finish it. To do is twice as wide as the other columns, with two cards to a row.
 

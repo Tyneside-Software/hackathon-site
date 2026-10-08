@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Tyneside Logistics — backlog</title>
   <link rel="icon" href="logo.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="styles.css?v=20261008-board8">
+  <link rel="stylesheet" href="styles.css?v=20261008-board9">
 </head>
 <body class="site" data-board-view="backlog">
   <nav class="site-nav" aria-label="Primary">
@@ -33,7 +33,7 @@
     </div>
   </nav>
 
-  <div class="wrap-board board-ui" style="padding: 1.5rem 0 3rem" x-data="boardPage()" x-init="boot()" @keydown.window="onKey($event)">
+  <div class="wrap-board board-ui" style="padding: 1.5rem 0 3rem" x-data="boardPage()" x-init="boot()" @keydown.window="onKey($event)" @click.window="onWhoAway($event)">
     <p class="hero-kicker">Hackathon night · work tracking</p>
     <h1 style="font-size:1.7rem;margin-bottom:0.4rem" x-text="pageTitle()"></h1>
     <p style="color:var(--muted);max-width:42rem" x-text="intro()"></p>
@@ -44,7 +44,7 @@
     <div class="filters" role="toolbar" aria-label="Filter by person">
       <button type="button" class="filter" :class="{ 'is-on': filter === 'all' }" :aria-pressed="filter === 'all'" @click="setFilter('all')">Everyone</button>
       <template x-for="person in people" :key="person.id">
-        <button type="button" class="filter" :class="{ 'is-on': filter === person.id }" :aria-pressed="filter === person.id" @click="togglePerson(person.id)" x-text="(person.emoji ? person.emoji + ' ' : '') + person.name"></button>
+        <button type="button" class="filter" :class="{ 'is-on': filter === person.id }" :aria-pressed="filter === person.id" @click="togglePerson(person.id)" x-text="person.name"></button>
       </template>
       <button type="button" class="filter" :class="{ 'is-on': filter === 'none' }" :aria-pressed="filter === 'none'" @click="setFilter(filter === 'none' ? 'all' : 'none')">— Unassigned</button>
     </div>
@@ -56,10 +56,9 @@
       </label>
       <button type="button" class="btn btn-ghost" @click="undo()" :disabled="busy || !writable() || !undoStack.length" :title="undoLabel()">Undo</button>
       <button type="button" class="btn btn-ghost" @click="redo()" :disabled="busy || !writable() || !redoStack.length" :title="redoLabel()">Redo</button>
-      <span class="clear-assignees" draggable="true" title="Drag onto a card to clear its people" @dragstart="onPersonDragStart($event, '')" @dragend="onDragEnd()">—</span>
       <button type="button" class="btn btn-fill" @click="showAdd = !showAdd; if (showAdd) adding = blankAdd()" :disabled="busy">Add a card</button>
     </div>
-    <p class="board-hint">Drag a person’s mark onto a card to add them. × removes that one person. Drag — onto a card to clear everyone. A card can move to any column, including back. Undo steps back the last save in this browser.</p>
+    <p class="board-hint">Click a name tag to switch who is on the card. Choose No one to clear that name. A card can move to any column, including back. Undo steps back the last save in this browser.</p>
 
     <form class="board-form" x-show="showAdd" @submit.prevent="addCard()">
       <label class="span-all">Title
@@ -120,15 +119,15 @@
 
     <div class="people">
       <template x-for="person in people" :key="'hour-' + person.id">
-        <div class="person" :class="{ 'is-on': filter === person.id }">
-          <div class="who"><span class="glyph" draggable="true" :title="'Drag onto a card to add ' + person.name" @dragstart.stop="onPersonDragStart($event, person.id)" @dragend="onDragEnd()" x-text="person.emoji"></span> <span x-text="person.name"></span></div>
+        <div class="person" :class="['is-' + person.id, { 'is-on': filter === person.id }]">
+          <div class="who"><span class="who-swatch" :class="'is-' + person.id"></span> <span x-text="person.name"></span></div>
           <div class="hrs"><span class="num" x-text="stats(person.id).hours"></span> <span>hrs</span></div>
           <div class="meta" x-text="stats(person.id).meta"></div>
           <button type="button" class="person-filter" :aria-pressed="filter === person.id" @click="togglePerson(person.id)" x-text="filter === person.id ? 'Showing these tasks' : 'Only these tasks'"></button>
         </div>
       </template>
-      <div class="person" x-show="stats('none').count" :class="{ 'is-on': filter === 'none' }">
-        <div class="who"><span class="glyph" draggable="true" title="Drag onto a card to clear its people" @dragstart.stop="onPersonDragStart($event, '')" @dragend="onDragEnd()">—</span> <span>Unassigned</span></div>
+      <div class="person is-none" x-show="stats('none').count" :class="{ 'is-on': filter === 'none' }">
+        <div class="who"><span class="who-swatch is-none"></span> <span>Unassigned</span></div>
         <div class="hrs"><span class="num" x-text="stats('none').hours"></span> <span>hrs</span></div>
         <div class="meta" x-text="stats('none').meta"></div>
         <button type="button" class="person-filter" :aria-pressed="filter === 'none'" @click="setFilter(filter === 'none' ? 'all' : 'none')" x-text="filter === 'none' ? 'Showing these tasks' : 'Only these tasks'"></button>
@@ -158,9 +157,9 @@
               <p class="empty-col" x-show="visible(col.id).length === 0" x-text="emptyText(col)"></p>
               <template x-for="group in groups(col.id)" :key="col.id + '-' + group.key">
                 <div class="owner-group">
-                  <div class="owner-group-head"><span x-text="group.emoji + ' ' + group.name"></span><span x-text="group.cards.length + ' · ' + group.hours"></span></div>
+                  <div class="owner-group-head"><span class="owner-group-name"><span class="who-swatch" :class="'is-' + group.key"></span> <span x-text="group.name"></span></span><span x-text="group.cards.length + ' · ' + group.hours"></span></div>
                   <template x-for="card in group.cards" :key="card.id">
-                    <article class="card" :id="'card-' + card.id" :class="{ 'is-dragging': draggingId === card.id, 'is-assign': assignOver === card.id }" :data-card-id="card.id" :draggable="writable()" @dragstart="onCardDragStart($event, card)" @dragend="onDragEnd()" @click="openCard(card)" @dragover="onCardDragOver($event, card)" @dragleave="onCardDragLeave($event, card)" @drop="onCardDrop($event, card)">
+                    <article class="card" :id="'card-' + card.id" :class="{ 'is-dragging': draggingId === card.id }" :data-card-id="card.id" :draggable="writable()" @dragstart="onCardDragStart($event, card)" @dragend="onDragEnd()" @click="openCard(card)">
                       <div class="top">
                         <span class="id" x-text="card.id"></span>
                         <span class="card-tools" x-show="writable()">
@@ -170,14 +169,11 @@
                           <button type="button" class="card-tool is-back" x-show="card.column === 'backlog'" @click.stop="quickMove(card, 'todo')" :disabled="busy">To board</button>
                         </span>
                         <span class="drag-handle" title="Drag the card" aria-hidden="true">⠿</span>
-                        <span class="owner-chips">
+                        <span class="who-tags">
                           <template x-for="owner in cardOwners(card)" :key="card.id + '-o-' + owner">
-                            <span class="owner-chip" draggable="true" :data-person="owner" :title="'Drag onto another card to add ' + personName(owner)" @click.stop @dragstart.stop="onPersonDragStart($event, owner)" @dragend="onDragEnd()">
-                              <span x-text="personEmoji(owner)"></span>
-                              <button type="button" class="owner-x" x-show="writable()" @click.stop="removeOwner(card, owner)" :aria-label="'Remove ' + personName(owner)">×</button>
-                            </span>
+                            <button type="button" class="who-tag" :class="'is-' + owner" :disabled="!writable() || busy" :aria-expanded="whoFor === card.id + ':' + owner" aria-haspopup="menu" @click.stop="toggleWho($event, card, owner)" x-text="personName(owner)"></button>
                           </template>
-                          <span class="owner-chip is-empty" x-show="!cardOwners(card).length" draggable="true" title="Drag onto another card to clear its people" @click.stop @dragstart.stop="onPersonDragStart($event, '')" @dragend="onDragEnd()">—</span>
+                          <button type="button" class="who-tag is-none" x-show="!cardOwners(card).length" :disabled="!writable() || busy" :aria-expanded="whoFor === card.id + ':'" aria-haspopup="menu" @click.stop="toggleWho($event, card, '')">Unassigned</button>
                         </span>
                       </div>
                       <div class="title" x-text="card.title"></div>
@@ -206,9 +202,9 @@
           <p class="empty-col" x-show="visible(col.id).length === 0" x-text="emptyText(col)"></p>
           <template x-for="group in groups(col.id)" :key="'list-' + col.id + '-' + group.key">
             <div class="owner-group">
-              <div class="owner-group-head"><span x-text="group.emoji + ' ' + group.name"></span><span x-text="group.cards.length + ' · ' + group.hours"></span></div>
+              <div class="owner-group-head"><span class="owner-group-name"><span class="who-swatch" :class="'is-' + group.key"></span> <span x-text="group.name"></span></span><span x-text="group.cards.length + ' · ' + group.hours"></span></div>
               <template x-for="card in group.cards" :key="'list-card-' + card.id">
-                <article class="card" :id="'card-' + card.id" :class="{ 'is-dragging': draggingId === card.id, 'is-assign': assignOver === card.id }" :data-card-id="card.id" :draggable="writable()" @dragstart="onCardDragStart($event, card)" @dragend="onDragEnd()" @click="openCard(card)" @dragover="onCardDragOver($event, card)" @dragleave="onCardDragLeave($event, card)" @drop="onCardDrop($event, card)">
+                <article class="card" :id="'card-' + card.id" :class="{ 'is-dragging': draggingId === card.id }" :data-card-id="card.id" :draggable="writable()" @dragstart="onCardDragStart($event, card)" @dragend="onDragEnd()" @click="openCard(card)">
                   <div class="top">
                     <span class="id" x-text="card.id"></span>
                     <span class="card-tools" x-show="writable()">
@@ -218,14 +214,11 @@
                       <button type="button" class="card-tool is-back" x-show="card.column === 'backlog'" @click.stop="quickMove(card, 'todo')" :disabled="busy">To board</button>
                     </span>
                     <span class="drag-handle" title="Drag the card" aria-hidden="true">⠿</span>
-                    <span class="owner-chips">
+                    <span class="who-tags">
                       <template x-for="owner in cardOwners(card)" :key="'list-' + card.id + '-o-' + owner">
-                        <span class="owner-chip" draggable="true" :data-person="owner" :title="'Drag onto another card to add ' + personName(owner)" @click.stop @dragstart.stop="onPersonDragStart($event, owner)" @dragend="onDragEnd()">
-                          <span x-text="personEmoji(owner)"></span>
-                          <button type="button" class="owner-x" x-show="writable()" @click.stop="removeOwner(card, owner)" :aria-label="'Remove ' + personName(owner)">×</button>
-                        </span>
+                        <button type="button" class="who-tag" :class="'is-' + owner" :disabled="!writable() || busy" :aria-expanded="whoFor === card.id + ':' + owner" aria-haspopup="menu" @click.stop="toggleWho($event, card, owner)" x-text="personName(owner)"></button>
                       </template>
-                      <span class="owner-chip is-empty" x-show="!cardOwners(card).length" draggable="true" title="Drag onto another card to clear its people" @click.stop @dragstart.stop="onPersonDragStart($event, '')" @dragend="onDragEnd()">—</span>
+                      <button type="button" class="who-tag is-none" x-show="!cardOwners(card).length" :disabled="!writable() || busy" :aria-expanded="whoFor === card.id + ':'" aria-haspopup="menu" @click.stop="toggleWho($event, card, '')">Unassigned</button>
                     </span>
                   </div>
                   <div class="title" x-text="card.title"></div>
@@ -246,7 +239,7 @@
     </template>
 
     <h2 style="margin-top:2rem">Who’s who</h2>
-    <p class="lede">Hours are every card attributed to that person, whichever column it sits in. Only these tasks filters to that person. Drag their mark onto a card to add them.</p>
+    <p class="lede">Hours are every card attributed to that person, whichever column it sits in. Only these tasks filters to that person. Click a name tag on a card to switch who is on it.</p>
     <div class="who-wrap">
       <table class="who-table">
         <thead>
@@ -255,14 +248,14 @@
         <tbody>
           <template x-for="person in people" :key="'who-' + person.id">
             <tr :data-person="person.id" :class="{ 'is-on': filter === person.id }" @click="togglePerson(person.id)" title="Filter the board to this person">
-              <td x-text="person.emoji"></td>
+              <td><span class="who-swatch" :class="'is-' + person.id"></span></td>
               <td><strong x-text="person.name"></strong></td>
               <td class="claimed" x-text="claimed(person.id)"></td>
               <td><strong x-text="hoursLabel(cards.filter(function (card) { return heldBy(card, person.id); }))"></strong></td>
             </tr>
           </template>
           <tr x-show="stats('none').count" :class="{ 'is-on': filter === 'none' }" @click="setFilter(filter === 'none' ? 'all' : 'none')" title="Filter to cards with nobody on them">
-            <td>—</td>
+            <td><span class="who-swatch is-none"></span></td>
             <td><strong>Unassigned</strong></td>
             <td class="claimed" x-text="claimed('none')"></td>
             <td><strong x-text="hoursLabel(cards.filter(function (card) { return heldBy(card, 'none'); }))"></strong></td>
@@ -292,26 +285,22 @@
       </ol>
     </div>
 
-    <dialog class="card-modal" x-ref="dlg" aria-labelledby="card-modal-title" @close="onDialogClose()" @cancel.prevent="closeCard()" @click.self="closeCard()">
+    <dialog class="card-modal" x-ref="dlg" aria-labelledby="card-modal-title" @close="onDialogClose()" @cancel.prevent="onDialogCancel()" @click.self="closeCard()">
       <div class="card-modal-inner" x-show="selected">
         <button type="button" class="card-modal-close" @click="closeCard()">Close</button>
         <p class="hero-kicker" x-text="selected ? ('#' + selected.id + ' · ' + ownerLine(selected) + ' · ' + (selected.hours == null ? 'no estimate' : fmtHours(selected.hours) + 'h') + (selected.value ? ' · value ' + selected.value : '') + ' · ' + columnLabel(selected.column)) : ''"></p>
+        <div class="who-tags" x-show="selected">
+          <template x-for="owner in cardOwners(selected)" :key="'dlg-' + (selected ? selected.id : '') + '-' + owner">
+            <button type="button" class="who-tag" :class="'is-' + owner" :disabled="!writable() || busy" :aria-expanded="!!(selected && whoFor === selected.id + ':' + owner)" aria-haspopup="menu" @click.stop="toggleWho($event, selected, owner)" x-text="personName(owner)"></button>
+          </template>
+          <button type="button" class="who-tag is-none" x-show="selected && !cardOwners(selected).length" :disabled="!writable() || busy" :aria-expanded="!!(selected && whoFor === selected.id + ':')" aria-haspopup="menu" @click.stop="toggleWho($event, selected, '')">Unassigned</button>
+        </div>
         <h2 id="card-modal-title" x-show="!editing" x-text="selected ? selected.title : ''"></h2>
         <div x-show="editing && selected">
           <label>Title
             <input x-model="draft.title" maxlength="240">
           </label>
           <div class="board-form" style="margin-top:0.6rem">
-            <div class="span-all">
-              <span class="field-label">Assignees</span>
-              <div class="choice-row">
-                <template x-for="person in people" :key="'edit-' + person.id">
-                  <button type="button" class="choice" :class="{ 'is-on': draft.owners && draft.owners.indexOf(person.id) !== -1 }" @click="toggleOwner(person.id)" x-text="(person.emoji ? person.emoji + ' ' : '') + person.name"></button>
-                </template>
-                <button type="button" class="choice" @click="draft.owners = []">Unassigned</button>
-              </div>
-              <p class="field-help">Turning one person off does not turn another on. Unassigned clears everyone.</p>
-            </div>
             <label>Hours
               <input type="number" min="0" max="1000" step="0.25" x-model="draft.hours" placeholder="Blank if not estimated">
             </label>
@@ -351,16 +340,6 @@
           </div>
         </div>
         <div class="card-modal-body" x-show="selected && !editing" x-html="selected ? selected.brief : ''"></div>
-        <div class="assign-row" x-show="selected && writable() && !editing">
-          <span class="field-label">Add a person</span>
-          <div class="choice-row">
-            <template x-for="person in people" :key="'assign-' + person.id">
-              <button type="button" class="choice" :class="{ 'is-on': selected && cardOwners(selected).indexOf(person.id) !== -1 }" @click="applyAssign(selected, person.id)" :disabled="busy || (selected && cardOwners(selected).indexOf(person.id) !== -1)" x-text="(person.emoji ? person.emoji + ' ' : '') + person.name"></button>
-            </template>
-            <button type="button" class="choice" @click="applyAssign(selected, '')" :disabled="busy">Clear</button>
-          </div>
-          <p class="field-help">Same as dropping their mark on the card. Someone already on it stays.</p>
-        </div>
         <div class="move-row" x-show="selected && writable()">
           <template x-for="col in columns" :key="'move-' + col.id">
             <button type="button" class="btn btn-ghost" @click="moveTo(col.id)" :disabled="busy || !selected || selected.column === col.id" x-text="col.label"></button>
@@ -374,13 +353,29 @@
       </div>
     </dialog>
 
+    <div class="who-menu" popover="manual" x-ref="whoMenu" role="menu" aria-label="Person" :style="whoMenuStyle()" @click.stop>
+      <p class="who-menu-label">Switch person</p>
+      <template x-for="person in people" :key="'who-opt-' + person.id">
+        <button type="button" class="who-option" role="menuitem" :class="{ 'is-current': whoSlot === person.id }" @click="choosePerson(person.id)">
+          <span class="who-swatch" :class="'is-' + person.id"></span>
+          <span x-text="person.name"></span>
+          <span class="who-check" x-show="whoSlot === person.id" aria-hidden="true">✓</span>
+        </button>
+      </template>
+      <button type="button" class="who-option is-clear" role="menuitem" @click="choosePerson('')">
+        <span class="who-swatch is-none"></span>
+        <span>No one</span>
+        <span class="who-check" x-show="whoSlot === ''" aria-hidden="true">✓</span>
+      </button>
+    </div>
+
   </div>
 
   <footer class="foot">
     <div class="wrap-wide">Tyneside Logistics hackathon · Reeve · Connor · Michael · Lewis · Noah</div>
   </footer>
   <script src="config.js"></script>
-  <script defer src="board-app.js?v=20261008-board8"></script>
+  <script defer src="board-app.js?v=20261008-board9"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.8/dist/cdn.min.js"></script>
 </body>
 </html>

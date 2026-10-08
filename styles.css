@@ -302,9 +302,8 @@ a:hover { color: var(--link-hover); }
 .card:last-child { margin-bottom: 0; }
 .card:hover { border-color: #475569; }
 .card:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-.card .top { display: flex; justify-content: space-between; align-items: center; gap: 0.4rem; }
+.card .top { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.4rem; }
 .card .id { font-family: ui-monospace, Consolas, monospace; font-size: 0.72rem; color: #64748b; }
-.card .emoji { font-size: 1.15rem; line-height: 1; flex-shrink: 0; }
 .card .title {
   font-size: 0.9rem; font-weight: 600; margin: 0.4rem 0 0.45rem;
   color: var(--heading); line-height: 1.35; overflow-wrap: anywhere;
@@ -1300,16 +1299,10 @@ details.fix p:last-child { margin-bottom: 0; }
 .who-table td.claimed { max-width: 36rem; }
 .board-hint { color: var(--muted); font-size: 0.85rem; max-width: 46rem; margin: -0.4rem 0 1rem; }
 .board-toolbar .find { min-width: 14rem; flex: 1; }
-.clear-assignees {
-  display: inline-flex; align-items: center; justify-content: center;
-  width: 2.2rem; height: 2.2rem; border: 1px dashed var(--border); border-radius: 8px;
-  color: var(--muted); cursor: grab; user-select: none;
-}
 .board-progress { margin: 0 0 1rem; }
 .board-progress .bar { height: 0.45rem; background: #121820; border-radius: 999px; overflow: hidden; border: 1px solid var(--border); }
 .board-progress .bar div { height: 100%; background: var(--accent, #f5b942); }
 .board-progress p { color: var(--muted); font-size: 0.82rem; margin: 0.35rem 0 0; }
-.glyph { cursor: grab; user-select: none; font-size: 1.45rem; line-height: 1; display: inline-block; }
 .card-tools { display: inline-flex; align-items: center; gap: 0.55rem; margin-left: auto; }
 .card-tool {
   appearance: none; background: transparent; border: 0; padding: 0; color: #94a3b8;
@@ -1319,21 +1312,69 @@ details.fix p:last-child { margin-bottom: 0; }
 .card-tool.is-back { color: #fbbf24; }
 .card-tool.is-back:hover { color: #fde68a; }
 .card-tool:disabled { opacity: 0.4; cursor: default; }
-.assign-row { margin: 0.8rem 0 0.2rem; }
 .owner-group { margin-top: 0.35rem; }
 .owner-group-head {
   display: flex; justify-content: space-between; gap: 0.5rem;
   font-size: 0.68rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted);
   padding: 0.35rem 0.15rem 0.2rem;
 }
-.owner-chips { display: inline-flex; gap: 0.2rem; margin-left: 0.35rem; align-items: center; }
-.owner-chip { display: inline-flex; align-items: center; gap: 0.05rem; cursor: grab; }
-.owner-chip.is-empty { color: var(--muted); }
-.owner-x {
-  appearance: none; border: 0; background: transparent; color: #94a3b8;
-  cursor: pointer; font: inherit; line-height: 1; padding: 0 0.1rem;
+.owner-group-name { display: inline-flex; align-items: center; gap: 0.35rem; }
+.is-michael { --who-bg: #e9d5ff; --who-ink: #4c1d95; --who-line: #d8b4fe; --who: #c4b5fd; }
+.is-connor { --who-bg: #dbeafe; --who-ink: #1e3a8a; --who-line: #93c5fd; --who: #60a5fa; }
+.is-reeve { --who-bg: #ccfbf1; --who-ink: #115e59; --who-line: #5eead4; --who: #2dd4bf; }
+.is-lewis { --who-bg: #fef3c7; --who-ink: #92400e; --who-line: #fcd34d; --who: #fbbf24; }
+.is-noah { --who-bg: #ffe4e6; --who-ink: #9f1239; --who-line: #fda4af; --who: #fb7185; }
+.is-none { --who-bg: #1e293b; --who-ink: #cbd5e1; --who-line: #475569; --who: #64748b; }
+.board-ui .person.is-michael,
+.board-ui .person.is-connor,
+.board-ui .person.is-reeve,
+.board-ui .person.is-lewis,
+.board-ui .person.is-noah,
+.board-ui .person.is-none { box-shadow: inset 3px 0 0 var(--who, var(--border)); }
+.board-ui .person.is-on { border-color: var(--who, var(--accent)); }
+.who-swatch {
+  width: 0.55rem; height: 0.55rem; border-radius: 999px;
+  background: var(--who, #64748b); display: inline-block; flex-shrink: 0;
 }
-.card.is-assign { outline: 2px solid var(--accent, #f5b942); }
+.who-table .who-swatch { width: 0.7rem; height: 0.7rem; margin-top: 0.35rem; }
+.who-tags { display: inline-flex; flex-wrap: wrap; justify-content: flex-end; gap: 0.25rem; min-width: 0; }
+.card-modal .who-tags { margin: 0.15rem 0 0.85rem; justify-content: flex-start; }
+.who-tag {
+  appearance: none; display: inline-flex; align-items: center; gap: 0.32rem;
+  border-radius: 999px; border: 1px solid var(--who-line, #475569);
+  background: var(--who-bg, #1e293b); color: var(--who-ink, #cbd5e1);
+  font: inherit; font-size: 0.72rem; font-weight: 650; line-height: 1;
+  padding: 0.28rem 0.42rem 0.28rem 0.55rem; cursor: pointer; max-width: 100%;
+}
+.who-tag::after {
+  content: ""; width: 0; height: 0;
+  border-left: 3px solid transparent; border-right: 3px solid transparent;
+  border-top: 4px solid currentColor; opacity: 0.55;
+}
+.who-tag:hover:not(:disabled) { filter: brightness(0.97); }
+.who-tag:disabled { cursor: default; opacity: 0.72; }
+.who-tag:disabled::after { display: none; }
+.who-tag:focus-visible { outline: 2px solid var(--who, #c4b5fd); outline-offset: 2px; }
+.who-menu {
+  display: none; position: fixed; inset: auto; margin: 0; border: 1px solid #334155;
+  padding: 0.35rem; min-width: 11.75rem; width: max-content; height: auto;
+  overflow: visible; color: var(--text); background: #0c1219;
+  border-radius: 12px; box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
+}
+.who-menu:popover-open { display: flex; flex-direction: column; gap: 0.1rem; }
+.who-menu-label {
+  margin: 0.15rem 0.45rem 0.3rem; font-size: 0.68rem; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--muted);
+}
+.who-option {
+  display: flex; width: 100%; align-items: center; gap: 0.5rem;
+  border: 0; background: transparent; color: var(--text); border-radius: 8px;
+  padding: 0.42rem 0.5rem; cursor: pointer; font: inherit; font-size: 0.88rem; text-align: left;
+}
+.who-option:hover, .who-option.is-current { background: #1e293b; }
+.who-option:focus-visible { outline: 2px solid #c4b5fd; outline-offset: -2px; }
+.who-option.is-clear { margin-top: 0.2rem; border-top: 1px solid #1e293b; border-radius: 0 0 8px 8px; padding-top: 0.5rem; }
+.who-check { margin-left: auto; color: #cbd5e1; font-size: 0.8rem; }
 .card-note {
   color: var(--muted); font-size: 0.78rem; margin: 0.35rem 0 0;
   display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
