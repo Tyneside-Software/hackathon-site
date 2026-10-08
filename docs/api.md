@@ -106,3 +106,9 @@ gcloud run deploy hackathon-api `
 ```
 
 `--source .` uses the Dockerfile **if** that service is set to Docker. The GitHub-connected service uses pack instead.
+
+## Board
+
+`GET /v1/board` reads the kanban from SQLite. Moves, edits, and new cards are on that same route (`POST /v1/board/cards`, `PATCH /v1/board/cards/{id}`, `POST /v1/board/cards/{id}/move`, `POST /v1/board/reorder`). A move back among To do, In progress, Ready to demo, and Done needs `reason`. Moving to or from the backlog does not. `owners` is the list of people on a card. `hours` may be null. `value` is 1 to 5. `POST /v1/board/cards/{id}/commits` records a repo and sha. `by` is a person id (`michael`, `connor`, `reeve`, `lewis`, `noah`).
+
+`app/board_seed.json` is imported only when the board tables have never held cards. `GET /v1/board/export` is the copy to commit back. The site pages use the snapshot in git when this route is not deployed yet. See the site wiki [Kanban board](#board).

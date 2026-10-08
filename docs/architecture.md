@@ -42,10 +42,12 @@ hackathon-site/
   index.html          Home
   progress.html       Catch-up snapshot (been away?)
   app/                Map (Leaflet + map.js)
-  board.html          Kanban (preview columns)
-  board.js            Filter, card modal, scroll lock
-  todo.html           All to-do cards (generated)
-  done.html           All done cards (generated)
+  board.html          Kanban (to do, in progress, ready)
+  backlog.html        Backlog
+  todo.html           All to-do cards
+  done.html           All done cards
+  board-app.js        Drag, edit, history
+  board-snapshot.json Read-only copy when the API has no board
   api-test.html       Alpine.js GET /test_field
   account.html        Register / login / Fetch me (Noah, 41)
   docs/               This wiki
@@ -57,8 +59,8 @@ hackathon-site/
   CNAME               hackathon.tyneside.software
   start.ps1           Site :5500 + API :8080
   scripts/
-    cards.json        Kanban source of truth
-    update_board.py   Rewrites board / todo / done
+    cards.json        Git copy of the SQLite board
+    update_board.py   list / move / pull (does not rewrite the pages)
 ```
 
 ## API tree
@@ -123,9 +125,10 @@ New map JS stays vanilla inside the existing `app/map.js` IIFE. Alpine is for wi
 
 ## How the kanban works
 
-- Edit `scripts/cards.json` or run `python scripts/update_board.py`.
-- Do not hand-edit `<!-- BOARD:… -->` in `board.html`.
-- To-do on the board is the top four cards plus a link to `todo.html`. Done is a count plus `done.html`.
+- The API stores the cards in SQLite (`GET /v1/board`).
+- `app/board_seed.json` fills an empty database once. It does not replace cards that are already there.
+- `board-snapshot.json` is what the pages show when that route is missing, so the current cards stay on GitHub Pages.
+- `python scripts/update_board.py pull` copies SQLite back into those files.
 - Details: [Kanban board](#board).
 
 ## Deploy

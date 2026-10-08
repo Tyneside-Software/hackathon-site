@@ -5,9 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Tyneside Logistics — hackathon board</title>
   <link rel="icon" href="logo.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css?v=20261008-board2">
 </head>
-<body class="site">
+<body class="site" data-board-view="board">
   <nav class="site-nav" aria-label="Primary">
     <div class="inner">
       <a href="index.html" class="brand-link">
@@ -20,6 +20,7 @@
         <a href="progress.html" class="nav-now">Progress</a>
         <a href="app/">Map</a>
         <a href="board.html" class="is-current" aria-current="page">Board</a>
+        <a href="backlog.html">Backlog</a>
         <a href="todo.html">To do</a>
         <a href="done.html">Done</a>
         <a href="docs/" class="nav-docs">Docs</a>
@@ -32,403 +33,399 @@
     </div>
   </nav>
 
-  <div class="wrap-wide" style="padding: 1.5rem 0 3rem">
-    <p class="hero-kicker">Hackathon night · 2026-08-27</p>
-    <h1 style="font-size:1.7rem;margin-bottom:0.4rem">Logistics — work tracking board</h1>
-    <p style="color:var(--muted);max-width:42rem">
-      Same idea as the Automatica kanban. Every card is a <strong>releasable increment</strong> —
-      the site should still look working when the card lands.
-      Push to <code>main</code> deploys the site and the API. To-do and done lists
-      have their own pages (<a href="todo.html">to do</a>, <a href="done.html">done</a>)
-      so this board stays short.
-      Filter by person with the chips, the hour cards, or a row in Who’s who.
-      <strong>Click a card</strong> for the full brief (or share <code>#t-04</code>).
-      Board edits: <code>python scripts/update_board.py</code>.
-    </p>
+  <div class="wrap-wide board-ui" style="padding: 1.5rem 0 3rem" x-data="boardPage()" x-init="boot()" @keydown.window="onKey($event)">
+    <p class="hero-kicker">Hackathon night · work tracking</p>
+    <h1 style="font-size:1.7rem;margin-bottom:0.4rem" x-text="pageTitle()"></h1>
+    <p style="color:var(--muted);max-width:42rem" x-text="intro()"></p>
+    <p class="board-status" x-text="statusText()"></p>
+    <p class="board-error" role="alert" x-show="error" x-text="error"></p>
+    <p class="board-ok" x-show="notice" x-text="notice"></p>
 
     <div class="filters" role="toolbar" aria-label="Filter by person">
-      <button type="button" class="filter is-on" data-person="all" aria-pressed="true">Everyone</button>
-      <button type="button" class="filter" data-person="reeve" aria-pressed="false">🧭 Reeve</button>
-      <button type="button" class="filter" data-person="connor" aria-pressed="false">⚡ Connor</button>
-      <button type="button" class="filter" data-person="michael" aria-pressed="false">🏗️ Michael</button>
-      <button type="button" class="filter" data-person="lewis" aria-pressed="false">🌱 Lewis</button>
-      <button type="button" class="filter" data-person="noah" aria-pressed="false">🔧 Noah</button>
+      <button type="button" class="filter" :class="{ 'is-on': filter === 'all' }" :aria-pressed="filter === 'all'" @click="setFilter('all')">Everyone</button>
+      <template x-for="person in people" :key="person.id">
+        <button type="button" class="filter" :class="{ 'is-on': filter === person.id }" :aria-pressed="filter === person.id" @click="togglePerson(person.id)" x-text="(person.emoji ? person.emoji + ' ' : '') + person.name"></button>
+      </template>
+      <button type="button" class="filter" :class="{ 'is-on': filter === 'none' }" :aria-pressed="filter === 'none'" @click="setFilter(filter === 'none' ? 'all' : 'none')">— Unassigned</button>
     </div>
-    <p class="filter-status" id="filter-status">Showing everyone.</p>
+    <p class="filter-status" x-text="filterStatus()"></p>
+
+    <div class="board-toolbar">
+      <label>I am
+        <select x-model="me" @change="saveMe()">
+          <option value="">Choose…</option>
+          <template x-for="person in people" :key="'me-' + person.id">
+            <option :value="person.id" x-text="(person.emoji ? person.emoji + ' ' : '') + person.name"></option>
+          </template>
+        </select>
+      </label>
+      <label class="find">Find
+        <input type="search" x-model="query" placeholder="Title or note" autocomplete="off">
+      </label>
+      <button type="button" class="btn btn-ghost" @click="undo()" :disabled="busy || !writable() || !undoStack.length" :title="undoLabel()">Undo</button>
+      <button type="button" class="btn btn-ghost" @click="redo()" :disabled="busy || !writable() || !redoStack.length" :title="redoLabel()">Redo</button>
+      <span class="clear-assignees" draggable="true" title="Drag onto a card to clear its people" @dragstart="onPersonDragStart($event, '')" @dragend="onDragEnd()">—</span>
+      <button type="button" class="btn btn-fill" @click="showAdd = !showAdd; if (showAdd) adding = blankAdd()" :disabled="busy">Add a card</button>
+    </div>
+    <p class="board-hint">Drag a person’s mark onto a card to add them. × removes that one person. Drag — onto a card to clear everyone. To backlog parks a card without a reason. Undo steps back the last save in this browser.</p>
+
+    <form class="board-form" x-show="showAdd" @submit.prevent="addCard()">
+      <label class="span-all">Title
+        <input x-model="adding.title" required maxlength="240" placeholder="A releasable slice">
+      </label>
+      <label>Person
+        <select x-model="adding.person">
+          <option value="">Unassigned</option>
+          <template x-for="person in people" :key="'add-' + person.id">
+            <option :value="person.id" x-text="person.name"></option>
+          </template>
+        </select>
+      </label>
+      <label>Hours
+        <input type="number" min="0" max="1000" step="0.25" x-model="adding.hours" placeholder="Blank if not estimated">
+      </label>
+      <label>Value
+        <select x-model="adding.value">
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+        </select>
+      </label>
+      <label>Column
+        <select x-model="adding.column">
+          <template x-for="col in columns" :key="'add-col-' + col.id">
+            <option :value="col.id" x-text="col.label"></option>
+          </template>
+        </select>
+      </label>
+      <label>Tag
+        <input x-model="adding.tag" maxlength="120" placeholder="Optional">
+      </label>
+      <label class="span-all">Brief
+        <textarea x-model="adding.brief" placeholder="What done looks like. Plain text is fine."></textarea>
+      </label>
+      <div class="form-actions span-all">
+        <button type="submit" class="btn btn-fill" :disabled="busy">Save card</button>
+        <button type="button" class="btn btn-ghost" @click="showAdd = false">Cancel</button>
+      </div>
+    </form>
 
     <div class="board-banner">
-      <div>📋 <strong>Tonight:</strong> Noah — phones toggle remembered (47), accounts (41). Michael — bus trails snap to streets via OSRM (48), 10-minute fade (46), Firestore cache (45). Live API <strong>0.1.9</strong>. Doing is empty.</div>
+      <div x-text="banner()"></div>
       <div class="btns">
         <a class="btn btn-fill" href="app/">Map app</a>
         <a class="btn btn-ghost" href="progress.html">Progress</a>
         <a class="btn btn-ghost" href="onboarding.html">Onboarding</a>
-        <a class="btn btn-ghost" href="index.html">Desktop home</a>
       </div>
     </div>
 
-    <!-- BOARD:PEOPLE -->
+    <div class="board-progress">
+      <div class="bar" role="img" :aria-label="progress().label"><div :style="'width:' + progress().pct + '%'"></div></div>
+      <p x-text="progress().label"></p>
+    </div>
+
     <div class="people">
-      <button type="button" class="person" data-person="reeve" aria-pressed="false">
-        <div class="who"><span class="emoji">🧭</span> Reeve</div>
-        <div class="hrs">8.75 <span>hrs</span></div>
-        <div class="meta">5 done · 1 ready · 1 to do</div>
-      </button>
-      <button type="button" class="person" data-person="connor" aria-pressed="false">
-        <div class="who"><span class="emoji">⚡</span> Connor</div>
-        <div class="hrs">6.75 <span>hrs</span></div>
-        <div class="meta">3 done · 1 ready · 1 to do</div>
-      </button>
-      <button type="button" class="person" data-person="michael" aria-pressed="false">
-        <div class="who"><span class="emoji">🏗️</span> Michael</div>
-        <div class="hrs">36.75 <span>hrs</span></div>
-        <div class="meta">16 done · 2 to do</div>
-      </button>
-      <button type="button" class="person" data-person="lewis" aria-pressed="false">
-        <div class="who"><span class="emoji">🌱</span> Lewis</div>
-        <div class="hrs">8.75 <span>hrs</span></div>
-        <div class="meta">4 done · 3 to do</div>
-      </button>
-      <button type="button" class="person" data-person="noah" aria-pressed="false">
-        <div class="who"><span class="emoji">🔧</span> Noah</div>
-        <div class="hrs">36 <span>hrs</span></div>
-        <div class="meta">10 done · 4 to do</div>
+      <template x-for="person in people" :key="'hour-' + person.id">
+        <button type="button" class="person" :class="{ 'is-on': filter === person.id }" :aria-pressed="filter === person.id" @click="togglePerson(person.id)">
+          <div class="who"><span class="glyph" draggable="true" title="Drag onto a card to add this person" @click.stop @dragstart="onPersonDragStart($event, person.id)" @dragend="onDragEnd()" x-text="person.emoji"></span> <span x-text="person.name"></span></div>
+          <div class="hrs"><span class="num" x-text="stats(person.id).hours"></span> <span>hrs</span></div>
+          <div class="meta" x-text="stats(person.id).meta"></div>
+        </button>
+      </template>
+      <button type="button" class="person" x-show="stats('none').count" :class="{ 'is-on': filter === 'none' }" @click="setFilter(filter === 'none' ? 'all' : 'none')">
+        <div class="who"><span class="glyph">—</span> <span>Unassigned</span></div>
+        <div class="hrs"><span class="num" x-text="stats('none').hours"></span> <span>hrs</span></div>
+        <div class="meta" x-text="stats('none').meta"></div>
       </button>
     </div>
-    <!-- /BOARD:PEOPLE -->
 
+    <div class="board-summaries" x-show="view === 'board'">
+      <a class="card todo-index" :href="pageHref('backlog.html')">
+        <div class="todo-index-count" x-text="sorted('backlog').length"></div>
+        <div class="title">Backlog</div>
+        <p class="todo-index-meta" x-text="columnCount('backlog') + ' · open the backlog →'"></p>
+      </a>
+      <a class="card done-index" :href="pageHref('done.html')">
+        <div class="done-index-count" x-text="sorted('done').length"></div>
+        <div class="title">Done</div>
+        <p class="done-index-meta" x-text="columnCount('done') + ' · open the done list →'"></p>
+      </a>
+    </div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    <!-- BOARD:KANBAN -->
+    <template x-if="view === 'board'">
     <div class="kanban-scroll">
-      <div class="kanban">
-
-        <div class="col todo">
-          <div class="head"><span class="col-name">To do</span><span class="count" id="todo-col-count">11 · 21h</span></div>
-          <div class="stack">
-            <script type="application/json" id="todo-cards-index">[{"id":"13","person":"lewis","hours":1},{"id":"06","person":"lewis","hours":2},{"id":"07","person":"connor","hours":2},{"id":"08","person":"reeve","hours":1.5},{"id":"09","person":"lewis","hours":2},{"id":"11","person":"michael","hours":4},{"id":"35","person":"michael","hours":0.5},{"id":"49","person":"noah","hours":2},{"id":"50","person":"noah","hours":2},{"id":"51","person":"noah","hours":2},{"id":"52","person":"noah","hours":2}]</script>
-            <p class="empty-col is-hidden" data-all="Nothing here."></p>
-            <a class="card" id="card-13" href="#t-13" data-person="lewis" data-hours="1">
-              <div class="top"><span class="id">13</span><span class="emoji">🌱</span></div>
-              <div class="title">Lewis: get the back end running locally</div>
-              <span class="tag tag-wait">clone api · venv · uvicorn · /health</span>
-              <div class="bot"><span>1h</span><span>Lewis</span></div>
-              <template class="card-brief">
-                <p>Clone the API as a sibling of the site and get FastAPI answering on port 8080. This is the health-check loop, not Cloud Run.</p>
-                                <h3>Done when</h3>
-                                <ul>
-                                  <li><code>GET http://127.0.0.1:8080/health</code> returns <code>ok</code>.</li>
-                                  <li><code>/docs</code> loads the Swagger UI.</li>
-                                </ul>
-                                <h3>How</h3>
-                                <ol>
-                                  <li>Clone <a href="https://github.com/Tyneside-Software/hackathon-api">Tyneside-Software/hackathon-api</a> next to the site.</li>
-                                  <li><code>python -m venv .venv</code> then <code>pip install -r requirements.txt</code>.</li>
-                                  <li><code>uvicorn app.main:app --reload --port 8080</code> (or just <code>.\start.ps1</code> from the site folder).</li>
-                                </ol>
-                                <div class="brief-actions"><a class="btn btn-ghost" href="onboarding.html">Onboarding steps</a></div>
+      <div class="kanban cols-3">
+        <template x-for="col in shownColumns()" :key="col.id">
+          <div class="col" :class="[col.id, { 'is-drop': dropColumn === col.id }]" @dragover="onDragOver($event, col.id)" @dragleave="onDragLeave($event, col.id)" @drop.prevent="onDrop($event, col.id)">
+            <div class="head"><span class="col-name" x-text="col.label"></span><span class="count" x-text="columnCount(col.id)"></span></div>
+            <div class="stack">
+              <p class="empty-col" x-show="visible(col.id).length === 0" x-text="emptyText(col)"></p>
+              <template x-for="group in groups(col.id)" :key="col.id + '-' + group.key">
+                <div class="owner-group">
+                  <div class="owner-group-head"><span x-text="group.emoji + ' ' + group.name"></span><span x-text="group.cards.length + ' · ' + group.hours"></span></div>
+                  <template x-for="card in group.cards" :key="card.id">
+                    <article class="card" :id="'card-' + card.id" :class="{ 'is-dragging': draggingId === card.id, 'is-assign': assignOver === card.id }" :data-card-id="card.id" @click="openCard(card)" @dragover="onCardDragOver($event, card)" @dragleave="onCardDragLeave($event, card)" @drop="onCardDrop($event, card)">
+                      <div class="top">
+                        <span class="id" x-text="card.id"></span>
+                        <button type="button" class="drag-handle" draggable="true" title="Drag to another column" aria-label="Drag card" @click.stop.prevent @dragstart="onDragStart($event, card)" @dragend="onDragEnd()">⠿</button>
+                        <span class="owner-chips">
+                          <template x-for="owner in cardOwners(card)" :key="card.id + '-o-' + owner">
+                            <span class="owner-chip" draggable="true" :title="'Drag onto another card to add ' + personName(owner)" @click.stop @dragstart.stop="onPersonDragStart($event, owner)" @dragend="onDragEnd()">
+                              <span x-text="personEmoji(owner)"></span>
+                              <button type="button" class="owner-x" x-show="writable()" @click.stop="removeOwner(card, owner)" :aria-label="'Remove ' + personName(owner)">×</button>
+                            </span>
+                          </template>
+                          <span class="owner-chip is-empty" x-show="!cardOwners(card).length" draggable="true" title="Drag onto another card to clear its people" @click.stop @dragstart.stop="onPersonDragStart($event, '')" @dragend="onDragEnd()">—</span>
+                        </span>
+                      </div>
+                      <div class="title" x-text="card.title"></div>
+                      <p class="card-note" x-show="notePreview(card)" x-text="notePreview(card)"></p>
+                      <span class="tag" x-show="card.tag" :class="card.tag_kind === 'ok' ? 'tag-ok' : 'tag-wait'" x-text="card.tag"></span>
+                      <span class="unestimated" x-show="card.hours == null">∅ no estimate</span>
+                      <div class="card-actions" x-show="writable()">
+                        <button type="button" @click.stop="duplicateCard(card)" :disabled="busy">Duplicate</button>
+                        <button type="button" x-show="card.column !== 'backlog' && card.column !== 'done'" @click.stop="quickMove(card, 'backlog')" :disabled="busy">To backlog</button>
+                        <button type="button" x-show="card.column === 'backlog'" @click.stop="quickMove(card, 'todo')" :disabled="busy">To board</button>
+                      </div>
+                      <div class="bot">
+                        <span x-text="card.hours == null ? '∅' : (fmtHours(card.hours) + 'h')"></span>
+                        <span class="value" x-show="card.value" :title="'Value ' + card.value + ' of 5'" x-text="valueMarks(card.value)"></span>
+                        <span x-show="card.commits && card.commits.length" x-text="card.commits.length + (card.commits.length === 1 ? ' commit' : ' commits')"></span>
+                      </div>
+                    </article>
+                  </template>
+                </div>
               </template>
-            </a>
-            <a class="card" id="card-06" href="#t-06" data-person="lewis" data-hours="2">
-              <div class="top"><span class="id">06</span><span class="emoji">🌱</span></div>
-              <div class="title">Save routes in the browser (localStorage)</div>
-              <div class="bot"><span>2h</span><span>Lewis</span></div>
-              <template class="card-brief">
-                <p>Persist the current waypoint list in the browser so a refresh does not wipe a demo. No API. This is the persistence story until card 11.</p>
-                                <h3>Done when</h3>
-                                <ul>
-                                  <li>Add stops, refresh, they come back on the map and in the sidebar.</li>
-                                  <li>Clear still clears, including storage.</li>
-                                  <li>Home / Board still load if storage is empty or corrupt — never a blank map.</li>
-                                </ul>
-                                <h3>How</h3>
-                                <ol>
-                                  <li>Write waypoints (lat/lng order) to <code>localStorage</code> from <code>app/map.js</code>.</li>
-                                  <li>Restore on load, then let the user Calculate route as today.</li>
-                                  <li>Do not block on Cloud Run.</li>
-                                </ol>
-                                <div class="brief-actions"><a class="btn btn-ghost" href="app/">Open map</a></div>
-              </template>
-            </a>
-            <a class="card" id="card-07" href="#t-07" data-person="connor" data-hours="2">
-              <div class="top"><span class="id">07</span><span class="emoji">⚡</span></div>
-              <div class="title">Job list beside the map (seed Howden-shaped jobs)</div>
-              <div class="bot"><span>2h</span><span>Connor</span></div>
-              <template class="card-brief">
-                <p>A job list in the map sidebar, seeded with Howden-shaped work: named jobs, rough Tyneside locations. This is the first hint of dispatch, not a full scheduler.</p>
-                                <h3>Done when</h3>
-                                <ul>
-                                  <li>At least five seed jobs visible beside the map without an API.</li>
-                                  <li>Clicking a job does something visible (focus the map, highlight, or drop its waypoint).</li>
-                                  <li>The existing waypoint + route flow still works if you ignore the list.</li>
-                                </ul>
-                                <h3>How</h3>
-                                <ol>
-                                  <li>Hard-code a small JSON/JS list in the map page (name, area, lat/lng).</li>
-                                  <li>Render it in the existing sidebar; keep the layout usable on a laptop.</li>
-                                  <li>Shape the names like real cleaning/logistics jobs, not “Test 1”.</li>
-                                </ol>
-                                <div class="brief-actions"><a class="btn btn-ghost" href="app/">Open map</a></div>
-              </template>
-            </a>
-            <a class="card" id="card-08" href="#t-08" data-person="reeve" data-hours="1.5">
-              <div class="top"><span class="id">08</span><span class="emoji">🧭</span></div>
-              <div class="title">Demo seed: 5 Tyneside waypoints + named run</div>
-              <div class="bot"><span>1.5h</span><span>Reeve</span></div>
-              <template class="card-brief">
-                <p>One-click demo so nobody has to click the map five times during a show-and-tell. Load a named run with five Tyneside waypoints already placed.</p>
-                                <h3>Done when</h3>
-                                <ul>
-                                  <li>A button (e.g. “Load Tyneside demo”) drops five named stops and a run name.</li>
-                                  <li>Calculate route works immediately on that seed.</li>
-                                  <li>Clear still returns to an empty map.</li>
-                                </ul>
-                                <h3>How</h3>
-                                <ol>
-                                  <li>Pick five real-ish spots around Newcastle / Tyneside (not a straight line down one street).</li>
-                                  <li>Give the run a name the operator can see in the sidebar.</li>
-                                  <li>Keep the manual click-to-add path working.</li>
-                                </ol>
-                                <div class="brief-actions"><a class="btn btn-ghost" href="app/">Open map</a></div>
-              </template>
-            </a>
-            <a class="card todo-index" id="todo-index" href="todo.html">
-              <div class="todo-index-count" id="todo-index-count">11</div>
-              <div class="title">All to-do cards</div>
-              <p class="todo-index-meta" id="todo-index-meta">7 more · all 11 →</p>
-            </a>
+            </div>
           </div>
-        </div>
-
-        <div class="col doing">
-          <div class="head"><span class="col-name">In progress</span><span class="count">0 · 0h</span></div>
-          <div class="stack">
-            <p class="empty-col" data-all="Empty on purpose. Pull a Ready card and ship it.">Empty on purpose. Pull a Ready card and ship it.</p>
-          </div>
-        </div>
-
-        <div class="col ready">
-          <div class="head"><span class="col-name">Ready to demo</span><span class="count">2 · 6h</span></div>
-          <div class="stack">
-            <p class="empty-col is-hidden" data-all="Nothing here."></p>
-            <a class="card" id="card-04" href="#t-04" data-person="reeve" data-hours="3">
-              <div class="top"><span class="id">04</span><span class="emoji">🧭</span></div>
-              <div class="title">Map with clickable / draggable waypoints</div>
-              <span class="tag tag-ok">open app/</span>
-              <div class="bot"><span>3h</span><span>Reeve</span></div>
-              <template class="card-brief">
-                <p>Leaflet map centred on Newcastle. Click to drop a stop, drag to move it, remove from the list. This is the visual spine of the night: dispatch starts with a map that never looks dead.</p>
-                                <h3>Done when</h3>
-                                <ul>
-                                  <li>Someone else can add two pins without a briefing.</li>
-                                  <li>Drag updates the sidebar coordinates.</li>
-                                  <li>Clear removes pins and the route line.</li>
-                                </ul>
-                                <h3>What’s live</h3>
-                                <ul>
-                                  <li><code>app/index.html</code> + <code>app/map.js</code> — OSM tiles, draggable markers, stop list with remove.</li>
-                                </ul>
-                                <div class="brief-actions"><a class="btn btn-fill" href="app/">Open map →</a></div>
-              </template>
-            </a>
-            <a class="card" id="card-05" href="#t-05" data-person="connor" data-hours="3">
-              <div class="top"><span class="id">05</span><span class="emoji">⚡</span></div>
-              <div class="title">Route calculation between waypoints</div>
-              <span class="tag tag-ok">OSRM + straight-line fallback</span>
-              <div class="bot"><span>3h</span><span>Connor</span></div>
-              <template class="card-brief">
-                <p>Calculate a driving route through the waypoints. Public OSRM when the network is up; haversine straight-line fallback if it fails, so the board never looks broken.</p>
-                                <h3>Done when</h3>
-                                <ul>
-                                  <li>Two or more stops + Calculate route draws a line.</li>
-                                  <li>Sidebar shows distance, time, and engine (<code>OSRM driving</code> or <code>straight-line</code>).</li>
-                                  <li>OSRM down still produces a visible line, not an empty map.</li>
-                                </ul>
-                                <h3>What’s live</h3>
-                                <ul>
-                                  <li><code>https://router.project-osrm.org</code> for the driving geometry.</li>
-                                  <li>Fallback assumes ~35 km/h for a rough time estimate.</li>
-                                </ul>
-                                <div class="brief-actions"><a class="btn btn-fill" href="app/">Open map →</a></div>
-              </template>
-            </a>
-          </div>
-        </div>
-
-        <div class="col done">
-          <div class="head"><span class="col-name">Done</span><span class="count" id="done-col-count">38 · 70h</span></div>
-          <div class="stack">
-            <script type="application/json" id="done-cards-index">[{"id":"48","person":"michael","hours":1.5},{"id":"47","person":"noah","hours":1},{"id":"46","person":"michael","hours":1.5},{"id":"45","person":"michael","hours":2},{"id":"41","person":"noah","hours":3},{"id":"44","person":"michael","hours":2},{"id":"43","person":"michael","hours":0.5},{"id":"42","person":"michael","hours":1.5},{"id":"40","person":"noah","hours":2},{"id":"39","person":"michael","hours":2},{"id":"36","person":"noah","hours":2},{"id":"37","person":"noah","hours":3},{"id":"38","person":"noah","hours":3},{"id":"32","person":"michael","hours":4},{"id":"33","person":"michael","hours":3},{"id":"34","person":"michael","hours":3},{"id":"17","person":"reeve","hours":0.75},{"id":"31","person":"noah","hours":12},{"id":"28","person":"michael","hours":1},{"id":"29","person":"michael","hours":2},{"id":"30","person":"michael","hours":1.5},{"id":"14","person":"lewis","hours":0.75},{"id":"18","person":"connor","hours":0.5},{"id":"19","person":"connor","hours":0.75},{"id":"20","person":"michael","hours":0.75},{"id":"21","person":"reeve","hours":1},{"id":"27","person":"connor","hours":0.5},{"id":"26","person":"michael","hours":2},{"id":"10","person":"michael","hours":4},{"id":"12","person":"lewis","hours":0.5},{"id":"15","person":"reeve","hours":0.5},{"id":"16","person":"reeve","hours":1},{"id":"01","person":"lewis","hours":0.5},{"id":"02","person":"reeve","hours":1},{"id":"03","person":"lewis","hours":2},{"id":"25","person":"noah","hours":0.5},{"id":"22","person":"noah","hours":0.5},{"id":"23","person":"noah","hours":1}]</script>
-            <a class="card done-index" id="done-index" href="done.html">
-              <div class="done-index-count" id="done-index-count">38</div>
-              <div class="title">All done cards</div>
-              <p class="done-index-meta" id="done-index-meta">38 cards · 70h · archive →</p>
-            </a>
-          </div>
-        </div>
-
+        </template>
       </div>
     </div>
-    <!-- /BOARD:KANBAN -->
+    </template>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    <template x-if="view !== 'board'">
+    <div class="card-archive" @dragover="onDragOver($event, view)" @drop.prevent="onDrop($event, view)">
+      <template x-for="col in shownColumns()" :key="'list-' + col.id">
+        <div class="stack" style="display:contents">
+          <p class="empty-col" x-show="visible(col.id).length === 0" x-text="emptyText(col)"></p>
+          <template x-for="group in groups(col.id)" :key="'list-' + col.id + '-' + group.key">
+            <div class="owner-group">
+              <div class="owner-group-head"><span x-text="group.emoji + ' ' + group.name"></span><span x-text="group.cards.length + ' · ' + group.hours"></span></div>
+              <template x-for="card in group.cards" :key="'list-card-' + card.id">
+                <article class="card" :id="'card-' + card.id" :class="{ 'is-dragging': draggingId === card.id, 'is-assign': assignOver === card.id }" :data-card-id="card.id" @click="openCard(card)" @dragover="onCardDragOver($event, card)" @dragleave="onCardDragLeave($event, card)" @drop="onCardDrop($event, card)">
+                  <div class="top">
+                    <span class="id" x-text="card.id"></span>
+                    <button type="button" class="drag-handle" draggable="true" title="Drag to reorder" aria-label="Drag card" @click.stop.prevent @dragstart="onDragStart($event, card)" @dragend="onDragEnd()">⠿</button>
+                    <span class="owner-chips">
+                      <template x-for="owner in cardOwners(card)" :key="'list-' + card.id + '-o-' + owner">
+                        <span class="owner-chip" draggable="true" :title="'Drag onto another card to add ' + personName(owner)" @click.stop @dragstart.stop="onPersonDragStart($event, owner)" @dragend="onDragEnd()">
+                          <span x-text="personEmoji(owner)"></span>
+                          <button type="button" class="owner-x" x-show="writable()" @click.stop="removeOwner(card, owner)" :aria-label="'Remove ' + personName(owner)">×</button>
+                        </span>
+                      </template>
+                      <span class="owner-chip is-empty" x-show="!cardOwners(card).length" draggable="true" title="Drag onto another card to clear its people" @click.stop @dragstart.stop="onPersonDragStart($event, '')" @dragend="onDragEnd()">—</span>
+                    </span>
+                  </div>
+                  <div class="title" x-text="card.title"></div>
+                  <p class="card-note" x-show="notePreview(card)" x-text="notePreview(card)"></p>
+                  <span class="tag" x-show="card.tag" :class="card.tag_kind === 'ok' ? 'tag-ok' : 'tag-wait'" x-text="card.tag"></span>
+                  <span class="unestimated" x-show="card.hours == null">∅ no estimate</span>
+                  <div class="card-actions" x-show="writable()">
+                    <button type="button" @click.stop="duplicateCard(card)" :disabled="busy">Duplicate</button>
+                    <button type="button" x-show="card.column !== 'backlog' && card.column !== 'done'" @click.stop="quickMove(card, 'backlog')" :disabled="busy">To backlog</button>
+                    <button type="button" x-show="card.column === 'backlog'" @click.stop="quickMove(card, 'todo')" :disabled="busy">To board</button>
+                  </div>
+                  <div class="bot">
+                    <span x-text="card.hours == null ? '∅' : (fmtHours(card.hours) + 'h')"></span>
+                    <span class="value" x-show="card.value" :title="'Value ' + card.value + ' of 5'" x-text="valueMarks(card.value)"></span>
+                    <span x-show="card.commits && card.commits.length" x-text="card.commits.length + (card.commits.length === 1 ? ' commit' : ' commits')"></span>
+                  </div>
+                </article>
+              </template>
+            </div>
+          </template>
+        </div>
+      </template>
+    </div>
+    </template>
 
     <h2 style="margin-top:2rem">Who’s who</h2>
-    <p class="lede">Hours are every card attributed to that person, whichever column it sits in. Click a row to filter the board.</p>
-    <!-- BOARD:WHO -->
+    <p class="lede">Hours are every card attributed to that person, whichever column it sits in. Click a row to filter.</p>
     <div class="who-wrap">
-    <table class="who-table">
-      <thead>
-        <tr><th></th><th>Owner</th><th>Claimed work</th><th>Hours</th></tr>
-      </thead>
-      <tbody>
-        <tr data-person="reeve">
-          <td>🧭</td>
-          <td><strong>Reeve</strong></td>
-          <td>Reeve: GitHub edit → run → push (API repo) (0.75h, done) · Reeve: start script for front end and back end together (1h, done) · Reeve: get the front end running locally (0.5h, done) · Reeve: get the back end running locally (1h, done) · Demo seed: 5 Tyneside waypoints + named run (1.5h) · Map with clickable / draggable waypoints (3h, ready) · Run the API locally and hit /health (1h, done)</td>
-          <td><strong>8.75h</strong></td>
-        </tr>
-        <tr data-person="connor">
-          <td>⚡</td>
-          <td><strong>Connor</strong></td>
-          <td>Connor: get the front end running locally (0.5h, done) · Connor: GitHub edit → run → push (site repo) (0.75h, done) · finished push and pull (0.5h, done) · Job list beside the map (seed Howden-shaped jobs) (2h) · Route calculation between waypoints (3h, ready)</td>
-          <td><strong>6.75h</strong></td>
-        </tr>
-        <tr data-person="michael">
-          <td>🏗️</td>
-          <td><strong>Michael</strong></td>
-          <td>Snap bus trails to the streets (OSRM) (1.5h, done) · 10-minute fading trail behind each bus (1.5h, done) · Cache live buses in Firestore; map reads our API (2h, done) · Buses: viewport, dots then chips, no waypoint steal (2h, done) · Show buses actually fetches; ghost buttons hover (0.5h, done) · Tracker POSTs every minute; pin on Newcastle (1.5h, done) · Live buses on the map (toggle, 30 miles of Newcastle) (2h, done) · Android app: tracking toggle, GPS to the API (4h, done) · API stores GPS pings in the database (3h, done) · Map shows the phone’s current coordinates (3h, done) · Alpine.js test page calls GET /test_field (1h, done) · Docs wiki (Docs in the nav) (2h, done) · Cloud Run GitHub builds (buildpacks, Python 3.13) (1.5h, done) · Michael: GitHub edit → run → push (both repos) (0.75h, done) · Site + API deploy on push to main (2h, done) · Cloud Run API live + CORS for Pages (4h, done) · Persist routes on the API (replace localStorage) (4h) · Sideload the tracker APK on a physical phone (0.5h)</td>
-          <td><strong>36.75h</strong></td>
-        </tr>
-        <tr data-person="lewis">
-          <td>🌱</td>
-          <td><strong>Lewis</strong></td>
-          <td>Lewis: GitHub edit → run → push (site repo) (0.75h, done) · Lewis: get the front end running locally (0.5h, done) · Lewis: get the back end running locally (1h) · Save routes in the browser (localStorage) (2h) · Local “who am I” account (name in the browser) (2h) · Serve the site locally (0.5h, done) · Desktop home in Tyneside style (2h, done)</td>
-          <td><strong>8.75h</strong></td>
-        </tr>
-        <tr data-person="noah">
-          <td>🔧</td>
-          <td><strong>Noah</strong></td>
-          <td>Show / hide phones on the map, remembered (1h, done) · API user accounts / OAuth2 token (3h, done) · Split the API into FastAPI routers (2h, done) · Review the live-phone path, then take it forward (2h, done) · Several phones on the map, easy to tell apart (3h, done) · Show history as a route on the map (3h, done) · Noah: API talks to Firestore (12h, done) · Noah: API version on / and /health (0.5h, done) · Noah: get the front end running locally (0.5h, done) · Noah: get the back end running locally (1h, done) · Allow user to login on app (2h) · Allow user to set who can view their location (2h) · Allow user to accept group invites and create groups (2h) · Allow user to choose if their location is public on the map (2h)</td>
-          <td><strong>36h</strong></td>
-        </tr>
-      </tbody>
-    </table>
+      <table class="who-table">
+        <thead>
+          <tr><th></th><th>Owner</th><th>Claimed work</th><th>Hours</th></tr>
+        </thead>
+        <tbody>
+          <template x-for="person in people" :key="'who-' + person.id">
+            <tr :data-person="person.id" :class="{ 'is-on': filter === person.id }" @click="togglePerson(person.id)" title="Filter the board to this person">
+              <td x-text="person.emoji"></td>
+              <td><strong x-text="person.name"></strong></td>
+              <td class="claimed" x-text="claimed(person.id)"></td>
+              <td><strong x-text="hoursLabel(cards.filter(function (card) { return heldBy(card, person.id); }))"></strong></td>
+            </tr>
+          </template>
+          <tr x-show="stats('none').count" :class="{ 'is-on': filter === 'none' }" @click="setFilter(filter === 'none' ? 'all' : 'none')" title="Filter to cards with nobody on them">
+            <td>—</td>
+            <td><strong>Unassigned</strong></td>
+            <td class="claimed" x-text="claimed('none')"></td>
+            <td><strong x-text="hoursLabel(cards.filter(function (card) { return heldBy(card, 'none'); }))"></strong></td>
+          </tr>
+        </tbody>
+      </table>
     </div>
-    <!-- /BOARD:WHO -->
 
+    <div x-show="view === 'board'">
+      <h2>How a card ships</h2>
+      <ol style="color:var(--muted);padding-left:1.2rem;line-height:1.7">
+        <li>The increment is visible on the running site (not a branch of theory).</li>
+        <li>Home, Map, and Board still load if the new thing is half-finished — fallbacks, never a blank page.</li>
+        <li>Drag the card to <em>Ready to demo</em> when someone else can click it without a briefing. The brief on the card is that briefing.</li>
+        <li>Open the card and move it to Done, or run <code>python scripts/update_board.py done 12 --by michael</code> while the API is up.</li>
+        <li>Moving a card back among To do, In progress, Ready to demo, and Done asks for a reason. Parking it on the backlog does not. The reason stays on the card history.</li>
+      </ol>
 
+      <h2 style="margin-top:2rem">GitHub loop</h2>
+      <p class="lede">Do this on the <strong>Tyneside-Software</strong> repos, not personal forks unless you have been told otherwise. Full clone-and-run steps live on <a href="onboarding.html">Onboarding</a>.</p>
+      <ol style="color:var(--muted);padding-left:1.2rem;line-height:1.7">
+        <li>Clone (or pull) <a href="https://github.com/Tyneside-Software/hackathon-site">hackathon-site</a> and <a href="https://github.com/Tyneside-Software/hackathon-api">hackathon-api</a> as sibling folders.</li>
+        <li>Run both: <code>.\start.ps1</code> in the site repo.</li>
+        <li>Make a tiny visible change. Confirm it still runs.</li>
+        <li><code>git add</code> · <code>git commit</code> · <code>git push origin main</code>.</li>
+        <li>Check the commit on GitHub. Open the card and record that commit, then move the card to Done.</li>
+      </ol>
+    </div>
 
+    <dialog class="card-modal" x-ref="dlg" aria-labelledby="card-modal-title" @close="onDialogClose()" @cancel.prevent="closeCard()" @click.self="closeCard()">
+      <div class="card-modal-inner" x-show="selected">
+        <button type="button" class="card-modal-close" @click="closeCard()">Close</button>
+        <p class="hero-kicker" x-text="selected ? ('#' + selected.id + ' · ' + ownerLine(selected) + ' · ' + (selected.hours == null ? 'no estimate' : fmtHours(selected.hours) + 'h') + (selected.value ? ' · value ' + selected.value : '') + ' · ' + columnLabel(selected.column)) : ''"></p>
+        <h2 id="card-modal-title" x-show="!editing" x-text="selected ? selected.title : ''"></h2>
+        <div x-show="editing && selected">
+          <label>Title
+            <input x-model="draft.title" maxlength="240">
+          </label>
+          <div class="board-form" style="margin-top:0.6rem">
+            <div class="span-all">
+              <span class="field-label">People</span>
+              <div class="choice-row">
+                <template x-for="person in people" :key="'edit-' + person.id">
+                  <button type="button" class="choice" :class="{ 'is-on': draft.owners && draft.owners.indexOf(person.id) !== -1 }" @click="toggleOwner(person.id)" x-text="(person.emoji ? person.emoji + ' ' : '') + person.name"></button>
+                </template>
+                <button type="button" class="choice" @click="draft.owners = []">Unassigned</button>
+              </div>
+              <p class="field-help">Turning one person off does not turn another on. Unassigned clears everyone.</p>
+            </div>
+            <label>Hours
+              <input type="number" min="0" max="1000" step="0.25" x-model="draft.hours" placeholder="Blank if not estimated">
+            </label>
+            <label>Value
+              <select x-model="draft.value">
+                <option value="">Not set</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+              </select>
+            </label>
+            <label>Column
+              <select x-model="draft.column">
+                <template x-for="col in columns" :key="'edit-col-' + col.id">
+                  <option :value="col.id" x-text="col.label"></option>
+                </template>
+              </select>
+            </label>
+            <label>Tag
+              <input x-model="draft.tag" maxlength="120">
+            </label>
+            <label>Tag colour
+              <select x-model="draft.tag_kind">
+                <option value="wait">Waiting</option>
+                <option value="ok">Done</option>
+              </select>
+            </label>
+            <label class="span-all" x-show="selected && isBackward(selected.column, draft.column)">Why it is moving back
+              <textarea x-model="draft.reason" rows="3" placeholder="What changed?"></textarea>
+            </label>
+            <label class="span-all">Brief
+              <textarea x-model="draft.brief" placeholder="Plain text is wrapped. HTML is kept when it starts with <."></textarea>
+            </label>
+          </div>
+          <div class="edit-row">
+            <button type="button" class="btn btn-fill" @click="saveEdit()" :disabled="busy">Save edit</button>
+            <button type="button" class="btn btn-ghost" @click="editing = false">Cancel edit</button>
+          </div>
+        </div>
+        <div class="card-modal-body" x-show="selected && !editing" x-html="selected ? selected.brief : ''"></div>
+        <div class="move-row" x-show="selected && writable()">
+          <template x-for="col in columns" :key="'move-' + col.id">
+            <button type="button" class="btn btn-ghost" @click="moveTo(col.id)" :disabled="busy || !selected || selected.column === col.id" x-text="col.label"></button>
+          </template>
+        </div>
+        <div class="edit-row" x-show="selected && writable() && !editing">
+          <button type="button" class="btn btn-ghost" @click="editing = true">Edit</button>
+          <button type="button" class="btn btn-ghost" @click="duplicateCard()" :disabled="busy">Duplicate</button>
+          <button type="button" class="btn btn-ghost" @click="removeCard()" :disabled="busy" x-text="removeArmed ? 'Remove now' : 'Remove'"></button>
+        </div>
+        <div class="commits" x-show="selected">
+          <h3>Commits</h3>
+          <p class="field-help" x-show="!selected || !selected.commits || !selected.commits.length">No commit recorded on this card yet.</p>
+          <ul x-show="selected && selected.commits && selected.commits.length">
+            <template x-for="commit in (selected ? selected.commits : [])" :key="commit.repo + '@' + commit.sha">
+              <li>
+                <code x-text="commit.repo + '@' + commit.sha.slice(0, 7)"></code>
+                <span x-show="commit.summary" x-text="commit.summary"></span>
+                <button type="button" x-show="writable()" @click="removeCommit(commit)" :disabled="busy">Remove</button>
+              </li>
+            </template>
+          </ul>
+          <form class="commit-form" x-show="writable()" @submit.prevent="addCommit()">
+            <input x-model="commitDraft.repo" placeholder="hackathon-site" maxlength="80" aria-label="Repo">
+            <input x-model="commitDraft.sha" placeholder="Commit sha" maxlength="40" aria-label="Commit sha" required>
+            <input x-model="commitDraft.summary" placeholder="What it did" maxlength="200" aria-label="Summary">
+            <button type="submit" class="btn btn-ghost" :disabled="busy">Record commit</button>
+          </form>
+        </div>
+        <details class="audit" x-show="selected">
+          <summary x-text="selected ? ('History (' + selected.events.length + ')') : 'History'"></summary>
+          <p x-show="selected && selected.events.length === 0">No changes recorded yet.</p>
+          <ul x-show="selected && selected.events.length">
+            <template x-for="ev in (selected ? selected.events : [])" :key="ev.id">
+              <li>
+                <span x-text="formatWhen(ev.at)"></span>
+                · <span x-text="personName(ev.by) || 'Someone'"></span>
+                · <span x-text="ev.detail"></span>
+                <span class="reason" x-show="ev.reason" x-text="' Reason: ' + ev.reason"></span>
+              </li>
+            </template>
+          </ul>
+        </details>
+      </div>
+    </dialog>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    <h2>How a card ships</h2>
-    <ol style="color:var(--muted);padding-left:1.2rem;line-height:1.7">
-      <li>The increment is visible on the running site (not a branch of theory).</li>
-      <li>Home, Map, and Board still load if the new thing is half-finished — fallbacks, never a blank page.</li>
-      <li>Move the card to <em>Ready to demo</em> when someone else can click it without a briefing. The brief on the card is that briefing.</li>
-      <li>Move a card with <code>python scripts/update_board.py done 12</code> (or <code>move 07 doing</code>) — do not hand-edit the kanban HTML.</li>
-      <li>LocalStorage is still the persistence story until card 11. The live API deploys from <code>main</code>.</li>
-    </ol>
-
-    <h2 style="margin-top:2rem">GitHub loop (cards 14 · 17 · 19 · 20)</h2>
-    <p class="lede">Do this on the <strong>Tyneside-Software</strong> repos, not personal forks unless you have been told otherwise. Full clone-and-run steps (and the usual Windows fixes) live on <a href="onboarding.html">Onboarding</a>.</p>
-    <ol style="color:var(--muted);padding-left:1.2rem;line-height:1.7">
-      <li>Clone (or pull) <a href="https://github.com/Tyneside-Software/hackathon-site">hackathon-site</a> and/or <a href="https://github.com/Tyneside-Software/hackathon-api">hackathon-api</a> as sibling folders.</li>
-      <li>Run both: <code>.\start.ps1</code> in the site repo (or <code>.\serve.ps1</code> for the site only, and uvicorn on :8080 for the API).</li>
-      <li>Make a tiny visible change (your name in a comment, README line, or a harmless label).</li>
-      <li>Confirm it still runs.</li>
-      <li><code>git add</code> · <code>git commit</code> · <code>git push origin main</code>.</li>
-      <li>Check the commit on GitHub. Then move your card to Done.</li>
-    </ol>
+    <dialog class="card-modal" x-ref="reason" aria-labelledby="reason-title" @cancel.prevent="cancelReason()">
+      <div class="card-modal-inner">
+        <h2 id="reason-title">Why is this moving back?</h2>
+        <p style="color:var(--muted)">A move to an earlier column keeps a reason on the card history.</p>
+        <label>Reason
+          <textarea x-model="reason" rows="4" placeholder="What changed?"></textarea>
+        </label>
+        <div class="edit-row">
+          <button type="button" class="btn btn-fill" @click="confirmReason()" :disabled="busy">Move back</button>
+          <button type="button" class="btn btn-ghost" @click="cancelReason()">Cancel</button>
+        </div>
+      </div>
+    </dialog>
   </div>
 
   <footer class="foot">
-
-
     <div class="wrap-wide">Tyneside Logistics hackathon · Reeve · Connor · Michael · Lewis · Noah</div>
-
   </footer>
-
-  <dialog class="card-modal" id="card-modal" aria-labelledby="card-modal-title">
-    <div class="card-modal-inner">
-      <button type="button" class="card-modal-close" id="card-modal-close">Close</button>
-      <p class="hero-kicker" id="card-modal-meta"></p>
-      <h2 id="card-modal-title"></h2>
-      <div class="card-modal-body" id="card-modal-body"></div>
-    </div>
-  </dialog>
-  <script src="board.js"></script>
+  <script src="config.js"></script>
+  <script defer src="board-app.js?v=20261008-board2"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.8/dist/cdn.min.js"></script>
 </body>
 </html>

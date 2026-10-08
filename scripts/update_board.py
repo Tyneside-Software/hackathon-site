@@ -1,18 +1,20 @@
 #!/usr/bin/env python3
-"""Update the hackathon kanban without hand-editing HTML.
+"""Update the hackathon kanban.
 
-Source of truth: scripts/cards.json
-Writes: board.html (short to-do preview + done summary), todo.html, and done.html
+The live board is SQLite, through the API, once that API is running.
+scripts/cards.json, board-snapshot.json, and hackathon-api/app/board_seed.json
+are the copy that survives when the database is not deployed yet.
 
 Examples (from the repo root):
 
     python scripts/update_board.py list
-    python scripts/update_board.py done 12 15 16
-    python scripts/update_board.py done 10 --tag "Cloud Run · CORS"
-    python scripts/update_board.py move 07 doing
-    python scripts/update_board.py add --title "…" --person michael --hours 2 --column done
-    python scripts/update_board.py render
-    python scripts/update_board.py import-html   # bootstrap cards.json from board.html
+    python scripts/update_board.py pull
+    python scripts/update_board.py done 12 --by michael
+    python scripts/update_board.py move 07 todo --by michael --reason "Not ready."
+    python scripts/update_board.py move 07 backlog --by michael
+    python scripts/update_board.py assign 07 lewis+noah --by michael
+    python scripts/update_board.py commit 12 --repo hackathon-site --sha abcdef1 --by michael --summary "What it did"
+    python scripts/update_board.py add --title "…" --person michael --hours 2 --column backlog
 """
 
 from __future__ import annotations
@@ -20,13 +22,19 @@ from __future__ import annotations
 import argparse
 import html
 import json
+import os
 import re
 import sys
+import urllib.error
+import urllib.parse
+import urllib.request
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 SCRIPTS = Path(__file__).resolve().parent
 CARDS_PATH = SCRIPTS / "cards.json"
+SNAPSHOT_PATH = ROOT / "board-snapshot.json"
+SEED_PATH = ROOT.parent / "hackathon-api" / "app" / "board_seed.json"
 BOARD_PATH = ROOT / "board.html"
 DONE_PATH = ROOT / "done.html"
 TODO_PATH = ROOT / "todo.html"
@@ -40,20 +48,23 @@ PEOPLE = [
     {"id": "noah", "name": "Noah", "emoji": "🔧"},
 ]
 PEOPLE_BY_ID = {p["id"]: p for p in PEOPLE}
-COLUMNS = ("todo", "doing", "ready", "done")
+COLUMNS = ("backlog", "todo", "doing", "ready", "done")
 COL_LABEL = {
+    "backlog": "Backlog",
     "todo": "To do",
     "doing": "In progress",
     "ready": "Ready to demo",
     "done": "Done",
 }
 EMPTY_ALL = {
+    "backlog": "Nothing waiting.",
     "todo": "Nothing here.",
     "doing": "Empty on purpose. Pull a Ready card and ship it.",
     "ready": "Nothing here.",
     "done": "Nothing here.",
 }
 COL_HEAD_CLASS = {
+    "backlog": "backlog",
     "todo": "todo",
     "doing": "doing",
     "ready": "ready",
@@ -66,20 +77,104 @@ def fmt_hours(n: float) -> str:
     return str(int(n)) if n == int(n) else str(n)
 
 
-def load_cards() -> list[dict]:
+def api_base() -> str:
+    return os.environ.get("HACKATHON_API", "http://127.0.0.1:8080").rstrip("/")
+
+
+def api_alive() -> bool:
+    try:
+        with urllib.request.urlopen(api_base() + "/v1/board", timeout=2) as res:
+            return res.status == 200
+    except (urllib.error.URLError, TimeoutError, OSError):
+        return False
+
+
+def api_json(method: str, path: str, body: dict | None = None, timeout: float = 8) -> dict:
+    data = None if body is None else json.dumps(body).encode("utf-8")
+    req = urllib.request.Request(
+        api_base() + path,
+        data=data,
+        method=method,
+        headers={"Content-Type": "application/json", "Accept": "application/json"},
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=timeout) as res:
+            return json.loads(res.read().decode("utf-8"))
+    except urllib.error.HTTPError as exc:
+        raw = exc.read().decode("utf-8", errors="replace")
+        try:
+            detail = json.loads(raw).get("detail", raw)
+        except json.JSONDecodeError:
+            detail = raw
+        sys.exit(f"API {method} {path} failed ({exc.code}): {detail}")
+    except urllib.error.URLError as exc:
+        sys.exit(f"API {method} {path} failed: {exc}")
+
+
+def write_bundle(payload: dict) -> None:
+    text = json.dumps(
+        {
+            "people": payload.get("people") or PEOPLE,
+            "cards": payload.get("cards") or [],
+            "events": payload.get("events") or [],
+        },
+        ensure_ascii=False,
+        indent=2,
+    ) + "\n"
+    CARDS_PATH.write_text(text, encoding="utf-8")
+    SNAPSHOT_PATH.write_text(text, encoding="utf-8")
+    if SEED_PATH.parent.is_dir():
+        SEED_PATH.write_text(text, encoding="utf-8")
+
+
+def load_state() -> dict:
     if not CARDS_PATH.exists():
-        sys.exit(f"No {CARDS_PATH.relative_to(ROOT)} — run: python scripts/update_board.py import-html")
+        sys.exit(f"No {CARDS_PATH.relative_to(ROOT)} — the board seed is missing.")
     data = json.loads(CARDS_PATH.read_text(encoding="utf-8"))
-    cards = data["cards"] if isinstance(data, dict) and "cards" in data else data
+    if isinstance(data, list):
+        return {"people": PEOPLE, "cards": data, "events": []}
+    cards = data.get("cards")
     if not isinstance(cards, list):
-        sys.exit("cards.json must be a list or {\"cards\": [...]}")
-    return cards
+        sys.exit('cards.json must be a list or {"cards": [...]}')
+    return {
+        "people": data.get("people") or PEOPLE,
+        "cards": cards,
+        "events": data.get("events") or [],
+    }
+
+
+def load_cards() -> list[dict]:
+    return load_state()["cards"]
 
 
 def save_cards(cards: list[dict]) -> None:
-    CARDS_PATH.write_text(
-        json.dumps({"people": PEOPLE, "cards": cards}, ensure_ascii=False, indent=2) + "\n",
-        encoding="utf-8",
+    state = load_state() if CARDS_PATH.exists() else {"people": PEOPLE, "events": []}
+    write_bundle({"people": state.get("people") or PEOPLE, "cards": cards, "events": state.get("events") or []})
+
+
+def warn_offline() -> None:
+    print("API is not running, so this edit is in the JSON seed only.")
+    db_paths = [
+        ROOT.parent / "hackathon-api" / "hackathon.db",
+        ROOT.parent / "hackathon-api" / "data" / "hackathon.db",
+    ]
+    if any(path.exists() for path in db_paths):
+        print("A SQLite file is already on disk and was not changed.")
+        print("Start the API and edit there. An existing database does not re-import this file.")
+
+
+def cmd_pull(args: argparse.Namespace | None = None) -> None:
+    try:
+        with urllib.request.urlopen(api_base() + "/v1/board/export", timeout=8) as res:
+            payload = json.loads(res.read().decode("utf-8"))
+    except (urllib.error.URLError, TimeoutError, OSError, json.JSONDecodeError) as exc:
+        sys.exit(f"Could not export the board from {api_base()}: {exc}")
+    if not isinstance(payload, dict) or not isinstance(payload.get("cards"), list):
+        sys.exit("Export did not include cards.")
+    write_bundle(payload)
+    print(
+        f"Copied {len(payload['cards'])} cards from SQLite into "
+        "scripts/cards.json, board-snapshot.json, and hackathon-api/app/board_seed.json."
     )
 
 
@@ -105,11 +200,35 @@ def next_id(cards: list[dict]) -> str:
 
 
 def in_column(cards: list[dict], column: str) -> list[dict]:
-    return [c for c in cards if c.get("column") == column]
+    rows = [c for c in cards if c.get("column") == column]
+    if any(isinstance(c.get("rank"), int) for c in rows):
+        rows.sort(key=lambda c: (c.get("rank") if isinstance(c.get("rank"), int) else 0, str(c.get("id"))))
+    return rows
 
 
 def hours_of(cards: list[dict]) -> float:
-    return sum(float(c.get("hours") or 0) for c in cards)
+    return sum(float(c["hours"]) for c in cards if c.get("hours") is not None)
+
+
+def _owner_list(text: str) -> list[str]:
+    raw = (text or "").strip().lower()
+    if raw in ("", "none", "-", "unassigned"):
+        return []
+    found = []
+    for part in raw.replace("+", ",").split(","):
+        key = part.strip()
+        if key and key not in found:
+            found.append(key)
+    return found
+
+
+def owners_of(card: dict) -> list[str]:
+    raw = card.get("owners")
+    if isinstance(raw, list) and raw:
+        return [str(item) for item in raw if str(item).strip()]
+    if card.get("person"):
+        return [str(card["person"])]
+    return []
 
 
 def person_cards(cards: list[dict], pid: str) -> list[dict]:
@@ -191,6 +310,8 @@ def cmd_import_html(args: argparse.Namespace) -> None:
     if CARDS_PATH.exists() and not args.force:
         sys.exit(f"{CARDS_PATH.name} already exists. Pass --force to overwrite from board.html.")
     board_html = BOARD_PATH.read_text(encoding="utf-8")
+    if "BOARD:KANBAN" not in board_html:
+        sys.exit("board.html is the live board. import-html only reads the old generated markup.")
     cards: list[dict] = []
     seen: set[str] = set()
     for col, section in _split_columns(board_html).items():
@@ -537,18 +658,14 @@ def render_archive_page(cards: list[dict], column: str) -> str:
 
 
 def cmd_render(args: argparse.Namespace | None = None) -> None:
-    cards = load_cards()
-    patch_board_html(cards)
-    TODO_PATH.write_text(render_archive_page(cards, "todo"), encoding="utf-8")
-    DONE_PATH.write_text(render_archive_page(cards, "done"), encoding="utf-8")
-    done = in_column(cards, "done")
-    print(
-        f"Rendered board.html + todo.html + done.html "
-        f"({len(in_column(cards, 'todo'))} todo, "
-        f"{len(in_column(cards, 'doing'))} doing, "
-        f"{len(in_column(cards, 'ready'))} ready, "
-        f"{len(done)} done)"
-    )
+    """Refresh the git copies. Does not rewrite the board pages."""
+    if api_alive():
+        cmd_pull(args)
+        return
+    state = load_state()
+    write_bundle(state)
+    print(f"API is not running. Wrote the snapshot from {CARDS_PATH.name} ({len(state['cards'])} cards).")
+    warn_offline()
 
 
 def move_cards(cards: list[dict], ids: list[str], column: str, tag: str | None, tag_kind: str | None) -> None:
@@ -570,33 +687,104 @@ def move_cards(cards: list[dict], ids: list[str], column: str, tag: str | None, 
         print(f"  #{str(card['id']).zfill(2)} → {column}  {card['title']}")
 
 
+def _card_lookup(cards: list[dict]) -> dict[str, dict]:
+    found = {}
+    for card in cards:
+        key = str(card["id"])
+        found[key] = card
+        if key.isdigit():
+            found[key.zfill(2)] = card
+            found[str(int(key))] = card
+    return found
+
+
+def _actor(args: argparse.Namespace, card: dict) -> str:
+    by = getattr(args, "by", None)
+    if by:
+        return str(by).lower()
+    return str(card.get("person") or "michael")
+
+
 def cmd_done(args: argparse.Namespace) -> None:
+    if api_alive():
+        state = api_json("GET", "/v1/board")
+        found = _card_lookup(state["cards"])
+        for cid in args.ids:
+            card = found.get(str(cid)) or found.get(str(cid).zfill(2))
+            if card is None:
+                sys.exit(f"No card {cid}")
+            api_json(
+                "POST",
+                f"/v1/board/cards/{card['id']}/move",
+                {"column": "done", "by": _actor(args, card), "reason": args.reason or ""},
+            )
+        cmd_pull(args)
+        return
     cards = load_cards()
     move_cards(cards, args.ids, "done", args.tag, args.tag_kind)
     save_cards(cards)
-    cmd_render()
+    warn_offline()
 
 
 def cmd_move(args: argparse.Namespace) -> None:
+    if api_alive():
+        state = api_json("GET", "/v1/board")
+        found = _card_lookup(state["cards"])
+        for cid in args.ids:
+            card = found.get(str(cid)) or found.get(str(cid).zfill(2))
+            if card is None:
+                sys.exit(f"No card {cid}")
+            api_json(
+                "POST",
+                f"/v1/board/cards/{card['id']}/move",
+                {"column": args.column, "by": _actor(args, card), "reason": args.reason or ""},
+            )
+        cmd_pull(args)
+        return
     cards = load_cards()
     move_cards(cards, args.ids, args.column, args.tag, args.tag_kind)
     save_cards(cards)
-    cmd_render()
+    warn_offline()
 
 
 def cmd_add(args: argparse.Namespace) -> None:
+    if api_alive():
+        if args.id:
+            sys.exit("The API assigns the card id. Leave out --id, or stop the API to edit the JSON seed.")
+        brief = args.brief or f"<p>{html.escape(args.title)}</p>"
+        owners = _owner_list(args.owners) if args.owners else ([args.person.lower()] if args.person else [])
+        actor = (args.by or (owners[0] if owners else "")).lower()
+        if not actor:
+            sys.exit("Say who is adding the card with --by.")
+        body = {
+            "title": args.title,
+            "by": actor,
+            "owners": owners,
+            "hours": args.hours,
+            "column": args.column,
+            "brief": brief,
+            "tag": args.tag or "",
+            "tag_kind": args.tag_kind or "",
+            "value": args.value,
+        }
+        api_json("POST", "/v1/board/cards", body)
+        print(f"  added to {args.column}: {args.title}")
+        cmd_pull(args)
+        return
     cards = load_cards()
     cid = args.id.zfill(2) if args.id else next_id(cards)
     if any(str(c["id"]).zfill(2) == cid for c in cards):
         sys.exit(f"Card {cid} already exists")
-    person = args.person.lower()
-    if person not in PEOPLE_BY_ID:
-        sys.exit(f"person must be one of {', '.join(PEOPLE_BY_ID)}")
+    owners = _owner_list(args.owners) if args.owners else ([args.person.lower()] if args.person else [])
+    for person in owners:
+        if person not in PEOPLE_BY_ID:
+            sys.exit(f"person must be one of {', '.join(PEOPLE_BY_ID)}")
+    person = owners[0] if owners else ""
     column = args.column
     if column not in COLUMNS:
         sys.exit(f"column must be one of {', '.join(COLUMNS)}")
     hours = args.hours
-    if hours == int(hours):
+    if isinstance(hours, float) and hours == int(hours):
         hours = int(hours)
     brief = args.brief or f"<p>{html.escape(args.title)}</p>"
     if not brief.strip().startswith("<"):
@@ -605,7 +793,9 @@ def cmd_add(args: argparse.Namespace) -> None:
         "id": cid,
         "person": person,
         "hours": hours,
-        "emoji": args.emoji or PEOPLE_BY_ID[person]["emoji"],
+        "emoji": args.emoji or (PEOPLE_BY_ID[person]["emoji"] if person else ""),
+        "owners": owners,
+        "value": args.value,
         "title": args.title,
         "column": column,
         "brief": brief,
@@ -619,11 +809,94 @@ def cmd_add(args: argparse.Namespace) -> None:
         cards.append(card)
     save_cards(cards)
     print(f"  added #{cid} in {column}: {args.title}")
-    cmd_render()
+    warn_offline()
+
+
+def _find_live(args_ids: list[str]) -> list[dict]:
+    state = api_json("GET", "/v1/board")
+    found = _card_lookup(state["cards"])
+    cards = []
+    for cid in args_ids:
+        card = found.get(str(cid)) or found.get(str(cid).zfill(2))
+        if card is None:
+            sys.exit(f"No card {cid}")
+        cards.append(card)
+    return cards
+
+
+def cmd_assign(args: argparse.Namespace) -> None:
+    owners = _owner_list(args.owners)
+    for person in owners:
+        if person not in PEOPLE_BY_ID:
+            sys.exit(f"person must be one of {', '.join(PEOPLE_BY_ID)}")
+    if api_alive():
+        for card in _find_live(args.ids):
+            api_json(
+                "PATCH",
+                f"/v1/board/cards/{card['id']}",
+                {"by": _actor(args, card), "owners": owners},
+            )
+        cmd_pull(args)
+        return
+    cards = load_cards()
+    found = _card_lookup(cards)
+    for cid in args.ids:
+        card = found.get(str(cid)) or found.get(str(cid).zfill(2))
+        if card is None:
+            sys.exit(f"No card {cid}")
+        card["owners"] = owners
+        card["person"] = owners[0] if owners else ""
+        if owners:
+            card["emoji"] = PEOPLE_BY_ID[owners[0]]["emoji"]
+        print(f"  #{card['id']} assignees: {'+'.join(owners) if owners else 'nobody'}")
+    save_cards(cards)
+    warn_offline()
+
+
+def cmd_commit(args: argparse.Namespace) -> None:
+    if api_alive():
+        for card in _find_live(args.ids):
+            if args.remove:
+                query = urllib.parse.urlencode({"by": _actor(args, card), "repo": args.repo, "sha": args.sha})
+                api_json("DELETE", f"/v1/board/cards/{card['id']}/commits?{query}")
+            else:
+                api_json(
+                    "POST",
+                    f"/v1/board/cards/{card['id']}/commits",
+                    {"by": _actor(args, card), "repo": args.repo, "sha": args.sha, "summary": args.summary or ""},
+                )
+        cmd_pull(args)
+        return
+    cards = load_cards()
+    found = _card_lookup(cards)
+    for cid in args.ids:
+        card = found.get(str(cid)) or found.get(str(cid).zfill(2))
+        if card is None:
+            sys.exit(f"No card {cid}")
+        current = [item for item in (card.get("commits") or []) if isinstance(item, dict)]
+        sha = args.sha.strip().lower()
+        if args.remove:
+            kept = [item for item in current if not (item.get("repo") == args.repo and str(item.get("sha", "")).lower() == sha)]
+            if len(kept) == len(current):
+                sys.exit("That commit is not on this card.")
+            card["commits"] = kept
+        else:
+            if any(item.get("repo") == args.repo and str(item.get("sha", "")).lower() == sha for item in current):
+                sys.exit("That commit is already on this card.")
+            current.append({"repo": args.repo, "sha": sha, "summary": args.summary or ""})
+            card["commits"] = current
+        print(f"  #{card['id']} commits: {len(card.get('commits') or [])}")
+    save_cards(cards)
+    warn_offline()
 
 
 def cmd_list(args: argparse.Namespace) -> None:
-    cards = load_cards()
+    if api_alive():
+        cards = api_json("GET", "/v1/board")["cards"]
+        print(f"(from {api_base()})")
+    else:
+        cards = load_cards()
+        print("(from scripts/cards.json — API is not running)")
     col_filter = args.column
     person_filter = args.person.lower() if args.person else None
     for col in COLUMNS:
@@ -632,12 +905,15 @@ def cmd_list(args: argparse.Namespace) -> None:
             continue
         print(f"{COL_LABEL[col]}  ({len(group)} · {fmt_hours(hours_of(group))}h)")
         for card in group:
-            if person_filter and card.get("person") != person_filter:
+            names = owners_of(card)
+            if person_filter and person_filter not in names:
                 continue
-            print(
-                f"  {str(card['id']).zfill(2)}  {card.get('person', '?'):<8}  "
-                f"{fmt_hours(card.get('hours') or 0):>5}h  {card['title']}"
-            )
+            who = "+".join(names) if names else "—"
+            if card.get("hours") is None:
+                hours = "    ∅"
+            else:
+                hours = f"{fmt_hours(card.get('hours')):>5}h"
+            print(f"  {str(card['id']).zfill(2)}  {who:<16}  {hours}  {card['title']}")
         print()
 
 
@@ -649,23 +925,30 @@ def build_parser() -> argparse.ArgumentParser:
     imp.add_argument("--force", action="store_true")
     imp.set_defaults(func=cmd_import_html)
 
-    rend = sub.add_parser("render", help="Rewrite board.html + todo.html + done.html from cards.json")
+    rend = sub.add_parser("render", help="Copy the API board into the git seed, or refresh the snapshot from cards.json")
     rend.set_defaults(func=cmd_render)
+
+    pull = sub.add_parser("pull", help="Copy the SQLite board into cards.json, the snapshot, and the API seed")
+    pull.set_defaults(func=cmd_pull)
 
     lst = sub.add_parser("list", help="Print cards")
     lst.add_argument("--column", choices=COLUMNS)
     lst.add_argument("--person")
     lst.set_defaults(func=cmd_list)
 
-    done = sub.add_parser("done", help="Move cards to Done and re-render")
+    done = sub.add_parser("done", help="Move cards to Done")
     done.add_argument("ids", nargs="+")
+    done.add_argument("--by", help="Person id recorded on the history, such as michael")
+    done.add_argument("--reason", default="", help="Required by the API when the move is backwards")
     done.add_argument("--tag")
     done.add_argument("--tag-kind", choices=("ok", "wait"))
     done.set_defaults(func=cmd_done)
 
-    mv = sub.add_parser("move", help="Move cards to a column and re-render")
+    mv = sub.add_parser("move", help="Move cards to a column")
     mv.add_argument("ids", nargs="+")
     mv.add_argument("column", choices=COLUMNS)
+    mv.add_argument("--by", help="Person id recorded on the history, such as michael")
+    mv.add_argument("--reason", default="", help="Required when the move is backwards")
     mv.add_argument("--tag")
     mv.add_argument("--tag-kind", choices=("ok", "wait"))
     mv.set_defaults(func=cmd_move)
@@ -673,14 +956,32 @@ def build_parser() -> argparse.ArgumentParser:
     add = sub.add_parser("add", help="Add a card and re-render")
     add.add_argument("--id")
     add.add_argument("--title", required=True)
-    add.add_argument("--person", required=True)
-    add.add_argument("--hours", type=float, required=True)
+    add.add_argument("--person", default="", help="One person. Use --owners for more than one, or leave both blank.")
+    add.add_argument("--owners", help="lewis+noah. When set, this is the whole list.")
+    add.add_argument("--hours", type=float, default=None, help="Leave blank when the card is not estimated.")
+    add.add_argument("--value", type=int, default=3, choices=(1, 2, 3, 4, 5))
     add.add_argument("--column", default="todo", choices=COLUMNS)
     add.add_argument("--emoji")
     add.add_argument("--tag")
     add.add_argument("--tag-kind", choices=("ok", "wait"))
+    add.add_argument("--by", help="Person id recorded on the history. Defaults to --person.")
     add.add_argument("--brief", help="HTML or plain text for the modal")
     add.set_defaults(func=cmd_add)
+
+    assign = sub.add_parser("assign", help="Set the people on a card. none clears them.")
+    assign.add_argument("ids", nargs="+")
+    assign.add_argument("owners", help="One person, lewis+noah, or none")
+    assign.add_argument("--by", help="Person id recorded on the history")
+    assign.set_defaults(func=cmd_assign)
+
+    commit = sub.add_parser("commit", help="Record or remove a git commit on a card")
+    commit.add_argument("ids", nargs="+")
+    commit.add_argument("--repo", required=True)
+    commit.add_argument("--sha", required=True)
+    commit.add_argument("--summary", default="")
+    commit.add_argument("--by")
+    commit.add_argument("--remove", action="store_true")
+    commit.set_defaults(func=cmd_commit)
 
     return p
 
