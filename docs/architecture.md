@@ -46,7 +46,7 @@ hackathon-site/
   backlog.html        Backlog
   todo.html           All to-do cards
   done.html           All done cards
-  board-app.js        Drag, edit, history
+  board-app.js        Drag and edit
   board-snapshot.json Read-only copy when the API has no board
   api-test.html       Alpine.js GET /test_field
   account.html        Register / login / Fetch me (Noah, 41)

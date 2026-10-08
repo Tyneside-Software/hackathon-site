@@ -11,7 +11,6 @@ document.addEventListener("alpine:init", function () {
       cards: [],
       filter: "all",
       query: "",
-      me: "",
       selected: null,
       draft: {},
       editing: false,
@@ -35,7 +34,6 @@ document.addEventListener("alpine:init", function () {
 
       async boot() {
         this.view = document.body.dataset.boardView || "board";
-        this.me = localStorage.getItem("hackathon-board-me") || "";
         this.filter = this.readFilter();
         this.adding = this.blankAdd();
         this.loadHist();
@@ -105,7 +103,7 @@ document.addEventListener("alpine:init", function () {
         this.columns = Array.isArray(data.columns) && data.columns.length ? data.columns : this.defaultColumns();
         this.cards = (data.cards || []).map(function (card) {
           var copy = Object.assign({}, card);
-          copy.events = Array.isArray(card.events) ? card.events : [];
+          delete copy.events;
           return copy;
         });
         if (this.filter !== "all" && !this.people.some(function (p) { return p.id === this.filter; }, this)) {
@@ -152,10 +150,10 @@ document.addEventListener("alpine:init", function () {
           return "Work that is not on the board yet. To board puts a card on To do. A card can move to any column, including back.";
         }
         if (this.view === "todo") {
-          return "Everything still to do. Drag to reorder, or send a card to the backlog. Open a card for the note, the people on it, and the history.";
+          return "Everything still to do. Drag to reorder, or send a card to the backlog. Open a card for the note and the people on it.";
         }
         if (this.view === "done") {
-          return "Finished increments. Open a card for the note and the history. Drag a card back onto the board when it is not finished.";
+          return "Finished increments. Open a card for the note. Drag a card back onto the board when it is not finished.";
         }
         return "Drag a card between columns, or onto the Done count to finish it. Done cards stay on the done page. To do is the wide column, two cards to a row. Drag a person’s mark onto a card to add them. The backlog is a side pile.";
       },
@@ -369,17 +367,6 @@ document.addEventListener("alpine:init", function () {
         this.setFilter(this.filter === id ? "all" : id);
       },
 
-      saveMe() {
-        localStorage.setItem("hackathon-board-me", this.me || "");
-        if (!this.adding.person) this.adding.person = this.me;
-      },
-
-      requireMe() {
-        if (this.me) return true;
-        this.error = "Choose who you are first. That name is written on the card history.";
-        return false;
-      },
-
       writable() {
         return this.source === "api" && !!this.api;
       },
@@ -388,7 +375,7 @@ document.addEventListener("alpine:init", function () {
         var column = this.view === "backlog" || this.view === "done" || this.view === "todo" ? this.view : "todo";
         return {
           title: "",
-          person: this.me || "",
+          person: "",
           hours: "",
           column: column,
           brief: "",
@@ -545,7 +532,6 @@ document.addEventListener("alpine:init", function () {
       },
 
       async commitMove(id, columnId, order, reason) {
-        if (!this.requireMe()) return;
         var card = this.cards.find(function (item) { return item.id === id; });
         if (!card) return;
         var fromColumn = card.column;
@@ -557,7 +543,6 @@ document.addEventListener("alpine:init", function () {
           if (fromColumn !== columnId) {
             await this.send("POST", "/v1/board/cards/" + encodeURIComponent(id) + "/move", {
               column: columnId,
-              by: this.me,
               reason: reason || ""
             });
             this.remember("Move " + id, {
@@ -574,7 +559,7 @@ document.addEventListener("alpine:init", function () {
               order: order
             });
           }
-          await this.send("POST", "/v1/board/reorder", { column: columnId, ids: order, by: this.me });
+          await this.send("POST", "/v1/board/reorder", { column: columnId, ids: order });
           if (fromColumn === columnId) {
             this.remember("Reorder " + id, {
               op: "reorder",
@@ -669,13 +654,6 @@ document.addEventListener("alpine:init", function () {
         if (card) this.openCard(card);
       },
 
-      formatWhen(value) {
-        if (!value) return "";
-        var date = new Date(value);
-        if (Number.isNaN(date.getTime())) return value;
-        return date.toLocaleString(undefined, { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
-      },
-
       freshId(before) {
         var created = this.cards.find(function (card) { return !before[card.id]; });
         return created ? created.id : "";
@@ -714,7 +692,6 @@ document.addEventListener("alpine:init", function () {
           this.error = "This copy is read-only. The cards are still in the site source.";
           return;
         }
-        if (!this.requireMe()) return;
         var before = {};
         this.cards.forEach(function (card) { before[card.id] = true; });
         var hours = this.adding.hours === "" || this.adding.hours == null ? null : Number(this.adding.hours);
@@ -724,7 +701,6 @@ document.addEventListener("alpine:init", function () {
         try {
           await this.send("POST", "/v1/board/cards", {
             title: this.adding.title,
-            by: this.me,
             owners: owners,
             hours: hours,
             column: this.adding.column,
@@ -757,7 +733,7 @@ document.addEventListener("alpine:init", function () {
       },
 
       async saveEdit() {
-        if (!this.selected || !this.requireMe()) return;
+        if (!this.selected) return;
         var previous = this.snapshotCard(this.selected);
         var nextColumn = this.draft.column || previous.column;
         var hours = this.draft.hours === "" || this.draft.hours == null ? null : Number(this.draft.hours);
@@ -774,7 +750,7 @@ document.addEventListener("alpine:init", function () {
         this._keptApi = this.api;
         this.busy = true;
         try {
-          await this.send("PATCH", "/v1/board/cards/" + encodeURIComponent(previous.id), Object.assign({ by: this.me }, body));
+          await this.send("PATCH", "/v1/board/cards/" + encodeURIComponent(previous.id), body);
           var after = this.cards.find(function (card) { return card.id === previous.id; });
           if (after) {
             this.remember(
@@ -794,13 +770,13 @@ document.addEventListener("alpine:init", function () {
 
       async duplicateCard(card) {
         var source = card && card.id ? card : this.selected;
-        if (!source || !this.requireMe()) return;
+        if (!source) return;
         var before = {};
         this.cards.forEach(function (item) { before[item.id] = true; });
         this._keptApi = this.api;
         this.busy = true;
         try {
-          await this.send("POST", "/v1/board/cards/" + encodeURIComponent(source.id) + "/duplicate", { by: this.me });
+          await this.send("POST", "/v1/board/cards/" + encodeURIComponent(source.id) + "/duplicate", {});
           var id = this.freshId(before);
           var created = this.cards.find(function (item) { return item.id === id; });
           if (created) {
@@ -815,7 +791,7 @@ document.addEventListener("alpine:init", function () {
       },
 
       async removeCard() {
-        if (!this.selected || !this.requireMe()) return;
+        if (!this.selected) return;
         if (!this.removeArmed) {
           this.removeArmed = true;
           return;
@@ -824,7 +800,7 @@ document.addEventListener("alpine:init", function () {
         this._keptApi = this.api;
         this.busy = true;
         try {
-          await this.send("DELETE", "/v1/board/cards/" + encodeURIComponent(snap.id) + "?by=" + encodeURIComponent(this.me));
+          await this.send("DELETE", "/v1/board/cards/" + encodeURIComponent(snap.id) );
           this.remember("Remove " + snap.id, { op: "create", card: snap }, { op: "delete", id: snap.id });
           this.closeCard();
           this.flash("Removed card " + snap.id + ".");
@@ -837,7 +813,7 @@ document.addEventListener("alpine:init", function () {
       },
 
       async applyAssign(card, personId) {
-        if (!this.writable() || !this.requireMe()) return;
+        if (!this.writable()) return;
         var have = this.cardOwners(card);
         var next;
         if (!personId) {
@@ -851,7 +827,7 @@ document.addEventListener("alpine:init", function () {
         this._keptApi = this.api;
         this.busy = true;
         try {
-          await this.send("PATCH", "/v1/board/cards/" + encodeURIComponent(card.id), { by: this.me, owners: next });
+          await this.send("PATCH", "/v1/board/cards/" + encodeURIComponent(card.id), { owners: next });
           var label = personId ? ("Add " + this.personName(personId)) : "Clear assignees";
           this.remember(label + " on " + card.id, { op: "patch", id: card.id, body: { owners: have } }, { op: "patch", id: card.id, body: { owners: next } });
           this.flash(personId ? (this.personName(personId) + " is on card " + card.id + ".") : ("Cleared card " + card.id + "."));
@@ -866,11 +842,10 @@ document.addEventListener("alpine:init", function () {
         var next = this.cardOwners(card).filter(function (id) { return id !== personId; });
         var have = this.cardOwners(card);
         if (next.length === have.length) return;
-        if (!this.requireMe()) return;
         this._keptApi = this.api;
         this.busy = true;
         try {
-          await this.send("PATCH", "/v1/board/cards/" + encodeURIComponent(card.id), { by: this.me, owners: next });
+          await this.send("PATCH", "/v1/board/cards/" + encodeURIComponent(card.id), { owners: next });
           this.remember(
             "Remove " + this.personName(personId) + " from " + card.id,
             { op: "patch", id: card.id, body: { owners: have } },
@@ -925,24 +900,22 @@ document.addEventListener("alpine:init", function () {
         if (step.op === "move") {
           await this.send("POST", "/v1/board/cards/" + encodeURIComponent(step.id) + "/move", {
             column: step.column,
-            by: this.me,
             reason: step.reason || ""
           });
           if (step.order) {
-            await this.send("POST", "/v1/board/reorder", { column: step.column, ids: step.order, by: this.me });
+            await this.send("POST", "/v1/board/reorder", { column: step.column, ids: step.order });
           }
         } else if (step.op === "reorder") {
-          await this.send("POST", "/v1/board/reorder", { column: step.column, ids: step.order, by: this.me });
+          await this.send("POST", "/v1/board/reorder", { column: step.column, ids: step.order });
         } else if (step.op === "patch") {
-          await this.send("PATCH", "/v1/board/cards/" + encodeURIComponent(step.id), Object.assign({ by: this.me }, step.body || {}));
+          await this.send("PATCH", "/v1/board/cards/" + encodeURIComponent(step.id), step.body || {});
         } else if (step.op === "delete") {
-          await this.send("DELETE", "/v1/board/cards/" + encodeURIComponent(step.id) + "?by=" + encodeURIComponent(this.me));
+          await this.send("DELETE", "/v1/board/cards/" + encodeURIComponent(step.id));
         } else if (step.op === "create") {
           var card = step.card || {};
           await this.send("POST", "/v1/board/cards", {
             id: card.id,
             title: card.title,
-            by: this.me,
             owners: card.owners || [],
             hours: card.hours,
             column: card.column,
@@ -956,7 +929,6 @@ document.addEventListener("alpine:init", function () {
 
       async undo() {
         if (!this.undoStack.length || !this.writable() || this.busy) return;
-        if (!this.requireMe()) return;
         var step = this.undoStack.pop();
         this.busy = true;
         try {
@@ -975,7 +947,6 @@ document.addEventListener("alpine:init", function () {
 
       async redo() {
         if (!this.redoStack.length || !this.writable() || this.busy) return;
-        if (!this.requireMe()) return;
         var step = this.redoStack.pop();
         this.busy = true;
         try {

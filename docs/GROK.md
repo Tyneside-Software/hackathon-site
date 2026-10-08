@@ -161,7 +161,7 @@ python scripts/update_board.py move 07 doing --by connor
 python scripts/update_board.py add --title "…" --person connor --hours 1 --column backlog --brief "…"
 ```
 
-People ids: `reeve`, `connor`, `michael`, `lewis`, `noah`. A backwards move does not need `--reason`. Nav is copied by hand in each HTML file — update each file. Do not run a generator over `board.html`.
+People ids: `reeve`, `connor`, `michael`, `lewis`, `noah`. The board does not ask who you are, and it does not keep a card history. `--by` on the script is accepted and ignored. Nav is copied by hand in each HTML file — update each file. Do not run a generator over `board.html`.
 
 ---
 

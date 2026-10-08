@@ -754,12 +754,9 @@ def cmd_add(args: argparse.Namespace) -> None:
             sys.exit("The API assigns the card id. Leave out --id, or stop the API to edit the JSON seed.")
         brief = args.brief or f"<p>{html.escape(args.title)}</p>"
         owners = _owner_list(args.owners) if args.owners else ([args.person.lower()] if args.person else [])
-        actor = (args.by or (owners[0] if owners else "")).lower()
-        if not actor:
-            sys.exit("Say who is adding the card with --by.")
         body = {
             "title": args.title,
-            "by": actor,
+            "by": "",
             "owners": owners,
             "hours": args.hours,
             "column": args.column,
@@ -902,8 +899,8 @@ def build_parser() -> argparse.ArgumentParser:
 
     done = sub.add_parser("done", help="Move cards to Done")
     done.add_argument("ids", nargs="+")
-    done.add_argument("--by", help="Person id recorded on the history, such as michael")
-    done.add_argument("--reason", default="", help="Optional note stored on the card history")
+    done.add_argument("--by", help="Accepted and ignored. The board does not keep a history.")
+    done.add_argument("--reason", default="", help="Accepted and ignored.")
     done.add_argument("--tag")
     done.add_argument("--tag-kind", choices=("ok", "wait"))
     done.set_defaults(func=cmd_done)
@@ -911,8 +908,8 @@ def build_parser() -> argparse.ArgumentParser:
     mv = sub.add_parser("move", help="Move cards to a column")
     mv.add_argument("ids", nargs="+")
     mv.add_argument("column", choices=COLUMNS)
-    mv.add_argument("--by", help="Person id recorded on the history, such as michael")
-    mv.add_argument("--reason", default="", help="Optional note stored on the card history")
+    mv.add_argument("--by", help="Accepted and ignored. The board does not keep a history.")
+    mv.add_argument("--reason", default="", help="Accepted and ignored.")
     mv.add_argument("--tag")
     mv.add_argument("--tag-kind", choices=("ok", "wait"))
     mv.set_defaults(func=cmd_move)
@@ -928,14 +925,14 @@ def build_parser() -> argparse.ArgumentParser:
     add.add_argument("--emoji")
     add.add_argument("--tag")
     add.add_argument("--tag-kind", choices=("ok", "wait"))
-    add.add_argument("--by", help="Person id recorded on the history. Defaults to --person.")
+    add.add_argument("--by", help="Accepted and ignored. The board does not keep a history.")
     add.add_argument("--brief", help="HTML or plain text for the modal")
     add.set_defaults(func=cmd_add)
 
     assign = sub.add_parser("assign", help="Set the people on a card. none clears them.")
     assign.add_argument("ids", nargs="+")
     assign.add_argument("owners", help="One person, lewis+noah, or none")
-    assign.add_argument("--by", help="Person id recorded on the history")
+    assign.add_argument("--by", help="Accepted and ignored. The board does not keep a history.")
     assign.set_defaults(func=cmd_assign)
 
     return p

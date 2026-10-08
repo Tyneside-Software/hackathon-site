@@ -1297,10 +1297,6 @@ details.fix p:last-child { margin-bottom: 0; }
   user-select: none;
 }
 .move-row, .edit-row { display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 0.8rem 0; }
-.audit { margin-top: 0.8rem; color: var(--muted); font-size: 0.85rem; }
-.audit summary { cursor: pointer; color: var(--heading); }
-.audit li { margin: 0.35rem 0; }
-.audit .reason { color: #fcd34d; }
 .who-table td.claimed { max-width: 36rem; }
 .board-hint { color: var(--muted); font-size: 0.85rem; max-width: 46rem; margin: -0.4rem 0 1rem; }
 .board-toolbar .find { min-width: 14rem; flex: 1; }

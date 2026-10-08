@@ -109,6 +109,6 @@ gcloud run deploy hackathon-api `
 
 ## Board
 
-`GET /v1/board` reads the kanban from SQLite. Moves, edits, and new cards are on that same route (`POST /v1/board/cards`, `PATCH /v1/board/cards/{id}`, `POST /v1/board/cards/{id}/move`, `POST /v1/board/reorder`). `reason` is optional on every move, including a move back. `owners` is the list of people on a card. `hours` may be null. `value` is 1 to 5. `by` is a person id (`michael`, `connor`, `reeve`, `lewis`, `noah`).
+`GET /v1/board` reads the kanban from SQLite. Moves, edits, and new cards are on that same route (`POST /v1/board/cards`, `PATCH /v1/board/cards/{id}`, `POST /v1/board/cards/{id}/move`, `POST /v1/board/reorder`). `reason` may be sent and is ignored. `owners` is the list of people on a card. `hours` may be null. `value` is 1 to 5. `by` may be sent and is ignored. The board does not record a history.
 
 `app/board_seed.json` is imported only when the board tables have never held cards. `GET /v1/board/export` is the copy to commit back. The site pages use the snapshot in git when this route is not deployed yet. See the site wiki [Kanban board](#board).

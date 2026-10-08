@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Tyneside Logistics — backlog</title>
   <link rel="icon" href="logo.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="styles.css?v=20261008-board7">
+  <link rel="stylesheet" href="styles.css?v=20261008-board8">
 </head>
 <body class="site" data-board-view="backlog">
   <nav class="site-nav" aria-label="Primary">
@@ -51,14 +51,6 @@
     <p class="filter-status" x-text="filterStatus()"></p>
 
     <div class="board-toolbar">
-      <label>I am
-        <select x-model="me" @change="saveMe()">
-          <option value="">Choose…</option>
-          <template x-for="person in people" :key="'me-' + person.id">
-            <option :value="person.id" x-text="(person.emoji ? person.emoji + ' ' : '') + person.name"></option>
-          </template>
-        </select>
-      </label>
       <label class="find">Find
         <input type="search" x-model="query" placeholder="Title or note" autocomplete="off">
       </label>
@@ -379,20 +371,6 @@
           <button type="button" class="btn btn-ghost" @click="duplicateCard()" :disabled="busy">Duplicate</button>
           <button type="button" class="btn btn-ghost" @click="removeCard()" :disabled="busy" x-text="removeArmed ? 'Remove now' : 'Remove'"></button>
         </div>
-        <details class="audit" x-show="selected">
-          <summary x-text="selected ? ('History (' + selected.events.length + ')') : 'History'"></summary>
-          <p x-show="selected && selected.events.length === 0">No changes recorded yet.</p>
-          <ul x-show="selected && selected.events.length">
-            <template x-for="ev in (selected ? selected.events : [])" :key="ev.id">
-              <li>
-                <span x-text="formatWhen(ev.at)"></span>
-                · <span x-text="personName(ev.by) || 'Someone'"></span>
-                · <span x-text="ev.detail"></span>
-                <span class="reason" x-show="ev.reason" x-text="' Reason: ' + ev.reason"></span>
-              </li>
-            </template>
-          </ul>
-        </details>
       </div>
     </dialog>
 
@@ -402,7 +380,7 @@
     <div class="wrap-wide">Tyneside Logistics hackathon · Reeve · Connor · Michael · Lewis · Noah</div>
   </footer>
   <script src="config.js"></script>
-  <script defer src="board-app.js?v=20261008-board7"></script>
+  <script defer src="board-app.js?v=20261008-board8"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.8/dist/cdn.min.js"></script>
 </body>
 </html>
