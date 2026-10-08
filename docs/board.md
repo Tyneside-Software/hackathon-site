@@ -6,11 +6,11 @@ The board, backlog, to-do list, and done list are one SQLite board on the API (`
 
 A card can have more than one person. Drag a person’s mark onto a card to add them, use × to remove one person, or drag — onto a card to clear everyone. The first person is the group the card sits under. Find matches a title or a note. Undo and Redo step back the last saves in this browser.
 
-Value is 1 to 5. Hours can be blank, which shows as no estimate. A card can move to any column, including back, with no reason. The backlog is a side pile.
+Value is 1 to 5. Hours can be blank, which shows as no estimate. A card can move to any column, including back, with no reason. The backlog is a side pile. On the work board, Done is a count with a link to the done page. Drop a card on that count to finish it. To do is twice as wide as the other columns, with two cards to a row.
 
 | Page | What it shows |
 |------|----------------|
-| [board.html](../board.html) | To do, Next, In progress, Ready to deploy, Done |
+| [board.html](../board.html) | To do (wide), Next, In progress, Ready to deploy, and a Done count |
 | [backlog.html](../backlog.html) | Not on the board yet |
 | [todo.html](../todo.html) | Every to-do card |
 | [done.html](../done.html) | Finished cards |

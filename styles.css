@@ -1237,26 +1237,56 @@ details.fix p:last-child { margin-bottom: 0; }
 @media (max-width: 700px) { .board-summaries { grid-template-columns: 1fr; } }
 .board-ui .kanban,
 .board-ui .kanban.cols-board {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  width: max-content;
+  min-width: 100%;
   grid-template-columns: none;
-  grid-auto-flow: column;
-  grid-auto-columns: minmax(15rem, 1fr);
-  min-width: 0;
 }
+.board-ui .kanban > .col {
+  flex: 1 1 0;
+  min-width: 14rem;
+}
+.board-ui .kanban > .col.todo {
+  flex: 2 1 0;
+  min-width: 28rem;
+}
+.board-ui .col.todo .owner-group {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.55rem;
+  align-items: start;
+}
+.board-ui .col.todo .owner-group-head { grid-column: 1 / -1; }
+.board-ui .col.todo .card { margin-bottom: 0; }
 .board-ui .card { cursor: grab; }
+.board-ui .done-index,
+.board-ui .todo-index { cursor: pointer; }
 .board-ui .card.is-dragging { cursor: grabbing; }
 @media (max-width: 720px) {
   .board-ui .kanban,
   .board-ui .kanban.cols-board {
-    grid-auto-flow: row;
-    grid-auto-columns: auto;
+    flex-direction: column;
+    width: 100%;
     min-width: 0;
   }
+  .board-ui .kanban > .col,
+  .board-ui .kanban > .col.todo {
+    flex: none;
+    width: 100%;
+    min-width: 0;
+  }
+}
+@media (max-width: 520px) {
+  .board-ui .col.todo .owner-group { grid-template-columns: 1fr; }
 }
 .col.backlog { border-color: #475569; }
 /* Same landing mark as Hermione's .kbody.over. overflow:hidden on .col would clip it. */
 .board-ui .col.is-drop { overflow: visible; }
 .board-ui .col.is-drop .stack,
-.board-ui .card-archive.is-drop {
+.board-ui .card-archive.is-drop,
+.board-ui .done-index.is-drop {
   outline: 2px dashed #8b5cf6;
   outline-offset: -4px;
   border-radius: 0.75rem;

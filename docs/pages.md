@@ -5,7 +5,7 @@
 | `/` | `index.html` | Desktop home |
 | `/progress.html` | `progress.html` | Catch-up snapshot (been away?) |
 | `/app/` | `app/index.html` | Map — waypoints, phones, drawer, optional buses. See [The map](#map) |
-| `/board.html` | `board.html` + `board-app.js` | To do, Next, In progress, Ready to deploy, Done |
+| `/board.html` | `board.html` + `board-app.js` | To do (wide), Next, In progress, Ready to deploy, and a Done count |
 | `/backlog.html` | `backlog.html` | Backlog |
 | `/todo.html` | `todo.html` | Full to-do list |
 | `/done.html` | `done.html` | Done archive |

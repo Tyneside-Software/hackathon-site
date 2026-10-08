@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Tyneside Logistics — done</title>
   <link rel="icon" href="logo.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="styles.css?v=20261008-board6">
+  <link rel="stylesheet" href="styles.css?v=20261008-board7">
 </head>
 <body class="site" data-board-view="done">
   <nav class="site-nav" aria-label="Primary">
@@ -149,7 +149,7 @@
         <div class="title">Backlog</div>
         <p class="todo-index-meta" x-text="columnCount('backlog') + ' · open the backlog →'"></p>
       </a>
-      <a class="card done-index" :href="pageHref('done.html')">
+      <a class="card done-index" :class="{ 'is-drop': dropColumn === 'done' }" :href="pageHref('done.html')" title="Drop a card here to mark it done. Click to open the list." @dragover="onDragOver($event, 'done')" @dragleave="onDragLeave($event, 'done')" @drop.prevent="onDrop($event, 'done')">
         <div class="done-index-count" x-text="sorted('done').length"></div>
         <div class="title">Done</div>
         <p class="done-index-meta" x-text="columnCount('done') + ' · open the done list →'"></p>
@@ -402,7 +402,7 @@
     <div class="wrap-wide">Tyneside Logistics hackathon · Reeve · Connor · Michael · Lewis · Noah</div>
   </footer>
   <script src="config.js"></script>
-  <script defer src="board-app.js?v=20261008-board6"></script>
+  <script defer src="board-app.js?v=20261008-board7"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.8/dist/cdn.min.js"></script>
 </body>
 </html>

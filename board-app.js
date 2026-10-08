@@ -157,7 +157,7 @@ document.addEventListener("alpine:init", function () {
         if (this.view === "done") {
           return "Finished increments. Open a card for the note and the history. Drag a card back onto the board when it is not finished.";
         }
-        return "Drag a card to move it, including back to an earlier column. Drag a person’s mark onto a card to add them. The backlog is a side pile.";
+        return "Drag a card between columns, or onto the Done count to finish it. Done cards stay on the done page. To do is the wide column, two cards to a row. Drag a person’s mark onto a card to add them. The backlog is a side pile.";
       },
 
       statusText() {
@@ -192,7 +192,7 @@ document.addEventListener("alpine:init", function () {
       },
 
       shownColumns() {
-        var ids = this.view === "board" ? ["todo", "next", "doing", "ready", "done"] : [this.view];
+        var ids = this.view === "board" ? ["todo", "next", "doing", "ready"] : [this.view];
         var self = this;
         return ids.map(function (id) {
           return self.columns.find(function (col) { return col.id === id; });
