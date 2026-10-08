@@ -2,15 +2,15 @@
 
 How this sits in the product: [Architecture](#architecture).
 
-The board, backlog, to-do list, and done list are one SQLite board on the API (`GET /v1/board`). Drag a card by its handle, or open it and use the buttons. Choose **I am** first — that name is stored on the card history.
+The board, backlog, to-do list, and done list are one SQLite board on the API (`GET /v1/board`). Drag a card by its body, or open it and use the buttons. Choose **I am** first — that name is stored on the card history.
 
 A card can have more than one person. Drag a person’s mark onto a card to add them, use × to remove one person, or drag — onto a card to clear everyone. The first person is the group the card sits under. Find matches a title or a note. Undo and Redo step back the last saves in this browser.
 
-Value is 1 to 5. Hours can be blank, which shows as no estimate. A commit can be recorded on a card (`repo` and sha). Moving a card back among To do, In progress, Ready to demo, and Done asks for a reason. The backlog is a side pile: parking a card there, or putting it back on the board, does not.
+Value is 1 to 5. Hours can be blank, which shows as no estimate. A commit can be recorded on a card (`repo` and sha). Moving a card back among To do, Next, In progress, Ready to deploy, and Done asks for a reason. The backlog is a side pile: parking a card there, or putting it back on the board, does not.
 
 | Page | What it shows |
 |------|----------------|
-| [board.html](../board.html) | To do, In progress, Ready to demo |
+| [board.html](../board.html) | To do, Next, In progress, Ready to deploy, Done |
 | [backlog.html](../backlog.html) | Not on the board yet |
 | [todo.html](../todo.html) | Every to-do card |
 | [done.html](../done.html) | Finished cards |

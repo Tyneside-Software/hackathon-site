@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Tyneside Logistics — done</title>
   <link rel="icon" href="logo.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="styles.css?v=20261008-board2">
+  <link rel="stylesheet" href="styles.css?v=20261008-board3">
 </head>
 <body class="site" data-board-view="done">
   <nav class="site-nav" aria-label="Primary">
@@ -33,7 +33,7 @@
     </div>
   </nav>
 
-  <div class="wrap-wide board-ui" style="padding: 1.5rem 0 3rem" x-data="boardPage()" x-init="boot()" @keydown.window="onKey($event)">
+  <div class="wrap-board board-ui" style="padding: 1.5rem 0 3rem" x-data="boardPage()" x-init="boot()" @keydown.window="onKey($event)">
     <p class="hero-kicker">Hackathon night · work tracking</p>
     <h1 style="font-size:1.7rem;margin-bottom:0.4rem" x-text="pageTitle()"></h1>
     <p style="color:var(--muted);max-width:42rem" x-text="intro()"></p>
@@ -156,7 +156,7 @@
 
     <template x-if="view === 'board'">
     <div class="kanban-scroll">
-      <div class="kanban cols-3">
+      <div class="kanban cols-board">
         <template x-for="col in shownColumns()" :key="col.id">
           <div class="col" :class="[col.id, { 'is-drop': dropColumn === col.id }]" @dragover="onDragOver($event, col.id)" @dragleave="onDragLeave($event, col.id)" @drop.prevent="onDrop($event, col.id)">
             <div class="head"><span class="col-name" x-text="col.label"></span><span class="count" x-text="columnCount(col.id)"></span></div>
@@ -166,13 +166,13 @@
                 <div class="owner-group">
                   <div class="owner-group-head"><span x-text="group.emoji + ' ' + group.name"></span><span x-text="group.cards.length + ' · ' + group.hours"></span></div>
                   <template x-for="card in group.cards" :key="card.id">
-                    <article class="card" :id="'card-' + card.id" :class="{ 'is-dragging': draggingId === card.id, 'is-assign': assignOver === card.id }" :data-card-id="card.id" @click="openCard(card)" @dragover="onCardDragOver($event, card)" @dragleave="onCardDragLeave($event, card)" @drop="onCardDrop($event, card)">
+                    <article class="card" :id="'card-' + card.id" :class="{ 'is-dragging': draggingId === card.id, 'is-assign': assignOver === card.id }" :data-card-id="card.id" :draggable="writable()" @dragstart="onCardDragStart($event, card)" @dragend="onDragEnd()" @click="openCard(card)" @dragover="onCardDragOver($event, card)" @dragleave="onCardDragLeave($event, card)" @drop="onCardDrop($event, card)">
                       <div class="top">
                         <span class="id" x-text="card.id"></span>
-                        <button type="button" class="drag-handle" draggable="true" title="Drag to another column" aria-label="Drag card" @click.stop.prevent @dragstart="onDragStart($event, card)" @dragend="onDragEnd()">⠿</button>
+                        <span class="drag-handle" title="Drag the card" aria-hidden="true">⠿</span>
                         <span class="owner-chips">
                           <template x-for="owner in cardOwners(card)" :key="card.id + '-o-' + owner">
-                            <span class="owner-chip" draggable="true" :title="'Drag onto another card to add ' + personName(owner)" @click.stop @dragstart.stop="onPersonDragStart($event, owner)" @dragend="onDragEnd()">
+                            <span class="owner-chip" draggable="true" :data-person="owner" :title="'Drag onto another card to add ' + personName(owner)" @click.stop @dragstart.stop="onPersonDragStart($event, owner)" @dragend="onDragEnd()">
                               <span x-text="personEmoji(owner)"></span>
                               <button type="button" class="owner-x" x-show="writable()" @click.stop="removeOwner(card, owner)" :aria-label="'Remove ' + personName(owner)">×</button>
                             </span>
@@ -214,13 +214,13 @@
             <div class="owner-group">
               <div class="owner-group-head"><span x-text="group.emoji + ' ' + group.name"></span><span x-text="group.cards.length + ' · ' + group.hours"></span></div>
               <template x-for="card in group.cards" :key="'list-card-' + card.id">
-                <article class="card" :id="'card-' + card.id" :class="{ 'is-dragging': draggingId === card.id, 'is-assign': assignOver === card.id }" :data-card-id="card.id" @click="openCard(card)" @dragover="onCardDragOver($event, card)" @dragleave="onCardDragLeave($event, card)" @drop="onCardDrop($event, card)">
+                <article class="card" :id="'card-' + card.id" :class="{ 'is-dragging': draggingId === card.id, 'is-assign': assignOver === card.id }" :data-card-id="card.id" :draggable="writable()" @dragstart="onCardDragStart($event, card)" @dragend="onDragEnd()" @click="openCard(card)" @dragover="onCardDragOver($event, card)" @dragleave="onCardDragLeave($event, card)" @drop="onCardDrop($event, card)">
                   <div class="top">
                     <span class="id" x-text="card.id"></span>
-                    <button type="button" class="drag-handle" draggable="true" title="Drag to reorder" aria-label="Drag card" @click.stop.prevent @dragstart="onDragStart($event, card)" @dragend="onDragEnd()">⠿</button>
+                    <span class="drag-handle" title="Drag the card" aria-hidden="true">⠿</span>
                     <span class="owner-chips">
                       <template x-for="owner in cardOwners(card)" :key="'list-' + card.id + '-o-' + owner">
-                        <span class="owner-chip" draggable="true" :title="'Drag onto another card to add ' + personName(owner)" @click.stop @dragstart.stop="onPersonDragStart($event, owner)" @dragend="onDragEnd()">
+                        <span class="owner-chip" draggable="true" :data-person="owner" :title="'Drag onto another card to add ' + personName(owner)" @click.stop @dragstart.stop="onPersonDragStart($event, owner)" @dragend="onDragEnd()">
                           <span x-text="personEmoji(owner)"></span>
                           <button type="button" class="owner-x" x-show="writable()" @click.stop="removeOwner(card, owner)" :aria-label="'Remove ' + personName(owner)">×</button>
                         </span>
@@ -282,9 +282,9 @@
       <ol style="color:var(--muted);padding-left:1.2rem;line-height:1.7">
         <li>The increment is visible on the running site (not a branch of theory).</li>
         <li>Home, Map, and Board still load if the new thing is half-finished — fallbacks, never a blank page.</li>
-        <li>Drag the card to <em>Ready to demo</em> when someone else can click it without a briefing. The brief on the card is that briefing.</li>
+        <li>Drag the card to <em>Ready to deploy</em> when someone else can click it without a briefing. The brief on the card is that briefing.</li>
         <li>Open the card and move it to Done, or run <code>python scripts/update_board.py done 12 --by michael</code> while the API is up.</li>
-        <li>Moving a card back among To do, In progress, Ready to demo, and Done asks for a reason. Parking it on the backlog does not. The reason stays on the card history.</li>
+        <li>Moving a card back among To do, Next, In progress, Ready to deploy, and Done asks for a reason. Parking it on the backlog does not. The reason stays on the card history.</li>
       </ol>
 
       <h2 style="margin-top:2rem">GitHub loop</h2>
@@ -425,7 +425,7 @@
     <div class="wrap-wide">Tyneside Logistics hackathon · Reeve · Connor · Michael · Lewis · Noah</div>
   </footer>
   <script src="config.js"></script>
-  <script defer src="board-app.js?v=20261008-board2"></script>
+  <script defer src="board-app.js?v=20261008-board3"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.8/dist/cdn.min.js"></script>
 </body>
 </html>

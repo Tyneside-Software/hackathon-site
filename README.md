@@ -70,7 +70,7 @@ Do **not** open HTML as `file://` — the browser will block the API.
 | `/` | Desktop home |
 | `/progress.html` | Catch-up snapshot if you have been away |
 | `/app/` | Map, waypoints, route, live phones, optional buses |
-| `/board.html` | Kanban — to do, in progress, ready to demo |
+| `/board.html` | Kanban — to do, next, in progress, ready to deploy, done |
 | `/backlog.html` | Backlog |
 | `/todo.html` | Full to-do list |
 | `/done.html` | Done archive |

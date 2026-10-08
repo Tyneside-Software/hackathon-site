@@ -51,6 +51,7 @@ a { color: var(--link); text-decoration: none; }
 a:hover { color: var(--link-hover); }
 .wrap { width: min(920px, calc(100% - 2rem)); margin-inline: auto; }
 .wrap-wide { width: min(1120px, calc(100% - 2rem)); margin-inline: auto; }
+.wrap-board { width: calc(100% - 2.5rem); max-width: none; margin-inline: auto; }
 
 .site-nav {
   position: sticky; top: 0; z-index: 50;
@@ -277,13 +278,15 @@ a:hover { color: var(--link-hover); }
 .col .head .col-name { font-weight: 650; line-height: 1.25; }
 .col .head .count { font-size: 0.75rem; color: var(--muted); white-space: nowrap; flex-shrink: 0; }
 .col.todo { border-color: #334155; }
+.col.next { border-color: #0369a1; }
 .col.doing { border-color: #b45309; }
 .col.ready { border-color: #7c3aed; }
 .col.done { border-color: #047857; }
+.col.next .head { color: #bae6fd; }
 .col.doing .head { color: #fde68a; }
 .col.ready .head { color: #ddd6fe; }
 .col.done .head { color: #6ee7b7; }
-.col .stack { padding: 0.7rem; }
+.col .stack { padding: 0.7rem; min-height: 5rem; }
 .col .stack .empty-col { color: var(--muted); font-size: 0.85rem; padding: 0.4rem 0.2rem; }
 .card.is-hidden, .empty-col.is-hidden { display: none; }
 .card {
@@ -1224,19 +1227,30 @@ details.fix p:last-child { margin-bottom: 0; }
 @media (max-width: 800px) { .board-form { grid-template-columns: 1fr 1fr; } }
 .board-summaries { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 1rem; }
 @media (max-width: 700px) { .board-summaries { grid-template-columns: 1fr; } }
-.kanban.cols-3 { grid-template-columns: repeat(3, minmax(16rem, 1fr)); min-width: 52rem; }
-.kanban.cols-1 { grid-template-columns: minmax(16rem, 42rem); min-width: 0; }
+.board-ui .kanban,
+.board-ui .kanban.cols-board {
+  grid-template-columns: none;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(15rem, 1fr);
+  min-width: 0;
+}
+.board-ui .card { cursor: grab; }
+.board-ui .card.is-dragging { cursor: grabbing; }
 @media (max-width: 720px) {
-  .kanban.cols-3, .kanban.cols-1 { grid-template-columns: 1fr; min-width: 0; }
+  .board-ui .kanban,
+  .board-ui .kanban.cols-board {
+    grid-auto-flow: row;
+    grid-auto-columns: auto;
+    min-width: 0;
+  }
 }
 .col.backlog { border-color: #475569; }
 .col.is-drop { outline: 2px dashed var(--accent); outline-offset: -3px; }
 .card.is-dragging { opacity: 0.45; }
 .drag-handle {
-  appearance: none; border: 0; background: transparent; color: #64748b;
-  cursor: grab; font: inherit; font-size: 0.85rem; padding: 0 0.15rem; line-height: 1;
+  color: #64748b; cursor: grab; font-size: 0.85rem; padding: 0 0.15rem; line-height: 1;
+  user-select: none;
 }
-.drag-handle:active { cursor: grabbing; }
 .move-row, .edit-row { display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 0.8rem 0; }
 .audit { margin-top: 0.8rem; color: var(--muted); font-size: 0.85rem; }
 .audit summary { cursor: pointer; color: var(--heading); }

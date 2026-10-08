@@ -50,8 +50,9 @@ document.addEventListener("alpine:init", function () {
         return [
           { id: "backlog", label: "Backlog", empty: "Nothing waiting. Add a card, or send one back from the board." },
           { id: "todo", label: "To do", empty: "Nothing here." },
+          { id: "next", label: "Next", empty: "Nothing lined up." },
           { id: "doing", label: "In progress", empty: "Empty on purpose. Pull a card and ship it." },
-          { id: "ready", label: "Ready to demo", empty: "Nothing ready to demo." },
+          { id: "ready", label: "Ready to deploy", empty: "Nothing ready to deploy." },
           { id: "done", label: "Done", empty: "Nothing finished yet." }
         ];
       },
@@ -159,13 +160,13 @@ document.addEventListener("alpine:init", function () {
         if (this.view === "done") {
           return "Finished increments. Open a card for the note, any commit recorded on it, and the history. Moving one back onto the board asks for a reason.";
         }
-        return "Drag the handle to move a card. Drag a person’s mark onto a card to add them. A move back among To do, In progress, Ready to demo, and Done asks for a reason. The backlog is a side pile, so parking a card there does not.";
+        return "Drag a card to move it. Drag a person’s mark onto a card to add them. A move back among To do, Next, In progress, Ready to deploy, and Done asks for a reason. The backlog is a side pile, so parking a card there does not.";
       },
 
       statusText() {
         if (this.source === "loading") return "Loading the board…";
         if (this.source === "api") {
-          return "Saved in SQLite. The deployed server does not have this database yet — run python scripts/update_board.py pull and keep those files so a new machine still has the cards.";
+          return "Saved in SQLite.";
         }
         if (this.source === "snapshot") {
           return "Showing the cards stored in the site source. The API board is not reachable, so this page is read-only and nothing has been dropped.";
@@ -175,7 +176,7 @@ document.addEventListener("alpine:init", function () {
 
       banner() {
         var self = this;
-        var bits = ["backlog", "todo", "doing", "ready", "done"].map(function (id) {
+        var bits = ["backlog", "todo", "next", "doing", "ready", "done"].map(function (id) {
           var col = self.columns.find(function (item) { return item.id === id; });
           var label = col ? col.label : id;
           return self.sorted(id).length + " " + label.toLowerCase();
@@ -194,7 +195,7 @@ document.addEventListener("alpine:init", function () {
       },
 
       shownColumns() {
-        var ids = this.view === "board" ? ["todo", "doing", "ready"] : [this.view];
+        var ids = this.view === "board" ? ["todo", "next", "doing", "ready", "done"] : [this.view];
         var self = this;
         return ids.map(function (id) {
           return self.columns.find(function (col) { return col.id === id; });
@@ -242,7 +243,7 @@ document.addEventListener("alpine:init", function () {
 
       isBackward(from, to) {
         if (!from || !to || from === to || from === "backlog" || to === "backlog") return false;
-        var order = ["todo", "doing", "ready", "done"];
+        var order = ["todo", "next", "doing", "ready", "done"];
         var start = order.indexOf(from);
         var dest = order.indexOf(to);
         if (start === -1 || dest === -1) return this.columnIndex(to) < this.columnIndex(from);
@@ -355,7 +356,7 @@ document.addEventListener("alpine:init", function () {
         this.columns.forEach(function (col) {
           var n = cards.filter(function (card) { return card.column === col.id; }).length;
           if (!n) return;
-          var word = { backlog: "backlog", todo: "to do", doing: "in progress", ready: "ready", done: "done" }[col.id] || col.label;
+          var word = { backlog: "backlog", todo: "to do", next: "next", doing: "in progress", ready: "ready", done: "done" }[col.id] || col.label;
           bits.push(n + " " + word);
         });
         return { hours: this.hoursLabel(cards).replace("h", ""), meta: bits.join(" · ") || "no cards", count: cards.length };
@@ -422,16 +423,28 @@ document.addEventListener("alpine:init", function () {
         this._timer = setTimeout(function () { self.notice = ""; }, 4000);
       },
 
-      onDragStart(event, card) {
+      onCardDragStart(event, card) {
         if (!this.writable()) {
           event.preventDefault();
           return;
         }
+        var node = event.target && event.target.nodeType === 1 ? event.target : event.target.parentElement;
+        if (node && node.closest && node.closest("button, a, input, textarea, select")) {
+          event.preventDefault();
+          return;
+        }
+        var chip = node && node.closest ? node.closest(".owner-chip") : null;
+        if (chip && event.currentTarget.contains(chip)) {
+          this.onPersonDragStart(event, chip.getAttribute("data-person") || "");
+          return;
+        }
         this.dragKind = "card";
         this.draggingId = card.id;
+        this._heldId = card.id;
         this.draggingPerson = "";
-        this.suppressClick = false;
-        event.dataTransfer.setData("text/plain", card.id);
+        this._heldPerson = "";
+        this.suppressClick = true;
+        try { event.dataTransfer.setData("text/plain", card.id); } catch (err) {}
         event.dataTransfer.effectAllowed = "move";
       },
 
@@ -440,24 +453,39 @@ document.addEventListener("alpine:init", function () {
           event.preventDefault();
           return;
         }
+        var node = event.target && event.target.nodeType === 1 ? event.target : null;
+        if (node && node.closest && node.closest("button")) {
+          event.preventDefault();
+          return;
+        }
         this.dragKind = "person";
         this.draggingPerson = personId || "";
+        this._heldPerson = personId || "";
         this.draggingId = "";
-        event.dataTransfer.setData("text/plain", "person:" + (personId || ""));
+        this._heldId = "";
+        this.suppressClick = true;
+        try { event.dataTransfer.setData("text/plain", "person:" + (personId || "")); } catch (err) {}
         event.dataTransfer.effectAllowed = "copy";
       },
 
       onDragEnd() {
-        this.draggingId = "";
-        this.dragKind = "";
-        this.draggingPerson = "";
-        this.dropColumn = "";
-        this.assignOver = "";
+        var self = this;
+        setTimeout(function () {
+          self.draggingId = "";
+          self.dragKind = "";
+          self.draggingPerson = "";
+          self._heldId = "";
+          self._heldPerson = "";
+          self.dropColumn = "";
+          self.assignOver = "";
+        }, 0);
       },
 
       onDragOver(event, columnId) {
-        if (this.dragKind === "person" || !this.writable()) return;
+        if (!this.writable() || this.dragKind === "person") return;
+        if (this.dragKind !== "card" && !this._heldId) return;
         event.preventDefault();
+        if (event.dataTransfer) event.dataTransfer.dropEffect = "move";
         this.dropColumn = columnId;
       },
 
@@ -490,13 +518,14 @@ document.addEventListener("alpine:init", function () {
 
       onDrop(event, columnId) {
         if (!columnId || this.dragKind === "person") return;
-        var id = (event.dataTransfer && event.dataTransfer.getData("text/plain")) || this.draggingId;
-        if (String(id).indexOf("person:") === 0) return;
+        event.preventDefault();
+        var raw = "";
+        try { raw = event.dataTransfer ? event.dataTransfer.getData("text/plain") : ""; } catch (err) { raw = ""; }
+        var id = this._heldId || this.draggingId || raw;
+        if (!id || String(id).indexOf("person:") === 0) return;
         var el = event.target.closest ? event.target.closest("[data-card-id]") : null;
         var beforeId = el ? el.getAttribute("data-card-id") : "";
-        this.draggingId = "";
         this.dropColumn = "";
-        if (!id) return;
         this.requestMove(id, columnId, beforeId);
       },
 

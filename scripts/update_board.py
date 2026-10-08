@@ -48,17 +48,19 @@ PEOPLE = [
     {"id": "noah", "name": "Noah", "emoji": "🔧"},
 ]
 PEOPLE_BY_ID = {p["id"]: p for p in PEOPLE}
-COLUMNS = ("backlog", "todo", "doing", "ready", "done")
+COLUMNS = ("backlog", "todo", "next", "doing", "ready", "done")
 COL_LABEL = {
     "backlog": "Backlog",
     "todo": "To do",
+    "next": "Next",
     "doing": "In progress",
-    "ready": "Ready to demo",
+    "ready": "Ready to deploy",
     "done": "Done",
 }
 EMPTY_ALL = {
     "backlog": "Nothing waiting.",
     "todo": "Nothing here.",
+    "next": "Nothing lined up.",
     "doing": "Empty on purpose. Pull a Ready card and ship it.",
     "ready": "Nothing here.",
     "done": "Nothing here.",
@@ -66,6 +68,7 @@ EMPTY_ALL = {
 COL_HEAD_CLASS = {
     "backlog": "backlog",
     "todo": "todo",
+    "next": "next",
     "doing": "doing",
     "ready": "ready",
     "done": "done",
@@ -238,7 +241,7 @@ def person_cards(cards: list[dict], pid: str) -> list[dict]:
 def person_meta(cards: list[dict], pid: str) -> str:
     theirs = person_cards(cards, pid)
     bits = []
-    for col, label in (("done", "done"), ("ready", "ready"), ("doing", "in progress"), ("todo", "to do")):
+    for col, label in (("done", "done"), ("ready", "ready"), ("doing", "in progress"), ("next", "next"), ("todo", "to do")):
         n = sum(1 for c in theirs if c.get("column") == col)
         if n:
             bits.append(f"{n} {label}")

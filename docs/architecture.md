@@ -42,7 +42,7 @@ hackathon-site/
   index.html          Home
   progress.html       Catch-up snapshot (been away?)
   app/                Map (Leaflet + map.js)
-  board.html          Kanban (to do, in progress, ready)
+  board.html          Kanban (to do, next, in progress, ready to deploy, done)
   backlog.html        Backlog
   todo.html           All to-do cards
   done.html           All done cards
