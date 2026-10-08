@@ -436,8 +436,9 @@ document.addEventListener("alpine:init", function () {
           event.preventDefault();
           return;
         }
-        var node = event.target && event.target.nodeType === 1 ? event.target : null;
-        if (node && node.closest && node.closest("button")) {
+        var node = event.target && event.target.nodeType === 1 ? event.target : (event.target && event.target.parentElement);
+        var fromGlyph = node && node.closest && node.closest(".glyph");
+        if (!fromGlyph && node && node.closest && node.closest("button")) {
           event.preventDefault();
           return;
         }
@@ -597,6 +598,12 @@ document.addEventListener("alpine:init", function () {
       moveTo(columnId) {
         if (!this.selected) return;
         this.requestMove(this.selected.id, columnId, "");
+      },
+
+      editCard(card) {
+        this.suppressClick = false;
+        this.openCard(card);
+        this.editing = true;
       },
 
       lockPageScroll() {

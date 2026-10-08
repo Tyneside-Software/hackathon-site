@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Tyneside Logistics — done</title>
   <link rel="icon" href="logo.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="styles.css?v=20261008-board5">
+  <link rel="stylesheet" href="styles.css?v=20261008-board6">
 </head>
 <body class="site" data-board-view="done">
   <nav class="site-nav" aria-label="Primary">
@@ -128,17 +128,19 @@
 
     <div class="people">
       <template x-for="person in people" :key="'hour-' + person.id">
-        <button type="button" class="person" :class="{ 'is-on': filter === person.id }" :aria-pressed="filter === person.id" @click="togglePerson(person.id)">
-          <div class="who"><span class="glyph" draggable="true" title="Drag onto a card to add this person" @click.stop @dragstart="onPersonDragStart($event, person.id)" @dragend="onDragEnd()" x-text="person.emoji"></span> <span x-text="person.name"></span></div>
+        <div class="person" :class="{ 'is-on': filter === person.id }">
+          <div class="who"><span class="glyph" draggable="true" :title="'Drag onto a card to add ' + person.name" @dragstart.stop="onPersonDragStart($event, person.id)" @dragend="onDragEnd()" x-text="person.emoji"></span> <span x-text="person.name"></span></div>
           <div class="hrs"><span class="num" x-text="stats(person.id).hours"></span> <span>hrs</span></div>
           <div class="meta" x-text="stats(person.id).meta"></div>
-        </button>
+          <button type="button" class="person-filter" :aria-pressed="filter === person.id" @click="togglePerson(person.id)" x-text="filter === person.id ? 'Showing these tasks' : 'Only these tasks'"></button>
+        </div>
       </template>
-      <button type="button" class="person" x-show="stats('none').count" :class="{ 'is-on': filter === 'none' }" @click="setFilter(filter === 'none' ? 'all' : 'none')">
-        <div class="who"><span class="glyph">—</span> <span>Unassigned</span></div>
+      <div class="person" x-show="stats('none').count" :class="{ 'is-on': filter === 'none' }">
+        <div class="who"><span class="glyph" draggable="true" title="Drag onto a card to clear its people" @dragstart.stop="onPersonDragStart($event, '')" @dragend="onDragEnd()">—</span> <span>Unassigned</span></div>
         <div class="hrs"><span class="num" x-text="stats('none').hours"></span> <span>hrs</span></div>
         <div class="meta" x-text="stats('none').meta"></div>
-      </button>
+        <button type="button" class="person-filter" :aria-pressed="filter === 'none'" @click="setFilter(filter === 'none' ? 'all' : 'none')" x-text="filter === 'none' ? 'Showing these tasks' : 'Only these tasks'"></button>
+      </div>
     </div>
 
     <div class="board-summaries" x-show="view === 'board'">
@@ -169,6 +171,12 @@
                     <article class="card" :id="'card-' + card.id" :class="{ 'is-dragging': draggingId === card.id, 'is-assign': assignOver === card.id }" :data-card-id="card.id" :draggable="writable()" @dragstart="onCardDragStart($event, card)" @dragend="onDragEnd()" @click="openCard(card)" @dragover="onCardDragOver($event, card)" @dragleave="onCardDragLeave($event, card)" @drop="onCardDrop($event, card)">
                       <div class="top">
                         <span class="id" x-text="card.id"></span>
+                        <span class="card-tools" x-show="writable()">
+                          <button type="button" class="card-tool" @click.stop="editCard(card)" :disabled="busy">Edit</button>
+                          <button type="button" class="card-tool" @click.stop="duplicateCard(card)" :disabled="busy">Duplicate</button>
+                          <button type="button" class="card-tool is-back" x-show="card.column !== 'backlog' && card.column !== 'done'" @click.stop="quickMove(card, 'backlog')" :disabled="busy">To backlog</button>
+                          <button type="button" class="card-tool is-back" x-show="card.column === 'backlog'" @click.stop="quickMove(card, 'todo')" :disabled="busy">To board</button>
+                        </span>
                         <span class="drag-handle" title="Drag the card" aria-hidden="true">⠿</span>
                         <span class="owner-chips">
                           <template x-for="owner in cardOwners(card)" :key="card.id + '-o-' + owner">
@@ -184,11 +192,6 @@
                       <p class="card-note" x-show="notePreview(card)" x-text="notePreview(card)"></p>
                       <span class="tag" x-show="card.tag" :class="card.tag_kind === 'ok' ? 'tag-ok' : 'tag-wait'" x-text="card.tag"></span>
                       <span class="unestimated" x-show="card.hours == null">∅ no estimate</span>
-                      <div class="card-actions" x-show="writable()">
-                        <button type="button" @click.stop="duplicateCard(card)" :disabled="busy">Duplicate</button>
-                        <button type="button" x-show="card.column !== 'backlog' && card.column !== 'done'" @click.stop="quickMove(card, 'backlog')" :disabled="busy">To backlog</button>
-                        <button type="button" x-show="card.column === 'backlog'" @click.stop="quickMove(card, 'todo')" :disabled="busy">To board</button>
-                      </div>
                       <div class="bot">
                         <span x-text="card.hours == null ? '∅' : (fmtHours(card.hours) + 'h')"></span>
                         <span class="value" x-show="card.value" :title="'Value ' + card.value + ' of 5'" x-text="valueMarks(card.value)"></span>
@@ -216,6 +219,12 @@
                 <article class="card" :id="'card-' + card.id" :class="{ 'is-dragging': draggingId === card.id, 'is-assign': assignOver === card.id }" :data-card-id="card.id" :draggable="writable()" @dragstart="onCardDragStart($event, card)" @dragend="onDragEnd()" @click="openCard(card)" @dragover="onCardDragOver($event, card)" @dragleave="onCardDragLeave($event, card)" @drop="onCardDrop($event, card)">
                   <div class="top">
                     <span class="id" x-text="card.id"></span>
+                    <span class="card-tools" x-show="writable()">
+                      <button type="button" class="card-tool" @click.stop="editCard(card)" :disabled="busy">Edit</button>
+                      <button type="button" class="card-tool" @click.stop="duplicateCard(card)" :disabled="busy">Duplicate</button>
+                      <button type="button" class="card-tool is-back" x-show="card.column !== 'backlog' && card.column !== 'done'" @click.stop="quickMove(card, 'backlog')" :disabled="busy">To backlog</button>
+                      <button type="button" class="card-tool is-back" x-show="card.column === 'backlog'" @click.stop="quickMove(card, 'todo')" :disabled="busy">To board</button>
+                    </span>
                     <span class="drag-handle" title="Drag the card" aria-hidden="true">⠿</span>
                     <span class="owner-chips">
                       <template x-for="owner in cardOwners(card)" :key="'list-' + card.id + '-o-' + owner">
@@ -231,11 +240,6 @@
                   <p class="card-note" x-show="notePreview(card)" x-text="notePreview(card)"></p>
                   <span class="tag" x-show="card.tag" :class="card.tag_kind === 'ok' ? 'tag-ok' : 'tag-wait'" x-text="card.tag"></span>
                   <span class="unestimated" x-show="card.hours == null">∅ no estimate</span>
-                  <div class="card-actions" x-show="writable()">
-                    <button type="button" @click.stop="duplicateCard(card)" :disabled="busy">Duplicate</button>
-                    <button type="button" x-show="card.column !== 'backlog' && card.column !== 'done'" @click.stop="quickMove(card, 'backlog')" :disabled="busy">To backlog</button>
-                    <button type="button" x-show="card.column === 'backlog'" @click.stop="quickMove(card, 'todo')" :disabled="busy">To board</button>
-                  </div>
                   <div class="bot">
                     <span x-text="card.hours == null ? '∅' : (fmtHours(card.hours) + 'h')"></span>
                     <span class="value" x-show="card.value" :title="'Value ' + card.value + ' of 5'" x-text="valueMarks(card.value)"></span>
@@ -250,7 +254,7 @@
     </template>
 
     <h2 style="margin-top:2rem">Who’s who</h2>
-    <p class="lede">Hours are every card attributed to that person, whichever column it sits in. Click a row to filter.</p>
+    <p class="lede">Hours are every card attributed to that person, whichever column it sits in. Only these tasks filters to that person. Drag their mark onto a card to add them.</p>
     <div class="who-wrap">
       <table class="who-table">
         <thead>
@@ -307,7 +311,7 @@
           </label>
           <div class="board-form" style="margin-top:0.6rem">
             <div class="span-all">
-              <span class="field-label">People</span>
+              <span class="field-label">Assignees</span>
               <div class="choice-row">
                 <template x-for="person in people" :key="'edit-' + person.id">
                   <button type="button" class="choice" :class="{ 'is-on': draft.owners && draft.owners.indexOf(person.id) !== -1 }" @click="toggleOwner(person.id)" x-text="(person.emoji ? person.emoji + ' ' : '') + person.name"></button>
@@ -355,6 +359,16 @@
           </div>
         </div>
         <div class="card-modal-body" x-show="selected && !editing" x-html="selected ? selected.brief : ''"></div>
+        <div class="assign-row" x-show="selected && writable() && !editing">
+          <span class="field-label">Add a person</span>
+          <div class="choice-row">
+            <template x-for="person in people" :key="'assign-' + person.id">
+              <button type="button" class="choice" :class="{ 'is-on': selected && cardOwners(selected).indexOf(person.id) !== -1 }" @click="applyAssign(selected, person.id)" :disabled="busy || (selected && cardOwners(selected).indexOf(person.id) !== -1)" x-text="(person.emoji ? person.emoji + ' ' : '') + person.name"></button>
+            </template>
+            <button type="button" class="choice" @click="applyAssign(selected, '')" :disabled="busy">Clear</button>
+          </div>
+          <p class="field-help">Same as dropping their mark on the card. Someone already on it stays.</p>
+        </div>
         <div class="move-row" x-show="selected && writable()">
           <template x-for="col in columns" :key="'move-' + col.id">
             <button type="button" class="btn btn-ghost" @click="moveTo(col.id)" :disabled="busy || !selected || selected.column === col.id" x-text="col.label"></button>
@@ -388,7 +402,7 @@
     <div class="wrap-wide">Tyneside Logistics hackathon · Reeve · Connor · Michael · Lewis · Noah</div>
   </footer>
   <script src="config.js"></script>
-  <script defer src="board-app.js?v=20261008-board5"></script>
+  <script defer src="board-app.js?v=20261008-board6"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.8/dist/cdn.min.js"></script>
 </body>
 </html>
