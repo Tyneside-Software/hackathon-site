@@ -28,7 +28,6 @@ document.addEventListener("alpine:init", function () {
       undoStack: [],
       redoStack: [],
       removeArmed: false,
-      commitDraft: { repo: "hackathon-site", sha: "", summary: "" },
       suppressClick: false,
       scrollLockY: 0,
       scrollLocked: false,
@@ -156,7 +155,7 @@ document.addEventListener("alpine:init", function () {
           return "Everything still to do. Drag to reorder, or send a card to the backlog. Open a card for the note, the people on it, and the history.";
         }
         if (this.view === "done") {
-          return "Finished increments. Open a card for the note, any commit recorded on it, and the history. Drag a card back onto the board when it is not finished.";
+          return "Finished increments. Open a card for the note and the history. Drag a card back onto the board when it is not finished.";
         }
         return "Drag a card to move it, including back to an earlier column. Drag a person’s mark onto a card to add them. The backlog is a side pile.";
       },
@@ -634,7 +633,6 @@ document.addEventListener("alpine:init", function () {
         };
         this.editing = false;
         this.removeArmed = false;
-        this.commitDraft = { repo: "hackathon-site", sha: "", summary: "" };
         var url = new URL(location.href);
         url.hash = "t-" + card.id;
         history.replaceState(null, "", url.pathname + url.search + url.hash);
@@ -686,10 +684,7 @@ document.addEventListener("alpine:init", function () {
           brief: card.brief || "",
           tag: card.tag || "",
           tag_kind: card.tag_kind || "",
-          value: card.value == null ? null : card.value,
-          commits: (card.commits || []).map(function (item) {
-            return { repo: item.repo, sha: item.sha, summary: item.summary || "" };
-          })
+          value: card.value == null ? null : card.value
         };
       },
 
@@ -885,49 +880,6 @@ document.addEventListener("alpine:init", function () {
         this.requestMove(card.id, columnId, "");
       },
 
-      async addCommit() {
-        if (!this.selected || !this.requireMe()) return;
-        var draft = this.commitDraft || {};
-        var id = this.selected.id;
-        var commit = { repo: (draft.repo || "").trim(), sha: (draft.sha || "").trim(), summary: (draft.summary || "").trim() };
-        this._keptApi = this.api;
-        this.busy = true;
-        try {
-          await this.send("POST", "/v1/board/cards/" + encodeURIComponent(id) + "/commits", Object.assign({ by: this.me }, commit));
-          this.remember(
-            "Commit on " + id,
-            { op: "commit-remove", id: id, repo: commit.repo, sha: commit.sha },
-            { op: "commit-add", id: id, commit: commit }
-          );
-          this.commitDraft = { repo: commit.repo || "hackathon-site", sha: "", summary: "" };
-          this.flash("Recorded the commit on card " + id + ".");
-        } catch (err) {
-          this.error = err.message;
-        } finally {
-          this.busy = false;
-        }
-      },
-
-      async removeCommit(commit) {
-        if (!this.selected || !commit || !this.requireMe()) return;
-        var id = this.selected.id;
-        this._keptApi = this.api;
-        this.busy = true;
-        try {
-          var path = "/v1/board/cards/" + encodeURIComponent(id) + "/commits?by=" + encodeURIComponent(this.me) + "&repo=" + encodeURIComponent(commit.repo) + "&sha=" + encodeURIComponent(commit.sha);
-          await this.send("DELETE", path);
-          this.remember(
-            "Remove commit on " + id,
-            { op: "commit-add", id: id, commit: { repo: commit.repo, sha: commit.sha, summary: commit.summary || "" } },
-            { op: "commit-remove", id: id, repo: commit.repo, sha: commit.sha }
-          );
-        } catch (err) {
-          this.error = err.message;
-        } finally {
-          this.busy = false;
-        }
-      },
-
       loadHist() {
         try {
           var raw = JSON.parse(sessionStorage.getItem("hackathon-board-undo") || "null");
@@ -990,14 +942,8 @@ document.addEventListener("alpine:init", function () {
             brief: card.brief || "",
             tag: card.tag || "",
             tag_kind: card.tag_kind || "",
-            value: card.value,
-            commits: card.commits || []
+            value: card.value
           });
-        } else if (step.op === "commit-add") {
-          await this.send("POST", "/v1/board/cards/" + encodeURIComponent(step.id) + "/commits", Object.assign({ by: this.me }, step.commit || {}));
-        } else if (step.op === "commit-remove") {
-          var path = "/v1/board/cards/" + encodeURIComponent(step.id) + "/commits?by=" + encodeURIComponent(this.me) + "&repo=" + encodeURIComponent(step.repo) + "&sha=" + encodeURIComponent(step.sha);
-          await this.send("DELETE", path);
         }
       },
 

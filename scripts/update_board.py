@@ -13,7 +13,6 @@ Examples (from the repo root):
     python scripts/update_board.py move 07 todo --by michael --reason "Not ready."
     python scripts/update_board.py move 07 backlog --by michael
     python scripts/update_board.py assign 07 lewis+noah --by michael
-    python scripts/update_board.py commit 12 --repo hackathon-site --sha abcdef1 --by michael --summary "What it did"
     python scripts/update_board.py add --title "…" --person michael --hours 2 --column backlog
 """
 
@@ -26,7 +25,6 @@ import os
 import re
 import sys
 import urllib.error
-import urllib.parse
 import urllib.request
 from pathlib import Path
 
@@ -856,43 +854,6 @@ def cmd_assign(args: argparse.Namespace) -> None:
     warn_offline()
 
 
-def cmd_commit(args: argparse.Namespace) -> None:
-    if api_alive():
-        for card in _find_live(args.ids):
-            if args.remove:
-                query = urllib.parse.urlencode({"by": _actor(args, card), "repo": args.repo, "sha": args.sha})
-                api_json("DELETE", f"/v1/board/cards/{card['id']}/commits?{query}")
-            else:
-                api_json(
-                    "POST",
-                    f"/v1/board/cards/{card['id']}/commits",
-                    {"by": _actor(args, card), "repo": args.repo, "sha": args.sha, "summary": args.summary or ""},
-                )
-        cmd_pull(args)
-        return
-    cards = load_cards()
-    found = _card_lookup(cards)
-    for cid in args.ids:
-        card = found.get(str(cid)) or found.get(str(cid).zfill(2))
-        if card is None:
-            sys.exit(f"No card {cid}")
-        current = [item for item in (card.get("commits") or []) if isinstance(item, dict)]
-        sha = args.sha.strip().lower()
-        if args.remove:
-            kept = [item for item in current if not (item.get("repo") == args.repo and str(item.get("sha", "")).lower() == sha)]
-            if len(kept) == len(current):
-                sys.exit("That commit is not on this card.")
-            card["commits"] = kept
-        else:
-            if any(item.get("repo") == args.repo and str(item.get("sha", "")).lower() == sha for item in current):
-                sys.exit("That commit is already on this card.")
-            current.append({"repo": args.repo, "sha": sha, "summary": args.summary or ""})
-            card["commits"] = current
-        print(f"  #{card['id']} commits: {len(card.get('commits') or [])}")
-    save_cards(cards)
-    warn_offline()
-
-
 def cmd_list(args: argparse.Namespace) -> None:
     if api_alive():
         cards = api_json("GET", "/v1/board")["cards"]
@@ -976,15 +937,6 @@ def build_parser() -> argparse.ArgumentParser:
     assign.add_argument("owners", help="One person, lewis+noah, or none")
     assign.add_argument("--by", help="Person id recorded on the history")
     assign.set_defaults(func=cmd_assign)
-
-    commit = sub.add_parser("commit", help="Record or remove a git commit on a card")
-    commit.add_argument("ids", nargs="+")
-    commit.add_argument("--repo", required=True)
-    commit.add_argument("--sha", required=True)
-    commit.add_argument("--summary", default="")
-    commit.add_argument("--by")
-    commit.add_argument("--remove", action="store_true")
-    commit.set_defaults(func=cmd_commit)
 
     return p
 

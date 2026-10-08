@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Tyneside Logistics — to do</title>
   <link rel="icon" href="logo.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="styles.css?v=20261008-board4">
+  <link rel="stylesheet" href="styles.css?v=20261008-board5">
 </head>
 <body class="site" data-board-view="todo">
   <nav class="site-nav" aria-label="Primary">
@@ -192,7 +192,6 @@
                       <div class="bot">
                         <span x-text="card.hours == null ? '∅' : (fmtHours(card.hours) + 'h')"></span>
                         <span class="value" x-show="card.value" :title="'Value ' + card.value + ' of 5'" x-text="valueMarks(card.value)"></span>
-                        <span x-show="card.commits && card.commits.length" x-text="card.commits.length + (card.commits.length === 1 ? ' commit' : ' commits')"></span>
                       </div>
                     </article>
                   </template>
@@ -240,7 +239,6 @@
                   <div class="bot">
                     <span x-text="card.hours == null ? '∅' : (fmtHours(card.hours) + 'h')"></span>
                     <span class="value" x-show="card.value" :title="'Value ' + card.value + ' of 5'" x-text="valueMarks(card.value)"></span>
-                    <span x-show="card.commits && card.commits.length" x-text="card.commits.length + (card.commits.length === 1 ? ' commit' : ' commits')"></span>
                   </div>
                 </article>
               </template>
@@ -294,7 +292,7 @@
         <li>Run both: <code>.\start.ps1</code> in the site repo.</li>
         <li>Make a tiny visible change. Confirm it still runs.</li>
         <li><code>git add</code> · <code>git commit</code> · <code>git push origin main</code>.</li>
-        <li>Check the commit on GitHub. Open the card and record that commit, then move the card to Done.</li>
+        <li>Check the commit on GitHub, then move the card to Done.</li>
       </ol>
     </div>
 
@@ -367,25 +365,6 @@
           <button type="button" class="btn btn-ghost" @click="duplicateCard()" :disabled="busy">Duplicate</button>
           <button type="button" class="btn btn-ghost" @click="removeCard()" :disabled="busy" x-text="removeArmed ? 'Remove now' : 'Remove'"></button>
         </div>
-        <div class="commits" x-show="selected">
-          <h3>Commits</h3>
-          <p class="field-help" x-show="!selected || !selected.commits || !selected.commits.length">No commit recorded on this card yet.</p>
-          <ul x-show="selected && selected.commits && selected.commits.length">
-            <template x-for="commit in (selected ? selected.commits : [])" :key="commit.repo + '@' + commit.sha">
-              <li>
-                <code x-text="commit.repo + '@' + commit.sha.slice(0, 7)"></code>
-                <span x-show="commit.summary" x-text="commit.summary"></span>
-                <button type="button" x-show="writable()" @click="removeCommit(commit)" :disabled="busy">Remove</button>
-              </li>
-            </template>
-          </ul>
-          <form class="commit-form" x-show="writable()" @submit.prevent="addCommit()">
-            <input x-model="commitDraft.repo" placeholder="hackathon-site" maxlength="80" aria-label="Repo">
-            <input x-model="commitDraft.sha" placeholder="Commit sha" maxlength="40" aria-label="Commit sha" required>
-            <input x-model="commitDraft.summary" placeholder="What it did" maxlength="200" aria-label="Summary">
-            <button type="submit" class="btn btn-ghost" :disabled="busy">Record commit</button>
-          </form>
-        </div>
         <details class="audit" x-show="selected">
           <summary x-text="selected ? ('History (' + selected.events.length + ')') : 'History'"></summary>
           <p x-show="selected && selected.events.length === 0">No changes recorded yet.</p>
@@ -409,7 +388,7 @@
     <div class="wrap-wide">Tyneside Logistics hackathon · Reeve · Connor · Michael · Lewis · Noah</div>
   </footer>
   <script src="config.js"></script>
-  <script defer src="board-app.js?v=20261008-board4"></script>
+  <script defer src="board-app.js?v=20261008-board5"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.8/dist/cdn.min.js"></script>
 </body>
 </html>

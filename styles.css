@@ -342,30 +342,33 @@ html.card-modal-open body {
   border: 0;
   background: transparent;
   color: var(--text);
-  overflow: hidden;
-  overscroll-behavior: none;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
 }
 .card-modal[open] {
-  display: grid;
-  place-items: center;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
 }
 .card-modal::backdrop {
   background: rgba(6, 10, 16, 0.78);
-  overscroll-behavior: none;
 }
 .card-modal-inner {
-  width: min(38rem, calc(100vw - 2rem));
-  max-height: min(88vh, 42rem);
-  overflow: auto;
-  overscroll-behavior: contain;
-  -webkit-overflow-scrolling: touch;
-  touch-action: pan-y;
+  width: min(40rem, calc(100vw - 2rem));
+  max-height: none;
+  overflow: visible;
+  margin: 4vh auto;
   background: var(--panel);
   border: 1px solid var(--border);
   border-radius: 14px;
   padding: 1.15rem 1.2rem 1.35rem;
   box-shadow: 0 24px 64px rgba(0, 0, 0, 0.55);
   position: relative;
+}
+@media (max-width: 720px) {
+  .card-modal { padding: 0.75rem; }
+  .card-modal-inner { margin-top: 1.5vh; }
 }
 .card-modal-close {
   position: absolute;
@@ -1315,9 +1318,4 @@ details.fix p:last-child { margin-bottom: 0; }
 .choice.is-on { border-color: var(--accent, #f5b942); color: var(--heading); background: rgba(245, 185, 66, 0.12); }
 .field-label, .field-help { display: block; color: var(--muted); font-size: 0.75rem; }
 .field-help { margin: 0.3rem 0 0; }
-.commits { margin-top: 0.8rem; }
-.commits h3 { font-size: 0.95rem; margin: 0 0 0.35rem; }
-.commits li { display: flex; flex-wrap: wrap; gap: 0.45rem; align-items: center; margin: 0.3rem 0; color: var(--muted); font-size: 0.85rem; }
-.commits button { font: inherit; font-size: 0.75rem; }
-.commit-form { display: grid; grid-template-columns: 1fr 1fr 1.4fr auto; gap: 0.4rem; margin-top: 0.45rem; }
-@media (max-width: 720px) { .commit-form { grid-template-columns: 1fr; } }
+
