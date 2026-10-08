@@ -35,13 +35,81 @@
   </nav>
 
   <div class="wrap" style="padding: 1.5rem 0 3rem">
-    <p class="hero-kicker">Alpine.js 3 · GET /test_field</p>
+    <p class="hero-kicker">Alpine.js 3 · test phones · GET /test_field</p>
     <h1 style="font-size:1.7rem;margin-bottom:0.4rem">API test</h1>
     <div x-data="apiTest()" x-init="load()">
     <p class="lede">
       This page is Alpine.js only (no <code>board.js</code>).
-      It calls the Cloud Run API at <code x-text="base"></code>.
+      It calls the API at <code x-text="base"></code>.
+      Test phones use the same <code>POST /v1/locations</code> body as the Android app;
+      the first ping creates the device.
     </p>
+
+      <div class="grid-2" style="margin-bottom:0.85rem">
+        <div class="panel">
+          <p class="hero-kicker" style="margin-bottom:0.4rem">Test phone</p>
+          <p class="lede" style="margin-bottom:0.8rem">
+            Mints an <code>android-</code> id, then pings like the tracker.
+            Open the <a href="app/">map</a> to see the marker.
+          </p>
+          <div class="form-field">
+            <label for="phone-id">Device id</label>
+            <input id="phone-id" type="text" autocomplete="off" x-model="deviceId" @change="saveDeviceId()">
+          </div>
+          <div class="form-field">
+            <label for="phone-lat">Latitude</label>
+            <input id="phone-lat" type="number" step="any" x-model.number="lat">
+          </div>
+          <div class="form-field">
+            <label for="phone-lng">Longitude</label>
+            <input id="phone-lng" type="number" step="any" x-model.number="lng">
+          </div>
+          <div class="form-field">
+            <label for="phone-acc">Accuracy (m)</label>
+            <input id="phone-acc" type="number" step="any" min="0" x-model.number="accuracyM">
+          </div>
+          <div class="hero-actions" style="margin-top:0">
+            <button type="button" class="btn btn-fill" @click="createDevice()" :disabled="phoneBusy">
+              <span x-show="!phoneBusy">New test phone</span>
+              <span x-show="phoneBusy" x-cloak>Working…</span>
+            </button>
+            <button type="button" class="btn btn-ghost" @click="sendPing()" :disabled="phoneBusy">
+              Send ping
+            </button>
+            <button type="button" class="btn btn-ghost" @click="nudgeNearby()" :disabled="phoneBusy">
+              Randomise nearby lat/lon
+            </button>
+            <button type="button" class="btn btn-ghost" @click="setNewcastle()">
+              Newcastle
+            </button>
+          </div>
+          <p class="map-status" style="margin:0.8rem 0 0.5rem" :class="phoneOk ? 'form-ok' : (phoneError ? 'form-bad' : '')" x-text="phoneStatus"></p>
+          <pre class="api-json" x-show="phonePayload" x-cloak x-text="phonePretty"></pre>
+        </div>
+
+        <div class="panel">
+          <p class="hero-kicker" style="margin-bottom:0.4rem">Existing devices</p>
+          <p class="lede" style="margin-bottom:0.8rem">
+            <code>GET /v1/devices</code> — same list the map polls. Click one to ping as that phone.
+          </p>
+          <div class="hero-actions" style="margin-top:0">
+            <button type="button" class="btn btn-fill" @click="loadDevices()" :disabled="phoneBusy">
+              <span x-show="!phoneBusy">Refresh list</span>
+              <span x-show="phoneBusy" x-cloak>Loading…</span>
+            </button>
+          </div>
+          <p class="map-status" style="margin:0.8rem 0 0.5rem" x-text="devicesStatus"></p>
+          <p x-show="!devices.length && !phoneBusy" x-cloak class="lede" style="margin:0.4rem 0 0">No devices yet.</p>
+          <div class="device-list" x-show="devices.length" x-cloak>
+            <template x-for="d in devices" :key="d.device_id">
+              <button type="button" class="device-card" :class="d.device_id === deviceId ? 'is-selected' : ''" @click="selectDevice(d)">
+                <span class="device-card-id" x-text="phoneLabel(d)"></span>
+                <span class="device-card-meta" x-text="deviceMeta(d)"></span>
+              </button>
+            </template>
+          </div>
+        </div>
+      </div>
 
       <div class="panel">
         <p class="hero-kicker" style="margin-bottom:0.4rem">GET /test_field</p>
@@ -93,15 +161,18 @@
 
 
   <footer class="foot">
-    <div class="wrap">Tyneside Logistics hackathon · Alpine.js + Cloud Run</div>
+    <div class="wrap">Tyneside Logistics hackathon · Alpine.js</div>
   </footer>
 
   <script>
     function apiTest() {
       const raw = (window.HACKATHON_API || "").replace(/\/$/, "");
+      const DEVICE_KEY = "hackathon-test-device-id";
+      const NEWCASTLE = { lat: 54.9783, lng: -1.6178 };
       return {
         base: raw || "(missing config.js)",
         loading: false,
+        phoneBusy: false,
         status: "Ready",
         payload: null,
         createKey: "",
@@ -112,6 +183,16 @@
         viewStatus: "Ready",
         viewPayload: null,
         error: "",
+        deviceId: "",
+        lat: NEWCASTLE.lat,
+        lng: NEWCASTLE.lng,
+        accuracyM: 12,
+        phoneStatus: "Ready",
+        phonePayload: null,
+        phoneOk: false,
+        phoneError: false,
+        devices: [],
+        devicesStatus: "Ready",
         get pretty() {
           return this.payload ? JSON.stringify(this.payload, null, 2) : "";
         },
@@ -121,8 +202,179 @@
         get viewPretty() {
           return this.viewPayload ? JSON.stringify(this.viewPayload, null, 2) : "";
         },
+        get phonePretty() {
+          return this.phonePayload ? JSON.stringify(this.phonePayload, null, 2) : "";
+        },
         async load() {
-          return this.loadTestField();
+          this.restoreDevice();
+          return Promise.all([this.loadTestField(), this.loadDevices()]);
+        },
+        restoreDevice() {
+          try {
+            const saved = localStorage.getItem(DEVICE_KEY);
+            if (saved) this.deviceId = saved;
+          } catch (err) { /* ignore */ }
+        },
+        saveDeviceId() {
+          const id = String(this.deviceId || "").trim();
+          this.deviceId = id;
+          try {
+            if (id) localStorage.setItem(DEVICE_KEY, id);
+            else localStorage.removeItem(DEVICE_KEY);
+          } catch (err) { /* ignore */ }
+        },
+        mintAndroidId() {
+          const bytes = new Uint8Array(8);
+          crypto.getRandomValues(bytes);
+          let hex = "";
+          for (let i = 0; i < bytes.length; i++) {
+            hex += bytes[i].toString(16).padStart(2, "0");
+          }
+          return "android-" + hex;
+        },
+        isoNow() {
+          return new Date().toISOString().replace(/\.\d{3}Z$/, "Z");
+        },
+        phoneLabel(d) {
+          const nick = d && typeof d.nickname === "string" ? d.nickname.trim() : "";
+          if (nick) return nick;
+          return (d && d.device_id) || "phone";
+        },
+        deviceMeta(d) {
+          const lat = Number(d && d.last_lat);
+          const lng = Number(d && d.last_lng);
+          const coords = Number.isFinite(lat) && Number.isFinite(lng)
+            ? lat.toFixed(5) + ", " + lng.toFixed(5)
+            : "no coordinates";
+          const age = this.ageLabel(d && d.last_seen_at);
+          const who = d && d.username ? " · " + d.username : "";
+          return coords + (age ? " · " + age : "") + who;
+        },
+        ageLabel(iso) {
+          if (!iso) return "";
+          const t = Date.parse(iso);
+          if (Number.isNaN(t)) return String(iso);
+          const sec = Math.max(0, Math.round((Date.now() - t) / 1000));
+          if (sec < 60) return sec + "s ago";
+          if (sec < 3600) return Math.round(sec / 60) + " min ago";
+          if (sec < 86400) return Math.round(sec / 3600) + " h ago";
+          return Math.round(sec / 86400) + " d ago";
+        },
+        setNewcastle() {
+          this.lat = NEWCASTLE.lat;
+          this.lng = NEWCASTLE.lng;
+        },
+        nudgeNearby() {
+          const lat = Number(this.lat);
+          const lng = Number(this.lng);
+          const baseLat = Number.isFinite(lat) ? lat : NEWCASTLE.lat;
+          const baseLng = Number.isFinite(lng) ? lng : NEWCASTLE.lng;
+          this.lat = Number((baseLat + (Math.random() - 0.5) * 0.004).toFixed(6));
+          this.lng = Number((baseLng + (Math.random() - 0.5) * 0.006).toFixed(6));
+        },
+        selectDevice(d) {
+          if (!d || !d.device_id) return;
+          this.deviceId = d.device_id;
+          this.saveDeviceId();
+          const lat = Number(d.last_lat);
+          const lng = Number(d.last_lng);
+          if (Number.isFinite(lat) && Number.isFinite(lng)) {
+            this.lat = lat;
+            this.lng = lng;
+          }
+          if (d.accuracy_m != null && Number.isFinite(Number(d.accuracy_m))) {
+            this.accuracyM = Number(d.accuracy_m);
+          }
+          this.phoneStatus = "Selected " + this.phoneLabel(d) + ". Send a ping to move it.";
+          this.phoneOk = true;
+          this.phoneError = false;
+        },
+        pingBody() {
+          const deviceId = String(this.deviceId || "").trim();
+          const lat = Number(this.lat);
+          const lng = Number(this.lng);
+          const accuracy = Number(this.accuracyM);
+          if (!deviceId) throw new Error("Device id is empty.");
+          if (!Number.isFinite(lat) || lat < -90 || lat > 90) throw new Error("Latitude must be between -90 and 90.");
+          if (!Number.isFinite(lng) || lng < -180 || lng > 180) throw new Error("Longitude must be between -180 and 180.");
+          const body = {
+            device_id: deviceId,
+            lat: lat,
+            lng: lng,
+            recorded_at: this.isoNow(),
+          };
+          if (Number.isFinite(accuracy) && accuracy >= 0) body.accuracy_m = accuracy;
+          return body;
+        },
+        async readJson(res) {
+          const text = await res.text();
+          try { return text ? JSON.parse(text) : null; } catch (err) { return { raw: text }; }
+        },
+        async createDevice() {
+          this.deviceId = this.mintAndroidId();
+          this.saveDeviceId();
+          const lat = Number(this.lat);
+          const lng = Number(this.lng);
+          if (!Number.isFinite(lat) || !Number.isFinite(lng)) this.setNewcastle();
+          this.phoneStatus = "Created " + this.deviceId + ". Sending first ping…";
+          await this.sendPing();
+        },
+        async sendPing() {
+          this.phoneBusy = true;
+          this.phoneError = false;
+          this.phoneOk = false;
+          this.phoneStatus = "Sending POST /v1/locations…";
+          try {
+            const body = this.pingBody();
+            const res = await fetch(this.base + "/v1/locations", {
+              method: "POST",
+              headers: { Accept: "application/json", "Content-Type": "application/json" },
+              body: JSON.stringify(body),
+            });
+            const data = await this.readJson(res);
+            this.phonePayload = data;
+            if (!res.ok) {
+              this.phoneError = true;
+              this.phoneStatus = "Ping failed (HTTP " + res.status + ").";
+              return;
+            }
+            this.phoneOk = true;
+            this.phoneStatus = "Ping stored for " + body.device_id + ".";
+            await this.loadDevices();
+          } catch (err) {
+            this.phoneError = true;
+            this.phonePayload = null;
+            this.phoneStatus = String(err && err.message ? err.message : err);
+          } finally {
+            this.phoneBusy = false;
+          }
+        },
+        async loadDevices() {
+          const mine = !this.phoneBusy;
+          if (mine) this.phoneBusy = true;
+          this.devicesStatus = "Calling GET /v1/devices…";
+          try {
+            const res = await fetch(this.base + "/v1/devices", {
+              method: "GET",
+              headers: { Accept: "application/json" },
+            });
+            const data = await this.readJson(res);
+            if (!res.ok) {
+              this.devices = [];
+              this.devicesStatus = "Request failed (HTTP " + res.status + ").";
+              return;
+            }
+            const rows = Array.isArray(data && data.devices) ? data.devices : [];
+            this.devices = rows;
+            this.devicesStatus = rows.length
+              ? rows.length + " device" + (rows.length === 1 ? "" : "s") + "."
+              : "No devices yet.";
+          } catch (err) {
+            this.devices = [];
+            this.devicesStatus = "Network or CORS failure.";
+          } finally {
+            if (mine) this.phoneBusy = false;
+          }
         },
         async loadTestField() {
           this.loading = true;
@@ -143,7 +395,7 @@
               return;
             }
             this.payload = data;
-            this.status = "OK — Alpine.js received /test_field from Cloud Run.";
+            this.status = "OK — Alpine.js received /test_field.";
           } catch (err) {
             this.error = String(err && err.message ? err.message : err);
             this.status = "Network or CORS failure.";

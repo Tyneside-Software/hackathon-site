@@ -164,6 +164,36 @@ a:hover { color: var(--link-hover); }
 }
 .form-ok { color: #34d399; }
 .form-bad { color: #fca5a5; }
+.device-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 0.6rem;
+  max-height: 32rem;
+  overflow: auto;
+}
+.device-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.15rem;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+  color: var(--heading);
+  background: #0a1016;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.7rem 0.85rem;
+}
+.device-card:hover { border-color: var(--accent); }
+.device-card.is-selected {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+.device-card-id { font-weight: 700; font-size: 0.92rem; word-break: break-all; }
+.device-card-meta { font-size: 0.8rem; color: var(--muted); }
 .foot {
   border-top: 1px solid var(--border); padding: 1.1rem 0 2rem;
   color: var(--muted); font-size: 0.82rem;
