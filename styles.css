@@ -1239,21 +1239,22 @@ details.fix p:last-child { margin-bottom: 0; }
   display: flex;
   align-items: flex-start;
   gap: 1rem;
-  width: max-content;
-  min-width: 100%;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
   grid-template-columns: none;
 }
 .board-ui .kanban > .col {
   flex: 1 1 0;
-  min-width: 14rem;
+  min-width: 0;
 }
 .board-ui .kanban > .col.todo {
   flex: 2 1 0;
-  min-width: 28rem;
+  min-width: 0;
 }
 .board-ui .col.todo .owner-group {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: 0.55rem;
   align-items: start;
 }
