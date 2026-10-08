@@ -418,6 +418,8 @@ document.addEventListener("alpine:init", function () {
           self.dragKind = "";
           self._heldId = "";
           self.dropColumn = "";
+          var stale = document.querySelectorAll(".board-ui .is-drop");
+          for (var i = 0; i < stale.length; i++) stale[i].classList.remove("is-drop");
         }, 0);
       },
 
@@ -426,15 +428,27 @@ document.addEventListener("alpine:init", function () {
         if (this.dragKind !== "card" && !this._heldId) return;
         event.preventDefault();
         if (event.dataTransfer) event.dataTransfer.dropEffect = "move";
-        this.dropColumn = columnId;
+        var zone = event.currentTarget;
+        if (this.dropColumn !== columnId) {
+          var stale = document.querySelectorAll(".board-ui .is-drop");
+          for (var i = 0; i < stale.length; i++) {
+            if (stale[i] !== zone) stale[i].classList.remove("is-drop");
+          }
+          this.dropColumn = columnId;
+        }
+        if (zone && zone.classList) zone.classList.add("is-drop");
       },
 
       onDragLeave(event, columnId) {
+        if (this.dropColumn !== columnId) return;
         var next = event.relatedTarget;
         if (next && event.currentTarget.contains(next)) return;
-        var under = document.elementFromPoint(event.clientX, event.clientY);
-        if (under && event.currentTarget.contains(under)) return;
-        if (this.dropColumn === columnId) this.dropColumn = "";
+        var box = event.currentTarget.getBoundingClientRect();
+        var x = event.clientX;
+        var y = event.clientY;
+        if (x > box.left && x < box.right && y > box.top && y < box.bottom) return;
+        this.dropColumn = "";
+        if (event.currentTarget.classList) event.currentTarget.classList.remove("is-drop");
       },
 
       onDrop(event, columnId) {

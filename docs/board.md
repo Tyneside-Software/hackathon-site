@@ -2,7 +2,7 @@
 
 How this sits in the product: [Architecture](#architecture).
 
-The board, backlog, to-do list, and done list are one SQLite board on the API (`GET /v1/board`). Drag a card by its body, or open it and use the buttons. The board does not ask who you are, and it does not keep a card history.
+The board, backlog, to-do list, and done list are one SQLite board on the API (`GET /v1/board`). Drag a card by its body, or open it and use the buttons. While a card is held over a column, the Done count, or a list, that zone shows a violet dashed frame. The board does not ask who you are, and it does not keep a card history.
 
 Click a name tag to switch that person. Michael is light purple, Reeve is teal, Connor is blue, Lewis is amber, and Noah is rose. No one clears that name. A card that already has several people keeps a tag for each, and the menu changes the one that was clicked. The first person is the group the card sits under. Find matches a title or a note. Undo and Redo step back the last saves in this browser.
 

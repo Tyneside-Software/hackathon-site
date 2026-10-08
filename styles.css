@@ -1281,14 +1281,15 @@ details.fix p:last-child { margin-bottom: 0; }
   .board-ui .col.todo .owner-group { grid-template-columns: 1fr; }
 }
 .col.backlog { border-color: #475569; }
-/* Same landing mark as Hermione's .kbody.over. overflow:hidden on .col would clip it. */
-.board-ui .col.is-drop { overflow: visible; }
-.board-ui .col.is-drop .stack,
+/* Same landing mark as Hermione's .kbody.over. Drawn outside the box so the
+   column's own border does not hide it, and so the cards cannot cover it. */
+.board-ui .kanban-scroll { padding: 8px 8px 0.65rem; }
+.board-ui .col.is-drop,
 .board-ui .card-archive.is-drop,
 .board-ui .done-index.is-drop {
-  outline: 2px dashed #8b5cf6;
-  outline-offset: -4px;
-  border-radius: 0.75rem;
+  outline: 3px dashed #8b5cf6;
+  outline-offset: 4px;
+  z-index: 3;
 }
 .card.is-dragging { opacity: 0.45; }
 .drag-handle {
