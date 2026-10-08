@@ -14,7 +14,7 @@ Static files only. No bundler, no `package.json`. What you commit is what GitHub
 | Map | Leaflet 1.9.4 + OSM | `app/index.html`, `app/map.js` |
 | Driving geometry | Public OSRM | Straight-line haversine if OSRM fails |
 | Our API | `config.js` → `window.HACKATHON_API` | Cloud Run URL in git |
-| Kanban | `scripts/cards.json` + Python 3 | [Kanban board](#board) |
+| Kanban | SQLite via `GET /v1/board`, snapshot fallback | [Kanban board](#board) |
 | Wiki | Alpine + marked.js | This folder |
 | Host | GitHub Pages + `CNAME` | https://hackathon.tyneside.software |
 | Local | `python -m http.server 5500` | Or `.\start.ps1` with the API |
@@ -66,16 +66,17 @@ Committed default is the Cloud Run URL. Override locally with `window.HACKATHON_
 
 CORS must allow the page origin: `http://127.0.0.1:5500`, `http://localhost:5500`, `https://hackathon.tyneside.software`. That is configured on the API, not here.
 
-## Kanban generator
+## Kanban
 
 | File | Role |
 |------|------|
-| `scripts/cards.json` | Source of truth |
-| `scripts/update_board.py` | `list` / `done` / `move` / `add` / `render` |
-| `board.html` | Live columns — only inside `<!-- BOARD:… -->` |
-| `todo.html` / `done.html` | Archives, generated whole-file |
+| API `GET /v1/board` | Live cards in SQLite |
+| `board.html`, `backlog.html`, `todo.html`, `done.html` | Alpine pages (`board-app.js`) |
+| `board-snapshot.json` | Fallback when the API has no board route |
+| `scripts/cards.json` | Git copy, same cards |
+| `scripts/update_board.py` | `list` / `move` / `add` / `pull` |
 
-Python 3 stdlib. Run from the site root. See [Kanban board](#board).
+On localhost the pages call `http://127.0.0.1:8080` first. See [Kanban board](#board).
 
 ## Hosting
 

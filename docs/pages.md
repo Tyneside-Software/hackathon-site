@@ -5,9 +5,10 @@
 | `/` | `index.html` | Desktop home |
 | `/progress.html` | `progress.html` | Catch-up snapshot (been away?) |
 | `/app/` | `app/index.html` | Map — waypoints, phones, drawer, optional buses. See [The map](#map) |
-| `/board.html` | `board.html` + `board.js` | Kanban preview |
-| `/todo.html` | generated | Full to-do list |
-| `/done.html` | generated | Done archive |
+| `/board.html` | `board.html` + `board-app.js` | To do, in progress, ready |
+| `/backlog.html` | `backlog.html` | Backlog |
+| `/todo.html` | `todo.html` | Full to-do list |
+| `/done.html` | `done.html` | Done archive |
 | `/api-test.html` | `api-test.html` | Alpine `GET /test_field` |
 | `/account.html` | `account.html` | Register / login / `GET /users/me` |
 | `/docs/` | `docs/index.html` | This wiki |
@@ -18,7 +19,7 @@ Shared: `styles.css`, `logo.svg`, sticky nav. **Docs** in the nav is `/docs/`.
 
 ## Nav
 
-Most HTML files copy the same nav by hand. `todo.html` and `done.html` get theirs from `scripts/update_board.py` (`render_archive_page`). If you add a nav item, update the static files **and** that template, then `python scripts/update_board.py render`.
+Most HTML files copy the same nav by hand, including the board pages. If you add a nav item, update each file. `update_board.py` does not rewrite them.
 
 ## Where new files go
 

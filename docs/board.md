@@ -2,35 +2,50 @@
 
 How this sits in the product: [Architecture](#architecture).
 
-Do not hand-edit the kanban columns, hour cards, or Who’s who in `board.html`. Those blocks are generated.
+The board, backlog, to-do list, and done list are one SQLite board on the API (`GET /v1/board`). Drag a card by its handle, or open it and use the buttons. Choose **I am** first — that name is stored on the card history.
 
-**Source of truth:** `scripts/cards.json`  
-**Script:** `python scripts/update_board.py` (Python 3 stdlib only)
+A card can have more than one person. Drag a person’s mark onto a card to add them, use × to remove one person, or drag — onto a card to clear everyone. The first person is the group the card sits under. Find matches a title or a note. Undo and Redo step back the last saves in this browser.
 
-From the **site repo root**:
+Value is 1 to 5. Hours can be blank, which shows as no estimate. A commit can be recorded on a card (`repo` and sha). Moving a card back among To do, In progress, Ready to demo, and Done asks for a reason. The backlog is a side pile: parking a card there, or putting it back on the board, does not.
+
+| Page | What it shows |
+|------|----------------|
+| [board.html](../board.html) | To do, In progress, Ready to demo |
+| [backlog.html](../backlog.html) | Not on the board yet |
+| [todo.html](../todo.html) | Every to-do card |
+| [done.html](../done.html) | Finished cards |
+
+On this machine, `http://127.0.0.1:5500/board.html` talks to `http://127.0.0.1:8080`. The public site uses `config.js`, then falls back if that API has no board yet.
+
+## The cards are not only in the database
+
+The database deployment is not the live server yet. Current cards are also in git, in three files that stay copies of each other:
+
+| File | Why it exists |
+|------|----------------|
+| `hackathon-api/app/board_seed.json` | Loaded the first time a database has no cards. Never overwrites a database that already has cards, and does not refill a board that was emptied. |
+| `scripts/cards.json` | Same copy, in the site repo |
+| `board-snapshot.json` | What the pages show when `/v1/board` does not answer, so GitHub Pages still has every card |
+
+After edits in SQLite, copy them back before you depend on a new machine or a fresh deploy:
+
+```powershell
+python scripts/update_board.py pull
+```
+
+That writes all three files. Commit them when you want the next empty database, and the public fallback, to include those edits.
 
 ```powershell
 python scripts/update_board.py list
-python scripts/update_board.py done 12 15 16
-python scripts/update_board.py done 10 --tag "Cloud Run · CORS"
-python scripts/update_board.py move 07 doing
-python scripts/update_board.py add --title "A new slice" --person lewis --hours 2 --column todo --brief "What done looks like."
-python scripts/update_board.py render
+python scripts/update_board.py done 12 --by michael
+python scripts/update_board.py move 07 doing --by connor
+python scripts/update_board.py move 07 backlog --by connor
+python scripts/update_board.py move 07 todo --by connor --reason "Not ready."
+python scripts/update_board.py assign 07 lewis+noah --by michael
+python scripts/update_board.py commit 12 --repo hackathon-site --sha abcdef1 --by michael --summary "What it did"
+python scripts/update_board.py add --title "A new slice" --person lewis --hours 2 --column backlog --brief "What done looks like."
 ```
 
-`done`, `move`, and `add` rewrite `board.html`, `todo.html`, and `done.html`.
+When the API is running, those commands change SQLite and then pull. When it is not, they change the JSON seed only, and they will not import over a database that already exists.
 
-## What the board shows
-
-| Column | On `board.html` | Full list |
-|--------|-----------------|-----------|
-| To do | Top four cards + count/link | [todo.html](../todo.html) |
-| In progress | All cards | — |
-| Ready to demo | All cards | — |
-| Done | Count + link only | [done.html](../done.html) |
-
-Filter with `?person=lewis`. Open a card brief with `#t-04` (modal on the board; archive pages too).
-
-`import-html` rebuilds `cards.json` from `board.html` if the JSON is missing (`--force` to overwrite). Prefer editing JSON, not HTML.
-
-People the script knows: Reeve, Connor, Michael, Lewis, Noah. Add a person in `scripts/update_board.py` (`PEOPLE`) if the team grows.
+People: Reeve, Connor, Michael, Lewis, Noah.

@@ -29,7 +29,7 @@ https://github.com/Tyneside-Software/hackathon-site/blob/main/docs/GROK.md
 
 ## What you must not do
 
-- Do not hand-edit the `<!-- BOARD:… -->` regions in `board.html`. Use `python scripts/update_board.py`.
+- Do not hand-edit card HTML. The board is SQLite (`GET /v1/board`). `python scripts/update_board.py pull` copies it back into the git seed.
 - Do not invent a second docs tree (no `wiki/`, no Notion export, no `Connor-docs/`).
 - Do not add npm, React, Vue, Svelte, Tailwind, or a bundler.
 - Do not open or rely on `file://` — the wiki `fetch`es markdown.
@@ -80,7 +80,7 @@ Onboarding (human night notes): `onboarding.html`
 | New chrome JS | **Alpine.js 3.14.8** from jsDelivr, `defer`, `x-data` (wiki, API test) |
 | Map | Leaflet 1.9.4 + OSM + public OSRM. **Vanilla `app/map.js` IIFE** — append, do not rewrite. Phones, drawer, buses live here |
 | API base | `config.js` → `window.HACKATHON_API` (Cloud Run URL committed) |
-| Board | `scripts/cards.json` + `scripts/update_board.py` (stdlib) |
+| Board | SQLite `GET /v1/board`. Git seed: `scripts/cards.json`, `board-snapshot.json`, `hackathon-api/app/board_seed.json` |
 
 No `package.json`. What you push is what Pages serves.
 
@@ -151,16 +151,17 @@ Shared wiki pages (stack, alpine, board) are for everyone. Edit them when the fa
 
 ## Kanban
 
+The pages are `board.html`, `backlog.html`, `todo.html`, and `done.html` (`board-app.js`). On localhost they use `http://127.0.0.1:8080`. If `/v1/board` is missing they stay read-only and show `board-snapshot.json`.
+
 ```powershell
 python scripts/update_board.py list
-python scripts/update_board.py done 27
-python scripts/update_board.py move 07 doing
-python scripts/update_board.py add --title "…" --person connor --hours 1 --column todo --brief "…"
+python scripts/update_board.py pull
+python scripts/update_board.py done 27 --by connor
+python scripts/update_board.py move 07 doing --by connor
+python scripts/update_board.py add --title "…" --person connor --hours 1 --column backlog --brief "…"
 ```
 
-That rewrites `board.html`, `todo.html`, `done.html`. People ids: `reeve`, `connor`, `michael`, `lewis`, `noah`.
-
-Nav on `todo.html` / `done.html` is generated inside `scripts/update_board.py` (`render_archive_page`). If you add a nav item there, change the template and run `render`. Other HTML navs are hand-copied — update each file.
+People ids: `reeve`, `connor`, `michael`, `lewis`, `noah`. A backwards move needs `--reason`. Nav is copied by hand in each HTML file — update each file. Do not run a generator over `board.html`.
 
 ---
 
@@ -169,7 +170,7 @@ Nav on `todo.html` / `done.html` is generated inside `scripts/update_board.py` (
 - Remote: `origin` → `Tyneside-Software/hackathon-site` (and the API repo the same way).
 - Branch: `main` (hackathon; everyone pushes here).
 - Before push: `git pull --rebase origin main` then `git push origin main`.
-- If rebase conflicts in generated board regions, prefer `python scripts/update_board.py render` after fixing `cards.json`.
+- If the board seed conflicts, keep the SQLite export: start the API and run `python scripts/update_board.py pull`.
 - Commit messages: short, imperative, like the rest of the log.
 
 ---

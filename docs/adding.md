@@ -41,4 +41,4 @@ Connor’s pages go in `docs/connor/` with ids prefixed `connor-`. Register them
 
 ## People
 
-If you mention a new teammate on the kanban, that is `scripts/update_board.py` (`PEOPLE`), not this wiki. See [Kanban board](#board).
+If you mention a new teammate on the kanban, add them in the API board people (and `scripts/update_board.py` `PEOPLE` for the offline seed). See [Kanban board](#board).

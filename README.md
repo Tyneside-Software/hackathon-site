@@ -70,7 +70,8 @@ Do **not** open HTML as `file://` — the browser will block the API.
 | `/` | Desktop home |
 | `/progress.html` | Catch-up snapshot if you have been away |
 | `/app/` | Map, waypoints, route, live phones, optional buses |
-| `/board.html` | Kanban (short to-do + done summary) |
+| `/board.html` | Kanban — to do, in progress, ready to demo |
+| `/backlog.html` | Backlog |
 | `/todo.html` | Full to-do list |
 | `/done.html` | Done archive |
 | `/api-test.html` | Alpine.js GET `/test_field` against Cloud Run |
@@ -89,16 +90,16 @@ API base URL: `config.js` → `window.HACKATHON_API` (Cloud Run URL in git). Inc
 
 ## Board cards
 
-Source of truth is `scripts/cards.json`. Do not hand-edit the `<!-- BOARD:… -->` blocks.
+The board is stored in the API’s SQLite database. Drag a card on the page, or open it. `scripts/cards.json`, `board-snapshot.json`, and `hackathon-api/app/board_seed.json` are the copy that still has every card while that database is not deployed. The pages show that copy if `/v1/board` does not answer.
 
 ```powershell
+python scripts/update_board.py pull
 python scripts/update_board.py list
-python scripts/update_board.py done 13
-python scripts/update_board.py move 07 doing
-python scripts/update_board.py add --title "A new slice" --person lewis --hours 2 --column todo --brief "What done looks like."
+python scripts/update_board.py done 13 --by michael
+python scripts/update_board.py move 07 doing --by connor
 ```
 
-The board shows the top four to-do cards plus a link to `todo.html`. Done is a count plus `done.html`.
+`pull` copies SQLite back into those three files. See [scripts/README.md](scripts/README.md).
 
 ## Deploy
 

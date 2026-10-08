@@ -31,6 +31,6 @@ Add more rows as you add files. New markdown lives in `docs/connor/`. Ids use th
 
 ## Do not
 
-- Do not hand-edit generated kanban HTML — `python scripts/update_board.py`.
+- Do not hand-edit kanban cards. The board is SQLite. `python scripts/update_board.py pull` copies it back into git.
 - Do not start a second documentation folder.
 - Do not put secrets in this shelf.
