@@ -1,5 +1,5 @@
-// Cloud Run (europe-west2). Override before this file loads if you need local uvicorn.
-window.HACKATHON_API = window.HACKATHON_API || "https://hackathon-api-git-975511976696.europe-west2.run.app";
+// Tailscale host (port 8080). Override before this file loads if you need local uvicorn.
+window.HACKATHON_API = window.HACKATHON_API || "http://100.65.94.5:8080";
 
 // Social login — paste IDs here (and on Cloud Run) to switch the buttons on.
 // Google: https://console.cloud.google.com/apis/credentials  → OAuth client, Web

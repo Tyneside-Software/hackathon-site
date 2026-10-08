@@ -25,7 +25,7 @@
   var friendNames = {};
 
   function api() {
-    var raw = window.HACKATHON_API || "https://hackathon-api-git-975511976696.europe-west2.run.app";
+    var raw = window.HACKATHON_API || "http://100.65.94.5:8080";
     return String(raw).replace(/\/$/, "");
   }
 
