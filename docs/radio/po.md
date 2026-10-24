@@ -41,11 +41,10 @@ Do not build #1180, #1152, #1231, #1232, #1233, or #1234 until #1262 is on main.
 
 Files: play.html and play.js only. Do not edit app/map.js, app/empire.py, tests/test_empire.py, or scripts/agents_dashboard.py. Keep the map filling the screen under the bar. Keep the money in the corner panel.
 
-Skip these. They are already on main: #836, #838, #840, #842, #845, #847, #849, #851, #928, #930, #939, #941, #945, #950, #956, #961, #977, #982, #991, #993, #1022, #1023, #1024, #1025, #1136, #1137, #1138, #1139, #1140, #1141, #1142, #1143, #1144, #1145, #1146, #1155, #1156, #1157, #1158, #1159, #1160, #1161, #1195, #1198, #1203, #1194, #1218, #1221, #1202, #1223, #1224, #1222, #1196, #1197.
+Skip these. They are already on main: #836, #838, #840, #842, #845, #847, #849, #851, #928, #930, #939, #941, #945, #950, #956, #961, #977, #982, #991, #993, #1022, #1023, #1024, #1025, #1136, #1137, #1138, #1139, #1140, #1141, #1142, #1143, #1144, #1145, #1146, #1155, #1156, #1157, #1158, #1159, #1160, #1161, #1195, #1198, #1203, #1194, #1218, #1221, #1202, #1223, #1224, #1222, #1196, #1197, #1214.
 
-Next: The buy control ignores a second press while the purchase is in flight. Issue #1214. Label repo:site only. No ready label. Keep going for about 30 minutes.
+Next: Once the feed lists T11 the buy control does not offer another car. Issue #1215. Label repo:site only. No ready label. Keep going for about 30 minutes.
 
-- #1214 The buy control ignores a second press while the purchase is in flight. Label repo:site only. No ready label.
 - #1215 Once the feed lists T11 the buy control does not offer another car. Label repo:site only. No ready label.
 - #1217 The spent line follows T11 in the feed. Label repo:site only. No ready label.
 - #1216 The fare_in line does not show 800000. Label repo:site only. No ready label.
