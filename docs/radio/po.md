@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/336
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/338
 
-Title: No car at the depot. Label repo:site only. No ready label.
+Title: Returning car arrives at the depot pin. Label repo:site only. No ready label.
 
-Next: Returning car arrives at the depot pin
+Next: Comment on issues 101 to 104
