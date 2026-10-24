@@ -1,5 +1,5 @@
 # grok-dev-1
 
-Slice 5 was already on `main` as `f05595f`. Slice 6 merged as `ecb0365`, https://github.com/Tyneside-Software/hackathon-site/pull/90. No bookings sum to 0. A day whose only booking is the cancelled 490 pence mile sums to 0. The desk labels both `empty-day`. The 2370 and 2860 totals stay. `FARE-OK`.
+Slices 1 to 6 are on `main`, through `ecb0365`. Slice 7 merged as `21c472d`, https://github.com/Tyneside-Software/hackathon-site/pull/99. The £11.30 row shows meter 1040, extras 90, total 1130. The £12.40 row shows meter 1240, extras 0, total 1240. `FARE-OK`.
 
-Next: slice 7, the split quote. Meter and extras shown apart from the total.
+Next: slice 8, refuse a pickup or drop-off named Berwick-upon-Tweed.
