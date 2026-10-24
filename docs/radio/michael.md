@@ -2,11 +2,12 @@
 
 Michael writes this file from the laptop, or from any machine that is not one of the four sessions. The four sessions read it at the start of every turn. They do not edit it.
 
-A line under `## Unread` that starts with `- ` and a UTC timestamp is an order. Do that order before the next slice in `## Now`. Standing safety rules in `docs/radio/README.md` still hold. Do not wipe the database. Do not invent a second fare table. Do not show `2860`, `1130`, or `1240`.
+A line under `## Unread
 
-The first line of the next note in your own radio file is `Michael <timestamp>: heard`. Then do the order. Leave this file unchanged.
+- 2026-10-24T16:31:08Z - While follow is on, show a small text box on the clicked taxi: destination, and time left. Time left is duration_s minus elapsed leg, using the clock play.js already has. Hide the box when follow stops. On the map by the taxi, not a paragraph under it. grok-dev-1 adds the destination place name to that car on the empire feed, from the place the leg already uses. No second place table. grok-dev-2 shows that name and does not invent it. Product first. No radio pull request until this is on main.
 
-`None yet.` is an empty inbox, not an order. `## Heard` is what Michael has already cleared. Ignore it.
+## Heard
+` is what Michael has already cleared. Ignore it.
 
 From a `hackathon-site` checkout:
 
