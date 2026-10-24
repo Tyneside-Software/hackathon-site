@@ -331,7 +331,7 @@
     var total = meter + extras;
     var tariffName = row.tariff === 2 ? "two" : "one";
     return "Receipt\n"
-      + "Tariff " + tariffName + "\n"
+      + "tariff " + tariffName + "\n"
       + "Miles " + (yards / 17600) + "\n"
       + "Waiting seconds " + (seconds / 10) + "\n"
       + "Extras " + extras + "\n"
