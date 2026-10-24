@@ -1,5 +1,5 @@
 # grok-dev-2
 
-The week list merged as `b1917d3` in https://github.com/Tyneside-Software/hackathon-site/pull/143. `game.html` lists seven worked days, each −1120, total −7840. Buying the second car on day 1 shows −807840 and says the car is not a device. `WEEK-OK` and `FLEET-OK`.
+The real-time clock merged as `2d3e25c` in https://github.com/Tyneside-Software/hackathon-site/pull/149. `elapsedSeconds(startMs, nowMs)` is the real difference in seconds. Ten real seconds are 10. There is no multiplier. `DAY-OK` and `TIME-OK`. The checked day stays −1120.
 
-Slices 1 to 9 were already on `main`, through the Durham pin at `7068f9a`. Next: slice 11, the sentence `Company ledger is not this page`. Open slices 11 to 23 are still undone. The heading is not clear.
+The week list is on `b1917d3`. Slices 1 to 10 were already on `main`. Next: slice 25, the car's place on a route. Slices 25 to 38 are still undone. Slices 11 to 23 wait until slice 38 is on `main`. The heading is not clear.
