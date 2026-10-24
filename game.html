@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tyneside Logistics — empire</title>
+  <link rel="icon" href="logo.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css?v=20261009-board11">
+</head>
+<body class="site">
+  <nav class="site-nav" aria-label="Primary">
+    <div class="inner">
+      <a href="index.html" class="brand-link">
+        <img src="logo.svg" width="36" height="36" alt="Tyneside">
+        <span>TYNESIDE</span>
+        <span class="brand-sub">LOGISTICS</span>
+      </a>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="progress.html" class="nav-now">Progress</a>
+        <a href="app/">Map</a>
+        <a href="board.html">Board</a>
+        <a href="backlog.html">Backlog</a>
+        <a href="todo.html">To do</a>
+        <a href="done.html">Done</a>
+        <a href="docs/" class="nav-docs">Docs</a>
+        <a href="api-test.html">API test</a>
+        <a href="account.html">Account</a>
+        <a href="onboarding.html">Onboarding</a>
+        <a href="lewis.html">Lewis</a>
+      </div>
+      <a class="btn btn-fill" href="app/">Open map →</a>
+    </div>
+  </nav>
+
+  <main class="wrap" style="padding: 1.5rem 0 3rem">
+    <p class="hero-kicker">Empire · Shiremoor depot</p>
+    <h1 style="font-size:1.7rem;margin-bottom:0.4rem">One empire day</h1>
+    <p class="lede">The depot is Shiremoor. The worked day below is the example already checked at −1120 pence. This page does not call the API.</p>
+
+    <ul id="day-lines"></ul>
+    <p id="day-sum" style="font-size:1.25rem"></p>
+
+    <div class="map-actions" style="display:flex;gap:0.5rem;flex-wrap:wrap;margin-top:1rem">
+      <button type="button" class="btn btn-ghost" id="btn-before">Cancel before the car starts</button>
+      <button type="button" class="btn btn-ghost" id="btn-after">Cancel after 1 mile</button>
+      <button type="button" class="btn btn-ghost" id="btn-car">Buy a second car</button>
+    </div>
+    <p class="lede" id="case-result">Choose a case.</p>
+  </main>
+
+  <script src="app/taxi-game.js"></script>
+  <script>
+    var game = window.TaxiGame;
+    var labels = {
+      standing: "Standing for the one car",
+      fare_in: "Fare in",
+      driver_share: "Driver share",
+      fuel: "Fuel"
+    };
+    var list = document.getElementById("day-lines");
+    game.workedDay().forEach(function (row) {
+      var item = document.createElement("li");
+      item.textContent = labels[row.kind] + " " + game.formatPounds(row.amountPence);
+      list.appendChild(item);
+    });
+    document.getElementById("day-sum").textContent = "Sum " + game.formatPounds(game.sumPence(game.workedDay()));
+    var result = document.getElementById("case-result");
+    document.getElementById("btn-before").addEventListener("click", function () {
+      var rows = game.cancelBefore();
+      result.textContent = rows.length === 0 ? "No lines." : rows.map(function (row) {
+        return row.kind + " " + game.formatPounds(row.amountPence);
+      }).join(", ");
+    });
+    document.getElementById("btn-after").addEventListener("click", function () {
+      var rows = game.cancelAfterOneMile();
+      result.textContent = "Fuel " + game.formatPounds(rows[0].amountPence);
+    });
+    document.getElementById("btn-car").addEventListener("click", function () {
+      var bought = game.newCar();
+      result.textContent = game.formatPounds(bought.lines[0].amountPence) + ". This car is not a device.";
+    });
+  </script>
+</body>
+</html>
