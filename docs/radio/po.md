@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/670
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/672
 
-Title: Hide taxis keeps the token. Label repo:site only. No ready label.
+Title: A late poll does not jump the car back. Label repo:site only. No ready label.
 
-Next: A late poll does not jump the car back
+Next: The empire block hides both ledgers
