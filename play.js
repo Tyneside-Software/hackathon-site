@@ -228,7 +228,46 @@
     localStorage.removeItem("hackathon-empire-token");
     localStorage.removeItem("hackathon-empire-user");
     clearPlayChips();
+    showPlayAccount();
     paintPlayStatus(null);
+  }
+
+  async function createPlayAccount() {
+    const usernameEl = document.getElementById("play-username");
+    const passwordEl = document.getElementById("play-password");
+    const status = document.getElementById("play-account-status");
+    const username = usernameEl ? usernameEl.value.trim() : "";
+    const password = passwordEl ? passwordEl.value : "";
+    const base = apiBase();
+    if (!base) {
+      if (status) status.textContent = "The API address is missing.";
+      return;
+    }
+    const registered = await fetch(base + "/register", {
+      method: "POST",
+      headers: { Accept: "application/json", "Content-Type": "application/json" },
+      body: JSON.stringify({ username: username, password: password })
+    });
+    if (!registered.ok) {
+      if (status) status.textContent = "Create account failed.";
+      return;
+    }
+    const logged = await fetch(base + "/login", {
+      method: "POST",
+      headers: { Accept: "application/json", "Content-Type": "application/json" },
+      body: JSON.stringify({ username: username, password: password })
+    });
+    const session = await logged.json().catch(function () { return null; });
+    if (!logged.ok || !session || !session.access_token) {
+      if (status) status.textContent = "Sign in failed.";
+      return;
+    }
+    localStorage.setItem("hackathon-empire-token", session.access_token);
+    localStorage.setItem("hackathon-empire-user", username);
+    if (status) status.textContent = "";
+    hidePlayAccount();
+    paintPlayStatus(null);
+    pollPlay();
   }
 
   async function signInPlay(event) {
@@ -346,8 +385,11 @@
 
   const playAccount = document.getElementById("play-account");
   if (playAccount) playAccount.addEventListener("submit", signInPlay);
+  const playCreate = document.getElementById("play-create");
+  if (playCreate) playCreate.addEventListener("click", createPlayAccount);
   const playSignOut = document.getElementById("play-signout");
   if (playSignOut) playSignOut.addEventListener("click", signOutPlay);
+  if (!(localStorage.getItem("hackathon-empire-token") || "")) showPlayAccount();
   paintPlayStatus(null);
   setInterval(pollPlay, 2000);
   pollPlay();
