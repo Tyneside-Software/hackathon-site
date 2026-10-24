@@ -151,6 +151,7 @@
       "play-to-passenger",
       "play-fare-riding",
       "play-signed-chips",
+      "play-person-waiting",
       "play-locks",
       "play-osrm",
       "play-buses",
@@ -200,6 +201,7 @@
   };
   const playChips = new Map();
   const playFares = [];
+  const playPeople = [];
   const playTrails = [];
   const playTrailFed = new Map();
   let playFeed = null;
@@ -617,6 +619,51 @@
     }
     noteFareName(fareNames);
     noteFareRiding(skippedRiding);
+  }
+
+  function personTaxi(person) {
+    if (!person || person.allocated === true) return "allocated";
+    return String(person.sign || person.taxi || "").trim();
+  }
+
+  function paintPlayPeople(feed) {
+    playPeople.forEach((marker) => map.removeLayer(marker));
+    playPeople.length = 0;
+    const people = feed && Array.isArray(feed.people) ? feed.people : [];
+    let drawn = 0;
+    let skipped = 0;
+    people.forEach((person) => {
+      if (!person) return;
+      if (personTaxi(person)) {
+        skipped += 1;
+        return;
+      }
+      const lat = Number(person.lat);
+      const lng = Number(person.lng);
+      if (!Number.isFinite(lat) || !Number.isFinite(lng)) return;
+      const name = person.name || "Person";
+      const marker = L.marker([lat, lng], {
+        icon: L.divIcon({
+          className: "play-chip-icon",
+          html: '<span class="play-person" style="display:inline-block;padding:2px 6px;border-radius:999px;background:#111827;color:#f8fafc;font:700 11px/1.2 system-ui,sans-serif;white-space:nowrap">' + name + "</span>",
+          iconSize: [120, 22],
+          iconAnchor: [60, 22]
+        }),
+        title: name,
+        zIndexOffset: 700
+      }).addTo(map);
+      playPeople.push(marker);
+      drawn += 1;
+    });
+    notePersonWaiting(drawn, skipped);
+  }
+
+  function notePersonWaiting(drawn, skipped) {
+    const node = document.getElementById("play-person-waiting");
+    if (!node) return;
+    node.dataset.person = drawn ? "drawn" : "none";
+    node.dataset.drawn = String(drawn);
+    node.dataset.allocated = String(skipped);
   }
 
   function fareCarRiding(feed, fare) {
@@ -1178,6 +1225,7 @@
     noteStartedTen(data);
     paintPlayTrails(data);
     paintPlayFares(data);
+    paintPlayPeople(data);
     paintPlayOsrm(data);
     if (!playMotion) playMotion = requestAnimationFrame(glidePlay);
   }
