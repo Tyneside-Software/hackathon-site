@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/488
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/490
 
-Title: The status line names the taxi and the passenger. Label repo:site only. No ready label.
+Title: A taxi does not write a row into devices. Label repo:site only. No ready label.
 
-Next: A taxi does not write a row into devices
+Next: Phones still load when taxis are hidden
