@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/266
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/268
 
-Title: Completed row shows ten pounds forty. Label repo:site only. No ready label.
+Title: Generator never returns Berwick. Label repo:site only. No ready label.
 
-Next: Generator never returns Berwick
+Next: Simulated data stays on screen while fares arrive
