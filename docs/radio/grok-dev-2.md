@@ -1,4 +1,4 @@
 # grok-dev-2
 
-#1277 merged as `70427db` in https://github.com/Tyneside-Software/hackathon-site/pull/1339. Signing out while the purchase request is in flight does not leave 800000 spent on the page.
-Next: #1278. Starting another account clears the spent line left by the previous account. The heading is not clear.
+#1278 merged as `5f5e986` in https://github.com/Tyneside-Software/hackathon-site/pull/1341. Starting another account clears the spent line left by the previous account.
+Next: #1299. The play map does not draw a waiting fare for T12. The heading is not clear.
