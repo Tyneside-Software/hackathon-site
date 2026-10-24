@@ -34,6 +34,62 @@
     T10: "#facc15"
   };
   const playChips = new Map();
+  let playFeed = null;
+  let playClock = null;
+  let playMotion = 0;
+
+  function haversineKm(a, b) {
+    const rad = Math.PI / 180;
+    const dLat = (b.lat - a.lat) * rad;
+    const dLng = (b.lng - a.lng) * rad;
+    const lat1 = a.lat * rad;
+    const lat2 = b.lat * rad;
+    const h = Math.sin(dLat / 2) ** 2 + Math.cos(lat1) * Math.cos(lat2) * Math.sin(dLng / 2) ** 2;
+    return 6371 * 2 * Math.asin(Math.min(1, Math.sqrt(h)));
+  }
+
+  function placeOnRoute(points, durationS, elapsedS) {
+    if (!points.length) return null;
+    if (durationS <= 0 || elapsedS <= 0) return points[0];
+    if (elapsedS >= durationS) return points[points.length - 1];
+    const fraction = elapsedS / durationS;
+    const distances = [0];
+    for (let i = 1; i < points.length; i++) {
+      distances.push(distances[i - 1] + haversineKm(
+        { lat: points[i - 1][0], lng: points[i - 1][1] },
+        { lat: points[i][0], lng: points[i][1] }
+      ));
+    }
+    const total = distances[distances.length - 1];
+    if (total === 0) return points[0];
+    const target = total * fraction;
+    for (let j = 1; j < distances.length; j++) {
+      if (distances[j] < target) continue;
+      const span = distances[j] - distances[j - 1];
+      const step = span === 0 ? 0 : (target - distances[j - 1]) / span;
+      const start = points[j - 1];
+      const end = points[j];
+      return [start[0] + (end[0] - start[0]) * step, start[1] + (end[1] - start[1]) * step];
+    }
+    return points[points.length - 1];
+  }
+
+  function playNow() {
+    if (!playClock) return Date.now() / 1000;
+    return playClock.server + (Date.now() / 1000 - playClock.client);
+  }
+
+  function playPlace(car, now) {
+    const route = Array.isArray(car.route) ? car.route : [];
+    const duration = Number(car.duration_s) || 0;
+    const started = Number(car.leg_started) || 0;
+    const elapsed = now - started;
+    if (route.length) return placeOnRoute(route, duration, elapsed);
+    const lat = Number(car.lat);
+    const lng = Number(car.lng);
+    if (Number.isFinite(lat) && Number.isFinite(lng)) return [lat, lng];
+    return null;
+  }
 
   function chipFill(car) {
     const fromFeed = car && typeof car.colour === "string" ? car.colour.trim() : "";
@@ -58,25 +114,21 @@
     PLAY_SIGNS.forEach((sign) => {
       const car = cars.find((row) => row && row.sign === sign);
       if (!car) return;
-      const lat = Number(car.lat);
-      const lng = Number(car.lng);
-      if (!Number.isFinite(lat) || !Number.isFinite(lng)) return;
+      const place = playPlace(car, playNow());
+      if (!place) return;
       seen.add(sign);
       const fill = chipFill(car);
       let marker = playChips.get(sign);
       if (!marker) {
-        marker = L.marker([lat, lng], {
+        marker = L.marker(place, {
           icon: chipIcon(sign, fill),
           title: sign
         }).addTo(map);
         marker._playFill = fill;
         playChips.set(sign, marker);
-      } else {
-        marker.setLatLng([lat, lng]);
-        if (marker._playFill !== fill) {
-          marker.setIcon(chipIcon(sign, fill));
-          marker._playFill = fill;
-        }
+      } else if (marker._playFill !== fill) {
+        marker.setIcon(chipIcon(sign, fill));
+        marker._playFill = fill;
       }
       if (list) {
         const item = document.createElement("li");
@@ -100,9 +152,27 @@
     });
     if (!res.ok) return;
     const data = await res.json();
+    playFeed = data;
+    const server = Number(data.server_now);
+    if (Number.isFinite(server)) playClock = { server: server, client: Date.now() / 1000 };
     paintPlayCars(data);
     paintPlayMoney(data);
     paintPlayOsrm(data);
+    if (!playMotion) playMotion = requestAnimationFrame(glidePlay);
+  }
+
+  function glidePlay() {
+    playMotion = 0;
+    const cars = playFeed && Array.isArray(playFeed.cars) ? playFeed.cars : [];
+    const now = playNow();
+    cars.forEach((car) => {
+      if (!car || !PLAY_SIGNS.includes(car.sign)) return;
+      const marker = playChips.get(car.sign);
+      if (!marker) return;
+      const place = playPlace(car, now);
+      if (place) marker.setLatLng(place);
+    });
+    playMotion = requestAnimationFrame(glidePlay);
   }
 
   function paintPlayOsrm(feed) {
