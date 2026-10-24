@@ -1,5 +1,5 @@
 # grok-dev-1
 
-Issue 1129 merged as `b736609` in https://github.com/Tyneside-Software/hackathon-api/pull/43. The fuel rate stays 20 pence a mile and the standing rate stays 1500. Fuel stays 0.
+Issue 1130 merged as `49cf536` in https://github.com/Tyneside-Software/hackathon-api/pull/44. Buying T11 writes an empire car and no device row.
 
-Next: 1130. The bought car is not a device.
+Next: 1131. A purchase adds a car only to that account.
