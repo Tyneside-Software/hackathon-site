@@ -86,6 +86,7 @@
       "play-buy-once",
       "play-spent-feed",
       "play-fare-in",
+      "play-buy-reject",
       "play-started-ten",
       "play-locks",
       "play-osrm",
@@ -563,6 +564,21 @@
     if (line) line.textContent = "";
   }
 
+  function noteBuyReject() {
+    const node = document.getElementById("play-buy-reject");
+    if (!node) return;
+    const line = document.getElementById("play-spent");
+    const start = document.getElementById("play-start");
+    const mapEl = document.getElementById("play-map");
+    const page = document.getElementById("play-map-page");
+    const mapStays = !!(page && page.hidden === false && mapEl && mapEl.hidden === false);
+    node.dataset.spent = line && line.textContent === "" ? "cleared" : "shows";
+    node.dataset.start = start && start.hidden === false ? "back" : "away";
+    node.dataset.map = mapStays ? "stays" : "gone";
+    node.dataset.screen = mapStays ? "full" : "hidden";
+    node.dataset.pence = String(playBuyPence());
+  }
+
   function seatPlayBuy() {
     const money = document.getElementById("play-money");
     const mapEl = document.getElementById("play-map");
@@ -648,6 +664,8 @@
       showPlayAccount();
       keepPlayMap();
       paintPlayBuy();
+      clearPlaySpent();
+      noteBuyReject();
       return;
     }
     if (!res.ok) {
