@@ -2147,6 +2147,7 @@
     if (car.status === "to_passenger") return car.sign + " · collecting" + (passenger ? " " + passenger : "");
     if (car.status === "with_passenger") return (passenger || car.sign) + " · " + car.sign;
     if (car.status === "returning") return car.sign + " · returning";
+    if (car.status === "at_depot") return car.sign + " · at depot";
     return car.sign + " · at depot";
   }
 
@@ -2167,9 +2168,10 @@
       const duration = Number(car.duration_s) || 0;
       const started = Number(car.leg_started) || 0;
       const elapsed = now - started;
-      const place = route.length
-        ? placeOnRoute(route, duration, elapsed)
-        : (Number.isFinite(Number(car.lat)) && Number.isFinite(Number(car.lng)) ? [Number(car.lat), Number(car.lng)] : null);
+      let place = null;
+      if (car.status === "at_depot") place = DEPOT;
+      else if (route.length) place = placeOnRoute(route, duration, elapsed);
+      else if (Number.isFinite(Number(car.lat)) && Number.isFinite(Number(car.lng))) place = [Number(car.lat), Number(car.lng)];
       if (!place) return;
       let marker = empireMarkers.get(car.sign);
       if (!marker) {
