@@ -1442,6 +1442,8 @@
   let taxiNameAt = 0;
   let taxisOn = false;
   let empireAccount = false;
+  const EMPIRE_POLL_MS = 2000;
+  let empirePoll = 0;
   let empireTrails = [];
   let empireFares = [];
   let taxiPaintAt = 0;
@@ -1822,6 +1824,7 @@
       }
       localStorage.setItem("hackathon-empire-token", session.access_token);
       if (status) status.textContent = "Account created. Token stored for " + username + ".";
+      startEmpirePoll();
     } catch (err) {
       if (status) status.textContent = "Network or CORS failure.";
     }
@@ -1878,16 +1881,60 @@
       }
       localStorage.setItem("hackathon-empire-token", session.access_token);
       if (status) status.textContent = "Signed in as " + username + ".";
+      startEmpirePoll();
     } catch (err) {
       if (status) status.textContent = "Network or CORS failure.";
     }
   }
 
   function signOutEmpire() {
+    stopEmpirePoll();
     localStorage.removeItem("hackathon-empire-token");
     clearEmpireDraw();
     const status = document.getElementById("empire-account-status");
     if (status) status.textContent = "Signed out.";
+  }
+
+  function empireToken() {
+    return localStorage.getItem("hackathon-empire-token") || "";
+  }
+
+  function stopEmpirePoll() {
+    if (empirePoll) clearInterval(empirePoll);
+    empirePoll = 0;
+  }
+
+  async function pollEmpire() {
+    const token = empireToken();
+    if (!token) {
+      stopEmpirePoll();
+      return;
+    }
+    const base = apiBase();
+    const status = document.getElementById("empire-account-status");
+    if (!base) {
+      if (status) status.textContent = "The API address is missing.";
+      return;
+    }
+    if (status) status.textContent = "Asking the box for this account.";
+    try {
+      const res = await fetch(base + "/v1/empire", {
+        headers: {
+          Accept: "application/json",
+          Authorization: "Bearer " + token,
+        },
+      });
+      if (!res.ok) return;
+      await res.json().catch(() => null);
+    } catch (err) {
+      if (status) status.textContent = "Asking the box for this account.";
+    }
+  }
+
+  function startEmpirePoll() {
+    stopEmpirePoll();
+    pollEmpire();
+    empirePoll = setInterval(pollEmpire, EMPIRE_POLL_MS);
   }
 
   const empireCreate = document.getElementById("empire-create");
@@ -1896,6 +1943,7 @@
   if (empireSignIn) empireSignIn.addEventListener("click", () => { signInEmpire(); });
   const empireSignOut = document.getElementById("empire-signout");
   if (empireSignOut) empireSignOut.addEventListener("click", () => { signOutEmpire(); });
+  if (empireToken()) startEmpirePoll();
   syncTaxiButton();
   paintTaxiList(true);
 })();
