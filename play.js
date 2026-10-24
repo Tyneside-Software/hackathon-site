@@ -150,6 +150,7 @@
       "play-driver-share",
       "play-to-passenger",
       "play-fare-riding",
+      "play-signed-chips",
       "play-locks",
       "play-osrm",
       "play-buses",
@@ -1049,6 +1050,7 @@
     }
     if (status) status.textContent = "";
     playSignAgain = !!(registered && registered.status === 409);
+    if (playSignAgain) dropSignedChips();
     hidePlayAccount();
     keepStartedScreen();
     paintPlayStatus(null);
@@ -1092,10 +1094,20 @@
     localStorage.setItem("hackathon-empire-user", username);
     if (status) status.textContent = "";
     playSignAgain = true;
+    dropSignedChips();
     hidePlayAccount();
     keepPlayMap();
     paintPlayStatus(null);
     pollPlay();
+  }
+
+  function dropSignedChips() {
+    clearPlayChips();
+    playFeedEpoch += 1;
+    const node = document.getElementById("play-signed-chips");
+    if (!node) return;
+    node.dataset.chips = playChips.size === 0 ? "gone" : "stays";
+    node.dataset.feed = "waiting";
   }
 
   function clearBuyFailed() {
