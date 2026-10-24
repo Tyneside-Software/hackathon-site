@@ -148,6 +148,7 @@
       "play-with-passenger",
       "play-signout-failed",
       "play-driver-share",
+      "play-to-passenger",
       "play-locks",
       "play-osrm",
       "play-buses",
@@ -413,12 +414,14 @@
     notePriceStill();
     noteSignedAgain(feed);
     noteWithPassenger();
+    noteToPassenger();
   }
 
   function listStatus(car) {
     if (!car) return "";
     if (car.status === "returning") return " is returning";
     if (car.status === "with_passenger") return " is with_passenger";
+    if (car.status === "to_passenger") return " is to_passenger";
     return "";
   }
 
@@ -428,6 +431,15 @@
     const list = document.getElementById("play-taxi-list");
     const text = list ? list.textContent : "";
     node.dataset.named = text.indexOf(" is with_passenger") === -1 ? "no" : "yes";
+    node.dataset.returning = text.indexOf(" is returning") === -1 ? "no" : "yes";
+  }
+
+  function noteToPassenger() {
+    const node = document.getElementById("play-to-passenger");
+    if (!node) return;
+    const list = document.getElementById("play-taxi-list");
+    const text = list ? list.textContent : "";
+    node.dataset.named = text.indexOf(" is to_passenger") === -1 ? "no" : "yes";
     node.dataset.returning = text.indexOf(" is returning") === -1 ? "no" : "yes";
   }
 
@@ -1154,6 +1166,7 @@
       item.textContent = text;
     });
     noteWithPassenger();
+    noteToPassenger();
     playMotion = requestAnimationFrame(glidePlay);
   }
 
