@@ -59,6 +59,16 @@ def cancel_before():
     return []
 
 
+def new_driver(name):
+    return {"name": name, "cost_pence": NEW_DRIVER_PENCE}
+
+
+def day_with_driver(name):
+    """A new driver costs 0, so the worked day does not change."""
+    new_driver(name)
+    return worked_day()
+
+
 def cancel_after_zero_miles():
     """Started, but no miles: no fuel and no fare."""
     return []

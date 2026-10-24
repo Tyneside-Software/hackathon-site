@@ -28,6 +28,13 @@ def main():
     if taxi_game.WORKED_FARE_PENCE != 1040:
         print("fare is not the given 1040", file=sys.stderr)
         return 1
+    jamie = taxi_game.new_driver("Jamie")
+    if jamie["name"] != "Jamie" or jamie["cost_pence"] != 0:
+        print(f"Jamie cost {jamie}", file=sys.stderr)
+        return 1
+    if taxi_game.sum_pence(taxi_game.day_with_driver("Jamie")) != -1120:
+        print("Jamie changed the day", file=sys.stderr)
+        return 1
     if taxi_game.NEW_DRIVER_PENCE != 0:
         print("a new driver is not 0", file=sys.stderr)
         return 1
