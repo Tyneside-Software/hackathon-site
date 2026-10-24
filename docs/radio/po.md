@@ -8,15 +8,10 @@ The dashboard compares GitHub with the live box, and each code line-count graph 
 
 Files in hackathon-api only: app/empire.py, app/routers/empire.py, tests/test_empire.py. Do not edit play.html, play.js, or scripts/agents_dashboard.py.
 
-Skip these. They are already on main: #808, #810, #812, #814, #816.
+Skip these. They are already on main: #808, #810, #812, #814, #816, #818, #921, #923, #926, #932.
 
-Next: The money lines are for one account. Issue #818. Label repo:api only. No ready label. Keep going for about 30 minutes.
+Next: A collected ten-car fare leaves the feed. Issue #936. Label repo:api only. No ready label. Keep going for about 30 minutes.
 
-- #818 The money lines are for one account. Label repo:api only. No ready label.
-- #921 The ten-car feed names check_s and trail_s. Label repo:api only. No ready label.
-- #923 A ten-car trail point is longitude then latitude. Label repo:api only. No ready label.
-- #926 The ten-car names cycle Mina through Tom. Label repo:api only. No ready label.
-- #932 Standing does not rise when the ten drive. Label repo:api only. No ready label.
 - #936 A collected ten-car fare leaves the feed. Label repo:api only. No ready label.
 - #943 Each of the ten uses one of four statuses. Label repo:api only. No ready label.
 - #948 A leaving ten-car route starts at the depot. Label repo:api only. No ready label.
@@ -28,20 +23,27 @@ Next: The money lines are for one account. Issue #818. Label repo:api only. No r
 - #975 Ten-car pings older than ten minutes leave the trail. Label repo:api only. No ready label.
 - #979 The ten-car tests do not open the live database. Label repo:api only. No ready label.
 - #988 A ten-car check-in appends one trail point. Label repo:api only. No ready label.
+- #1010 A ten-car fare is present only while going to the passenger. Label repo:api only. No ready label.
+- #1011 The ten-car drop-off is further than the pickup. Label repo:api only. No ready label.
+- #1012 The ten-car feed names server_now. Label repo:api only. No ready label.
+- #1013 Two of the ten can be on different legs. Label repo:api only. No ready label.
+- #1014 One ten-car fault does not stop the other nine. Label repo:api only. No ready label.
+- #1015 The ten-car feed names the account username. Label repo:api only. No ready label.
+- #1016 Ten standing cars with no miles total minus 15000. Label repo:api only. No ready label.
+- #1017 A ten-car trail point ends with the unix time. Label repo:api only. No ready label.
+- #1018 A returning ten-car carries no fare. Label repo:api only. No ready label.
+- #1019 The ten-car snapshot includes ok. Label repo:api only. No ready label.
+- #1020 The ten-car feed does not show 2860, 1130, or 1240. Label repo:api only. No ready label.
+- #1021 Standing for one car is 1500 pence. Label repo:api only. No ready label.
 
 ### grok-dev-2
 
 Files: play.html and play.js only. Do not edit app/map.js, app/empire.py, tests/test_empire.py, or scripts/agents_dashboard.py.
 
-Skip these. They are already on main: #836, #838, #840, #842.
+Skip these. They are already on main: #836, #838, #840, #842, #845, #847, #849, #851, #928.
 
-Next: play.html has no bus toggle. Issue #845. Label repo:site only. No ready label. Keep going for about 30 minutes.
+Next: A rejected play token shows the account form. Issue #930. Label repo:site only. No ready label. Keep going for about 30 minutes.
 
-- #845 play.html has no bus toggle. Label repo:site only. No ready label.
-- #847 play.html does not call devices. Label repo:site only. No ready label.
-- #849 Play shows the fleet that ran while closed. Label repo:site only. No ready label.
-- #851 play.html does not write the office ledger. Label repo:site only. No ready label.
-- #928 play.html shows the username on the status line. Label repo:site only. No ready label.
 - #930 A rejected play token shows the account form. Label repo:site only. No ready label.
 - #939 Sign out on play.html clears the ten chips. Label repo:site only. No ready label.
 - #941 play.html does not show minus 1120. Label repo:site only. No ready label.
@@ -53,6 +55,18 @@ Next: play.html has no bus toggle. Issue #845. Label repo:site only. No ready la
 - #982 The play trail fades after ten minutes. Label repo:site only. No ready label.
 - #991 play.html does not draw a car before the feed arrives. Label repo:site only. No ready label.
 - #993 play.html labels the money in pence. Label repo:site only. No ready label.
+- #1022 A returning play car uses the feed status. Label repo:site only. No ready label.
+- #1023 play.html does not show the office grid. Label repo:site only. No ready label.
+- #1024 play.html says OSRM unavailable when the feed says so. Label repo:site only. No ready label.
+- #1025 play.html does not list phones. Label repo:site only. No ready label.
+- #1026 play.html has no Place stops control. Label repo:site only. No ready label.
+- #1027 play.html does not show 2860, 1130, or 1240. Label repo:site only. No ready label.
+- #1028 play.html marks the Shiremoor depot. Label repo:site only. No ready label.
+- #1029 A play fare shows the passenger name from the feed. Label repo:site only. No ready label.
+- #1030 play.html does not say Simulated data. Label repo:site only. No ready label.
+- #1031 play.html does not request the bus feed. Label repo:site only. No ready label.
+- #1032 play.html centres the circle on Grey's Monument. Label repo:site only. No ready label.
+- #1033 play.html draws at_depot on the depot pin. Label repo:site only. No ready label.
 
 ## Reservoir
 
