@@ -8,25 +8,10 @@ The dashboard compares GitHub with the live box, and each code line-count graph 
 
 Files in hackathon-api only: app/empire.py, app/routers/empire.py, tests/test_empire.py. Do not edit play.html, play.js, or scripts/agents_dashboard.py.
 
-Skip these. They are already on main: #808, #810, #812, #814, #816, #818, #921, #923, #926, #932.
+Skip these. They are already on main: #808, #810, #812, #814, #816, #818, #921, #923, #926, #932, #936, #943, #948, #952, #954, #959, #970, #973, #975, #979, #988, #1010, #1011, #1012, #1013.
 
-Next: A collected ten-car fare leaves the feed. Issue #936. Label repo:api only. No ready label. Keep going for about 30 minutes.
+Next: One ten-car fault does not stop the other nine. Issue #1014. Label repo:api only. No ready label. Keep going for about 30 minutes.
 
-- #936 A collected ten-car fare leaves the feed. Label repo:api only. No ready label.
-- #943 Each of the ten uses one of four statuses. Label repo:api only. No ready label.
-- #948 A leaving ten-car route starts at the depot. Label repo:api only. No ready label.
-- #952 osrm_unavailable is true when any of the ten missed. Label repo:api only. No ready label.
-- #954 The company figure minus 1120 stays off the ten-car feed. Label repo:api only. No ready label.
-- #959 The new-car 800000 is not added to fare_in. Label repo:api only. No ready label.
-- #970 The ten-car feed does not grow an eleventh sign. Label repo:api only. No ready label.
-- #973 The username still shifts the ten-car bearing. Label repo:api only. No ready label.
-- #975 Ten-car pings older than ten minutes leave the trail. Label repo:api only. No ready label.
-- #979 The ten-car tests do not open the live database. Label repo:api only. No ready label.
-- #988 A ten-car check-in appends one trail point. Label repo:api only. No ready label.
-- #1010 A ten-car fare is present only while going to the passenger. Label repo:api only. No ready label.
-- #1011 The ten-car drop-off is further than the pickup. Label repo:api only. No ready label.
-- #1012 The ten-car feed names server_now. Label repo:api only. No ready label.
-- #1013 Two of the ten can be on different legs. Label repo:api only. No ready label.
 - #1014 One ten-car fault does not stop the other nine. Label repo:api only. No ready label.
 - #1015 The ten-car feed names the account username. Label repo:api only. No ready label.
 - #1016 Ten standing cars with no miles total minus 15000. Label repo:api only. No ready label.
@@ -35,30 +20,29 @@ Next: A collected ten-car fare leaves the feed. Issue #936. Label repo:api only.
 - #1019 The ten-car snapshot includes ok. Label repo:api only. No ready label.
 - #1020 The ten-car feed does not show 2860, 1130, or 1240. Label repo:api only. No ready label.
 - #1021 Standing for one car is 1500 pence. Label repo:api only. No ready label.
+- #1081 A ten-car fare uses the North Tyneside tariff. Label repo:api only. No ready label.
+- #1082 A one-mile ten-car trip is 490 pence. Label repo:api only. No ready label.
+- #1083 A ten-car stop is not the Berwick point. Label repo:api only. No ready label.
+- #1084 Empty return miles count in the ten-car fuel. Label repo:api only. No ready label.
+- #1085 An answered OSRM leg keeps that duration. Label repo:api only. No ready label.
+- #1086 A with_passenger ten-car keeps the passenger name. Label repo:api only. No ready label.
+- #1087 A ten-car cancel before the start adds no fuel. Label repo:api only. No ready label.
+- #1088 The ten-car snapshot has no phone list. Label repo:api only. No ready label.
+- #1089 The ten-car snapshot has no bus rows. Label repo:api only. No ready label.
+- #1090 A waiting ten-car fare has name, lat, lng, and sign. Label repo:api only. No ready label.
+- #1091 The ten-car fare_in rises only when the job completes. Label repo:api only. No ready label.
+- #1092 An at_depot ten-car has no passenger. Label repo:api only. No ready label.
+- #1093 A ten-car route pair is latitude then longitude. Label repo:api only. No ready label.
+- #1094 The ten-car fuel figure is whole pence. Label repo:api only. No ready label.
 
 ### grok-dev-2
 
 Files: play.html and play.js only. Do not edit app/map.js, app/empire.py, tests/test_empire.py, or scripts/agents_dashboard.py.
 
-Skip these. They are already on main: #836, #838, #840, #842, #845, #847, #849, #851, #928.
+Skip these. They are already on main: #836, #838, #840, #842, #845, #847, #849, #851, #928, #930, #939, #941, #945, #950, #956, #961, #977, #982, #991, #993, #1022, #1023, #1024, #1025.
 
-Next: A rejected play token shows the account form. Issue #930. Label repo:site only. No ready label. Keep going for about 30 minutes.
+Next: play.html has no Place stops control. Issue #1026. Label repo:site only. No ready label. Keep going for about 30 minutes.
 
-- #930 A rejected play token shows the account form. Label repo:site only. No ready label.
-- #939 Sign out on play.html clears the ten chips. Label repo:site only. No ready label.
-- #941 play.html does not show minus 1120. Label repo:site only. No ready label.
-- #945 The play status says the fleet runs on the box. Label repo:site only. No ready label.
-- #950 play.html does not say device on a chip. Label repo:site only. No ready label.
-- #956 Create account on play.html starts the ten cars. Label repo:site only. No ready label.
-- #961 The play account form says the password is at least 8 characters. Label repo:site only. No ready label.
-- #977 A quiet play feed says the feed is quiet. Label repo:site only. No ready label.
-- #982 The play trail fades after ten minutes. Label repo:site only. No ready label.
-- #991 play.html does not draw a car before the feed arrives. Label repo:site only. No ready label.
-- #993 play.html labels the money in pence. Label repo:site only. No ready label.
-- #1022 A returning play car uses the feed status. Label repo:site only. No ready label.
-- #1023 play.html does not show the office grid. Label repo:site only. No ready label.
-- #1024 play.html says OSRM unavailable when the feed says so. Label repo:site only. No ready label.
-- #1025 play.html does not list phones. Label repo:site only. No ready label.
 - #1026 play.html has no Place stops control. Label repo:site only. No ready label.
 - #1027 play.html does not show 2860, 1130, or 1240. Label repo:site only. No ready label.
 - #1028 play.html marks the Shiremoor depot. Label repo:site only. No ready label.
@@ -67,6 +51,20 @@ Next: A rejected play token shows the account form. Issue #930. Label repo:site 
 - #1031 play.html does not request the bus feed. Label repo:site only. No ready label.
 - #1032 play.html centres the circle on Grey's Monument. Label repo:site only. No ready label.
 - #1033 play.html draws at_depot on the depot pin. Label repo:site only. No ready label.
+- #1096 The play account form asks for a username of at least 3 characters. Label repo:site only. No ready label.
+- #1097 play.html does not draw a fare outside the circle. Label repo:site only. No ready label.
+- #1098 A play chip shows the passenger while with the passenger. Label repo:site only. No ready label.
+- #1100 play.html draws a car only for the four statuses. Label repo:site only. No ready label.
+- #1101 play.html names the circle as 50 miles. Label repo:site only. No ready label.
+- #1102 play.html does not draw a second fare table. Label repo:site only. No ready label.
+- #1103 Sign out on play.html clears the fare markers. Label repo:site only. No ready label.
+- #1104 Sign out on play.html clears the money lines. Label repo:site only. No ready label.
+- #1105 A play fare marker names the call sign. Label repo:site only. No ready label.
+- #1106 A play fare with no name is not drawn. Label repo:site only. No ready label.
+- #1107 play.html does not draw an eleventh chip. Label repo:site only. No ready label.
+- #1108 A play fare marker does not show a phone. Label repo:site only. No ready label.
+- #1109 A play fare marker does not move the circle. Label repo:site only. No ready label.
+- #1110 play.html lists only the five game money lines. Label repo:site only. No ready label.
 
 ## Reservoir
 
@@ -101,5 +99,6 @@ Not assigned. Do not start these.
 
 - Check the grok-dev-1 and grok-dev-2 turn lengths from their radio commits.
 - Top up whichever queue has fewer than 16 unfinished slices.
-- Show unfinished slices separately from lines already on main.
 - Tell the devs the next slice and the files they may edit.
+- Show what the ten-car feed has on API main, next to the play.html checklist. One change in scripts/agents_dashboard.py. Do not add a second graph.
+
