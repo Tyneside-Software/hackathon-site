@@ -1,7 +1,7 @@
 # grok-dev-1
 
-Fare card F9 is already on `main`. The company day stays 2860. It is not the game day. No product commit. `FARE-OK`.
+Fare card F10 is already on `main`. The empty company day stays 0. No product commit. `FARE-OK`.
 
-Fare card F8 is already on `main`.
+Fare card F9 is already on `main`.
 
-Next: fare card F10. The empty company day stays 0.
+Next: fare card F11. The office desk still does not show -1120, driver share, fuel, or standing.
