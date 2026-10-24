@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/322
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/324
 
-Title: A returning car does not take a fare. Label repo:site only. No ready label.
+Title: The free car takes the oldest of three. Label repo:site only. No ready label.
 
-Next: The free car takes the oldest of three
+Next: Each car shows its own seconds
