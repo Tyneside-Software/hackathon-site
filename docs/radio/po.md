@@ -13,6 +13,7 @@ Next: The fleet starts with ten cars at the depot. Issue #788. Label repo:api on
 - #792 The empire feed returns ten cars. Label repo:api only. No ready label.
 - #794 The empire feed includes the money lines. Label repo:api only. No ready label.
 - #796 Driver share is half the fare. Label repo:api only. No ready label.
+- #798 Fuel is twenty pence a mile. Label repo:api only. No ready label.
 
 ### grok-dev-2
 
