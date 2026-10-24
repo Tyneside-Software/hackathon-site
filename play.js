@@ -154,6 +154,7 @@
       "play-person-waiting",
       "play-person-stays",
       "play-car-job",
+      "play-next-failed",
       "play-locks",
       "play-osrm",
       "play-buses",
@@ -1002,6 +1003,18 @@
     node.dataset.account = "next";
   }
 
+  function clearFailedForNextAccount(username) {
+    const previous = localStorage.getItem("hackathon-empire-user") || "";
+    if (!previous || previous === username) return;
+    const status = document.getElementById("play-buy-status");
+    if (status && status.textContent === "Buy failed.") status.textContent = "";
+    const node = document.getElementById("play-next-failed");
+    if (!node) return;
+    const text = status ? status.textContent : "";
+    node.dataset.failed = text === "Buy failed." ? "shows" : "clear";
+    node.dataset.account = "next";
+  }
+
   function clearFeedForNextAccount(username) {
     const previous = localStorage.getItem("hackathon-empire-user") || "";
     if (!previous || previous === username) return false;
@@ -1051,6 +1064,7 @@
       return;
     }
     clearSpentForNextAccount(username);
+    clearFailedForNextAccount(username);
     const clearedFeed = clearFeedForNextAccount(username);
     localStorage.setItem("hackathon-empire-token", session.access_token);
     localStorage.setItem("hackathon-empire-user", username);
@@ -1147,6 +1161,7 @@
       return;
     }
     clearSpentForNextAccount(username);
+    clearFailedForNextAccount(username);
     const clearedFeed = clearFeedForNextAccount(username);
     localStorage.setItem("hackathon-empire-token", session.access_token);
     localStorage.setItem("hackathon-empire-user", username);
