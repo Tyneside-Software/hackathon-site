@@ -17,6 +17,7 @@ Next: The fleet starts with ten cars at the depot. Issue #788. Label repo:api on
 - #800 Standing is 1500 pence a car. Label repo:api only. No ready label.
 - #802 Ten cars standing sum to minus 15000. Label repo:api only. No ready label.
 - #804 A new car costs 800000 before it leaves. Label repo:api only. No ready label.
+- #806 The ten-car feed hides the company totals. Label repo:api only. No ready label.
 
 ### grok-dev-2
 
