@@ -166,6 +166,7 @@
       "play-quiet-fares",
       "play-quiet-chips",
       "play-signout-money",
+      "play-quiet-money",
       "play-locks",
       "play-osrm",
       "play-buses",
@@ -1372,6 +1373,21 @@
     node.dataset.feed = "quiet";
   }
 
+  function clearQuietMoney() {
+    const rows = document.querySelectorAll("#play-money-lines li");
+    rows.forEach((row) => {
+      row.textContent = "";
+    });
+    const node = document.getElementById("play-quiet-money");
+    if (!node) return;
+    let showing = false;
+    rows.forEach((row) => {
+      if (row.textContent) showing = true;
+    });
+    node.dataset.money = showing ? "shows" : "clear";
+    node.dataset.feed = "quiet";
+  }
+
   function paintQuietFeed() {
     const line = document.getElementById("play-status");
     if (line) line.textContent = "The feed is quiet.";
@@ -1380,6 +1396,7 @@
     clearQuietSpent();
     clearQuietFares();
     clearQuietChips();
+    clearQuietMoney();
   }
 
   async function pollPlay() {
