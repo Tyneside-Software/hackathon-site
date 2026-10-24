@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/609
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/611
 
-Title: Sign out clears the cars. Label repo:site only. No ready label.
+Title: The three cars leave a few seconds apart. Label repo:api only. No ready label.
 
-Next: The three cars leave a few seconds apart
+Next: Trips stay inland of the North Sea
