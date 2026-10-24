@@ -15,6 +15,15 @@
   }).addTo(map);
   map.setView(monument, 10);
   map.fitBounds(circle.getBounds());
+  function seatPlayScreen() {
+    const nav = document.querySelector(".site-nav");
+    const top = nav ? Math.ceil(nav.getBoundingClientRect().height) : 0;
+    document.documentElement.style.setProperty("--play-nav", top + "px");
+    map.invalidateSize();
+  }
+  seatPlayScreen();
+  map.fitBounds(circle.getBounds());
+  window.addEventListener("resize", seatPlayScreen);
   function clearBusToggle() {
     document.querySelectorAll("button, input, select").forEach((node) => {
       const label = ((node.textContent || "") + " " + (node.id || "") + " " + (node.getAttribute("aria-label") || "")).toLowerCase();
@@ -508,11 +517,24 @@
     pollPlay();
   }
 
+  function accountProblem(body, fallback) {
+    let msg = "";
+    if (body && typeof body.detail === "string" && body.detail) msg = body.detail;
+    else if (body && Array.isArray(body.detail) && body.detail[0] && body.detail[0].msg) msg = String(body.detail[0].msg);
+    msg = msg.replace(/^Value error,\s*/i, "");
+    return msg || fallback;
+  }
+
   async function startPlay(event) {
     if (event) event.preventDefault();
+    const form = document.getElementById("play-account");
     const usernameEl = document.getElementById("play-username");
     const passwordEl = document.getElementById("play-password");
     const status = document.getElementById("play-account-status");
+    if (form && typeof form.reportValidity === "function" && !form.reportValidity()) {
+      if (status) status.textContent = "";
+      return;
+    }
     const username = usernameEl ? usernameEl.value.trim() : "";
     const password = passwordEl ? passwordEl.value : "";
     const base = apiBase();
@@ -520,19 +542,36 @@
       if (status) status.textContent = "The API address is missing.";
       return;
     }
-    await fetch(base + "/register", {
-      method: "POST",
-      headers: { Accept: "application/json", "Content-Type": "application/json" },
-      body: JSON.stringify({ username: username, password: password })
-    });
-    const logged = await fetch(base + "/login", {
-      method: "POST",
-      headers: { Accept: "application/json", "Content-Type": "application/json" },
-      body: JSON.stringify({ username: username, password: password })
-    });
+    let registered;
+    let registerProblem = "";
+    try {
+      registered = await fetch(base + "/register", {
+        method: "POST",
+        headers: { Accept: "application/json", "Content-Type": "application/json" },
+        body: JSON.stringify({ username: username, password: password })
+      });
+    } catch (err) {
+      if (status) status.textContent = "The API did not answer.";
+      return;
+    }
+    const registeredBody = await registered.json().catch(function () { return null; });
+    if (registered && !registered.ok && registered.status !== 409) {
+      registerProblem = accountProblem(registeredBody, "");
+    }
+    let logged;
+    try {
+      logged = await fetch(base + "/login", {
+        method: "POST",
+        headers: { Accept: "application/json", "Content-Type": "application/json" },
+        body: JSON.stringify({ username: username, password: password })
+      });
+    } catch (err) {
+      if (status) status.textContent = registerProblem || "The API did not answer.";
+      return;
+    }
     const session = await logged.json().catch(function () { return null; });
     if (!logged.ok || !session || !session.access_token) {
-      if (status) status.textContent = "Start failed.";
+      if (status) status.textContent = registerProblem || accountProblem(session, "Start failed.");
       return;
     }
     localStorage.setItem("hackathon-empire-token", session.access_token);
@@ -540,8 +579,7 @@
     if (status) status.textContent = "";
     hidePlayAccount();
     keepPlayMap();
-    const page = document.getElementById("play-map-page");
-    if (page && page.scrollIntoView) page.scrollIntoView();
+    seatPlayScreen();
     paintPlayStatus(null);
     pollPlay();
   }
