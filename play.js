@@ -183,7 +183,9 @@
       }
       if (list) {
         const item = document.createElement("li");
-        item.textContent = reported ? sign + " " + reported[0] + ", " + reported[1] : sign;
+        let text = reported ? sign + " " + reported[0] + ", " + reported[1] : sign;
+        if (car.status === "returning") text += " is returning";
+        item.textContent = text;
         list.appendChild(item);
       }
     });
