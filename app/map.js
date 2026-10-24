@@ -1969,6 +1969,10 @@
     if (!empireMotion) empireMotion = requestAnimationFrame(glideEmpire);
     paintEmpireTrails();
     paintEmpireFares();
+    const line = document.getElementById("empire-account-status");
+    if (line) {
+      line.textContent = "The fleet runs on the box." + (data.osrm_unavailable ? " OSRM unavailable" : "");
+    }
   }
 
   function paintEmpireTrails() {
