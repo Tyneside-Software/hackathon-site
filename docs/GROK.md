@@ -4,7 +4,7 @@ This page is the briefing for an AI (Grok, or anything similar) helping **Connor
 
 If you have been pointed at this URL and given a task, **read this whole page, then [Architecture](#architecture), then execute**. Do not ask the human to paste stack notes that are already here.
 
-A queued list of changes is one job. On the integrator checkout, follow [Development loop](#loop), including `.\scripts\box.ps1 update` and `.\scripts\check.ps1`. If several sessions are working at once, follow [Lanes](#lanes) and `docs/radio/README.md`. A lane merges its own pull requests and writes only its own radio file. It does not deploy. It does not use the desk folder on the PC. The product direction is [Tracker, office, and game](#taxi). Do not invent a second fare table or a second map centre.
+A queued list of changes is one job. On the integrator checkout, follow [Development loop](#loop). The four sessions that build the taxi game follow `docs/radio/README.md` from a cold start, then `## Now` in `docs/radio/integrator.md`. Their deploy is `.\scripts\deploy-if-product.ps1`, not an update after every radio commit. If several sessions are working at once, follow [Lanes](#lanes) and that radio manual. A lane merges its own pull requests and writes only its own radio file. It does not deploy. It does not use the desk folder on the PC. The product direction is [Tracker, office, and game](#taxi). Do not invent a second fare table or a second map centre.
 
 Been away, or the board looks noisy: the human catch-up page is [Current progress](../progress.html).
 
@@ -25,7 +25,7 @@ https://github.com/Tyneside-Software/hackathon-site/blob/main/docs/GROK.md
 
 The API and the board the team edits run on the Linux box. Cloud Run is not the live API. The procedure is [Linux box and deploy](#linux) (`docs/linux.md`).
 
-SSH as `michael` to `192.168.0.52`. Do not SSH to `100.65.94.5` (Tailscale SSH wants a browser check). After `git push origin main`, from the site folder run `.\scripts\box.ps1 update`. That is `/usr/local/bin/update` on the box. `.\scripts\box.ps1 health` checks the API, the site, and SSH.
+SSH as `michael` to `192.168.0.52`. Do not SSH to `100.65.94.5` (Tailscale SSH wants a browser check). The four-agent deploy is `.\scripts\deploy-if-product.ps1` from the site folder. It runs `/usr/local/bin/update` only when product files changed. `.\scripts\box.ps1 health` checks the API, the site, and SSH. Do not invoke `box.ps1` with the call operator from the current shell.
 
 The SSH password is not in git. On Michael’s PC it is in `C:\Users\MichaelThomson\Desktop\hackathon-linux.md`. Do not copy that file into a repo. Connor’s machine does not have it.
 

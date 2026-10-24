@@ -68,20 +68,17 @@ Checkouts, all on ``main``:
 - $dest\hackathon-api
 - $dest\hackathon-android
 
-Read ``hackathon-site\docs\LANES.md`` and ``hackathon-site\docs\DESK.md``.
-
-The integrator writes your orders in ``$Root\desk\to-$Lane.md``. Read that file every time you start, do it, then overwrite ``$Root\desk\from-$Lane.md``. Say what you did, what is blocked, any pull request URL, and what you need next. Do not edit another lane's desk file. Do not put a password in a note.
+Read ``hackathon-site\docs\radio\README.md``, then ``## Now`` in ``docs\radio\integrator.md``. The desk folder is retired. If the human says ``continue``, that word is the whole order. Do not put a password in a note.
 
 Standing orders:
 
-1. Do not edit product code. Do not commit. Do not push. Do not merge a pull request.
-2. Do not deploy. Do not run ``box.ps1``. Do not read ``C:\Users\MichaelThomson\Desktop\hackathon-linux.md``. Do not copy ``C:\Users\MichaelThomson\Desktop\confidential docs`` into a repo.
+1. Do not edit product code. You may commit and squash-merge a branch that changes only ``docs/radio/po.md``.
+2. Do not deploy. Do not run ``box.ps1`` or ``deploy-if-product.ps1``. Do not read ``C:\Users\MichaelThomson\Desktop\hackathon-linux.md``. Do not copy ``C:\Users\MichaelThomson\Desktop\confidential docs`` into a repo.
 3. Do not touch ``C:\Users\MichaelThomson\source\hackathon-site``, ``hackathon-api``, or ``hackathon-android``. Those folders belong to the integrator session.
-4. From ``hackathon-site``, run ``.\scripts\lane-sync.ps1`` and then ``.\scripts\lane-status.ps1``.
-5. Turn the human's priorities into GitHub issues on ``Tyneside-Software/hackathon-site``. One issue is one unit of work. Include acceptance criteria, the ``repo:`` labels, and ``ready`` when a dev lane may start. Leave September 2026 issues 1, 2, 3, 4, and 18 alone unless the human names them.
-6. Do not give the same ``ready`` issue to two lanes. ``grok-dev-1`` and ``grok-dev-2`` are the prepared dev lanes.
-7. When a pull request is open, read it and say whether the test notes are enough. When it is merged, tell the human the integrator session should deploy. You do not deploy.
-8. Report the open ``ready`` issues, the open pull requests, and whether live ``/health`` matches ``VERSION`` on ``origin/main``. Then stop, unless the human asked you to keep watching.
+4. Number the work ``## Now`` names. Set each dev ``Next`` to it. Keep sixteen unfinished slices that someone can watch, or that make the next slice smaller. A clear of one field is not one of them.
+5. Do not add ``ready``. Leave September 2026 issues 1, 2, 3, 4, and 18 alone. Leave issues 22 and 29 ``blocked``. Leave API pull request ``reeve-branch`` alone.
+6. Do not give both devs the same file. grok-dev-1 owns the empire API. grok-dev-2 owns ``play.html`` and ``play.js``.
+7. After the radio merge, pull ``main`` and read the other radio files. Keep going for about 30 minutes. Do not deploy.
 "@
 }
 else {
@@ -96,21 +93,18 @@ Checkouts:
 - $dest\hackathon-api
 - $dest\hackathon-android
 
-Read ``hackathon-site\docs\LANES.md`` and ``hackathon-site\docs\DESK.md``. Use ``hackathon-site\docs\LOOP.md`` for how to build and test. Ignore that page's steps that push ``main`` or run ``box.ps1``. Those are for the integrator.
-
-The integrator writes your orders in ``$Root\desk\to-$Lane.md``. Read that file every time you start, do it, then overwrite ``$Root\desk\from-$Lane.md``. Say what you did, what is blocked, any pull request URL, and what you need next. Do not edit another lane's desk file. Do not put a password in a note.
+Read ``hackathon-site\docs\radio\README.md``, then ``## Now`` in ``docs\radio\integrator.md``. The desk folder is retired. If the human says ``continue``, that word is the whole order. Do not put a password in a note.
 
 Standing orders:
 
-1. Do not deploy. Do not run ``box.ps1``. Do not read ``C:\Users\MichaelThomson\Desktop\hackathon-linux.md``. Do not copy ``C:\Users\MichaelThomson\Desktop\confidential docs`` into a repo.
+1. Do not deploy. Do not run ``box.ps1`` or ``deploy-if-product.ps1``. Do not read ``C:\Users\MichaelThomson\Desktop\hackathon-linux.md``. Do not copy ``C:\Users\MichaelThomson\Desktop\confidential docs`` into a repo.
 2. Do not edit ``C:\Users\MichaelThomson\source\hackathon-site``, ``hackathon-api``, or ``hackathon-android``. Those folders belong to the integrator session.
-3. From ``hackathon-site``, run ``.\scripts\lane-sync.ps1`` before you edit and again before you push.
-4. Take one issue on ``Tyneside-Software/hackathon-site`` that is labelled ``ready``. Claim it with ``in-progress`` and ``lane:$Lane``, and remove ``ready``, before you branch. Read the issue back. If another lane owns it, stop. If nothing is ``ready``, report and stop. Do not start an issue that is not labelled ``ready``.
-5. In each repo you will change, branch ``lane/$Lane/<slug>`` from current ``origin/main``.
-6. Test before you push. API tests use ``.\.venv\Scripts\python.exe -m unittest tests.test_board`` from ``hackathon-api``. Android uses JDK 17 and ``.\gradlew.bat assembleDebug``.
-7. Commit only your files. Author on this PC: ``Michael Thomson <michael.thomson@cloudconnectsoftware.com>``. Push the lane branch. After a rebase, ``git push --force-with-lease`` is allowed on that branch only.
-8. Open a pull request into ``main``. Link ``Tyneside-Software/hackathon-site#ISSUE``. Do not merge it.
-9. Report the pull request URL and stop, unless the human told you to take the next ready issue.
+3. Build the unfinished line ``## Now`` names for this lane. One slice is one pull request, then four radio lines, then the next slice. A clear of one field is not the slice.
+4. From ``hackathon-site``, run ``.\scripts\lane-sync.ps1`` before you edit and again before you push.
+5. Branch ``lane/$Lane/<slug>`` from current ``origin/main``. Author ``Michael Thomson <michael.thomson@cloudconnectsoftware.com>``. ``git push --force-with-lease`` is allowed on that lane branch only.
+6. Test before you push. From ``hackathon-api``, ``.\.venv\Scripts\python.exe -m unittest tests.test_empire`` for game work, and ``tests.test_board`` for board work.
+7. Squash-merge your own pull request. Link ``Tyneside-Software/hackathon-site#ISSUE``. Do not use Closes, Fixes, or Resolves. Then merge your radio file and keep going for about 30 minutes.
+8. Do not edit the other dev's files. grok-dev-1 owns the empire API. grok-dev-2 owns ``play.html`` and ``play.js``. The page shows the feed. It does not invent places or positions.
 "@
 }
 

@@ -2,19 +2,21 @@
 
 Written on `main` for the other sessions to pull. The integrator updates this file by merging a branch. Lanes do not edit it.
 
-The human types `continue`. That means the slices below. The rule is in `docs/radio/README.md`.
-
-A radio note that says a heading is clear is stale when this file lists Open slices for that heading. Do those Open slices. Done is history. The reservoir is not work until it is moved into Open slices.
+The human types `continue`. The process is `docs/radio/README.md`. The current order in this file is `## Now`.
 
 ## How to read this
 
-`continue` is a long turn, about 30 minutes. The rule is in `docs/radio/README.md`. The product owner writes the next slices in `docs/radio/po.md`. The devs build those slices. They are not specialised. The integrator does not write the slice text.
+Read `docs/radio/README.md` first. In this file the order is `## Now`, then `## A running game stays up`, then `## The route is the gap`. Every other heading is history. Do not follow it.
 
-When a slice is already on `origin/main`, skip it. A list marked Waiting is not work. Office slices, desk slices, fare cards, and map titles M1 to M32 are Waiting. Do not stop after one slice. Do not write that a heading is clear while `po.md` still lists work.
+When `## Now` names a slice that is already on `origin/main`, skip it and take the next unfinished line `## Now` names. `po.md` Next loses when it names a finished slice, a clear of one field, or a control the API cannot do yet.
+
+grok-dev-1 owns the empire API files named in the radio README. grok-dev-2 owns `play.html` and `play.js`. Do not give both the same file. The integrator does not write the slice text unless Michael asks for an intervention.
+
+A list marked Waiting is not work. Office slices, desk slices, fare cards, and map titles M1 to M32 are Waiting. Do not stop after one slice. Do not write that a heading is clear while `## Now` still names work.
 
 The product brief is `docs/TAXI.md`. Do not invent a second fare table, a second map centre, or a fourth product. Do not edit `docs/TAXI.md`. Do not add `ready`. Leave September 2026 issues 1, 2, 3, 4, and 18 alone. Do not touch API pull request `reeve-branch`. Issues 22 and 29 stay `blocked`. Do not migrate `device_links` and do not write the live database.
 
-Queue depth is in `docs/radio/README.md`. The product owner keeps at least 16 unfinished slices in front of each dev, and at least 24 more in the reservoir.
+Queue depth is in `docs/radio/README.md`. The sixteen slices in front of a dev are behaviours someone can watch, or the seam that makes the next slice smaller. A clear of one field is not one of those slices.
 
 ## Now
 

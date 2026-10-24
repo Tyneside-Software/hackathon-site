@@ -101,14 +101,15 @@ From `hackathon-site`, with no password typed:
 
 ```powershell
 .\scripts\box.ps1 health
-.\scripts\box.ps1 update
-.\scripts\box.ps1 ssh "hostname"
+.\scripts\deploy-if-product.ps1
 .\scripts\check.ps1
 ```
 
+`deploy-if-product.ps1` is the four-agent deploy. It calls `box.ps1` in a child PowerShell and skips when the commits since the last deploy did not change `play.html`, `play.js`, `config.js`, or the API `app/` tree. Do not invoke `box.ps1` with the call operator from the current shell. The script ends in `exit`, which would exit that shell. Do not run two updates at once.
+
 `box.ps1` reads `SSH_HOST`, `SSH_USER`, and `SSH_PASSWORD` from `C:\Users\MichaelThomson\Desktop\hackathon-linux.md`. The script is in git. The password is not.
 
-`update` is the deploy. It pulls both repos on the box and rebuilds the API. Push `origin/main` first or the box stays on the old commit.
+`update` pulls both repos on the box. It recreates the API container only when `app/`, `main.py`, `requirements.txt`, `Dockerfile`, or `docker-entrypoint.sh` changed. Push `origin/main` first or the box stays on the old commit.
 
 `health` checks the API, the site, and SSH.
 

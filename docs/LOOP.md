@@ -6,7 +6,9 @@ Read [For Grok](#grok) and [Linux box and deploy](#linux) as well. This page is 
 
 ## If this checkout is a lane
 
-If `LANE.txt` sits beside these three repos, you are a dev lane or the product owner. Follow [Lanes](#lanes). Do not push `main`. Do not run `.\scripts\box.ps1`. The steps below are for the integrator folders `C:\Users\MichaelThomson\source\hackathon-site`, `hackathon-api`, and `hackathon-android`. That session is the one that deploys.
+If `LANE.txt` sits beside these three repos, you are a dev lane or the product owner. Follow [Lanes](#lanes) and `docs/radio/README.md`. Do not push `main` by hand. Do not run `.\scripts\box.ps1`. The steps below are for a one-off queue on the integrator folders `C:\Users\MichaelThomson\source\hackathon-site`, `hackathon-api`, and `hackathon-android`.
+
+The four-agent taxi game does not use this page as its order. Those sessions follow `docs/radio/README.md`. Their deploy is `.\scripts\deploy-if-product.ps1`, and only after product code is on `origin/main`.
 
 ## What a queue is
 
@@ -15,7 +17,7 @@ A queue is the whole message: a numbered list, a set of sentences, or several re
 - Do every item before reporting back.
 - Do not stop after the first item to ask whether to continue.
 - Do not ask the human to commit, push, SSH, build, or start the emulator.
-- Ship once, at the end. One `.\scripts\box.ps1 update` covers the site and the API. The box pulls `origin/main` only.
+- Ship once, at the end, with `.\scripts\deploy-if-product.ps1`. The box pulls `origin/main` only. A radio-only queue does not recreate the container.
 
 Connor’s PC does not have the Desktop password file. On Michael’s PC the file is `C:\Users\MichaelThomson\Desktop\hackathon-linux.md`. Never copy it into a repo, a commit, or a chat log.
 
@@ -29,11 +31,11 @@ Connor’s PC does not have the Desktop password file. On Michael’s PC the fil
    - Android code: JDK 17 at `C:\Program Files\Microsoft\jdk-17.0.20.101-hotspot`, then `.\gradlew.bat assembleDebug` from `hackathon-android`.
 5. Commit each repo that this queue changed. Leave unrelated dirt alone. Do not commit `build-err.txt`, `*.db`, `.env`, or the Desktop sheet. Author `Michael Thomson <michael.thomson@cloudconnectsoftware.com>`.
 6. In each repo: `git pull --rebase origin main`, then `git push origin main`. `origin` is the Tyneside-Software org. Do not force-push. Do not push the `personal` remote and expect the box to see it.
-7. From `hackathon-site`: `.\scripts\box.ps1 update`. That SSHs to `192.168.0.52` as `michael` and runs `/usr/local/bin/update`. Do not SSH to `100.65.94.5`.
+7. From `hackathon-site`: `.\scripts\deploy-if-product.ps1`. That runs the box update when `play.html`, `play.js`, `config.js`, or the API `app/` tree changed. A radio-only queue skips. Do not SSH to `100.65.94.5`. Do not invoke `box.ps1` with PowerShell's call operator from the current shell. Its `exit` would close that shell.
 8. From `hackathon-site`: `.\scripts\check.ps1`. It must print `CHECK-OK`.
 9. Run the extra proofs in the table below when the queue touched that area. Then report the SHAs, the health version, and the proof for each item.
 
-`update` rebuilds the API image and fast-forwards the site. It keeps `data/hackathon.db`. A pull on the box without that script leaves the old image running.
+`/usr/local/bin/update` recreates the API container only when the pull changed `app/`, `main.py`, `requirements.txt`, `Dockerfile`, or `docker-entrypoint.sh`. Otherwise it leaves the container running. It keeps `data/hackathon.db`. The detail is [Linux box and deploy](#linux).
 
 ## Proofs
 
@@ -60,7 +62,7 @@ Connor’s PC does not have the Desktop password file. On Michael’s PC the fil
 
 | What failed | What to do |
 |-------------|------------|
-| `check.ps1` version mismatch | The box is still on the old image. Push `origin/main`, then `.\scripts\box.ps1 update` once. |
+| `check.ps1` version mismatch | The box is still on the old image. Push `origin/main`, then `.\scripts\deploy-if-product.ps1` once. |
 | `update` pull is not a fast-forward | Fix `main` on GitHub. Do not reset the box checkout by hand. |
 | SSH to `100.65.94.5` waits on a browser | Stop. Use `.\scripts\box.ps1`, which connects to `192.168.0.52`. That works when this PC is on the same LAN. |
 | Unit tests fail | Fix and re-run before pushing. |

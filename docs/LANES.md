@@ -10,7 +10,7 @@ Read [Development loop](#loop) for tests and for the integrator’s deploy. Read
 
 | Checkout | On Michael’s PC | Merge to `main` | Deploy the box |
 |----------|-----------------|-----------------|----------------|
-| Integrator | `C:\Users\MichaelThomson\source\hackathon-site` and its two siblings | Yes | Yes. `.\scripts\box.ps1 update`, then `.\scripts\check.ps1` |
+| Integrator | `C:\Users\MichaelThomson\source\hackathon-site` and its two siblings | Yes | Yes. `.\scripts\deploy-if-product.ps1`, which runs the box update only when product files changed. Then `.\scripts\check.ps1` must print `CHECK-OK`. |
 | Product owner | `C:\Users\MichaelThomson\source\lanes\po` | Its own radio branch | No |
 | grok-dev-1 | `C:\Users\MichaelThomson\source\lanes\grok-dev-1` | Its own pull requests | No |
 | grok-dev-2 | `C:\Users\MichaelThomson\source\lanes\grok-dev-2` | Its own pull requests | No |
@@ -66,11 +66,11 @@ The integrator deploys from `C:\Users\MichaelThomson\source\hackathon-site` afte
 
 ## What each session does
 
-**Product owner.** Read `docs/radio/integrator.md` on `origin/main`. File the issues listed there. Do not edit product code. After each issue, merge `docs/radio/po.md`. Keep going through that heading in the same turn.
+**Product owner.** Read `docs/radio/README.md`, then `## Now` in `docs/radio/integrator.md`. Number that work and set each dev `Next`. Do not edit product code. Merge only `docs/radio/po.md`. Keep going for the whole turn.
 
-**Dev lane.** Read `docs/radio/integrator.md`. Do your heading, one slice at a time. Commit, rebase onto `origin/main`, push, and squash-merge before the next slice. Update your own radio file by its own merge in the middle of the turn. Read the other radio files before the next slice.
+**Dev lane.** Read the same two files. grok-dev-1 owns the empire API files. grok-dev-2 owns `play.html` and `play.js`. Build the unfinished line `## Now` names, squash-merge it, then four lines in your own radio file, then the next slice. A clear of one field is not the slice.
 
-**Integrator.** This is the session on the `source\hackathon-*` folders. It is the session Michael talks to. It writes orders in `docs/radio/integrator.md` and reads the other radio files on `origin/main`. It deploys after product merges. It does not use the desk folder.
+**Integrator.** This is the session on the `source\hackathon-*` folders. It is the session Michael talks to. It writes `## Now` and deploys with `.\scripts\deploy-if-product.ps1` after product code has merged. A radio-only merge is not a deploy. It does not use the desk folder. The full loop is `docs/radio/README.md`.
 
 ## Commands
 

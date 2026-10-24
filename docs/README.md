@@ -16,6 +16,7 @@ The wiki people use is [index.html](index.html) (live `/docs/`). Markdown here i
 | [linux.md](linux.md) | `#linux` | Box, SSH, deploy, emulator |
 | [LOOP.md](LOOP.md) | `#loop` | Queued changes: test, push, update, check |
 | [LANES.md](LANES.md) | `#lanes` | Parallel checkouts, branches, pull requests |
+| [radio/README.md](radio/README.md) | — | Cold-start manual for the four taxi-game sessions |
 | [DESK.md](DESK.md) | `#desk` | Retired. Sessions talk through `docs/radio/` on `main` |
 | [connor/](connor/home.md) | `#connor` | Connor’s shelf |
 | [adding.md](adding.md) | `#adding` | How to add a page |

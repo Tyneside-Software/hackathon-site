@@ -49,10 +49,16 @@
           "summary": "Separate checkouts, lane branches, and pull requests into main. Only the integrator deploys."
         },
         {
+          "id": "radio",
+          "title": "Four sessions",
+          "file": "radio/README.md",
+          "summary": "Cold-start manual for the integrator, the product owner, and the two dev lanes."
+        },
+        {
           "id": "desk",
           "title": "Desk",
           "file": "DESK.md",
-          "summary": "Where the integrator leaves orders and where each lane writes its reply."
+          "summary": "Retired. The four sessions talk through docs/radio/ on main."
         },
         {
           "id": "taxi",
