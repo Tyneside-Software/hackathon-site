@@ -66,6 +66,7 @@ Not assigned. Do not start these.
 - #880 Play trails are not bus trails. Label repo:site only. No ready label.
 - #882 The play status names the call sign. Label repo:site only. No ready label.
 - #884 A click on play.html does not add a waypoint. Label repo:site only. No ready label.
+- #888 The play circle is not recentred by a car. Label repo:site only. No ready label.
 
 ## Next for me
 
