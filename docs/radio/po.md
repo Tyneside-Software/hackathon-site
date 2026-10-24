@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/167
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/170
 
-Title: Live fares stay inside eight miles. Label repo:site only. No ready label.
+Title: Live fare uses the November 2024 tariff. Label repo:site only. No ready label.
 
-Next: Live fare uses the November 2024 tariff
+Next: Three cars can be out at once
