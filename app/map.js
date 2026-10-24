@@ -115,7 +115,7 @@
     return (km / MILE_KM) * 3600 / 30;
   }
 
-  function moveSample(points, durationS) {
+  function moveSample(points, durationS, onDone) {
     if (sampleMotion) cancelAnimationFrame(sampleMotion);
     const started = Date.now();
     const duration = durationS > 0 ? durationS : fallbackDuration(points);
@@ -129,9 +129,32 @@
       if (tip) tip.setContent(text);
       else sampleMarker.bindTooltip(text, { permanent: true, direction: "right" });
       if (elapsed < duration) sampleMotion = requestAnimationFrame(frame);
-      else sampleMotion = 0;
+      else {
+        sampleMotion = 0;
+        if (onDone) onDone();
+      }
     }
     frame();
+  }
+
+  async function followPath(path, onDone) {
+    const joined = path.map((p) => `${p[1].toFixed(6)},${p[0].toFixed(6)}`).join(";");
+    const url = `${OSRM}${joined}?overview=full&geometries=geojson`;
+    try {
+      const res = await fetch(url);
+      if (!res.ok) throw new Error("HTTP " + res.status);
+      const data = await res.json();
+      const route = data.routes && data.routes[0];
+      if (!route) throw new Error("no route");
+      const coords = route.geometry.coordinates.map(([lng, lat]) => [lat, lng]);
+      drawSample(coords);
+      moveSample(coords, route.duration, onDone);
+      return true;
+    } catch (err) {
+      drawSample(path);
+      moveSample(path, fallbackDuration(path), onDone);
+      return false;
+    }
   }
 
   async function driveSample(dest, doneText) {
@@ -219,27 +242,33 @@
 
   addCustomerPin(DEPOT);
 
+  function markDepot() {
+    sampleMarker.setLatLng(DEPOT);
+    const tip = sampleMarker.getTooltip();
+    if (tip) tip.setContent("at_depot");
+    else sampleMarker.bindTooltip("at_depot", { permanent: true, direction: "right" });
+    const sampleStatus = document.getElementById("sample-status");
+    if (sampleStatus) sampleStatus.textContent = "at_depot";
+  }
+
+  async function driveHome(origin) {
+    const sampleStatus = document.getElementById("sample-status");
+    const tip = sampleMarker.getTooltip();
+    if (tip) tip.setContent("returning");
+    if (sampleStatus) sampleStatus.textContent = "returning";
+    const osrm = await followPath([origin, DEPOT], markDepot);
+    if (!osrm && sampleStatus && sampleStatus.textContent !== "at_depot") {
+      sampleStatus.textContent = "OSRM unavailable";
+    }
+  }
+
   async function startOfferCar(dest) {
     if (customerPins.length) map.removeLayer(customerPins.shift());
-    const path = [DEPOT, dest];
-    const joined = path.map((p) => `${p[1].toFixed(6)},${p[0].toFixed(6)}`).join(";");
-    const url = `${OSRM}${joined}?overview=full&geometries=geojson`;
     const sampleStatus = document.getElementById("sample-status");
     if (sampleStatus) sampleStatus.textContent = "Asking OSRM…";
-    try {
-      const res = await fetch(url);
-      if (!res.ok) throw new Error("HTTP " + res.status);
-      const data = await res.json();
-      const route = data.routes && data.routes[0];
-      if (!route) throw new Error("no route");
-      const coords = route.geometry.coordinates.map(([lng, lat]) => [lat, lng]);
-      drawSample(coords);
-      moveSample(coords, route.duration);
-      if (sampleStatus) sampleStatus.textContent = "T1 started. The customer pin is gone.";
-    } catch (err) {
-      drawSample(path);
-      moveSample(path, fallbackDuration(path));
-      if (sampleStatus) sampleStatus.textContent = "OSRM unavailable";
+    const osrm = await followPath([DEPOT, dest], () => driveHome(dest));
+    if (sampleStatus && sampleStatus.textContent === "Asking OSRM…") {
+      sampleStatus.textContent = osrm ? "T1 started. The customer pin is gone." : "OSRM unavailable";
     }
   }
 

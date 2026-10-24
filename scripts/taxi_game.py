@@ -327,6 +327,14 @@ def start_accepted(taken):
     }
 
 
+def return_leg(origin, duration_s, elapsed_s):
+    """After the drop-off the car drives back to the depot. Arrival sets at_depot."""
+    if duration_s <= 0 or elapsed_s >= duration_s:
+        return {"status": "at_depot", "lat": DEPOT[0], "lng": DEPOT[1]}
+    point = position_on_route((origin, DEPOT), duration_s, elapsed_s)
+    return {"status": "returning", "lat": point[0], "lng": point[1]}
+
+
 def position_on_route(points, duration_s, elapsed_s):
     """Place on a polyline. The checker passes points and a duration. It does not call OSRM."""
     if not points:
