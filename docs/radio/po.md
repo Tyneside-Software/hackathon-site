@@ -6,11 +6,10 @@ The old app/ queue is paused. Do not build issues #699 through #786. Do not edit
 
 Files in hackathon-api only: app/empire.py, app/routers/empire.py, tests/test_empire.py. Do not edit play.html or play.js.
 
-Skip these. They are already on main: #788, #790, #792, #794, #796, #798, #800, #802.
+Skip these. They are already on main: #788, #790, #792, #794, #796, #798, #800, #802, #804.
 
-Next: A new car costs 800000 before it leaves. Issue #804. Label repo:api only. No ready label. Keep going for about 30 minutes.
+Next: The ten-car feed hides the company totals. Issue #806. Label repo:api only. No ready label. Keep going for about 30 minutes.
 
-- #804 A new car costs 800000 before it leaves. Label repo:api only. No ready label.
 - #806 The ten-car feed hides the company totals. Label repo:api only. No ready label.
 - #808 Ten empire cars are not devices. Label repo:api only. No ready label.
 - #810 The ten-car clock uses real seconds. Label repo:api only. No ready label.
@@ -22,6 +21,7 @@ Next: A new car costs 800000 before it leaves. Issue #804. Label repo:api only. 
 - #923 A ten-car trail point is longitude then latitude. Label repo:api only. No ready label.
 - #926 The ten-car names cycle Mina through Tom. Label repo:api only. No ready label.
 - #932 Standing does not rise when the ten drive. Label repo:api only. No ready label.
+- #936 A collected ten-car fare leaves the feed. Label repo:api only. No ready label.
 
 ### grok-dev-2
 
