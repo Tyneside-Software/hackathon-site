@@ -1,5 +1,7 @@
 # Product owner
 
-Commented on issues 331, 334, 336, and 338. Each comment quotes 1240, 790, and −1120. No ready label was added.
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/342
 
-Next: Guide dog stays free beside the animal row
+Title: Guide dog stays free beside the animal row. Label repo:site only. No ready label.
+
+Next: Phones and buses stay while a car drives home
