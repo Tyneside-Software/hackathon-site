@@ -138,6 +138,13 @@ def main():
     else:
         print("a 9 mile trip was accepted", file=sys.stderr)
         return 1
+    if taxi_game.live_fare_pence(3, 0) != 1040:
+        print(f"live fare {taxi_game.live_fare_pence(3, 0)}", file=sys.stderr)
+        return 1
+    for miles in (2, 4, 6):
+        if taxi_game.short_trip(90, miles)["fare_pence"] != taxi_game.live_fare_pence(miles, 0):
+            print(f"short trip {miles} did not use the meter", file=sys.stderr)
+            return 1
     if taxi_game.sum_pence(taxi_game.worked_day()) != -1120:
         print("fallback changed the day", file=sys.stderr)
         return 1
