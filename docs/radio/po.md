@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/355
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/357
 
-Title: 1 January quote uses tariff one. Label repo:site only. No ready label.
+Title: Soiling shows a meter of zero. Label repo:site only. No ready label.
 
-Next: Soiling shows a meter of zero
+Next: Oldest offer is listed first
