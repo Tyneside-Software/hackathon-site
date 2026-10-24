@@ -1,5 +1,14 @@
-// Tailscale host (port 8080). Override before this file loads if you need local uvicorn.
-window.HACKATHON_API = window.HACKATHON_API || "http://100.65.94.5:8080";
+// Pages is HTTPS, so it calls the HTTPS tunnel. The box and localhost keep the Tailscale HTTP API.
+// Override before this file loads if you need local uvicorn.
+(function () {
+  if (window.HACKATHON_API) return;
+  var host = "";
+  try { host = location.hostname; } catch (e) { host = ""; }
+  var pages = host === "hackathon.tyneside.software" || host === "tyneside.software" || /\.github\.io$/.test(host);
+  window.HACKATHON_API = pages
+    ? "https://keyword-chamber-stands-graphics.trycloudflare.com"
+    : "http://100.65.94.5:8080";
+})();
 
 // Social login — paste IDs here (and on Cloud Run) to switch the buttons on.
 // Google: https://console.cloud.google.com/apis/credentials  → OAuth client, Web

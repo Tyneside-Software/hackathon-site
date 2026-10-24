@@ -38,6 +38,10 @@ Do not redo a slice that is already on `main`. Do not start the reservoir.
 
 The integrator deploys this PC when those files change. Lanes do not deploy.
 
+## Public site
+
+`https://hackathon.tyneside.software` is GitHub Pages. `play.html` loads `config.js` before `play.js`. On that host, `config.js` calls `https://keyword-chamber-stands-graphics.trycloudflare.com`, which tunnels to the box API. Do not remove that script tag. Do not point the Pages host at `http://100.65.94.5:8080`. The box and localhost keep that HTTP address.
+
 ## Last order before morning
 
 This is the last note. The continues already queued are the whole of the work until morning. Do not wait for another integrator note.
