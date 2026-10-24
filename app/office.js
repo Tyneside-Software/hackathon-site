@@ -598,6 +598,16 @@
     dayNote("Restored three completed bookings, 1130, 1240, and 490. The day shows " + runningPence() + ".");
   }
 
+  function showAlexDay() {
+    var rows = workedRows();
+    samples = [completedRow(rows[0]), completedRow(rows[2])];
+    addedQuotes = [];
+    persistDay();
+    renderSamples();
+    renderLedger();
+    dayNote("Alex's 1130 and 490 show " + runningPence() + ".");
+  }
+
   function showCancelledMile() {
     var rows = workedRows();
     var mile = copyRow(rows[2]);
@@ -623,6 +633,7 @@
 
   document.getElementById("btn-restore").addEventListener("click", showFullDay);
   document.getElementById("btn-day-full").addEventListener("click", showFullDay);
+  document.getElementById("btn-day-alex").addEventListener("click", showAlexDay);
   document.getElementById("btn-day-empty").addEventListener("click", showEmptyDay);
   document.getElementById("btn-day-cancel").addEventListener("click", showCancelledMile);
 
