@@ -349,6 +349,24 @@ def post_live_fuel(trip_id, miles, posted=()):
     }
 
 
+def seconds_remaining(duration_s, elapsed_s):
+    """Seconds left on a moving car's booking row. One real second is one game second."""
+    if duration_s <= 0 or elapsed_s >= duration_s:
+        return 0
+    if elapsed_s <= 0:
+        return duration_s
+    return duration_s - elapsed_s
+
+
+def moving_row(call_sign, duration_s, elapsed_s):
+    """The booking row of a car that is on a route."""
+    return {
+        "call_sign": call_sign,
+        "status": "started",
+        "seconds_remaining": seconds_remaining(duration_s, elapsed_s),
+    }
+
+
 def position_on_route(points, duration_s, elapsed_s):
     """Place on a polyline. The checker passes points and a duration. It does not call OSRM."""
     if not points:
