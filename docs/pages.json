@@ -79,6 +79,12 @@
           "summary": "Many-to-many device links, and why game taxis are not devices."
         },
         {
+          "id": "taxi-game",
+          "title": "Game store",
+          "file": "taxi-game.md",
+          "summary": "Empire game tables. No device_id, and no rows in devices."
+        },
+        {
           "id": "onboarding",
           "title": "Onboarding (night)",
           "href": "../onboarding.html",
