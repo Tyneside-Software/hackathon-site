@@ -34,6 +34,7 @@
     T10: "#facc15"
   };
   const playChips = new Map();
+  const playFares = [];
   let playFeed = null;
   let playClock = null;
   let playMotion = 0;
@@ -144,6 +145,30 @@
     });
   }
 
+  function paintPlayFares(feed) {
+    playFares.forEach((marker) => map.removeLayer(marker));
+    playFares.length = 0;
+    const fares = feed && Array.isArray(feed.fares) ? feed.fares : [];
+    fares.forEach((fare) => {
+      if (!fare) return;
+      const lat = Number(fare.lat);
+      const lng = Number(fare.lng);
+      if (!Number.isFinite(lat) || !Number.isFinite(lng)) return;
+      const name = fare.name || "Passenger";
+      const marker = L.marker([lat, lng], {
+        icon: L.divIcon({
+          className: "play-chip-icon",
+          html: '<span class="play-fare" style="display:inline-block;padding:2px 6px;border-radius:6px;background:#fff;color:#0c1219;font:700 11px/1.2 system-ui,sans-serif;white-space:nowrap">' + name + " waiting</span>",
+          iconSize: [120, 22],
+          iconAnchor: [60, 22]
+        }),
+        title: name + " waiting",
+        zIndexOffset: 650
+      }).addTo(map);
+      playFares.push(marker);
+    });
+  }
+
   async function pollPlay() {
     const token = localStorage.getItem("hackathon-empire-token") || "";
     const base = apiBase();
@@ -157,6 +182,7 @@
     const server = Number(data.server_now);
     if (Number.isFinite(server)) playClock = { server: server, client: Date.now() / 1000 };
     paintPlayCars(data);
+    paintPlayFares(data);
     paintPlayMoney(data);
     paintPlayOsrm(data);
     if (!playMotion) playMotion = requestAnimationFrame(glidePlay);
