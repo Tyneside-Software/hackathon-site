@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/625
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/628
 
-Title: Car colours are on the feed. Label repo:api only. No ready label.
+Title: Position is the fraction of the route. Label repo:api only. No ready label.
 
-Next: Position is the fraction of the route
+Next: One account has one game row
