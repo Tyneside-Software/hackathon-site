@@ -26,17 +26,28 @@ The office and the empire desk stay as they are. `office.html` is the real compa
 
 | Lane | State | Next slice |
 |------|--------|------------|
-| Product owner | Off track at `6dfd8ae`. The queues still lead with locks. `play.js` has no 800000 purchase. The dashboard waits. | The next commit is one `po.md` change. Put the watch and the 800000 purchase at the front of both queues. Park the lock lines. Do not open another lock first. |
-| grok-dev-1 | You are on lock slices. #1018 is not the morning work. Finish only the slice you have already started. | Pull. If the new front is the purchase that spends 800000 and adds one car, build that, then the next morning slice. If the front is still a lock, write `morning order not at the front`, pull once more, and do not build that lock. Do not edit `play.html` or `play.js`. Do not invent a second price. A tick must not invent an eleventh car. A paid purchase may add the next sign. |
-| grok-dev-2 | You are on lock slices. #1028 may be finished if you have already started it. The depot mark is visible. The locks after it are not the morning work. | Pull. If the new front is the watch and the control that buys the next car, build that. If the front is still a lock, write `morning order not at the front`, pull once more, and do not build that lock. Do not edit `app/map.js`. |
+| Product owner | This is the last integrator note before morning. Do not wait for another. The dashboard waits. | Use the next continue for one `po.md` commit. Put the watch and the 800000 purchase at the front of both queues. Park the lock lines. Do not open another lock. Leave `## Next for me` with four jobs. |
+| grok-dev-1 | This is the last integrator note before morning. Do not wait for another. Locks are not the work. | On each remaining continue: pull, then build the morning purchase at the front of `### grok-dev-1`. One product pull request, four radio lines, then the next morning slice. If the front is still a lock, write `morning order not at the front` and stop. Do not edit `play.html` or `play.js`. A tick must not invent an eleventh car. A paid 800000 purchase may add the next sign. |
+| grok-dev-2 | This is the last integrator note before morning. Do not wait for another. The depot mark is done if it is already on `main`. | On each remaining continue: pull, then build the watch and the buy control at the front of `### grok-dev-2`. One product pull request, four radio lines, then the next morning slice. If the front is still a lock, write `morning order not at the front` and stop. Do not edit `app/map.js`. |
 
 Do not redo a slice that is already on `main`. Do not start the reservoir.
 
-## Next two hours
+## Last order before morning
 
-At `6dfd8ae` this is off track. grok-dev-1's radio says next is #1018. grok-dev-2's radio says next is #1028. Neither is the purchase. `play.js` only mentions 800000 as a money line. Master is watching the next two hours so the morning page is the watch, then the purchase.
+This is the last note. The continues already queued are the whole of the work until morning. Do not wait for another integrator note.
 
-The opening ten stay ten unless the player pays. `test_ten_car_feed_does_not_grow_an_eleventh_sign` stays true for a tick nobody paid for. The purchase is a separate action. It spends 800000 pence and adds the next car to that account. The new chip shows on the map.
+By morning, http://100.65.94.5/play.html lets Master watch, then grow the empire.
+
+1. The map is the page. Ten taxis are moving in real seconds. The in-game money is changing. One Start is enough when there is no saved account: `POST /register`, then `POST /login`. The token stays `hackathon-empire-token`.
+2. A control spends 800000 pence and one more car joins that account and appears on the map. The opening ten stay. The price stays 800000. No second fare table, fuel rate, or standing charge.
+3. `test_ten_car_feed_does_not_grow_an_eleventh_sign` stays true. A tick nobody paid for does not add a car. The purchase is the only way to add one.
+4. No phone list, no bus toggle, no Place stops. Do not show 2860, 1130, or 1240.
+
+Product owner: one commit, at the front of both queues, those two outcomes. Park the lock list. grok-dev-1 owns the purchase and the feed. grok-dev-2 owns the watch and the control. Do not give both the same file. Do not edit the dashboard tonight.
+
+Devs: the remaining continues build that front, and nothing else. A lock at the front means stop, not another lock. Output is the product pull request.
+
+The integrator PC deploys when `play.html`, `play.js`, `config.js`, or the API `app/` tree changes. Lanes do not deploy. Merge to `origin/main`.
 
 ## This stretch
 
