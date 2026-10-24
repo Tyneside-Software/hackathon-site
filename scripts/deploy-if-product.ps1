@@ -58,8 +58,9 @@ if ($update.Code -ne 0) {
 
 $siteSha = $siteOrigin
 $apiSha = $apiOrigin
-if ($update.Text -match "(?m)^--- site ---\r?\n([0-9a-f]+)") { $siteSha = $Matches[1] }
-if ($update.Text -match "(?m)^--- api ---\r?\n([0-9a-f]+)") { $apiSha = $Matches[1] }
+# Case-sensitive. PowerShell -match treats "From" as the hex digit f.
+if ($update.Text -cmatch "(?m)^--- site ---\r?\n([0-9a-f]{7,40})\s*$") { $siteSha = $Matches[1] }
+if ($update.Text -cmatch "(?m)^--- api ---\r?\n([0-9a-f]{7,40})\s*$") { $apiSha = $Matches[1] }
 
 $check = & pwsh -NoProfile -File (Join-Path $Site "scripts\check.ps1") 2>&1 | Out-String
 Write-Output $check
