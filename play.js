@@ -1132,6 +1132,29 @@
     });
     notePersonWaiting(drawn, stayed);
     notePersonStays(stayed, arrived);
+    showWaitingCount(waitingPeople(feed));
+  }
+
+  function waitingPeople(feed) {
+    const people = feed && Array.isArray(feed.people) ? feed.people : [];
+    let count = 0;
+    people.forEach((person) => {
+      if (!person || allocatedTaxiArrived(feed, person)) return;
+      count += 1;
+    });
+    return count;
+  }
+
+  function showWaitingCount(count) {
+    const node = document.getElementById("play-waiting-count");
+    if (!node) return;
+    if (count === null || count === undefined) {
+      node.textContent = "";
+      node.hidden = true;
+      return;
+    }
+    node.hidden = false;
+    node.textContent = count + " waiting";
   }
 
   function notePersonWaiting(drawn, stayed) {
@@ -1269,6 +1292,7 @@
   function clearSignOutPeople() {
     playPeople.forEach((marker) => map.removeLayer(marker));
     playPeople.length = 0;
+    showWaitingCount(null);
     const node = document.getElementById("play-signout-person");
     if (!node) return;
     node.dataset.person = playPeople.length === 0 ? "clear" : "shows";
@@ -1374,6 +1398,7 @@
   function clearFeed401People() {
     playPeople.forEach((marker) => map.removeLayer(marker));
     playPeople.length = 0;
+    showWaitingCount(null);
     const node = document.getElementById("play-feed-401-person");
     if (!node) return;
     node.dataset.person = playPeople.length === 0 ? "clear" : "shows";
@@ -1561,6 +1586,7 @@
     if (!previous || previous === username) return;
     playPeople.forEach((marker) => map.removeLayer(marker));
     playPeople.length = 0;
+    showWaitingCount(null);
     const node = document.getElementById("play-next-person");
     if (!node) return;
     node.dataset.person = playPeople.length === 0 ? "clear" : "shows";
@@ -1857,6 +1883,7 @@
   function clearSignedPeople() {
     playPeople.forEach((marker) => map.removeLayer(marker));
     playPeople.length = 0;
+    showWaitingCount(null);
     const node = document.getElementById("play-signed-person");
     if (!node) return;
     node.dataset.person = playPeople.length === 0 ? "clear" : "shows";
@@ -1977,6 +2004,7 @@
   function clearQuietPeople() {
     playPeople.forEach((marker) => map.removeLayer(marker));
     playPeople.length = 0;
+    showWaitingCount(null);
     const node = document.getElementById("play-quiet-person");
     if (!node) return;
     node.dataset.person = playPeople.length === 0 ? "clear" : "shows";
