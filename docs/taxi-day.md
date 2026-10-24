@@ -13,3 +13,15 @@ The fare is the brief's checked figure, tariff one for 3 miles, £10.40. This pa
 | Sum | −1120 |
 
 Standing is 1500 pence for the one car. The fare in is 1040 pence. The driver's share is half of that fare, 520 pence, paid out of it. The fuel is the seven miles in this example at 20 pence a mile, 140 pence. Those four lines sum to −1120 pence.
+
+## Other cases
+
+These cases are not lines on the worked day above. They do not change the sum of −1120.
+
+Cancel before the car starts: no `fare_in` line and no `fuel` line.
+
+Cancel after 1 mile: a `fuel` line of −20 pence, and no fare. That is this one mile at 20 pence. There is no `fare_in` line.
+
+A second car is a `new_car` line of −800000 pence, then a `game_taxis` row. It is never a row in `devices`. It cannot leave the depot until that line is paid.
+
+Issue 28 is One empire day at Shiremoor: https://github.com/Tyneside-Software/hackathon-site/issues/28
