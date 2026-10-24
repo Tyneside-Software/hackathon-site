@@ -14,6 +14,14 @@
 .map-side h1 { font-size: 1.45rem; margin-bottom: 0.4rem; }
 .map-actions { display: flex; flex-wrap: wrap; gap: 0.45rem; margin: 0.9rem 0 0.75rem; }
 .map-status { font-size: 0.88rem; color: var(--muted); min-height: 1.4em; }
+.empire-account {
+  margin: 0.35rem 0 0.75rem;
+  padding: 0.55rem 0.7rem;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+.empire-account .hero-kicker { margin: 0 0 0.25rem; }
 .stats {
   display: grid;
   grid-template-columns: 1fr 1fr;

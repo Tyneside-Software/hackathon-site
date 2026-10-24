@@ -66,11 +66,15 @@
       <p class="map-status" id="device-status">Waiting for tracker pings.</p>
       <ul class="phone-list" id="devices"></ul>
       <p class="hero-kicker" style="margin-top:1.25rem">Empire</p>
-      <p class="lede" style="font-size:0.88rem">Three taxis on this map. Each collects a virtual passenger, drives the streets, and returns to the Shiremoor depot. One real second is one game second. They are not phones.</p>
+      <form id="empire-account" class="empire-account">
+        <p class="hero-kicker">Account</p>
+        <p class="map-status" id="empire-account-status">An account comes before the taxis.</p>
+      </form>
+      <p class="lede" style="font-size:0.88rem">The account form comes first. This page does not start T1, T2, and T3 by itself.</p>
       <div class="map-actions">
-        <button type="button" class="btn btn-fill is-on" id="btn-taxis" aria-pressed="true">Hide taxis</button>
+        <button type="button" class="btn btn-ghost" id="btn-taxis" aria-pressed="false">Show taxis</button>
       </div>
-      <p class="map-status" id="taxi-status">Starting the fleet.</p>
+      <p class="map-status" id="taxi-status">An account comes before the taxis.</p>
       <ul class="phone-list" id="taxi-list"></ul>
       <p class="lede" style="font-size:0.88rem">The sample car is separate. It is not one of the three taxis.</p>
       <div class="map-actions">
