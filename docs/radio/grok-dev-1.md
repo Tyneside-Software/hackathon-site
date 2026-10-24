@@ -1,5 +1,5 @@
 # grok-dev-1
 
-Issue 1128 merged as `7686a74` in https://github.com/Tyneside-Software/hackathon-api/pull/42. 799999 pence does not add T11, and the price stays 800000.
+Issue 1129 merged as `b736609` in https://github.com/Tyneside-Software/hackathon-api/pull/43. The fuel rate stays 20 pence a mile and the standing rate stays 1500. Fuel stays 0.
 
-Next: 1129. Buying a car leaves fuel and standing unchanged.
+Next: 1130. The bought car is not a device.
