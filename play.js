@@ -154,6 +154,7 @@
       "play-signed-chips",
       "play-person-waiting",
       "play-person-stays",
+      "play-person-sign",
       "play-car-job",
       "play-job-feed",
       "play-next-failed",
@@ -1216,26 +1217,49 @@
       const lat = Number(person.lat);
       const lng = Number(person.lng);
       if (!Number.isFinite(lat) || !Number.isFinite(lng)) return;
-      const name = person.name || "Person";
+      const sign = personTaxiSign(person);
+      const label = personPinText(person);
+      const width = Math.max(72, 8 + label.length * 7);
       const marker = L.marker([lat, lng], {
         icon: L.divIcon({
           className: "play-chip-icon",
-          html: '<span class="play-person" style="display:inline-block;padding:2px 6px;border-radius:999px;background:#111827;color:#f8fafc;font:700 11px/1.2 system-ui,sans-serif;white-space:nowrap">' + name + "</span>",
-          iconSize: [120, 22],
-          iconAnchor: [60, 22]
+          html: '<span class="play-person" style="display:inline-block;padding:2px 6px;border-radius:999px;background:#111827;color:#f8fafc;font:700 11px/1.2 system-ui,sans-serif;white-space:nowrap">' + personPinHtml(label) + "</span>",
+          iconSize: [width, 22],
+          iconAnchor: [width / 2, 22]
         }),
-        title: name,
+        title: label,
         zIndexOffset: 700
       }).addTo(map);
+      marker._playPersonSign = sign;
       const time = personTimeText(person);
       if (time) marker.bindTooltip(mapHtml(time), { permanent: true, direction: "top", className: "play-leg-label", opacity: 0.95 });
       playPeople.push(marker);
       drawn += 1;
-      if (person.allocated === true || personTaxiSign(person)) stayed += 1;
+      if (person.allocated === true || sign) stayed += 1;
     });
     notePersonWaiting(drawn, stayed);
     notePersonStays(stayed, arrived);
+    notePersonSign();
     showWaitingCount(waitingPeople(feed));
+  }
+
+  function personPinText(person) {
+    const name = String(person && person.name || "Person").trim() || "Person";
+    const sign = personTaxiSign(person);
+    return sign ? name + " " + sign : name;
+  }
+
+  function personPinHtml(text) {
+    return String(text).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  }
+
+  function notePersonSign() {
+    const node = document.getElementById("play-person-sign");
+    if (!node) return;
+    const claimed = playPeople.filter((marker) => marker && marker._playPersonSign).length;
+    node.dataset.sign = claimed ? "feed" : "none";
+    node.dataset.claimed = String(claimed);
+    node.dataset.offset = "none";
   }
 
   function waitingPeople(feed) {
