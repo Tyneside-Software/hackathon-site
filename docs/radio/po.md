@@ -26,6 +26,7 @@ Next: Ten-car trips stay inside the circle. Issue #816. Label repo:api only. No 
 - #959 The new-car 800000 is not added to fare_in. Label repo:api only. No ready label.
 - #970 The ten-car feed does not grow an eleventh sign. Label repo:api only. No ready label.
 - #973 The username still shifts the ten-car bearing. Label repo:api only. No ready label.
+- #975 Ten-car pings older than ten minutes leave the trail. Label repo:api only. No ready label.
 
 ### grok-dev-2
 
