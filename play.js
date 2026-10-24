@@ -153,6 +153,7 @@
       "play-signed-chips",
       "play-person-waiting",
       "play-person-stays",
+      "play-car-job",
       "play-locks",
       "play-osrm",
       "play-buses",
@@ -315,10 +316,23 @@
     return String(sign || "").replace(/device/ig, "").trim();
   }
 
-  function chipIcon(sign, fill) {
+  function carJob(car) {
+    if (!car) return "";
+    const raw = String(car.job || car.status || "").trim();
+    if (raw === "waiting" || raw === "at_depot") return "waiting";
+    if (raw === "travelling to a better spot" || raw === "travelling" || raw === "to_better_spot") return "travelling to a better spot";
+    if (raw === "collecting" || raw === "to_passenger") return "collecting";
+    if (raw === "carrying" || raw === "with_passenger") return "carrying";
+    if (raw === "returning") return "returning";
+    return "";
+  }
+
+  function chipIcon(sign, fill, job) {
     const label = chipLabel(sign);
-    const html = '<span class="play-chip" style="display:flex;align-items:center;justify-content:center;width:36px;height:22px;border-radius:6px;background:' + fill + ';color:#0c1219;font:700 11px/1 system-ui,sans-serif">' + label + "</span>";
-    return L.divIcon({ className: "play-chip-icon", html: html, iconSize: [36, 22], iconAnchor: [18, 11] });
+    const text = job ? label + " " + job : label;
+    const width = Math.max(36, 8 + text.length * 7);
+    const html = '<span class="play-chip" style="display:flex;align-items:center;justify-content:center;min-width:' + width + 'px;height:22px;padding:0 4px;border-radius:6px;background:' + fill + ';color:#0c1219;font:700 11px/1 system-ui,sans-serif;white-space:nowrap">' + text + "</span>";
+    return L.divIcon({ className: "play-chip-icon", html: html, iconSize: [width, 22], iconAnchor: [width / 2, 11] });
   }
 
   function apiBase() {
@@ -379,18 +393,24 @@
       seen.add(sign);
       if (boughtAtDepot(car)) noteBoughtDepot();
       const fill = chipFill(car);
+      const job = carJob(car);
+      const title = job ? chipLabel(sign) + " " + job : chipLabel(sign);
       let marker = playChips.get(sign);
       if (!marker) {
         marker = L.marker(place, {
-          icon: chipIcon(sign, fill),
-          title: chipLabel(sign)
+          icon: chipIcon(sign, fill, job),
+          title: title
         }).addTo(map);
         marker._playFill = fill;
+        marker._playJob = job;
         playChips.set(sign, marker);
-      } else if (marker._playFill !== fill) {
-        marker.setIcon(chipIcon(sign, fill));
+      } else if (marker._playFill !== fill || marker._playJob !== job) {
+        marker.setIcon(chipIcon(sign, fill, job));
         marker._playFill = fill;
+        marker._playJob = job;
       }
+      marker.options.title = title;
+      if (marker._icon) marker._icon.title = title;
       if (list) {
         const item = document.createElement("li");
         let text = reported ? sign + " " + reported[0] + ", " + reported[1] : sign;
@@ -420,14 +440,31 @@
     noteSignedAgain(feed);
     noteWithPassenger();
     noteToPassenger();
+    noteCarJob();
   }
 
   function listStatus(car) {
-    if (!car) return "";
-    if (car.status === "returning") return " is returning";
-    if (car.status === "with_passenger") return " is with_passenger";
-    if (car.status === "to_passenger") return " is to_passenger";
-    return "";
+    const job = carJob(car);
+    return job ? " " + job : "";
+  }
+
+  function noteCarJob() {
+    const node = document.getElementById("play-car-job");
+    if (!node) return;
+    const jobs = ["waiting", "travelling to a better spot", "collecting", "carrying", "returning"];
+    const list = document.getElementById("play-taxi-list");
+    const text = list ? list.textContent : "";
+    const listed = [];
+    const chips = [];
+    jobs.forEach((job) => {
+      if (text.indexOf(" " + job) !== -1) listed.push(job);
+      playChips.forEach((marker) => {
+        const title = marker && marker.options ? String(marker.options.title || "") : "";
+        if (title.indexOf(job) !== -1 && chips.indexOf(job) === -1) chips.push(job);
+      });
+    });
+    node.dataset.list = listed.join(",");
+    node.dataset.chip = chips.join(",");
   }
 
   function noteWithPassenger() {
@@ -1272,6 +1309,7 @@
     });
     noteWithPassenger();
     noteToPassenger();
+    noteCarJob();
     playMotion = requestAnimationFrame(glidePlay);
   }
 
