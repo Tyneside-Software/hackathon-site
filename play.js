@@ -372,21 +372,29 @@
     node.dataset.moves = "no";
   }
 
-  function noteBoughtDepot() {
+  function noteBoughtDepot(car) {
     const node = document.getElementById("play-depot-chip");
     if (!node) return;
-    node.dataset.pin = "55.0367,-1.5075";
-    node.dataset.placedBy = "status";
+    const lat = Number(car && car.lat);
+    const lng = Number(car && car.lng);
+    if (Number.isFinite(lat) && Number.isFinite(lng)) node.dataset.pin = lat + "," + lng;
+    node.dataset.placedBy = "feed";
   }
 
   function playPlace(car, now) {
+    if (!car) return null;
+    if (car.status === "at_depot") {
+      const lat = Number(car.lat);
+      const lng = Number(car.lng);
+      if (Number.isFinite(lat) && Number.isFinite(lng)) return [lat, lng];
+      return null;
+    }
     const route = Array.isArray(car.route) ? car.route : [];
     const duration = Number(car.duration_s) || 0;
     const started = Number(car.leg_started) || 0;
     const elapsed = now - started;
-    if (boughtAtDepot(car)) return [55.0367, -1.5075];
-    if (car.status === "at_depot" && !tenIgnoreNewCarLine(car) && !newCarLineReady()) return [55.0367, -1.5075];
-    if (car.status === "returning" && (!route.length || elapsed >= duration)) return [55.0367, -1.5075];
+    const outside = PLAY_SIGNS.indexOf(String(car.sign || "")) === -1;
+    if (!outside && car.status === "returning" && (!route.length || elapsed >= duration)) return [55.0367, -1.5075];
     if (route.length) return placeOnRoute(route, duration, elapsed);
     const lat = Number(car.lat);
     const lng = Number(car.lng);
@@ -503,10 +511,10 @@
       const sign = String(car.sign || "");
       if (!sign || seen.has(sign)) return;
       const reported = feedPlace(car);
-      const place = boughtAtDepot(car) ? [55.0367, -1.5075] : (reported || playPlace(car, playNow()));
+      const place = reported || playPlace(car, playNow());
       if (!place) return;
       seen.add(sign);
-      if (boughtAtDepot(car)) noteBoughtDepot();
+      if (boughtAtDepot(car)) noteBoughtDepot(car);
       const fill = chipFill(car);
       const job = carJob(car);
       const endName = feedPlaceName(car);
