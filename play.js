@@ -79,6 +79,7 @@
       "play-trail-age",
       "play-trail-replace",
       "play-trail-chip",
+      "play-depot-chip",
       "play-started-ten",
       "play-locks",
       "play-osrm",
@@ -183,11 +184,25 @@
     return !!(row && String(row.textContent).indexOf("800000") !== -1);
   }
 
+  function boughtAtDepot(car) {
+    if (!car || car.status !== "at_depot") return false;
+    const sign = String(car.sign || "");
+    return PLAY_SIGNS.indexOf(sign) === -1;
+  }
+
+  function noteBoughtDepot() {
+    const node = document.getElementById("play-depot-chip");
+    if (!node) return;
+    node.dataset.pin = "55.0367,-1.5075";
+    node.dataset.placedBy = "status";
+  }
+
   function playPlace(car, now) {
     const route = Array.isArray(car.route) ? car.route : [];
     const duration = Number(car.duration_s) || 0;
     const started = Number(car.leg_started) || 0;
     const elapsed = now - started;
+    if (boughtAtDepot(car)) return [55.0367, -1.5075];
     if (car.status === "at_depot" && !newCarLineReady()) return [55.0367, -1.5075];
     if (car.status === "returning" && (!route.length || elapsed >= duration)) return [55.0367, -1.5075];
     if (route.length) return placeOnRoute(route, duration, elapsed);
@@ -261,9 +276,10 @@
       const sign = String(car.sign || "");
       if (!sign) return;
       const reported = feedPlace(car);
-      const place = reported || playPlace(car, playNow());
+      const place = boughtAtDepot(car) ? [55.0367, -1.5075] : (reported || playPlace(car, playNow()));
       if (!place) return;
       seen.add(sign);
+      if (boughtAtDepot(car)) noteBoughtDepot();
       const fill = chipFill(car);
       let marker = playChips.get(sign);
       if (!marker) {
