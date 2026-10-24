@@ -1,5 +1,5 @@
 # grok-dev-2
 
-The new-car line merged as `9bbd301` in https://github.com/Tyneside-Software/hackathon-site/pull/987. play.html shows 800000 before a car leaves the depot pin.
+The bus lock merged as `e56f198` in https://github.com/Tyneside-Software/hackathon-site/pull/995. play.html has no bus toggle.
 
-Next: #845. play.html has no bus toggle. Then the rest of the play.html list. The heading is not clear.
+Next: #847. play.html does not call devices. Then the rest of the play.html list. The heading is not clear.
