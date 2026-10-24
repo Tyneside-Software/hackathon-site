@@ -174,6 +174,7 @@
       "play-next-chips",
       "play-next-money",
       "play-feed-401-money",
+      "play-signed-fares",
       "play-locks",
       "play-osrm",
       "play-buses",
@@ -1351,7 +1352,10 @@
     }
     if (status) status.textContent = "";
     playSignAgain = !!(registered && registered.status === 409);
-    if (playSignAgain) dropSignedChips();
+    if (playSignAgain) {
+      dropSignedChips();
+      clearSignedFares();
+    }
     hidePlayAccount();
     keepStartedScreen();
     paintPlayStatus(null);
@@ -1396,6 +1400,7 @@
     if (status) status.textContent = "";
     playSignAgain = true;
     dropSignedChips();
+    clearSignedFares();
     hidePlayAccount();
     keepPlayMap();
     paintPlayStatus(null);
@@ -1408,6 +1413,15 @@
     const node = document.getElementById("play-signed-chips");
     if (!node) return;
     node.dataset.chips = playChips.size === 0 ? "gone" : "stays";
+    node.dataset.feed = "waiting";
+  }
+
+  function clearSignedFares() {
+    playFares.forEach((marker) => map.removeLayer(marker));
+    playFares.length = 0;
+    const node = document.getElementById("play-signed-fares");
+    if (!node) return;
+    node.dataset.fares = playFares.length === 0 ? "clear" : "shows";
     node.dataset.feed = "waiting";
   }
 
