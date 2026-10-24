@@ -267,6 +267,26 @@ def main():
     if taxi_game.count_label(60, 1) != "2 fares waiting" or taxi_game.count_label(60, 0) != "3 fares waiting":
         print("accepting one did not leave 2 fares waiting", file=sys.stderr)
         return 1
+    homeward = taxi_game.three_cars()
+    for car in homeward:
+        car["status"] = "returning"
+    kept = taxi_game.returning_stays(taxi_game.waiting_offers(20), homeward)
+    if has_device_id(kept) or any(offer["status"] != "offered" for offer in kept["offers"]):
+        print(f"a returning car took the offer {kept['offers']}", file=sys.stderr)
+        return 1
+    if any(car["status"] != "returning" for car in kept["cars"]):
+        print(f"returning cars changed {kept['cars']}", file=sys.stderr)
+        return 1
+    mixed = taxi_game.three_cars()
+    mixed[0]["status"] = "returning"
+    mixed[1]["status"] = "returning"
+    taken_home = taxi_game.returning_stays(taxi_game.waiting_offers(20), mixed)
+    if has_device_id(taken_home) or taken_home["offers"][0]["call_sign"] != "T3":
+        print("T3 at the depot did not take the offer", file=sys.stderr)
+        return 1
+    if taken_home["offers"][0]["status"] != "accepted" or taken_home["cars"][2]["status"] != "accepted":
+        print(f"depot take {taken_home}", file=sys.stderr)
+        return 1
     if taxi_game.fares_waiting(80, 1) != 3:
         print("the next 20 seconds did not add one fare", file=sys.stderr)
         return 1

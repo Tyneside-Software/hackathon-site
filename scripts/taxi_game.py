@@ -316,6 +316,21 @@ def free_car_takes(offers, cars):
     return accept_offer(offers, cars)
 
 
+def returning_stays(offers, cars):
+    """A returning car does not take an offer. It stays offered until a car is at the depot."""
+    free = None
+    for car in cars:
+        if car.get("status") == "at_depot" and "device_id" not in car:
+            free = car
+            break
+    if free is None:
+        return {
+            "offers": [dict(offer) for offer in offers],
+            "cars": [dict(car) for car in cars],
+        }
+    return accept_offer(offers, cars)
+
+
 def two_cars_out(elapsed_s):
     """Two accepted offers move T1 and T2 at the same moment. T3 can stay at the depot."""
     offers = waiting_offers(40)
