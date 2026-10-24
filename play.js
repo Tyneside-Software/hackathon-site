@@ -89,6 +89,7 @@
       "play-buy-reject",
       "play-started-screen",
       "play-started-ten",
+      "play-signed-again",
       "play-locks",
       "play-osrm",
       "play-buses",
@@ -306,7 +307,7 @@
     function paintOne(car) {
       if (!car) return;
       const sign = String(car.sign || "");
-      if (!sign) return;
+      if (!sign || seen.has(sign)) return;
       const reported = feedPlace(car);
       const place = boughtAtDepot(car) ? [55.0367, -1.5075] : (reported || playPlace(car, playNow()));
       if (!place) return;
@@ -348,8 +349,38 @@
       map.removeLayer(marker);
       playChips.delete(sign);
     });
+    dropSecondTen();
     noteT11Only();
     notePriceStill();
+    noteSignedAgain(feed);
+  }
+
+  function dropSecondTen() {
+    const list = document.getElementById("play-taxi-list");
+    if (!list) return;
+    const once = new Set();
+    Array.from(list.children).forEach((item) => {
+      const sign = item.dataset.sign || "";
+      if (PLAY_SIGNS.indexOf(sign) === -1) return;
+      if (once.has(sign)) item.remove();
+      else once.add(sign);
+    });
+  }
+
+  let playSignAgain = false;
+
+  function noteSignedAgain(feed) {
+    const node = document.getElementById("play-signed-again");
+    if (!node || !playSignAgain) return;
+    const list = document.getElementById("play-taxi-list");
+    let doubled = false;
+    PLAY_SIGNS.forEach((sign) => {
+      if (!list) return;
+      if (list.querySelectorAll('[data-sign="' + sign + '"]').length > 1) doubled = true;
+    });
+    const listed = feedListsT11(feed);
+    node.dataset.t11 = listed && playChips.has("T11") ? "shown" : "absent";
+    node.dataset.ten = doubled ? "doubled" : "once";
   }
 
   function clearPlayTrails() {
@@ -523,6 +554,7 @@
   function signOutPlay() {
     localStorage.removeItem("hackathon-empire-token");
     localStorage.removeItem("hackathon-empire-user");
+    playSignAgain = false;
     dropBoughtChips();
     clearPlayChips();
     clearPlaySpent();
@@ -801,6 +833,7 @@
     localStorage.setItem("hackathon-empire-token", session.access_token);
     localStorage.setItem("hackathon-empire-user", username);
     if (status) status.textContent = "";
+    playSignAgain = !!(registered && registered.status === 409);
     hidePlayAccount();
     keepStartedScreen();
     paintPlayStatus(null);
@@ -843,7 +876,9 @@
     localStorage.setItem("hackathon-empire-token", session.access_token);
     localStorage.setItem("hackathon-empire-user", username);
     if (status) status.textContent = "";
+    playSignAgain = true;
     hidePlayAccount();
+    keepPlayMap();
     paintPlayStatus(null);
     pollPlay();
   }
