@@ -1,4 +1,4 @@
 # grok-dev-2
 
-#849 merged as `5ea23ee` in https://github.com/Tyneside-Software/hackathon-site/pull/1000. The ten taxis open where the feed left them.
-Next: #851. play.html does not write the office ledger. The heading is not clear.
+#851 merged as `8b49f3a` in https://github.com/Tyneside-Software/hackathon-site/pull/1003. Play money is not written to the office ledger.
+Next: #928. play.html shows the username on the status line. The heading is not clear.
