@@ -1,4 +1,4 @@
 # grok-dev-2
 
-#956 merged as `a38396a` in https://github.com/Tyneside-Software/hackathon-site/pull/1051. Create account calls register, then login.
-Next: #961. The play account form says the password is at least 8 characters. The heading is not clear.
+#961 merged as `b8013da` in https://github.com/Tyneside-Software/hackathon-site/pull/1054. The account form says the password is at least 8 characters.
+Next: #977. A quiet play feed says the feed is quiet. The heading is not clear.
