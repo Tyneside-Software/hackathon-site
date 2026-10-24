@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/599
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/602
 
-Title: The status says the fleet runs on the box. Label repo:site only. No ready label.
+Title: A rejected token shows the account form. Label repo:site only. No ready label.
 
-Next: A rejected token shows the account form
+Next: The public HTTPS page points at the box
