@@ -451,6 +451,26 @@ def main():
     if "taxiCars.forEach" not in started or 'sign: "T1"' not in map_js or 'sign: "T2"' not in map_js:
         print("the three taxis were not out at the same time", file=sys.stderr)
         return 1
+    straight = map_js.split("function driveStraight", 1)
+    if (
+        len(straight) != 2
+        or "runLeg(car, [from, to], fallbackDuration([from, to]), token, onDone)"
+        not in straight[1].split("function ", 1)[0]
+    ):
+        print("the taxi did not keep moving in a straight line", file=sys.stderr)
+        return 1
+    if "(km / MILE_KM) * 3600 / 30" not in map_js:
+        print("the straight line was not 30 miles per hour", file=sys.stderr)
+        return 1
+    if 'car.osrm === false ? " · OSRM unavailable"' not in map_js:
+        print("the status did not say OSRM unavailable", file=sys.stderr)
+        return 1
+    caught = map_js.split('"?overview=full&geometries=geojson&steps=true"', 1)
+    if len(caught) != 2 or "driveStraight(car, from, to, token, onDone)" not in caught[1].split(
+        "function driveStraight", 1
+    )[0]:
+        print("a failed route did not take the straight line", file=sys.stderr)
+        return 1
     posted_trip = taxi_game.post_live_trip(7, 3, ())
     posted_kinds = [row["kind"] for row in posted_trip["lines"]]
     posted_amounts = [row["amount_pence"] for row in posted_trip["lines"]]
