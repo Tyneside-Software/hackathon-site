@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/634
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/636
 
-Title: Three cars can be on different legs. Label repo:api only. No ready label.
+Title: The feed names the clock and the trail. Label repo:api only. No ready label.
 
-Next: The feed names the clock and the trail
+Next: The feed says when OSRM missed
