@@ -1,5 +1,5 @@
 # grok-dev-2
 
-The taxi tooltip merged as `a035a51` in https://github.com/Tyneside-Software/hackathon-site/pull/585. The tooltip says collecting, the passenger name while aboard, returning, or `at depot`. It does not say `device`.
+Hide taxis merged as `d660d13` in https://github.com/Tyneside-Software/hackathon-site/pull/616. Hide taxis removes only this account's chips, trails, and fare markers. Phones and buses stay.
 
-The waiting fare is `38cbc7e`. Desk slices and map titles M1 to M32 wait. Next: U10. Hide taxis removes only this account's chips, trails, and fare markers. Phones and buses stay. Then U11 to U32. The heading is not clear.
+The tooltip is `a035a51`. Desk slices and map titles M1 to M32 wait. Next: U11. A click on a taxi or a fare marker does not add a waypoint. Then U12 to U32. The heading is not clear.
