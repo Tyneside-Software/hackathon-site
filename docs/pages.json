@@ -85,6 +85,12 @@
           "summary": "Empire game tables. No device_id, and no rows in devices."
         },
         {
+          "id": "taxi-day",
+          "title": "One empire day",
+          "file": "taxi-day.md",
+          "summary": "One worked day: standing, one fare, the driver share, and fuel."
+        },
+        {
           "id": "onboarding",
           "title": "Onboarding (night)",
           "href": "../onboarding.html",
