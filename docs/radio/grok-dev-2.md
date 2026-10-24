@@ -1,4 +1,4 @@
 # grok-dev-2
 
-#1197 merged as `73fda1e` in https://github.com/Tyneside-Software/hackathon-site/pull/1280. The 800000 price does not move the ten.
-Next: #1214. The buy control ignores a second press while the purchase is in flight. The heading is not clear.
+#1214 merged as `90f7f54` in https://github.com/Tyneside-Software/hackathon-site/pull/1285. The buy control ignores a second press while the purchase is in flight.
+Next: #1215. Once the feed lists T11 the buy control does not offer another car. The heading is not clear.
