@@ -47,7 +47,7 @@ The quote form takes tariff one or tariff two, miles, waiting seconds, extra pas
 
 Each desk row stores a pickup, a drop-off, a requested time, a vehicle call sign, and a status. The £11.30 sample picks up at Grey's Monument and drops at Shiremoor depot. The £12.40 sample picks up at Shiremoor depot and drops at Grey's Monument.
 
-The desk has two sample rows. The £11.30 row is tariff one, 3 miles, no waiting, one extra passenger, and one outside bag. The £12.40 row is tariff two, 3 miles, no waiting, and no extras. Buttons move a sample through `offered`, `accepted`, `started`, and `completed`. Cancel is offered until the booking is completed. Completing adds the quoted fare to the company ledger. Cancelling adds nothing.
+The desk has two sample rows. The £11.30 row is tariff one, 3 miles, no waiting, one extra passenger, and one outside bag. The £12.40 row is tariff two, 3 miles, no waiting, and no extras. Buttons move a sample through `offered`, `accepted`, `started`, and `completed`. Cancel is allowed until `completed`. Completing the £11.30 row adds 1130 pence once. A second press does not add it again. Cancel from `offered` adds 0. A completed booking does not become cancelled.
 
 A button fills the mixed tariff-one case from [Taxi fares](#taxi-fares): the first 161.3 yards in 20 seconds, then 46.8 seconds waiting. The desk shows 265 pence, £2.65.
 
