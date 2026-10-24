@@ -141,6 +141,7 @@
       "play-signout-flight",
       "play-next-account",
       "play-fare-t12",
+      "play-next-feed",
       "play-locks",
       "play-osrm",
       "play-buses",
@@ -193,6 +194,7 @@
   const playTrails = [];
   const playTrailFed = new Map();
   let playFeed = null;
+  let playFeedEpoch = 0;
   let playFed = false;
   let playClock = null;
   let playMotion = 0;
@@ -804,6 +806,24 @@
     node.dataset.account = "next";
   }
 
+  function clearFeedForNextAccount(username) {
+    const previous = localStorage.getItem("hackathon-empire-user") || "";
+    if (!previous || previous === username) return false;
+    playFeed = null;
+    playFeedEpoch += 1;
+    return true;
+  }
+
+  function noteNextFeed() {
+    const node = document.getElementById("play-next-feed");
+    if (!node) return;
+    const button = document.getElementById("play-buy");
+    const token = !!(localStorage.getItem("hackathon-empire-token") || "");
+    node.dataset.feed = playFeed ? "held" : "clear";
+    node.dataset.t11 = feedListsT11(playFeed) ? "listed" : "gone";
+    node.dataset.buy = token && button && !button.hidden ? "offered" : "hidden";
+  }
+
   async function createPlayAccount() {
     const usernameEl = document.getElementById("play-username");
     const passwordEl = document.getElementById("play-password");
@@ -835,8 +855,13 @@
       return;
     }
     clearSpentForNextAccount(username);
+    const clearedFeed = clearFeedForNextAccount(username);
     localStorage.setItem("hackathon-empire-token", session.access_token);
     localStorage.setItem("hackathon-empire-user", username);
+    if (clearedFeed) {
+      paintPlayBuy();
+      noteNextFeed();
+    }
     if (status) status.textContent = "";
     hidePlayAccount();
     paintPlayStatus(null);
@@ -926,8 +951,13 @@
       return;
     }
     clearSpentForNextAccount(username);
+    const clearedFeed = clearFeedForNextAccount(username);
     localStorage.setItem("hackathon-empire-token", session.access_token);
     localStorage.setItem("hackathon-empire-user", username);
+    if (clearedFeed) {
+      paintPlayBuy();
+      noteNextFeed();
+    }
     if (status) status.textContent = "";
     playSignAgain = !!(registered && registered.status === 409);
     hidePlayAccount();
@@ -991,15 +1021,18 @@
     if (!token || !base) return;
     const path = playFeedPath();
     if (!playMayRequest(path) || path.indexOf("/v1/devices") !== -1) return;
+    const epoch = playFeedEpoch;
     let res;
     try {
       res = await fetch(base + path, {
         headers: { Authorization: "Bearer " + token }
       });
     } catch (err) {
+      if (epoch !== playFeedEpoch) return;
       paintQuietFeed();
       return;
     }
+    if (epoch !== playFeedEpoch) return;
     if (res.status === 401) {
       localStorage.removeItem("hackathon-empire-token");
       paintPlayStatus(null);
