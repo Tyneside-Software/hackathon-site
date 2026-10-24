@@ -240,6 +240,7 @@
   const playAhead = [];
   let playChosen = "";
   let playFollow = false;
+  let playOfficeName = "";
   let playFeed = null;
   let playFeedEpoch = 0;
   let playFed = false;
@@ -681,12 +682,34 @@
     return parts.join(" ");
   }
 
+  function feedText(value) {
+    if (typeof value !== "string") return "";
+    const name = value.trim();
+    if (!name || name === "2860" || name === "1130" || name === "1240" || name === "-1120") return "";
+    return name;
+  }
+
+  function feedPence(holder, key) {
+    if (!holder || !Object.prototype.hasOwnProperty.call(holder, key)) return null;
+    const pence = Number(holder[key]);
+    if (!Number.isFinite(pence)) return null;
+    const whole = Math.trunc(pence);
+    if (whole === 2860 || whole === 1130 || whole === 1240 || whole === -1120 || whole === 800000) return null;
+    return whole;
+  }
+
   function followBoxText(car, now, firm) {
     const lines = [];
     const place = destinationName(car);
     if (place) lines.push(place);
     const left = feedSecondsLeft(car, now);
     if (left !== null) lines.push(left + "s");
+    const pickup = feedText(car && car.pickup);
+    if (pickup) lines.push(pickup);
+    const drop = feedText(car && car.drop);
+    if (drop) lines.push(drop);
+    const trip = feedPence(car, "trip_pence");
+    if (trip !== null) lines.push(trip + " pence");
     const passenger = typeof car.passenger === "string" ? car.passenger.trim() : "";
     if (passenger) lines.push(passenger);
     const job = carJob(car);
@@ -1318,7 +1341,71 @@
     });
   }
 
+  function firmCalled(feed, name) {
+    const firms = feed && Array.isArray(feed.firms) ? feed.firms : [];
+    for (let i = 0; i < firms.length; i++) {
+      const firm = firms[i];
+      const called = firm && typeof firm.firm === "string" ? firm.firm.trim().toLowerCase() : "";
+      if (called === name) return firm;
+    }
+    return null;
+  }
+
+  function paintPlayOffice() {
+    const panel = document.getElementById("play-office");
+    if (!panel) return;
+    if (playOfficeName !== "north" && playOfficeName !== "south") {
+      panel.hidden = true;
+      return;
+    }
+    panel.hidden = false;
+    const title = document.getElementById("play-office-title");
+    if (title) title.textContent = playOfficeName === "north" ? "North office" : "South office";
+    const firm = firmCalled(playFeed, playOfficeName);
+    const fareNode = document.getElementById("play-office-fare");
+    const fare = feedPence(firm, "fare_in");
+    if (fareNode) fareNode.textContent = fare === null ? "" : "fare_in " + fare + " pence";
+    const list = document.getElementById("play-office-rows");
+    const empty = document.getElementById("play-office-empty");
+    if (list) list.textContent = "";
+    const rows = firm && Array.isArray(firm.bookings) ? firm.bookings : [];
+    let shown = 0;
+    rows.forEach((row) => {
+      if (!row || typeof row !== "object") return;
+      const sign = feedText(row.sign);
+      const pickup = feedText(row.pickup);
+      const drop = feedText(row.drop);
+      const pence = feedPence(row, "pence");
+      if (!sign && !pickup && !drop && pence === null) return;
+      shown += 1;
+      if (!list) return;
+      const item = document.createElement("li");
+      const bits = [];
+      if (sign) bits.push(sign);
+      if (pickup) bits.push(pickup);
+      if (drop) bits.push(drop);
+      if (pence !== null) bits.push(pence + " pence");
+      item.textContent = bits.join(" ");
+      list.appendChild(item);
+    });
+    if (empty) {
+      empty.hidden = shown > 0;
+      empty.textContent = shown > 0 ? "" : "No bookings.";
+    }
+  }
+
+  function openPlayOffice(name) {
+    playOfficeName = name;
+    paintPlayOffice();
+  }
+
+  function closePlayOffice() {
+    playOfficeName = "";
+    paintPlayOffice();
+  }
+
   function signOutPlay() {
+    closePlayOffice();
     localStorage.removeItem("hackathon-empire-token");
     localStorage.removeItem("hackathon-empire-user");
     playSignAgain = false;
@@ -1593,6 +1680,7 @@
     if (!(localStorage.getItem("hackathon-empire-token") || "")) return;
     if (res.status === 401) {
       localStorage.removeItem("hackathon-empire-token");
+      closePlayOffice();
       paintPlayStatus(null);
       showPlayAccount();
       keepPlayMap();
@@ -2106,6 +2194,7 @@
     if (epoch !== playFeedEpoch) return;
     if (res.status === 401) {
       localStorage.removeItem("hackathon-empire-token");
+      closePlayOffice();
       paintPlayStatus(null);
       showPlayAccount();
       keepPlayMap();
@@ -2141,6 +2230,7 @@
     playFed = true;
     paintPlayCars(data);
     paintFeedDepots(data);
+    paintPlayOffice();
     showJobCount(jobCounts(data));
     noteStartedTen(data);
     paintPlayTrails(data);
@@ -2292,6 +2382,12 @@
   if (playSignOut) playSignOut.addEventListener("click", signOutPlay);
   const playFollowStop = document.getElementById("play-follow-stop");
   if (playFollowStop) playFollowStop.addEventListener("click", stopPlayFollow);
+  const playOfficeNorth = document.getElementById("play-office-north");
+  if (playOfficeNorth) playOfficeNorth.addEventListener("click", function () { openPlayOffice("north"); });
+  const playOfficeSouth = document.getElementById("play-office-south");
+  if (playOfficeSouth) playOfficeSouth.addEventListener("click", function () { openPlayOffice("south"); });
+  const playOfficeClose = document.getElementById("play-office-close");
+  if (playOfficeClose) playOfficeClose.addEventListener("click", closePlayOffice);
   if (!(localStorage.getItem("hackathon-empire-token") || "")) showPlayAccount();
   paintPlayBuy();
   const playBuy = document.getElementById("play-buy");
