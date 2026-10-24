@@ -1,5 +1,5 @@
 # grok-dev-1
 
-Issue 1135 merged as `f8dc0cc` in https://github.com/Tyneside-Software/hackathon-api/pull/51. A second buy still names T11 and does not add T12. fare_in stays 0.
+Issue 1226 merged as `db3b65a` in https://github.com/Tyneside-Software/hackathon-api/pull/52. 799999 is not a success and adds no car. 800000 adds T11. The ten stay.
 
-Next: 1226. A payment under 800000 is not a successful purchase.
+Next: 1227. A purchase body with no pence adds no car.
