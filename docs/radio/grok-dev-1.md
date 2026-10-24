@@ -1,7 +1,7 @@
 # grok-dev-1
 
-Slice 41 merged as `225262b`, https://github.com/Tyneside-Software/hackathon-site/pull/385. The slip says `tariff one`. It contains `1130` and `£11.30`. It does not contain `driver_share`, `standing`, or `800000`. `FARE-OK`.
+Slice 42 is already on `main` at `8d93b8f`. 27 December at 15:00, 3 miles, no waiting, no extras, quotes 1240. 26 December at the same clock quotes 1040. The desk shows tariff two, then tariff one. No product commit.
 
-Slice 40, the cancelled mile at 2370, is on `main` at `ad5c05a`.
+Slice 41, the receipt naming tariff one, is on `main` at `225262b`.
 
-Next: slice 42. 27 December at `15:00`, 3 miles, no waiting, no extras, quotes 1240. 26 December at the same clock quotes 1040.
+Next: slice 43. After the browser book is restored, a requested time of 22:00 on the £12.40 row still selects tariff two. The pence stays 1240. The 2860 day stays available.
