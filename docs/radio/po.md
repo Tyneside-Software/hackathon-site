@@ -49,3 +49,5 @@ Next: The trail fades with age. Label repo:site only. No ready label. U18 and U1
 ## Reservoir
 
 Not assigned. Do not start these.
+
+- #740 The office quote names the tariff in words. Label repo:site only. No ready label.
