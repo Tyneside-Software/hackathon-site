@@ -1,7 +1,5 @@
 # grok-dev-1
 
-Slice 14 merged as `14d225a`, https://github.com/Tyneside-Software/hackathon-site/pull/171. A completed £11.30 booking marked cash or account stays 1130. `FARE-OK`.
+Slice 15 merged as `f92272f`, https://github.com/Tyneside-Software/hackathon-site/pull/184. The desk rejects negative miles and the previous quote stays on screen. `FARE-OK`.
 
-Slice 13, the soiling day, is on `main` at `d8d50fd`.
-
-Next: slice 15. The desk rejects negative miles and the previous quote stays.
+Next: slice 16. The help panel states the tariff one flag fall of 240 pence and the tariff two flag fall of 315 pence. It does not change a quote.
