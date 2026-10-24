@@ -1440,7 +1440,8 @@
   ];
   const TAXI_NAMES = ["Mina", "Owen", "Priya", "Jack", "Helen", "Tom"];
   let taxiNameAt = 0;
-  let taxisOn = true;
+  let taxisOn = false;
+  let empireAccount = false;
   let taxiPaintAt = 0;
   let fleetFramed = false;
   const taxiCars = TAXI_CARS.map((spec) => ({
@@ -1489,13 +1490,19 @@
     const status = document.getElementById("taxi-status");
     if (list) {
       list.replaceChildren();
-      taxiCars.forEach((car) => {
-        const li = document.createElement("li");
-        li.textContent = taxiLabel(car);
-        list.appendChild(li);
-      });
+      if (taxisOn && empireAccount) {
+        taxiCars.forEach((car) => {
+          const li = document.createElement("li");
+          li.textContent = taxiLabel(car);
+          list.appendChild(li);
+        });
+      }
     }
     if (!status) return;
+    if (!empireAccount) {
+      status.textContent = "An account comes before the taxis.";
+      return;
+    }
     const aboard = taxiCars.filter((car) => car.status === "with_passenger").length;
     let text = aboard === 0
       ? "Taxis are between fares."
@@ -1753,12 +1760,18 @@
   }
   if (btnTaxis) {
     btnTaxis.addEventListener("click", () => {
+      if (!empireAccount) {
+        taxisOn = false;
+        syncTaxiButton();
+        paintTaxiList(true);
+        return;
+      }
       taxisOn = !taxisOn;
       syncTaxiButton();
-      if (taxisOn) startFleet();
+      if (taxisOn && empireAccount) paintTaxiList(true);
       else stopFleet();
     });
   }
   syncTaxiButton();
-  startFleet();
+  paintTaxiList(true);
 })();

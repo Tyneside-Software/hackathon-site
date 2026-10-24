@@ -471,6 +471,22 @@ def main():
     )[0]:
         print("a failed route did not take the straight line", file=sys.stderr)
         return 1
+    if "let taxisOn = false" not in map_js or "let empireAccount = false" not in map_js:
+        print("the map still drew the three taxis on load", file=sys.stderr)
+        return 1
+    boot = map_js.split("syncTaxiButton();")[-1]
+    if "startFleet()" in boot:
+        print("the old fleet still started by itself", file=sys.stderr)
+        return 1
+    handler = map_js.split("btnTaxis.addEventListener", 1)[1].split("});", 1)[0]
+    if "startFleet()" in handler:
+        print("the button still starts the old fleet", file=sys.stderr)
+        return 1
+    empire_page = Path(__file__).resolve().parents[1].joinpath("app", "index.html").read_text(encoding="utf-8")
+    empire = empire_page.split(">Empire<", 1)[1].split('id="btn-sample"', 1)[0]
+    if 'id="empire-account"' not in empire or empire.find('id="empire-account"') > empire.find('id="btn-taxis"'):
+        print("the account form was not the first empire control", file=sys.stderr)
+        return 1
     posted_trip = taxi_game.post_live_trip(7, 3, ())
     posted_kinds = [row["kind"] for row in posted_trip["lines"]]
     posted_amounts = [row["amount_pence"] for row in posted_trip["lines"]]
