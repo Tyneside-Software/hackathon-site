@@ -144,6 +144,7 @@
       "play-next-feed",
       "play-feed-401",
       "play-fare-name",
+      "play-buy-cleared",
       "play-locks",
       "play-osrm",
       "play-buses",
@@ -1031,6 +1032,16 @@
     pollPlay();
   }
 
+  function clearBuyFailed() {
+    const status = document.getElementById("play-buy-status");
+    if (status && status.textContent === "Buy failed.") status.textContent = "";
+    const node = document.getElementById("play-buy-cleared");
+    if (!node) return;
+    const text = status ? status.textContent : "";
+    node.dataset.failed = text === "Buy failed." ? "shows" : "clear";
+    node.dataset.feed = "good";
+  }
+
   function paintQuietFeed() {
     const line = document.getElementById("play-status");
     if (line) line.textContent = "The feed is quiet.";
@@ -1072,6 +1083,7 @@
     }
     const data = await res.json();
     playFeed = data;
+    clearBuyFailed();
     const server = Number(data.server_now);
     if (Number.isFinite(server)) playClock = { server: server, client: Date.now() / 1000 };
     clearBusToggle();
