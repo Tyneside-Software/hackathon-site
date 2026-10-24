@@ -512,6 +512,32 @@ def main():
     if "startFleet()" in created_body:
         print("create account started the old fleet", file=sys.stderr)
         return 1
+    signed = map_js.split("async function signInEmpire", 1)
+    if len(signed) != 2:
+        print("sign in did not call the API", file=sys.stderr)
+        return 1
+    signed_body = signed[1].split("function signOutEmpire", 1)[0]
+    if '"/login"' not in signed_body or '"/register"' in signed_body:
+        print("sign in did not call only login", file=sys.stderr)
+        return 1
+    if 'localStorage.setItem("hackathon-empire-token"' not in signed_body:
+        print("sign in did not store the token", file=sys.stderr)
+        return 1
+    signed_out = map_js.split("function signOutEmpire", 1)
+    if len(signed_out) != 2:
+        print("sign out was missing", file=sys.stderr)
+        return 1
+    signed_out_body = signed_out[1].split("const empireCreate", 1)[0]
+    if 'localStorage.removeItem("hackathon-empire-token")' not in signed_out_body or "clearEmpireDraw()" not in signed_out_body:
+        print("sign out left the token or the cars", file=sys.stderr)
+        return 1
+    drawn = map_js.split("function clearEmpireDraw", 1)[1].split("async function signInEmpire", 1)[0]
+    if "clearCarLayers(car)" not in drawn or "empireTrails" not in drawn or "empireFares" not in drawn:
+        print("sign out left a car, a trail, or a fare marker", file=sys.stderr)
+        return 1
+    if ">Sign out<" not in empire:
+        print("the form had no sign out control", file=sys.stderr)
+        return 1
     posted_trip = taxi_game.post_live_trip(7, 3, ())
     posted_kinds = [row["kind"] for row in posted_trip["lines"]]
     posted_amounts = [row["amount_pence"] for row in posted_trip["lines"]]
