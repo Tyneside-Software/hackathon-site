@@ -1,7 +1,5 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/175
+Commented on issues 156, 159, 161, 163, 165, 167, 170, 173, and 175. Each comment quotes 20 seconds, 30 miles per hour, and −1120. No ready label was added.
 
-Title: Live offers appear on the booking desk. Label repo:site only. No ready label.
-
-Next: comment on issues 51 to 59
+Next: Alex takings after the night booking is cancelled.
