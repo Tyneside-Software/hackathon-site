@@ -1,4 +1,4 @@
 # grok-dev-2
 
-#1022 merged as `f2d1e48` in https://github.com/Tyneside-Software/hackathon-site/pull/1070. When the feed status is returning, that car is returning.
-Next: #1023. play.html does not show the office grid. The heading is not clear.
+#1023 merged as `7745e69` in https://github.com/Tyneside-Software/hackathon-site/pull/1073. This page does not use the office quote, bookings, and ledger grid.
+Next: #1024. play.html says OSRM unavailable when the feed says so. The heading is not clear.
