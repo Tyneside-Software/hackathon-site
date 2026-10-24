@@ -18,19 +18,19 @@ Queue depth is in `docs/radio/README.md`. The product owner keeps at least 16 un
 
 ## Now
 
-The integrator leads on `continue`. The only products are the tracker, the booking office, and the empire game in `docs/TAXI.md`.
+Master has unpaused the lanes. This section is the order. An older line that says to stop, or to write `morning order not at the front`, is stale. Do not write that phrase.
 
-The tracker model is agreed. Issues 22 and 29 stay `blocked`. Do not migrate the live database.
+The only products are the tracker, the booking office, and the empire game in `docs/TAXI.md`. Issues 22 and 29 stay `blocked`. Do not migrate the live database. The open work is the taxi game on `play.html`.
 
-The office and the empire desk stay as they are. `office.html` is the real company. `game.html` is the same desk filled with simulated rows. The banner is the visible difference: `Real data` on the office, `Simulated data` on the empire. The company ledger never shows game costs. The game ledger never shows the company totals 2860, 1130, or 1240. Those two pages are not the open work. The open work is the taxi game on `play.html`.
+`play.js` posts `{ pence: 800000 }` to `POST /v1/empire/buy`. `app/routers/empire.py` still only has `GET /v1/empire`, so the live POST is 404. `buy_car` can add T11 and is not the purchase until that route calls it. The page can paint a sign outside T1 to T10. `paintPlayTrails` still skips that sign, so the bought car has no trail. There is no `cash_pence` column yet. Do not pretend `fare_in` is the cash balance. `fare_in` stays 0 until a completed job adds a tariff fare, and 800000 is not added to `fare_in`.
 
 | Lane | State | Next slice |
 |------|--------|------------|
-| Product owner | The watch is on the live page. `play.js` posts `{ pence: 800000 }` to `POST /v1/empire/buy`. `app/routers/empire.py` still only has `GET /v1/empire`, and the live POST is 404. The moving chip is on `main`. The route is already the front of `### grok-dev-1`, and that lane is still stopped. `### grok-dev-2` is already pointed at the bought car trail. Trails still skip a sign outside T1 to T10. | Do not open a lock. Do not replace the route with a behaviour test. Leave the route at the front of `### grok-dev-1`: `app/routers/empire.py` accepts 800000, calls `buy_car`, and the feed then includes the new car. Leave the trail at the front of `### grok-dev-2`: draw the trail for the sign the feed returns. Do not put the finished moving chip back. The dashboard waits. |
-| grok-dev-1 | `buy_car` is on `main` and is not the purchase. `app/routers/empire.py` does not call it. The lane is still stopped on `morning order not at the front`. The front is the route, not another behaviour test. | Pull. Build `POST /v1/empire/buy` in `app/routers/empire.py` so it calls `buy_car` with 800000. One product pull request, four radio lines. Do not edit `play.html` or `play.js`. Do not write `morning order not at the front`. If the front is another behaviour test while the route is still missing, write `morning order not at the front` and stop. A tick must not invent an eleventh car. |
-| grok-dev-2 | The sign the feed returns is painted, and glide moves that chip. `paintPlayTrails` still skips a sign outside T1 to T10, so the bought car trail is not drawn. | Pull. The front is that trail. Draw the trail for the sign the feed returns. Do not redo the moving chip. One product pull request, four radio lines. Do not edit the API. |
+| Product owner | Both devs had stopped, and the queues behind the route were cash locks for a column that does not exist. | You are not paused. Do `## Next for me` in `po.md` from the top. Open every line marked OPEN, in one `po.md` commit, and replace OPEN with the issue number. Do not change the sentence. Do not put a new issue in front of #1178 or #1194. Do not edit `play.html`, `play.js`, or the API. Do not deploy. |
+| grok-dev-1 | The last radio says `morning order not at the front`. That note is wrong. #1178 is the front. | Pull. Build #1178, then the next numbered line in `### grok-dev-1`, for about 30 minutes. One product pull request, four radio lines, then the next slice. Skip a line marked OPEN. Do not build #1180, #1152, #1231, #1232, #1233, or #1234 until the `cash_pence` issue is on `main`. Do not edit `play.html` or `play.js`. A tick must not invent an eleventh car. |
+| grok-dev-2 | The bought car chip can already paint. The trail cannot. | Pull. Build #1194, then the next numbered line in `### grok-dev-2`, for about 30 minutes. One product pull request, four radio lines, then the next slice. Skip a line marked OPEN. Do not edit the API. Do not put the money column back beside the map. |
 
-Do not redo a slice that is already on `main`. Do not start the reservoir.
+Do not redo a slice that is already on `main`. Do not start `## Reservoir` until a line from it is in your numbered list. The fullscreen map and the Start error text are already on `main` as `715b7c9`. Do not rebuild them.
 
 ## The route is the gap
 
@@ -43,6 +43,8 @@ The integrator deploys this PC when those files change. Lanes do not deploy.
 `https://hackathon.tyneside.software` is GitHub Pages. `play.html` loads `config.js` before `play.js`. On that host, `config.js` calls `https://keyword-chamber-stands-graphics.trycloudflare.com`, which tunnels to the box API. Do not remove that script tag. Do not point the Pages host at `http://100.65.94.5:8080`. The box and localhost keep that HTTP address.
 
 ## Last order before morning
+
+Superseded by `## Now`. Do not stop. Do not write `morning order not at the front`.
 
 This is the last note. The continues already queued are the whole of the work until morning. Do not wait for another integrator note.
 
