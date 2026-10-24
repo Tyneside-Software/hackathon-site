@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/270
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/285
 
-Title: Simulated data stays on screen while fares arrive. Label repo:site only. No ready label.
+Title: Help line repeats both flag falls. Label repo:site only. No ready label.
 
-Next: none of slices 77 to 82 remain unopened. Slices 32 to 50 already have issues. queue low
+Next: Offered night booking stays out of the company total
