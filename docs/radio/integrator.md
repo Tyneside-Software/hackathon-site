@@ -40,9 +40,9 @@ The rows live in SQLite: status, route, `leg_started`, passenger, trail, and `ca
 
 `/usr/local/bin/update` recreates the API container only when the API checkout moved. A change that is only the site leaves the container running, so the tick continues. An API change restarts the process for a few seconds and then resumes from the stored leg. An open browser keeps the page it already loaded. A refresh loads the new page.
 
-People and the current job come next. Where a fare appears is the local region, not a ring around the depot. The product owner numbers that for grok-dev-1, in front of #1263.
+People and the current job come next. Where a fare appears is the local region, not a ring around the depot. #1331, the place table, is API `6ecd1d3`. Do not rebuild that table. #1332 to #1336 are already in front of #1263.
 
-Today every pickup is `destination(depot, bearing, 1.2)` and every drop is `destination(depot, bearing, 3.0)`. The bearing comes from the username. That is not this region. Replace it. Do not call out to the network for each fare. One table in the API names the places and the journeys, and the local hour in `Europe/London` picks among them.
+The 1.2 mile pickup and the 3 mile drop on one bearing are not the journey. That ring is finished. Do not call out to the network for each fare. One table in the API names the places. The local hour in `Europe/London` still has to pick the journey. That is #1332, then #1333 to #1336.
 
 Places, each at its real position, inside the circle, and not Berwick. Homes near the depot: Shiremoor, Backworth, Earsdon, West Monkseaton, Forest Hall, Killingworth, Benton. Work and shops: Cobalt, Silverlink, Royal Quays, Regent Centre, Four Lane Ends. Coast: Whitley Bay, Spanish City, Cullercoats, Tynemouth, North Shields. Town: Grey's Monument, Central Station, Haymarket, the Quayside, Osborne Road. Hospitals: North Tyneside General at Rake Lane, the RVI, the Freeman. Newcastle Airport stays a small share at every hour.
 
