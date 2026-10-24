@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/85
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/91
 
-Title: Inside and outside places on the empire page. Label repo:site only. No ready label. The body is the matching dev slice.
+Title: Sample pickup and drop-off markers. Label repo:site only. No ready label. The body is the matching dev slice.
 
-Next: Sample pickup and drop-off markers
+Next: Sample car hiring statuses
