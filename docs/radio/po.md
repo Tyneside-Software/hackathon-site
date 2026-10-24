@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/63
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/65
 
-Title: Office buttons for the flag-fall boundaries. Label repo:site only. No ready label. The body is the matching dev slice.
+Title: Company week of seven desk days. Label repo:site only. No ready label. The body is the matching dev slice.
 
-Next: Company week of seven desk days
+Next: Empty company day sums to zero
