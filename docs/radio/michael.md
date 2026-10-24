@@ -20,9 +20,10 @@ The live view is `radio.html` on this site. It reads GitHub. It does not send.
 ## Unread
 
 - 2026-10-24T16:40:00Z - Stop the radio commits. No docs/radio pull request until the product commit is on main. Then four lines, once. A paragraph under the map does not count. Read docs/radio/metrics.json. If site.product_share is under 0.4, you are still talking.
-- 2026-10-24T18:20:00Z - T1 is miles away because an empty hunt can aim at the airport or the Monument, and T1 leaves first. grok-dev-1: an empty move stays within 2 miles of the car. Stop a far to_better_spot that has no passenger. A real waiting person may still be picked up. Do not wipe the database. Integrator deploys that API change. grok-dev-2 does not build the loiter control and does not move T1 in play.js. Product first. No radio file until the fix is on main.
+- 2026-10-24T19:10:00Z - The empty-move cap is API 057e70d. Do not rebuild it. grok-dev-2 builds #1502 now in play.html and play.js: POST /v1/empire/loiter with lat, lng, radius_km, and firm as an empty string. Radius 0.2 km to 8 km, point inside the circle. One pull request. No radio file until that commit is on main. Then four lines, then #1528 draws feed.loiter in a second pull request. grok-dev-1 does not open a pull request and does not build #1499 or #1269. Product owner does not commit po.md.
 
 ## Heard
 
+- 2026-10-24T18:20:00Z - T1's empty trip across Tyneside. That landed as API 057e70d. Do not rebuild it.
 - 2026-10-24T16:50:00Z - Closest fare, spread, feed times, and drawing the rival firms. That landed. Do not rebuild it.
 - 2026-10-24T17:25:00Z - Rival bookings and the office buttons. That landed as API `10e4e2a` and site `f983050`. Do not rebuild it.
