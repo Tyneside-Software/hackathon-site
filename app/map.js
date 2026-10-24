@@ -405,11 +405,13 @@
     }
   }
 
-  map.on("click", (e) => {
-    const t = e.originalEvent && e.originalEvent.target;
-    if (t && t.closest && t.closest(".bus-marker, .bus-chip-wrap, .bus-chip, .bus-dot, .taxi-marker, .taxi-chip, .taxi-passenger, .taxi-passenger-pin, .leaflet-popup")) return;
+  const btnStops = document.getElementById("btn-stops");
+  let placeStops = false;
+  let stopTimer = 0;
+
+  function addStop(latlng) {
     const n = markers.length + 1;
-    const marker = L.marker(e.latlng, { draggable: true, title: "Stop " + n }).addTo(map);
+    const marker = L.marker(latlng, { draggable: true, title: "Stop " + n }).addTo(map);
     marker.on("dragend", () => {
       renderStops();
       clearRoute();
@@ -418,7 +420,28 @@
     renderStops();
     clearRoute();
     setStatus(markers.length < 2 ? "Add another stop, then calculate." : "Ready to calculate.");
+  }
+
+  if (btnStops) {
+    btnStops.addEventListener("click", () => {
+      placeStops = !placeStops;
+      btnStops.setAttribute("aria-pressed", placeStops ? "true" : "false");
+      btnStops.classList.toggle("is-on", placeStops);
+      btnStops.textContent = placeStops ? "Stop placing" : "Place stops";
+      setStatus(placeStops ? "Click the map to add a stop." : "Moving the map does not add a stop.");
+    });
+  }
+
+  map.on("click", (e) => {
+    if (!placeStops) return;
+    if (map.dragging && map.dragging.moved()) return;
+    const t = e.originalEvent && e.originalEvent.target;
+    if (t && t.closest && t.closest(".leaflet-control, .leaflet-marker-pane, .leaflet-tooltip, .leaflet-popup, .leaflet-shadow-pane, .bus-marker, .bus-chip-wrap, .bus-chip, .bus-dot, .taxi-marker, .taxi-chip, .taxi-passenger, .taxi-passenger-pin")) return;
+    const latlng = e.latlng;
+    window.clearTimeout(stopTimer);
+    stopTimer = window.setTimeout(() => addStop(latlng), 280);
   });
+  map.on("dblclick", () => window.clearTimeout(stopTimer));
 
   document.getElementById("btn-route").addEventListener("click", calculate);
   document.getElementById("btn-clear").addEventListener("click", () => {
@@ -426,7 +449,7 @@
     markers.length = 0;
     clearRoute();
     renderStops();
-    setStatus("Cleared. Click the map to add a stop.");
+    setStatus(placeStops ? "Cleared. Click the map to add a stop." : "Cleared. Moving the map does not add a stop.");
   });
 
   const DEVICE_COLOUR = "#F5A623";
