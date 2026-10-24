@@ -263,6 +263,7 @@
       ["Completed, tariff one, 1 mile", completed[2]],
       ["Cancel", cancel],
       ["completed-day", completedDay],
+      ["soiling-day", window.TaxiFare.quotePence(1, [[0, 0]], { soiling: 1 })],
       ["Alex", completed[0] + completed[2]],
       ["Sam", completed[1]],
       ["cancelled-mile", cancelledMile],

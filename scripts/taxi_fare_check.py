@@ -168,7 +168,7 @@ def main():
     soiling_only = empty_one + extras_pence(soiling=1)
     if soiling_only != 12500:
         failed = True
-        print("Soiling with no meter: got %s, expected 12500" % soiling_only, file=sys.stderr)
+        print("soiling-day: got %s, expected 12500" % soiling_only, file=sys.stderr)
     clock = (
         ("22:00", 22 * 60, False, None, 2),
         ("06:59", 6 * 60 + 59, False, None, 2),
