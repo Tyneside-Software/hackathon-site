@@ -414,6 +414,12 @@
     return 20 - remainder;
   }
 
+  function nextFareLabel(elapsedS, accepted) {
+    var wait = secondsUntilFare(elapsedS, accepted);
+    if (wait === null) return null;
+    return "Next fare in " + Math.ceil(wait);
+  }
+
   function postLiveTrip(tripId, miles, posted) {
     var already = {};
     (posted || []).forEach(function (id) { already[id] = true; });
@@ -479,6 +485,7 @@
     faresWaiting: faresWaiting,
     waitingLabel: waitingLabel,
     secondsUntilFare: secondsUntilFare,
+    nextFareLabel: nextFareLabel,
     postLiveTrip: postLiveTrip,
     shortTrip: shortTrip,
     positionOnRoute: positionOnRoute,
