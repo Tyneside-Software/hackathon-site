@@ -147,6 +147,7 @@
       "play-buy-cleared",
       "play-with-passenger",
       "play-signout-failed",
+      "play-driver-share",
       "play-locks",
       "play-osrm",
       "play-buses",
@@ -1224,6 +1225,19 @@
     return amount;
   }
 
+  function driverShareAmount(value) {
+    const amount = shownPence(value);
+    if (amount === "400000") return "";
+    return amount;
+  }
+
+  function noteDriverShare() {
+    const row = document.querySelector('[data-money="driver_share"]');
+    const note = document.getElementById("play-driver-share");
+    if (!note) return;
+    note.dataset.share = row && row.textContent.indexOf("400000") !== -1 ? "shows" : "clear";
+  }
+
   function noteFareIn() {
     const row = document.querySelector('[data-money="fare_in"]');
     const note = document.getElementById("play-fare-in");
@@ -1235,11 +1249,12 @@
     ["fare_in", "driver_share", "fuel", "standing", "new_car", "cash_pence"].forEach((key) => {
       const row = document.querySelector('[data-money="' + key + '"]');
       if (!row) return;
-      const amount = key === "fare_in" ? fareInAmount(feed && feed[key]) : key === "cash_pence" ? cashPenceAmount(feed) : shownPence(feed && feed[key]);
+      const amount = key === "fare_in" ? fareInAmount(feed && feed[key]) : key === "driver_share" ? driverShareAmount(feed && feed[key]) : key === "cash_pence" ? cashPenceAmount(feed) : shownPence(feed && feed[key]);
       row.textContent = (amount === "" ? key : key + " " + amount) + " pence";
     });
     hideCompanyTotals();
     noteFareIn();
+    noteDriverShare();
     noteCashPence(feed);
     const money = document.getElementById("play-money");
     if (money) money.dataset.follows = "feed";
