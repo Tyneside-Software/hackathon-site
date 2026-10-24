@@ -1956,6 +1956,7 @@
     };
     if (!empireMotion) empireMotion = requestAnimationFrame(glideEmpire);
     paintEmpireTrails();
+    paintEmpireFares();
   }
 
   function paintEmpireTrails() {
@@ -1984,6 +1985,30 @@
       }
       group.addTo(map);
       empireTrails.push(group);
+    });
+  }
+
+  function paintEmpireFares() {
+    empireFares.forEach((layer) => map.removeLayer(layer));
+    empireFares = [];
+    if (!empireFeed || !Array.isArray(empireFeed.fares)) return;
+    empireFeed.fares.forEach((fare) => {
+      if (!fare) return;
+      const lat = Number(fare.lat);
+      const lng = Number(fare.lng);
+      if (!Number.isFinite(lat) || !Number.isFinite(lng)) return;
+      const name = fare.name || "Passenger";
+      const marker = L.marker([lat, lng], {
+        icon: L.divIcon({
+          className: "taxi-passenger",
+          html: '<span class="taxi-passenger-pin">' + name + " waiting</span>",
+          iconSize: [120, 22],
+          iconAnchor: [60, 11],
+        }),
+        title: name + " waiting",
+        zIndexOffset: 650,
+      }).addTo(map);
+      empireFares.push(marker);
     });
   }
 
