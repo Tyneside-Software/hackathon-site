@@ -22,8 +22,8 @@ The tracker model is agreed. Issues 22 and 29 stay `blocked`. Do not migrate the
 
 | Lane | State | Next slice |
 |------|--------|------------|
-| Product owner | On task. Issue 77 is the plain-text receipt. | `Company takings by driver Alex and Sam`, then the rest of the list through slice 27. Do not stop after one issue. Skip a title that already has an issue. |
-| grok-dev-1 | On task. Slices 1 to 4 are on `main`, through the flag falls at `20e3df6`. | Slice 5. Seven company days of 2860 pence sum to 20020. Label it `company-week`. This is not the game week. `FARE-OK`. Then slice 6. |
+| Product owner | On task. Issue 83 is the tariff clock. | `Inside and outside places on the empire page`, then the rest of the list through slice 27. Do not stop after one issue. Skip a title that already has an issue. |
+| grok-dev-1 | On task. Slices 1 to 5 are on `main`, through the company week at `f05595f`. | Slice 6. An empty day is 0. A day whose only booking is the cancelled 490 pence mile is 0. Label it `empty-day`. The 2860 and 2370 totals stay. `FARE-OK`. Then slice 7. |
 | grok-dev-2 | On task. Slices 1 to 3 are on `main`, through the hiring statuses at `cc34563`. The old radio line that asks for statuses is stale. | Slice 4. A Berwick drop-off adds no ledger lines. Do not price Hexham. The worked day stays −1120. Then slice 5. |
 
 Do not redo a slice that is already on `main`. Do not start the reservoir.
@@ -36,7 +36,7 @@ No product code. You may commit and squash-merge a branch that changes only `doc
 
 Done, already on `main`: issues 30, 31, 32, 33, and 34 are open. Issues 23 and 24 are commented. Issues 22, 29, and 34 stay `blocked`. Do not open those titles again.
 
-Open slices. One issue, then a radio note, then the next. If that exact title already exists, comment on it and do not open a second. Label `repo:site` only. The issue body is the matching dev slice in this file. Do not add `ready`. Skip a title that already has an issue. The next title is `Company takings by driver Alex and Sam`.
+Open slices. One issue, then a radio note, then the next. If that exact title already exists, comment on it and do not open a second. Label `repo:site` only. The issue body is the matching dev slice in this file. Do not add `ready`. Skip a title that already has an issue. The next title is `Inside and outside places on the empire page`.
 
 1. `Office booking fields for pickup and drop-off`
 2. `Office status changes add the fare once`
@@ -93,7 +93,7 @@ You own the fare maths and the office desk. You may edit `scripts/taxi_fare.py`,
 
 Do not rewrite the locked results: 490, 1040, 615, 1240, 1130, 265, 2370, 2860, and 12500. Money is integer pence. `py -3 scripts\taxi_fare_check.py` must print `FARE-OK` before each merge. The company ledger is not the game ledger. No driver share, no fuel, no standing, and no new-car cost on this desk. No API call and no database.
 
-Done, on `fa3b6e3`: the office desk, the £11.30 and £12.40 rows, the mixed button at 265, the company day at 2860, the cancelled mile at 2370, the empty hiring at 0, and soiling-only at 12500. Open slices 1 to 4 are also on `main`, through `20e3df6`. Skip them.
+Done, on `fa3b6e3`: the office desk, the £11.30 and £12.40 rows, the mixed button at 265, the company day at 2860, the cancelled mile at 2370, the empty hiring at 0, and soiling-only at 12500. Open slices 1 to 5 are also on `main`, through `f05595f`. Skip them.
 
 Open slices.
 
