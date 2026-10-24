@@ -87,6 +87,7 @@
       "play-spent-feed",
       "play-fare-in",
       "play-buy-reject",
+      "play-started-screen",
       "play-started-ten",
       "play-locks",
       "play-osrm",
@@ -723,6 +724,31 @@
     return msg || fallback;
   }
 
+  function keepStartedScreen() {
+    const screen = document.getElementById("play-screen");
+    const money = document.getElementById("play-money");
+    const mapEl = document.getElementById("play-map");
+    keepPlayMap();
+    keepPlayMoney();
+    if (screen && money && money.parentElement !== screen) screen.appendChild(money);
+    if (screen && window.getComputedStyle) {
+      const shown = window.getComputedStyle(screen).display;
+      if (shown === "grid" || shown === "flex") screen.style.display = "block";
+    }
+    seatPlayScreen();
+    const node = document.getElementById("play-started-screen");
+    if (!node) return;
+    const nav = document.querySelector(".site-nav");
+    const mapBox = mapEl && mapEl.hidden === false ? mapEl.getBoundingClientRect() : null;
+    const navBox = nav ? nav.getBoundingClientRect() : null;
+    const under = !!(mapBox && navBox && mapBox.top + 1 >= navBox.bottom && mapBox.height > 0);
+    const placed = money && window.getComputedStyle ? window.getComputedStyle(money).position : "";
+    node.dataset.screen = under ? "full" : "short";
+    node.dataset.money = money && money.hidden === false && (placed === "fixed" || placed === "absolute") ? "corner" : "away";
+    const column = screen && window.getComputedStyle ? window.getComputedStyle(screen).display : "";
+    node.dataset.column = column === "grid" || column === "flex" ? "side" : "none";
+  }
+
   async function startPlay(event) {
     if (event) event.preventDefault();
     const form = document.getElementById("play-account");
@@ -776,8 +802,7 @@
     localStorage.setItem("hackathon-empire-user", username);
     if (status) status.textContent = "";
     hidePlayAccount();
-    keepPlayMap();
-    seatPlayScreen();
+    keepStartedScreen();
     paintPlayStatus(null);
     pollPlay();
   }
