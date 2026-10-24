@@ -64,6 +64,7 @@
     [
       "play-moving",
       "play-bought-moves",
+      "play-started-ten",
       "play-locks",
       "play-osrm",
       "play-buses",
@@ -521,10 +522,22 @@
     localStorage.setItem("hackathon-empire-user", username);
     if (status) status.textContent = "";
     hidePlayAccount();
+    keepPlayMap();
     const page = document.getElementById("play-map-page");
     if (page && page.scrollIntoView) page.scrollIntoView();
     paintPlayStatus(null);
     pollPlay();
+  }
+
+  function noteStartedTen(feed) {
+    const mapEl = document.getElementById("play-map");
+    if (!mapEl) return;
+    const cars = feed && Array.isArray(feed.cars) ? feed.cars : [];
+    let count = 0;
+    PLAY_SIGNS.forEach((sign) => {
+      if (cars.some((car) => car && car.sign === sign) && playChips.has(sign)) count += 1;
+    });
+    mapEl.dataset.ten = String(count);
   }
 
   async function signInPlay(event) {
@@ -604,6 +617,7 @@
     paintPlayMoney(data);
     playFed = true;
     paintPlayCars(data);
+    noteStartedTen(data);
     paintPlayTrails(data);
     paintPlayFares(data);
     paintPlayOsrm(data);
