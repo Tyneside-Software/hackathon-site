@@ -1546,14 +1546,16 @@
 
   function showPassenger(car, latlng) {
     if (car.pin) map.removeLayer(car.pin);
-    car.pin = L.circleMarker(latlng, {
-      radius: 7,
-      color: "#6b21a8",
-      weight: 2,
-      fillColor: "#e9d5ff",
-      fillOpacity: 0.95,
+    car.pin = L.marker(latlng, {
+      icon: L.divIcon({
+        className: "taxi-passenger",
+        html: '<span class="taxi-passenger-pin">' + car.passenger + " waiting</span>",
+        iconSize: [120, 22],
+        iconAnchor: [60, 11],
+      }),
+      title: car.passenger + " waiting",
+      zIndexOffset: 650,
     }).addTo(map);
-    car.pin.bindTooltip(car.passenger + " · waiting", { permanent: true, direction: "bottom" });
     car.pin.on("click", (ev) => {
       if (ev.originalEvent) L.DomEvent.stopPropagation(ev.originalEvent);
     });

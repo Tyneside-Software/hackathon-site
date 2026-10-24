@@ -193,6 +193,23 @@
   color: #0c1219;
   box-shadow: 0 0 0 2px #0b1220, 0 2px 6px rgba(0, 0, 0, 0.45);
 }
+.taxi-passenger {
+  background: none;
+  border: 0;
+}
+.taxi-passenger-pin {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 120px;
+  height: 22px;
+  border-radius: 6px;
+  background: #e9d5ff;
+  font: 700 11px/1 system-ui, sans-serif;
+  color: #3b0764;
+  white-space: nowrap;
+  box-shadow: 0 0 0 2px #0b1220, 0 2px 6px rgba(0, 0, 0, 0.45);
+}
 .bus-marker {
   background: none;
   border: 0;
