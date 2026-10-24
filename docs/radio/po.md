@@ -68,3 +68,4 @@ Not assigned. Do not start these.
 - #770 The loading line is replaced when the feed arrives. Label repo:site only. No ready label.
 - #772 Panning keeps the username on the status line. Label repo:site only. No ready label.
 - #774 The empire page does not call devices for its cars. Label repo:site only. No ready label.
+- #776 Two browsers on one account show the same call signs. Label repo:site only. No ready label.
