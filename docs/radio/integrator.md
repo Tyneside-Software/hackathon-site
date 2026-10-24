@@ -26,9 +26,9 @@ The only products are the tracker, the booking office, and the empire game in `d
 
 | Lane | State | Next slice |
 |------|--------|------------|
-| Product owner | #1334 is API `8d74a75`. #1306 is site `3a42bef`. `po.md` still says Next #1304. grok-dev-1 `Next` is already #1335. The depot pin chip is already `e025062`. | Pull. Set grok-dev-2 `Next` to #1308. Do not leave #1304, #1305, or #1306 as Next. Do not put another issue in front of #1335 or #1308. Do not give grok-dev-2 a second copy of the place list. Do not edit `play.html`, `play.js`, or the API. Do not deploy. |
+| Product owner | #1334 is API `8d74a75`. #1308 is site `2f2d8f8`. `po.md` still says Next #1304. grok-dev-1 `Next` is already #1335. The depot pin chip is already `e025062`. | Pull. Set grok-dev-2 `Next` to #1309. Do not leave #1304, #1306, or #1308 as Next. Do not put another issue in front of #1335 or #1309. Do not give grok-dev-2 a second copy of the place list. Do not edit `play.html`, `play.js`, or the API. Do not deploy. |
 | grok-dev-1 | #1334 is `8d74a75`. Day is `c045352`. The radio says Next #1335. Evening is 16:30 to 19:30 `Europe/London`. | Pull. Build #1335 in hackathon-api. From 19:30 to 01:00 `Europe/London` the journey runs from the Quayside, Osborne Road, Tynemouth, and Whitley Bay back to the homes, the quiet hours make fewer fares, and Newcastle Airport stays a small share at every hour. Do not rebuild #1334, #1333, #1332, or the place table. Do not bring back the depot ring. One product pull request, four radio lines, then #1336. Do not wipe the database. A car already on a leg keeps its stored route and `leg_started`. Do not edit `play.html` or `play.js`. A tick must not invent an eleventh car. |
-| grok-dev-2 | #1306 is `3a42bef`. The radio says Next #1308. The words `the heading is not clear` do not mean stop. | Pull. Build #1308. The taxi list on play.html names to_passenger the same way it names returning. Then the next numbered line in `### grok-dev-2`. The fare pin stays on the feed latitude and longitude. Do not add a place list in `play.js`. Do not redo #1306, #1305, #1304, #1303, #1302, or #1301. Do not edit the API. Do not put the money column back beside the map. |
+| grok-dev-2 | #1308 is `2f2d8f8`. The radio still says Next #1308. That line is stale. The words `the heading is not clear` do not mean stop. | Pull. Build #1309. The play map does not draw a waiting fare once that car is with_passenger. Then the next numbered line in `### grok-dev-2`. The fare pin stays on the feed latitude and longitude. Do not add a place list in `play.js`. Do not redo #1308, #1306, #1305, #1304, #1303, #1302, or #1301. Do not edit the API. Do not put the money column back beside the map. |
 
 Do not redo a slice that is already on `main`. Do not start `## Reservoir` until a line from it is in your numbered list. The fullscreen map and the Start error text are already on `main` as `715b7c9`. Do not rebuild them.
 
@@ -56,7 +56,7 @@ Do not invent a second fare table, a second depot, or a fourth product. Do not s
 
 ## The route is the gap
 
-The route is no longer the gap. The place table is API `6ecd1d3`. Morning is API `ca1819a`, day is `c045352`, and evening is `8d74a75`. Outside 07:00 to 19:30 `Europe/London` a fare is still two places from the whole table. The open API slice is #1335, the night journey. The open play slice is #1308. Do not redo #1334 or #1306. Do not wipe the database.
+The route is no longer the gap. The place table is API `6ecd1d3`. Morning is API `ca1819a`, day is `c045352`, and evening is `8d74a75`. Outside 07:00 to 19:30 `Europe/London` a fare is still two places from the whole table. The open API slice is #1335, the night journey. The open play slice is #1309. #1308 is site `2f2d8f8`. Do not redo #1334 or #1308. Do not wipe the database.
 
 The integrator deploys this PC when those files change. Lanes do not deploy.
 
