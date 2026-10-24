@@ -11,6 +11,9 @@ NEW_DRIVER_PENCE = 0
 WORKED_FARE_PENCE = 1040
 WORKED_MILES = 7
 DEPOT = (55.0367, -1.5075)
+MONUMENT = (54.9783, -1.6178)
+BERWICK = (55.7704, -2.0068)
+HEXHAM = (54.9716, -2.1015)
 
 
 def line(kind, amount_pence, game_day=1, job_id=None, taxi_id=None):
@@ -38,6 +41,18 @@ def worked_day(game_day=1):
         line("driver_share", -(fare // 2), game_day, job_id=1, taxi_id=1),
         line("fuel", -(WORKED_MILES * FUEL_PENCE_A_MILE), game_day, job_id=1, taxi_id=1),
     ]
+
+
+def dropoff_offered(point):
+    import taxi_geo
+    return not taxi_geo.job_refused(MONUMENT, point)
+
+
+def dropoff_lines(point):
+    """An outside drop-off is not a job. An inside drop-off has no fare of its own."""
+    if not dropoff_offered(point):
+        return []
+    return []
 
 
 def cancel_before():

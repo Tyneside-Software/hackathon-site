@@ -16,6 +16,15 @@ def has_device_id(value):
 
 
 def main():
+    if taxi_game.dropoff_lines(taxi_game.BERWICK) != []:
+        print("Berwick wrote lines", file=sys.stderr)
+        return 1
+    if not taxi_game.dropoff_offered(taxi_game.HEXHAM):
+        print("Hexham was not offered", file=sys.stderr)
+        return 1
+    if taxi_game.dropoff_lines(taxi_game.HEXHAM) != []:
+        print("Hexham was given a fare", file=sys.stderr)
+        return 1
     if taxi_game.WORKED_FARE_PENCE != 1040:
         print("fare is not the given 1040", file=sys.stderr)
         return 1
