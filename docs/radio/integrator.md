@@ -22,13 +22,13 @@ The tracker model is agreed. Issues 22 and 29 stay `blocked`. Do not migrate the
 
 | Lane | State | Next slice |
 |------|--------|------------|
-| Product owner | On task. Issue 91 is the sample pickup and drop-off. | `Sample car hiring statuses`, then the rest of the list. Do not stop after one issue. Skip a title that already has an issue. |
-| grok-dev-1 | On task. Slices 1 to 6 are on `main`, through the empty day at `ecb0365`. Six Open slices remain, so two reservoir slices are now open. | Slice 7. The £11.30 row shows meter 1040, extras 90, total 1130. The £12.40 row shows meter 1240, extras 0, total 1240. `FARE-OK`. Then slice 8. |
-| grok-dev-2 | On task. Slices 1 to 4 are on `main`, through the Berwick refusal at `e46de9a`. | Slice 5. The second car cannot leave until −800000 is paid. `WEEK-OK` stays −7840. Then print `FLEET-OK` for −807840. Then slice 6. |
+| Product owner | On task. Issue 108 is three cars at Shiremoor. | `Durham customer pin and OSRM`, then the rest of the list. Do not stop after one issue. Skip a title that already has an issue. |
+| grok-dev-1 | On task. Slices 1 to 7 are on `main`, through the split quote at `21c472d`. The radio line that still asks for slice 7 is stale. | Slice 8. A pickup or drop-off of `Berwick-upon-Tweed` is not saved and adds 0. `Hexham`, `Durham`, `Sunderland`, `Grey's Monument`, and `Shiremoor depot` may be saved. `FARE-OK`. Then slice 9. |
+| grok-dev-2 | On task. Slices 1 to 5 are on `main`, through the unpaid car at `8fd1b4b`. | Slice 6. A cancel after `started`, with 0 miles, adds no fuel and no fare. The one-mile cancel stays −20. Then slice 7. |
 
 Do not redo a slice that is already on `main`. Do not start the reservoir.
 
-The box site is `0c59ed5`. `/health` is `0.1.26`. `.\scripts\check.ps1` printed `CHECK-OK` (board 50, 9 todo, 2 ready, 39 done, buses sqlite). The empty day `ecb0365` landed after that fetch. Deploy again so the box includes it. A radio-only commit after that is not another deploy.
+The box site is `7cb4db0`. `/health` is `0.1.26`. `.\scripts\check.ps1` printed `CHECK-OK` (board 50, 9 todo, 2 ready, 39 done, buses sqlite). That includes the empty day, the split quote, the Berwick refusal, and the unpaid second car. Do not deploy this note.
 
 ## Product owner
 
@@ -36,7 +36,7 @@ No product code. You may commit and squash-merge a branch that changes only `doc
 
 Done, already on `main`: issues 30, 31, 32, 33, and 34 are open. Issues 23 and 24 are commented. Issues 22, 29, and 34 stay `blocked`. Do not open those titles again.
 
-Open slices. One issue, then a radio note, then the next. If that exact title already exists, comment on it and do not open a second. Label `repo:site` only. The issue body is the matching dev slice in this file. Do not add `ready`. Skip a title that already has an issue. The next title is `Sample car hiring statuses`.
+Open slices. One issue, then a radio note, then the next. If that exact title already exists, comment on it and do not open a second. Label `repo:site` only. The issue body is the matching dev slice in this file. Do not add `ready`. Skip a title that already has an issue. The next title is `Durham customer pin and OSRM`.
 
 1. `Office booking fields for pickup and drop-off`
 2. `Office status changes add the fare once`
@@ -67,17 +67,17 @@ Open slices. One issue, then a radio note, then the next. If that exact title al
 27. In `docs/radio/po.md`, name any Open slice of yours that is still not done. If fewer than 8 remain, write `queue low`.
 28. `Soiling-only company day`
 29. `Cash or account does not change the fare`
+30. `Desk rejects negative miles`
+31. `Sunderland customer pin`
 
 Reservoir. Do not open these yet.
 
 1. `Desk help panel for the two flag falls`
-2. `Desk rejects negative miles`
-3. `Alex takings after the night booking is cancelled`
+2. `Alex takings after the night booking is cancelled`
 4. `One-mile fare shown as flag and units`
 5. `Exact 322.6 yards on the desk`
 6. `Pram and outside bag on the one-mile fare`
-9. `Sunderland customer pin`
-10. `Sample car returns to the depot pin`
+7. `Sample car returns to the depot pin`
 11. `Game drivers Jamie and Alex`
 12. `Fuel for four miles after the start`
 13. `Standing only, when no job runs`
@@ -93,7 +93,7 @@ You own the fare maths and the office desk. You may edit `scripts/taxi_fare.py`,
 
 Do not rewrite the locked results: 490, 1040, 615, 1240, 1130, 265, 2370, 2860, and 12500. Money is integer pence. `py -3 scripts\taxi_fare_check.py` must print `FARE-OK` before each merge. The company ledger is not the game ledger. No driver share, no fuel, no standing, and no new-car cost on this desk. No API call and no database.
 
-Done, on `fa3b6e3`: the office desk, the £11.30 and £12.40 rows, the mixed button at 265, the company day at 2860, the cancelled mile at 2370, the empty hiring at 0, and soiling-only at 12500. Open slices 1 to 6 are also on `main`, through `ecb0365`. Skip them.
+Done, on `fa3b6e3`: the office desk, the £11.30 and £12.40 rows, the mixed button at 265, the company day at 2860, the cancelled mile at 2370, the empty hiring at 0, and soiling-only at 12500. Open slices 1 to 7 are also on `main`, through `21c472d`. Skip them.
 
 Open slices.
 
@@ -111,11 +111,11 @@ Open slices.
 12. Clock chooses the tariff. Requested time `22:00` or `06:59` selects tariff two. `07:00` or `21:59` selects tariff one. A Sunday checkbox forces tariff two. 27 December through 31 December forces tariff two. A Tuesday at `15:00` stays tariff one. The meter figures do not change. The checker covers those boundaries. The desk shows the tariff it selected.
 13. Soiling-only day. One hiring, no meter, soiling on, sums the day to 12500. Label it `soiling-day`. The 2860 day stays available beside it. `FARE-OK`.
 14. Cash or account. A completed £11.30 booking can be marked cash or account. The pence stays 1130 either way. `FARE-OK`.
+15. Negative miles. The desk rejects them and the previous quote stays on screen. `FARE-OK`.
 
 Reservoir. Do not start these.
 
 1. A help panel states tariff one flag fall 240 and tariff two flag fall 315.
-2. Negative miles are rejected and the previous quote stays.
 3. Cancelling Sam's 1240 and completing Alex's 1130 and 490 sums to 1620.
 4. The 1-mile tariff-one fare is shown as flag 240 plus 10 units of 25, total 490.
 5. Exact 322.6 yards on tariff one shows 265.
@@ -129,7 +129,7 @@ You own the circle, the game ledger, the sample car, and the map drawing for thi
 
 `GEO-OK`, `DAY-OK`, and `WEEK-OK` must pass before each merge that touches those scripts. The one-car worked day stays −1120 pence. Seven of those days stay −7840. A new car stays −800000 and never has a `device_id`. No API call. Do not import the office ledger and do not show 2860, 1130, or 1240 as game cash. The priced fare in the worked day stays 1040. Do not price Hexham, Durham, or Sunderland by distance.
 
-Done, on `e4a2c1c`: the checkers, `game.html`, the 80467 metre circle, the `Shiremoor depot` marker, and the sample car that asks OSRM or shows `OSRM unavailable` without repricing the day. Open slices 1 to 4 are also on `main`, through `e46de9a`. Skip them.
+Done, on `e4a2c1c`: the checkers, `game.html`, the 80467 metre circle, the `Shiremoor depot` marker, and the sample car that asks OSRM or shows `OSRM unavailable` without repricing the day. Open slices 1 to 5 are also on `main`, through `8fd1b4b`. Skip them.
 
 Open slices. Use the coordinates already in `scripts/taxi_geo_check.py`. Do not invent a new pin.
 
@@ -145,20 +145,20 @@ Open slices. Use the coordinates already in `scripts/taxi_geo_check.py`. Do not 
 10. Week list. `game.html` lists seven worked days, each −1120, total −7840. A control that also buys the second car on day 1 shows −807840 and says the car is not a device. `WEEK-OK` and `FLEET-OK` still pass.
 11. Separate ledgers. `game.html` states `Company ledger is not this page`. It does not show 2860, 1130, or 1240. Do not edit the office files.
 12. Map legend. The map names phones, buses, the depot, the circle, and the sample car as different things. The sample-car popup says `not a device`. The circle text includes `80467 m`. The depot label stays `Shiremoor depot`.
+13. Sunderland customer. A pin at `54.9069, -1.3838` is inside and has no fare of its own. `GEO-OK` still passes.
 
 Reservoir. Do not start these.
 
-1. A customer pin at Sunderland `54.9069, -1.3838` is inside and has no fare of its own.
-2. Status `returning` draws the sample car on the depot pin.
-3. Game drivers Jamie and Alex. Alex runs `T1`. Jamie has no share until a fare. The one-car day stays −1120.
-4. Cancel after 4 miles driven: fuel −80 and no fare. The miles are given by this slice, not by OSRM.
-5. A day with one car and no job is standing −1500 only.
-6. A new car and a new driver on the same day: −800000 and 0. The new car cannot start.
-7. The empire page lists the seven −1120 lines as well as the total.
-8. Watcher and owner stories stay on the model page. Do not migrate `device_links`.
+1. Status `returning` draws the sample car on the depot pin.
+2. Game drivers Jamie and Alex. Alex runs `T1`. Jamie has no share until a fare. The one-car day stays −1120.
+3. Cancel after 4 miles driven: fuel −80 and no fare. The miles are given by this slice, not by OSRM.
+4. A day with one car and no job is standing −1500 only.
+5. A new car and a new driver on the same day: −800000 and 0. The new car cannot start.
+6. The empire page lists the seven −1120 lines as well as the total.
+7. Watcher and owner stories stay on the model page. Do not migrate `device_links`.
 
 ## Integrator
 
 On `continue`, lead. Read the three radio files and look at the lane checkouts. Do not edit those checkouts. Name the next slice in `## Now`. Top up any lane with fewer than 8 Open slices not yet on `origin/main`. Deploy once when product code has merged since the site commit in `## Now`. Write the result back here. A radio-only commit is not a deploy.
 
-Last deploy recorded: box site `0c59ed5`, health `0.1.26`, `CHECK-OK`. The empty day is newer than that site commit. Deploy once more, then stop. Do not deploy a later radio-only note.
+Last deploy: box site `7cb4db0`, health `0.1.26`, `CHECK-OK`. Do not deploy a later radio-only note.
