@@ -174,6 +174,38 @@
     return 20 - remainder;
   }
 
+  var MILE_KM = 80.467 / 50;
+  var DEPOT_POINT = { lat: 55.0367, lng: -1.5075 };
+
+  function destination(origin, bearingDeg, miles) {
+    var km = miles * MILE_KM;
+    var lat1 = origin.lat * Math.PI / 180;
+    var lng1 = origin.lng * Math.PI / 180;
+    var bearing = (bearingDeg % 360) * Math.PI / 180;
+    var ang = km / EARTH_KM;
+    var lat2 = Math.asin(
+      Math.sin(lat1) * Math.cos(ang)
+      + Math.cos(lat1) * Math.sin(ang) * Math.cos(bearing)
+    );
+    var lng2 = lng1 + Math.atan2(
+      Math.sin(bearing) * Math.sin(ang) * Math.cos(lat1),
+      Math.cos(ang) - Math.sin(lat1) * Math.sin(lat2)
+    );
+    var lng = (lng2 * 180 / Math.PI + 540) % 360 - 180;
+    return { lat: lat2 * 180 / Math.PI, lng: lng };
+  }
+
+  function shortTrip(bearingDeg, miles) {
+    if (miles !== 2 && miles !== 4 && miles !== 6) return null;
+    var dropoff = destination(DEPOT_POINT, bearingDeg, miles);
+    return {
+      pickup: DEPOT_POINT,
+      dropoff: dropoff,
+      miles: miles,
+      inside: haversineKm(CENTRE, DEPOT_POINT) <= RADIUS_KM && haversineKm(CENTRE, dropoff) <= RADIUS_KM,
+    };
+  }
+
   function positionOnRoute(points, durationS, elapsedS) {
     if (!points.length) return null;
     if (durationS <= 0 || elapsedS <= 0) return points[0];
@@ -236,6 +268,7 @@
     fallbackSeconds: fallbackSeconds,
     offeredCount: offeredCount,
     secondsUntilNextOffer: secondsUntilNextOffer,
+    shortTrip: shortTrip,
     positionOnRoute: positionOnRoute,
     workedWeek: workedWeek,
     fleetWeek: fleetWeek,

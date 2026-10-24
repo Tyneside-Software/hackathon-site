@@ -115,6 +115,29 @@ def main():
     if taxi_game.seconds_until_next_offer(80) is not None:
         print("an 80 second clock added a fourth offer", file=sys.stderr)
         return 1
+    import taxi_geo
+    for miles in (2, 4, 6):
+        trip = taxi_game.short_trip(90, miles)
+        apart = taxi_geo.haversine_km(trip["pickup"], trip["dropoff"]) / taxi_game.MILE_KM
+        if trip["pickup"] != taxi_game.DEPOT or abs(apart - miles) > 0.05:
+            print(f"short trip {miles} was {apart}", file=sys.stderr)
+            return 1
+        if not 1 <= apart <= 8:
+            print(f"short trip {miles} is outside 1 to 8 miles", file=sys.stderr)
+            return 1
+        if not taxi_geo.inside(trip["pickup"]) or not taxi_geo.inside(trip["dropoff"]):
+            print(f"short trip {miles} left the circle", file=sys.stderr)
+            return 1
+        if taxi_geo.haversine_km(trip["dropoff"], taxi_game.BERWICK) < 10:
+            print("a short trip reached Berwick", file=sys.stderr)
+            return 1
+    try:
+        taxi_game.short_trip(0, 9)
+    except ValueError:
+        pass
+    else:
+        print("a 9 mile trip was accepted", file=sys.stderr)
+        return 1
     if taxi_game.sum_pence(taxi_game.worked_day()) != -1120:
         print("fallback changed the day", file=sys.stderr)
         return 1
