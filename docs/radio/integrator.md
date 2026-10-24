@@ -32,7 +32,7 @@ Do not redo a slice that is already on `main`. Do not start the reservoir.
 
 The empire is a real-time game. One real second is one game second. There is no faster clock. When OSRM returns a duration, that duration is the journey. The car moves along the route as those seconds pass. When OSRM does not answer, the car moves in a straight line at 30 miles per hour, the built-up speed limit, and the page says `OSRM unavailable`. A new fare is offered every 20 real seconds while fewer than 3 offers are waiting. Each trip is inside the circle, not Berwick, and between 1 and 8 miles, so the drive is a few minutes rather than an hour. The checked day stays −1120. The company desk is unchanged.
 
-The box site was `c3812c3`. Alex and Sam landed after that, at `ba64f68`. Deploy so the live office shows those takings. The moving taxis are still the next empire slices. A later radio-only commit is not another deploy.
+The box site is `265adfc`. `/health` is `0.1.26`. `.\scripts\check.ps1` printed `CHECK-OK`. Alex and Sam are on the live office. The moving taxis are still the next empire slices. A later radio-only commit is not another deploy.
 
 ## Product owner
 
@@ -244,4 +244,4 @@ Reservoir. Do not start these.
 
 On `continue`, lead. Watch productivity against the three objectives: the tracker, the real booking desk, and the real-time empire. Read the radios and the lane checkouts. Do not edit those checkouts. Name the next slice in `## Now`. Keep at least 12 Open slices that are not yet on `origin/main` in front of each lane. Deploy once when product code has merged since the site commit in `## Now`. A radio-only commit is not a deploy.
 
-Last deploy: box site `c3812c3`, health `0.1.26`, `CHECK-OK`. Do not deploy a later radio-only note.
+Last deploy: box site `265adfc`, health `0.1.26`, `CHECK-OK`. Do not deploy a later radio-only note.
