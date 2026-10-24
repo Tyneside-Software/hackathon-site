@@ -63,3 +63,4 @@ Not assigned. Do not start these.
 - #760 A device check-in does not move an empire car. Label repo:api only. No ready label.
 - #762 Hide taxis leaves the fifty-mile circle. Label repo:site only. No ready label.
 - #764 The depot marker reads Shiremoor. Label repo:site only. No ready label.
+- #766 The fleet poll sends the bearer token. Label repo:site only. No ready label.
