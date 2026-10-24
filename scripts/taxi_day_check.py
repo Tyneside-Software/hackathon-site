@@ -589,6 +589,20 @@ def main():
     if "paintEmpireTrails()" not in handler:
         print("the hide button did not remove the trail", file=sys.stderr)
         return 1
+    waiting = map_js.split("function paintEmpireFares", 1)
+    if len(waiting) != 2:
+        print("a waiting fare had no marker", file=sys.stderr)
+        return 1
+    waiting_body = waiting[1].split("function empireNow", 1)[0]
+    if 'name + " waiting"' not in waiting_body:
+        print("the waiting fare did not show the name", file=sys.stderr)
+        return 1
+    if "empireFares = []" not in waiting_body or "map.removeLayer" not in waiting_body:
+        print("a dropped fare stayed on the map", file=sys.stderr)
+        return 1
+    if "paintEmpireFares()" not in map_js.split("function rememberEmpire", 1)[1].split("function paintEmpireTrails", 1)[0]:
+        print("the feed did not refresh the waiting fares", file=sys.stderr)
+        return 1
     posted_trip = taxi_game.post_live_trip(7, 3, ())
     posted_kinds = [row["kind"] for row in posted_trip["lines"]]
     posted_amounts = [row["amount_pence"] for row in posted_trip["lines"]]
