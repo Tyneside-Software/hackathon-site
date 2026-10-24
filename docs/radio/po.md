@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/658
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/661
 
-Title: Chip colours come from the feed. Label repo:site only. No ready label.
+Title: The waiting chip says the name. Label repo:site only. No ready label.
 
-Next: The waiting chip says the name
+Next: A quiet feed keeps the last cars
