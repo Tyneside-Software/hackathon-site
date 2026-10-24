@@ -210,6 +210,32 @@ def short_trip(bearing_deg, miles):
     }
 
 
+def fleet_positions(routes, elapsed_s):
+    """T1, T2, and T3 each follow a route at the same moment. None is a device.
+
+    routes has three entries. An entry is (points, duration_s), or None to
+    leave that car at the depot. Offers still arrive on the 20 second clock.
+    """
+    if len(routes) != 3:
+        raise ValueError("the fleet is T1, T2, and T3")
+    cars = []
+    for car, route in zip(three_cars(), routes):
+        if route is None:
+            point = DEPOT
+            status = "at_depot"
+        else:
+            points, duration_s = route
+            point = position_on_route(points, duration_s, elapsed_s)
+            status = "started"
+        cars.append({
+            "call_sign": car["call_sign"],
+            "status": status,
+            "lat": point[0],
+            "lng": point[1],
+        })
+    return cars
+
+
 def position_on_route(points, duration_s, elapsed_s):
     """Place on a polyline. The checker passes points and a duration. It does not call OSRM."""
     if not points:

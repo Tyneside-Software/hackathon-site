@@ -243,6 +243,19 @@
     return points[points.length - 1];
   }
 
+  function fleetPositions(routes, elapsedS) {
+    if (!routes || routes.length !== 3) return null;
+    var signs = ["T1", "T2", "T3"];
+    return signs.map(function (sign, index) {
+      var route = routes[index];
+      if (!route) {
+        return { callSign: sign, status: "at_depot", lat: DEPOT_POINT.lat, lng: DEPOT_POINT.lng };
+      }
+      var point = positionOnRoute(route.points, route.durationS, elapsedS);
+      return { callSign: sign, status: "started", lat: point[0], lng: point[1] };
+    });
+  }
+
   function sumPence(rows) {
     return rows.reduce(function (total, row) {
       return total + row.amountPence;
@@ -277,6 +290,7 @@
     offeredCount: offeredCount,
     secondsUntilNextOffer: secondsUntilNextOffer,
     liveFarePence: liveFarePence,
+    fleetPositions: fleetPositions,
     shortTrip: shortTrip,
     positionOnRoute: positionOnRoute,
     workedWeek: workedWeek,
