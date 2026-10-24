@@ -128,6 +128,11 @@ def main():
             "Empty hiring must be 0 pence, got tariff one %s and tariff two %s" % (empty_one, empty_two),
             file=sys.stderr,
         )
+    animal = extras_pence(animals=1)
+    failed = _expect(
+        "Tariff one, 1 mile, no waiting, one animal, no soiling",
+        mile, animal, mile + animal, 490, 300, 790,
+    ) or failed
     soiling_only = empty_one + extras_pence(soiling=1)
     if soiling_only != 12500:
         failed = True
