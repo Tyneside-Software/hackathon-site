@@ -154,6 +154,7 @@
       "play-person-waiting",
       "play-person-stays",
       "play-car-job",
+      "play-job-feed",
       "play-next-failed",
       "play-next-trail",
       "play-next-fares",
@@ -410,7 +411,9 @@
 
   function carJob(car) {
     if (!car) return "";
-    const raw = String(car.job || car.status || "").trim();
+    const sent = typeof car.job === "string" ? car.job.trim() : "";
+    if (sent) return sent;
+    const raw = String(car.status || "").trim();
     if (raw === "waiting" || raw === "at_depot") return "waiting";
     if (raw === "travelling to a better spot" || raw === "travelling" || raw === "to_better_spot") return "travelling to a better spot";
     if (raw === "collecting" || raw === "to_passenger") return "collecting";
@@ -525,6 +528,7 @@
         text += listStatus(car);
         if (endName) text += " " + endName;
         item.dataset.sign = sign;
+        item.dataset.job = job;
         item.textContent = text;
         list.appendChild(item);
       }
@@ -612,12 +616,17 @@
 
   function noteCarJob() {
     const node = document.getElementById("play-car-job");
-    if (!node) return;
+    const feed = document.getElementById("play-job-feed");
     const jobs = ["waiting", "travelling to a better spot", "collecting", "carrying", "returning"];
     const list = document.getElementById("play-taxi-list");
     const text = list ? list.textContent : "";
     const listed = [];
     const chips = [];
+    const sent = [];
+    function keep(job) {
+      if (!job || sent.indexOf(job) !== -1) return;
+      sent.push(job);
+    }
     jobs.forEach((job) => {
       if (text.indexOf(" " + job) !== -1) listed.push(job);
       playChips.forEach((marker) => {
@@ -625,8 +634,17 @@
         if (title.indexOf(job) !== -1 && chips.indexOf(job) === -1) chips.push(job);
       });
     });
-    node.dataset.list = listed.join(",");
-    node.dataset.chip = chips.join(",");
+    if (list) Array.from(list.children).forEach((item) => keep(String(item.dataset.job || "")));
+    playChips.forEach((marker) => keep(String(marker && marker._playJob || "")));
+    const extra = sent.filter((job) => jobs.indexOf(job) === -1);
+    if (node) {
+      node.dataset.list = listed.join(",");
+      node.dataset.chip = chips.join(",");
+    }
+    if (!feed) return;
+    feed.dataset.sent = sent.join(",");
+    feed.dataset.extra = extra.join(",");
+    feed.dataset.break = sent.indexOf("on break") === -1 ? "absent" : "feed";
   }
 
   function noteWithPassenger() {
@@ -1802,7 +1820,9 @@
       const item = document.querySelector('#play-taxi-list [data-sign="' + sign + '"]');
       if (!item) return;
       let text = sign + " " + place[0] + ", " + place[1];
-      text += listStatus(car);
+      const job = carJob(car);
+      item.dataset.job = job;
+      text += job ? " " + job : "";
       const endName = chosenPlaceName(car);
       if (endName) text += " " + endName;
       item.textContent = text;
