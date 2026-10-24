@@ -462,6 +462,18 @@
     };
   }
 
+  function completedFareRow(tripId, miles, posted) {
+    var first = postLiveTrip(tripId, miles, posted);
+    var fare = liveFarePence(miles, 0);
+    return {
+      status: "completed",
+      miles: miles,
+      farePounds: farePounds(fare),
+      lines: first.lines,
+      posted: first.posted,
+    };
+  }
+
   function sumPence(rows) {
     return rows.reduce(function (total, row) {
       return total + row.amountPence;
@@ -513,6 +525,7 @@
     secondsUntilFare: secondsUntilFare,
     nextFareLabel: nextFareLabel,
     postLiveTrip: postLiveTrip,
+    completedFareRow: completedFareRow,
     shortTrip: shortTrip,
     positionOnRoute: positionOnRoute,
     workedWeek: workedWeek,
