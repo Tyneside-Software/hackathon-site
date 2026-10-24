@@ -138,6 +138,34 @@ def main():
     else:
         print("a 9 mile trip was accepted", file=sys.stderr)
         return 1
+    routes = (
+        (((0.0, 0.0), (0.0, 2.0)), 600),
+        (((1.0, 0.0), (1.0, 4.0)), 400),
+        None,
+    )
+    fleet = taxi_game.fleet_positions(routes, 300)
+    if [car["call_sign"] for car in fleet] != ["T1", "T2", "T3"] or has_device_id(fleet):
+        print(f"fleet {fleet}", file=sys.stderr)
+        return 1
+    if abs(fleet[0]["lat"] - 0.0) > 1e-9 or abs(fleet[0]["lng"] - 1.0) > 1e-6:
+        print(f"T1 {fleet[0]}", file=sys.stderr)
+        return 1
+    if abs(fleet[1]["lat"] - 1.0) > 1e-9 or abs(fleet[1]["lng"] - 3.0) > 1e-6:
+        print(f"T2 {fleet[1]}", file=sys.stderr)
+        return 1
+    if (fleet[2]["lat"], fleet[2]["lng"]) != taxi_game.DEPOT or fleet[2]["status"] != "at_depot":
+        print(f"T3 {fleet[2]}", file=sys.stderr)
+        return 1
+    if taxi_game.offered_count(60) != 3 or taxi_game.offered_count(80) != 3:
+        print("three moving cars changed the offer cap", file=sys.stderr)
+        return 1
+    try:
+        taxi_game.fleet_positions((None, None, None, None), 0)
+    except ValueError:
+        pass
+    else:
+        print("a fourth car joined the fleet", file=sys.stderr)
+        return 1
     if taxi_game.live_fare_pence(3, 0) != 1040:
         print(f"live fare {taxi_game.live_fare_pence(3, 0)}", file=sys.stderr)
         return 1

@@ -42,6 +42,7 @@
     <p id="next-offer"></p>
     <p id="short-trip"></p>
     <p id="live-fare"></p>
+    <p id="fleet-move"></p>
     <ul id="places"></ul>
     <p class="lede" id="berwick-job"></p>
     <p class="lede" id="hexham-job"></p>
@@ -96,6 +97,19 @@
     document.getElementById("live-fare").textContent = liveFare === 1040 && game.sumPence(game.workedDay()) === -1120
       ? "A live 3 mile fare is 1040. The checked day stays −1120."
       : "A live fare changed the day.";
+    var fleet = game.fleetPositions([
+      { points: [[0, 0], [0, 2]], durationS: 600 },
+      { points: [[1, 0], [1, 4]], durationS: 400 },
+      null
+    ], 300);
+    var together = fleet && fleet.length === 3
+      && fleet[0].callSign === "T1" && fleet[2].status === "at_depot"
+      && game.offeredCount(80) === 3
+      && game.sumPence(game.workedDay()) === -1120
+      && !fleet.some(function (car) { return car.device_id; });
+    document.getElementById("fleet-move").textContent = together
+      ? "T1, T2, and T3 can move together. None is a device. The checked day stays −1120."
+      : "A car was a device.";
     var labels = {
       standing: "Standing for the one car",
       fare_in: "Fare in",
