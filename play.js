@@ -77,6 +77,7 @@
       "play-trail-colour",
       "play-trail-order",
       "play-trail-age",
+      "play-trail-replace",
       "play-started-ten",
       "play-locks",
       "play-osrm",
@@ -128,6 +129,7 @@
   const playChips = new Map();
   const playFares = [];
   const playTrails = [];
+  const playTrailFed = new Map();
   let playFeed = null;
   let playFed = false;
   let playClock = null;
@@ -327,17 +329,31 @@
     node.dataset.dropped = String(dropped);
   }
 
+  function trailStamp(point) {
+    return String(point.lng) + "," + String(point.lat) + "," + String(point.at);
+  }
+
+  function noteTrailReplaced(signs) {
+    const node = document.getElementById("play-trail-replace");
+    if (!node) return;
+    node.dataset.replaced = "feed";
+    node.dataset.signs = signs.join(",");
+  }
+
   function paintPlayTrails(feed) {
     clearPlayTrails();
     const keep = Number(feed && feed.trail_s);
     const trailS = Number.isFinite(keep) && keep > 0 ? keep : 600;
     const now = playNow();
     const cars = feed && Array.isArray(feed.cars) ? feed.cars : [];
+    const fedSigns = [];
     cars.forEach((car) => {
       if (!car || !car.sign || !Array.isArray(car.trail)) return;
+      const sign = String(car.sign);
       const boughtS = boughtTrailSeconds(car);
       const keepS = boughtS === null ? trailS : boughtS;
       const points = [];
+      const stamps = [];
       let dropped = 0;
       car.trail.forEach((row) => {
         const point = trailPoint(row);
@@ -346,8 +362,11 @@
           if (boughtS !== null) dropped += 1;
           return;
         }
+        stamps.push(trailStamp(point));
         points.push([point.lat, point.lng]);
       });
+      playTrailFed.set(sign, stamps);
+      fedSigns.push(sign);
       if (boughtS !== null) noteBoughtTrailAge(dropped);
       if (points.length < 2) return;
       const line = L.polyline(points, {
@@ -355,8 +374,15 @@
         weight: 4,
         opacity: 0.7
       }).addTo(map);
+      line._feedStamps = stamps.slice();
       playTrails.push(line);
     });
+    const stale = [];
+    playTrailFed.forEach(function (stamps, sign) {
+      if (fedSigns.indexOf(sign) === -1) stale.push(sign);
+    });
+    stale.forEach(function (sign) { playTrailFed.delete(sign); });
+    noteTrailReplaced(fedSigns);
   }
 
   function paintPlayFares(feed) {
