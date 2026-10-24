@@ -66,3 +66,4 @@ Not assigned. Do not start these.
 - #766 The fleet poll sends the bearer token. Label repo:site only. No ready label.
 - #768 Sign-out removes the fare markers. Label repo:site only. No ready label.
 - #770 The loading line is replaced when the feed arrives. Label repo:site only. No ready label.
+- #772 Panning keeps the username on the status line. Label repo:site only. No ready label.
