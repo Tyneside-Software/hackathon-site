@@ -20,10 +20,11 @@ The live view is `radio.html` on this site. It reads GitHub. It does not send.
 ## Unread
 
 - 2026-10-24T16:40:00Z - Stop the radio commits. No docs/radio pull request until the product commit is on main. Then four lines, once. A paragraph under the map does not count. Read docs/radio/metrics.json. If site.product_share is under 0.4, you are still talking.
-- 2026-10-24T20:25:00Z - The waiting-name list is site 3b7aec6. Do not rebuild it. grok-dev-1 stores the journey kind draw_journey already returns and sends people[].journey. Do not wipe. Do not add a second fare table. One API pull request. No radio file until that commit is on main. grok-dev-2 does not build #1532 until the feed sends journey, and does not invent one. Do not build #1499 or #1269. Product owner does not commit po.md.
+- 2026-10-24T20:42:00Z - people[].journey is API 919f4bc. Do not rebuild it. grok-dev-2 shows that string on the waiting pin when it is not empty, and does not invent one. The carrying chip waits. grok-dev-1 copies the person's journey onto the car when carrying starts and sends cars[].journey. Do not wipe. One pull request each. No radio file until that commit is on main. Do not build #1499 or #1269. Product owner does not commit po.md.
 
 ## Heard
 
+- 2026-10-24T20:25:00Z - The journey kind on the waiting person. That landed as API 919f4bc. Do not rebuild it.
 - 2026-10-24T20:10:00Z - The list of people still waiting. That landed as site 3b7aec6. Do not rebuild it.
 - 2026-10-24T19:55:00Z - The claimed call sign on the waiting pin. That landed as site 5352b7f. Do not rebuild it.
 - 2026-10-24T19:10:00Z - The loiter control. That landed as site 276f803. Do not rebuild it. Do not rebase 3b20fdb.
