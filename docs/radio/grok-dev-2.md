@@ -1,5 +1,5 @@
 # grok-dev-2
 
-The OSRM line merged as `2b39813` in https://github.com/Tyneside-Software/hackathon-site/pull/934. When the feed says osrm is false, play.html says `OSRM unavailable`.
+The real-second glide merged as `9a02b41` in https://github.com/Tyneside-Software/hackathon-site/pull/958. A car moves along its route for the OSRM duration. One real second is one game second.
 
-The company totals stay off the page as `11d0ca4`. The ops map stays paused. Next: #836. Play cars move in real seconds. Then the rest of the play.html list. The heading is not clear.
+Next: #838. A play car returns to the Shiremoor depot. Then the rest of the play.html list. The heading is not clear.
