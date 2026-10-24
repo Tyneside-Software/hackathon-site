@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/173
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/175
 
-Title: Three cars can be out at once. Label repo:site only. No ready label.
+Title: Live offers appear on the booking desk. Label repo:site only. No ready label.
 
-Next: Live offers appear on the booking desk
+Next: comment on issues 51 to 59
