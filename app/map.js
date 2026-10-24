@@ -2017,6 +2017,14 @@
     return empireClock.server + (Date.now() / 1000 - empireClock.client);
   }
 
+  function empireTip(car) {
+    const passenger = car.passenger || "";
+    if (car.status === "to_passenger") return car.sign + " · collecting" + (passenger ? " " + passenger : "");
+    if (car.status === "with_passenger") return (passenger || car.sign) + " · " + car.sign;
+    if (car.status === "returning") return car.sign + " · returning";
+    return car.sign + " · at depot";
+  }
+
   function glideEmpire() {
     empireMotion = 0;
     if (!empireToken() || !empireFeed || !Array.isArray(empireFeed.cars)) return;
@@ -2049,6 +2057,10 @@
       } else {
         marker.setLatLng(place);
       }
+      const tipText = empireTip(car);
+      const tip = marker.getTooltip();
+      if (tip) tip.setContent(tipText);
+      else marker.bindTooltip(tipText, { permanent: true, direction: "right" });
     });
     Array.from(empireMarkers.keys()).forEach((sign) => {
       if (!seen.has(sign)) {

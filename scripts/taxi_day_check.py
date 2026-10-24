@@ -603,6 +603,23 @@ def main():
     if "paintEmpireFares()" not in map_js.split("function rememberEmpire", 1)[1].split("function paintEmpireTrails", 1)[0]:
         print("the feed did not refresh the waiting fares", file=sys.stderr)
         return 1
+    tip = map_js.split("function empireTip", 1)
+    if len(tip) != 2:
+        print("the taxi tooltip was missing", file=sys.stderr)
+        return 1
+    tip_body = tip[1].split("function glideEmpire", 1)[0]
+    if "collecting" not in tip_body or "returning" not in tip_body or "at depot" not in tip_body:
+        print("the tooltip did not name the leg", file=sys.stderr)
+        return 1
+    if "car.passenger" not in tip_body or 'car.status === "with_passenger"' not in tip_body:
+        print("the aboard tooltip did not name the passenger", file=sys.stderr)
+        return 1
+    if "device" in tip_body:
+        print("the tooltip said device", file=sys.stderr)
+        return 1
+    if "empireTip(car)" not in glide_body:
+        print("the gliding marker had no tooltip", file=sys.stderr)
+        return 1
     posted_trip = taxi_game.post_live_trip(7, 3, ())
     posted_kinds = [row["kind"] for row in posted_trip["lines"]]
     posted_amounts = [row["amount_pence"] for row in posted_trip["lines"]]
