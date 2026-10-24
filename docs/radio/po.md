@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/540
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/538
 
-Title: Waiting fare has a marker position. Label repo:api only. No ready label.
+Title: Depot pause then the next fare. Label repo:api only. No ready label.
 
-Next: Empire feed is one account
+Next: Waiting fare has a marker position
