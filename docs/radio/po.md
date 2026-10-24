@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/95
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/97
 
-Title: Sample car hiring statuses. Label repo:site only. No ready label. The body is the matching dev slice.
+Title: Game refuses a Berwick job. Label repo:site only. No ready label. The body is the matching dev slice.
 
-Next: Game refuses a Berwick job
+Next: Second car stays at the depot until it is paid for
