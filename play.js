@@ -138,6 +138,7 @@
       "play-cash-pence",
       "play-depot-clear",
       "play-zoom-clear",
+      "play-signout-flight",
       "play-locks",
       "play-osrm",
       "play-buses",
@@ -605,11 +606,25 @@
     playSignAgain = false;
     dropBoughtChips();
     clearPlayChips();
+    const leftDuringBuy = playBuying;
     clearPlaySpent();
     clearPlayTrails();
     showPlayAccount();
     paintPlayStatus(null);
     paintPlayBuy();
+    if (leftDuringBuy) {
+      clearPlaySpent();
+      noteSignOutFlight();
+    }
+  }
+
+  function noteSignOutFlight() {
+    const node = document.getElementById("play-signout-flight");
+    if (!node) return;
+    const line = document.getElementById("play-spent");
+    const text = line ? line.textContent : "";
+    node.dataset.spent = text.indexOf("800000") === -1 ? "clear" : "shows";
+    node.dataset.flight = "left";
   }
 
   let playBuying = false;
@@ -732,13 +747,20 @@
         body: JSON.stringify({ pence: playBuyPence() })
       });
     } catch (err) {
-      if (status) status.textContent = "Buy failed.";
+      if (localStorage.getItem("hackathon-empire-token") || "") {
+        if (status) status.textContent = "Buy failed.";
+      }
       return;
     } finally {
       playBuying = false;
       noteBuyFlight();
       paintPlayBuy();
+      if (!(localStorage.getItem("hackathon-empire-token") || "")) {
+        clearPlaySpent();
+        noteSignOutFlight();
+      }
     }
+    if (!(localStorage.getItem("hackathon-empire-token") || "")) return;
     if (res.status === 401) {
       localStorage.removeItem("hackathon-empire-token");
       paintPlayStatus(null);
