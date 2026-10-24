@@ -309,14 +309,12 @@
   function paintPlayStatus(feed) {
     const line = document.getElementById("play-status");
     if (!line) return;
+    const fleet = "The fleet runs on the box.";
     const token = localStorage.getItem("hackathon-empire-token") || "";
-    if (!token) {
-      line.textContent = "";
-      return;
-    }
     const fromFeed = statusName(feed && feed.username);
     const fromStore = statusName(localStorage.getItem("hackathon-empire-user"));
-    line.textContent = fromFeed || fromStore;
+    const who = token ? (fromFeed || fromStore) : "";
+    line.textContent = who ? who + ". " + fleet : fleet;
   }
 
   function paintPlayOsrm(feed) {
