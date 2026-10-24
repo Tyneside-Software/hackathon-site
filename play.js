@@ -84,6 +84,7 @@
     const duration = Number(car.duration_s) || 0;
     const started = Number(car.leg_started) || 0;
     const elapsed = now - started;
+    if (car.status === "returning" && (!route.length || elapsed >= duration)) return [55.0367, -1.5075];
     if (route.length) return placeOnRoute(route, duration, elapsed);
     const lat = Number(car.lat);
     const lng = Number(car.lng);
