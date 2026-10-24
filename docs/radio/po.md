@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/228
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/231
 
-Title: Office empty book says no bookings yet. Label repo:site only. No ready label.
+Title: Office bookings use the shared row. Label repo:site only. No ready label.
 
-Next: Office bookings use the shared row
+Next: Office week strip stays 20020
