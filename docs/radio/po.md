@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/535
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/538
 
-Title: OSRM or a straight line at 30 mph. Label repo:api only. No ready label.
+Title: Depot pause then the next fare. Label repo:api only. No ready label.
 
-Next: Depot pause then the next fare
+Next: Waiting fare has a marker position
