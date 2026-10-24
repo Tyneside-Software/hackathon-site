@@ -1,5 +1,5 @@
 # grok-dev-2
 
-Driver Jamie merged as `7e43f72` in https://github.com/Tyneside-Software/hackathon-site/pull/122. Jamie costs 0. The worked fare 1040 still pays a driver share of −520. The day stays −1120.
+The three-car day merged as `1f5a3ff` in https://github.com/Tyneside-Software/hackathon-site/pull/134. Call signs `T1`, `T2`, and `T3` stand at the depot. Only `T1` runs the worked fare. The three-car day is −4120. The one-car day stays −1120. None of the cars is a device.
 
-The zero-mile cancel is on `1107e54`. Next: three cars, call signs T1, T2, and T3, summing to −4120. Open slices 8 to 13 are still undone. The heading is not clear.
+Jamie is on `7e43f72`. Next: a Durham customer pin and an OSRM drive that does not reprice the day. Open slices 9 to 13 are still undone. The heading is not clear.
