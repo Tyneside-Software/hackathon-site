@@ -26,11 +26,23 @@ The office and the empire are the same booking desk. `office.html` is the real c
 
 | Lane | State | Next slice |
 |------|--------|------------|
-| Product owner | You own short-term priority. Titles 1 to 64 are opened, except 17, 18, and 19. grok-dev-1 finished A1 to A32 and stopped. grok-dev-2's U18 to U32 is not a 30 minute reserve. Both of those turns were short. You have been finishing early. | This turn is about 30 minutes of designing and communicating. Read both dev radios. Fill `### grok-dev-1`, `### grok-dev-2`, and `## Reservoir` in `po.md`. Then write `## Next for me` so your next continue already has work. Do not stop after one issue. |
-| grok-dev-1 | A1 to A32 are on `main`. Do not rebuild them. The heading-clear note is stale. You are not API-only. | Pull `main` and do the grok-dev-1 queue in `docs/radio/po.md` for about 30 minutes, one pull request each. If that queue is not on `main` yet, say `queue empty`, pull once more, then stop. Do not invent the slices. |
-| grok-dev-2 | U1 to U17 are on `main`. The signed-in form is `714303e`. Desk slices and map titles M1 to M32 wait. You are not map-only. | U18, then U19 to U32, and then the grok-dev-2 queue in `docs/radio/po.md`. About 30 minutes. One pull request each. Do not stop at U32 if `po.md` lists more. |
+| Product owner | Master has set the short-term priority: the taxi game UI. The lists now in `po.md` (password checks, and the `app/` map with phones and buses) are the wrong work. Park them. | This turn, about 30 minutes, design `play.html` and the 10-car game below. Replace both dev queues and refill the reservoir. Leave `## Next for me`. Do not stop after one issue. |
+| grok-dev-1 | A1 to A32 are on `main`. Do not rebuild the three-car fleet as if it were still the goal. | Do the new grok-dev-1 queue in `po.md` after the product owner posts the 10-car game. About 30 minutes, one pull request each. If that queue is not on `main` yet, say `queue empty`, pull once more, then stop. Do not invent the slices. Do not keep doing the short-password list. |
+| grok-dev-2 | U18 to U32 and the phones-and-buses list in `po.md` wait. The game is not `app/`. | Do the new grok-dev-2 queue in `po.md` for `play.html`. About 30 minutes, one pull request each. If that queue is not on `main` yet, say `queue empty`, pull once more, then stop. Do not keep editing the ops map. |
 
 Do not redo a slice that is already on `main`. Do not start the reservoir.
+
+## Game page
+
+Master's order. The product owner designs the slices. The integrator does not.
+
+The taxi game is `play.html`. It is not `app/`. `app/` keeps phones, buses, and waypoints. `play.html` shows the game only: the map, the ten taxis, and the in-game money. No phone list, no bus toggle, no Place stops. Same centre `54.9783, -1.6178`, same 50-mile circle, same Shiremoor depot `55.0367, -1.5075`.
+
+An account still starts the fleet, and the fleet still runs on the box when the browser is closed. `ensure_game` creates T1 to T10 at the depot, not three. T1 stays `#f5b942`, T2 `#38bdf8`, T3 `#4ade80`. The product owner names seven more colours in the slices. Cars are not devices. One real second is one game second. OSRM duration is the journey. If OSRM does not answer, the car moves straight at 30 mph and the page says `OSRM unavailable`.
+
+The page shows in-game money as it changes: fares earned, and the game costs already fixed (driver share, fuel at 20 pence a mile, standing). Integer pence. The North Tyneside tariff already in `docs/TAXI.md` is the fare. Do not invent a second fare table. Do not show the company totals 2860, 1130, or 1240 on `play.html`. Do not show game costs on `office.html`. `game.html` stays the simulated booking desk. Do not turn it into this map.
+
+The product owner writes at least 16 unfinished slices for each dev, and 24 in the reservoir, all for this game page. Name the files. One dev should own `play.html` and its script. The other should own the API fleet of 10 and the money figures on `GET /v1/empire`. Do not give both the same file. Say in the radio that the old `app/` queue is paused. Leave `## Next for me`.
 
 The empire is a real-time game. One real second is one game second. There is no faster clock. When OSRM returns a duration, that duration is the journey. The car moves along the route as those seconds pass. When OSRM does not answer, the car moves in a straight line at 30 miles per hour, the built-up speed limit, and the page says `OSRM unavailable`. The account fleet does not use the old 20-second offer rule. A car finishes, waits four seconds at the depot, then takes the next fare. Each trip is inside the circle, not Berwick. The checked day stays −1120. The company desk is unchanged.
 
@@ -205,9 +217,9 @@ Done, already on `main`: issues 30, 31, 32, 33, and 34 are open. Issues 23 and 2
 
 You own short-term priority. The integrator directs. You design and you communicate, and you should be busy for the whole continue. A turn is about 30 minutes. One issue is not a turn.
 
-On this continue, read `docs/radio/grok-dev-1.md` and `docs/radio/grok-dev-2.md` before you write. grok-dev-1 finished A1 to A32 and stopped. grok-dev-2 has only U18 to U32 left. Both turns were short. Say that in your radio. Then spend the rest of the turn filling work so the next dev turn can run for about 30 minutes.
+On this continue, read `## Game page` above. That is the priority Master just set. The queues now in `po.md` are paused: the short-password issues, and the `app/` slices about phones, buses, and trails. Say they are paused. Do not open more of them.
 
-Write `docs/radio/po.md` with `### grok-dev-1`, `### grok-dev-2`, and `## Reservoir`. At least 16 unfinished slices for each dev, and 24 in the reservoir. Name the next slice, the files that dev may edit, and that they keep going. Either dev may do API or map work. Do not give both the same file. One issue, then the radio, then the next issue. Do not stop when the old titles are all opened.
+Then spend the turn designing the 10-car game on `play.html`. Write `### grok-dev-1`, `### grok-dev-2`, and `## Reservoir` again, all for that game. At least 16 unfinished slices for each dev, and 24 in the reservoir. One dev owns the API fleet of 10 and the money on `GET /v1/empire`. The other owns `play.html` and its script. Name the next slice, the files, and that the turn runs about 30 minutes. One issue, then the radio, then the next issue. Do not stop after one issue.
 
 Leave yourself work. End the radio with `## Next for me` and at least four jobs you will do on the next continue: check the dev turn lengths, top up whichever queue is short, write the next slices, and tell the devs. If `## Next for me` would be empty, you are finishing early. Write more before you stop.
 

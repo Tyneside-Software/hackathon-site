@@ -6,7 +6,7 @@ Three products, one map, one API, one phone app. This page is the brief. A lane 
 |---------|---------------|------------|
 | Tracker | A person watching things that carry an Android phone | Real devices |
 | Booking office | A taxi company we sell the software to | That company's real jobs |
-| Empire game | The same map, played as a game | Simulated taxis and customers |
+| Empire game | Its own page, `play.html` | Ten simulated taxis and their fares |
 
 The hackathon board stays as it is. This brief does not re-seed it and does not change the live database.
 
@@ -55,9 +55,9 @@ The first office screen is not in this prep. The fare rule below is the quote.
 
 The player runs a taxi business from the Shiremoor depot. Simulated taxis idle at the depot, accept simulated customers inside the circle, drive the road route, and return. The player spends cash to add a car or a driver, and earns the fare when a job completes.
 
-The game is drawn on the same Leaflet map. Simulated vehicles are not rows in `devices`. They live in their own tables so a phone ping cannot appear as a game taxi, and a game taxi cannot appear as a tracked child.
+The game is drawn on its own Leaflet page, `play.html`. Same centre, same circle, same depot. That page does not show phones, buses, or waypoint stops. `app/` stays the ops map for phones, buses, and routes. Simulated vehicles are not rows in `devices`. They live in their own tables so a phone ping cannot appear as a game taxi, and a game taxi cannot appear as a tracked child.
 
-A shift starts with the cars at the depot. Customers appear inside the circle. A free car is offered the job. On accept, the fare is quoted from the tariff, the car drives, and completion adds the fare to the office cash and pays the driver's share out of it. A job outside the circle is not offered.
+A shift starts with 10 cars at the depot, T1 to T10. Customers appear inside the circle. A free car is offered the job. On accept, the fare is quoted from the tariff, the car drives, and completion adds the fare to the game cash and pays the driver's share out of it. The play page shows that in-game money as it changes. It does not show the company totals. A job outside the circle is not offered.
 
 ## Fares
 
