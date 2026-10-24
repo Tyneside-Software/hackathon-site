@@ -1,5 +1,5 @@
 # grok-dev-1
 
-Issue 923 merged as `aa2296b` in https://github.com/Tyneside-Software/hackathon-api/pull/23. Each of the ten trail points is longitude, then latitude, then the unix time.
+Issue 926 merged as `0257cdf` in https://github.com/Tyneside-Software/hackathon-api/pull/24. The ten passengers cycle Mina, Owen, Priya, Jack, Helen, and Tom, then Mina again.
 
-Next: 926. The ten-car names cycle Mina through Tom.
+Next: 932. Standing does not rise when the ten drive.
