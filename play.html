@@ -105,6 +105,39 @@
       bottom: 0.75rem;
     }
     #play-follow-stop[hidden] { display: none; }
+    #play-office-north,
+    #play-office-south,
+    #play-office-close {
+      color: var(--heading);
+      font-size: 0.82rem;
+      font-weight: 700;
+      padding: 0.35rem 0.65rem;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--accent-soft);
+      white-space: nowrap;
+      cursor: pointer;
+    }
+    #play-office {
+      position: fixed;
+      z-index: 30;
+      left: 0.75rem;
+      bottom: 3.2rem;
+      width: min(22rem, calc(100vw - 1.5rem));
+      max-height: 46vh;
+      overflow: auto;
+      margin: 0;
+      padding: 0.7rem 0.8rem;
+      background: rgba(12, 18, 25, 0.94);
+      color: #f8fafc;
+      border-radius: 8px;
+      font: 700 13px/1.35 system-ui, sans-serif;
+    }
+    #play-office[hidden] { display: none; }
+    #play-office h2 { margin: 0 0 0.35rem; font-size: 1rem; }
+    #play-office p { margin: 0.2rem 0; }
+    #play-office ul { margin: 0.45rem 0 0; padding-left: 1.1rem; }
+    #play-office li { margin: 0.2rem 0; }
     .leaflet-tooltip.play-leg-label,
     .leaflet-tooltip.play-follow-box {
       background: rgba(12, 18, 25, 0.92);
@@ -142,6 +175,9 @@
         <a href="index.html">Home</a>
         <a href="progress.html">Progress</a>
         <a href="play.html" class="is-current" aria-current="page">Taxi game</a>
+        <button type="button" id="play-office-north">North office</button>
+        <button type="button" id="play-office-south">South office</button>
+        <button type="button" id="play-office-close">Close</button>
       </div>
     </div>
   </nav>
@@ -262,6 +298,12 @@
     <p id="play-job-count" hidden></p>
     <button type="button" id="play-signout">Sign out</button>
     <button type="button" id="play-follow-stop" hidden>Stop following</button>
+    <section id="play-office" hidden aria-label="Firm bookings">
+      <h2 id="play-office-title"></h2>
+      <p id="play-office-fare"></p>
+      <ul id="play-office-rows"></ul>
+      <p id="play-office-empty" hidden>No bookings.</p>
+    </section>
     <p id="play-signout-chip">Sign out removes the bought car chip and shows Start when no token remains.</p>
     <form id="play-account" hidden>
       <label for="play-username">Username
@@ -286,6 +328,6 @@
 
   <script src="config.js?v=20261024-https1"></script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-  <script src="play.js?v=20261024-jobcount1"></script>
+  <script src="play.js?v=20261024-office1"></script>
 </body>
 </html>
