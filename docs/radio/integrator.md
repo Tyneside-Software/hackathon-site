@@ -22,19 +22,19 @@ Master has unpaused the lanes. This section is the order. An older line that say
 
 The only products are the tracker, the booking office, and the empire game in `docs/TAXI.md`. Issues 22 and 29 stay `blocked`. Do not migrate the live database. The open work is the taxi game on `play.html`.
 
-`POST /v1/empire/buy` is deployed. #1178, #1184, #1185, and #1186 are on API `main` through `3c322b2`. Do not rebuild them. The bought-car trail, its colour, and the latitude-then-longitude order are on site `main`: `c8b0851`, `08ea42d`, and `9a16369`. Do not rebuild them. There is no `cash_pence` column yet. `fare_in` stays 0 until a completed job adds a tariff fare, and 800000 is not added to `fare_in`.
+`POST /v1/empire/buy` is deployed. #1178, #1184, #1185, #1186, and #1135 are on API `main` through `f8dc0cc`. A second buy does not add T12. Do not rebuild them. The bought-car trail, its colour, and the latitude-then-longitude order are deployed from site `9a16369`. Do not rebuild them. There is no `cash_pence` column yet. `fare_in` stays 0 until a completed job adds a tariff fare, and 800000 is not added to `fare_in`.
 
 | Lane | State | Next slice |
 |------|--------|------------|
-| Product owner | The OPEN lines in `po.md` still have no issue numbers. `Next` still names #1178 and #1194, which are done. | You are not paused. Open every line marked OPEN, in one `po.md` commit, and replace OPEN with the issue number. Move `Next` to #1135 for grok-dev-1 and #1202 for grok-dev-2. Do not put a new issue in front of those. Do not edit `play.html`, `play.js`, or the API. Do not deploy. |
-| grok-dev-1 | #1185 is `73ae387`. #1186 is `3c322b2`. The live buy route answers, and the feed lists the bought car. | Pull. Build #1135, then the next numbered line in `### grok-dev-1`, for about 30 minutes. One product pull request, four radio lines, then the next slice. Skip #1178, #1184, #1185, and #1186. Skip a line marked OPEN. Do not build #1180, #1152, #1231, #1232, #1233, or #1234 until the `cash_pence` issue is on `main`. Do not edit `play.html` or `play.js`. A tick must not invent an eleventh car. A second buy does not add T12. |
-| grok-dev-2 | #1221 is merged as `9a16369`. The radio still says it is next. That note is stale. Do not write that the heading is not clear and stop. | Pull. Build #1202, then the next numbered line in `### grok-dev-2`, for about 30 minutes. One product pull request, four radio lines, then the next slice. Do not redo the trail, the colour, or the point order. Skip a line marked OPEN. Do not edit the API. Do not put the money column back beside the map. |
+| Product owner | No `po.md` commit since the refill. The checkout is behind `origin/main`. The OPEN lines still have no issue numbers. | You are not paused. Pull. Open every line marked OPEN, in one `po.md` commit, and replace OPEN with the issue number. Move `Next` to #1226 for grok-dev-1 and #1202 for grok-dev-2. Do not put a new issue in front of those. Do not edit `play.html`, `play.js`, or the API. Do not deploy. |
+| grok-dev-1 | #1135 is `f8dc0cc`. The radio note is on `main`. | Pull. Build #1226, then the next numbered line in `### grok-dev-1`, for about 30 minutes. One product pull request, four radio lines, then the next slice. Skip #1178, #1184, #1185, #1186, and #1135. Skip a line marked OPEN. Do not build #1180, #1152, #1231, #1232, #1233, or #1234 until the `cash_pence` issue is on `main`. Do not edit `play.html` or `play.js`. A tick must not invent an eleventh car. |
+| grok-dev-2 | #1221 is `9a16369` and the radio note is merged. The words `the heading is not clear` do not mean stop. | Pull. Build #1202 in `play.js`, then the next numbered line in `### grok-dev-2`, for about 30 minutes. One product pull request, four radio lines, then the next slice. Do not open another note about #1221. Do not redo the trail, the colour, or the point order. Skip a line marked OPEN. Do not edit the API. Do not put the money column back beside the map. |
 
 Do not redo a slice that is already on `main`. Do not start `## Reservoir` until a line from it is in your numbered list. The fullscreen map and the Start error text are already on `main` as `715b7c9`. Do not rebuild them.
 
 ## The route is the gap
 
-The route is no longer the gap. `POST /v1/empire/buy` is deployed. The bought-car trail, including latitude then longitude, is deployed from site `9a16369`. The open slices are #1135, one purchase and no T12, and #1202, drop trail points older than ten minutes. Do not redo the route or the trail.
+The route is no longer the gap. `POST /v1/empire/buy` is deployed. One purchase does not add T12, on API `f8dc0cc`. The bought-car trail is deployed from site `9a16369`. The open slices are #1226, a payment under 800000 is not a purchase, and #1202, drop trail points older than ten minutes. Do not redo the route or the trail.
 
 The integrator deploys this PC when those files change. Lanes do not deploy.
 
