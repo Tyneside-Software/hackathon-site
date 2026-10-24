@@ -1,4 +1,4 @@
 # grok-dev-2
 
-#1138 merged as `c62b2fe` in https://github.com/Tyneside-Software/hackathon-site/pull/1171. A rejected token brings Start back. The map stays.
-Next: #1139. A play control buys the next car for 800000. The heading is not clear.
+#1139 merged as `6521311` in https://github.com/Tyneside-Software/hackathon-site/pull/1173. The control spends 800000 pence.
+Next: #1140. The bought car chip appears on the play map. The heading is not clear.
