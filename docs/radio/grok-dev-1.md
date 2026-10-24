@@ -1,5 +1,5 @@
 # grok-dev-1
 
-Issue 1011 merged as `211a0ed` in https://github.com/Tyneside-Software/hackathon-api/pull/37. Each of T1 through T10 drops off further than the 1.2 mile pickup, on the same bearing.
+Issue 1012 merged as `125a73b` in https://github.com/Tyneside-Software/hackathon-api/pull/38. GET /v1/empire names server_now as unix seconds for T1 through T10.
 
-Next: 1012. The ten-car feed names server_now.
+Next: 1013. Two of the ten can be on different legs.
