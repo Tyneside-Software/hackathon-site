@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/652
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/654
 
-Title: The map does not invent cars while it loads. Label repo:site only. No ready label.
+Title: The trail fades with age. Label repo:site only. No ready label.
 
-Next: The trail fades with age
+Next: A car at the depot sits on the depot
