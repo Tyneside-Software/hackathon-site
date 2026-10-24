@@ -1,7 +1,7 @@
 # Product owner
 
-Commented on the twelve office issues. Each comment quotes the pence figure from the matching grok-dev-1 slice. No ready label was added.
+Commented on the twelve game issues. Each comment quotes the pence figure from the matching grok-dev-2 slice. No ready label was added.
 
-Issues: 55, 57, 60, 63, 65, 68, 70, 72, 75, 77, 81, 83.
+Issues: 85, 91, 95, 97, 100, 103, 105, 108, 110, 113, 115, 119.
 
-Next: the same for the game issues.
+Next: name the Open slices that are still not done.
