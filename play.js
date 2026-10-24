@@ -84,6 +84,7 @@
       "play-price-still",
       "play-buy-flight",
       "play-buy-once",
+      "play-spent-feed",
       "play-started-ten",
       "play-locks",
       "play-osrm",
@@ -541,10 +542,19 @@
     node.dataset.pence = String(playBuyPence());
   }
 
-  function showPlaySpent() {
+  function paintPlaySpent(feed) {
     const line = document.getElementById("play-spent");
     if (!line) return;
-    line.textContent = String(playBuyPence()) + " spent";
+    const token = !!(localStorage.getItem("hackathon-empire-token") || "");
+    if (token && feedListsT11(feed)) line.textContent = String(playBuyPence()) + " pence spent";
+    else line.textContent = "";
+    const note = document.getElementById("play-spent-feed");
+    if (!note) return;
+    note.dataset.spent = line.textContent ? "t11" : "empty";
+  }
+
+  function showPlaySpent() {
+    paintPlaySpent(playFeed);
   }
 
   function clearPlaySpent() {
@@ -595,6 +605,7 @@
     button.hidden = !token || listed;
     button.disabled = playBuying;
     noteBuyOnce(listed);
+    paintPlaySpent(playFeed);
   }
 
   async function buyPlayCar() {
