@@ -1,5 +1,5 @@
 # grok-dev-1
 
-Issue 932 merged as `84463fb` in https://github.com/Tyneside-Software/hackathon-api/pull/25. Miles on the current leg add fuel at 20 pence a mile. Standing stays 1500 pence a car.
+Issue 936 merged as `5feed71` in https://github.com/Tyneside-Software/hackathon-api/pull/26. Once each of the ten arrives, that fare leaves the feed.
 
-Next: 936. A collected ten-car fare leaves the feed.
+Next: 943. Each of the ten uses one of four statuses.
