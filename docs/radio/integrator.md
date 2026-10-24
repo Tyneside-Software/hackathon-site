@@ -26,9 +26,9 @@ The office and the empire desk stay as they are. `office.html` is the real compa
 
 | Lane | State | Next slice |
 |------|--------|------------|
-| Product owner | Output is the software the devs merge, plus a queue they can build. Since 05:00 the site had about 30 product commits and about 192 commits that touched only `po.md`. That ratio is too much chatter. Do not wait for a new note. | Every turn, about 30 minutes. If a queue is under 16 unfinished or the reservoir is under 24, put the new slices into one or two `po.md` commits, not one commit per issue. Then stop recording and let the devs build. One dashboard change only when the queues are already deep enough. Leave `## Next for me` with at least four jobs. |
-| grok-dev-1 | Your output is product code on API `main`. A radio note does not count. The queue in `po.md` is the work. Skip an issue already on `main`. | Build the next unfinished slice, then the next, for about 30 minutes. One product pull request, then four lines in your radio file, then code again. Do not open a second note about the same slice. Do not invent. Do not start the reservoir. Do not edit `play.html`, `play.js`, or `scripts/agents_dashboard.py`. |
-| grok-dev-2 | Your output is `play.html` and `play.js` on `main`. A radio note does not count. The queue in `po.md` is the work. Skip an issue already on `main`. | Build the next unfinished slice, then the next, for about 30 minutes. One product pull request, then four lines in your radio file, then code again. Do not open a second note about the same slice. Do not edit `app/map.js` or `scripts/agents_dashboard.py`. |
+| Product owner | Morning comes before the dashboard and before another lock that does not change the screen. Output is still product code. Batch `po.md`. Do not wait for a new note. | This turn, put the morning goal at the front of both queues in one commit. Finish the slice a dev is already in, then the watch and the car purchase. Keep 16 unfinished and 24 in the reservoir, all for that goal. One dashboard change only after the morning page can be watched and a car can be bought. |
+| grok-dev-1 | Your output is the API the page can play. Skip an issue already on `main`. A radio note is four lines, then code. | Build the next morning slice in `### grok-dev-1`: the purchase that spends 800000 pence and adds one car, and the feed the page watches. One product pull request, then four radio lines, then the next. Do not edit `play.html`, `play.js`, or `scripts/agents_dashboard.py`. Do not invent a second price. |
+| grok-dev-2 | Your output is what a person sees on `play.html`. Skip an issue already on `main`. A radio note is four lines, then code. | Build the next morning slice in `### grok-dev-2`: the map is the thing you watch, the taxis move, one Start is enough, then a control buys the next car. One product pull request, then four radio lines, then the next. Do not edit `app/map.js` or `scripts/agents_dashboard.py`. |
 
 Do not redo a slice that is already on `main`. Do not start the reservoir.
 
@@ -36,7 +36,17 @@ Do not redo a slice that is already on `main`. Do not start the reservoir.
 
 Master has queued a long run of continues. This order stays until Master gives a different one. Do not wait for a new integrator note between turns. An issue number written here goes stale. The list that matters is `docs/radio/po.md`, minus anything already on `main`.
 
-The result to aim at is a `play.html` someone can play. Ten taxis move on the map. The in-game money changes. The circle and the Shiremoor depot stay. There is no phone list, no bus toggle, and no Place stops. The product owner turns that into slices. The devs build those slices. The integrator does not name them.
+The morning goal comes first. Master will open http://100.65.94.5/play.html and watch the empire before playing it.
+
+The first feeling is the watch. The map is the page. Ten taxis are already working, moving in real seconds, and the in-game money is changing. One small Start is enough when there is no saved account: create the account, or sign in, with the existing `POST /register` and `POST /login`. Then the map takes over. Do not leave an empty map behind a hidden token. Do not put a wall of lock sentences in front of the taxis. Sentences a test still needs can stay, out of the way of the map.
+
+Then Master can play. A control spends 800000 pence of the in-game money and one more car joins that account's fleet. The starting ten stay. The price stays 800000. Do not invent a second fare table, a second standing charge, or a second fuel rate. The feed the page already polls grows by that car, and the new chip appears on the map. grok-dev-1 owns the purchase and the feed. grok-dev-2 owns the watch and the control. Do not give both the same file.
+
+Finish the slice you are already in. Then these morning slices are the queue. A lock that does not change the moving map or the purchase waits in the reservoir. The product owner writes that order in one `po.md` commit. The devs build it. The integrator does not name the issue titles.
+
+The integrator deploys from this PC with `scripts/deploy-if-product.ps1` when `play.html`, `play.js`, `config.js`, or the API `app/` tree has changed. Lanes do not deploy. Merge to `origin/main`. A radio-only commit still does not deploy. The dashboard waits until the morning page can be watched and a car can be bought.
+
+The circle, the Shiremoor depot, and the rest of the game rules stay as they are. There is no phone list, no bus toggle, and no Place stops.
 
 Output is product code. Since 05:00 on 24 Oct 2026 the site had about 30 commits that changed `play.html`, `play.js`, or `app/`, and about 192 commits that changed only `docs/radio/po.md`. grok-dev-1 had about 20 radio notes and was merging API slices. grok-dev-2 had about 28 radio notes. A turn with more radio commits than product commits has not produced enough software.
 
