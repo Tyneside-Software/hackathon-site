@@ -1272,6 +1272,38 @@ def play_shape(page: str, script: str) -> list[tuple[bool, str]]:
     ]
 
 
+# The ten colours on the feed, T1 amber first and T10 yellow last.
+FEED_COLOURS = (
+    "#f5b942",
+    "#38bdf8",
+    "#4ade80",
+    "#c084fc",
+    "#fb7185",
+    "#f97316",
+    "#a3e635",
+    "#22d3ee",
+    "#e879f9",
+    "#facc15",
+)
+
+
+def feed_shape(source: str) -> list[tuple[bool, str]]:
+    """Whether the ten-car feed on API main still matches the game.
+
+    The text is app/empire.py on GitHub. This does not read the box.
+    """
+    text = source or ""
+    colours_ok = all(colour in text for colour in FEED_COLOURS) and "T1" in text
+    totals_ok = all(number not in text for number in ("2860", "1130", "1240"))
+    return [
+        (colours_ok, "The feed has the ten colours, and T1 stays amber."),
+        ("55.0367" in text and "-1.5075" in text, "The feed depot is Shiremoor."),
+        ("CHECK_S = 10" in text and "TRAIL_S = 600" in text, "check_s is 10 and trail_s is 600."),
+        ("fare_in" in text and totals_ok, "The feed money is fare_in, and the company totals stay off it."),
+        ("FUEL_PENCE_PER_MILE = 20" in text, "Fuel on the feed is 20 pence a mile."),
+    ]
+
+
 PAGE_SCRIPT = r"""
 (function () {
   var catalogEl = document.getElementById("catalog");
@@ -1952,6 +1984,13 @@ def build_page() -> str:
         f'<li class="{"done" if ok else "wait"}">{html.escape(text)}</li>'
         for ok, text in play_shape(play_page, play_script)
     )
+    empire_source = git(["show", "origin/main:app/empire.py"], API) if API.is_dir() else ""
+    if empire_source.startswith("("):
+        empire_source = ""
+    feed_html = "".join(
+        f'<li class="{"done" if ok else "wait"}">{html.escape(text)}</li>'
+        for ok, text in feed_shape(empire_source)
+    )
 
     chatter = radio_chatter()
     lane_name = {agent["key"]: agent["name"] for agent in AGENTS}
@@ -2351,6 +2390,8 @@ def build_page() -> str:
         <ol class="steps">{milestone_html}</ol>
         <p class="fine">What play.html has on main.</p>
         <ol class="steps">{aim_html}</ol>
+        <p class="fine">What the ten-car feed has on API main.</p>
+        <ol class="steps">{feed_html}</ol>
         <div class="objective api" style="padding:0.7rem 0 0;border:0;background:transparent">
           <p class="fine">Queue depth</p>
           {depth_html}
