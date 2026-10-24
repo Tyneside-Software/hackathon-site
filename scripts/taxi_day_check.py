@@ -278,6 +278,23 @@ def main():
     if taxi_game.next_fare_label(60, 0) is not None or taxi_game.next_fare_label(80, 0) is not None:
         print("the countdown restarted while 3 fares were waiting", file=sys.stderr)
         return 1
+    oldest = taxi_game.waiting_offers(40)
+    taken_by_t1 = taxi_game.free_car_takes(oldest, taxi_game.three_cars())
+    if has_device_id(taken_by_t1) or taken_by_t1["offers"][0]["call_sign"] != "T1":
+        print("T1 did not take the oldest offer", file=sys.stderr)
+        return 1
+    if taken_by_t1["offers"][1]["status"] != "offered":
+        print("T1 took more than the oldest offer", file=sys.stderr)
+        return 1
+    busy = taxi_game.three_cars()
+    busy[0]["status"] = "started"
+    taken_by_t2 = taxi_game.free_car_takes(oldest, busy)
+    if has_device_id(taken_by_t2) or taken_by_t2["offers"][0]["call_sign"] != "T2":
+        print("T2 did not take the offer while T1 was out", file=sys.stderr)
+        return 1
+    if taken_by_t2["cars"][0]["status"] != "started" or taken_by_t2["cars"][1]["status"] != "accepted":
+        print(f"free car {taken_by_t2['cars']}", file=sys.stderr)
+        return 1
     posted_trip = taxi_game.post_live_trip(7, 3, ())
     posted_kinds = [row["kind"] for row in posted_trip["lines"]]
     posted_amounts = [row["amount_pence"] for row in posted_trip["lines"]]

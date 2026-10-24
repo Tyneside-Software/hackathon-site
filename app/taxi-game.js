@@ -330,6 +330,10 @@
     return { offers: nextOffers, cars: nextCars };
   }
 
+  function freeCarTakes(offers, cars) {
+    return acceptOffer(offers, cars);
+  }
+
   function customerPins(offers) {
     return (offers || []).filter(function (offer) {
       return offer.status === "offered";
@@ -476,6 +480,7 @@
     farePounds: farePounds,
     waitingOffers: waitingOffers,
     acceptOffer: acceptOffer,
+    freeCarTakes: freeCarTakes,
     customerPins: customerPins,
     startAccepted: startAccepted,
     returnLeg: returnLeg,

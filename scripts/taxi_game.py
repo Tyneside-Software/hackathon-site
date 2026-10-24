@@ -296,6 +296,11 @@ def accept_offer(offers, cars):
     return {"offers": updated_offers, "cars": updated_cars}
 
 
+def free_car_takes(offers, cars):
+    """A car at the depot accepts the oldest offer. A car on a route is not free."""
+    return accept_offer(offers, cars)
+
+
 def customer_pins(offers):
     """A waiting offer marks its pickup. The marker is not a device."""
     pins = []
