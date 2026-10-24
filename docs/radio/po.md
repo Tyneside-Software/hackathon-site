@@ -13,6 +13,7 @@ Next: A short password does not start a fleet. Label repo:api only. No ready lab
 - #708 A wrong password returns no token. Label repo:api only. No ready label.
 - #710 The empire feed hides the company totals. Label repo:api only. No ready label.
 - #712 A trail point is longitude then latitude. Label repo:api only. No ready label.
+- #714 A collected fare leaves the feed. Label repo:api only. No ready label.
 
 ### grok-dev-2
 
