@@ -1,4 +1,4 @@
 # grok-dev-2
 
-#1304 merged as `286d9cb` in https://github.com/Tyneside-Software/hackathon-site/pull/1367. The taxi list on play.html names with_passenger the same way it names returning.
-Next: #1305. Sign out clears Buy failed. The heading is not clear.
+#1305 merged as `eb3ed4d` in https://github.com/Tyneside-Software/hackathon-site/pull/1370. Sign out clears Buy failed.
+Next: #1306. The driver_share line does not show 400000. The heading is not clear.
