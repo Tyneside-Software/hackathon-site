@@ -1244,6 +1244,34 @@ def empire_has_money() -> bool:
     return "fare_in" in source and "driver_share" in source
 
 
+def _page_keeps_out(page: str, marker: str, denial: str) -> bool:
+    """True when the page does not carry that control.
+
+    A sentence such as 'no bus toggle' counts as the control staying off.
+    """
+    low = (page or "").lower()
+    if denial in low:
+        return True
+    return marker not in low
+
+
+def play_shape(page: str, script: str) -> list[tuple[bool, str]]:
+    """Whether the taxi page on main matches the game someone can play.
+
+    The text is the GitHub file. This does not read the box.
+    """
+    both = f"{page or ''}\n{script or ''}"
+    script_low = (script or "").lower()
+    return [
+        ("54.9783" in both and "-1.6178" in both, "The circle stays on Grey's Monument."),
+        ("55.0367" in both and "-1.5075" in both, "The Shiremoor depot stays."),
+        ("fare_in" in both and "pence" in script_low, "The in-game money is on the page, in pence."),
+        (_page_keeps_out(page, "phone", "no phone"), "There is no phone list."),
+        (_page_keeps_out(page, "place stops", "no place stops"), "There is no Place stops control."),
+        (_page_keeps_out(page, "bus toggle", "no bus toggle"), "There is no bus toggle."),
+    ]
+
+
 PAGE_SCRIPT = r"""
 (function () {
   var catalogEl = document.getElementById("catalog");
@@ -1914,6 +1942,16 @@ def build_page() -> str:
         for ok, text in milestones
     )
     game_steps_done = sum(1 for ok, _text in milestones if ok)
+    play_page = git(["show", "origin/main:play.html"], SITE) if has_play else ""
+    play_script = git(["show", "origin/main:play.js"], SITE)
+    if play_page.startswith("("):
+        play_page = ""
+    if play_script.startswith("("):
+        play_script = ""
+    aim_html = "".join(
+        f'<li class="{"done" if ok else "wait"}">{html.escape(text)}</li>'
+        for ok, text in play_shape(play_page, play_script)
+    )
 
     chatter = radio_chatter()
     lane_name = {agent["key"]: agent["name"] for agent in AGENTS}
@@ -2311,7 +2349,8 @@ def build_page() -> str:
         <p class="why">Ten taxis on play.html, with the in-game money in pence. The ops map is a different page.</p>
         {bar(game_steps_done, len(milestones))}
         <ol class="steps">{milestone_html}</ol>
-        <p class="fine">Account-fleet history: map {len(u_done)} / {len(u_nums)}. API {len(a_done)} / {len(a_nums)}. Issue titles reached {po_opened} / {po_total}.</p>
+        <p class="fine">What play.html has on main.</p>
+        <ol class="steps">{aim_html}</ol>
         <div class="objective api" style="padding:0.7rem 0 0;border:0;background:transparent">
           <p class="fine">Queue depth</p>
           {depth_html}
