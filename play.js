@@ -388,8 +388,24 @@
     return 800000;
   }
 
+  function seatPlayBuy() {
+    const money = document.getElementById("play-money");
+    const mapEl = document.getElementById("play-map");
+    const row = document.getElementById("play-buy-row");
+    const note = document.getElementById("play-buy-sits");
+    const button = document.getElementById("play-buy");
+    if (money && row && !money.contains(row)) money.appendChild(row);
+    if (money && note && !money.contains(note)) money.appendChild(note);
+    if (!button) return;
+    button.style.position = "static";
+    button.style.inset = "auto";
+    button.style.zIndex = "auto";
+    if (mapEl && mapEl.contains(button) && money) money.appendChild(button);
+  }
+
   function paintPlayBuy() {
     const button = document.getElementById("play-buy");
+    seatPlayBuy();
     if (!button) return;
     button.textContent = "Buy the next car for " + playBuyPence();
     button.hidden = !(localStorage.getItem("hackathon-empire-token") || "");
