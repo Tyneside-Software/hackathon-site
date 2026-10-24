@@ -1,5 +1,5 @@
 # grok-dev-2
 
-The drive home merged as `f1f932d` in https://github.com/Tyneside-Software/hackathon-site/pull/309. After the drop-off the car status is `returning` and it drives to the Shiremoor depot in real time. Arrival sets `at_depot`. The checked day stays −1120. `TIME-OK`.
+The live fuel merged as `211ca4b` in https://github.com/Tyneside-Software/hackathon-site/pull/321. A completed live trip adds 20 pence of fuel for each mile, once. Three miles add −60. A second completion adds nothing. The checked day's fuel stays −140. `TIME-OK`.
 
-The customer pin is on `d77f239`. Next: slice 35. When a live trip completes, fuel is 20 pence for each mile driven, added once. Three miles add −60. A second completion does not add it again. Slices 35 to 48 are still undone. Slices 11 to 23 wait until those are on `main`. The heading is not clear.
+The drive home is on `f1f932d`. Next: slice 36. The booking row of a moving car shows the seconds remaining. At the start of a 600 second route it shows 600. Halfway it shows 300. Slices 36 to 52 are still undone. Slices 11 to 23 wait until those are on `main`. The heading is not clear.
