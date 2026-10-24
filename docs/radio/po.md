@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/342
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/345
 
-Title: Guide dog stays free beside the animal row. Label repo:site only. No ready label.
+Title: Phones and buses stay while a car drives home. Label repo:site only. No ready label.
 
-Next: Phones and buses stay while a car drives home
+Next: Pram and bag stays off the company day
