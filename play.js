@@ -75,6 +75,7 @@
       "play-bought-moves",
       "play-bought-trail",
       "play-trail-colour",
+      "play-trail-order",
       "play-started-ten",
       "play-locks",
       "play-osrm",
@@ -301,6 +302,15 @@
     playTrails.length = 0;
   }
 
+  function trailPoint(row) {
+    if (!Array.isArray(row) || row.length < 3) return null;
+    const lng = Number(row[0]);
+    const lat = Number(row[1]);
+    const at = Number(row[2]);
+    if (!Number.isFinite(lat) || !Number.isFinite(lng) || !Number.isFinite(at)) return null;
+    return { lat: lat, lng: lng, at: at };
+  }
+
   function paintPlayTrails(feed) {
     clearPlayTrails();
     const keep = Number(feed && feed.trail_s);
@@ -311,13 +321,9 @@
       if (!car || !car.sign || !Array.isArray(car.trail)) return;
       const points = [];
       car.trail.forEach((row) => {
-        if (!Array.isArray(row) || row.length < 3) return;
-        const lng = Number(row[0]);
-        const lat = Number(row[1]);
-        const at = Number(row[2]);
-        if (!Number.isFinite(lat) || !Number.isFinite(lng) || !Number.isFinite(at)) return;
-        if (now - at > trailS) return;
-        points.push([lat, lng]);
+        const point = trailPoint(row);
+        if (!point || now - point.at > trailS) return;
+        points.push([point.lat, point.lng]);
       });
       if (points.length < 2) return;
       const line = L.polyline(points, {
