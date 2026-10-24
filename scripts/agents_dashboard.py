@@ -1304,6 +1304,32 @@ def feed_shape(source: str) -> list[tuple[bool, str]]:
     ]
 
 
+def route_and_trail(router: str, script: str) -> list[tuple[bool, str]]:
+    """Whether the purchase route and the bought trail are on main.
+
+    The text is origin/main. This does not read the box.
+    """
+    route = router or ""
+    has_post = 'post("/v1/empire/buy"' in route or "post('/v1/empire/buy'" in route
+    source = script or ""
+    start = source.find("function paintPlayTrails")
+    if start < 0:
+        skips = True
+    else:
+        end = source.find("\n  function ", start + 10)
+        body = source[start:end if end > start else None]
+        skips = "PLAY_SIGNS" in body
+    if has_post:
+        route_line = "Origin app/routers/empire.py has POST /v1/empire/buy."
+    else:
+        route_line = "Origin app/routers/empire.py has no POST /v1/empire/buy."
+    if skips:
+        trail_line = "play.js still skips a trail outside T1 to T10."
+    else:
+        trail_line = "play.js does not skip a trail outside T1 to T10."
+    return [(has_post, route_line), (not skips, trail_line)]
+
+
 PAGE_SCRIPT = r"""
 (function () {
   var catalogEl = document.getElementById("catalog");
@@ -1991,6 +2017,13 @@ def build_page() -> str:
         f'<li class="{"done" if ok else "wait"}">{html.escape(text)}</li>'
         for ok, text in feed_shape(empire_source)
     )
+    empire_router = git(["show", "origin/main:app/routers/empire.py"], API) if API.is_dir() else ""
+    if empire_router.startswith("("):
+        empire_router = ""
+    route_html = "".join(
+        f'<li class="{"done" if ok else "wait"}">{html.escape(text)}</li>'
+        for ok, text in route_and_trail(empire_router, play_script)
+    )
 
     chatter = radio_chatter()
     lane_name = {agent["key"]: agent["name"] for agent in AGENTS}
@@ -2392,6 +2425,8 @@ def build_page() -> str:
         <ol class="steps">{aim_html}</ol>
         <p class="fine">What the ten-car feed has on API main.</p>
         <ol class="steps">{feed_html}</ol>
+        <p class="fine">Purchase route and bought trail on main.</p>
+        <ol class="steps">{route_html}</ol>
         <div class="objective api" style="padding:0.7rem 0 0;border:0;background:transparent">
           <p class="fine">Queue depth</p>
           {depth_html}
