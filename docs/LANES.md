@@ -69,7 +69,7 @@ Then the integrator, from `C:\Users\MichaelThomson\source\hackathon-site`, runs 
 
 **Dev lane.** Read that lane’s `PROMPT.md`. Take one `ready` issue. Branch, test, push, open the pull request, report the URL, and stop. Take another issue only when the human says to keep going. Sync before the first edit and before the push.
 
-**Integrator.** This is the session on the `source\hackathon-*` folders. It may commit straight to `main` when it is the only worker, and it is the session that deploys. When lane pull requests are waiting, merge them and deploy once.
+**Integrator.** This is the session on the `source\hackathon-*` folders. It is the session Michael talks to. It writes each lane's orders in `C:\Users\MichaelThomson\source\lanes\desk\to-*.md` and reads their replies in `from-*.md`. It may commit straight to `main`, and it is the session that deploys. When lane pull requests are waiting, it merges them and deploys once. See [Desk](#desk).
 
 ## Commands
 
@@ -90,22 +90,24 @@ A new dev lane on this PC:
 
 ## Paste-ready prompts
 
+These three lines do not change. The integrator changes the desk files, then Michael pastes the same line again to wake that lane.
+
 Product owner:
 
 ```
-You are the product-owner lane. Read and follow C:\Users\MichaelThomson\source\lanes\po\PROMPT.md. Do not edit product code and do not deploy.
+Read and follow C:\Users\MichaelThomson\source\lanes\desk\to-po.md. Write your reply over C:\Users\MichaelThomson\source\lanes\desk\from-po.md.
 ```
 
 Dev lane 1:
 
 ```
-You are dev lane grok-dev-1. Read and follow C:\Users\MichaelThomson\source\lanes\dev-1\PROMPT.md. Work ready issues through a pull request. Do not deploy.
+Read and follow C:\Users\MichaelThomson\source\lanes\desk\to-grok-dev-1.md. Write your reply over C:\Users\MichaelThomson\source\lanes\desk\from-grok-dev-1.md.
 ```
 
 Dev lane 2:
 
 ```
-You are dev lane grok-dev-2. Read and follow C:\Users\MichaelThomson\source\lanes\dev-2\PROMPT.md. Work ready issues through a pull request. Do not deploy.
+Read and follow C:\Users\MichaelThomson\source\lanes\desk\to-grok-dev-2.md. Write your reply over C:\Users\MichaelThomson\source\lanes\desk\from-grok-dev-2.md.
 ```
 
 Git author on Michael’s PC is `Michael Thomson <michael.thomson@cloudconnectsoftware.com>`. A human on another machine uses their own name and email.

@@ -62,7 +62,9 @@ Checkouts, all on ``main``:
 - $dest\hackathon-api
 - $dest\hackathon-android
 
-Read ``hackathon-site\docs\LANES.md`` and follow it.
+Read ``hackathon-site\docs\LANES.md`` and ``hackathon-site\docs\DESK.md``.
+
+The integrator writes your orders in ``$Root\desk\to-$Lane.md``. Read that file every time you start, do it, then overwrite ``$Root\desk\from-$Lane.md``. Say what you did, what is blocked, any pull request URL, and what you need next. Do not edit another lane's desk file. Do not put a password in a note.
 
 Standing orders:
 
@@ -88,7 +90,9 @@ Checkouts:
 - $dest\hackathon-api
 - $dest\hackathon-android
 
-Read ``hackathon-site\docs\LANES.md`` and follow it. Use ``hackathon-site\docs\LOOP.md`` for how to build and test. Ignore that page's steps that push ``main`` or run ``box.ps1``. Those are for the integrator.
+Read ``hackathon-site\docs\LANES.md`` and ``hackathon-site\docs\DESK.md``. Use ``hackathon-site\docs\LOOP.md`` for how to build and test. Ignore that page's steps that push ``main`` or run ``box.ps1``. Those are for the integrator.
+
+The integrator writes your orders in ``$Root\desk\to-$Lane.md``. Read that file every time you start, do it, then overwrite ``$Root\desk\from-$Lane.md``. Say what you did, what is blocked, any pull request URL, and what you need next. Do not edit another lane's desk file. Do not put a password in a note.
 
 Standing orders:
 

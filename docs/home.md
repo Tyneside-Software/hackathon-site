@@ -17,6 +17,7 @@ If you do not know how the site is wired, start with **[Architecture](#architect
 | How the three repos fit | [Architecture](#architecture) |
 | Queue of changes for an AI | [Development loop](#loop) |
 | Several people or Grok sessions | [Lanes](#lanes) |
+| Orders between Grok sessions | [Desk](#desk) |
 | Clone, run, git (human) | [Onboarding](../onboarding.html) · [Run locally](#local) |
 | Libraries on the site | [Site stack](#stack) |
 | New JavaScript | [Alpine.js](#javascript) |

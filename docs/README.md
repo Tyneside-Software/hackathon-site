@@ -16,5 +16,6 @@ The wiki people use is [index.html](index.html) (live `/docs/`). Markdown here i
 | [linux.md](linux.md) | `#linux` | Box, SSH, deploy, emulator |
 | [LOOP.md](LOOP.md) | `#loop` | Queued changes: test, push, update, check |
 | [LANES.md](LANES.md) | `#lanes` | Parallel checkouts, branches, pull requests |
+| [DESK.md](DESK.md) | `#desk` | Orders and replies between Grok sessions |
 | [connor/](connor/home.md) | `#connor` | Connor’s shelf |
 | [adding.md](adding.md) | `#adding` | How to add a page |

@@ -49,6 +49,12 @@
           "summary": "Separate checkouts, lane branches, and pull requests into main. Only the integrator deploys."
         },
         {
+          "id": "desk",
+          "title": "Desk",
+          "file": "DESK.md",
+          "summary": "Where the integrator leaves orders and where each lane writes its reply."
+        },
+        {
           "id": "onboarding",
           "title": "Onboarding (night)",
           "href": "../onboarding.html",
