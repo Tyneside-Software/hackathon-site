@@ -2055,6 +2055,9 @@
     empireTrails.forEach((layer) => map.removeLayer(layer));
     empireTrails = [];
     if (empireHidden || !empireFeed || !Array.isArray(empireFeed.cars)) return;
+    const trailS = Number(empireFeed.trail_s);
+    const keepS = Number.isFinite(trailS) && trailS > 0 ? trailS : 600;
+    const now = empireNow();
     empireFeed.cars.forEach((car) => {
       const raw = Array.isArray(car.trail) ? car.trail : [];
       const points = [];
@@ -2062,14 +2065,18 @@
         if (!Array.isArray(row) || row.length < 2) return;
         const lat = Number(row[1]);
         const lng = Number(row[0]);
+        const at = Number(row[2]);
         if (!Number.isFinite(lat) || !Number.isFinite(lng)) return;
-        points.push([lat, lng]);
+        if (Number.isFinite(at) && now - at > keepS) return;
+        points.push([lat, lng, at]);
       });
       if (points.length < 2) return;
       const group = L.layerGroup();
       for (let i = 1; i < points.length; i += 1) {
-        const opacity = Math.max(0.12, i / (points.length - 1));
-        L.polyline([points[i - 1], points[i]], {
+        const at = points[i][2];
+        const age = Number.isFinite(at) ? Math.max(0, now - at) : 0;
+        const opacity = Math.max(0.12, 1 - age / keepS);
+        L.polyline([[points[i - 1][0], points[i - 1][1]], [points[i][0], points[i][1]]], {
           color: car.colour || "#94a3b8",
           weight: 4,
           opacity: opacity,
