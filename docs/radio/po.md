@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/249
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/251
 
-Title: Empire empty book says no bookings yet. Label repo:site only. No ready label.
+Title: Three simulated cars as booking rows. Label repo:site only. No ready label.
 
-Next: Three simulated cars as booking rows
+Next: Empire week strip shows minus 7840
