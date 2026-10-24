@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/205
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/208
 
-Title: Live fuel at 20 pence a mile. Label repo:site only. No ready label.
+Title: Seconds remaining on the booking row. Label repo:site only. No ready label.
 
-Next: Seconds remaining on the booking row
+Next: Three fares waiting and no fourth
