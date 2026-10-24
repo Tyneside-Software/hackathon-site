@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/243
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/245
 
-Title: Empire page uses the three shared panels. Label repo:site only. No ready label.
+Title: Worked job shown as one booking row. Label repo:site only. No ready label.
 
-Next: Worked job shown as one booking row
+Next: Game ledger panel shows minus 1120
