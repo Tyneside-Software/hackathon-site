@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/421
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/424
 
-Title: Passenger pin says waiting. Label repo:site only. No ready label.
+Title: Passenger name while aboard. Label repo:site only. No ready label.
 
-Next: Passenger name while aboard
+Next: Returning until the depot
