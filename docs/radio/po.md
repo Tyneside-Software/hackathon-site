@@ -2,17 +2,16 @@
 
 The old app/ queue is paused. Do not build issues #699 through #786. Do not edit app/map.js for this game. The turn is about 30 minutes. One slice, then the radio, then the next.
 
-The dashboard on main compares GitHub with the live box. The booking office matches. The empire desk matches. play.html is behind GitHub. API health 0.1.27 matches. That read is not a deploy. The devs do not edit scripts/agents_dashboard.py.
+The dashboard compares GitHub with the live box, and each code line-count graph is the last 3 hours. The devs do not edit scripts/agents_dashboard.py. A dashboard change is not a deploy.
 
 ### grok-dev-1
 
 Files in hackathon-api only: app/empire.py, app/routers/empire.py, tests/test_empire.py. Do not edit play.html, play.js, or scripts/agents_dashboard.py.
 
-Skip these. They are already on main: #808, #810, #812, #814.
+Skip these. They are already on main: #808, #810, #812, #814, #816.
 
-Next: Ten-car trips stay inside the circle. Issue #816. Label repo:api only. No ready label. Keep going for about 30 minutes.
+Next: The money lines are for one account. Issue #818. Label repo:api only. No ready label. Keep going for about 30 minutes.
 
-- #816 Ten-car trips stay inside the circle. Label repo:api only. No ready label.
 - #818 The money lines are for one account. Label repo:api only. No ready label.
 - #921 The ten-car feed names check_s and trail_s. Label repo:api only. No ready label.
 - #923 A ten-car trail point is longitude then latitude. Label repo:api only. No ready label.
@@ -28,16 +27,16 @@ Next: Ten-car trips stay inside the circle. Issue #816. Label repo:api only. No 
 - #973 The username still shifts the ten-car bearing. Label repo:api only. No ready label.
 - #975 Ten-car pings older than ten minutes leave the trail. Label repo:api only. No ready label.
 - #979 The ten-car tests do not open the live database. Label repo:api only. No ready label.
+- #988 A ten-car check-in appends one trail point. Label repo:api only. No ready label.
 
 ### grok-dev-2
 
 Files: play.html and play.js only. Do not edit app/map.js, app/empire.py, tests/test_empire.py, or scripts/agents_dashboard.py.
 
-Skip these. They are already on main: #836, #838.
+Skip these. They are already on main: #836, #838, #840.
 
-Next: A play fare marker waits for its taxi. Issue #840. Label repo:site only. No ready label. Keep going for about 30 minutes.
+Next: The 800000 line shows before that car leaves. Issue #842. Label repo:site only. No ready label. Keep going for about 30 minutes.
 
-- #840 A play fare marker waits for its taxi. Label repo:site only. No ready label.
 - #842 The 800000 line shows before that car leaves. Label repo:site only. No ready label.
 - #845 play.html has no bus toggle. Label repo:site only. No ready label.
 - #847 play.html does not call devices. Label repo:site only. No ready label.
@@ -87,5 +86,5 @@ Not assigned. Do not start these.
 
 - Check the grok-dev-1 and grok-dev-2 turn lengths from their radio commits.
 - Top up whichever queue has fewer than 16 unfinished slices.
-- Draw the code line-count graph for the last 3 hours.
+- Show unfinished slices separately from lines already on main.
 - Tell the devs the next slice and the files they may edit.
