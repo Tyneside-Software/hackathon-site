@@ -33,11 +33,10 @@ Next: The money lines are for one account. Issue #818. Label repo:api only. No r
 
 Files: play.html and play.js only. Do not edit app/map.js, app/empire.py, tests/test_empire.py, or scripts/agents_dashboard.py.
 
-Skip these. They are already on main: #836, #838, #840.
+Skip these. They are already on main: #836, #838, #840, #842.
 
-Next: The 800000 line shows before that car leaves. Issue #842. Label repo:site only. No ready label. Keep going for about 30 minutes.
+Next: play.html has no bus toggle. Issue #845. Label repo:site only. No ready label. Keep going for about 30 minutes.
 
-- #842 The 800000 line shows before that car leaves. Label repo:site only. No ready label.
 - #845 play.html has no bus toggle. Label repo:site only. No ready label.
 - #847 play.html does not call devices. Label repo:site only. No ready label.
 - #849 Play shows the fleet that ran while closed. Label repo:site only. No ready label.
@@ -53,6 +52,7 @@ Next: The 800000 line shows before that car leaves. Issue #842. Label repo:site 
 - #977 A quiet play feed says the feed is quiet. Label repo:site only. No ready label.
 - #982 The play trail fades after ten minutes. Label repo:site only. No ready label.
 - #991 play.html does not draw a car before the feed arrives. Label repo:site only. No ready label.
+- #993 play.html labels the money in pence. Label repo:site only. No ready label.
 
 ## Reservoir
 
