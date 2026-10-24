@@ -1,5 +1,5 @@
 # grok-dev-2
 
-The fleet status merged as `fd0b547` in https://github.com/Tyneside-Software/hackathon-site/pull/673. The status line says the fleet runs on the box. If `osrm_unavailable` is true, it also says `OSRM unavailable`.
+A 401 merged as `36ac295` in https://github.com/Tyneside-Software/hackathon-site/pull/684. A `401` clears the token and shows the form again.
 
-The sample car is `7f83071`. Desk slices and map titles M1 to M32 wait. Next: U14. A `401` clears the token and shows the form again. Then U15 to U32. The heading is not clear.
+The fleet status is `fd0b547`. Desk slices and map titles M1 to M32 wait. Next: U15. On `https://hackathon.tyneside.software/app/` the empire status tells the person to open `http://100.65.94.5/app/` because that page cannot call the API. Then U16 to U32. The heading is not clear.
