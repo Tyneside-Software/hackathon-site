@@ -545,7 +545,7 @@ def main():
     if len(polled) != 2:
         print("the map did not ask for the account fleet", file=sys.stderr)
         return 1
-    polled_body = polled[1].split("function startEmpirePoll", 1)[0]
+    polled_body = polled[1].split("function rememberEmpire", 1)[0]
     if '"/v1/empire"' not in polled_body or 'Authorization: "Bearer " + token' not in polled_body:
         print("the empire poll did not send the bearer token", file=sys.stderr)
         return 1
@@ -558,6 +558,22 @@ def main():
         return 1
     if "startEmpirePoll()" not in signed_body or "stopEmpirePoll()" not in signed_out_body:
         print("sign in did not keep the empire poll with the token", file=sys.stderr)
+        return 1
+    if "marker.setLatLng" in polled_body:
+        print("the marker jumped only when a poll arrived", file=sys.stderr)
+        return 1
+    glide = map_js.split("function glideEmpire", 1)
+    if len(glide) != 2:
+        print("the marker did not glide between polls", file=sys.stderr)
+        return 1
+    glide_body = glide[1].split("function startEmpirePoll", 1)[0]
+    for needle in ("car.route", "car.leg_started", "car.duration_s", "requestAnimationFrame(glideEmpire)"):
+        if needle not in glide_body:
+            print("the glide did not follow the route clock", file=sys.stderr)
+            return 1
+    remembered = map_js.split("function rememberEmpire", 1)[1].split("function empireNow", 1)[0]
+    if "data.server_now" not in remembered:
+        print("the glide did not use server_now", file=sys.stderr)
         return 1
     posted_trip = taxi_game.post_live_trip(7, 3, ())
     posted_kinds = [row["kind"] for row in posted_trip["lines"]]
