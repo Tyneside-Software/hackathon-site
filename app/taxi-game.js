@@ -158,6 +158,10 @@
     return (nowMs - startMs) / 1000;
   }
 
+  function fallbackSeconds(miles) {
+    return miles * 3600 / 30;
+  }
+
   function positionOnRoute(points, durationS, elapsedS) {
     if (!points.length) return null;
     if (durationS <= 0 || elapsedS <= 0) return points[0];
@@ -217,6 +221,7 @@
     newDriver: newDriver,
     threeCarDay: threeCarDay,
     elapsedSeconds: elapsedSeconds,
+    fallbackSeconds: fallbackSeconds,
     positionOnRoute: positionOnRoute,
     workedWeek: workedWeek,
     fleetWeek: fleetWeek,
