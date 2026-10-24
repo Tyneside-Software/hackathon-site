@@ -39,10 +39,11 @@
     radius: 8,
     color: "#8a5a00",
     weight: 2,
-    fillColor: "#f5b942",
+    fillColor: "#8a5a00",
     fillOpacity: 0.95,
+    title: "Sample car",
   }).addTo(map);
-  sampleMarker.bindTooltip("Sample car", { permanent: true, direction: "right" });
+  sampleMarker.bindTooltip("Sample car · not T1", { permanent: true, direction: "right" });
   sampleMarker.on("click", (ev) => {
     if (ev.originalEvent) L.DomEvent.stopPropagation(ev.originalEvent);
   });

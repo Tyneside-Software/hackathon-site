@@ -642,6 +642,17 @@ def main():
     if "stopPropagation" not in glide_body or "stopPropagation" not in waiting_body:
         print("a taxi or a fare marker did not stop the click", file=sys.stderr)
         return 1
+    if "It is not T1." not in empire:
+        print("the sample car was treated as T1", file=sys.stderr)
+        return 1
+    sample_button = empire_page.split('id="btn-sample"', 1)[1].split("</button>", 1)[0]
+    if "Drive to the Monument and back" not in sample_button:
+        print("the sample car lost its own button", file=sys.stderr)
+        return 1
+    sample_marker = map_js.split("const sampleMarker = ", 1)[1].split("function gamePin", 1)[0]
+    if "not T1" not in sample_marker or "#f5b942" in sample_marker:
+        print("the sample marker used T1", file=sys.stderr)
+        return 1
     posted_trip = taxi_game.post_live_trip(7, 3, ())
     posted_kinds = [row["kind"] for row in posted_trip["lines"]]
     posted_amounts = [row["amount_pence"] for row in posted_trip["lines"]]
