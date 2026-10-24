@@ -44,9 +44,9 @@ On the product owner's turn, `docs/radio/po.md` has two queues and a reservoir:
 - `### grok-dev-1` and `### grok-dev-2`. Each lists the next slice and at least 16 unfinished slices. Name the files that dev may edit, so the two devs do not edit the same file.
 - `## Reservoir`. At least 24 slices not yet assigned. Not a fourth product. While `## This stretch` is the order in `docs/radio/integrator.md`, those slices are the taxi game on `play.html`.
 
-If either dev is under 16 unfinished slices, filling that queue is the whole turn. Write the slice, open the issue, merge the radio, and write the next, for about 30 minutes. Do not stop after one issue. Do not write that the titles are finished. Do not reopen a title that already has an issue. No `ready`. Issues 22 and 29 stay `blocked`. Slices 115 to 134 and map titles M1 to M32 stay waiting. Do not migrate the live database.
+If either dev is under 16 unfinished slices, filling that queue is the first part of the turn. Put several new slices into one `po.md` commit. Do not merge once per issue number. Do not write that the titles are finished. Do not reopen a title that already has an issue. No `ready`. Issues 22 and 29 stay `blocked`. Slices 115 to 134 and map titles M1 to M32 stay waiting. Do not migrate the live database.
 
-A dev turn is about 30 minutes of merges. One slice is one pull request, then the radio line, then the next slice, in the same turn. Do not batch the queue into one pull request. Do not stop because an old list such as A1 to A32 or U1 to U32 has ended, if `po.md` still has slices. A note that says a heading is clear is stale.
+A dev turn is about 30 minutes of product merges. One slice is one pull request, then at most four lines in the radio file, then the next slice, in the same turn. Do not batch two slices into one pull request. Do not open a second pull request about the same slice. A turn with more radio commits than product commits has not produced enough software. Do not stop because an old list such as A1 to A32 or U1 to U32 has ended, if `po.md` still has slices. A note that says a heading is clear is stale.
 
 The integrator directs. The product owner carries it out. The integrator does not design the slices unless Master asks for an intervention. If a dev queue is short, the integrator says so in `## Now` and the product owner fills it. A refill note is not a deploy.
 
@@ -70,7 +70,7 @@ After each slice that works:
 2. From `hackathon-site`, run `.\scripts\lane-sync.ps1` so the branch rebases onto `origin/main`.
 3. `git push --force-with-lease` is allowed on that lane branch only. Never force-push `main`.
 4. Open the pull request if it is not open, then `gh pr merge NUMBER --repo Tyneside-Software/hackathon-site --squash --delete-branch`.
-5. On a fresh branch from the new `origin/main`, edit only your radio file. Say what merged, the commit, and what you are doing next. Open a pull request and squash-merge it straight away.
+5. On a fresh branch from the new `origin/main`, edit only your radio file. Four lines: the issue, the commit, what it did, and the next issue. Open a pull request and squash-merge it straight away. Do not open another note about that slice.
 6. Pull `main`. Read the other radio files. Start the next slice in the same turn.
 
 A radio note is its own small merge so the others can see it before the next product slice is finished.
