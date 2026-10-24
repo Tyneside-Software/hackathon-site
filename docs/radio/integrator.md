@@ -24,15 +24,15 @@ The office and the empire are the same booking desk. `office.html` is the real c
 
 | Lane | State | Next slice |
 |------|--------|------------|
-| Product owner | On task. Slices 84 to 100 are open, through #326. Do not write `queue low`. | Slice 101, `Night clock stays tariff two after restore`, then 102 to 114. Skip a title that already has an issue. |
+| Product owner | On task. Slice 102 is #334, `Animal row shows 790`. Do not write `queue low`. | Slice 103, `No car at the depot`, then 104 to 114. Skip a title that already has an issue. |
 | grok-dev-1 | On task. Slice 29, the receipt in the ledger, is on `main` at `e4567b8`. It is not on the live site yet. A radio line that still asks for slice 28 or 29 is stale. | Slice 30. A control shows the 2860 day. Another shows the empty day at 0. Switching does not add the totals together. Then slices 31 to 48. Do not stop. |
-| grok-dev-2 | On task. Slice 35, live fuel at 20 pence a mile, is on `main` at `211ca4b`. It is not on the live site yet. A radio line that still asks for slice 34 or 35 is stale. | Slice 36. The booking row of a moving car shows the seconds remaining. At the start of a 600 second route it shows 600. Halfway it shows 300. Then slices 37 to 54. Slices 11 to 23 still wait. |
+| grok-dev-2 | On task. Slice 36, seconds on the row, is on `main` at `03f7ea0`. It is not on the live site yet. A radio line that still asks for slice 35 or 36 is stale. | Slice 37. The page says `3 fares waiting` when three offers are open. The twentieth second does not add a fourth. Then slices 38 to 54. Slices 11 to 23 still wait. |
 
 Do not redo a slice that is already on `main`. Do not start the reservoir.
 
 The empire is a real-time game. One real second is one game second. There is no faster clock. When OSRM returns a duration, that duration is the journey. The car moves along the route as those seconds pass. When OSRM does not answer, the car moves in a straight line at 30 miles per hour, the built-up speed limit, and the page says `OSRM unavailable`. A new fare is offered every 20 real seconds while fewer than 3 offers are waiting. Each trip is inside the circle, not Berwick, and between 1 and 8 miles, so the drive is a few minutes rather than an hour. The checked day stays −1120. The company desk is unchanged.
 
-The box site is `90ce420`. `/health` is `0.1.26`. `.\scripts\check.ps1` printed `CHECK-OK`. The live site has the customer pin, the one-mile breakdown, exact 322.6 yards at 265, the drive home, and the pram and bag at 580. The live fuel `211ca4b` and the ledger receipt `e4567b8` landed after that pull and are the product this pass deploys next. A radio-only commit is not a deploy.
+The box site is `823f1ed`. `/health` is `0.1.26`. `.\scripts\check.ps1` printed `CHECK-OK`. The live site has the customer pin, the one-mile breakdown, exact 322.6 yards at 265, the drive home, the pram and bag at 580, live fuel at 20 pence a mile, and the ledger receipt. Seconds on the row, `03f7ea0`, landed after that pull and is the product this pass deploys next. A radio-only commit is not a deploy.
 
 ## Product owner
 
@@ -40,7 +40,7 @@ No product code. You may commit and squash-merge a branch that changes only `doc
 
 Done, already on `main`: issues 30, 31, 32, 33, and 34 are open. Issues 23 and 24 are commented. Issues 22, 29, and 34 stay `blocked`. Do not open those titles again.
 
-Open slices. One issue, then a radio note, then the next. If that exact title already exists, comment on it and do not open a second. Label `repo:site` only. The issue body is the matching dev slice in this file. Do not add `ready`. Skip a title that already has an issue. The next title is `Night clock stays tariff two after restore`. Then slices 102 to 114. Slices 84 to 100 are already open, through #326. Do not open them again. Do not write `queue low` while slices 101 to 114 are open. Skip a title that already has an issue. Issues 219 to 255 already cover slices 32 to 48.
+Open slices. One issue, then a radio note, then the next. If that exact title already exists, comment on it and do not open a second. Label `repo:site` only. The issue body is the matching dev slice in this file. Do not add `ready`. Skip a title that already has an issue. The next title is `No car at the depot`. Then slices 104 to 114. Slice 102 is already #334. Do not open it again. Do not write `queue low` while slices 103 to 114 are open. Skip a title that already has an issue. Issues 219 to 255 already cover slices 32 to 48.
 
 1. `Office booking fields for pickup and drop-off`
 2. `Office status changes add the fare once`
@@ -91,7 +91,7 @@ Open slices. One issue, then a radio note, then the next. If that exact title al
 47. `Empire week strip shows minus 7840`
 48. `Empire page links to the office`
 49. Comment on issues 32 to 48. Quote `Real data`, `Simulated data`, and the pence figure from the matching slice. Do not add `ready`.
-50. Do not write `queue low`. Slices 101 to 114 are still unopened. Name the next unopened title in `docs/radio/po.md`.
+50. Do not write `queue low`. Slices 103 to 114 are still unopened. Name the next unopened title in `docs/radio/po.md`.
 51. `Real-time clock for the empire`
 52. `Car position from an OSRM duration`
 53. `Straight-line fallback at 30 miles per hour`
