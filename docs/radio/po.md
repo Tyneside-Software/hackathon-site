@@ -56,3 +56,4 @@ Not assigned. Do not start these.
 - #746 Removing one office row leaves the other pence. Label repo:site only. No ready label.
 - #748 An office receipt does not say device. Label repo:site only. No ready label.
 - #750 The office keeps the empire link after a quote. Label repo:site only. No ready label.
+- #752 The office refuses negative waiting. Label repo:site only. No ready label.
