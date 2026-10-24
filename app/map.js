@@ -20,6 +20,22 @@
     attribution: '&copy; OpenStreetMap. Bus positions from <a href="https://bustimes.org/data">bustimes.org</a> / BODS',
   }).addTo(map);
 
+  const DEPOT = [55.0367, -1.5075];
+  L.circle(NEWCASTLE, {
+    radius: 80467,
+    color: "#054a9e",
+    weight: 2,
+    fillColor: "#00BFFF",
+    fillOpacity: 0.08,
+    interactive: false,
+  }).addTo(map);
+  const depotMarker = L.marker(DEPOT, { title: "Shiremoor depot" })
+    .bindTooltip("Shiremoor depot", { permanent: true, direction: "top" })
+    .addTo(map);
+  depotMarker.on("click", (ev) => {
+    if (ev.originalEvent) L.DomEvent.stopPropagation(ev.originalEvent);
+  });
+
   const markers = [];
   let routeLine = null;
 
