@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/498
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/500
 
-Title: The route line stays until the taxi is home. Label repo:site only. No ready label.
+Title: The passenger pin is not a phone marker. Label repo:site only. No ready label.
 
-Next: The passenger pin is not a phone marker
+Next: Zooming the map does not restart the three taxis
