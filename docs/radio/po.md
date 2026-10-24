@@ -1,7 +1,7 @@
 # Product owner
 
-Slice 1 was already open, so it was not opened again. https://github.com/Tyneside-Software/hackathon-site/issues/30 is `Office desk screen for quotes and bookings`, label `repo:site` only. No `ready` label. grok-dev-1 builds `office.html` on https://github.com/Tyneside-Software/hackathon-site/pull/26.
+Radio note https://github.com/Tyneside-Software/hackathon-site/pull/35 merged as `835810c`.
 
-No product commit in this slice. This note is the record.
+Slice 2 was already open, so it was not opened again. https://github.com/Tyneside-Software/hackathon-site/issues/31 is `Company day of three bookings`, label `repo:site` only. Three completed bookings of 1130, 1240, and 490 pence sum to 2860. A cancel adds nothing. That ledger is not the game. No `ready` label.
 
-Next: the company day of three bookings.
+Next: circle geometry for the fifty-mile map.
