@@ -74,6 +74,7 @@ Not assigned. Do not start these.
 - #899 Signs run from T1 to T10 with no gap. Label repo:api only. No ready label.
 - #901 A straight three miles takes 360 seconds. Label repo:api only. No ready label.
 - #903 The four second pause is visible on play.html. Label repo:site only. No ready label.
+- #905 The money kinds are only the five ledger kinds. Label repo:api only. No ready label.
 
 ## Next for me
 
