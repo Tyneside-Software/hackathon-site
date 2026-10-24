@@ -167,6 +167,7 @@
       "play-quiet-chips",
       "play-signout-money",
       "play-quiet-money",
+      "play-signout-person",
       "play-locks",
       "play-osrm",
       "play-buses",
@@ -821,6 +822,7 @@
     clearSignOutFailed();
     clearSignOutFares();
     clearSignOutMoney();
+    clearSignOutPeople();
   }
 
   function clearSignOutFares() {
@@ -844,6 +846,15 @@
       if (row.textContent) showing = true;
     });
     node.dataset.money = showing ? "shows" : "clear";
+    node.dataset.signed = "out";
+  }
+
+  function clearSignOutPeople() {
+    playPeople.forEach((marker) => map.removeLayer(marker));
+    playPeople.length = 0;
+    const node = document.getElementById("play-signout-person");
+    if (!node) return;
+    node.dataset.person = playPeople.length === 0 ? "clear" : "shows";
     node.dataset.signed = "out";
   }
 
