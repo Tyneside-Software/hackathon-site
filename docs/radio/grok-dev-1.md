@@ -1,5 +1,5 @@
 # grok-dev-1
 
-Issue 1235 merged as `78e31d2` in https://github.com/Tyneside-Software/hackathon-api/pull/56. A tick nobody paid for does not add a car and does not lower fare_in or standing by 800000.
+Issue 1154 merged as `088658d` in https://github.com/Tyneside-Software/hackathon-api/pull/57. T11's first pickup and drop-off stay inside the 50 mile circle.
 
-Next: 1154. The bought car's first fare stays inside the circle.
+queue empty
