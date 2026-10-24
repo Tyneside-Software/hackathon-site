@@ -243,6 +243,17 @@ def main():
     if second_fuel["fuel_pence"] != 0 or second_fuel["lines"] != []:
         print("a second completion added fuel", file=sys.stderr)
         return 1
+    start_row = taxi_game.moving_row("T1", 600, 0)
+    half_row = taxi_game.moving_row("T1", 600, 300)
+    if start_row["seconds_remaining"] != 600 or start_row["status"] != "started":
+        print(f"row start {start_row}", file=sys.stderr)
+        return 1
+    if half_row["seconds_remaining"] != 300 or half_row["call_sign"] != "T1":
+        print(f"row halfway {half_row}", file=sys.stderr)
+        return 1
+    if taxi_game.seconds_remaining(600, 600) != 0:
+        print("a finished route still showed seconds", file=sys.stderr)
+        return 1
     if taxi_game.live_fare_pence(3, 0) != 1040:
         print(f"live fare {taxi_game.live_fare_pence(3, 0)}", file=sys.stderr)
         return 1

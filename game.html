@@ -48,6 +48,7 @@
     <p id="customer-pin"></p>
     <p id="drive-home"></p>
     <p id="live-fuel"></p>
+    <p id="row-seconds"></p>
     <button type="button" class="btn btn-ghost" id="btn-accept">Accept the oldest offer</button>
     <p id="accept-result"></p>
     <ul id="places"></ul>
@@ -150,6 +151,14 @@
       && game.sumPence(game.workedDay()) === -1120
       ? "A live 3 mile trip adds −60 fuel once. The checked day still has −140."
       : "Live fuel changed the day.";
+    var startRow = game.movingRow("T1", 600, 0);
+    var halfRow = game.movingRow("T1", 600, 300);
+    document.getElementById("row-seconds").textContent = startRow.secondsRemaining === 600
+      && halfRow.secondsRemaining === 300
+      && startRow.status === "started"
+      && game.sumPence(game.workedDay()) === -1120
+      ? "T1 · started · 600 seconds remaining. Halfway, 300 seconds remaining."
+      : "The row showed the wrong seconds.";
     document.getElementById("btn-accept").addEventListener("click", function () {
       var elapsed = game.elapsedSeconds(offerStart, Date.now());
       var taken = game.acceptOffer(game.waitingOffers(elapsed), depotCars);

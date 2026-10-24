@@ -381,6 +381,20 @@
     };
   }
 
+  function secondsRemaining(durationS, elapsedS) {
+    if (durationS <= 0 || elapsedS >= durationS) return 0;
+    if (elapsedS <= 0) return durationS;
+    return durationS - elapsedS;
+  }
+
+  function movingRow(callSign, durationS, elapsedS) {
+    return {
+      callSign: callSign,
+      status: "started",
+      secondsRemaining: secondsRemaining(durationS, elapsedS),
+    };
+  }
+
   function sumPence(rows) {
     return rows.reduce(function (total, row) {
       return total + row.amountPence;
@@ -423,6 +437,8 @@
     startAccepted: startAccepted,
     returnLeg: returnLeg,
     postLiveFuel: postLiveFuel,
+    secondsRemaining: secondsRemaining,
+    movingRow: movingRow,
     shortTrip: shortTrip,
     positionOnRoute: positionOnRoute,
     workedWeek: workedWeek,
