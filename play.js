@@ -176,6 +176,7 @@
       "play-feed-401-money",
       "play-signed-fares",
       "play-signed-trail",
+      "play-signed-person",
       "play-locks",
       "play-osrm",
       "play-buses",
@@ -1357,6 +1358,7 @@
       dropSignedChips();
       clearSignedFares();
       clearSignedTrails();
+      clearSignedPeople();
     }
     hidePlayAccount();
     keepStartedScreen();
@@ -1404,6 +1406,7 @@
     dropSignedChips();
     clearSignedFares();
     clearSignedTrails();
+    clearSignedPeople();
     hidePlayAccount();
     keepPlayMap();
     paintPlayStatus(null);
@@ -1434,6 +1437,15 @@
     const node = document.getElementById("play-signed-trail");
     if (!node) return;
     node.dataset.trail = playTrails.length === 0 && playTrailFed.size === 0 ? "clear" : "shows";
+    node.dataset.feed = "waiting";
+  }
+
+  function clearSignedPeople() {
+    playPeople.forEach((marker) => map.removeLayer(marker));
+    playPeople.length = 0;
+    const node = document.getElementById("play-signed-person");
+    if (!node) return;
+    node.dataset.person = playPeople.length === 0 ? "clear" : "shows";
     node.dataset.feed = "waiting";
   }
 
