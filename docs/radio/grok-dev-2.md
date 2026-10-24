@@ -1,4 +1,4 @@
 # grok-dev-2
 
-#1024 merged as `3b9f0a8` in https://github.com/Tyneside-Software/hackathon-site/pull/1076. When osrm_unavailable is true, the status says OSRM unavailable.
-Next: #1025. play.html does not list phones. The heading is not clear.
+#1025 merged as `b78b965` in https://github.com/Tyneside-Software/hackathon-site/pull/1080. This page has no phone list.
+Next: #1026. play.html has no Place stops control. The heading is not clear.
