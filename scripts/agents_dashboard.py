@@ -873,6 +873,30 @@ def _sample_points(points: list[tuple[int, int]], count: int = 48) -> list[tuple
     return chosen
 
 
+def recent_line(points: list[tuple[int, int]], window_s: int = WINDOW_S) -> list[tuple[int, int]]:
+    """Running total across the last three hours, including a point at each end."""
+    if not points:
+        return []
+    now = int(time.time())
+    start = now - window_s
+    before: int | None = None
+    inside: list[tuple[int, int]] = []
+    for ts, total in points:
+        if ts < start:
+            before = total
+        else:
+            inside.append((ts, total))
+    chosen: list[tuple[int, int]] = []
+    if before is not None:
+        chosen.append((start, before))
+    chosen.extend(inside)
+    if not chosen:
+        return []
+    if chosen[-1][0] < now:
+        chosen.append((now, chosen[-1][1]))
+    return _sample_points(chosen)
+
+
 def code_progress(repo: Path) -> dict:
     """Cumulative code lines on origin/main. Cached, then extended when main moves."""
     empty = {"tip": "", "total": 0, "points": [], "added_3h": 0}
@@ -938,7 +962,10 @@ def line_chart(series: list[tuple[str, str, list[tuple[int, int]]]]) -> str:
         return '<p class="fine">Not enough code history for a graph yet.</p>'
     t0 = min(point[0] for point in all_points)
     t1 = max(point[0] for point in all_points)
-    y_max = max(point[1] for point in all_points) or 1
+    y_min = min(point[1] for point in all_points)
+    y_max = max(point[1] for point in all_points)
+    span = max(y_max - y_min, 1)
+    label = series[0][0] if len(series) == 1 else "Code"
 
     def x_of(ts: int) -> float:
         if t1 == t0:
@@ -946,19 +973,20 @@ def line_chart(series: list[tuple[str, str, list[tuple[int, int]]]]) -> str:
         return pad_l + (ts - t0) / (t1 - t0) * (width - pad_l - pad_r)
 
     def y_of(val: int) -> float:
-        return pad_t + (1 - val / y_max) * (height - pad_t - pad_b)
+        return pad_t + (1 - (val - y_min) / span) * (height - pad_t - pad_b)
 
     parts = [
         f'<svg viewBox="0 0 {width} {height}" class="chart" role="img" '
-        f'aria-label="Code lines on main over time">'
+        f'aria-label="{html.escape(label)} code lines on main over the last 3 hours">'
     ]
     for frac in (0, 0.5, 1):
-        yy = y_of(int(y_max * frac))
+        val = int(round(y_min + span * frac))
+        yy = y_of(val)
         parts.append(
             f'<line x1="{pad_l}" y1="{yy:.1f}" x2="{width - pad_r}" y2="{yy:.1f}" stroke="#2a3544"/>'
         )
         parts.append(
-            f'<text x="4" y="{yy + 4:.1f}" fill="#94a3b8" font-size="10">{int(y_max * frac)}</text>'
+            f'<text x="4" y="{yy + 4:.1f}" fill="#94a3b8" font-size="10">{val}</text>'
         )
     for name, colour, points in series:
         if len(points) < 2:
@@ -1707,11 +1735,9 @@ def build_page() -> str:
         if play_on_box
         else 'The taxi game link is <a href="http://100.65.94.5/play.html">http://100.65.94.5/play.html</a>. The box is not serving that page yet.'
     )
-    line_svg = line_chart(
-        [
-            ("Site", "#fcd34d", site_lines["points"]),
-            ("API", "#38bdf8", api_lines["points"]),
-        ]
+    line_svg = (
+        line_chart([("Site", "#fcd34d", recent_line(site_lines.get("points_full") or []))])
+        + line_chart([("API", "#38bdf8", recent_line(api_lines.get("points_full") or []))])
     )
     milestone_html = "".join(
         f'<li class="{"done" if ok else "wait"}">{html.escape(text)}</li>'
@@ -2123,7 +2149,7 @@ def build_page() -> str:
       <h3>Code on main</h3>
       <p class="pace"><span><strong>{site_lines['total']}</strong> site lines</span><span><strong>{api_lines['total']}</strong> API lines</span><span>Last 3 hours: site +{site_lines['added_3h']}, API +{api_lines['added_3h']}</span></p>
       <p class="legend"><span><i style="background:#fcd34d"></i>Site</span><span><i style="background:#38bdf8"></i>API</span></p>
-      <p class="fine">Python, JavaScript, CSS, HTML, and Kotlin. Docs are not in this count. The line is the running total on main.</p>
+      <p class="fine">Python, JavaScript, CSS, HTML, and Kotlin. Docs are not in this count. Each line is that repo's running total over the last 3 hours, on its own scale.</p>
       {line_svg}
     </section>
 
