@@ -401,6 +401,16 @@ def main():
     if map_js.count("beginFare(car)") < 1 or 'sign: "T1"' not in map_js or 'sign: "T3"' not in map_js:
         print("the other taxis stopped driving", file=sys.stderr)
         return 1
+    home_leg = map_js.split('driveLeg(car, dropoff, DEPOT, "returning"', 1)
+    if len(home_leg) != 2 or "markAtDepot(car)" not in home_leg[1].split("setTimeout", 1)[0]:
+        print("the taxi did not reach the depot before the next fare", file=sys.stderr)
+        return 1
+    if 'car.sign + " · at depot"' not in map_js or 'car.status = "at_depot"' not in map_js:
+        print("arrival did not say at depot", file=sys.stderr)
+        return 1
+    if 'car.status === "returning"' not in map_js and 'sign + " · returning"' not in map_js:
+        print("the way home did not say returning", file=sys.stderr)
+        return 1
     posted_trip = taxi_game.post_live_trip(7, 3, ())
     posted_kinds = [row["kind"] for row in posted_trip["lines"]]
     posted_amounts = [row["amount_pence"] for row in posted_trip["lines"]]
