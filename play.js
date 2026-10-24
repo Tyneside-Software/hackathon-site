@@ -1247,7 +1247,11 @@
   function personPinText(person) {
     const name = String(person && person.name || "Person").trim() || "Person";
     const sign = personTaxiSign(person);
-    return sign ? name + " " + sign : name;
+    const journey = String(person && person.journey || "").trim();
+    let text = name;
+    if (sign) text += " " + sign;
+    if (journey) text += " " + journey;
+    return text;
   }
 
   function personPinHtml(text) {
