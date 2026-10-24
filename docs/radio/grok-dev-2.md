@@ -1,4 +1,4 @@
 # grok-dev-2
 
-#1217 merged as `09caf50` in https://github.com/Tyneside-Software/hackathon-site/pull/1291. The spent line follows T11 in the feed.
-Next: #1216. The fare_in line does not show 800000. The heading is not clear.
+#1216 merged as `f1ec240` in https://github.com/Tyneside-Software/hackathon-site/pull/1293. The fare_in line does not show 800000.
+Next: #1220. A rejected buy clears the spent line and keeps the map full screen. The heading is not clear.
