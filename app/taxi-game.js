@@ -53,6 +53,14 @@
     });
   }
 
+  function dropoffOffered(lat, lng) {
+    return haversineKm(CENTRE, { lat: lat, lng: lng }) <= RADIUS_KM;
+  }
+
+  function dropoffLines() {
+    return [];
+  }
+
   function jobOffered(startName, endName) {
     var start = placeByName(startName);
     var end = placeByName(endName);
@@ -124,6 +132,8 @@
     depotLabel: "Shiremoor depot",
     places: places,
     jobOffered: jobOffered,
+    dropoffOffered: dropoffOffered,
+    dropoffLines: dropoffLines,
     carStatuses: CAR_STATUSES,
     setCarStatus: setCarStatus,
     currentCarStatus: function () { return carStatus; },
