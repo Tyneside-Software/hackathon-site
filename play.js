@@ -163,6 +163,7 @@
       "play-signout-fares",
       "play-quiet-failed",
       "play-quiet-spent",
+      "play-quiet-fares",
       "play-locks",
       "play-osrm",
       "play-buses",
@@ -1334,12 +1335,22 @@
     node.dataset.feed = "quiet";
   }
 
+  function clearQuietFares() {
+    playFares.forEach((marker) => map.removeLayer(marker));
+    playFares.length = 0;
+    const node = document.getElementById("play-quiet-fares");
+    if (!node) return;
+    node.dataset.fares = playFares.length === 0 ? "clear" : "shows";
+    node.dataset.feed = "quiet";
+  }
+
   function paintQuietFeed() {
     const line = document.getElementById("play-status");
     if (line) line.textContent = "The feed is quiet.";
     keepStatusClear();
     clearQuietFailed();
     clearQuietSpent();
+    clearQuietFares();
   }
 
   async function pollPlay() {
