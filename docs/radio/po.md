@@ -27,11 +27,10 @@ Next: The ten-car feed hides the company totals. Issue #806. Label repo:api only
 
 Files: play.html and play.js only. Do not edit app/map.js, app/empire.py, or tests/test_empire.py.
 
-Skip these. They are already on main: #820, #822, #824, #826, #828, #830, #832.
+Skip these. They are already on main: #820, #822, #824, #826, #828, #830, #832, #834.
 
-Next: play.html says OSRM unavailable. Issue #834. Label repo:site only. No ready label. Keep going for about 30 minutes.
+Next: Play cars move in real seconds. Issue #836. Label repo:site only. No ready label. Keep going for about 30 minutes.
 
-- #834 play.html says OSRM unavailable. Label repo:site only. No ready label.
 - #836 Play cars move in real seconds. Label repo:site only. No ready label.
 - #838 A play car returns to the depot. Label repo:site only. No ready label.
 - #840 A play fare marker waits for its taxi. Label repo:site only. No ready label.
@@ -43,6 +42,7 @@ Next: play.html says OSRM unavailable. Issue #834. Label repo:site only. No read
 - #928 play.html shows the username on the status line. Label repo:site only. No ready label.
 - #930 A rejected play token shows the account form. Label repo:site only. No ready label.
 - #939 Sign out on play.html clears the ten chips. Label repo:site only. No ready label.
+- #941 play.html does not show minus 1120. Label repo:site only. No ready label.
 
 ## Reservoir
 
