@@ -157,6 +157,7 @@
       "play-next-failed",
       "play-next-trail",
       "play-next-fares",
+      "play-feed-401-fares",
       "play-locks",
       "play-osrm",
       "play-buses",
@@ -878,6 +879,15 @@
     node.dataset.pence = String(playBuyPence());
   }
 
+  function clearFeed401Fares() {
+    playFares.forEach((marker) => map.removeLayer(marker));
+    playFares.length = 0;
+    const node = document.getElementById("play-feed-401-fares");
+    if (!node) return;
+    node.dataset.fares = playFares.length === 0 ? "clear" : "shows";
+    node.dataset.feed = "401";
+  }
+
   function noteFeed401() {
     const node = document.getElementById("play-feed-401");
     if (!node) return;
@@ -1302,6 +1312,7 @@
       paintPlayBuy();
       clearPlaySpent();
       noteFeed401();
+      clearFeed401Fares();
       return;
     }
     if (!res.ok) {
