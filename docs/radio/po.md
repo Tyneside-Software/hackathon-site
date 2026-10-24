@@ -53,3 +53,4 @@ Not assigned. Do not start these.
 - #740 The office quote names the tariff in words. Label repo:site only. No ready label.
 - #742 An account booking keeps the quoted pence. Label repo:site only. No ready label.
 - #744 The office ledger opens on today. Label repo:site only. No ready label.
+- #746 Removing one office row leaves the other pence. Label repo:site only. No ready label.
