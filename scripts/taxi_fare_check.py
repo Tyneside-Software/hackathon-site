@@ -49,6 +49,7 @@ CASES = (
     ("Tariff one, exactly 161.3 yards, no waiting", TARIFF_ONE, ((1613, 0),), 240),
     ("Tariff one, exactly 322.6 yards, no waiting", TARIFF_ONE, ((3226, 0),), 265),
     ("Tariff two, exactly 140.5 yards, no waiting", TARIFF_TWO, ((1405, 0),), 315),
+    ("Tariff two, no yards, 45 seconds", TARIFF_TWO, ((0, 450),), 315),
 )
 
 
@@ -126,6 +127,17 @@ def main():
         failed = True
         print(
             "Empty hiring must be 0 pence, got tariff one %s and tariff two %s" % (empty_one, empty_two),
+            file=sys.stderr,
+        )
+    flag_t1 = quote_pence(TARIFF_ONE, ((1613, 0),))
+    flag_t2_yards = quote_pence(TARIFF_TWO, ((1405, 0),))
+    flag_t2_time = quote_pence(TARIFF_TWO, ((0, 450),))
+    mixed = quote_pence(TARIFF_ONE, ((1613, 200), (0, 468)))
+    if flag_t1 != 240 or flag_t2_yards != 315 or flag_t2_time != 315 or mixed != 265:
+        failed = True
+        print(
+            "Flag falls moved: tariff one yards %s, tariff two yards %s, tariff two 45 seconds %s, mixed %s"
+            % (flag_t1, flag_t2_yards, flag_t2_time, mixed),
             file=sys.stderr,
         )
     animal = extras_pence(animals=1)
