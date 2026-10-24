@@ -36,6 +36,7 @@ Next: play.html is the taxi game. Issue #820. Label repo:site only. No ready lab
 - #824 The play depot is Shiremoor. Label repo:site only. No ready label.
 - #826 play.html draws ten taxi chips. Label repo:site only. No ready label.
 - #828 Play chips use the feed colours. Label repo:site only. No ready label.
+- #830 play.html shows the four money lines. Label repo:site only. No ready label.
 
 ## Reservoir
 
