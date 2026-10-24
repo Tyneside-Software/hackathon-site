@@ -24,6 +24,30 @@
       segments: [[52800, 0]],
       extras: {},
       status: "offered"
+    },
+    {
+      title: "Soiling only",
+      detail: "No miles, no waiting, soiling",
+      pickup: "Grey's Monument",
+      dropOff: "Shiremoor depot",
+      requestedTime: "15:00",
+      callSign: "T1",
+      tariff: 1,
+      segments: [[0, 0]],
+      extras: { soiling: 1 },
+      status: "offered"
+    },
+    {
+      title: "One animal",
+      detail: "Tariff one, 1 mile, no waiting, one animal, no soiling",
+      pickup: "Shiremoor depot",
+      dropOff: "Grey's Monument",
+      requestedTime: "15:00",
+      callSign: "T1",
+      tariff: 1,
+      segments: [[17600, 0]],
+      extras: { animals: 1 },
+      status: "offered"
     }
   ];
   var addedQuotes = [];

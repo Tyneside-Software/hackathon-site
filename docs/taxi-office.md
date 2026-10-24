@@ -51,6 +51,8 @@ The desk has two sample rows. The £11.30 row is tariff one, 3 miles, no waiting
 
 A button fills the mixed tariff-one case from [Taxi fares](#taxi-fares): the first 161.3 yards in 20 seconds, then 46.8 seconds waiting. The desk shows 265 pence, £2.65.
 
+Two extras rows sit with the samples. A hiring with no miles, no waiting, and soiling is 12500 pence. A guide or hearing dog adds 0. Tariff one, 1 mile, no waiting, one animal, and no soiling is 490 + 300 = 790 pence.
+
 The company day is its own ledger, separate from any single booking and separate from the game. It is three completed bookings, 1130, 1240, and 490 pence, and one cancel that adds 0. The 490 pence booking is tariff one, 1 mile, no waiting, and no extras. The sum is 2860 pence (£28.60). The desk labels that total completed-day.
 
 The same three bookings, with the 490 pence mile cancelled before completion instead of completed, sum to 2370 pence. The desk labels that total cancelled-mile. Cancelling before `completed` leaves that fare off the ledger. A booking that has been completed does not then become cancelled.
