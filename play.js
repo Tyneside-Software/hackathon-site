@@ -73,6 +73,7 @@
     [
       "play-moving",
       "play-bought-moves",
+      "play-bought-trail",
       "play-started-ten",
       "play-locks",
       "play-osrm",
@@ -298,7 +299,7 @@
     const now = playNow();
     const cars = feed && Array.isArray(feed.cars) ? feed.cars : [];
     cars.forEach((car) => {
-      if (!car || !PLAY_SIGNS.includes(car.sign) || !Array.isArray(car.trail)) return;
+      if (!car || !car.sign || !Array.isArray(car.trail)) return;
       const points = [];
       car.trail.forEach((row) => {
         if (!Array.isArray(row) || row.length < 3) return;
