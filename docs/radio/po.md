@@ -35,11 +35,10 @@ Next: POST /v1/empire/buy spends 800000 and adds T11. Issue #1178. Label repo:ap
 
 Files: play.html and play.js only. Do not edit app/map.js, app/empire.py, tests/test_empire.py, or scripts/agents_dashboard.py.
 
-Skip these. They are already on main: #836, #838, #840, #842, #845, #847, #849, #851, #928, #930, #939, #941, #945, #950, #956, #961, #977, #982, #991, #993, #1022, #1023, #1024, #1025, #1136, #1137, #1138, #1139, #1140, #1141.
+Skip these. They are already on main: #836, #838, #840, #842, #845, #847, #849, #851, #928, #930, #939, #941, #945, #950, #956, #961, #977, #982, #991, #993, #1022, #1023, #1024, #1025, #1136, #1137, #1138, #1139, #1140, #1141, #1142.
 
-Next: The play map shows the ten taxis moving. Issue #1142. Label repo:site only. No ready label. Keep going for about 30 minutes.
+Next: The play money stays visible beside the moving map. Issue #1143. Label repo:site only. No ready label. Keep going for about 30 minutes.
 
-- #1142 The play map shows the ten taxis moving. Label repo:site only. No ready label.
 - #1143 The play money stays visible beside the moving map. Label repo:site only. No ready label.
 - #1144 The play buy control shows 800000 and no second price. Label repo:site only. No ready label.
 - #1145 Sign out brings Start back and removes the bought chip. Label repo:site only. No ready label.
@@ -51,6 +50,11 @@ Next: The play map shows the ten taxis moving. Issue #1142. Label repo:site only
 - #1159 Before Start the circle and the depot stay. Label repo:site only. No ready label.
 - #1160 The Start control is one button. Label repo:site only. No ready label.
 - #1161 The bought chip uses the feed colour. Label repo:site only. No ready label.
+- #1194 The bought car trail follows the feed. Label repo:site only. No ready label.
+- #1195 The buy control is visible with the map. Label repo:site only. No ready label.
+- #1196 The play map draws T11 and does not draw T12. Label repo:site only. No ready label.
+- #1197 The 800000 price does not move the ten. Label repo:site only. No ready label.
+- #1198 The bought car row moves with the ten. Label repo:site only. No ready label.
 
 ## Reservoir
 
@@ -130,5 +134,6 @@ Not assigned. Do not start these. Locks that do not change the moving map or the
 - Top up whichever queue has fewer than 16 unfinished slices.
 - Tell the devs the next slice and the files they may edit.
 - After the morning page can be watched and a car can be bought, one dashboard change. Do not add a second graph before that.
+
 
 
