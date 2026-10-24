@@ -144,6 +144,7 @@
         <p id="play-t11-only">The map draws the bought T11 chip and does not draw T12. T1 through T10 stay on the map.</p>
         <p id="play-price-still">A car is drawn from its feed position. The new_car 800000 line does not send the ten back to the depot and does not send them away from it.</p>
         <p id="play-buy-flight">A second press does nothing until the first purchase request finishes. When that request fails, the control can be pressed again. The price stays 800000. The ten stay on the map. The two-second poll stays a read of the empire feed.</p>
+        <p id="play-buy-once">When the empire feed includes T11, the buy control is not offered again. The price stays 800000. T1 through T11 stay on the map.</p>
         <p id="play-started-ten">After Start the ten chips from the feed are on the map.</p>
         <p id="play-locks">Sentences a test still needs stay on the page, under the map, not in front of the taxis.</p>
         <p id="play-osrm"></p>
@@ -189,6 +190,6 @@
 
   <script src="config.js?v=20261024-https1"></script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-  <script src="play.js?v=20261024-buyflight1"></script>
+  <script src="play.js?v=20261024-buyonce1"></script>
 </body>
 </html>
