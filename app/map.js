@@ -399,7 +399,7 @@
 
   map.on("click", (e) => {
     const t = e.originalEvent && e.originalEvent.target;
-    if (t && t.closest && t.closest(".bus-marker, .bus-chip-wrap, .bus-chip, .bus-dot, .taxi-marker, .taxi-chip, .leaflet-popup")) return;
+    if (t && t.closest && t.closest(".bus-marker, .bus-chip-wrap, .bus-chip, .bus-dot, .taxi-marker, .taxi-chip, .taxi-passenger, .taxi-passenger-pin, .leaflet-popup")) return;
     const n = markers.length + 1;
     const marker = L.marker(e.latlng, { draggable: true, title: "Stop " + n }).addTo(map);
     marker.on("dragend", () => {
@@ -2019,6 +2019,9 @@
         title: name + " waiting",
         zIndexOffset: 650,
       }).addTo(map);
+      marker.on("click", (ev) => {
+        if (ev.originalEvent) L.DomEvent.stopPropagation(ev.originalEvent);
+      });
       empireFares.push(marker);
     });
   }
@@ -2069,6 +2072,9 @@
           title: car.sign + " taxi",
           zIndexOffset: 700,
         }).addTo(map);
+        marker.on("click", (ev) => {
+          if (ev.originalEvent) L.DomEvent.stopPropagation(ev.originalEvent);
+        });
         empireMarkers.set(car.sign, marker);
       } else {
         marker.setLatLng(place);
