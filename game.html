@@ -37,6 +37,8 @@
     <p class="hero-kicker">Empire · Shiremoor depot</p>
     <h1 style="font-size:1.7rem;margin-bottom:0.4rem">One empire day</h1>
     <p class="lede">The depot is Shiremoor. The worked day below is the example already checked at −1120 pence. This page does not call the API.</p>
+    <ul id="places"></ul>
+    <p class="lede" id="berwick-job"></p>
 
     <ul id="day-lines"></ul>
     <p id="day-sum" style="font-size:1.25rem"></p>
@@ -58,6 +60,15 @@
       driver_share: "Driver share",
       fuel: "Fuel"
     };
+    var places = document.getElementById("places");
+    game.places().forEach(function (place) {
+      var item = document.createElement("li");
+      item.textContent = place.name + " — " + (place.inside ? "inside" : "outside");
+      places.appendChild(item);
+    });
+    document.getElementById("berwick-job").textContent = game.jobOffered("Grey's Monument", "Berwick-upon-Tweed")
+      ? "A Berwick job was offered."
+      : "A job that starts or ends at Berwick-upon-Tweed is not offered.";
     var list = document.getElementById("day-lines");
     game.workedDay().forEach(function (row) {
       var item = document.createElement("li");

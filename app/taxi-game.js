@@ -11,6 +11,52 @@
   var NEW_DRIVER_PENCE = 0;
   var WORKED_FARE_PENCE = 1040;
   var WORKED_MILES = 7;
+  var CENTRE = { lat: 54.9783, lng: -1.6178 };
+  var RADIUS_KM = 80.467;
+  var EARTH_KM = 6371;
+  var PLACES = [
+    { name: "Grey's Monument", lat: 54.9783, lng: -1.6178 },
+    { name: "Shiremoor depot", lat: 55.0367, lng: -1.5075 },
+    { name: "Hexham", lat: 54.9716, lng: -2.1015 },
+    { name: "Durham", lat: 54.7753, lng: -1.5849 },
+    { name: "Sunderland", lat: 54.9069, lng: -1.3838 },
+    { name: "Berwick-upon-Tweed", lat: 55.7704, lng: -2.0068 },
+  ];
+
+  function haversineKm(a, b) {
+    var dlat = (b.lat - a.lat) * Math.PI / 180;
+    var dlng = (b.lng - a.lng) * Math.PI / 180;
+    var lat1 = a.lat * Math.PI / 180;
+    var lat2 = b.lat * Math.PI / 180;
+    var half = Math.sin(dlat / 2) * Math.sin(dlat / 2)
+      + Math.cos(lat1) * Math.cos(lat2) * Math.sin(dlng / 2) * Math.sin(dlng / 2);
+    return 2 * EARTH_KM * Math.asin(Math.sqrt(half));
+  }
+
+  function placeByName(name) {
+    for (var i = 0; i < PLACES.length; i++) {
+      if (PLACES[i].name === name) return PLACES[i];
+    }
+    return null;
+  }
+
+  function places() {
+    return PLACES.map(function (place) {
+      return {
+        name: place.name,
+        lat: place.lat,
+        lng: place.lng,
+        inside: haversineKm(CENTRE, place) <= RADIUS_KM,
+      };
+    });
+  }
+
+  function jobOffered(startName, endName) {
+    var start = placeByName(startName);
+    var end = placeByName(endName);
+    if (!start || !end) return false;
+    return haversineKm(CENTRE, start) <= RADIUS_KM && haversineKm(CENTRE, end) <= RADIUS_KM;
+  }
 
   function line(kind, amountPence) {
     return { kind: kind, amountPence: amountPence };
@@ -64,6 +110,8 @@
   window.TaxiGame = {
     newDriverPence: NEW_DRIVER_PENCE,
     depotLabel: "Shiremoor depot",
+    places: places,
+    jobOffered: jobOffered,
     workedDay: workedDay,
     cancelBefore: cancelBefore,
     cancelAfterOneMile: cancelAfterOneMile,
