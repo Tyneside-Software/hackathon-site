@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/668
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/670
 
-Title: The account form leaves the sample car. Label repo:site only. No ready label.
+Title: Hide taxis keeps the token. Label repo:site only. No ready label.
 
-Next: Hide taxis keeps the token
+Next: A late poll does not jump the car back
