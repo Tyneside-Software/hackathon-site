@@ -48,6 +48,14 @@ def cancel_after_one_mile(game_day=1):
     return [line("fuel", -FUEL_PENCE_A_MILE, game_day, job_id=1, taxi_id=1)]
 
 
+def worked_week():
+    """Seven identical worked days. The second car is not bought."""
+    rows = []
+    for game_day in range(1, 8):
+        rows.extend(worked_day(game_day))
+    return rows
+
+
 def second_car():
     taxi = {
         "id": 2,
