@@ -1774,6 +1774,10 @@
         taxisOn = false;
         empireHidden = true;
         syncTaxiButton();
+        paintEmpireTrails();
+        paintEmpireFares();
+        Array.from(empireMarkers.values()).forEach((marker) => map.removeLayer(marker));
+        empireMarkers.clear();
         paintTaxiList(true);
         return;
       }
@@ -1781,6 +1785,13 @@
       taxisOn = false;
       syncTaxiButton();
       paintEmpireTrails();
+      paintEmpireFares();
+      if (empireHidden) {
+        Array.from(empireMarkers.values()).forEach((marker) => map.removeLayer(marker));
+        empireMarkers.clear();
+      } else if (!empireMotion) {
+        empireMotion = requestAnimationFrame(glideEmpire);
+      }
       paintTaxiList(true);
     });
   }
@@ -1991,7 +2002,7 @@
   function paintEmpireFares() {
     empireFares.forEach((layer) => map.removeLayer(layer));
     empireFares = [];
-    if (!empireFeed || !Array.isArray(empireFeed.fares)) return;
+    if (empireHidden || !empireFeed || !Array.isArray(empireFeed.fares)) return;
     empireFeed.fares.forEach((fare) => {
       if (!fare) return;
       const lat = Number(fare.lat);
@@ -2027,6 +2038,11 @@
 
   function glideEmpire() {
     empireMotion = 0;
+    if (empireHidden) {
+      Array.from(empireMarkers.values()).forEach((marker) => map.removeLayer(marker));
+      empireMarkers.clear();
+      return;
+    }
     if (!empireToken() || !empireFeed || !Array.isArray(empireFeed.cars)) return;
     const now = empireNow();
     const seen = new Set();
