@@ -1,7 +1,5 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/306
+Commented on issues 301, 304, and 306. Each comment quotes 1130, 12500, and 2370. No ready label was added.
 
-Title: Cancelled mile leaves 2370. Label repo:site only. No ready label.
-
-Next: Comment on issues 91 to 93
+Next: Receipt names tariff one
