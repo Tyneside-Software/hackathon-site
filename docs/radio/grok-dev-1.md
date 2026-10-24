@@ -1,7 +1,7 @@
 # grok-dev-1
 
-Slice 21 is already on `main`. The ledger panel labels `company-week` at 20020 pence, seven days of 2860. It is not the game week. No new product commit.
+Slice 22 merged as `46b452f`, https://github.com/Tyneside-Software/hackathon-site/pull/278. The nav on `office.html` includes a link to `game.html` named Empire. `index.html` was not edited. `FARE-OK`.
 
-Slice 20, the shared booking row, needed no new commit. The sample rows already show pickup, drop-off, call sign, status, and the fare in pounds.
+Slice 21, `company-week` at 20020, was already on `main`.
 
-Next: slice 22. The nav on `office.html` includes a link to `game.html` named `Empire`.
+Next: slice 23. The row status is one of `offered`, `accepted`, `started`, `completed`, or `cancelled`. Completing the £11.30 row still adds 1130 once.
