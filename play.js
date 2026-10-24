@@ -114,8 +114,13 @@
     return FEED_COLOURS[car.sign] || "#94a3b8";
   }
 
+  function chipLabel(sign) {
+    return String(sign || "").replace(/device/ig, "").trim();
+  }
+
   function chipIcon(sign, fill) {
-    const html = '<span class="play-chip" style="display:flex;align-items:center;justify-content:center;width:36px;height:22px;border-radius:6px;background:' + fill + ';color:#0c1219;font:700 11px/1 system-ui,sans-serif">' + sign + "</span>";
+    const label = chipLabel(sign);
+    const html = '<span class="play-chip" style="display:flex;align-items:center;justify-content:center;width:36px;height:22px;border-radius:6px;background:' + fill + ';color:#0c1219;font:700 11px/1 system-ui,sans-serif">' + label + "</span>";
     return L.divIcon({ className: "play-chip-icon", html: html, iconSize: [36, 22], iconAnchor: [18, 11] });
   }
 
@@ -157,7 +162,7 @@
       if (!marker) {
         marker = L.marker(place, {
           icon: chipIcon(sign, fill),
-          title: sign
+          title: chipLabel(sign)
         }).addTo(map);
         marker._playFill = fill;
         playChips.set(sign, marker);
