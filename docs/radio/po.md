@@ -50,6 +50,7 @@ Next: Play cars move in real seconds. Issue #836. Label repo:site only. No ready
 - #945 The play status says the fleet runs on the box. Label repo:site only. No ready label.
 - #950 play.html does not say device on a chip. Label repo:site only. No ready label.
 - #956 Create account on play.html starts the ten cars. Label repo:site only. No ready label.
+- #961 The play account form says the password is at least 8 characters. Label repo:site only. No ready label.
 
 ## Reservoir
 
