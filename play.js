@@ -81,6 +81,7 @@
       "play-trail-chip",
       "play-depot-chip",
       "play-t11-only",
+      "play-price-still",
       "play-started-ten",
       "play-locks",
       "play-osrm",
@@ -191,6 +192,17 @@
     return PLAY_SIGNS.indexOf(sign) === -1;
   }
 
+  function tenIgnoreNewCarLine(car) {
+    const sign = String(car && car.sign || "");
+    return PLAY_SIGNS.indexOf(sign) !== -1;
+  }
+
+  function notePriceStill() {
+    const node = document.getElementById("play-price-still");
+    if (!node) return;
+    node.dataset.moves = "no";
+  }
+
   function noteBoughtDepot() {
     const node = document.getElementById("play-depot-chip");
     if (!node) return;
@@ -204,7 +216,7 @@
     const started = Number(car.leg_started) || 0;
     const elapsed = now - started;
     if (boughtAtDepot(car)) return [55.0367, -1.5075];
-    if (car.status === "at_depot" && !newCarLineReady()) return [55.0367, -1.5075];
+    if (car.status === "at_depot" && !tenIgnoreNewCarLine(car) && !newCarLineReady()) return [55.0367, -1.5075];
     if (car.status === "returning" && (!route.length || elapsed >= duration)) return [55.0367, -1.5075];
     if (route.length) return placeOnRoute(route, duration, elapsed);
     const lat = Number(car.lat);
@@ -331,6 +343,7 @@
       playChips.delete(sign);
     });
     noteT11Only();
+    notePriceStill();
   }
 
   function clearPlayTrails() {
