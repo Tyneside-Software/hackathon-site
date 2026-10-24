@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/531
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/533
 
-Title: The box ticks every account every second. Label repo:api only. No ready label.
+Title: A car checks in every ten seconds. Label repo:api only. No ready label.
 
-Next: A car checks in every ten seconds
+Next: OSRM or a straight line at 30 mph
