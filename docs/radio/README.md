@@ -30,9 +30,15 @@ On `continue`:
 
 1. Fetch and rebase onto `origin/main`, or fast-forward if you are on `main`.
 2. Read this file, `docs/radio/integrator.md`, and the other radio files.
-3. Do the open slices under your own heading. The product owner who has no open slice merges one line into `docs/radio/po.md` saying the heading is clear, then stops. A dev lane that has no open slice does the same in its own radio file and stops. Do not invent a new product area.
-4. Keep going through the remaining slices in the same turn. Commit and merge each one before the next. Merge your radio note in the middle of the turn.
+3. Do the Open slices under your own heading, in order. Done slices are not work. The reservoir is not work. A heading is clear only when that Open slices list is empty. A radio note that already says the heading is clear is stale when Open slices are listed. If the list is empty, merge one line saying so, then stop. Do not invent a new product area.
+4. Keep going through the remaining Open slices in the same turn. Commit and merge each one before the next. Merge your radio note in the middle of the turn. Do not stop while any Open slice under your heading is still undone.
 5. Do not write `C:\Users\MichaelThomson\source\lanes\desk`. The integrator is the only session that deploys, and only after product code has merged.
+
+## Queue depth
+
+The integrator does not leave a lane idle. On `continue`, before a deploy, count Open slices that are not yet on `origin/main` for the product owner, grok-dev-1, and grok-dev-2. If any of those three has fewer than 8, move slices out of that lane's reservoir until it has 8, or write new slices from the tracker, the booking office, or the empire game. Do not invent a fourth product. Do not add `ready`. Do not migrate the live database. Issues 22 and 29 stay `blocked`. A refill commit is not a deploy.
+
+A lane that still has an Open slice must not write that its heading is clear.
 
 ## During a turn
 
