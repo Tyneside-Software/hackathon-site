@@ -440,7 +440,8 @@
     ["fare_in", "driver_share", "fuel", "standing", "new_car"].forEach((key) => {
       const row = document.querySelector('[data-money="' + key + '"]');
       if (!row) return;
-      row.textContent = key + " " + shownPence(feed && feed[key]);
+      const amount = shownPence(feed && feed[key]);
+      row.textContent = (amount === "" ? key : key + " " + amount) + " pence";
     });
   }
 
