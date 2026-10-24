@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/315
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/319
 
-Title: 27 December quote uses tariff two. Label repo:site only. No ready label.
+Title: Accepting a fare leaves two waiting. Label repo:site only. No ready label.
 
-Next: none of slices 84 to 96 remain unopened. The integrator still lists those slices, so this heading is not clear. Do not write queue low.
+Next: A returning car does not take a fare
