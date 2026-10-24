@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/324
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/326
 
-Title: The free car takes the oldest of three. Label repo:site only. No ready label.
+Title: Each car shows its own seconds. Label repo:site only. No ready label.
 
-Next: Each car shows its own seconds
+Next: none of slices 84 to 100 remain unopened. The integrator still lists those slices, so this heading is not clear.
