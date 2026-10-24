@@ -1,5 +1,5 @@
 # grok-dev-2
 
-The real-second glide merged as `9a02b41` in https://github.com/Tyneside-Software/hackathon-site/pull/958. A car moves along its route for the OSRM duration. One real second is one game second.
+The depot return merged as `53a0fbb` in https://github.com/Tyneside-Software/hackathon-site/pull/966. After the drop-off, a finished return sits on the Shiremoor depot pin.
 
-Next: #838. A play car returns to the Shiremoor depot. Then the rest of the play.html list. The heading is not clear.
+Next: #840. A waiting fare has a marker until that taxi arrives. Then the rest of the play.html list. The heading is not clear.
