@@ -52,7 +52,7 @@ Next: play.html is the taxi game. Issue #820. Label repo:site only. No ready lab
 
 Not assigned. Do not start these.
 
-- none yet
+- #853 T4 is violet on the feed. Label repo:api only. No ready label.
 
 ## Next for me
 
