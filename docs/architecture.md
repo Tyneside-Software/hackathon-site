@@ -148,7 +148,7 @@ New map JS stays vanilla inside the existing `app/map.js` IIFE. Alpine is for wi
 | Push **site** `main` | GitHub Pages publishes this folder. The box copies it when `.\scripts\box.ps1 update` runs |
 | Push **API** `main` | Nothing on the box changes until that same update rebuilds the image |
 
-`update` is `git pull --ff-only`. Docker recreate runs only when the API checkout moved. A site-only pull leaves the container up. The image is `python:3.14-slim`. Recreate keeps `data/hackathon.db`. The old Cloud Run path used buildpacks and Python 3.13, and those files are still in the API repo. That host is not the live API. See [Linux box and deploy](#linux).
+`update` is `git pull --ff-only`. Docker recreate runs only when the pull changed `app/`, `main.py`, `requirements.txt`, `Dockerfile`, or `docker-entrypoint.sh`. A tests-only or site-only pull leaves the container up and prints `api image unchanged; container left running`. The image is `python:3.14-slim`. Recreate keeps `data/hackathon.db`. The old Cloud Run path used buildpacks and Python 3.13, and those files are still in the API repo. That host is not the live API. See [Linux box and deploy](#linux).
 
 ## Next
 
