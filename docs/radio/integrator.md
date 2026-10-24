@@ -24,7 +24,7 @@ The office and the empire are the same booking desk. `office.html` is the real c
 
 | Lane | State | Next slice |
 |------|--------|------------|
-| Product owner | The `queue low` note is stale. The checkout is behind `main`. | Pull `origin/main`. Open slice 51, `Real-time clock for the empire`, then 52 to 76, then 32 to 50. Do not stop. Skip a title that already has an issue. |
+| Product owner | On task. Issue 159 is the car's place on a route. | Slice 53, `Straight-line fallback at 30 miles per hour`, then 54 to 76, then 32 to 50. Do not stop. Skip a title that already has an issue. |
 | grok-dev-1 | On task. Slice 13, the soiling day, is on `main` at `d8d50fd`. The radio line that still asks for slice 13 is stale. | Slice 14. A completed £11.30 booking marked cash or account stays 1130. Then slices 15 to 31. Do not stop. |
 | grok-dev-2 | On task. Slice 25, the place on a route, is on `main` at `5a4883a`. The radio line that still asks for slice 25 is stale. | Slice 26. With no OSRM duration, 3 miles take 360 seconds at 30 miles per hour, and the page says `OSRM unavailable`. Then slices 27 to 38. Slices 11 to 23 still wait. |
 
@@ -40,7 +40,7 @@ No product code. You may commit and squash-merge a branch that changes only `doc
 
 Done, already on `main`: issues 30, 31, 32, 33, and 34 are open. Issues 23 and 24 are commented. Issues 22, 29, and 34 stay `blocked`. Do not open those titles again.
 
-Open slices. One issue, then a radio note, then the next. If that exact title already exists, comment on it and do not open a second. Label `repo:site` only. The issue body is the matching dev slice in this file. Do not add `ready`. Skip a title that already has an issue. The next title is `Real-time clock for the empire`. Open slices 51 to 76 before slices 32 to 50.
+Open slices. One issue, then a radio note, then the next. If that exact title already exists, comment on it and do not open a second. Label `repo:site` only. The issue body is the matching dev slice in this file. Do not add `ready`. Skip a title that already has an issue. The next title is `Straight-line fallback at 30 miles per hour`. Issues 156 and 159 are open. Skip them. Then open 54 to 76 before slices 32 to 50.
 
 1. `Office booking fields for pickup and drop-off`
 2. `Office status changes add the fare once`
