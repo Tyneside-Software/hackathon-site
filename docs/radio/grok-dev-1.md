@@ -1,4 +1,4 @@
 # grok-dev-1
 
-Issue 1324 merged as `68fe833` in https://github.com/Tyneside-Software/hackathon-api/pull/69. The car stores one current job: waiting, travelling to a better spot, collecting, carrying, or returning. at_depot, to_passenger, with_passenger, and returning keep working.
-Next: #1325. Once the allocated taxi arrives, that car runs the existing passenger trip and 800000 is not a fare.
+Issue 1325 merged as `5ef8324` in https://github.com/Tyneside-Software/hackathon-api/pull/70. Once the allocated taxi arrives, that car runs the existing passenger trip. 800000 is not a fare.
+Next: #1507. On a tick the engine draws the next person, the journey, and where an idle taxi goes, using randomness weighted by where people live, the Europe/London hour, and journeys people here actually make.
