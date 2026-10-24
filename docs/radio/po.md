@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/81
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/83
 
-Title: Company takings by driver Alex and Sam. Label repo:site only. No ready label. The body is the matching dev slice.
+Title: Tariff chosen from the requested clock. Label repo:site only. No ready label. The body is the matching dev slice.
 
-Next: Tariff chosen from the requested clock
+Next: Inside and outside places on the empire page
