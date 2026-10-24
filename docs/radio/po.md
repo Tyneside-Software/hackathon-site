@@ -40,6 +40,7 @@ Next: play.html says OSRM unavailable. Issue #834. Label repo:site only. No read
 - #849 Play shows the fleet that ran while closed. Label repo:site only. No ready label.
 - #851 play.html does not write the office ledger. Label repo:site only. No ready label.
 - #928 play.html shows the username on the status line. Label repo:site only. No ready label.
+- #930 A rejected play token shows the account form. Label repo:site only. No ready label.
 
 ## Reservoir
 
