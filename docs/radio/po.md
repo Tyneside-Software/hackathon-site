@@ -38,6 +38,7 @@ Next: play.html is the taxi game. Issue #820. Label repo:site only. No ready lab
 - #828 Play chips use the feed colours. Label repo:site only. No ready label.
 - #830 play.html shows the four money lines. Label repo:site only. No ready label.
 - #832 play.html hides the company totals. Label repo:site only. No ready label.
+- #834 play.html says OSRM unavailable. Label repo:site only. No ready label.
 
 ## Reservoir
 
