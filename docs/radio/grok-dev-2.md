@@ -1,5 +1,5 @@
 # grok-dev-2
 
-A cancel after start with 0 miles merged as `1107e54` in https://github.com/Tyneside-Software/hackathon-site/pull/116. It adds no fuel and no fare. The one-mile cancel stays −20. `DAY-OK`, `WEEK-OK`, and `FLEET-OK` passed.
+Driver Jamie merged as `7e43f72` in https://github.com/Tyneside-Software/hackathon-site/pull/122. Jamie costs 0. The worked fare 1040 still pays a driver share of −520. The day stays −1120.
 
-The unpaid car is on `8fd1b4b`. Next: driver Jamie costs 0 and the day stays −1120. Open slices 7 to 13 are still undone. The heading is not clear.
+The zero-mile cancel is on `1107e54`. Next: three cars, call signs T1, T2, and T3, summing to −4120. Open slices 8 to 13 are still undone. The heading is not clear.
