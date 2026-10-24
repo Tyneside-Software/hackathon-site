@@ -232,6 +232,7 @@
   };
   const playChips = new Map();
   const playFirmChips = new Map();
+  const playDepots = [];
   const playFares = [];
   const playPeople = [];
   const playTrails = [];
@@ -771,6 +772,33 @@
     playFirmChips.clear();
   }
 
+  function clearFeedDepots() {
+    playDepots.forEach((marker) => map.removeLayer(marker));
+    playDepots.length = 0;
+  }
+
+  function depotFirmName(firm) {
+    const name = firm && typeof firm.firm === "string" ? firm.firm.trim() : "";
+    if (!name || name === "2860" || name === "1130" || name === "1240" || name === "-1120") return "";
+    return name;
+  }
+
+  function paintFeedDepots(feed) {
+    clearFeedDepots();
+    const firms = feed && Array.isArray(feed.firms) ? feed.firms : [];
+    firms.forEach((firm) => {
+      if (!firm || !Array.isArray(firm.depot) || firm.depot.length < 2) return;
+      const lat = Number(firm.depot[0]);
+      const lng = Number(firm.depot[1]);
+      if (!Number.isFinite(lat) || !Number.isFinite(lng)) return;
+      const name = depotFirmName(firm);
+      const title = name ? name + " depot" : "depot";
+      const marker = L.marker([lat, lng], { title: title }).addTo(map);
+      marker.bindTooltip(mapHtml(title), { permanent: true, direction: "top", className: "play-leg-label", opacity: 0.95 });
+      playDepots.push(marker);
+    });
+  }
+
   function paintPlayFirms(feed) {
     const seen = new Set();
     const firms = feed && Array.isArray(feed.firms) ? feed.firms : [];
@@ -1224,6 +1252,7 @@
     playFollow = false;
     clearPlayAhead();
     clearPlayFirms();
+    clearFeedDepots();
     if (wasFollowing) map.fitBounds(circle.getBounds());
     noteFollow();
     playChips.forEach((marker) => map.removeLayer(marker));
@@ -2065,6 +2094,7 @@
     paintPlayMoney(data);
     playFed = true;
     paintPlayCars(data);
+    paintFeedDepots(data);
     noteStartedTen(data);
     paintPlayTrails(data);
     paintPlayFares(data);
