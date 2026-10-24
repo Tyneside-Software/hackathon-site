@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/240
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/243
 
-Title: Empire heading is Booking desk. Label repo:site only. No ready label.
+Title: Empire page uses the three shared panels. Label repo:site only. No ready label.
 
-Next: Empire page uses the three shared panels
+Next: Worked job shown as one booking row
