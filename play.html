@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tyneside Logistics — taxi game</title>
+  <link rel="icon" href="logo.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+</head>
+<body class="site">
+  <nav class="site-nav" aria-label="Primary">
+    <div class="inner">
+      <a href="index.html" class="brand-link">
+        <img src="logo.svg" width="36" height="36" alt="Tyneside">
+        <span>TYNESIDE</span>
+        <span class="brand-sub">LOGISTICS</span>
+      </a>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="progress.html">Progress</a>
+        <a href="play.html" class="is-current" aria-current="page">Taxi game</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="wrap" style="padding: 1.5rem 0 3rem">
+    <p class="hero-kicker">Empire</p>
+    <h1 style="font-size:1.7rem;margin-bottom:0.4rem">Taxi game</h1>
+    <p class="lede">This page is the taxi game. It shows the map, the ten taxis, and the in-game money.</p>
+
+    <section class="panel" aria-label="Map">
+      <h2>Map</h2>
+      <div id="play-map" style="height: 28rem; border-radius: 12px"></div>
+    </section>
+
+    <section class="panel" id="play-taxis" aria-label="Ten taxis">
+      <h2>Ten taxis</h2>
+      <p>The ten taxis are on this page.</p>
+    </section>
+
+    <section class="panel" id="play-money" aria-label="In-game money">
+      <h2>In-game money</h2>
+      <p>The in-game money is on this page.</p>
+    </section>
+  </main>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script src="play.js?v=20261024-play1"></script>
+</body>
+</html>
