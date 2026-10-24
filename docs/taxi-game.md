@@ -53,3 +53,11 @@ Cancel after it has started: fuel for the miles already driven, and no fare. `mi
 - No new SQLite tables on the box, and no write to the live database.
 - No edit to `app/models.py`, `docs/TAXI.md`, or `app/map.js`.
 - No `device_id` on a game table.
+
+## Checkers and the map
+
+`scripts/taxi_geo.py` is the circle. `scripts/taxi_geo_check.py` prints `GEO-OK` when the centre is `54.9783, -1.6178`, the radius is 80.467 km, and a job that starts or ends outside is refused.
+
+`scripts/taxi_game.py` is the ledger. `scripts/taxi_day_check.py` prints `DAY-OK`. `scripts/taxi_week_check.py` prints `WEEK-OK` for seven worked days.
+
+The map draws a circle of 80467 metres around that centre and a marker labelled Shiremoor depot. One sample car starts at the depot. It is not a device. A control asks public OSRM for the drive to Grey's Monument and back. If OSRM does not answer, the map draws the straight line and shows `OSRM unavailable`. That path does not change the ledger.

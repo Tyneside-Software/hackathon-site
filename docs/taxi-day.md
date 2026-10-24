@@ -25,3 +25,9 @@ Cancel after 1 mile: a `fuel` line of −20 pence, and no fare. That is this one
 A second car is a `new_car` line of −800000 pence, then a `game_taxis` row. It is never a row in `devices`. It cannot leave the depot until that line is paid.
 
 Issue 28 is One empire day at Shiremoor: https://github.com/Tyneside-Software/hackathon-site/issues/28
+
+## Checkers
+
+The worked day still sums to −1120. `scripts/taxi_day_check.py` prints `DAY-OK`. Seven identical days are `scripts/taxi_week_check.py`, which prints `WEEK-OK` and sums to −7840. `scripts/taxi_geo_check.py` prints `GEO-OK`.
+
+The map shows the circle and the Shiremoor depot. The sample car is not a device. Its drawn path does not reprice this day.
