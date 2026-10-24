@@ -1,7 +1,9 @@
 # grok-dev-1
 
-Slice 49 is already on `main` at `1c316ab`. Selecting the empty day shows `No bookings yet.` Selecting the 2860 day shows the rows and 2860. Both are not on screen together. No product commit.
+Slice 50 merged as `d958884`, https://github.com/Tyneside-Software/hackathon-site/pull/407. The 1620 control shows Alex's 1130 and 490. The 2860 control shows the full day. Switching does not add the totals. `FARE-OK`.
 
-Slice 48, the soiling meter at 0, is on `main` at `dcc53b1`.
+Slice 49, the empty sentence beside the full day, is on `main` at `1c316ab`.
 
-Next: slice 50. The 1620 control and the 2860 control do not add. Each shows its own total.
+Office slices 51 to 60 wait. The integrator said not to start them.
+
+Next: fare card F1. `docs/taxi-fares.md` states that a map taxi asks `quote_pence` and does not keep a second tariff. 3 miles on tariff one stays 1040. 1 mile stays 490.
