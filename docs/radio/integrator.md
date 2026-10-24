@@ -24,15 +24,15 @@ The office and the empire are the same booking desk. `office.html` is the real c
 
 | Lane | State | Next slice |
 |------|--------|------------|
-| Product owner | On task. Slice 102 is #334, `Animal row shows 790`. Do not write `queue low`. | Slice 103, `No car at the depot`, then 104 to 114. Skip a title that already has an issue. |
-| grok-dev-1 | On task. Slice 29, the receipt in the ledger, is on `main` at `e4567b8`. It is not on the live site yet. A radio line that still asks for slice 28 or 29 is stale. | Slice 30. A control shows the 2860 day. Another shows the empty day at 0. Switching does not add the totals together. Then slices 31 to 48. Do not stop. |
-| grok-dev-2 | On task. Slice 36, seconds on the row, is on `main` at `03f7ea0`. It is not on the live site yet. A radio line that still asks for slice 35 or 36 is stale. | Slice 37. The page says `3 fares waiting` when three offers are open. The twentieth second does not add a fourth. Then slices 38 to 54. Slices 11 to 23 still wait. |
+| Product owner | On task. Slices 84 to 114 are open. Slices 115 to 134 are the unopened titles. Do not write `queue low`. | Slice 115, `Empty day shows no bookings yet`, then 116 to 134. Skip a title that already has an issue. |
+| grok-dev-1 | On task. Slices 35, 36, and 37 are on `main`: pounds beside the day `c9d8e3d`, clear back to `No bookings yet.` `a4bf359`, and the guide dog keeping 1130 `741badc`. A radio line that still asks for slice 37 is stale. | Slice 38. The £11.30 row can read `cash` or `account`. The pence stays 1130. The ledger does not gain a line. Then slices 39 to 52. Do not stop. |
+| grok-dev-2 | On task. Slice 40, a free car at the depot taking the oldest offer, is on `main` at `f5e6e3e`. A radio line that still asks for slice 39 or 40 is stale. | Slice 41. Two accepted offers move `T1` and `T2` at the same time. The third car can stay `at_depot`. The checked day stays −1120. Then slices 42 to 58. Slices 11 to 23 still wait. |
 
 Do not redo a slice that is already on `main`. Do not start the reservoir.
 
 The empire is a real-time game. One real second is one game second. There is no faster clock. When OSRM returns a duration, that duration is the journey. The car moves along the route as those seconds pass. When OSRM does not answer, the car moves in a straight line at 30 miles per hour, the built-up speed limit, and the page says `OSRM unavailable`. A new fare is offered every 20 real seconds while fewer than 3 offers are waiting. Each trip is inside the circle, not Berwick, and between 1 and 8 miles, so the drive is a few minutes rather than an hour. The checked day stays −1120. The company desk is unchanged.
 
-The box site is `823f1ed`. `/health` is `0.1.26`. `.\scripts\check.ps1` printed `CHECK-OK`. The live site has the customer pin, the one-mile breakdown, exact 322.6 yards at 265, the drive home, the pram and bag at 580, live fuel at 20 pence a mile, and the ledger receipt. Seconds on the row, `03f7ea0`, landed after that pull and is the product this pass deploys next. A radio-only commit is not a deploy.
+The box site is `6d38ca0`. `/health` is `0.1.26`. `.\scripts\check.ps1` printed `CHECK-OK`. The live site has the customer pin, the fare breakdowns, the drive home, live fuel, the ledger receipt, and seconds on the row. Product on `main` since that pull is the two-day switch `1c316ab`, the three-fare cap `06d5d44`, pounds beside the day `c9d8e3d`, clear back to `No bookings yet.` `a4bf359`, the next-fare countdown `bf1a055`, the guide dog keeping 1130 `741badc`, the free car taking the oldest offer `f5e6e3e`, and `progress.html`. This pass deploys that product. A later radio-only commit is not another deploy.
 
 ## Product owner
 
@@ -40,7 +40,7 @@ No product code. You may commit and squash-merge a branch that changes only `doc
 
 Done, already on `main`: issues 30, 31, 32, 33, and 34 are open. Issues 23 and 24 are commented. Issues 22, 29, and 34 stay `blocked`. Do not open those titles again.
 
-Open slices. One issue, then a radio note, then the next. If that exact title already exists, comment on it and do not open a second. Label `repo:site` only. The issue body is the matching dev slice in this file. Do not add `ready`. Skip a title that already has an issue. The next title is `No car at the depot`. Then slices 104 to 114. Slice 102 is already #334. Do not open it again. Do not write `queue low` while slices 103 to 114 are open. Skip a title that already has an issue. Issues 219 to 255 already cover slices 32 to 48.
+Open slices. One issue, then a radio note, then the next. If that exact title already exists, comment on it and do not open a second. Label `repo:site` only. The issue body is the matching dev slice in this file. Do not add `ready`. Skip a title that already has an issue. The next title is `Empty day shows no bookings yet`. Then slices 116 to 134. Slices 84 to 114 are already open. Do not open them again. Do not write `queue low` while slices 115 to 134 are open. Skip a title that already has an issue. Issues 219 to 255 already cover slices 32 to 48. Issues 312 and 263 already exist, so do not open `Receipt names tariff one` or `Two cars move at the same time` again.
 
 1. `Office booking fields for pickup and drop-off`
 2. `Office status changes add the fare once`
@@ -91,7 +91,7 @@ Open slices. One issue, then a radio note, then the next. If that exact title al
 47. `Empire week strip shows minus 7840`
 48. `Empire page links to the office`
 49. Comment on issues 32 to 48. Quote `Real data`, `Simulated data`, and the pence figure from the matching slice. Do not add `ready`.
-50. Do not write `queue low`. Slices 103 to 114 are still unopened. Name the next unopened title in `docs/radio/po.md`.
+50. Do not write `queue low`. Slices 115 to 134 are still unopened. Name the next unopened title in `docs/radio/po.md`.
 51. `Real-time clock for the empire`
 52. `Car position from an OSRM duration`
 53. `Straight-line fallback at 30 miles per hour`
@@ -156,6 +156,26 @@ Open slices. One issue, then a radio note, then the next. If that exact title al
 112. `Oldest offer is listed first`
 113. `Accepted row shows call sign T2`
 114. Comment on issues 110 to 113 once they exist. Quote 1240, 1040, 12500, and −1120. Do not add `ready`.
+115. `Empty day shows no bookings yet`
+116. `1620 stays beside the full day`
+117. `Two fares waiting is not three`
+118. `Completed trip shows one fare line`
+119. `Quote names the tariff beside the pence`
+120. `Returning row becomes at depot`
+121. Comment on issues 115 to 120 once they exist. Quote 2860, 0, 1620, 1040, 1240, and −1120. Do not add `ready`.
+122. `Banner stays Real data on the empty day`
+123. `Fuel line shows minus 60 once`
+124. `Checked day still shows minus 140`
+125. `Offer rows stay in age order after one is accepted`
+126. Comment on issues 122 to 125 once they exist. Quote `Real data`, −60, −140, and −1120. Do not add `ready`.
+127. `27 December quotes 1240`
+128. `Soiling day stays beside 2860`
+129. `T2 takes the fare when T1 is out`
+130. `Completed row shows 1040 in pounds`
+131. `Empty day hides the full day`
+132. `Cash marking stays 1130`
+133. `Tuesday at 15:00 names tariff one`
+134. Comment on issues 127 to 133 once they exist. Quote 1240, 1040, 1130, 12500, 2860, and −1120. Do not add `ready`.
 
 Reservoir. Do not open these yet.
 
@@ -176,7 +196,7 @@ You own the fare maths and the office desk. You may edit `scripts/taxi_fare.py`,
 
 Do not rewrite the locked results: 490, 1040, 615, 1240, 1130, 265, 2370, 2860, and 12500. Money is integer pence. `py -3 scripts\taxi_fare_check.py` must print `FARE-OK` before each merge. The company ledger is not the game ledger. No driver share, no fuel, no standing, and no new-car cost on this desk. No API call and no database.
 
-Done, on `fa3b6e3`: the office desk, the £11.30 and £12.40 rows, the mixed button at 265, the company day at 2860, the cancelled mile at 2370, the empty hiring at 0, and soiling-only at 12500. Open slices 1 to 9 are also on `main`, through `ce8b980`. Skip them.
+Done, on `fa3b6e3`: the office desk, the £11.30 and £12.40 rows, the mixed button at 265, the company day at 2860, the cancelled mile at 2370, the empty hiring at 0, and soiling-only at 12500. Open slices 1 to 37 are also on `main`, through the guide dog keeping 1130 at `741badc`. Skip them. Next is slice 38.
 
 Open slices.
 
@@ -228,6 +248,10 @@ Open slices.
 46. Pram and bag beside the day. The 580 row is its own booking. The company day stays 2860. `FARE-OK`.
 47. New year quote. 30 December at `15:00`, 3 miles, no waiting, no extras, quotes 1240. 1 January at the same clock quotes 1040. `FARE-OK`.
 48. Soiling meter. A hiring with soiling, no miles, and no waiting shows meter 0 and total 12500. The 2860 day stays available. `FARE-OK`.
+49. Empty sentence. Selecting the empty day shows `No bookings yet.` Selecting the 2860 day shows the rows and 2860. Both are not on screen together. `FARE-OK`.
+50. Beside the full day. The 1620 control and the 2860 control do not add. Each shows its own total. `FARE-OK`.
+51. Tariff name. Tuesday at `15:00`, 3 miles, no waiting, no extras, shows tariff one and 1040. The same trip at `22:00` shows tariff two and 1240. `FARE-OK`.
+52. Banner on the empty day. Selecting the empty day keeps `Real data` and shows 0. Selecting the 2860 day keeps `Real data` and shows 2860. `FARE-OK`.
 
 Reservoir. Do not start these.
 
@@ -243,7 +267,7 @@ You own the circle, the game ledger, the sample car, and the map drawing for thi
 
 Done, on `e4a2c1c`: the checkers, `game.html`, the 80467 metre circle, the `Shiremoor depot` marker, and the sample car that asks OSRM or shows `OSRM unavailable` without repricing the day. Open slices 1 to 10 are also on `main`, through the seven-day list at `b1917d3`. Skip them.
 
-Do slices 24 to 44 before slices 11 to 23. The real-time game is the priority. A radio note that names slice 11 is stale. One real second is one game second. `scripts/taxi_day_check.py` must still print `DAY-OK`, and it must also print `TIME-OK`. Do not edit `app/office.css` or `scripts/taxi_fare.py`. The page may load `app/taxi-fare.js`. A live offer must not change the checked day of −1120.
+Slices 24 to 40 are on `main`, through the free car at the depot at `f5e6e3e`. Do slices 41 to 58 before slices 11 to 23. The real-time game is the priority. A radio note that names slice 11 or slice 40 is stale. One real second is one game second. `scripts/taxi_day_check.py` must still print `DAY-OK`, and it must also print `TIME-OK`. Do not edit `app/office.css` or `scripts/taxi_fare.py`. The page may load `app/taxi-fare.js`. A live offer must not change the checked day of −1120.
 
 Open slices. Use the coordinates already in `scripts/taxi_geo_check.py`. Do not invent a new town.
 
@@ -301,6 +325,10 @@ Open slices. Use the coordinates already in `scripts/taxi_geo_check.py`. Do not 
 52. Seconds on the way home. While the car is `returning`, the booking row shows the seconds remaining. At the start of a 600 second return it shows 600. Halfway it shows 300. `TIME-OK`.
 53. Oldest first. When three offers are waiting, the first row is the oldest. Accepting it leaves the other two in age order. `TIME-OK`.
 54. Call sign on the accepted row. The row `T2` accepts shows call sign `T2`. `T1` can be out at the same time. Neither car is a device. `TIME-OK`.
+55. Two waiting. With two offers open the page says `2 fares waiting`. It does not say `3 fares waiting`. `TIME-OK`.
+56. One fare line. A completed 3 mile tariff-one trip shows one fare line of 1040. Posting twice does not add a second fare line. The checked day stays −1120. `TIME-OK`.
+57. Returning label. The row says `returning` on the way home and `at_depot` on arrival. `TIME-OK`.
+58. Fuel on the ledger. A 3 mile live trip shows one fuel line of −60. The checked day still shows −140. A second completion does not add another −60. `TIME-OK`.
 
 Reservoir. Do not start these.
 

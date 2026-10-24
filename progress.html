@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Current progress · Tyneside Logistics</title>
-  <meta name="description" content="Catch-up snapshot. Live phones work. Buses come from a Firestore cache with a 10-minute trail. Noah shipped register/login. API 0.1.8.">
+  <meta name="description" content="24 October 2026. Tracker, real booking office, and real-time Shiremoor empire. Live on the Linux box.">
   <link rel="icon" href="logo.svg" type="image/svg+xml">
   <link rel="stylesheet" href="styles.css">
   <script src="config.js"></script>
@@ -22,6 +22,8 @@
         <a href="index.html">Home</a>
         <a href="progress.html" class="nav-now is-current" aria-current="page">Progress</a>
         <a href="app/">Map</a>
+        <a href="office.html">Office</a>
+        <a href="game.html">Empire</a>
         <a href="board.html">Board</a>
         <a href="backlog.html">Backlog</a>
         <a href="todo.html">To do</a>
@@ -40,23 +42,24 @@
     <div class="wrap">
       <p class="hero-kicker">
         Snapshot ·
-        <time datetime="2026-09-11">11 September 2026</time>
-        · catch-up for anyone who has been away
+        <time datetime="2026-10-24">24 October 2026</time>
+        · read this page to catch up
       </p>
       <h1>CURRENT<br>PROGRESS</h1>
-      <p class="hero-tag">Noah shipped accounts. Michael put buses behind our API.</p>
+      <p class="hero-tag">One map. A tracker, a real booking office, and a real-time taxi empire.</p>
       <p class="hero-lead">
-        Three repos, two hosts, one product. Live API is <strong>0.1.8</strong>.
-        <strong>Noah tonight:</strong> phone cards, device drawer, ping history (36–38), API split into routers (40), then <strong>register / login / Fetch me</strong> on <a href="account.html">Account</a> (41, <code>830036a</code> / <code>625b5dc</code>). No Noah commits after that.
-        <strong>Michael tonight:</strong> readable bus chips (44), shared Firestore cache (45), then a <strong>10-minute fading trail</strong> behind each bus (46).
-        In flight: nothing. Next product: job list (07), demo seed (08), localStorage (06).
+        The live site is the Linux box: <a href="http://100.65.94.5/office.html">office</a>
+        says <strong>Real data</strong>, <a href="http://100.65.94.5/game.html">empire</a>
+        is the same desk with simulated rows. The API is
+        <a href="http://100.65.94.5:8080/health">health 0.1.26</a>.
+        Fares are the North Tyneside hackney tariff from 11 November 2024.
+        The map centre is Grey's Monument. The depot is Shiremoor. The circle is 50 miles.
       </p>
       <div class="hero-actions">
-        <a class="btn btn-fill" href="app/">Open the map →</a>
-        <a class="btn btn-ghost" href="board.html">Kanban</a>
-        <a class="btn btn-ghost" href="docs/#architecture">Architecture</a>
-        <a class="btn btn-ghost" href="api-test.html">Ping the API</a>
-        <a class="btn btn-ghost" href="onboarding.html">Get running</a>
+        <a class="btn btn-fill" href="office.html">Open the office →</a>
+        <a class="btn btn-ghost" href="game.html">Open the empire</a>
+        <a class="btn btn-ghost" href="app/">Open the map</a>
+        <a class="btn btn-ghost" href="#today">Today</a>
       </div>
     </div>
   </header>
@@ -68,14 +71,14 @@
           <span class="progress-dot" :class="dotClass" aria-hidden="true"></span>
           <span>
             <span class="k">API</span>
-            <span class="v" x-text="apiLine">Cloud Run · snapshot 0.1.8</span>
+            <span class="v" x-text="apiLine">Linux box · 0.1.26</span>
           </span>
         </div>
         <div class="progress-live-item">
           <span class="progress-dot is-ok" aria-hidden="true"></span>
           <span>
             <span class="k">Site</span>
-            <span class="v">Pages · hackathon.tyneside.software</span>
+            <span class="v">Linux box · 100.65.94.5</span>
           </span>
         </div>
         <div class="progress-live-item">
@@ -97,7 +100,8 @@
   </div>
 
   <nav class="progress-jump wrap-wide" aria-label="On this page">
-    <a href="#brief">Read first</a>
+    <a href="#today">24 October</a>
+    <a href="#brief">September snapshot</a>
     <a href="#now">Now / next</a>
     <a href="#who">Who</a>
     <a href="#landed">What landed</a>
@@ -105,11 +109,49 @@
     <a href="#pickup">Pick up</a>
   </nav>
 
+  <section class="section" id="today">
+    <div class="wrap">
+      <p class="hero-kicker">24 October 2026</p>
+      <h2>Where we are</h2>
+      <p class="lede">This is the page to read. The September notes further down are history.</p>
+      <h3>The three products</h3>
+      <ol class="progress-facts">
+        <li><strong>Tracker.</strong> Many phones, children, cars, and other things, linked to many people. The model is agreed. Issues 22 and 29 stay blocked, so the live database is not migrated. Until a later read rule, the map shows every device. Game taxis are never rows in devices.</li>
+        <li><strong>Booking office.</strong> Software to sell. <a href="office.html">office.html</a> is the real company. The banner is exactly <strong>Real data</strong>. The panels are Quote, Bookings, and Ledger. The company ledger never shows driver share, fuel, standing, or −1120.</li>
+        <li><strong>Empire.</strong> A taxi game on the same map. <a href="game.html">game.html</a> uses simulated rows. One real second is one game second. When OSRM returns a duration, the car drives that route for that many seconds. When OSRM does not answer, the car goes straight at 30 mph and the page says <strong>OSRM unavailable</strong>. A new fare arrives every 20 seconds while fewer than 3 are waiting. Trips stay inside the circle, are not Berwick, and are 1 to 8 miles. Cars T1, T2, and T3 are not devices. The checked game day stays −1120. That ledger never shows the company totals 2860, 1130, or 1240.</li>
+      </ol>
+      <h3>Locked figures</h3>
+      <ul>
+        <li>Tariff one starts at 240 pence for the first 161.3 yards or 46.8 seconds, then 25 pence a unit. One mile is 490. Three miles, no waiting, no extras, is 1040. Exact 322.6 yards is 265.</li>
+        <li>Tariff two starts at 315 pence for the first 140.5 yards or 45 seconds, then 25 pence a unit. One mile is 615. Three miles is 1240. Sunday, 22:00 to 06:59, and 27 to 31 December force tariff two. Tuesday at 15:00 stays tariff one. 1 January at 15:00 is 1040.</li>
+        <li>Extras, in pence: soiling 12500, extra passenger 50, outside bag 40, animal 300, bicycle 300, pram 50, guide or hearing dog 0. The £11.30 hiring is meter 1040 plus one extra passenger and one outside bag. One pram and one outside bag on the 490 mile is 580.</li>
+        <li>The company day is 1130 + 1240 + 490 = 2860, shown as £28.60. Cancel the 490 and the day is 2370. Alex's two fares are 1620. Sam's night fare is 1240. Seven company days are 20020. The empty day is 0 and £0.00.</li>
+        <li>The checked game day is standing −1500, fare +1040, driver share −520, fuel −140, sum −1120. Seven of those days are −7840. A new car is −800000. That week plus the purchase is −807840. Live fuel is 20 pence a mile, so three miles add −60 once. The checked fuel of −140 stays.</li>
+        <li>The circle is 50 miles, 80467 metres, centred on Grey's Monument. The depot is Shiremoor. Three miles with no OSRM answer take 360 seconds at 30 mph, and the page says <strong>OSRM unavailable</strong>.</li>
+      </ul>
+      <h3>On main today</h3>
+      <p>The office desk has the <strong>Real data</strong> banner, the three panels, the sentence <strong>No bookings yet</strong>, an Empire link, shared booking rows, and a receipt in the ledger for the £11.30 hiring. The banner still says Real data after a reload. One control shows the 2860 day and another shows the empty day at 0. Switching them does not make 5720. The ledger shows £28.60 beside 2860, and £0.00 beside 0. Clearing the book returns <strong>No bookings yet</strong> and a total of 0. Restore brings the three bookings and 2860. An offered £12.40 stays out of the total until it is completed, so the desk can show 1620 and then 2860. Sunday at 15:00 quotes tariff two. A guide or hearing dog on the £11.30 row adds 0, and the row stays 1130. The help line still states flag falls of 240 and 315.</p>
+      <p>The empire draws the 50-mile circle and the Shiremoor depot. Live trips start from the depot at 2, 4, or 6 miles and stay inside eight miles. They are not Berwick. A 3-mile tariff-one fare with no waiting and no extras is 1040. Offers arrive every 20 seconds and stop at 3. The page says <strong>3 fares waiting</strong> at the cap, and <strong>Next fare in</strong> with the seconds left. At 0 the offer appears and the count starts again from 20 unless 3 are already waiting. A car at the depot accepts the oldest offer. If T1 is already out, T2 takes the next one. Three cars, T1, T2, and T3, can move at once. None of them is a device. A waiting fare puts a customer pin on its pickup. After the drop-off the car drives home and becomes <strong>at_depot</strong>. A moving row shows the seconds remaining. Completing a live trip posts one fare line and one fuel line. Three miles of live fuel are −60, once. The checked day stays −1120. Phones and buses stay on the map.</p>
+      <p>The tracker model is agreed: a person can watch many things, and a thing can be linked to many people. Kinds are phone, child, car, and other. Issues 22 and 29 stay blocked, so the live database is not migrated. Until a later read rule, the map shows every device. The API on the box is still 0.1.26. The phone <code>android-c55e59830b71ba38</code> stays.</p>
+      <h3>Live on the box</h3>
+      <p>Earlier today the box moved from <code>8bd97bb</code> through <code>90ce420</code> and <code>823f1ed</code> to <code>6d38ca0</code>. Each of those printed CHECK-OK. Health stayed 0.1.26. The board stayed 50 cards: 9 to do, 2 ready, 39 done. <code>6d38ca0</code> is the last checked site commit. It has the customer pin, the fare breakdowns, the drive home, live fuel, the ledger receipt, and seconds on the row. This deploy adds the two-day switch, the pounds beside the day, clear back to No bookings yet, the guide dog on the £11.30 row, the three-fare cap, the next-fare countdown, a free car taking the oldest offer, and this page.</p>
+      <h3>How the day is run</h3>
+      <p>Four sessions share GitHub <code>main</code>. There is no master branch. The word in every tab is <strong>continue</strong>. The checkout decides the role. Orders are <code>docs/radio/integrator.md</code>. Each lane writes only its own radio file. Lanes do not deploy. The integrator deploys with <code>scripts/box.ps1</code> and then <code>scripts/check.ps1</code> must print CHECK-OK. Each lane keeps at least 12 unfinished slices. A note that says the queue is low is stale while those slices are still listed.</p>
+      <h3>Next</h3>
+      <ul>
+        <li><strong>Office.</strong> The £11.30 row can read cash or account. The pence stays 1130. The ledger does not gain a line.</li>
+        <li><strong>Empire.</strong> Two accepted offers move T1 and T2 at the same time. The third car can stay at the depot. The checked day stays −1120. Neither car is a device.</li>
+        <li><strong>Issues.</strong> The next title to open is <strong>Empty day shows no bookings yet</strong>. Further titles run through <strong>Tuesday at 15:00 names tariff one</strong>. Do not add the ready label. Do not migrate the live database.</li>
+      </ul>
+      <p>The moving detail is <a href="docs/radio/integrator.md">docs/radio/integrator.md</a> on main. This page is the briefing. The September snapshot below is not the current product.</p>
+    </div>
+  </section>
+
   <section class="section" id="brief">
     <div class="wrap">
-      <p class="hero-kicker">Sixty seconds</p>
-      <h2>Read this first</h2>
-      <p class="lede">If you only have a minute, this is the whole picture.</p>
+      <p class="hero-kicker">11 September 2026</p>
+      <h2>September snapshot</h2>
+      <p class="lede">Kept so the earlier catch-up is still here. It is not the live product.</p>
       <ol class="progress-facts">
         <li>
           <span class="n">01</span>
