@@ -26,7 +26,7 @@ The brief's 22:00–07:00 is the same window as the council's 10pm to 7am. The y
 
 A unit ends when the distance or the waiting time runs out, whichever is first. Charge that many units. Do not add a distance meter to a time meter.
 
-Extras stay the November 2024 extras on the council page. The cases below add none. This page does not change the game money lines in the brief.
+The distance and waiting cases below add no extras. Extras are a separate amount on top of the meter. This page does not change the game money lines in the brief.
 
 ## Distance check
 
@@ -88,3 +88,19 @@ The journey used 161.3 yards and 66.8 seconds. A distance meter on its own is 1 
 **Tariff two.** The car covers the first 140.5 yards in 20 seconds. That is the £3.15 flag. It then waits 45 seconds, which is one further unit at £0.25. Fare £3.40.
 
 That journey is 140.5 yards and 65 seconds. Adding a 1-unit distance meter to a 2-unit time meter makes 3 units and £3.65. The tariff charges 2 units and £3.40.
+
+## Extras
+
+November 2024 extras are added to the meter. They do not replace it. A guide or hearing dog is exempt. Tolls are passed on at cost and have no fixed figure on this page.
+
+| Extra | Pence |
+|-------|------:|
+| Soiling the carriage | 12500 |
+| Each passenger after two | 50 |
+| Each bag carried outside | 40 |
+| Each animal, except a guide or hearing dog | 300 |
+| A guide or hearing dog | 0 |
+| Each bicycle | 300 |
+| Each pram | 50 |
+
+Worked quote. Tariff one, 3 miles, no waiting, one extra passenger, one bag carried outside. The meter is the three-mile tariff one fare, 1040 pence (£10.40). The extras are 50 + 40 = 90 pence. The total is 1130 pence (£11.30). `scripts/taxi_fare_check.py` requires 1130.

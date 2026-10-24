@@ -10,7 +10,9 @@ first. Those two are not added as separate meters. A part of a further unit
 is a whole further unit. An exact multiple is not an extra unit.
 
 The prices are the tariff that took effect on Monday 11 November 2024.
-This script does not use the August 2026 proposal.
+This script does not use the August 2026 proposal. Extras are added to the
+meter. They do not replace it. A guide or hearing dog adds nothing. A toll
+is whatever it cost, in pence, because the tariff names no fixed toll.
 
     py -3 scripts/taxi_fare_check.py
 """
@@ -22,6 +24,15 @@ import sys
 # (unit yards, unit seconds, flag fall pence, further unit pence)
 TARIFF_ONE = (1613, 468, 240, 25)
 TARIFF_TWO = (1405, 450, 315, 25)
+
+# November 2024 extras, in pence, on top of the meter.
+SOILING = 12500
+PASSENGER_AFTER_TWO = 50
+BAG_OUTSIDE = 40
+ANIMAL = 300
+GUIDE_OR_HEARING_DOG = 0
+BICYCLE = 300
+PRAM = 50
 
 # (label, tariff, segments of (yards, seconds), expected pence)
 CASES = (
@@ -48,6 +59,40 @@ CASES = (
         340,
     ),
 )
+
+
+def extras_pence(
+    soiling=0,
+    passengers_after_two=0,
+    bags=0,
+    animals=0,
+    guide_or_hearing_dogs=0,
+    bicycles=0,
+    prams=0,
+    tolls_pence=0,
+):
+    """Return extras in pence. Counts are whole items. Tolls are already pence."""
+    counts = (
+        soiling,
+        passengers_after_two,
+        bags,
+        animals,
+        guide_or_hearing_dogs,
+        bicycles,
+        prams,
+    )
+    if tolls_pence < 0 or any(count < 0 for count in counts):
+        raise ValueError("an extra cannot be negative")
+    return (
+        soiling * SOILING
+        + passengers_after_two * PASSENGER_AFTER_TWO
+        + bags * BAG_OUTSIDE
+        + animals * ANIMAL
+        + guide_or_hearing_dogs * GUIDE_OR_HEARING_DOG
+        + bicycles * BICYCLE
+        + prams * PRAM
+        + tolls_pence
+    )
 
 
 def quote_pence(tariff, segments):
@@ -140,6 +185,19 @@ def main():
         if got != expected:
             failed = True
             print("%s: got %s pence, expected %s" % (label, got, expected), file=sys.stderr)
+    if extras_pence(guide_or_hearing_dogs=1) != 0:
+        failed = True
+        print("A guide or hearing dog must add 0 pence", file=sys.stderr)
+    meter = quote_pence(TARIFF_ONE, ((52800, 0),))
+    extra = extras_pence(passengers_after_two=1, bags=1)
+    total = meter + extra
+    if meter != 1040 or extra != 90 or total != 1130:
+        failed = True
+        print(
+            "Tariff one, 3 miles, one extra passenger, one outside bag: "
+            "meter %s, extras %s, total %s, expected 1040 + 90 = 1130" % (meter, extra, total),
+            file=sys.stderr,
+        )
     if failed:
         return 1
     print("FARE-OK")
