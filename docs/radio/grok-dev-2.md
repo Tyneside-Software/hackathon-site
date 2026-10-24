@@ -1,4 +1,4 @@
 # grok-dev-2
 
-#945 merged as `24be943` in https://github.com/Tyneside-Software/hackathon-site/pull/1044. The status line says the fleet runs on the box.
-Next: #950. play.html does not say device on a chip. The heading is not clear.
+#950 merged as `5e2963e` in https://github.com/Tyneside-Software/hackathon-site/pull/1048. A taxi chip shows the call sign.
+Next: #956. Create account on play.html starts the ten cars. The heading is not clear.
