@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/577
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/579
 
-Title: A car at the depot still checks in. Label repo:api only. No ready label.
+Title: One car failing does not stop the others. Label repo:api only. No ready label.
 
-Next: One car failing does not stop the others
+Next: The map polls the account fleet
