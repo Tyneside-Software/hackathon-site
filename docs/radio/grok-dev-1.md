@@ -1,7 +1,7 @@
 # grok-dev-1
 
-Slice 26 merged as `f991d5d`, https://github.com/Tyneside-Software/hackathon-site/pull/307. Exact 322.6 yards on tariff one shows 265. The mixed button stays 265, not 290. `FARE-OK`.
+Slice 28 is already on `main`. After Restore day, a reload still says `Real data` and the running total is 2860. No new product commit. `FARE-OK` was already printed for the fare module on this desk.
 
-Slice 25, the one-mile breakdown, is on `main` at `5bbc809`.
+Slice 27, one pram and one outside bag at 580, is on `main` at `9ece5ed`.
 
-Next: slice 27. Tariff one, 1 mile, one pram, and one outside bag is 490 + 50 + 40 = 580.
+Next: slice 29. The plain-text slip moves inside the ledger panel. It still contains `1130` and `£11.30`.
