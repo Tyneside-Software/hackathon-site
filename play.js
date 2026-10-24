@@ -102,6 +102,15 @@
     const data = await res.json();
     paintPlayCars(data);
     paintPlayMoney(data);
+    paintPlayOsrm(data);
+  }
+
+  function paintPlayOsrm(feed) {
+    const line = document.getElementById("play-osrm");
+    if (!line) return;
+    const cars = feed && Array.isArray(feed.cars) ? feed.cars : [];
+    const missing = (feed && feed.osrm_unavailable === true) || cars.some((car) => car && car.osrm === false);
+    line.textContent = missing ? "OSRM unavailable" : "";
   }
 
   function shownPence(value) {
