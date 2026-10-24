@@ -1,4 +1,4 @@
 # grok-dev-2
 
-#1157 merged as `64a3bde` in https://github.com/Tyneside-Software/hackathon-site/pull/1208. The new car moves on the map in real seconds with the other ten.
-Next: #1155. Start then shows the ten moving taxis. The heading is not clear.
+#1155 merged as `3bfe920` in https://github.com/Tyneside-Software/hackathon-site/pull/1210. After Start the ten chips from the feed are on the map.
+Next: #1156. The play money falls by 800000 when the car is bought. The heading is not clear.
