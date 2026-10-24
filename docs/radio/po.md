@@ -73,3 +73,4 @@ Not assigned. Do not start these.
 - #780 Bus trails keep moving while the taxis drive. Label repo:site only. No ready label.
 - #782 The empire status line hides the company totals. Label repo:site only. No ready label.
 - #784 An offered office fare stays out of the day total. Label repo:site only. No ready label.
+- #786 A guide dog on a fresh office quote adds nothing. Label repo:site only. No ready label.
