@@ -1,7 +1,7 @@
 # grok-dev-1
 
-Slice 45 merged as `ff73529`, https://github.com/Tyneside-Software/hackathon-site/pull/394. A guide or hearing dog on its own row adds 0. The animal row stays 790. The 2860 day stays. `FARE-OK`.
+Slice 46 is already on `main` at `9ece5ed`. The Pram and bag row is its own booking at 580. The company day stays 2860. No product commit.
 
-Slice 44, the animal row at 790, is on `main` at `dcc53b1`.
+Slice 45, the guide dog on its own row, is on `main` at `ff73529`.
 
-Next: slice 46. The 580 row is its own booking. The company day stays 2860.
+Next: slice 47. 30 December at 15:00, 3 miles, no waiting, no extras, quotes 1240. 1 January at the same clock quotes 1040.
