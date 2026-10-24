@@ -80,11 +80,17 @@
     return playClock.server + (Date.now() / 1000 - playClock.client);
   }
 
+  function newCarLineReady() {
+    const row = document.querySelector('[data-money="new_car"]');
+    return !!(row && String(row.textContent).indexOf("800000") !== -1);
+  }
+
   function playPlace(car, now) {
     const route = Array.isArray(car.route) ? car.route : [];
     const duration = Number(car.duration_s) || 0;
     const started = Number(car.leg_started) || 0;
     const elapsed = now - started;
+    if (car.status === "at_depot" && !newCarLineReady()) return [55.0367, -1.5075];
     if (car.status === "returning" && (!route.length || elapsed >= duration)) return [55.0367, -1.5075];
     if (route.length) return placeOnRoute(route, duration, elapsed);
     const lat = Number(car.lat);
@@ -181,9 +187,9 @@
     playFeed = data;
     const server = Number(data.server_now);
     if (Number.isFinite(server)) playClock = { server: server, client: Date.now() / 1000 };
+    paintPlayMoney(data);
     paintPlayCars(data);
     paintPlayFares(data);
-    paintPlayMoney(data);
     paintPlayOsrm(data);
     if (!playMotion) playMotion = requestAnimationFrame(glidePlay);
   }
@@ -217,7 +223,7 @@
   }
 
   function paintPlayMoney(feed) {
-    ["fare_in", "driver_share", "fuel", "standing"].forEach((key) => {
+    ["fare_in", "driver_share", "fuel", "standing", "new_car"].forEach((key) => {
       const row = document.querySelector('[data-money="' + key + '"]');
       if (!row) return;
       row.textContent = key + " " + shownPence(feed && feed[key]);
