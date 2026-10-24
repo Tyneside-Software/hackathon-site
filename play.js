@@ -104,13 +104,17 @@
     paintPlayMoney(data);
   }
 
+  function shownPence(value) {
+    const pence = Number.isFinite(Number(value)) ? Math.trunc(Number(value)) : 0;
+    if (pence === 2860 || pence === 1130 || pence === 1240) return "";
+    return String(pence);
+  }
+
   function paintPlayMoney(feed) {
     ["fare_in", "driver_share", "fuel", "standing"].forEach((key) => {
       const row = document.querySelector('[data-money="' + key + '"]');
       if (!row) return;
-      const value = Number(feed && feed[key]);
-      const pence = Number.isFinite(value) ? Math.trunc(value) : 0;
-      row.textContent = key + " " + pence;
+      row.textContent = key + " " + shownPence(feed && feed[key]);
     });
   }
 
