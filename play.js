@@ -36,9 +36,18 @@
       node.remove();
     });
   }
+  function clearPlaceStops() {
+    document.querySelectorAll("button, input, select").forEach((node) => {
+      if (!node || node.id === "play-stops") return;
+      const label = ((node.textContent || "") + " " + (node.id || "") + " " + (node.getAttribute("aria-label") || "")).toLowerCase();
+      if (label.indexOf("place stops") === -1 && node.id !== "btn-stops") return;
+      node.remove();
+    });
+  }
   clearBusToggle();
   clearOfficeGrid();
   clearPhoneList();
+  clearPlaceStops();
 
   const depot = [55.0367, -1.5075];
   L.marker(depot, { title: "Shiremoor depot" })
@@ -400,6 +409,7 @@
     clearBusToggle();
     clearOfficeGrid();
     clearPhoneList();
+    clearPlaceStops();
     hidePlayAccount();
     paintPlayStatus(data);
     paintPlayMoney(data);
