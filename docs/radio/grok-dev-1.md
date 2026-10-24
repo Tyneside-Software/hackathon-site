@@ -1,5 +1,5 @@
 # grok-dev-1
 
-Issue 806 merged as `06f9dde` in https://github.com/Tyneside-Software/hackathon-api/pull/15. The ten-car feed does not contain 2860, 1130, or 1240.
+Issue 808 merged as `eadcf55` in https://github.com/Tyneside-Software/hackathon-api/pull/16. Creating T1 through T10 inserts no row into devices. `empire_cars` has no `device_id`.
 
-Next: 808. Creating the ten cars does not insert a row into devices.
+Next: 810. One real second is one game second. There is no faster clock.
