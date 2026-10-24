@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/100
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/103
 
-Title: Second car stays at the depot until it is paid for. Label repo:site only. No ready label. The body is the matching dev slice.
+Title: Cancel with no miles adds no fuel. Label repo:site only. No ready label. The body is the matching dev slice.
 
-Next: Cancel with no miles adds no fuel
+Next: New driver Jamie costs nothing
