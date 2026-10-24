@@ -1,7 +1,7 @@
 # Product owner
 
-Radio note https://github.com/Tyneside-Software/hackathon-site/pull/38 merged as ``.
+Radio note https://github.com/Tyneside-Software/hackathon-site/pull/39 merged as ``.
 
-Slice 4 was already open, so it was not opened again. https://github.com/Tyneside-Software/hackathon-site/issues/33 is `Game day and week ledger checkers`, label `repo:site` only. `DAY-OK` is the −1120 pence day. `WEEK-OK` is seven of those days, −7840 pence. A new car is −800000 pence and has no `device_id`. No `ready` label.
+Slice 5 was already commented, so it was not commented again. https://github.com/Tyneside-Software/hackathon-site/issues/23#issuecomment-6378355090 says the circle is 80467 metres around Grey's Monument and the depot marker is `Shiremoor depot`. Phones and buses stay. https://github.com/Tyneside-Software/hackathon-site/issues/24#issuecomment-6378355269 says the sample car is not a device, uses OSRM when it answers, and does not reprice the −1120 pence day. Neither issue has `ready`.
 
-Next: comments on issues 23 and 24.
+Next: issues 22 and 29, which stay blocked.
