@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/636
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/639
 
-Title: The feed names the clock and the trail. Label repo:api only. No ready label.
+Title: The feed says when OSRM missed. Label repo:api only. No ready label.
 
-Next: The feed says when OSRM missed
+Next: A leaving leg starts at the depot
