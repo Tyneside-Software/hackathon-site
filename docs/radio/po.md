@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/527
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/529
 
-Title: Empire tables are not devices. Label repo:api only. No ready label.
+Title: Register starts the fleet on the box. Label repo:api only. No ready label.
 
-Next: Register starts the fleet on the box
+Next: The box ticks every account every second
