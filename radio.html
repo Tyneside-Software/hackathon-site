@@ -68,6 +68,14 @@
     <pre id="command" class="api-json">.\scripts\tell-agents.ps1 "…"</pre>
   </form>
 
+  <h2>Score</h2>
+  <p class="lede" id="verdict">Loading the metric record…</p>
+  <div class="grid" id="score">
+    <article><h2>Site today</h2><pre id="score-site">…</pre></article>
+    <article><h2>API today</h2><pre id="score-api">…</pre></article>
+    <article><h2>Last 3 hours</h2><pre id="score-recent">…</pre></article>
+  </div>
+
   <h2>Unread</h2>
   <ul class="inbox" id="unread"><li class="empty">Loading…</li></ul>
 
@@ -224,6 +232,35 @@
       });
     }
 
+    function shareLine(block) {
+      if (!block) return "No snapshot.";
+      var share = Math.round((block.product_share || 0) * 100);
+      return block.product + " product / " + block.commits + " commits (" + share + "% product)\n"
+        + block.radio + " radio, " + block.other + " other, " + block.clear_field_subjects + " clear-one-field subjects";
+    }
+
+    function loadScore() {
+      fetch(RAW + "docs/radio/metrics.json?t=" + Date.now()).then(function (res) {
+        if (!res.ok) throw new Error("metrics " + res.status);
+        return res.json();
+      }).then(function (body) {
+        var snaps = body.snapshots || [];
+        var last = snaps[snaps.length - 1];
+        if (!last) {
+          text("verdict", "No snapshot yet.");
+          return;
+        }
+        var verdict = document.getElementById("verdict");
+        verdict.textContent = last.at + " — " + last.verdict;
+        text("score-site", shareLine(last.site));
+        text("score-api", shareLine(last.api));
+        var recent = last.last_3h || {};
+        text("score-recent", "Site " + shareLine(recent.site) + "\n\nAPI " + shareLine(recent.api));
+      }).catch(function () {
+        text("verdict", "The metric record has not loaded.");
+      });
+    }
+
     function load() {
       var status = document.getElementById("status");
       status.textContent = "Loading GitHub…";
@@ -268,6 +305,7 @@
     });
     document.getElementById("reload").addEventListener("click", load);
     load();
+    loadScore();
     loadCommits();
     setInterval(load, 20000);
     setInterval(loadCommits, 60000);

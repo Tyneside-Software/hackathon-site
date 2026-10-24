@@ -1,0 +1,166 @@
+#!/usr/bin/env python3
+"""Append one product-versus-radio snapshot to docs/radio/metrics.json.
+
+Run from anywhere. The site repo is the parent of this script. The API repo
+is the sibling hackathon-api. A radio-only commit does not count as product.
+"""
+from __future__ import annotations
+
+import json
+import subprocess
+import sys
+from datetime import datetime, timedelta, timezone
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+API = ROOT.parent / "hackathon-api"
+OUT = ROOT / "docs" / "radio" / "metrics.json"
+DAY_SINCE = "2026-10-24 05:00"
+KEEP = 48
+
+
+def git_log(repo: Path, since: str) -> list[dict]:
+    if not repo.is_dir():
+        return []
+    try:
+        raw = subprocess.check_output(
+            [
+                "git",
+                "log",
+                f"--since={since}",
+                "--pretty=format:COMMIT\t%h\t%cI\t%s",
+                "--name-only",
+            ],
+            cwd=repo,
+            text=True,
+            encoding="utf-8",
+            errors="replace",
+        )
+    except (OSError, subprocess.CalledProcessError) as exc:
+        return [{"sha": "", "at": "", "subject": f"git failed: {exc}", "files": []}]
+    commits: list[dict] = []
+    current: dict | None = None
+    for line in raw.splitlines():
+        if line.startswith("COMMIT\t"):
+            if current:
+                commits.append(current)
+            parts = line.split("\t", 3)
+            current = {
+                "sha": parts[1] if len(parts) > 1 else "",
+                "at": parts[2] if len(parts) > 2 else "",
+                "subject": parts[3] if len(parts) > 3 else "",
+                "files": [],
+            }
+        elif line.strip() and current is not None:
+            current["files"].append(line.strip())
+    if current:
+        commits.append(current)
+    return commits
+
+
+def kind_of(commit: dict, repo: str) -> str:
+    files = commit["files"]
+    if repo == "site":
+        product = any(path in {"play.js", "play.html", "config.js"} for path in files)
+    else:
+        product = any(path.startswith("app/") or path.startswith("tests/") for path in files)
+    if product:
+        return "product"
+    if files and all(path.startswith("docs/") for path in files):
+        return "radio"
+    if any(path.startswith("docs/radio/") for path in files):
+        return "radio"
+    return "other"
+
+
+def summarise(commits: list[dict], repo: str) -> dict:
+    counts = {"product": 0, "radio": 0, "other": 0}
+    last_product = None
+    recent = []
+    clear_field = 0
+    for commit in commits:
+        kind = kind_of(commit, repo)
+        counts[kind] += 1
+        subject = commit["subject"]
+        if "clear " in subject.lower():
+            clear_field += 1
+        if last_product is None and kind == "product":
+            last_product = {
+                "sha": commit["sha"],
+                "at": commit["at"],
+                "subject": subject,
+            }
+        if len(recent) < 8:
+            recent.append(
+                {
+                    "sha": commit["sha"],
+                    "at": commit["at"],
+                    "subject": subject,
+                    "kind": kind,
+                }
+            )
+    total = sum(counts.values())
+    share = round(counts["product"] / total, 2) if total else 0
+    return {
+        "commits": total,
+        "product": counts["product"],
+        "radio": counts["radio"],
+        "other": counts["other"],
+        "clear_field_subjects": clear_field,
+        "product_share": share,
+        "last_product": last_product,
+        "recent": recent,
+    }
+
+
+def verdict(site: dict) -> str:
+    if site["commits"] == 0:
+        return "No site commits in the window."
+    if site["product_share"] < 0.4:
+        return "Site commits are mostly talk. The next commit is product."
+    return "Site product share is in range."
+
+
+def main() -> int:
+    now = datetime.now(timezone.utc)
+    three_hours = (now - timedelta(hours=3)).strftime("%Y-%m-%d %H:%M")
+    site_day = summarise(git_log(ROOT, DAY_SINCE), "site")
+    api_day = summarise(git_log(API, DAY_SINCE), "api")
+    site_recent = summarise(git_log(ROOT, three_hours), "site")
+    api_recent = summarise(git_log(API, three_hours), "api")
+    snapshot = {
+        "at": now.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "day_since": DAY_SINCE,
+        "site": site_day,
+        "api": api_day,
+        "last_3h": {"site": site_recent, "api": api_recent},
+        "verdict": verdict(site_day),
+    }
+    if OUT.exists():
+        try:
+            stored = json.loads(OUT.read_text(encoding="utf-8"))
+        except json.JSONDecodeError:
+            stored = {}
+    else:
+        stored = {}
+    snapshots = stored.get("snapshots")
+    if not isinstance(snapshots, list):
+        snapshots = []
+    snapshots.append(snapshot)
+    stored = {
+        "about": "Product commits against radio commits. python scripts/radio-metrics.py appends one snapshot. Do not edit this file by hand.",
+        "rule": "If site.product_share is under 0.4, the next commit is product. A docs-only commit does not count.",
+        "snapshots": snapshots[-KEEP:],
+    }
+    OUT.parent.mkdir(parents=True, exist_ok=True)
+    OUT.write_text(json.dumps(stored, indent=2) + "\n", encoding="utf-8")
+    print(
+        f"{snapshot['at']} site {site_day['product']}/{site_day['commits']} "
+        f"share {site_day['product_share']} api {api_day['product']}/{api_day['commits']} "
+        f"{snapshot['verdict']}"
+    )
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

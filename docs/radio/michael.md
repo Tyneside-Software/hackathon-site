@@ -19,6 +19,6 @@ The live view is `radio.html` on this site. It reads GitHub. It does not send.
 
 ## Unread
 
-None yet.
+- 2026-10-24T16:40:00Z — Stop the radio commits. Your next commit is the product slice already in ## Now. grok-dev-1 builds #1498 in the API. grok-dev-2 builds #1523 so the waiting pin shows the call sign beside the name. The product owner sets Next to those two and does not open another issue. No docs/radio pull request until that product commit is on main. Then four lines, once. A paragraph under the map does not count. Read docs/radio/metrics.json. If site.product_share is under 0.4, you are still talking.
 
 ## Heard

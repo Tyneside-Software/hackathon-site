@@ -32,7 +32,7 @@ The human pastes `continue` into each session. That word is the whole order. Do 
 1. Confirm the checkout path. That is the role. Read `LANE.txt` if it sits beside the three repos.
 2. In every repo you will touch: `git fetch origin`, then `git pull --rebase origin main` on `main`, or `.\scripts\lane-sync.ps1` from `hackathon-site` on a `lane/*` branch.
 3. Read this file.
-4. Read `docs/radio/michael.md`. A line under `## Unread` that starts with `- ` and a UTC timestamp is an order from Michael. Do it before the next slice. Do not edit that file. The first line of your next radio note is `Michael <timestamp>: heard`. `None yet.` means the inbox is empty.
+4. Read `docs/radio/michael.md` and the latest snapshot in `docs/radio/metrics.json`. A line under `## Unread` that starts with `- ` and a UTC timestamp is an order from Michael. Do it before the next slice. Do not edit that file. The first line of your next radio note is `Michael <timestamp>: heard`. `None yet.` means the inbox is empty. If `site.product_share` is under 0.4, the next commit is the product slice in `## Now`, not a radio file.
 5. In `docs/radio/integrator.md`, read only `## Now`, `## A running game stays up`, and `## The route is the gap`. Every other heading in that file is history. Do not follow it.
 6. Read `docs/radio/po.md` and the two dev radio files.
 7. Do the work for the role, for about 30 minutes. Do not stop after one slice. An unread line in `michael.md` is done first. When the inbox is empty, `## Now` is the order.
@@ -41,13 +41,13 @@ When two docs disagree, the code on `origin/main` wins over a SHA named in an ol
 
 ## What each role does
 
-**Integrator.** Write orders in `## Now`. Do not write the slice text unless Michael asks for an intervention. Do not edit `po.md`, `grok-dev-1.md`, `grok-dev-2.md`, `play.html`, `play.js`, or the API while a lane owns that work. Deploy with `.\scripts\deploy-if-product.ps1` after product code is on `origin/main`. A radio-only commit is not a deploy.
+**Integrator.** Write orders in `## Now`. Do not write the slice text unless Michael asks for an intervention. Do not publish a commit that only points a lane at a slice `## Now` already names. Do not edit `po.md`, `grok-dev-1.md`, `grok-dev-2.md`, `play.html`, `play.js`, or the API while a lane owns that work. Deploy with `.\scripts\deploy-if-product.ps1` after product code is on `origin/main`. A radio-only commit is not a deploy. After that deploy, run `python scripts/radio-metrics.py` and commit `docs/radio/metrics.json` with the deploy, not as its own pull request.
 
-**Product owner.** Number the work `## Now` names. Set each dev `Next` to that work. Keep at least 16 unfinished slices in front of each dev, and at least 24 in the reservoir. Those slices are behaviours someone can watch, or the seam that makes the next slice smaller. A clear of one field on one event is not one of them. Park that kind of line. Do not edit product code. Commit only `docs/radio/po.md`, on a `lane/po/<slug>` branch, squash-merge it, and keep going. Do not deploy.
+**Product owner.** Number the work `## Now` names. Set each dev `Next` to that work. One commit for that move, then stop until a dev has merged product. Keep at least 16 unfinished slices in front of each dev, and at least 24 in the reservoir. Those slices are behaviours someone can watch, or the seam that makes the next slice smaller. A clear of one field on one event is not one of them. Park that kind of line. Do not edit product code. Commit only `docs/radio/po.md`, on a `lane/po/<slug>` branch, squash-merge it, and keep going. Do not deploy. Do not open a second radio pull request while `site.product_share` is under 0.4.
 
-**grok-dev-1.** Build the unfinished API line `## Now` names. One slice is one pull request. Four radio lines come after that merge, not as a pull request before the code. Then the next slice in the same turn.
+**grok-dev-1.** Build the unfinished API line `## Now` names. One slice is one pull request. Four radio lines come after that merge, not as a pull request before the code. If your radio file is ahead of the product, write no radio file. Then the next slice in the same turn.
 
-**grok-dev-2.** Build the unfinished page line `## Now` names, the same way. The page shows what the feed already carries. Do not invent people, firms, places, or positions in `play.js`.
+**grok-dev-2.** Build the unfinished page line `## Now` names, the same way. The page shows what the feed already carries. The proof is the pin, the list, or the money. A new paragraph under the map is not the slice. Do not invent people, firms, places, or positions in `play.js`. If your radio file is ahead of the product, write no radio file.
 
 A dev does not invent a slice. A dev does not write `queue empty` while `## Now` names work. The words `the heading is not clear` do not mean stop. Do not write `morning order not at the front`.
 
@@ -73,7 +73,21 @@ A turn is about 30 minutes. One slice is too short. A turn is product on `main` 
 
 A radio note is at most four lines after the product merge: the issue, the commit, what it did, and the next issue. A second pull request that only notes the slice is not the turn. A clear of one field is not the turn. A turn with more radio commits than product commits has not produced enough software.
 
-Do not batch two slices into one pull request. Do not open a second pull request about the same slice.
+Do not open that radio note while `docs/radio/metrics.json` says `site.product_share` is under 0.4, unless the commit you just merged is the product slice `## Now` names. If your last merge was a radio file, the next merge is product. Do not batch two slices into one pull request. Do not open a second pull request about the same slice.
+
+## Metrics
+
+`docs/radio/metrics.json` is the score. From `hackathon-site`:
+
+```powershell
+python scripts/radio-metrics.py
+```
+
+That appends one snapshot. Do not edit the file by hand. The integrator runs it after a product deploy and commits it with that deploy. A lane does not run it to make a radio commit.
+
+Read the latest snapshot before a slice. `site.product` counts commits that change `play.html`, `play.js`, or `config.js`. `api.product` counts commits that change `app/` or `tests/`. A docs-only commit is `radio`. A paragraph under the map, and a function that only clears one field, do not count as the slice even if they sit in `play.html`.
+
+If `site.product_share` is under 0.4, you are still talking. The next commit is the product slice in `## Now`. The page that shows the score is `radio.html`.
 
 ## How a slice lands
 
@@ -83,8 +97,8 @@ Do not batch two slices into one pull request. Do not open a second pull request
 4. `git push --force-with-lease` is allowed on that lane branch only. Never force-push `main`. Never force-push someone else's branch.
 5. Open the pull request into `main` on the repo whose files changed. Link `Tyneside-Software/hackathon-site#ISSUE`. Do not use the words Closes, Fixes, or Resolves.
 6. Squash-merge when the slice passes its check: `gh pr merge NUMBER --repo Tyneside-Software/REPO --squash --delete-branch`.
-7. On a fresh branch from the new `origin/main`, edit only your radio file. Four lines. Squash-merge that note straight away.
-8. Pull `main`. Read the other radio files. Start the next slice.
+7. On a fresh branch from the new `origin/main`, edit only your radio file. Four lines. Squash-merge that note straight away. Skip this step when your previous merge was already a radio note, or when `site.product_share` in `docs/radio/metrics.json` is under 0.4.
+8. Pull `main`. Read the other radio files and the latest metrics snapshot. Start the next product slice.
 
 `origin` is the Tyneside-Software org. A push to a personal remote does not reach the box.
 
@@ -144,6 +158,9 @@ An open browser keeps the JavaScript it already loaded. A refresh loads the new 
 - Move issues 22 or 29 off `blocked`.
 - Edit another session's radio file.
 - Edit `docs/radio/michael.md`. That file is Michael's. Read `## Unread`, then leave it alone.
+- Edit `docs/radio/metrics.json` by hand. `python scripts/radio-metrics.py` writes it.
+- Open a pull request that only changes `docs/radio/` while the product slice in `## Now` is still unfinished.
+- Add a `play.html` paragraph, or a `dataset` flag, as the proof of a slice. The map, the list, or the money has to change.
 - Commit `build-err.txt`, `*.db`, `.env`, or the Desktop SSH sheet.
 - Hand git, SSH, or deploy commands back to the human. Do them, or say what failed.
 - Restart the agent dashboard on port 5510 unless Michael asks.
