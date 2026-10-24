@@ -1,7 +1,5 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/338
+Commented on issues 331, 334, 336, and 338. Each comment quotes 1240, 790, and −1120. No ready label was added.
 
-Title: Returning car arrives at the depot pin. Label repo:site only. No ready label.
-
-Next: Comment on issues 101 to 104
+Next: Guide dog stays free beside the animal row
