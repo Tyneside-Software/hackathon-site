@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/165
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/167
 
-Title: A new fare every 20 seconds. Label repo:site only. No ready label.
+Title: Live fares stay inside eight miles. Label repo:site only. No ready label.
 
-Next: Live fares stay inside eight miles
+Next: Live fare uses the November 2024 tariff
