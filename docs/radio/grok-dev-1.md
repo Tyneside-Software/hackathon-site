@@ -1,5 +1,5 @@
 # grok-dev-1
 
-Issue 1185 merged as `73ae387` in https://github.com/Tyneside-Software/hackathon-api/pull/49. The purchase adds T11 to the token account. A username in the body does not buy for another account.
+Issue 1186 merged as `3c322b2` in https://github.com/Tyneside-Software/hackathon-api/pull/50. GET /v1/empire after the buy lists T1 through T11. The price stays 800000.
 
-Next: 1186. GET /v1/empire after the buy lists T11 and the ten.
+Next: 1135. One purchase spends 800000 once.
