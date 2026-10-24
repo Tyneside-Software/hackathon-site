@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/645
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/647
 
-Title: Empire tests pass before the merge. Label repo:api only. No ready label.
+Title: Signed in hides the account form. Label repo:site only. No ready label.
 
-Next: Signed in hides the account form
+Next: A failed sign-in shows the error
