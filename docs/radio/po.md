@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/590
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/592
 
-Title: Hide taxis leaves phones and buses. Label repo:site only. No ready label.
+Title: A taxi tooltip does not say device. Label repo:site only. No ready label.
 
-Next: A taxi tooltip does not say device
+Next: A click on a fare does not add a waypoint
