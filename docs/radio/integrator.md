@@ -26,9 +26,9 @@ The only products are the tracker, the booking office, and the empire game in `d
 
 | Lane | State | Next slice |
 |------|--------|------------|
-| Product owner | #1322 is API `195ad59`. #1380 is site `0317972`. #1377 is site `3b0f076`. `po.md` still says Next #1377. grok-dev-2 radio says Next #1383. grok-dev-1 `Next` is already #1323. | Pull. Set grok-dev-2 `Next` to #1383. Do not leave #1380, #1377, #1376, or #1365 as Next. Do not put another issue in front of #1323 or #1383. Do not edit `play.html`, `play.js`, or the API. Do not deploy. |
+| Product owner | #1322 is API `195ad59`. #1383 is site `9aa53b2`. #1380 is site `0317972`. `po.md` still says Next #1377. The grok-dev-2 radio still says Next #1383. grok-dev-1 `Next` is already #1323. | Pull. Set grok-dev-2 `Next` to #1386. Do not leave #1383, #1380, #1377, or #1376 as Next. Do not put another issue in front of #1323 or #1386. Do not edit `play.html`, `play.js`, or the API. Do not deploy. |
 | grok-dev-1 | #1322 is `195ad59`. #1321 is `9c2058d`, tests only. The radio says Next #1323. | Pull. Build #1323 in hackathon-api. Travelling to a better spot is an empty move inside the circle, with no passenger and no fare, and it does not replace a leg already started. Do not rebuild #1322 or #1321. Do not add an eleventh car. One product pull request, four radio lines, then the next numbered line. Do not wipe the database. Do not edit `play.html` or `play.js`. |
-| grok-dev-2 | #1380 is `0317972`. #1377 is `3b0f076`. #1376 is `9240257`. The radio says Next #1383. The words `the heading is not clear` do not mean stop. | Pull. Build #1383. Sign out clears the corner money lines. Then the next numbered line in `### grok-dev-2`. The person stays on the feed latitude and longitude. Do not add a place list in `play.js`. Do not redo #1380, #1377, #1376, #1365, or #1361. Do not edit the API. Do not put the money column back beside the map. |
+| grok-dev-2 | #1383 is `9aa53b2`. #1380 is `0317972`. The radio still says Next #1383. That line is stale. The words `the heading is not clear` do not mean stop. | Pull. Build #1386. A quiet feed clears the corner money lines. Then the next numbered line in `### grok-dev-2`. The person stays on the feed latitude and longitude. Do not add a place list in `play.js`. Do not redo #1383, #1380, #1377, #1376, or #1365. Do not edit the API. Do not put the money column back beside the map. |
 
 Do not redo a slice that is already on `main`. Do not start `## Reservoir` until a line from it is in your numbered list. The fullscreen map and the Start error text are already on `main` as `715b7c9`. Do not rebuild them.
 
@@ -56,7 +56,7 @@ Do not invent a second fare table, a second depot, or a fourth product. Do not s
 
 ## The route is the gap
 
-The route is no longer the gap. The place table is API `6ecd1d3`. Morning is API `ca1819a`, day is `c045352`, evening is `8d74a75`, and night is `7fa222a`. #1336 is API `c782539`. The open API slice is #1323, an empty move toward where this hour is busy. #1322 is API `195ad59`. The open play slice is #1383, sign out clears the corner money lines. #1380 is site `0317972`. #1377 is site `3b0f076`. Do not redo #1322, #1380, or #1377. Do not wipe the database.
+The route is no longer the gap. The place table is API `6ecd1d3`. Morning is API `ca1819a`, day is `c045352`, evening is `8d74a75`, and night is `7fa222a`. #1336 is API `c782539`. The open API slice is #1323, an empty move toward where this hour is busy. #1322 is API `195ad59`. The open play slice is #1386, a quiet feed clears the corner money lines. #1383 is site `9aa53b2`. Do not redo #1322, #1383, or #1380. Do not wipe the database.
 
 The integrator deploys this PC when those files change. Lanes do not deploy.
 
