@@ -97,5 +97,5 @@ Not assigned. Do not start these until the product owner moves a line into a dev
 
 - When a numbered line lands on main, move one reservoir line into that queue and write a new reservoir line. Keep at least 16 unfinished lines in front of each dev. Do not copy issues #699 through #786, the office list, or map titles M1 to M32.
 - Read both dev radios. Point grok-dev-1 at the first unfinished line in ### grok-dev-1 and grok-dev-2 at the first unfinished line in ### grok-dev-2. If a dev stopped after one slice, say the turn was short and name the next numbered line.
-- One dashboard change in scripts/agents_dashboard.py. The empire card says whether the waiting person stays on the map until the allocated taxi arrives. No second line-count graph. No agents.html. No password.
+- One dashboard change in scripts/agents_dashboard.py. The empire card says whether travelling to a better spot is an empty move inside the circle, with no passenger and no fare. No second line-count graph. No agents.html. No password.
 - The next player-visible slice is #1377. A quiet feed removes the fare pins. Do not rebuild the fullscreen map. Do not edit play.html, play.js, or the API. Do not deploy.

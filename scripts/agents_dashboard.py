@@ -1531,6 +1531,56 @@ def other_end_lines(empire: str) -> list[tuple[bool, str]]:
     return [(other, line)]
 
 
+def person_stays_lines(script: str) -> list[tuple[bool, str]]:
+    """Whether the waiting person stays on the map until the allocated taxi arrives.
+
+    The text is origin/main play.js. This does not read the box. A comment
+    or a dataset node alone does not count. Leaving as soon as a taxi is
+    allocated is the old behaviour.
+    """
+    source = script or ""
+
+    def body(name: str) -> str:
+        start = source.find(name)
+        if start < 0:
+            return ""
+        end = source.find("\n  function ", start + len(name))
+        end_async = source.find("\n  async function ", start + len(name))
+        ends = [item for item in (end, end_async) if item > start]
+        stop = min(ends) if ends else len(source)
+        return source[start:stop]
+
+    paint = body("function paintPlayPeople")
+    gate = body("function allocatedTaxiArrived")
+    marker = paint.find("L.marker")
+    if marker < 0:
+        marker = paint.find("L.circleMarker")
+    before = paint[:marker] if marker > 0 else ""
+    after = paint[marker:] if marker > 0 else ""
+    gate_ok = (
+        "with_passenger" in gate
+        and "arrived === true" in gate
+        and "allocated === true" not in gate
+    )
+    called_before = "allocatedTaxiArrived" in before and "return" in before
+    no_early_allocated = "allocated === true" not in before and "person.allocated" not in before
+    stays_after = "allocated === true" in after or "person.allocated" in after
+    stays = (
+        bool(paint)
+        and bool(gate)
+        and marker > 0
+        and gate_ok
+        and called_before
+        and no_early_allocated
+        and stays_after
+    )
+    if stays:
+        line = "The waiting person stays on the map until the allocated taxi arrives."
+    else:
+        line = "The waiting person leaves the map when a taxi is allocated, before that taxi arrives."
+    return [(stays, line)]
+
+
 PAGE_SCRIPT = r"""
 (function () {
   var catalogEl = document.getElementById("catalog");
@@ -2241,6 +2291,10 @@ def build_page() -> str:
         f'<li class="{"done" if ok else "wait"}">{html.escape(text)}</li>'
         for ok, text in waiting_person_lines(play_script)
     )
+    stays_html = "".join(
+        f'<li class="{"done" if ok else "wait"}">{html.escape(text)}</li>'
+        for ok, text in person_stays_lines(play_script)
+    )
     other_html = "".join(
         f'<li class="{"done" if ok else "wait"}">{html.escape(text)}</li>'
         for ok, text in other_end_lines(empire_source)
@@ -2656,6 +2710,8 @@ def build_page() -> str:
         <ol class="steps">{spent_html}</ol>
         <p class="fine">A person waiting with no taxi allocated.</p>
         <ol class="steps">{person_html}</ol>
+        <p class="fine">The waiting person stays until the allocated taxi arrives.</p>
+        <ol class="steps">{stays_html}</ol>
         <p class="fine">The drop is the other end of the journey.</p>
         <ol class="steps">{other_html}</ol>
         <div class="objective api" style="padding:0.7rem 0 0;border:0;background:transparent">
