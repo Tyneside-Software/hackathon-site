@@ -600,11 +600,11 @@
     } catch (err) {
       return;
     }
-    samples = defaultRows();
+    samples = [];
     addedQuotes = [];
     renderSamples();
     renderLedger();
-    dayNote("Cleared. The key hackathon-office-day is removed. A reload starts from the offered rows.");
+    dayNote("Cleared. The bookings panel says No bookings yet. The total is 0. The key hackathon-office-day is removed. A reload starts from the offered rows.");
   });
 
   loadDay();
