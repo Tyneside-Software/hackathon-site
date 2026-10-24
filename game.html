@@ -50,6 +50,7 @@
     <p id="banner-stays"></p>
     <p id="accept-count"></p>
     <p id="returning-out"></p>
+    <p id="oldest-three"></p>
     <p id="short-trip"></p>
     <p id="live-fare"></p>
     <p id="fleet-move"></p>
@@ -221,6 +222,19 @@
       && takenAtDepot.offers[0].status === "accepted"
       ? "A returning car leaves the offer offered. A car at the depot takes it."
       : "A returning car took the offer.";
+    var oldestThree = game.oldestOfThree();
+    document.getElementById("oldest-three").textContent = oldestThree
+      && oldestThree.offers.length === 3
+      && oldestThree.offers[0].callSign === "T1"
+      && oldestThree.offers[0].status === "accepted"
+      && oldestThree.offers[0].miles === 2
+      && oldestThree.offers[1].status === "offered"
+      && oldestThree.offers[1].miles === 4
+      && oldestThree.offers[2].status === "offered"
+      && oldestThree.offers[2].miles === 6
+      && !oldestThree.cars.some(function (car) { return car.device_id; })
+      ? "T1 takes the oldest of three. The other two stay offered. Neither car is a device."
+      : "A younger offer was taken first.";
     var sample = game.waitingOffers(40);
     var sampleTaken = game.acceptOffer(sample, depotCars);
     document.getElementById("offer-sample").textContent = sample.length === 2

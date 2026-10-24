@@ -331,6 +331,11 @@ def returning_stays(offers, cars):
     return accept_offer(offers, cars)
 
 
+def oldest_of_three():
+    """The free car takes the oldest of three offers. The other two stay offered."""
+    return free_car_takes(waiting_offers(60), three_cars())
+
+
 def two_cars_out(elapsed_s):
     """Two accepted offers move T1 and T2 at the same moment. T3 can stay at the depot."""
     offers = waiting_offers(40)

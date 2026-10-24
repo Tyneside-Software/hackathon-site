@@ -287,6 +287,19 @@ def main():
     if taken_home["offers"][0]["status"] != "accepted" or taken_home["cars"][2]["status"] != "accepted":
         print(f"depot take {taken_home}", file=sys.stderr)
         return 1
+    oldest = taxi_game.oldest_of_three()
+    if has_device_id(oldest):
+        print("the oldest offer went to a device", file=sys.stderr)
+        return 1
+    if oldest["offers"][0]["status"] != "accepted" or oldest["offers"][0]["call_sign"] != "T1":
+        print(f"oldest offer {oldest['offers'][0]}", file=sys.stderr)
+        return 1
+    if [offer["status"] for offer in oldest["offers"][1:]] != ["offered", "offered"]:
+        print(f"younger offers {oldest['offers']}", file=sys.stderr)
+        return 1
+    if [offer["miles"] for offer in oldest["offers"]] != [2, 4, 6]:
+        print(f"offer order {[offer['miles'] for offer in oldest['offers']]}", file=sys.stderr)
+        return 1
     if taxi_game.fares_waiting(80, 1) != 3:
         print("the next 20 seconds did not add one fare", file=sys.stderr)
         return 1
