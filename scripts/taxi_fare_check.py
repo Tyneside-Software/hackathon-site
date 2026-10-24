@@ -114,6 +114,10 @@ def main():
             "Company day, three completed bookings and one cancel: got %s, expected 2860" % company_day,
             file=sys.stderr,
         )
+    company_week = company_day * 7
+    if company_week != 20020:
+        failed = True
+        print("Company week: got %s, expected 20020" % company_week, file=sys.stderr)
     cancelled_mile = (meter + extra) + (night_meter + night_extra) + 0
     if cancelled_mile != 2370:
         failed = True
