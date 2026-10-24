@@ -76,6 +76,13 @@
       left: 0.75rem;
       bottom: 0.75rem;
     }
+    #play-follow-stop {
+      position: fixed;
+      z-index: 30;
+      left: 7.5rem;
+      bottom: 0.75rem;
+    }
+    #play-follow-stop[hidden] { display: none; }
     #play-under-map,
     #play-taxis,
     #play-signout-chip,
@@ -198,6 +205,7 @@
         <p id="play-signed-spent">Sign in again clears the spent line before the next feed.</p>
         <p id="play-signed-money">Sign in again clears the previous account's corner money before the next feed.</p>
         <p id="play-route-ahead">The page draws the rest of the stored route ahead of the car, and the chip and the list name the place at the end of the leg from the feed. Do not add a place list.</p>
+        <p id="play-follow">The player can follow one taxi, and the camera stays on it as it moves. Choosing another taxi follows that one. There is a way to stop following, so the rest of the circle can be seen.</p>
         <p id="play-locks">Sentences a test still needs stay on the page, under the map, not in front of the taxis.</p>
         <p id="play-osrm"></p>
         <p id="play-buses">This page has no bus toggle.</p>
@@ -218,6 +226,7 @@
     <p class="lede">This page is the taxi game. It shows the map, the ten taxis, and the in-game money.</p>
     <p id="play-status">The fleet runs on the box.</p>
     <button type="button" id="play-signout">Sign out</button>
+    <button type="button" id="play-follow-stop" hidden>Stop following</button>
     <p id="play-signout-chip">Sign out removes the bought car chip and shows Start when no token remains.</p>
     <form id="play-account" hidden>
       <label for="play-username">Username
@@ -242,6 +251,6 @@
 
   <script src="config.js?v=20261024-https1"></script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-  <script src="play.js?v=20261024-routeahead1"></script>
+  <script src="play.js?v=20261024-follow1"></script>
 </body>
 </html>

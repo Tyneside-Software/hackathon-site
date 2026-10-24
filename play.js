@@ -181,6 +181,7 @@
       "play-signed-spent",
       "play-signed-money",
       "play-route-ahead",
+      "play-follow",
       "play-locks",
       "play-osrm",
       "play-buses",
@@ -235,6 +236,7 @@
   const playTrailFed = new Map();
   const playAhead = [];
   let playChosen = "";
+  let playFollow = false;
   let playFeed = null;
   let playFeedEpoch = 0;
   let playFed = false;
@@ -505,6 +507,7 @@
         marker._playClick = true;
         marker.on("click", function () {
           playChosen = sign;
+          playFollow = true;
           paintPlayCars(playFeed);
         });
         playChips.set(sign, marker);
@@ -548,6 +551,7 @@
     noteToPassenger();
     noteCarJob();
     paintPlayAhead(feed);
+    followChosenTaxi(feed);
   }
 
   function paintPlayAhead(feed) {
@@ -572,6 +576,33 @@
     node.dataset.chosen = playChosen;
     node.dataset.place = "feed";
     node.dataset.click = playChosen ? "shows" : "waiting";
+  }
+
+  function noteFollow() {
+    const node = document.getElementById("play-follow");
+    const button = document.getElementById("play-follow-stop");
+    if (button) button.hidden = !playFollow;
+    if (!node) return;
+    node.dataset.follow = playFollow ? "on" : "off";
+    node.dataset.chosen = playChosen;
+    node.dataset.circle = playFollow ? "taxi" : "full";
+  }
+
+  function followChosenTaxi(feed) {
+    noteFollow();
+    if (!playFollow || !playChosen) return;
+    const cars = feed && Array.isArray(feed.cars) ? feed.cars : [];
+    const car = cars.find((row) => row && String(row.sign) === playChosen);
+    if (!car) return;
+    const here = playPlace(car, playNow());
+    if (!here) return;
+    map.panTo(here, { animate: false });
+  }
+
+  function stopPlayFollow() {
+    playFollow = false;
+    map.fitBounds(circle.getBounds());
+    noteFollow();
   }
 
   function listStatus(car) {
@@ -908,8 +939,12 @@
   }
 
   function clearPlayChips() {
+    const wasFollowing = playFollow;
     playChosen = "";
+    playFollow = false;
     clearPlayAhead();
+    if (wasFollowing) map.fitBounds(circle.getBounds());
+    noteFollow();
     playChips.forEach((marker) => map.removeLayer(marker));
     playChips.clear();
     const list = document.getElementById("play-taxi-list");
@@ -1776,6 +1811,7 @@
     noteToPassenger();
     noteCarJob();
     paintPlayAhead(playFeed);
+    followChosenTaxi(playFeed);
     playMotion = requestAnimationFrame(glidePlay);
   }
 
@@ -1891,6 +1927,8 @@
   if (playCreate) playCreate.addEventListener("click", createPlayAccount);
   const playSignOut = document.getElementById("play-signout");
   if (playSignOut) playSignOut.addEventListener("click", signOutPlay);
+  const playFollowStop = document.getElementById("play-follow-stop");
+  if (playFollowStop) playFollowStop.addEventListener("click", stopPlayFollow);
   if (!(localStorage.getItem("hackathon-empire-token") || "")) showPlayAccount();
   paintPlayBuy();
   const playBuy = document.getElementById("play-buy");
