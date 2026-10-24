@@ -104,6 +104,18 @@
         segments: [[17600, 0]],
         extras: { animals: 1 },
         status: "offered"
+      },
+      {
+        title: "Guide or hearing dog",
+        detail: "A guide or hearing dog adds 0",
+        pickup: "Grey's Monument",
+        dropOff: "Shiremoor depot",
+        requestedTime: "15:00",
+        callSign: "T1",
+        tariff: 1,
+        segments: [[17600, 0]],
+        extras: { guideOrHearingDogs: 1 },
+        status: "offered"
       }
     ].map(copyRow);
   }
