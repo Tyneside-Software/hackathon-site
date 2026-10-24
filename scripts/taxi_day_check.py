@@ -84,7 +84,14 @@ def main():
     if "device_id" in bought["taxi"] or has_device_id(rows) or has_device_id(after) or has_device_id(bought):
         print("a game row has a device_id", file=sys.stderr)
         return 1
+    if taxi_game.elapsed_seconds(0, 10000) != 10:
+        print("ten real seconds were not 10", file=sys.stderr)
+        return 1
+    if taxi_game.elapsed_seconds(5000, 6000) != 1:
+        print("the clock multiplied the seconds", file=sys.stderr)
+        return 1
     print("DAY-OK")
+    print("TIME-OK")
     return 0
 
 
