@@ -40,6 +40,7 @@
     <p id="clock"></p>
     <p id="fallback"></p>
     <p id="next-offer"></p>
+    <p id="next-fare"></p>
     <p id="short-trip"></p>
     <p id="live-fare"></p>
     <p id="fleet-move"></p>
@@ -107,15 +108,22 @@
     function paintOffers() {
       var elapsed = game.elapsedSeconds(offerStart, Date.now());
       var waiting = game.faresWaiting(elapsed, acceptedOffers);
-      var wait = game.secondsUntilFare(elapsed, acceptedOffers);
       var text = waiting === 3 ? "3 fares waiting" : waiting + " offers.";
-      if (wait !== null) text += " Next offer in " + Math.ceil(wait) + " seconds.";
+      var fareLabel = game.nextFareLabel(elapsed, acceptedOffers);
+      if (fareLabel) text += " " + fareLabel + ".";
       document.getElementById("next-offer").textContent = text;
       var live = game.waitingOffers(elapsed).slice(0, waiting);
       paintOfferRows(live.length ? live : game.waitingOffers(40));
     }
     paintOffers();
     setInterval(paintOffers, 1000);
+    document.getElementById("next-fare").textContent = game.nextFareLabel(0, 0) === "Next fare in 20"
+      && game.faresWaiting(20, 0) === 1
+      && game.nextFareLabel(20, 0) === "Next fare in 20"
+      && game.nextFareLabel(60, 0) === null
+      && game.sumPence(game.workedDay()) === -1120
+      ? "Next fare in 20. At the boundary the offer appears and the count starts again from 20. With 3 fares waiting it does not restart."
+      : "The countdown added a fare while three were waiting.";
     var sample = game.waitingOffers(40);
     var sampleTaken = game.acceptOffer(sample, depotCars);
     document.getElementById("offer-sample").textContent = sample.length === 2

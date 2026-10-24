@@ -396,6 +396,19 @@ def seconds_until_fare(elapsed_s, accepted=0):
     return 20 - remainder
 
 
+def next_fare_label(elapsed_s, accepted=0):
+    """`Next fare in` and the seconds left. None while 3 offers are waiting.
+
+    On a 20 second boundary the offer is already counted and the label
+    starts again at 20.
+    """
+    wait = seconds_until_fare(elapsed_s, accepted)
+    if wait is None:
+        return None
+    seconds = int(wait) if float(wait).is_integer() else int(wait) + 1
+    return f"Next fare in {seconds}"
+
+
 def post_live_trip(trip_id, miles, posted=()):
     """Append one fare line and one fuel line. A second completion appends nothing."""
     already = set(posted)

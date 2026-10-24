@@ -266,6 +266,18 @@ def main():
     if taxi_game.fares_waiting(80, 1) != 3:
         print("the next 20 seconds did not add one fare", file=sys.stderr)
         return 1
+    if taxi_game.next_fare_label(0, 0) != "Next fare in 20":
+        print("the countdown did not start at 20", file=sys.stderr)
+        return 1
+    if taxi_game.fares_waiting(19, 0) != 0 or taxi_game.next_fare_label(19, 0) != "Next fare in 1":
+        print("the countdown skipped a second", file=sys.stderr)
+        return 1
+    if taxi_game.fares_waiting(20, 0) != 1 or taxi_game.next_fare_label(20, 0) != "Next fare in 20":
+        print("the offer did not appear and restart at 20", file=sys.stderr)
+        return 1
+    if taxi_game.next_fare_label(60, 0) is not None or taxi_game.next_fare_label(80, 0) is not None:
+        print("the countdown restarted while 3 fares were waiting", file=sys.stderr)
+        return 1
     posted_trip = taxi_game.post_live_trip(7, 3, ())
     posted_kinds = [row["kind"] for row in posted_trip["lines"]]
     posted_amounts = [row["amount_pence"] for row in posted_trip["lines"]]
