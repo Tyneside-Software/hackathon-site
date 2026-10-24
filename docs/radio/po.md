@@ -42,6 +42,7 @@ Next: The trail fades with age. Label repo:site only. No ready label. U18 and U1
 - #677 The status says the fleet is loading. Label repo:site only. No ready label.
 - #680 The map files are cache-busted. Label repo:site only. No ready label.
 - #682 Phones and buses stay for a signed-in player. Label repo:site only. No ready label.
+- #734 Switching accounts replaces the three chips. Label repo:site only. No ready label.
 
 ## Reservoir
 
