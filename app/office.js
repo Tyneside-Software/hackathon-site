@@ -23,7 +23,8 @@
       status: row.status,
       posted: !!row.posted,
       postedPence: row.postedPence || 0,
-      driver: row.driver || ""
+      driver: row.driver || "",
+      payment: row.payment || ""
     };
   }
 
@@ -321,7 +322,8 @@
         + ". Total " + pence + ". " + penceText(pence) + ". Pickup " + row.pickup
         + ". Drop-off " + row.dropOff + ". Requested " + row.requestedTime
         + ". Vehicle " + row.callSign
-        + (row.driver ? ". Driver " + row.driver : "") + ".";
+        + (row.driver ? ". Driver " + row.driver : "")
+        + (row.payment ? ". Payment " + row.payment + ". Fare " + row.postedPence : "") + ".";
       var status = document.createElement("p");
       status.className = "office-status";
       status.textContent = row.status;
@@ -354,6 +356,21 @@
       if (row.status === "started") addButton("Complete", "completed");
       if (row.status === "offered" || row.status === "accepted" || row.status === "started") {
         addButton("Cancel", "cancelled");
+      }
+      if (row.status === "completed") {
+        ["cash", "account"].forEach(function (kind) {
+          var pay = document.createElement("button");
+          pay.type = "button";
+          pay.className = "btn btn-ghost";
+          pay.textContent = kind;
+          pay.addEventListener("click", function () {
+            row.payment = kind;
+            persistDay();
+            renderSamples();
+            renderLedger();
+          });
+          actions.appendChild(pay);
+        });
       }
       block.appendChild(copy);
       block.appendChild(actions);
