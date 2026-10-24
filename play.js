@@ -202,6 +202,46 @@
     });
   }
 
+  function showPlayAccount() {
+    const form = document.getElementById("play-account");
+    if (form) form.hidden = false;
+  }
+
+  function hidePlayAccount() {
+    const form = document.getElementById("play-account");
+    if (form) form.hidden = true;
+  }
+
+  async function signInPlay(event) {
+    event.preventDefault();
+    const usernameEl = document.getElementById("play-username");
+    const passwordEl = document.getElementById("play-password");
+    const status = document.getElementById("play-account-status");
+    const username = usernameEl ? usernameEl.value.trim() : "";
+    const password = passwordEl ? passwordEl.value : "";
+    const base = apiBase();
+    if (!base) {
+      if (status) status.textContent = "The API address is missing.";
+      return;
+    }
+    const logged = await fetch(base + "/login", {
+      method: "POST",
+      headers: { Accept: "application/json", "Content-Type": "application/json" },
+      body: JSON.stringify({ username: username, password: password })
+    });
+    const session = await logged.json().catch(function () { return null; });
+    if (!logged.ok || !session || !session.access_token) {
+      if (status) status.textContent = "Sign in failed.";
+      return;
+    }
+    localStorage.setItem("hackathon-empire-token", session.access_token);
+    localStorage.setItem("hackathon-empire-user", username);
+    if (status) status.textContent = "";
+    hidePlayAccount();
+    paintPlayStatus(null);
+    pollPlay();
+  }
+
   async function pollPlay() {
     const token = localStorage.getItem("hackathon-empire-token") || "";
     const base = apiBase();
@@ -211,12 +251,19 @@
     const res = await fetch(base + path, {
       headers: { Authorization: "Bearer " + token }
     });
+    if (res.status === 401) {
+      localStorage.removeItem("hackathon-empire-token");
+      paintPlayStatus(null);
+      showPlayAccount();
+      return;
+    }
     if (!res.ok) return;
     const data = await res.json();
     playFeed = data;
     const server = Number(data.server_now);
     if (Number.isFinite(server)) playClock = { server: server, client: Date.now() / 1000 };
     clearBusToggle();
+    hidePlayAccount();
     paintPlayStatus(data);
     paintPlayMoney(data);
     paintPlayCars(data);
@@ -280,6 +327,8 @@
     });
   }
 
+  const playAccount = document.getElementById("play-account");
+  if (playAccount) playAccount.addEventListener("submit", signInPlay);
   paintPlayStatus(null);
   setInterval(pollPlay, 2000);
   pollPlay();
