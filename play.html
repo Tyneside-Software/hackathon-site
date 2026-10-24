@@ -138,6 +138,29 @@
     #play-office p { margin: 0.2rem 0; }
     #play-office ul { margin: 0.45rem 0 0; padding-left: 1.1rem; }
     #play-office li { margin: 0.2rem 0; }
+    #play-loiter {
+      position: fixed;
+      z-index: 30;
+      right: 0.75rem;
+      bottom: 0.75rem;
+      width: min(14rem, calc(100vw - 1.5rem));
+      margin: 0;
+      padding: 0.55rem 0.7rem 0.65rem;
+      background: rgba(12, 18, 25, 0.92);
+      color: #f8fafc;
+      border-radius: 8px;
+      font: 700 13px/1.3 system-ui, sans-serif;
+    }
+    #play-loiter[hidden] { display: none; }
+    #play-loiter label { display: block; margin: 0.35rem 0 0; }
+    #play-loiter input {
+      display: block;
+      width: 100%;
+      box-sizing: border-box;
+      margin-top: 0.15rem;
+    }
+    #play-loiter button { margin-top: 0.5rem; }
+    #play-loiter-status { min-height: 1.2em; margin: 0.35rem 0 0; }
     .leaflet-tooltip.play-leg-label,
     .leaflet-tooltip.play-follow-box {
       background: rgba(12, 18, 25, 0.92);
@@ -304,6 +327,22 @@
       <ul id="play-office-rows"></ul>
       <p id="play-office-empty" hidden>No bookings.</p>
     </section>
+    <form id="play-loiter" hidden>
+      <label for="play-loiter-lat">Latitude
+        <input id="play-loiter-lat" name="lat" inputmode="decimal" autocomplete="off">
+      </label>
+      <label for="play-loiter-lng">Longitude
+        <input id="play-loiter-lng" name="lng" inputmode="decimal" autocomplete="off">
+      </label>
+      <label for="play-loiter-km">Radius in kilometres
+        <input id="play-loiter-km" name="radius_km" inputmode="decimal" autocomplete="off">
+      </label>
+      <label for="play-loiter-firm">Firm
+        <input id="play-loiter-firm" name="firm" autocomplete="off">
+      </label>
+      <button type="submit" id="play-loiter-set">Set the loiter patch</button>
+      <p id="play-loiter-status"></p>
+    </form>
     <p id="play-signout-chip">Sign out removes the bought car chip and shows Start when no token remains.</p>
     <form id="play-account" hidden>
       <label for="play-username">Username
@@ -328,6 +367,6 @@
 
   <script src="config.js?v=20261024-https1"></script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-  <script src="play.js?v=20261024-office1"></script>
+  <script src="play.js?v=20261024-loiter1"></script>
 </body>
 </html>
