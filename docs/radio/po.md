@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/208
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/211
 
-Title: Seconds remaining on the booking row. Label repo:site only. No ready label.
+Title: Three fares waiting and no fourth. Label repo:site only. No ready label.
 
-Next: Three fares waiting and no fourth
+Next: A live trip posts its fare once
