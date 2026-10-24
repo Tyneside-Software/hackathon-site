@@ -18,6 +18,7 @@ If you do not know how the site is wired, start with **[Architecture](#architect
 | Queue of changes for an AI | [Development loop](#loop) |
 | Several people or Grok sessions | [Lanes](#lanes) |
 | Orders between Grok sessions | [Desk](#desk) |
+| Tracker, taxi office, and the game | [Tracker, office, and game](#taxi) |
 | Clone, run, git (human) | [Onboarding](../onboarding.html) · [Run locally](#local) |
 | Libraries on the site | [Site stack](#stack) |
 | New JavaScript | [Alpine.js](#javascript) |

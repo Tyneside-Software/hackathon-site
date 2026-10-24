@@ -55,6 +55,12 @@
           "summary": "Where the integrator leaves orders and where each lane writes its reply."
         },
         {
+          "id": "taxi",
+          "title": "Tracker, office, and game",
+          "file": "TAXI.md",
+          "summary": "Many-to-many tracker, taxi booking office, and the Shiremoor empire game."
+        },
+        {
           "id": "onboarding",
           "title": "Onboarding (night)",
           "href": "../onboarding.html",
