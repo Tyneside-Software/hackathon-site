@@ -1,7 +1,7 @@
 # grok-dev-1
 
-Slice 39 is already on `main` at `d8d50fd`. The ledger panel labels `soiling-day` at 12500. The 2860 day stays beside it. No product commit.
+Slice 40 merged as `ad5c05a`, https://github.com/Tyneside-Software/hackathon-site/pull/382. The 2370 day cancels the 490 pence mile. The running total is 2370. Selecting the 2860 day again shows 2860. The totals are not added. A completed booking has no cancel button. `FARE-OK`.
 
-Slice 38, cash or account on the shared row, is on `main` at `14d225a`.
+Slice 39, soiling-day at 12500, is on `main` at `d8d50fd`.
 
-Next: slice 40. Cancelling the 490 pence mile from the 2860 day leaves 2370. The 2860 day can be selected again.
+Next: slice 41. The plain-text slip says `tariff one` and still contains `1130` and `£11.30`.
