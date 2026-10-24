@@ -14,6 +14,7 @@ Next: The fleet starts with ten cars at the depot. Issue #788. Label repo:api on
 - #794 The empire feed includes the money lines. Label repo:api only. No ready label.
 - #796 Driver share is half the fare. Label repo:api only. No ready label.
 - #798 Fuel is twenty pence a mile. Label repo:api only. No ready label.
+- #800 Standing is 1500 pence a car. Label repo:api only. No ready label.
 
 ### grok-dev-2
 
