@@ -438,6 +438,13 @@
     return faresWaiting(elapsedS, accepted) === 3 ? "3 fares waiting" : null;
   }
 
+  function countLabel(elapsedS, accepted) {
+    var waiting = faresWaiting(elapsedS, accepted || 0);
+    if (waiting === 3) return "3 fares waiting";
+    if (waiting === 2) return "2 fares waiting";
+    return null;
+  }
+
   function secondsUntilFare(elapsedS, accepted) {
     if (faresWaiting(elapsedS, accepted) >= 3) return null;
     if (elapsedS < 0) return 20;
@@ -530,6 +537,7 @@
     movingRow: movingRow,
     faresWaiting: faresWaiting,
     waitingLabel: waitingLabel,
+    countLabel: countLabel,
     secondsUntilFare: secondsUntilFare,
     nextFareLabel: nextFareLabel,
     postLiveTrip: postLiveTrip,

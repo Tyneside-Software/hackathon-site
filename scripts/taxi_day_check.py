@@ -264,6 +264,9 @@ def main():
     if taxi_game.fares_waiting(60, 1) != 2 or taxi_game.seconds_until_fare(60, 1) != 20:
         print("accepting a fare did not open the next 20 seconds", file=sys.stderr)
         return 1
+    if taxi_game.count_label(60, 1) != "2 fares waiting" or taxi_game.count_label(60, 0) != "3 fares waiting":
+        print("accepting one did not leave 2 fares waiting", file=sys.stderr)
+        return 1
     if taxi_game.fares_waiting(80, 1) != 3:
         print("the next 20 seconds did not add one fare", file=sys.stderr)
         return 1

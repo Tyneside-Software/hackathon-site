@@ -419,6 +419,16 @@ def waiting_label(elapsed_s, accepted=0):
     return None
 
 
+def count_label(elapsed_s, accepted=0):
+    """`3 fares waiting` at the cap. Accepting one of those says `2 fares waiting`."""
+    waiting = fares_waiting(elapsed_s, accepted)
+    if waiting == 3:
+        return "3 fares waiting"
+    if waiting == 2:
+        return "2 fares waiting"
+    return None
+
+
 def seconds_until_fare(elapsed_s, accepted=0):
     """Seconds until another offer may appear. None while 3 are waiting."""
     if fares_waiting(elapsed_s, accepted) >= 3:
