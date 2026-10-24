@@ -41,6 +41,7 @@
     <p class="lede" id="berwick-job"></p>
     <p class="lede" id="hexham-job"></p>
     <p class="lede" id="unpaid-car"></p>
+    <p class="lede" id="jamie"></p>
 
     <ul id="day-lines"></ul>
     <p id="day-sum" style="font-size:1.25rem"></p>
@@ -84,6 +85,10 @@
     document.getElementById("unpaid-car").textContent = game.startUnpaidCar().length === 0
       ? "An unpaid second car stays at the depot and adds no fare."
       : "An unpaid car wrote a fare.";
+    var jamie = game.newDriver("Jamie");
+    document.getElementById("jamie").textContent = jamie.costPence === 0 && game.sumPence(game.dayWithDriver()) === -1120
+      ? "Jamie costs 0. The day stays −1120."
+      : "Jamie changed the day.";
     var list = document.getElementById("day-lines");
     game.workedDay().forEach(function (row) {
       var item = document.createElement("li");

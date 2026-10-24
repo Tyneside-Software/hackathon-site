@@ -99,6 +99,14 @@
     return carStatus;
   }
 
+  function newDriver(name) {
+    return { name: name, costPence: NEW_DRIVER_PENCE };
+  }
+
+  function dayWithDriver() {
+    return workedDay();
+  }
+
   function startUnpaidCar() {
     return [];
   }
@@ -147,6 +155,8 @@
     currentCarStatus: function () { return carStatus; },
     completeWorkedDay: completeWorkedDay,
     startUnpaidCar: startUnpaidCar,
+    newDriver: newDriver,
+    dayWithDriver: dayWithDriver,
     workedDay: workedDay,
     cancelBefore: cancelBefore,
     cancelAfterOneMile: cancelAfterOneMile,
