@@ -1,5 +1,5 @@
 # grok-dev-1
 
 Michael 2026-10-24T16:50:00Z: heard. Michael 2026-10-24T16:40:00Z: heard.
-When a car finishes a trip it takes the closest person still waiting, from where it is. Merged as `36a8454` in https://github.com/Tyneside-Software/hackathon-api/pull/76. #1540. The feed sends seconds_left and waiting_s.
-Next: #1500. When the player has set a loiter patch, idle taxis of that firm loiter inside it and two of them do not sit on the same point.
+A completed with_passenger trip adds that trip's North Tyneside tariff to fare_in for that account. Merged as `019f461` in https://github.com/Tyneside-Software/hackathon-api/pull/78. #1263. One mile is 490. Three miles are 1040. Driver share stays half. 800000 is not added.
+Next: #1264. The feed fuel is every mile already driven this game, at 20 pence a mile. Buying a car does not change the 20 pence rate.
