@@ -60,6 +60,7 @@ Not assigned. Do not start these.
 - #866 T9 is pink on the feed. Label repo:api only. No ready label.
 - #868 T10 is yellow on the feed. Label repo:api only. No ready label.
 - #870 An unpaid car stays on the play depot pin. Label repo:site only. No ready label.
+- #873 Half of 1040 is 520 on the driver share. Label repo:api only. No ready label.
 
 ## Next for me
 
