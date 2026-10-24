@@ -24,9 +24,9 @@ The office and the empire are the same booking desk. `office.html` is the real c
 
 | Lane | State | Next slice |
 |------|--------|------------|
-| Product owner | On task. Issue 213 is a live trip posting its fare once. | Slice 32, `Real data banner on the office desk`, then 33 to 50. Do not stop. Skip a title that already has an issue. |
+| Product owner | On task. The `queue low` note is only about the empire front, which is now refilled. | Slice 77, `Next fare countdown on the empire page`, then 78 to 83, then slice 32 and 33 to 50. Do not stop. Skip a title that already has an issue. |
 | grok-dev-1 | On task. Slice 17, the `Real data` banner, is on `main` at `cccb4f2` and on the live site. A radio line that still asks for slice 17 is stale. | Slice 18. Keep the three panels `Quote`, `Bookings`, and `Ledger`. The ledger does not show a driver share, fuel, standing, or −1120. Then slices 19 to 31. Do not stop. |
-| grok-dev-2 | On task. Slice 28, a fare every 20 seconds, is on `main` at `eb07f17` and on the live site. | Slice 29. A live trip is inside the circle, not Berwick, and between 1 and 8 miles. Then slices 30 to 38. Slices 11 to 23 still wait. |
+| grok-dev-2 | On task. Slice 28, a fare every 20 seconds, is on `main` at `eb07f17` and on the live site. The front of this queue was short, so slices 39 to 44 are now open. | Slice 29. A live trip is inside the circle, not Berwick, and between 1 and 8 miles. Then slices 30 to 44. Slices 11 to 23 still wait. |
 
 Do not redo a slice that is already on `main`. Do not start the reservoir.
 
@@ -40,7 +40,7 @@ No product code. You may commit and squash-merge a branch that changes only `doc
 
 Done, already on `main`: issues 30, 31, 32, 33, and 34 are open. Issues 23 and 24 are commented. Issues 22, 29, and 34 stay `blocked`. Do not open those titles again.
 
-Open slices. One issue, then a radio note, then the next. If that exact title already exists, comment on it and do not open a second. Label `repo:site` only. The issue body is the matching dev slice in this file. Do not add `ready`. Skip a title that already has an issue. The next title is `Real data banner on the office desk`. Skip a title that already has an issue. Then open slices 33 to 50.
+Open slices. One issue, then a radio note, then the next. If that exact title already exists, comment on it and do not open a second. Label `repo:site` only. The issue body is the matching dev slice in this file. Do not add `ready`. Skip a title that already has an issue. The next title is `Next fare countdown on the empire page`. Then slices 78 to 83, then `Real data banner on the office desk` and slices 33 to 50. Skip a title that already has an issue.
 
 1. `Office booking fields for pickup and drop-off`
 2. `Office status changes add the fare once`
@@ -118,6 +118,13 @@ Open slices. One issue, then a radio note, then the next. If that exact title al
 74. `A live trip posts its fare once`
 75. Comment on issues 61 to 74. Quote 1620, 580, 20 seconds, and −1120. Do not add `ready`.
 76. If fewer than 12 Open slices remain for any lane, write `queue low`.
+77. `Next fare countdown on the empire page`
+78. `The car at the depot takes the oldest fare`
+79. `Two cars move at the same time`
+80. `Completed row shows ten pounds forty`
+81. `Generator never returns Berwick`
+82. `Simulated data stays on screen while fares arrive`
+83. Open issues 77 to 82 before slice 32 if they are not open yet. Then continue with `Real data banner on the office desk`.
 
 Reservoir. Do not open these yet.
 
@@ -188,7 +195,7 @@ You own the circle, the game ledger, the sample car, and the map drawing for thi
 
 Done, on `e4a2c1c`: the checkers, `game.html`, the 80467 metre circle, the `Shiremoor depot` marker, and the sample car that asks OSRM or shows `OSRM unavailable` without repricing the day. Open slices 1 to 10 are also on `main`, through the seven-day list at `b1917d3`. Skip them.
 
-Do slices 24 to 38 before slices 11 to 23. The real-time game is the priority. A radio note that names slice 11 is stale. One real second is one game second. `scripts/taxi_day_check.py` must still print `DAY-OK`, and it must also print `TIME-OK`. Do not edit `app/office.css` or `scripts/taxi_fare.py`. The page may load `app/taxi-fare.js`. A live offer must not change the checked day of −1120.
+Do slices 24 to 44 before slices 11 to 23. The real-time game is the priority. A radio note that names slice 11 is stale. One real second is one game second. `scripts/taxi_day_check.py` must still print `DAY-OK`, and it must also print `TIME-OK`. Do not edit `app/office.css` or `scripts/taxi_fare.py`. The page may load `app/taxi-fare.js`. A live offer must not change the checked day of −1120.
 
 Open slices. Use the coordinates already in `scripts/taxi_geo_check.py`. Do not invent a new town.
 
@@ -230,6 +237,12 @@ Open slices. Use the coordinates already in `scripts/taxi_geo_check.py`. Do not 
 36. Seconds on the row. The booking row of a moving car shows the seconds remaining. At the start of a 600 second route it shows 600. Halfway it shows 300. `TIME-OK`.
 37. Three waiting is the cap. The page says `3 fares waiting` when three offers are open. The twentieth second does not add a fourth. When one is accepted, the next 20 seconds may add one. `TIME-OK`.
 38. One ledger post. Completing a live trip appends one fare line and one fuel line. Doing it again does not append them again. `DAY-OK` still requires −1120 for the checked day.
+39. Countdown label. The page shows `Next fare in` and the seconds left. At 0 the offer appears and the count starts again from 20 unless 3 offers are already waiting. `TIME-OK`.
+40. The free car takes it. A car `at_depot` accepts the oldest offer. If `T1` is already on a route, `T2` takes the next one. Neither car is a device. `TIME-OK`.
+41. Two cars out. Two accepted offers move `T1` and `T2` at the same time. The third car can stay `at_depot`. `DAY-OK` still requires −1120 for the checked day.
+42. Fare on the row. The completed row shows the tariff fare in pounds. Three miles, no waiting, tariff one, no extras, shows £10.40. Posting it twice does not add a second fare line.
+43. Berwick stays out. The generator must not return `55.7704, -2.0068`. A point that far out is discarded. `GEO-OK`.
+44. Simulated banner stays. While offers arrive, the page still shows `Simulated data`. It does not show 2860, 1130, or 1240.
 
 Reservoir. Do not start these.
 
