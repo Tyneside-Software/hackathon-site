@@ -1330,6 +1330,46 @@ def route_and_trail(router: str, script: str) -> list[tuple[bool, str]]:
     return [(has_post, route_line), (not skips, trail_line)]
 
 
+def cash_pence_lines(empire: str, script: str) -> list[tuple[bool, str]]:
+    """Whether GET /v1/empire returns cash_pence and the corner panel shows it.
+
+    The text is origin/main. This does not read the box. A comment outside
+    snapshot, or the word sitting in play.js away from the money panel, does
+    not count.
+    """
+    source = empire or ""
+    snap_at = source.find("def snapshot")
+    if snap_at < 0:
+        snap = ""
+    else:
+        snap_end = source.find("\ndef ", snap_at + 10)
+        snap = source[snap_at:snap_end if snap_end > snap_at else None]
+    returns = '"cash_pence"' in snap or "'cash_pence'" in snap
+    page = script or ""
+    money_at = page.find("function paintPlayMoney")
+    if money_at < 0:
+        money = ""
+    else:
+        money_end = page.find("\n  function ", money_at + 10)
+        money = page[money_at:money_end if money_end > money_at else None]
+    reads_feed = (
+        "feed.cash_pence" in money
+        or 'feed["cash_pence"]' in money
+        or "feed['cash_pence']" in money
+        or ('"cash_pence"' in money and "feed[key]" in money)
+        or ("'cash_pence'" in money and "feed[key]" in money)
+    )
+    if returns:
+        feed_line = "Origin GET /v1/empire returns cash_pence."
+    else:
+        feed_line = "Origin GET /v1/empire does not return cash_pence."
+    if reads_feed:
+        panel_line = "The corner panel in play.js shows cash_pence when the feed has it."
+    else:
+        panel_line = "The corner panel in play.js does not show cash_pence when the feed has it."
+    return [(returns, feed_line), (reads_feed, panel_line)]
+
+
 PAGE_SCRIPT = r"""
 (function () {
   var catalogEl = document.getElementById("catalog");
@@ -2024,6 +2064,10 @@ def build_page() -> str:
         f'<li class="{"done" if ok else "wait"}">{html.escape(text)}</li>'
         for ok, text in route_and_trail(empire_router, play_script)
     )
+    cash_html = "".join(
+        f'<li class="{"done" if ok else "wait"}">{html.escape(text)}</li>'
+        for ok, text in cash_pence_lines(empire_source, play_script)
+    )
 
     chatter = radio_chatter()
     lane_name = {agent["key"]: agent["name"] for agent in AGENTS}
@@ -2427,6 +2471,8 @@ def build_page() -> str:
         <ol class="steps">{feed_html}</ol>
         <p class="fine">Purchase route and bought trail on main.</p>
         <ol class="steps">{route_html}</ol>
+        <p class="fine">cash_pence on the feed and in the corner panel.</p>
+        <ol class="steps">{cash_html}</ol>
         <div class="objective api" style="padding:0.7rem 0 0;border:0;background:transparent">
           <p class="fine">Queue depth</p>
           {depth_html}
