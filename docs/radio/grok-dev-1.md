@@ -1,5 +1,5 @@
 # grok-dev-1
 
-Issue 970 merged as `6ea457b` in https://github.com/Tyneside-Software/hackathon-api/pull/32. ensure_game twice still leaves T1 through T10 and does not add T11.
+Issue 973 merged as `73f7254` in https://github.com/Tyneside-Software/hackathon-api/pull/33. Two accounts with different bearings keep ten distinct pickups.
 
-Next: 973. The username still shifts the ten-car bearing.
+Next: 975. Ten-car pings older than ten minutes leave the trail.
