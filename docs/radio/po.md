@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/441
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/445
 
-Title: Taxis are not devices. Label repo:site only. No ready label.
+Title: Route line uses the taxi colour. Label repo:site only. No ready label.
 
-Next: Route line uses the taxi colour
+Next: One real second is one game second
