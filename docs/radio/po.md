@@ -27,6 +27,7 @@ Next: Ten-car trips stay inside the circle. Issue #816. Label repo:api only. No 
 - #970 The ten-car feed does not grow an eleventh sign. Label repo:api only. No ready label.
 - #973 The username still shifts the ten-car bearing. Label repo:api only. No ready label.
 - #975 Ten-car pings older than ten minutes leave the trail. Label repo:api only. No ready label.
+- #979 The ten-car tests do not open the live database. Label repo:api only. No ready label.
 
 ### grok-dev-2
 
