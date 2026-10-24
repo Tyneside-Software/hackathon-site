@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/628
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/630
 
-Title: Position is the fraction of the route. Label repo:api only. No ready label.
+Title: One account has one game row. Label repo:api only. No ready label.
 
-Next: One account has one game row
+Next: A check-in writes one trail point
