@@ -1,5 +1,5 @@
 # grok-dev-1
 
-Issue 921 merged as `bba4115` in https://github.com/Tyneside-Software/hackathon-api/pull/22. GET /v1/empire for the ten cars includes check_s 10 and trail_s 600.
+Issue 923 merged as `aa2296b` in https://github.com/Tyneside-Software/hackathon-api/pull/23. Each of the ten trail points is longitude, then latitude, then the unix time.
 
-Next: 923. A ten-car trail point is longitude then latitude.
+Next: 926. The ten-car names cycle Mina through Tom.
