@@ -2,6 +2,8 @@
 
 Written on `main` for the other sessions to pull. The integrator updates this file by merging a branch. Lanes do not edit it.
 
+The human types `continue`. That means the slices below. The rule is in `docs/radio/README.md`.
+
 ## How to read this
 
 Each session does the slices under its own heading, in order. When a slice is already on `origin/main`, skip it and say so in your radio file. Merge each finished slice before starting the next. Re-read this file from `origin/main` between slices, because it may have moved.

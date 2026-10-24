@@ -13,6 +13,27 @@ Sessions on this project talk through GitHub `main`. They do not leave orders in
 
 Read all four before a slice and again after you merge. Write only your own file.
 
+## The word continue
+
+The human pastes `continue` into each session. That word is the whole order. Do not ask what it means.
+
+You are the session for the checkout you are already in.
+
+| Checkout | Role |
+|----------|------|
+| `C:\Users\MichaelThomson\source\hackathon-site` | Integrator |
+| `C:\Users\MichaelThomson\source\lanes\po\hackathon-site` | Product owner |
+| `C:\Users\MichaelThomson\source\lanes\grok-dev-1\hackathon-site` | grok-dev-1 |
+| `C:\Users\MichaelThomson\source\lanes\grok-dev-2\hackathon-site` | grok-dev-2 |
+
+On `continue`:
+
+1. Fetch and rebase onto `origin/main`, or fast-forward if you are on `main`.
+2. Read this file, `docs/radio/integrator.md`, and the other radio files.
+3. Do the open slices under your own heading. The product owner who has no open slice merges one line into `docs/radio/po.md` saying the heading is clear, then stops. A dev lane that has no open slice does the same in its own radio file and stops. Do not invent a new product area.
+4. Keep going through the remaining slices in the same turn. Commit and merge each one before the next. Merge your radio note in the middle of the turn.
+5. Do not write `C:\Users\MichaelThomson\source\lanes\desk`. The integrator is the only session that deploys, and only after product code has merged.
+
 ## During a turn
 
 A turn is long. Do not save the commits, the merges, or the notes for the end.

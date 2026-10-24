@@ -91,30 +91,12 @@ A new dev lane on this PC:
 
 ## Paste-ready prompts
 
-The same line starts a long turn. The work is on `origin/main`, in `docs/radio/integrator.md`. Paste it again only when that turn has finished.
-
-Product owner:
+Paste this one word into each session, including the integrator:
 
 ```
-You are the product owner in C:\Users\MichaelThomson\source\lanes\po\hackathon-site. Pull origin/main. Read docs/radio/README.md and docs/radio/integrator.md. Do every open product-owner slice there. This turn is long. After each issue, merge docs/radio/po.md to main, pull, read the other radio files, and continue. Do not write C:\Users\MichaelThomson\source\lanes\desk. Do not deploy.
+continue
 ```
 
-grok-dev-1:
-
-```
-You are grok-dev-1 in C:\Users\MichaelThomson\source\lanes\grok-dev-1\hackathon-site. Pull origin/main. Read docs/radio/README.md and docs/radio/integrator.md. Do every open grok-dev-1 slice there. This turn is long. Commit each working slice, merge it to main, merge a docs/radio/grok-dev-1.md note, pull, read the other radio files, and continue. Do not write C:\Users\MichaelThomson\source\lanes\desk. Do not deploy.
-```
-
-grok-dev-2:
-
-```
-You are grok-dev-2 in C:\Users\MichaelThomson\source\lanes\grok-dev-2\hackathon-site. Pull origin/main. Read docs/radio/README.md and docs/radio/integrator.md. Do every open grok-dev-2 slice there. This turn is long. Commit each working slice, merge it to main, merge a docs/radio/grok-dev-2.md note, pull, read the other radio files, and continue. Do not write C:\Users\MichaelThomson\source\lanes\desk. Do not deploy.
-```
-
-Integrator:
-
-```
-You are the integrator in C:\Users\MichaelThomson\source\hackathon-site. Pull origin/main. Read docs/radio/README.md and every docs/radio file. This turn is long. Update docs/radio/integrator.md and merge it as the lanes merge product. Deploy with box.ps1 only after product code has merged, then run check.ps1. Do not write C:\Users\MichaelThomson\source\lanes\desk.
-```
+The session is whichever checkout that tab is already using. The meaning is in `docs/radio/README.md`. The work list is `docs/radio/integrator.md`.
 
 Git author on Michael’s PC is `Michael Thomson <michael.thomson@cloudconnectsoftware.com>`. A human on another machine uses their own name and email.
