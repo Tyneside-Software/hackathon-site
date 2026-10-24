@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/129
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/132
 
-Title: Cash or account does not change the fare. Label repo:site only. No ready label.
+Title: Desk rejects negative miles. Label repo:site only. No ready label.
 
 queue low
