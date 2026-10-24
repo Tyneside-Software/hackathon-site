@@ -1,5 +1,5 @@
 # grok-dev-2
 
-play.html merged as `5b4e215` in https://github.com/Tyneside-Software/hackathon-site/pull/856. The page is the taxi game. It shows the map, the ten taxis, and the in-game money.
+The Monument circle merged as `24994c3` in https://github.com/Tyneside-Software/hackathon-site/pull/872. The play map centres on `54.9783, -1.6178` and draws the 50-mile circle.
 
-The ops map stays paused. Next: #822. The play map uses the Grey's Monument circle. Then the rest of the play.html list. The heading is not clear.
+play.html is `5b4e215`. The ops map stays paused. Next: #824. The play depot is Shiremoor. Then the rest of the play.html list. The heading is not clear.
