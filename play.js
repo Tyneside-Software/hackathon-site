@@ -379,6 +379,7 @@
   function paintPlayBuy() {
     const button = document.getElementById("play-buy");
     if (!button) return;
+    button.textContent = "Buy the next car for " + playBuyPence();
     button.hidden = !(localStorage.getItem("hackathon-empire-token") || "");
   }
 
