@@ -1401,6 +1401,48 @@ def buy_hide_lines(script: str) -> list[tuple[bool, str]]:
     return [(hides, line)]
 
 
+def spent_line_lines(script: str) -> list[tuple[bool, str]]:
+    """Whether play.js shows 800000 pence spent only when the feed lists T11.
+
+    The text is origin/main. This does not read the box. A textContent
+    assignment inside paintPlaySpent is the check. A note elsewhere does
+    not count.
+    """
+    page = script or ""
+    start = page.find("function paintPlaySpent")
+    if start < 0:
+        body = ""
+    else:
+        later = page.find("\n  function ", start + 10)
+        later_async = page.find("\n  async function ", start + 10)
+        ends = [item for item in (later, later_async) if item > start]
+        stop = min(ends) if ends else len(page)
+        body = page[start:stop]
+    found = False
+    gated = True
+    rows = body.splitlines()
+    for index, row in enumerate(rows):
+        if "textContent" not in row:
+            continue
+        if "800000" not in row and "playBuyPence" not in row and "pence spent" not in row:
+            continue
+        found = True
+        previous = ""
+        for back in range(index - 1, -1, -1):
+            if rows[back].strip():
+                previous = rows[back]
+                break
+        gate = row + "\n" + previous
+        if "feedListsT11" not in gate and "listed" not in gate:
+            gated = False
+    shows = found and gated
+    if shows:
+        line = "play.js shows 800000 pence spent only when the feed lists T11."
+    else:
+        line = "play.js does not show 800000 pence spent only when the feed lists T11."
+    return [(shows, line)]
+
+
 PAGE_SCRIPT = r"""
 (function () {
   var catalogEl = document.getElementById("catalog");
@@ -2103,6 +2145,10 @@ def build_page() -> str:
         f'<li class="{"done" if ok else "wait"}">{html.escape(text)}</li>'
         for ok, text in buy_hide_lines(play_script)
     )
+    spent_html = "".join(
+        f'<li class="{"done" if ok else "wait"}">{html.escape(text)}</li>'
+        for ok, text in spent_line_lines(play_script)
+    )
 
     chatter = radio_chatter()
     lane_name = {agent["key"]: agent["name"] for agent in AGENTS}
@@ -2510,6 +2556,8 @@ def build_page() -> str:
         <ol class="steps">{cash_html}</ol>
         <p class="fine">Buy control once the feed lists T11.</p>
         <ol class="steps">{buy_html}</ol>
+        <p class="fine">Spent line once the feed lists T11.</p>
+        <ol class="steps">{spent_html}</ol>
         <div class="objective api" style="padding:0.7rem 0 0;border:0;background:transparent">
           <p class="fine">Queue depth</p>
           {depth_html}
