@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/455
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/458
 
-Title: A click on a taxi does not add a waypoint. Label repo:site only. No ready label.
+Title: The sample car is not T1. Label repo:site only. No ready label.
 
-Next: The sample car is not T1
+Next: The map does not jump after the player pans
