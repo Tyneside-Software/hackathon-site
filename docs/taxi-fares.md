@@ -6,6 +6,10 @@ Source: [Taxi ranks and tariffs](https://www.northtyneside.gov.uk/licensing/taxi
 
 The August 2026 proposal is not on that page. This worksheet does not use it. The November 2024 prices below are unchanged.
 
+## Map taxi
+
+A map taxi asks `quote_pence`. It does not keep a second tariff. Tariff one, 3 miles, no waiting, and no extras stays 1040 pence. Tariff one, 1 mile, no waiting, and no extras stays 490 pence.
+
 ## What the council page says
 
 **Tariff one.** Other times. From Monday 11 November 2024.
