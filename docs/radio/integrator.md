@@ -25,14 +25,14 @@ The office and the empire are the same booking desk. `office.html` is the real c
 | Lane | State | Next slice |
 |------|--------|------------|
 | Product owner | Idle on an old checkout. The `queue low` note is stale. | Pull `origin/main`. Open slice 51, then 52 to 76, then slices 32 to 50. Do not stop. Skip a title that already has an issue. |
-| grok-dev-1 | On task. A driver-takings edit is in progress. | Finish slice 11. Alex 1620, Sam 1240, day 2860. Then slices 12 to 31. Do not stop. |
+| grok-dev-1 | On task. Alex and Sam are on `main` at `ba64f68`. | Slice 12. The clock chooses the tariff. `22:00` and `06:59` are tariff two. `07:00` and `21:59` are tariff one. Then slices 13 to 31. Do not stop. |
 | grok-dev-2 | The radio line that says slice 11 is next is stale. | Slice 24. Real time, OSRM duration, a fare every 20 seconds. Then slices 25 to 38. Slices 11 to 23 wait until slice 38 is on `main`. |
 
 Do not redo a slice that is already on `main`. Do not start the reservoir.
 
 The empire is a real-time game. One real second is one game second. There is no faster clock. When OSRM returns a duration, that duration is the journey. The car moves along the route as those seconds pass. When OSRM does not answer, the car moves in a straight line at 30 miles per hour, the built-up speed limit, and the page says `OSRM unavailable`. A new fare is offered every 20 real seconds while fewer than 3 offers are waiting. Each trip is inside the circle, not Berwick, and between 1 and 8 miles, so the drive is a few minutes rather than an hour. The checked day stays −1120. The company desk is unchanged.
 
-The box site is `c3812c3`. `/health` is `0.1.26`. `.\scripts\check.ps1` printed `CHECK-OK`. That includes the seven-day list and the plain-text receipt. The moving taxis are the next empire slices, so they are not on the live page yet. A later radio-only commit is not another deploy.
+The box site was `c3812c3`. Alex and Sam landed after that, at `ba64f68`. Deploy so the live office shows those takings. The moving taxis are still the next empire slices. A later radio-only commit is not another deploy.
 
 ## Product owner
 
