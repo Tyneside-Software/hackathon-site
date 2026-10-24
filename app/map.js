@@ -1434,9 +1434,9 @@
   renderStops();
 
   const TAXI_CARS = [
-    { sign: "T1", colour: "#f5b942", bearing: 210, miles: 2 },
-    { sign: "T2", colour: "#38bdf8", bearing: 250, miles: 3 },
-    { sign: "T3", colour: "#4ade80", bearing: 175, miles: 2 },
+    { sign: "T1", colour: "#f5b942", bearing: 210, miles: 2, spread: 0 },
+    { sign: "T2", colour: "#38bdf8", bearing: 250, miles: 3, spread: 40 },
+    { sign: "T3", colour: "#4ade80", bearing: 175, miles: 2, spread: 80 },
   ];
   const TAXI_NAMES = ["Mina", "Owen", "Priya", "Jack", "Helen", "Tom"];
   let taxiNameAt = 0;
@@ -1448,6 +1448,9 @@
     colour: spec.colour,
     bearing: spec.bearing,
     miles: spec.miles,
+    spread: spec.spread,
+    street: "",
+    steps: [],
     marker: null,
     line: null,
     pin: null,
@@ -1561,6 +1564,27 @@
     });
   }
 
+  function routeSteps(route) {
+    const steps = [];
+    (route.legs || []).forEach((leg) => {
+      (leg.steps || []).forEach((step) => {
+        steps.push({ name: step.name || "", duration: step.duration || 0 });
+      });
+    });
+    return steps;
+  }
+
+  function streetAt(steps, elapsed) {
+    let walked = 0;
+    let name = "";
+    for (let i = 0; i < steps.length; i += 1) {
+      if (steps[i].name) name = steps[i].name;
+      walked += steps[i].duration;
+      if (walked >= elapsed && name) return name;
+    }
+    return name;
+  }
+
   function runLeg(car, coords, durationS, token, onDone) {
     if (token !== car.token || !taxisOn) return;
     ensureTaxi(car);
@@ -1573,9 +1597,14 @@
       const remaining = Math.max(0, duration - elapsed);
       const place = placeOnRoute(coords, duration, Math.min(elapsed, duration));
       car.marker.setLatLng(place);
+      if (car.steps && car.steps.length) {
+        const named = streetAt(car.steps, elapsed);
+        car.street = named || ("line " + car.sign);
+      }
+      const street = car.street ? " · " + car.street : "";
       const text = car.status === "with_passenger" && car.passenger
-        ? car.passenger + " · " + car.sign + " · " + Math.ceil(remaining) + "s"
-        : taxiLabel(car) + " · " + Math.ceil(remaining) + "s";
+        ? car.passenger + " · " + car.sign + street + " · " + Math.ceil(remaining) + "s"
+        : taxiLabel(car) + street + " · " + Math.ceil(remaining) + "s";
       const tip = car.marker.getTooltip();
       if (tip) tip.setContent(text);
       else car.marker.bindTooltip(text, { permanent: true, direction: "right" });
@@ -1595,7 +1624,7 @@
     car.status = status;
     paintTaxiList(true);
     const joined = [from, to].map((point) => point[1].toFixed(6) + "," + point[0].toFixed(6)).join(";");
-    fetch(OSRM + joined + "?overview=full&geometries=geojson")
+    fetch(OSRM + joined + "?overview=full&geometries=geojson&steps=true")
       .then((res) => {
         if (!res.ok) throw new Error("HTTP " + res.status);
         return res.json();
@@ -1605,12 +1634,16 @@
         const route = data.routes && data.routes[0];
         if (!route) throw new Error("no route");
         car.osrm = true;
+        car.steps = routeSteps(route);
+        car.street = streetAt(car.steps, 0) || ("line " + car.sign);
         const coords = route.geometry.coordinates.map(([lng, lat]) => [lat, lng]);
         runLeg(car, coords, route.duration, token, onDone);
       })
       .catch(() => {
         if (token !== car.token || !taxisOn) return;
         car.osrm = false;
+        car.steps = [];
+        car.street = "line " + car.sign;
         paintTaxiList(true);
         runLeg(car, [from, to], fallbackDuration([from, to]), token, onDone);
       });
@@ -1619,6 +1652,8 @@
   function markAtDepot(car) {
     car.status = "at_depot";
     car.passenger = null;
+    car.street = "";
+    car.steps = [];
     if (car.marker) {
       car.marker.setLatLng(DEPOT);
       const home = car.sign + " · at depot";
@@ -1644,8 +1679,9 @@
     if (!taxisOn) return;
     const token = car.token;
     car.bearing = inlandBearing(car.bearing + 37);
-    const pickup = destinationPoint(DEPOT, car.bearing, 1.2);
-    const dropoff = destinationPoint(pickup, inlandBearing(car.bearing + 45), car.miles);
+    const pickupBearing = inlandBearing(car.bearing + car.spread);
+    const pickup = destinationPoint(DEPOT, pickupBearing, 1.2);
+    const dropoff = destinationPoint(pickup, inlandBearing(pickupBearing + 45), car.miles);
     car.passenger = nextPassenger();
     showPassenger(car, pickup);
     ensureTaxi(car);
