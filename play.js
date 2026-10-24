@@ -315,6 +315,57 @@
     clearPlayTrails();
     showPlayAccount();
     paintPlayStatus(null);
+    paintPlayBuy();
+  }
+
+  function playBuyPence() {
+    return 800000;
+  }
+
+  function paintPlayBuy() {
+    const button = document.getElementById("play-buy");
+    if (!button) return;
+    button.hidden = !(localStorage.getItem("hackathon-empire-token") || "");
+  }
+
+  async function buyPlayCar() {
+    const status = document.getElementById("play-buy-status");
+    const token = localStorage.getItem("hackathon-empire-token") || "";
+    const base = apiBase();
+    if (!token || !base) {
+      if (status) status.textContent = "";
+      showPlayAccount();
+      return;
+    }
+    let res;
+    try {
+      res = await fetch(base + "/v1/empire/buy", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + token
+        },
+        body: JSON.stringify({ pence: playBuyPence() })
+      });
+    } catch (err) {
+      if (status) status.textContent = "Buy failed.";
+      return;
+    }
+    if (res.status === 401) {
+      localStorage.removeItem("hackathon-empire-token");
+      paintPlayStatus(null);
+      showPlayAccount();
+      keepPlayMap();
+      paintPlayBuy();
+      return;
+    }
+    if (!res.ok) {
+      if (status) status.textContent = "Buy failed.";
+      return;
+    }
+    if (status) status.textContent = "";
+    pollPlay();
   }
 
   async function createPlayAccount() {
@@ -447,6 +498,7 @@
       paintPlayStatus(null);
       showPlayAccount();
       keepPlayMap();
+      paintPlayBuy();
       return;
     }
     if (!res.ok) {
@@ -462,6 +514,7 @@
     clearPhoneList();
     clearPlaceStops();
     hidePlayAccount();
+    paintPlayBuy();
     paintPlayStatus(data);
     paintPlayMoney(data);
     playFed = true;
@@ -548,6 +601,9 @@
   const playSignOut = document.getElementById("play-signout");
   if (playSignOut) playSignOut.addEventListener("click", signOutPlay);
   if (!(localStorage.getItem("hackathon-empire-token") || "")) showPlayAccount();
+  paintPlayBuy();
+  const playBuy = document.getElementById("play-buy");
+  if (playBuy) playBuy.addEventListener("click", buyPlayCar);
   paintPlayStatus(null);
   clearStandInTaxis();
   setInterval(pollPlay, 2000);
