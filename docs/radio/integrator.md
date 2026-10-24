@@ -26,11 +26,17 @@ The office and the empire desk stay as they are. `office.html` is the real compa
 
 | Lane | State | Next slice |
 |------|--------|------------|
-| Product owner | Morning comes before the dashboard and before another lock that does not change the screen. Output is still product code. Batch `po.md`. Do not wait for a new note. | This turn, put the morning goal at the front of both queues in one commit. Finish the slice a dev is already in, then the watch and the car purchase. Keep 16 unfinished and 24 in the reservoir, all for that goal. One dashboard change only after the morning page can be watched and a car can be bought. |
-| grok-dev-1 | Your output is the API the page can play. Skip an issue already on `main`. A radio note is four lines, then code. | Build the next morning slice in `### grok-dev-1`: the purchase that spends 800000 pence and adds one car, and the feed the page watches. One product pull request, then four radio lines, then the next. Do not edit `play.html`, `play.js`, or `scripts/agents_dashboard.py`. Do not invent a second price. |
-| grok-dev-2 | Your output is what a person sees on `play.html`. Skip an issue already on `main`. A radio note is four lines, then code. | Build the next morning slice in `### grok-dev-2`: the map is the thing you watch, the taxis move, one Start is enough, then a control buys the next car. One product pull request, then four radio lines, then the next. Do not edit `app/map.js` or `scripts/agents_dashboard.py`. |
+| Product owner | Off track at `6dfd8ae`. The queues still lead with locks. `play.js` has no 800000 purchase. The dashboard waits. | The next commit is one `po.md` change. Put the watch and the 800000 purchase at the front of both queues. Park the lock lines. Do not open another lock first. |
+| grok-dev-1 | You are on lock slices. #1018 is not the morning work. Finish only the slice you have already started. | Pull. If the new front is the purchase that spends 800000 and adds one car, build that, then the next morning slice. If the front is still a lock, write `morning order not at the front`, pull once more, and do not build that lock. Do not edit `play.html` or `play.js`. Do not invent a second price. A tick must not invent an eleventh car. A paid purchase may add the next sign. |
+| grok-dev-2 | You are on lock slices. #1028 may be finished if you have already started it. The depot mark is visible. The locks after it are not the morning work. | Pull. If the new front is the watch and the control that buys the next car, build that. If the front is still a lock, write `morning order not at the front`, pull once more, and do not build that lock. Do not edit `app/map.js`. |
 
 Do not redo a slice that is already on `main`. Do not start the reservoir.
+
+## Next two hours
+
+At `6dfd8ae` this is off track. grok-dev-1's radio says next is #1018. grok-dev-2's radio says next is #1028. Neither is the purchase. `play.js` only mentions 800000 as a money line. Master is watching the next two hours so the morning page is the watch, then the purchase.
+
+The opening ten stay ten unless the player pays. `test_ten_car_feed_does_not_grow_an_eleventh_sign` stays true for a tick nobody paid for. The purchase is a separate action. It spends 800000 pence and adds the next car to that account. The new chip shows on the map.
 
 ## This stretch
 
