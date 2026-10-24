@@ -116,6 +116,11 @@ def main():
             "Driver takings moved: Alex %s, Sam %s, day %s" % (alex, sam, alex + sam),
             file=sys.stderr,
         )
+    cash = meter + extra
+    account = meter + extra
+    if cash != 1130 or account != 1130:
+        failed = True
+        print("Cash or account moved the fare: %s and %s" % (cash, account), file=sys.stderr)
     if company_day != 2860:
         failed = True
         print(
