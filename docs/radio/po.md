@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/345
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/347
 
-Title: Phones and buses stay while a car drives home. Label repo:site only. No ready label.
+Title: Pram and bag stays off the company day. Label repo:site only. No ready label.
 
-Next: Pram and bag stays off the company day
+Next: Drive home shows seconds remaining
