@@ -446,6 +446,20 @@ def post_live_trip(trip_id, miles, posted=()):
     }
 
 
+def completed_fare_row(trip_id, miles, posted=()):
+    """The completed row shows the tariff fare in pounds. A second post adds nothing."""
+    posted_trip = post_live_trip(trip_id, miles, posted)
+    fare = live_fare_pence(miles, 0)
+    return {
+        "status": "completed",
+        "miles": miles,
+        "fare_pence": fare,
+        "fare_pounds": fare_pounds(fare),
+        "lines": posted_trip["lines"],
+        "posted": posted_trip["posted"],
+    }
+
+
 def position_on_route(points, duration_s, elapsed_s):
     """Place on a polyline. The checker passes points and a duration. It does not call OSRM."""
     if not points:

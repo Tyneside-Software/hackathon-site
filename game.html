@@ -43,6 +43,7 @@
     <p id="next-fare"></p>
     <p id="free-car"></p>
     <p id="two-out"></p>
+    <p id="fare-row"></p>
     <p id="short-trip"></p>
     <p id="live-fare"></p>
     <p id="fleet-move"></p>
@@ -159,6 +160,16 @@
       && !outLater.cars.some(function (car) { return car.device_id; })
       ? "T1 and T2 move on two accepted offers. T3 can stay at the depot. The checked day stays −1120."
       : "Two cars did not move together.";
+    var doneRow = game.completedFareRow(11, 3, []);
+    var doneAgain = game.completedFareRow(11, 3, doneRow.posted);
+    var doneFares = doneRow.lines.filter(function (row) { return row.kind === "fare_in"; });
+    document.getElementById("fare-row").textContent = doneRow.farePounds === "£10.40"
+      && doneFares.length === 1
+      && doneFares[0].amountPence === 1040
+      && doneAgain.lines.length === 0
+      && game.sumPence(game.workedDay()) === -1120
+      ? "Completed · 3 miles · £10.40. Posting it twice does not add a second fare line."
+      : "The completed row showed the fare twice.";
     var sample = game.waitingOffers(40);
     var sampleTaken = game.acceptOffer(sample, depotCars);
     document.getElementById("offer-sample").textContent = sample.length === 2

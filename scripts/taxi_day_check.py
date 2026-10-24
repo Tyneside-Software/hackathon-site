@@ -321,6 +321,17 @@ def main():
     if (out["cars"][1]["lat"], out["cars"][1]["lng"]) == (later["cars"][1]["lat"], later["cars"][1]["lng"]):
         print("T2 did not move with T1", file=sys.stderr)
         return 1
+    done = taxi_game.completed_fare_row(11, 3)
+    fare_lines = [row for row in done["lines"] if row["kind"] == "fare_in"]
+    if done["fare_pounds"] != "£10.40" or done["fare_pence"] != 1040 or len(fare_lines) != 1:
+        print(f"completed row {done}", file=sys.stderr)
+        return 1
+    if fare_lines[0]["amount_pence"] != 1040:
+        print(f"completed fare {fare_lines}", file=sys.stderr)
+        return 1
+    if taxi_game.completed_fare_row(11, 3, done["posted"])["lines"] != []:
+        print("posting the completed fare twice added a line", file=sys.stderr)
+        return 1
     posted_trip = taxi_game.post_live_trip(7, 3, ())
     posted_kinds = [row["kind"] for row in posted_trip["lines"]]
     posted_amounts = [row["amount_pence"] for row in posted_trip["lines"]]
