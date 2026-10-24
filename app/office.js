@@ -258,8 +258,23 @@
     showQuote(readQuote());
   });
 
+  function placeRefused(value) {
+    return value.trim() === "Berwick-upon-Tweed";
+  }
+
   document.getElementById("btn-add").addEventListener("click", function () {
     var quote = readQuote();
+    var pickup = document.getElementById("pickup").value;
+    var dropOff = document.getElementById("drop-off").value;
+    if (placeRefused(pickup) || placeRefused(dropOff)) {
+      document.getElementById("quote-result").textContent =
+        "Berwick-upon-Tweed is not saved, so 0 pence is added. The meter the clerk entered stays on the quote.";
+      if (!quote.error) {
+        document.getElementById("quote-result").textContent += " " + penceText(quote.pence) + ".";
+      }
+      lastQuote = null;
+      return;
+    }
     showQuote(quote);
     if (quote.error) return;
     if (quote.yards === 0 && quote.seconds === 0 && quote.extraPence === 0) return;
