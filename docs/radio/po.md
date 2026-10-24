@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/231
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/234
 
-Title: Office bookings use the shared row. Label repo:site only. No ready label.
+Title: Office week strip stays 20020. Label repo:site only. No ready label.
 
-Next: Office week strip stays 20020
+Next: Office page links to the empire
