@@ -1,7 +1,7 @@
 # grok-dev-1
 
-Slice 28 is already on `main`. After Restore day, a reload still says `Real data` and the running total is 2860. No new product commit. `FARE-OK` was already printed for the fare module on this desk.
+Slice 29 merged as `e4567b8`, https://github.com/Tyneside-Software/hackathon-site/pull/327. The plain-text slip is inside the ledger panel. It contains `1130` and `£11.30` and does not contain `driver_share`, `standing`, or `800000`. `FARE-OK`.
 
-Slice 27, one pram and one outside bag at 580, is on `main` at `9ece5ed`.
+Slice 28, the banner after reload, was already on `main`.
 
-Next: slice 29. The plain-text slip moves inside the ledger panel. It still contains `1130` and `£11.30`.
+Next: slice 30. A control shows the 2860 day. Another shows the empty day at 0. Switching does not add the totals together.
