@@ -414,6 +414,24 @@
     return 20 - remainder;
   }
 
+  function postLiveTrip(tripId, miles, posted) {
+    var already = {};
+    (posted || []).forEach(function (id) { already[id] = true; });
+    if (already[tripId] || miles <= 0) {
+      return { lines: [], posted: Object.keys(already).map(Number) };
+    }
+    var fare = liveFarePence(miles, 0);
+    var fuel = -(miles * FUEL_PENCE_A_MILE);
+    already[tripId] = true;
+    return {
+      lines: [
+        { kind: "fare_in", amountPence: fare, jobId: tripId },
+        { kind: "fuel", amountPence: fuel, jobId: tripId },
+      ],
+      posted: Object.keys(already).map(Number),
+    };
+  }
+
   function sumPence(rows) {
     return rows.reduce(function (total, row) {
       return total + row.amountPence;
@@ -461,6 +479,7 @@
     faresWaiting: faresWaiting,
     waitingLabel: waitingLabel,
     secondsUntilFare: secondsUntilFare,
+    postLiveTrip: postLiveTrip,
     shortTrip: shortTrip,
     positionOnRoute: positionOnRoute,
     workedWeek: workedWeek,

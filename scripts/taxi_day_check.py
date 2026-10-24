@@ -266,6 +266,20 @@ def main():
     if taxi_game.fares_waiting(80, 1) != 3:
         print("the next 20 seconds did not add one fare", file=sys.stderr)
         return 1
+    posted_trip = taxi_game.post_live_trip(7, 3, ())
+    posted_kinds = [row["kind"] for row in posted_trip["lines"]]
+    posted_amounts = [row["amount_pence"] for row in posted_trip["lines"]]
+    if posted_kinds != ["fare_in", "fuel"] or posted_amounts != [1040, -60]:
+        print(f"live post {posted_trip['lines']}", file=sys.stderr)
+        return 1
+    posted_again = taxi_game.post_live_trip(7, 3, posted_trip["posted"])
+    if posted_again["lines"] != []:
+        print("a second completion appended lines", file=sys.stderr)
+        return 1
+    checked_day = taxi_game.worked_day()
+    if [row["amount_pence"] for row in checked_day if row["kind"] == "fuel"] != [-140]:
+        print("the live post changed the checked fuel", file=sys.stderr)
+        return 1
     if taxi_game.live_fare_pence(3, 0) != 1040:
         print(f"live fare {taxi_game.live_fare_pence(3, 0)}", file=sys.stderr)
         return 1

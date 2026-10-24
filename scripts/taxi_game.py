@@ -396,6 +396,23 @@ def seconds_until_fare(elapsed_s, accepted=0):
     return 20 - remainder
 
 
+def post_live_trip(trip_id, miles, posted=()):
+    """Append one fare line and one fuel line. A second completion appends nothing."""
+    already = set(posted)
+    if trip_id in already or miles <= 0:
+        return {"lines": [], "posted": already}
+    fare = live_fare_pence(miles, 0)
+    fuel = -(int(miles) * FUEL_PENCE_A_MILE)
+    already.add(trip_id)
+    return {
+        "lines": [
+            line("fare_in", fare, job_id=trip_id),
+            line("fuel", fuel, job_id=trip_id),
+        ],
+        "posted": already,
+    }
+
+
 def position_on_route(points, duration_s, elapsed_s):
     """Place on a polyline. The checker passes points and a duration. It does not call OSRM."""
     if not points:

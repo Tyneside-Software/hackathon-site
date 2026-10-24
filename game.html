@@ -50,6 +50,7 @@
     <p id="live-fuel"></p>
     <p id="row-seconds"></p>
     <p id="fare-cap"></p>
+    <p id="live-post"></p>
     <button type="button" class="btn btn-ghost" id="btn-accept">Accept the oldest offer</button>
     <p id="accept-result"></p>
     <ul id="places"></ul>
@@ -169,6 +170,19 @@
       && game.sumPence(game.workedDay()) === -1120
       ? "3 fares waiting. At 80 seconds there are still 3. After one is accepted, the next 20 seconds may add one."
       : "A fourth fare was offered.";
+    var livePost = game.postLiveTrip(7, 3, []);
+    var livePostAgain = game.postLiveTrip(7, 3, livePost.posted);
+    var checkedFuelLine = game.workedDay().filter(function (row) { return row.kind === "fuel"; })[0];
+    document.getElementById("live-post").textContent = livePost.lines.length === 2
+      && livePost.lines[0].kind === "fare_in"
+      && livePost.lines[0].amountPence === 1040
+      && livePost.lines[1].kind === "fuel"
+      && livePost.lines[1].amountPence === -60
+      && livePostAgain.lines.length === 0
+      && checkedFuelLine.amountPence === -140
+      && game.sumPence(game.workedDay()) === -1120
+      ? "A live trip posts one fare of 1040 and one fuel of −60. Posting it again adds nothing. The checked day stays −1120."
+      : "A live post changed the day.";
     document.getElementById("btn-accept").addEventListener("click", function () {
       var elapsed = game.elapsedSeconds(offerStart, Date.now());
       var open = game.waitingOffers(elapsed).slice(0, game.faresWaiting(elapsed, acceptedOffers));
