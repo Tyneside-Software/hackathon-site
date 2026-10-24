@@ -538,6 +538,27 @@ def main():
     if ">Sign out<" not in empire:
         print("the form had no sign out control", file=sys.stderr)
         return 1
+    if "const EMPIRE_POLL_MS = 2000" not in map_js:
+        print("the empire poll was not every 2 seconds", file=sys.stderr)
+        return 1
+    polled = map_js.split("async function pollEmpire", 1)
+    if len(polled) != 2:
+        print("the map did not ask for the account fleet", file=sys.stderr)
+        return 1
+    polled_body = polled[1].split("function startEmpirePoll", 1)[0]
+    if '"/v1/empire"' not in polled_body or 'Authorization: "Bearer " + token' not in polled_body:
+        print("the empire poll did not send the bearer token", file=sys.stderr)
+        return 1
+    if "startFleet()" in polled_body:
+        print("the empire poll drew the old fleet", file=sys.stderr)
+        return 1
+    started_poll = map_js.split("function startEmpirePoll", 1)[1].split("const empireCreate", 1)[0]
+    if "setInterval(pollEmpire, EMPIRE_POLL_MS)" not in started_poll:
+        print("the empire poll did not repeat", file=sys.stderr)
+        return 1
+    if "startEmpirePoll()" not in signed_body or "stopEmpirePoll()" not in signed_out_body:
+        print("sign in did not keep the empire poll with the token", file=sys.stderr)
+        return 1
     posted_trip = taxi_game.post_live_trip(7, 3, ())
     posted_kinds = [row["kind"] for row in posted_trip["lines"]]
     posted_amounts = [row["amount_pence"] for row in posted_trip["lines"]]
