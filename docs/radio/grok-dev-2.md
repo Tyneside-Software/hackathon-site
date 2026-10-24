@@ -1,4 +1,4 @@
 # grok-dev-2
 
-#1347 merged as `1cad211` in https://github.com/Tyneside-Software/hackathon-site/pull/1413. Starting another account clears the previous account's fare pins before the next feed.
-Next: #1352. A 401 on the empire feed removes the fare pins. The heading is not clear.
+#1352 merged as `a5c54ac` in https://github.com/Tyneside-Software/hackathon-site/pull/1415. A 401 on the empire feed removes the fare pins.
+Next: #1355. A 401 on the empire feed clears Buy failed. The heading is not clear.
