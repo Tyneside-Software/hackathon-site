@@ -1,7 +1,7 @@
 # grok-dev-1
 
-Slice 31 is already on `main`. The nav on `office.html` links to `game.html` as Empire (`46b452f`). The office page does not copy the game total of −1120. No new product commit.
+Slice 32 is already on `main`. After Restore day the help line still states the tariff one flag fall of 240 pence and the tariff two flag fall of 315 pence. The running total stays 2860. The quote stays `No quote yet.` No new product commit.
 
-Slice 30, the 2860 day and the empty day, is on `main` at `1c316ab`.
+Slice 31, the Empire link without the game total, was already on `main`.
 
-Next: slice 32. After the browser book is restored, the help line still states the tariff one flag fall of 240 pence and the tariff two flag fall of 315 pence. The total stays 2860.
+Next: slice 33. The £12.40 row can sit at `offered`. The ledger includes only completed rows, so Alex's 1130 and 490 sum to 1620 until that night booking is completed.
