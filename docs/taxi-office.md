@@ -41,7 +41,7 @@ These figures are game settings. They are not this company's charges.
 
 ## Desk
 
-`office.html` is the booking desk. The banner says Real data. The heading is Booking desk. The three panels are Quote, Bookings, and Ledger. The ledger note says the money is the company's. It loads `app/office.js` and `app/office.css`. The quote uses `window.TaxiFare.quotePence` in `app/taxi-fare.js`. The Python checker is the proof. The desk does not call the API and it does not read the live database.
+`office.html` is the booking desk. The banner says Real data. The heading is Booking desk. The nav includes a link to `game.html` named Empire. The three panels are Quote, Bookings, and Ledger. The ledger note says the money is the company's. It loads `app/office.js` and `app/office.css`. The quote uses `window.TaxiFare.quotePence` in `app/taxi-fare.js`. The Python checker is the proof. The desk does not call the API and it does not read the live database.
 
 The desk rejects negative miles. The previous quote stays on screen.
 
