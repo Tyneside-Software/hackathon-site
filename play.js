@@ -123,6 +123,10 @@
     return String(window.HACKATHON_API || "").replace(/\/$/, "");
   }
 
+  function playFeedPath() {
+    return "/v1/empire";
+  }
+
   function paintPlayCars(feed) {
     const cars = feed && Array.isArray(feed.cars) ? feed.cars : [];
     const seen = new Set();
@@ -188,7 +192,9 @@
     const token = localStorage.getItem("hackathon-empire-token") || "";
     const base = apiBase();
     if (!token || !base) return;
-    const res = await fetch(base + "/v1/empire", {
+    const path = playFeedPath();
+    if (path.indexOf("/v1/devices") !== -1) return;
+    const res = await fetch(base + path, {
       headers: { Authorization: "Bearer " + token }
     });
     if (!res.ok) return;
