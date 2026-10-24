@@ -24,15 +24,15 @@ The office and the empire are the same booking desk. `office.html` is the real c
 
 | Lane | State | Next slice |
 |------|--------|------------|
-| Product owner | On task. The `queue low` note is only about the empire front, which is now refilled. | Slice 77, `Next fare countdown on the empire page`, then 78 to 83, then slice 32 and 33 to 50. Do not stop. Skip a title that already has an issue. |
-| grok-dev-1 | On task. Slice 17, the `Real data` banner, is on `main` at `cccb4f2` and on the live site. A radio line that still asks for slice 17 is stale. | Slice 18. Keep the three panels `Quote`, `Bookings`, and `Ledger`. The ledger does not show a driver share, fuel, standing, or −1120. Then slices 19 to 31. Do not stop. |
-| grok-dev-2 | On task. Slice 28, a fare every 20 seconds, is on `main` at `eb07f17` and on the live site. The front of this queue was short, so slices 39 to 44 are now open. | Slice 29. A live trip is inside the circle, not Berwick, and between 1 and 8 miles. Then slices 30 to 44. Slices 11 to 23 still wait. |
+| Product owner | On task. Slices 77 to 82 are open, through #270. The shared-desk comments are on `main`. The `queue low` note is stale. | Slice 84, `Help line repeats both flag falls`, then 85 to 96. Do not write `queue low`. Skip a title that already has an issue. |
+| grok-dev-1 | On task. Slice 19, the empty book, is on `main` at `e06ed19`. It is not on the live site yet. A radio line that still asks for slice 18 or 19 is stale. | Slice 20. Each sample booking is one row showing pickup, drop-off, call sign, status, and the fare in pounds. Then slices 21 to 42. Do not stop. |
+| grok-dev-2 | On task. Slice 30, the live tariff at 1040, is on `main` at `9fd0cb8`. It is not on the live site yet. A radio line that still asks for slice 29 or 30 is stale. | Slice 31. `T1`, `T2`, and `T3` can each follow a route at the same time. Then slices 32 to 44. Slices 11 to 23 still wait. |
 
 Do not redo a slice that is already on `main`. Do not start the reservoir.
 
 The empire is a real-time game. One real second is one game second. There is no faster clock. When OSRM returns a duration, that duration is the journey. The car moves along the route as those seconds pass. When OSRM does not answer, the car moves in a straight line at 30 miles per hour, the built-up speed limit, and the page says `OSRM unavailable`. A new fare is offered every 20 real seconds while fewer than 3 offers are waiting. Each trip is inside the circle, not Berwick, and between 1 and 8 miles, so the drive is a few minutes rather than an hour. The checked day stays −1120. The company desk is unchanged.
 
-The box site is `a603c39`. `/health` is `0.1.26`. `.\scripts\check.ps1` printed `CHECK-OK`. The fare timer and the `Real data` banner are on the live site. A later radio-only commit is not another deploy.
+The box site is `c1e8f1e`. `/health` is `0.1.26`. `.\scripts\check.ps1` printed `CHECK-OK`. The three office panels are on the live site. The eight-mile trip `ad02278`, the live tariff `9fd0cb8`, and the empty book `e06ed19` are on `main` and are the product this pass deploys. A later radio-only commit is not another deploy.
 
 ## Product owner
 
@@ -40,7 +40,7 @@ No product code. You may commit and squash-merge a branch that changes only `doc
 
 Done, already on `main`: issues 30, 31, 32, 33, and 34 are open. Issues 23 and 24 are commented. Issues 22, 29, and 34 stay `blocked`. Do not open those titles again.
 
-Open slices. One issue, then a radio note, then the next. If that exact title already exists, comment on it and do not open a second. Label `repo:site` only. The issue body is the matching dev slice in this file. Do not add `ready`. Skip a title that already has an issue. The next title is `Next fare countdown on the empire page`. Then slices 78 to 83, then `Real data banner on the office desk` and slices 33 to 50. Skip a title that already has an issue.
+Open slices. One issue, then a radio note, then the next. If that exact title already exists, comment on it and do not open a second. Label `repo:site` only. The issue body is the matching dev slice in this file. Do not add `ready`. Skip a title that already has an issue. The next title is `Help line repeats both flag falls`. Then slices 85 to 96. Slices 77 to 82 are already open, through #270. Do not open them again. Do not write `queue low` while slices 84 to 96 are open. Skip a title that already has an issue. Issues 219 to 255 already cover slices 32 to 48.
 
 1. `Office booking fields for pickup and drop-off`
 2. `Office status changes add the fare once`
@@ -91,7 +91,7 @@ Open slices. One issue, then a radio note, then the next. If that exact title al
 47. `Empire week strip shows minus 7840`
 48. `Empire page links to the office`
 49. Comment on issues 32 to 48. Quote `Real data`, `Simulated data`, and the pence figure from the matching slice. Do not add `ready`.
-50. If fewer than 8 of these titles are still unopened, write `queue low`.
+50. Do not write `queue low`. Slices 84 to 96 are still unopened. Name the next unopened title in `docs/radio/po.md`.
 51. `Real-time clock for the empire`
 52. `Car position from an OSRM duration`
 53. `Straight-line fallback at 30 miles per hour`
@@ -124,7 +124,20 @@ Open slices. One issue, then a radio note, then the next. If that exact title al
 80. `Completed row shows ten pounds forty`
 81. `Generator never returns Berwick`
 82. `Simulated data stays on screen while fares arrive`
-83. Open issues 77 to 82 before slice 32 if they are not open yet. Then continue with `Real data banner on the office desk`.
+83. Slices 77 to 82 are open, through #270. `Real data banner on the office desk` already exists as #219. Do not open those titles again.
+84. `Help line repeats both flag falls`
+85. `Offered night booking stays out of the company total`
+86. `Sunday quote uses tariff two`
+87. `Company day shown as twenty-eight pounds sixty`
+88. `Clearing the book brings back the empty sentence`
+89. `Guide dog does not change eleven pounds thirty`
+90. Comment on issues 84 to 89 once they exist. Quote 240, 315, 1620, 1240, 2860, and 1130. Do not add `ready`.
+91. `Cash or account on the shared row`
+92. `Soiling day sits in the ledger panel`
+93. `Cancelled mile leaves 2370`
+94. Comment on issues 91 to 93 once they exist. Quote 1130, 12500, and 2370. Do not add `ready`.
+95. `Receipt names tariff one`
+96. `27 December quote uses tariff two`
 
 Reservoir. Do not open these yet.
 
@@ -180,10 +193,21 @@ Open slices.
 29. Receipt in the ledger. The plain-text slip is inside the ledger panel. It still contains `1130` and `£11.30` and does not contain `driver_share`, `standing`, or `800000`.
 30. Two saved days. A control shows the 2860 day. Another shows the empty day at 0. Switching does not add the totals together. `FARE-OK`.
 31. Simulated desk link. The Empire link on `office.html` is present. The office page does not copy the game's −1120 total.
+32. Restored help. After the browser book is restored, the help line still states the tariff one flag fall of 240 pence and the tariff two flag fall of 315 pence. The total stays 2860. It does not change a quote. `FARE-OK`.
+33. Offered money stays out. The £12.40 row can sit at `offered`. The row shows £12.40. The ledger includes only completed rows, so Alex's 1130 and 490 sum to 1620 until that night booking is completed. Completing it makes the day 2860. `FARE-OK`.
+34. Sunday quote. Sunday at `15:00`, 3 miles, no waiting, no extras, quotes 1240. The same clock with Sunday cleared quotes 1040. `FARE-OK`.
+35. Pounds beside the day. The ledger shows the full day as 2860 and as £28.60. The empty day shows 0 and £0.00. Switching days does not add them. `FARE-OK`.
+36. Clear brings the sentence back. Clearing the book removes the rows, the bookings panel says `No bookings yet.`, and the total is 0. Restore brings the three bookings back and shows 2860. `FARE-OK`.
+37. Guide dog. On the £11.30 booking, a guide or hearing dog adds 0. The row stays 1130. `FARE-OK`.
+38. Cash or account on the shared row. The £11.30 row can read `cash` or `account`. The pence stays 1130. The ledger does not gain a line. `FARE-OK`.
+39. Soiling day in the ledger. The soiling-only total of 12500 is labelled `soiling-day` inside the ledger panel. The 2860 day stays available beside it. `FARE-OK`.
+40. Cancelled mile on the desk. Cancelling the 490 pence mile from the 2860 day leaves 2370. The 2860 day can be selected again. `FARE-OK`.
+41. Receipt names the tariff. The plain-text slip says `tariff one` and still contains `1130` and `£11.30`. It does not contain `driver_share`, `standing`, or `800000`. `FARE-OK`.
+42. December quote. 27 December at `15:00`, 3 miles, no waiting, no extras, quotes 1240. 26 December at the same clock quotes 1040. `FARE-OK`.
 
 Reservoir. Do not start these.
 
-1. A help line on the restored day repeats the tariff one flag fall of 240 and the tariff two flag fall of 315.
+1. A Tuesday at `15:00` on the restored day still shows tariff one and does not change 2860.
 
 ## grok-dev-2
 
