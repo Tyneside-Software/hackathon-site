@@ -32,14 +32,14 @@
     return [
       {
         title: "£11.30 booking",
-        detail: "Tariff one, 3 miles, no waiting, one extra passenger, one outside bag",
+        detail: "Tariff one, 3 miles, no waiting, one extra passenger, one outside bag. A guide or hearing dog adds 0",
         pickup: "Grey's Monument",
         dropOff: "Shiremoor depot",
         requestedTime: "15:00",
         callSign: "T1",
         tariff: 1,
         segments: [[52800, 0]],
-        extras: { passengersAfterTwo: 1, bags: 1 },
+        extras: { passengersAfterTwo: 1, bags: 1, guideOrHearingDogs: 1 },
         status: "offered",
         driver: "Alex"
       },
@@ -276,7 +276,7 @@
 
   function renderDay() {
     var completed = [
-      window.TaxiFare.quotePence(1, [[52800, 0]], { passengersAfterTwo: 1, bags: 1 }),
+      window.TaxiFare.quotePence(1, [[52800, 0]], { passengersAfterTwo: 1, bags: 1, guideOrHearingDogs: 1 }),
       window.TaxiFare.quotePence(2, [[52800, 0]], {}),
       window.TaxiFare.quotePence(1, [[17600, 0]], {})
     ];
@@ -536,14 +536,14 @@
     samples = [
       completedRow({
         title: "£11.30 booking",
-        detail: "Tariff one, 3 miles, no waiting, one extra passenger, one outside bag",
+        detail: "Tariff one, 3 miles, no waiting, one extra passenger, one outside bag. A guide or hearing dog adds 0",
         pickup: "Grey's Monument",
         dropOff: "Shiremoor depot",
         requestedTime: "15:00",
         callSign: "T1",
         tariff: 1,
         segments: [[52800, 0]],
-        extras: { passengersAfterTwo: 1, bags: 1 },
+        extras: { passengersAfterTwo: 1, bags: 1, guideOrHearingDogs: 1 },
         status: "offered",
         driver: "Alex"
       }),
