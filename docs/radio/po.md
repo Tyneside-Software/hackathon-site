@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/97
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/100
 
-Title: Game refuses a Berwick job. Label repo:site only. No ready label. The body is the matching dev slice.
+Title: Second car stays at the depot until it is paid for. Label repo:site only. No ready label. The body is the matching dev slice.
 
-Next: Second car stays at the depot until it is paid for
+Next: Cancel with no miles adds no fuel
