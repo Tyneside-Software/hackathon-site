@@ -121,7 +121,7 @@
     } catch (err) {
       return;
     }
-    if (!payload || !payload.rows || !payload.rows.length) return;
+    if (!payload || !Array.isArray(payload.rows)) return;
     samples = payload.rows.map(copyRow);
     addedQuotes = (payload.added || []).slice();
   }
@@ -306,7 +306,13 @@
 
   function renderSamples() {
     var root = document.getElementById("samples");
+    var empty = document.getElementById("empty-book");
     root.textContent = "";
+    if (!samples.length) {
+      empty.hidden = false;
+      return;
+    }
+    empty.hidden = true;
     samples.forEach(function (row, index) {
       var meter = window.TaxiFare.quoteMeter(row.tariff, row.segments);
       var extras = window.TaxiFare.extrasPence(row.extras);
