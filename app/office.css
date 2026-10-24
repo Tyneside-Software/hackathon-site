@@ -1,0 +1,75 @@
+.office-grid {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1.25rem;
+}
+.office-panel {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem 1.1rem 1.15rem;
+}
+.office-panel h2 {
+  font-size: 1.15rem;
+  margin-bottom: 0.35rem;
+}
+.office-note {
+  color: var(--muted);
+  max-width: 42rem;
+}
+.office-form {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+  gap: 0.75rem;
+  margin-top: 0.8rem;
+}
+.office-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.92rem;
+}
+.office-form input,
+.office-form select {
+  font: inherit;
+  color: var(--text);
+  background: #0a1016;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.4rem 0.5rem;
+}
+.office-check {
+  align-self: end;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.45rem;
+}
+.office-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.9rem;
+}
+.office-quote {
+  margin-top: 0.8rem;
+  font-size: 1.15rem;
+}
+.office-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.6rem;
+  padding: 0.75rem 0;
+  border-top: 1px solid var(--border);
+}
+.office-row:first-of-type { border-top: 0; }
+.office-status {
+  font-family: ui-monospace, Consolas, monospace;
+  color: var(--accent);
+}
+.ledger-line {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 0.35rem;
+}

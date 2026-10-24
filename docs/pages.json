@@ -61,6 +61,18 @@
           "summary": "Many-to-many tracker, taxi booking office, and the Shiremoor empire game."
         },
         {
+          "id": "taxi-fares",
+          "title": "Taxi fares",
+          "file": "taxi-fares.md",
+          "summary": "November 2024 North Tyneside tariff checked against the council page, plus waiting time."
+        },
+        {
+          "id": "taxi-office",
+          "title": "Booking office",
+          "file": "taxi-office.md",
+          "summary": "Company booking fields, the tariff quote, and a ledger separate from the game."
+        },
+        {
           "id": "onboarding",
           "title": "Onboarding (night)",
           "href": "../onboarding.html",

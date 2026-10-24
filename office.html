@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tyneside Logistics — booking office</title>
+  <link rel="icon" href="logo.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="app/office.css">
+</head>
+<body class="site">
+  <nav class="site-nav" aria-label="Primary">
+    <div class="inner">
+      <a href="index.html" class="brand-link">
+        <img src="logo.svg" width="36" height="36" alt="Tyneside">
+        <span>TYNESIDE</span>
+        <span class="brand-sub">LOGISTICS</span>
+      </a>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="progress.html" class="nav-now">Progress</a>
+        <a href="app/">Map</a>
+        <a href="board.html">Board</a>
+        <a href="backlog.html">Backlog</a>
+        <a href="todo.html">To do</a>
+        <a href="done.html">Done</a>
+        <a href="docs/" class="nav-docs">Docs</a>
+        <a href="api-test.html">API test</a>
+        <a href="account.html">Account</a>
+        <a href="office.html" class="is-current" aria-current="page">Office</a>
+        <a href="onboarding.html">Onboarding</a>
+        <a href="lewis.html">Lewis</a>
+      </div>
+      <a class="btn btn-fill" href="app/">Open map →</a>
+    </div>
+  </nav>
+
+  <main class="wrap" style="padding: 1.5rem 0 3rem">
+    <p class="hero-kicker">Taxi company · booking desk</p>
+    <h1 style="font-size:1.7rem;margin-bottom:0.4rem">Office</h1>
+    <p class="office-note">Quotes use the November 2024 North Tyneside tariff. This desk does not call the API and it does not read the live database. Driver half-fare, fuel, a standing charge, and an £8000 car are game costs. They are not company charges.</p>
+
+    <div class="office-grid">
+      <section class="office-panel" aria-labelledby="quote-heading">
+        <h2 id="quote-heading">Quote</h2>
+        <p class="office-note">One mile is 1760 yards. The meter charges the unit that finishes first.</p>
+        <form id="quote-form" class="office-form">
+          <label>Tariff
+            <select id="tariff" name="tariff" required>
+              <option value="">Choose</option>
+              <option value="1">Tariff one</option>
+              <option value="2">Tariff two</option>
+            </select>
+          </label>
+          <label>Miles
+            <input id="miles" name="miles" type="number" min="0" step="0.1" inputmode="decimal">
+          </label>
+          <label>Waiting seconds
+            <input id="waiting" name="waiting" type="number" min="0" step="0.1" inputmode="decimal">
+          </label>
+          <label>Extra passengers
+            <input id="passengers" name="passengers" type="number" min="0" step="1" value="0">
+          </label>
+          <label>Outside bags
+            <input id="bags" name="bags" type="number" min="0" step="1" value="0">
+          </label>
+          <label>Animals, not a guide or hearing dog
+            <input id="animals" name="animals" type="number" min="0" step="1" value="0">
+          </label>
+          <label>Bicycles
+            <input id="bicycles" name="bicycles" type="number" min="0" step="1" value="0">
+          </label>
+          <label>Prams
+            <input id="prams" name="prams" type="number" min="0" step="1" value="0">
+          </label>
+          <label class="office-check">Soiling
+            <input id="soiling" name="soiling" type="checkbox">
+          </label>
+        </form>
+        <div class="office-actions">
+          <button type="button" class="btn btn-fill" id="btn-quote">Quote</button>
+          <button type="button" class="btn btn-ghost" id="btn-add">Add to company ledger</button>
+          <button type="button" class="btn btn-ghost" id="btn-mixed">Mixed tariff one, £2.65</button>
+        </div>
+        <p class="office-quote" id="quote-result" role="status">No quote yet.</p>
+      </section>
+
+      <section class="office-panel" aria-labelledby="sample-heading">
+        <h2 id="sample-heading">Sample bookings</h2>
+        <div id="samples"></div>
+      </section>
+
+      <section class="office-panel" aria-labelledby="ledger-heading">
+        <h2 id="ledger-heading">Company ledger</h2>
+        <p class="office-note">Completed bookings add their quoted fare. A cancel adds nothing. This ledger is the company's, not the game's.</p>
+        <p class="ledger-line"><span>Running total</span><strong id="ledger-total">0 pence, £0.00</strong></p>
+        <div id="day-ledger"></div>
+      </section>
+    </div>
+  </main>
+
+  <script src="app/taxi-fare.js"></script>
+  <script src="app/office.js"></script>
+</body>
+</html>
