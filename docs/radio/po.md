@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/263
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/266
 
-Title: Two cars move at the same time. Label repo:site only. No ready label.
+Title: Completed row shows ten pounds forty. Label repo:site only. No ready label.
 
-Next: Completed row shows ten pounds forty
+Next: Generator never returns Berwick
