@@ -208,7 +208,9 @@
     var root = document.getElementById("samples");
     root.textContent = "";
     samples.forEach(function (row, index) {
-      var pence = window.TaxiFare.quotePence(row.tariff, row.segments, row.extras);
+      var meter = window.TaxiFare.quoteMeter(row.tariff, row.segments);
+      var extras = window.TaxiFare.extrasPence(row.extras);
+      var pence = meter + extras;
       var block = document.createElement("article");
       block.className = "office-row";
       var copy = document.createElement("div");
@@ -216,7 +218,8 @@
       title.textContent = row.title;
       var detail = document.createElement("p");
       detail.className = "office-note";
-      detail.textContent = row.detail + ". " + penceText(pence) + ". Pickup " + row.pickup
+      detail.textContent = row.detail + ". Meter " + meter + ". Extras " + extras
+        + ". Total " + pence + ". " + penceText(pence) + ". Pickup " + row.pickup
         + ". Drop-off " + row.dropOff + ". Requested " + row.requestedTime
         + ". Vehicle " + row.callSign + ".";
       var status = document.createElement("p");
