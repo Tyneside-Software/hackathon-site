@@ -20,16 +20,18 @@ Three GitHub repos, two hosts, one product. The **site** is static files. The **
         so the browser will not call the box. The board falls back
         to board-snapshot.json.
 
-  Phone (committed APK)
-     └─ API_BASE is still the old Cloud Run URL. That host is not
-        the live API. See Linux box and deploy.
+  Phone (debug APK)
+     └─ API_BASE is http://100.65.94.5:8080. Cleartext is on.
+        Emulator steps: Linux box and deploy.
 ```
 
 Locally the site is `python -m http.server 5500`, the API is `uvicorn` on `:8080`. `.\start.ps1` starts both. The phone is Android Studio / a debug APK.
 
-**Current:** the live API is SQLite in Docker on the Linux box. Deploy is SSH to `192.168.0.52` as `michael`, then `/usr/local/bin/update`. The password is not in git. On Michael’s PC it is `C:\Users\MichaelThomson\Desktop\hackathon-linux.md`. Read [Linux box and deploy](#linux) before connecting.
+**Current:** the live API is SQLite in Docker on the Linux box. From `hackathon-site` on Michael’s PC an AI runs `.\scripts\box.ps1 update`. That SSHs to `192.168.0.52` as `michael` and runs `/usr/local/bin/update`. The password is not in git. On Michael’s PC it is `C:\Users\MichaelThomson\Desktop\hackathon-linux.md`. Read [Linux box and deploy](#linux) before connecting.
 
-**11 September 2026:** phones and the map were proved against the API of that week (cards 32–34, 36–38, 41). Buses are a map toggle (`GET /v1/buses`) with a 10-minute trail. The store since the move onto the box is SQLite. A physical phone is still card 35. The committed APK still names the old Cloud Run host.
+**24 October 2026:** the debug APK posted to `http://100.65.94.5:8080` and `/health` reported the version in `app/config.py` (`0.1.26` that day). A board card was created and deleted. The board stayed at 50 cards. A physical phone is still card 35.
+
+**11 September 2026:** phones and the map were proved against the API of that week (cards 32–34, 36–38, 41). Buses are a map toggle (`GET /v1/buses`) with a 10-minute trail. The store since the move onto the box is SQLite.
 
 ## The three repos
 
@@ -104,7 +106,7 @@ New **chrome** (wiki, API test) goes in **Alpine.js**. New **map** behaviour sta
 
 ## How a page talks to the API
 
-1. `config.js` sets `window.HACKATHON_API` (Cloud Run URL in git).
+1. `config.js` sets `window.HACKATHON_API` to `http://100.65.94.5:8080`.
 2. The page includes `<script src="config.js"></script>` (from `app/` use `../config.js`).
 3. `fetch(base + "/test_field")` with `Accept: application/json`.
 4. CORS is enforced by the API (`CORS_ORIGINS`). Serve the site from `http://127.0.0.1:5500` or Pages, never `file://`.
@@ -117,7 +119,7 @@ Full page: [The map](#map).
 |-------|--------|---------|
 | Waypoints / OSRM | Public OSRM, not our API | On |
 | Phones | `GET /v1/devices` every 8s; drawer `GET /v1/locations?device_id=` | On |
-| Buses | Our `GET /v1/buses` every 15s | **Off** — no fetch until Show buses. API caches in Firestore, TTL 15s |
+| Buses | Our `GET /v1/buses` every 15s | **Off** — no fetch until Show buses. API caches in SQLite, TTL 15s |
 
 Device id on the phone is `Settings.Secure.ANDROID_ID` (not the hardware serial — Android 10+ will not give that to a sideloaded app). The tracker POSTs every minute while the switch is on, even if the pin has not moved. `recorded_at` is last communication.
 
@@ -143,14 +145,14 @@ New map JS stays vanilla inside the existing `app/map.js` IIFE. Alpine is for wi
 
 | Event | What happens |
 |-------|----------------|
-| Push **site** `main` | GitHub Pages publishes this folder |
-| Push **API** `main` | Cloud Build **pack/buildpacks** (ubuntu2404, Python **3.13**) builds and deploys Cloud Run |
+| Push **site** `main` | GitHub Pages publishes this folder. The box copies it when `.\scripts\box.ps1 update` runs |
+| Push **API** `main` | Nothing on the box changes until that same update rebuilds the image |
 
-The API Dockerfile exists for a Docker-based trigger. The GitHub-connected service **does not use it**; it uses buildpacks. That is why `main.py` at the repo root and `.python-version` = `3.13` exist. Pinning 3.12 failed: that builder has no 3.12. See [API](#api).
+`update` is `git pull --ff-only` plus `docker compose up -d --build --force-recreate`. The image is `python:3.14-slim`. Recreate keeps `data/hackathon.db`. The old Cloud Run path used buildpacks and Python 3.13, and those files are still in the API repo. That host is not the live API. See [Linux box and deploy](#linux).
 
 ## Next
 
-Live phones, drawer, ping history, live buses from a Firestore cache, and accounts are on the map and the Account page. Next product slices: job list, demo seed, localStorage. Board: [Current progress](../progress.html). [The map](#map) · [Buses](#buses) · [API](#api).
+Live phones, drawer, ping history, live buses from a SQLite cache, and accounts are on the map and the Account page. Next product slices: job list, demo seed, localStorage. Board: [Current progress](../progress.html). [The map](#map) · [Buses](#buses) · [API](#api).
 
 | Topic | Page |
 |-------|------|

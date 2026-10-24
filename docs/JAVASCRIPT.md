@@ -102,7 +102,7 @@ async function health() {
 }
 ```
 
-The committed default in `config.js` is the Cloud Run URL. CORS is the API’s job (`CORS_ORIGINS`). Serve from `http://127.0.0.1:5500` or Pages, never `file://`.
+The committed default in `config.js` is `http://100.65.94.5:8080`. CORS is the API’s job (`CORS_ORIGINS`). Serve from `http://127.0.0.1:5500` or the box, never `file://`. An HTTPS Pages tab cannot call that HTTP API.
 
 ## Cheatsheet
 

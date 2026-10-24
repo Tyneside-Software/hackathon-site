@@ -23,7 +23,7 @@ https://github.com/Tyneside-Software/hackathon-site/blob/main/docs/GROK.md
 
 The API and the board the team edits run on the Linux box. Cloud Run is not the live API. The procedure is [Linux box and deploy](#linux) (`docs/linux.md`).
 
-SSH as `michael` to `192.168.0.52`. Do not SSH to `100.65.94.5` (Tailscale SSH wants a browser check). After `git push origin main`, run `/usr/local/bin/update` on the box.
+SSH as `michael` to `192.168.0.52`. Do not SSH to `100.65.94.5` (Tailscale SSH wants a browser check). After `git push origin main`, from the site folder run `.\scripts\box.ps1 update`. That is `/usr/local/bin/update` on the box. `.\scripts\box.ps1 health` checks the API, the site, and SSH.
 
 The SSH password is not in git. On Michael’s PC it is in `C:\Users\MichaelThomson\Desktop\hackathon-linux.md`. Do not copy that file into a repo. Connor’s machine does not have it.
 

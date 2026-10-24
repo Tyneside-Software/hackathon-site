@@ -23,7 +23,17 @@ Pixel 6a emulator (`emulator-5554`):
 - Live coordinates on the map: **Grey’s Monument, Newcastle** (`54.9783, -1.6178`)
 - Log tag `TynesideTracker`
 
-This AVD ignores console `geo fix` and caches Google HQ as last-known. The debug app remaps that exact HQ default to Newcastle. A real GPS fix (not HQ) is used as-is. High-accuracy GPS is requested so a genuine fix can land.
+That note is the September host. The live API now stores the ping in SQLite.
+
+## Proven (24 October 2026)
+
+Same AVD, debug APK `0.1.1` (`versionCode` 2), `API_BASE` `http://100.65.94.5:8080`, cleartext allowed:
+
+- `app start api=http://100.65.94.5:8080 device=android-c55e59830b71ba38`
+- `POST /v1/locations` → HTTP **200** `stored=sqlite`
+- `GET /v1/devices` showed that same id, `last_seen_at` `2026-10-24T00:33:00Z`, pin at Grey’s Monument
+
+A fresh boot logged `lastLocation null`. `adb emu geo fix` returned OK and did not deliver. Mock location on the app package was rejected for uid 2000. The shell grant and test provider in [Linux box and deploy](#linux) produced the POST. Do not delete `android-c55e59830b71ba38`. It has been on the board since 8 October. Stop the app with `am force-stop` when the proof is finished.
 
 ## Run it
 

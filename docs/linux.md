@@ -126,7 +126,7 @@ cd C:\Users\MichaelThomson\source\hackathon-android
 & "$env:ANDROID_HOME\emulator\emulator.exe" -avd Pixel_6a -no-window -no-audio -no-boot-anim -gpu swiftshader_indirect
 ```
 
-Wait until `adb devices` shows `emulator-5554`, then:
+Keep that emulator process alive. A short-lived shell exits and takes the emulator with it. Wait until `adb devices` shows `emulator-5554`, then:
 
 ```powershell
 $adb = "$env:LOCALAPPDATA\Android\Sdk\platform-tools\adb.exe"
@@ -138,7 +138,26 @@ $adb = "$env:LOCALAPPDATA\Android\Sdk\platform-tools\adb.exe"
 & $adb logcat -s TynesideTracker
 ```
 
-A ping shows up on `GET /v1/devices`. The emulator’s Google HQ fix is rewritten to Grey’s Monument. Delete only that new `device_id` from `devices` and `location_pings` if the map should not keep the test pin. Do not delete the whole database.
+A fresh boot has no cached fix. Logcat says `lastLocation null`. `adb emu geo fix` can print OK and still deliver nothing until the shell is allowed to inject a location. Granting mock location to `software.tyneside.tracker` is not enough: uid 2000 is rejected. This sequence produced a POST on 24 October 2026:
+
+```powershell
+& $adb -s emulator-5554 shell cmd location set-location-enabled true
+& $adb -s emulator-5554 shell settings put secure location_mode 3
+& $adb -s emulator-5554 shell appops set com.android.shell android:mock_location allow
+& $adb -s emulator-5554 shell cmd location providers add-test-provider gps --requiresSatellite --supportsAltitude --supportsSpeed --supportsBearing
+& $adb -s emulator-5554 shell cmd location providers set-test-provider-enabled gps true
+& $adb -s emulator-5554 shell cmd location providers set-test-provider-location gps --location 37.4219983,-122.084 --accuracy 5
+& $adb -s emulator-5554 emu geo fix -1.6178 54.9783
+```
+
+Wait until logcat shows `POST result HTTP 200` and `"stored":"sqlite"`. `GET /v1/devices` should list `android-c55e59830b71ba38`. That id has existed since 8 October 2026. A test updates `last_seen_at`. Do not delete that row. A fix within 0.002° of Google HQ (`37.4219983, -122.084`) is rewritten to Grey’s Monument (`54.9783, -1.6178`). On this run the first posted point was a metre off those constants (`54.9782983, -1.6177983`). A later ping landed on the constants.
+
+Stop the tracker when the proof is done so it does not keep posting every minute:
+
+```powershell
+& $adb -s emulator-5554 shell am force-stop software.tyneside.tracker
+& $adb -s emulator-5554 emu kill
+```
 
 ## Database
 
@@ -147,9 +166,12 @@ The live board is SQLite on the box. Prove a write with the API, then remove the
 ```powershell
 curl.exe -fsS -X POST "$env:API/v1/board/cards" -H "Content-Type: application/json" -d "{\"title\":\"Workflow probe\",\"column\":\"todo\"}"
 curl.exe -fsS -X DELETE "$env:API/v1/board/cards/THE_ID"
+curl.exe -fsS "$env:API/v1/board"
 ```
 
-`API` is `http://100.65.94.5:8080`. `python -m unittest tests.test_board` in `hackathon-api` covers the same routes against an in-memory database and does not touch the box.
+`API` is `http://100.65.94.5:8080`. The write responses are the whole board. The DELETE body can still list the card, because that payload is built in the same database session as the delete. The following GET is the proof: the title is gone and the card count is back where it started. On 24 October 2026 that count was 50 (9 todo, 2 ready, 39 done) and 5 people. Parse the JSON in Python. A PowerShell `Where-Object` on `Invoke-RestMethod` once failed to see a card the server had stored, which left a second probe to delete.
+
+`python -m unittest tests.test_board` from `hackathon-api`, using `.\.venv\Scripts\python.exe`, covers the same routes against an in-memory database and does not touch the box. The working directory must be the API repo. System Python on this PC has no SQLAlchemy.
 
 Do not delete `data/hackathon.db`. Do not `docker compose down -v`. Do not re-seed.
 

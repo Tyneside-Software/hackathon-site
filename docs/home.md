@@ -36,4 +36,4 @@ If you do not know how the site is wired, start with **[Architecture](#architect
 
 ## Repos in one line
 
-The **site** is static HTML on GitHub Pages. The **API** is FastAPI on Cloud Run. The **phone** is a one-switch Android app. They meet only over HTTP. [Architecture](#architecture) has the diagram. [Android tracker](#android) is the phone repo.
+The **site** is static HTML on the Linux box and on GitHub Pages. The **API** is FastAPI in Docker on that box. The **phone** is a one-switch Android app. They meet only over HTTP. [Architecture](#architecture) has the diagram. [Android tracker](#android) is the phone repo. [Linux box and deploy](#linux) is how an AI ships a change.

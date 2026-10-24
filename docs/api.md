@@ -37,13 +37,13 @@ A Cloud Build log that says `gcr.io/k8s-skaffold/pack` is buildpacks. A log that
 
 | Layer | Choice |
 |-------|--------|
-| Language | Python **3.13** on Cloud Run (laptop may be 3.12 or 3.14) |
+| Language | Python **3.14** in the box image (`python:3.14-slim`). The laptop venv may differ |
 | Framework | FastAPI `>=0.115,<0.117` |
-| Server | Uvicorn `[standard]` `>=0.34,<0.36` |
-| Extra | `google-cloud-datastore` (fields + Device/LocationPing + User + BusCache writes); `google-cloud-firestore` (history + User + BusCache reads). Imported inside handlers, not at module top |
-| Auth | Cloud Run still `--allow-unauthenticated`. App-level JWT on `/users/me` only. `pwdlib` + `PyJWT` |
+| Server | Uvicorn `[standard]` `>=0.34,<0.36`, one worker |
+| Store | SQLite. On the box, `DATABASE_URL=sqlite:////data/hackathon.db`. Firestore helpers are off. `requirements.txt` has no `google-cloud` libraries |
+| Auth | Board, GPS, devices, buses, and Katie profile save are unauthenticated. JWT (`pwdlib` + `PyJWT`) is only on `/users/me` |
 
-`/health` and `/test_field` do not need Datastore or Firestore. Keep `/health` free of extra I/O.
+`/health` must stay free of extra I/O. The old Cloud Run notes (buildpacks, Python 3.13, Datastore) describe a host that is not serving.
 
 ## Routes
 
@@ -61,14 +61,16 @@ A Cloud Build log that says `gcr.io/k8s-skaffold/pack` is buildpacks. A log that
 | POST | `/v1/locations` | Phone GPS ping → Device last-known + LocationPing history |
 | GET | `/v1/devices` | All last-known phones (map poll) |
 | GET | `/v1/devices/{id}` | One phone |
-| GET | `/v1/locations?device_id=` | Ping history. JSON includes `source`: `firestore`, `datastore`, or `none` |
-| GET | `/v1/buses` | Live buses + `trails` (10 min of `[lng,lat,unix]` per id). Firestore `BusCache/newcastle`, TTL 15s. Fetches bustimes.org only when a looking tab finds the snapshot stale. Unauthenticated. |
+| GET | `/v1/locations?device_id=` | Ping history from SQLite. JSON `source` is `sqlite` |
+| GET | `/v1/buses` | Live buses + `trails` (10 min of `[lng,lat,unix]` per id). SQLite cache, TTL 15s, then bustimes.org. Unauthenticated |
 | GET | `/docs` | Swagger UI |
 | GET | `/openapi.json` | OpenAPI |
 
 `VERSION` lives in `app/config.py`.
 
 **Proven 11 September 2026:** emulator `POST /v1/locations` → HTTP 200 `stored=datastore`; `GET /v1/devices` returned that device. History GET is what the map drawer uses (card 38).
+
+**Proven 24 October 2026:** the same device id posted to the box and the body said `stored=sqlite`. `GET /health` was `0.1.26`. A card titled `Workflow probe` was created and deleted. `GET /v1/board` returned to 50 cards.
 
 CORS methods: `GET`, `POST`, `DELETE`, `OPTIONS`. Add `PUT`/`PATCH` in middleware when a card needs them.
 

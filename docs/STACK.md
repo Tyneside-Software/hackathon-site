@@ -13,7 +13,7 @@ Static files only. No bundler, no `package.json`. What you commit is what GitHub
 | New JS | **Alpine.js 3.14.8** (jsDelivr, `defer`) | [Alpine.js](#javascript) |
 | Map | Leaflet 1.9.4 + OSM | `app/index.html`, `app/map.js` |
 | Driving geometry | Public OSRM | Straight-line haversine if OSRM fails |
-| Our API | `config.js` → `window.HACKATHON_API` | Cloud Run URL in git |
+| Our API | `config.js` → `window.HACKATHON_API` | `http://100.65.94.5:8080` on the Linux box |
 | Kanban | SQLite via `GET /v1/board`, snapshot fallback | [Kanban board](#board) |
 | Wiki | Alpine + marked.js | This folder |
 | Host | GitHub Pages + `CNAME` | https://hackathon.tyneside.software |
@@ -50,7 +50,7 @@ Details: [Alpine.js](#javascript).
 
 Default centre: Newcastle `[54.9783, -1.6178]`.
 
-The map **does** call our API for phones (`GET /v1/devices`, `GET /v1/locations?device_id=`) and buses (`GET /v1/buses`). Waypoints do not. The browser never calls bustimes.org — the API caches that feed in Firestore. Full picture: [The map](#map).
+The map **does** call our API for phones (`GET /v1/devices`, `GET /v1/locations?device_id=`) and buses (`GET /v1/buses`). Waypoints do not. The browser never calls bustimes.org — the API caches that feed in SQLite. Full picture: [The map](#map).
 
 ## Our API from the browser
 
@@ -62,7 +62,7 @@ The map **does** call our API for phones (`GET /v1/devices`, `GET /v1/locations?
 
 From `app/` use `../config.js`. From `docs/` use `../config.js` if a wiki page ever calls the API (today they do not).
 
-Committed default is the Cloud Run URL. Override locally with `window.HACKATHON_API = "http://127.0.0.1:8080"` in the console, or a local edit you do not push.
+Committed default is `http://100.65.94.5:8080`. The board on localhost tries `http://127.0.0.1:8080` first. An HTTPS GitHub Pages tab cannot call the HTTP API.
 
 CORS must allow the page origin: `http://127.0.0.1:5500`, `http://localhost:5500`, `https://hackathon.tyneside.software`. That is configured on the API, not here.
 
@@ -80,8 +80,8 @@ On localhost the pages call `http://127.0.0.1:8080` first. See [Kanban board](#b
 
 ## Hosting
 
-Push **site** `main` → GitHub Pages.  
-Push **API** `main` → Cloud Run (buildpacks). That path is documented on [API](#api).
+Push **site** `main` → GitHub Pages. The Linux box copies the same files when `.\scripts\box.ps1 update` runs.  
+Push **API** `main` → the box rebuilds on that same command. Cloud Run is not the live API. See [Linux box and deploy](#linux).
 
 ## Versions we actually use
 
@@ -91,6 +91,6 @@ Push **API** `main` → Cloud Run (buildpacks). That path is documented on [API]
 | Leaflet | 1.9.4 (pinned + integrity) |
 | marked.js (wiki) | 11.1.1 |
 | Python (board script, `http.server`) | 3.12+ on the laptop is fine |
-| Python (Cloud Run buildpacks) | **3.13** (ubuntu2404 has no 3.12) |
+| Python (box image) | **3.14** (`python:3.14-slim`) |
 | FastAPI | `>=0.115,<0.117` |
 | PowerShell | 5.1+ (`start.ps1`) |
