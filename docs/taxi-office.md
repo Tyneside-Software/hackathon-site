@@ -69,6 +69,8 @@ Two extras rows sit with the samples. A hiring with no miles, no waiting, and so
 
 Alex runs the 1130 pence booking and the 490 pence mile. Sam runs the 1240 pence night booking. Completed takings are Alex 1620 pence and Sam 1240 pence. The day is still 2860 pence. These are gross fares. The desk does not subtract a driver share.
 
+The offered book includes Alex's 1 mile at 490 pence. Cancelling Sam's £12.40 row and completing Alex's £11.30 row and that mile leaves the running total at 1620 pence. The company day of 2860 pence stays in the ledger panel.
+
 The company day is its own ledger, separate from any single booking and separate from the game. It is three completed bookings, 1130, 1240, and 490 pence, and one cancel that adds 0. The 490 pence booking is tariff one, 1 mile, no waiting, and no extras. The sum is 2860 pence (£28.60). The desk labels that total completed-day. One hiring with no meter and soiling on is 12500 pence. The desk labels that `soiling-day`. The 2860 day stays beside it. Seven of those days are 20020 pence. The desk labels that `company-week`. It is not the game week. A day with no bookings is 0 pence. A day whose only booking is the cancelled 490 pence mile is also 0. The desk labels both `empty-day`. The 2370 and 2860 totals stay.
 
 The same three bookings, with the 490 pence mile cancelled before completion instead of completed, sum to 2370 pence. The desk labels that total cancelled-mile. Cancelling before `completed` leaves that fare off the ledger. A booking that has been completed does not then become cancelled.
