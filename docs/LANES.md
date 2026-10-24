@@ -8,13 +8,14 @@ Read [Development loop](#loop) for tests and for the integrator’s deploy. Read
 
 ## Who may deploy
 
-| Checkout | On Michael’s PC | Push `main` | Deploy the box |
-|----------|-----------------|-------------|----------------|
+| Checkout | On Michael’s PC | Merge to `main` | Deploy the box |
+|----------|-----------------|-----------------|----------------|
 | Integrator | `C:\Users\MichaelThomson\source\hackathon-site` and its two siblings | Yes | Yes. `.\scripts\box.ps1 update`, then `.\scripts\check.ps1` |
-| Product owner | `C:\Users\MichaelThomson\source\lanes\po` | No | No |
-| Dev lane | `C:\Users\MichaelThomson\source\lanes\dev-1` and `dev-2` | No | No |
+| Product owner | `C:\Users\MichaelThomson\source\lanes\po` | Its own radio branch | No |
+| grok-dev-1 | `C:\Users\MichaelThomson\source\lanes\grok-dev-1` | Its own pull requests | No |
+| grok-dev-2 | `C:\Users\MichaelThomson\source\lanes\grok-dev-2` | Its own pull requests | No |
 
-A `LANE.txt` file beside the three repos means that checkout is not the integrator. Do not push `main` from there. Do not run `box.ps1`. Do not read `C:\Users\MichaelThomson\Desktop\hackathon-linux.md`.
+A lane merges by squash-merging its own pull request. It does not push `main` by hand and it does not force-push `main`. It does not run `box.ps1`. It does not read `C:\Users\MichaelThomson\Desktop\hackathon-linux.md`. The PC folder `lanes\desk` is not a channel. Read `docs/radio/README.md`.
 
 On another machine, clone the three repos as siblings, add your own `LANE.txt`, and open a pull request. You do not have the deploy password. Do not copy that Desktop file, and do not copy `C:\Users\MichaelThomson\Desktop\confidential docs` into a repo.
 
@@ -55,21 +56,21 @@ gh issue view ISSUE --repo Tyneside-Software/hackathon-site --json labels,title
 
 If the labels show a different lane, stop. That issue is no longer yours.
 
-The pull request is opened on the repo whose files changed, into `main`. The body links the issue as `Tyneside-Software/hackathon-site#ISSUE`. A dev lane does not merge it. The integrator, or a human, merges with:
+The pull request is opened on the repo whose files changed, into `main`. The body links the issue as `Tyneside-Software/hackathon-site#ISSUE`. The lane that owns the branch squash-merges it when that slice passes its check. Do not wait until the end of the turn.
 
 ```powershell
 gh pr merge NUMBER --repo Tyneside-Software/REPO --squash --delete-branch
 ```
 
-Then the integrator, from `C:\Users\MichaelThomson\source\hackathon-site`, runs `.\scripts\box.ps1 update` and `.\scripts\check.ps1`.
+The integrator deploys from `C:\Users\MichaelThomson\source\hackathon-site` after product code has merged. A radio-only merge is not a deploy. Do not use the words Closes, Fixes, or Resolves in a pull request body.
 
 ## What each session does
 
-**Product owner.** Read `lanes\po\PROMPT.md`. File issues with acceptance criteria and the `ready` label when a dev may start. Watch open issues and pull requests with `.\scripts\lane-status.ps1`. Do not edit product code. When a pull request is merged, tell the human the integrator should deploy. Sync with `.\scripts\lane-sync.ps1`.
+**Product owner.** Read `docs/radio/integrator.md` on `origin/main`. File the issues listed there. Do not edit product code. After each issue, merge `docs/radio/po.md`. Keep going through that heading in the same turn.
 
-**Dev lane.** Read that lane’s `PROMPT.md`. Take one `ready` issue. Branch, test, push, open the pull request, report the URL, and stop. Take another issue only when the human says to keep going. Sync before the first edit and before the push.
+**Dev lane.** Read `docs/radio/integrator.md`. Do your heading, one slice at a time. Commit, rebase onto `origin/main`, push, and squash-merge before the next slice. Update your own radio file by its own merge in the middle of the turn. Read the other radio files before the next slice.
 
-**Integrator.** This is the session on the `source\hackathon-*` folders. It is the session Michael talks to. It writes each lane's orders in `C:\Users\MichaelThomson\source\lanes\desk\to-*.md` and reads their replies in `from-*.md`. It may commit straight to `main`, and it is the session that deploys. When lane pull requests are waiting, it merges them and deploys once. See [Desk](#desk).
+**Integrator.** This is the session on the `source\hackathon-*` folders. It is the session Michael talks to. It writes orders in `docs/radio/integrator.md` and reads the other radio files on `origin/main`. It deploys after product merges. It does not use the desk folder.
 
 ## Commands
 
@@ -90,24 +91,30 @@ A new dev lane on this PC:
 
 ## Paste-ready prompts
 
-These three lines do not change. The integrator changes the desk files, then Michael pastes the same line again to wake that lane.
+The same line starts a long turn. The work is on `origin/main`, in `docs/radio/integrator.md`. Paste it again only when that turn has finished.
 
 Product owner:
 
 ```
-Read and follow C:\Users\MichaelThomson\source\lanes\desk\to-po.md. Write your reply over C:\Users\MichaelThomson\source\lanes\desk\from-po.md.
+You are the product owner in C:\Users\MichaelThomson\source\lanes\po\hackathon-site. Pull origin/main. Read docs/radio/README.md and docs/radio/integrator.md. Do every open product-owner slice there. This turn is long. After each issue, merge docs/radio/po.md to main, pull, read the other radio files, and continue. Do not write C:\Users\MichaelThomson\source\lanes\desk. Do not deploy.
 ```
 
-Dev lane 1:
+grok-dev-1:
 
 ```
-Read and follow C:\Users\MichaelThomson\source\lanes\desk\to-grok-dev-1.md. Write your reply over C:\Users\MichaelThomson\source\lanes\desk\from-grok-dev-1.md.
+You are grok-dev-1 in C:\Users\MichaelThomson\source\lanes\grok-dev-1\hackathon-site. Pull origin/main. Read docs/radio/README.md and docs/radio/integrator.md. Do every open grok-dev-1 slice there. This turn is long. Commit each working slice, merge it to main, merge a docs/radio/grok-dev-1.md note, pull, read the other radio files, and continue. Do not write C:\Users\MichaelThomson\source\lanes\desk. Do not deploy.
 ```
 
-Dev lane 2:
+grok-dev-2:
 
 ```
-Read and follow C:\Users\MichaelThomson\source\lanes\desk\to-grok-dev-2.md. Write your reply over C:\Users\MichaelThomson\source\lanes\desk\from-grok-dev-2.md.
+You are grok-dev-2 in C:\Users\MichaelThomson\source\lanes\grok-dev-2\hackathon-site. Pull origin/main. Read docs/radio/README.md and docs/radio/integrator.md. Do every open grok-dev-2 slice there. This turn is long. Commit each working slice, merge it to main, merge a docs/radio/grok-dev-2.md note, pull, read the other radio files, and continue. Do not write C:\Users\MichaelThomson\source\lanes\desk. Do not deploy.
+```
+
+Integrator:
+
+```
+You are the integrator in C:\Users\MichaelThomson\source\hackathon-site. Pull origin/main. Read docs/radio/README.md and every docs/radio file. This turn is long. Update docs/radio/integrator.md and merge it as the lanes merge product. Deploy with box.ps1 only after product code has merged, then run check.ps1. Do not write C:\Users\MichaelThomson\source\lanes\desk.
 ```
 
 Git author on Michael’s PC is `Michael Thomson <michael.thomson@cloudconnectsoftware.com>`. A human on another machine uses their own name and email.
