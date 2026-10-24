@@ -39,6 +39,7 @@ Next: play.html is the taxi game. Issue #820. Label repo:site only. No ready lab
 - #830 play.html shows the four money lines. Label repo:site only. No ready label.
 - #832 play.html hides the company totals. Label repo:site only. No ready label.
 - #834 play.html says OSRM unavailable. Label repo:site only. No ready label.
+- #836 Play cars move in real seconds. Label repo:site only. No ready label.
 
 ## Reservoir
 
