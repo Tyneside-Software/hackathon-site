@@ -76,6 +76,7 @@
       "play-bought-trail",
       "play-trail-colour",
       "play-trail-order",
+      "play-trail-age",
       "play-started-ten",
       "play-locks",
       "play-osrm",
@@ -311,6 +312,21 @@
     return { lat: lat, lng: lng, at: at };
   }
 
+  const TRAIL_TEN_MINUTES = 600;
+
+  function boughtTrailSeconds(car) {
+    const sign = String(car && car.sign || "");
+    if (PLAY_SIGNS.indexOf(sign) !== -1) return null;
+    return TRAIL_TEN_MINUTES;
+  }
+
+  function noteBoughtTrailAge(dropped) {
+    const node = document.getElementById("play-trail-age");
+    if (!node) return;
+    node.dataset.minutes = "10";
+    node.dataset.dropped = String(dropped);
+  }
+
   function paintPlayTrails(feed) {
     clearPlayTrails();
     const keep = Number(feed && feed.trail_s);
@@ -319,12 +335,20 @@
     const cars = feed && Array.isArray(feed.cars) ? feed.cars : [];
     cars.forEach((car) => {
       if (!car || !car.sign || !Array.isArray(car.trail)) return;
+      const boughtS = boughtTrailSeconds(car);
+      const keepS = boughtS === null ? trailS : boughtS;
       const points = [];
+      let dropped = 0;
       car.trail.forEach((row) => {
         const point = trailPoint(row);
-        if (!point || now - point.at > trailS) return;
+        if (!point) return;
+        if (now - point.at > keepS) {
+          if (boughtS !== null) dropped += 1;
+          return;
+        }
         points.push([point.lat, point.lng]);
       });
+      if (boughtS !== null) noteBoughtTrailAge(dropped);
       if (points.length < 2) return;
       const line = L.polyline(points, {
         color: trailColour(car),
