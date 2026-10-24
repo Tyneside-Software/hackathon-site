@@ -62,6 +62,8 @@
   }
   gamePin(NEWCASTLE, "Sample pickup", "#7ec8ff");
   gamePin(DEPOT, "Sample drop-off", "#b7f0c2");
+  const DURHAM = [54.7753, -1.5849];
+  gamePin(DURHAM, "Durham customer", "#d9c2ff");
   let sampleRoute = null;
 
   function drawSample(latlngList) {
@@ -73,8 +75,8 @@
     ]).addTo(map);
   }
 
-  async function driveSample() {
-    const path = [DEPOT, NEWCASTLE, DEPOT];
+  async function driveSample(dest, doneText) {
+    const path = [DEPOT, dest, DEPOT];
     const joined = path.map((p) => `${p[1].toFixed(6)},${p[0].toFixed(6)}`).join(";");
     const url = `${OSRM}${joined}?overview=full&geometries=geojson`;
     const sampleStatus = document.getElementById("sample-status");
@@ -86,7 +88,7 @@
       const route = data.routes && data.routes[0];
       if (!route) throw new Error("no route");
       drawSample(route.geometry.coordinates.map(([lng, lat]) => [lat, lng]));
-      if (sampleStatus) sampleStatus.textContent = "Sample car drove to Grey's Monument and back.";
+      if (sampleStatus) sampleStatus.textContent = doneText;
     } catch (err) {
       drawSample(path);
       if (sampleStatus) sampleStatus.textContent = "OSRM unavailable";
@@ -94,7 +96,17 @@
   }
 
   const btnSample = document.getElementById("btn-sample");
-  if (btnSample) btnSample.addEventListener("click", driveSample);
+  if (btnSample) {
+    btnSample.addEventListener("click", () => driveSample(NEWCASTLE, "Sample car drove to Grey's Monument and back."));
+    if (btnSample.parentElement) {
+      const durhamButton = document.createElement("button");
+      durhamButton.type = "button";
+      durhamButton.className = "btn btn-ghost";
+      durhamButton.textContent = "Drive to the Durham customer and back";
+      durhamButton.addEventListener("click", () => driveSample(DURHAM, "Sample car drove to the Durham customer and back."));
+      btnSample.parentElement.appendChild(durhamButton);
+    }
+  }
   ["at_depot", "offered", "accepted", "started", "returning"].forEach((status) => {
     if (!btnSample || !btnSample.parentElement) return;
     const button = document.createElement("button");
