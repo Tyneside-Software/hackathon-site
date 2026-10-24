@@ -3,25 +3,33 @@
 Three GitHub repos, two hosts, one product. The **site** is static files. The **API** is a small FastAPI process. The **phone** is a one-switch Android app. Site and phone only meet the API over HTTP.
 
 ```
-  Browser
+  Browser on the tailnet
      │
-     ├─ HTML / CSS / JS  ← GitHub Pages  (hackathon.tyneside.software)
+     ├─ HTML / CSS / JS  ← nginx on the Linux box  (http://100.65.94.5/)
      │     index, progress, map, board, wiki, api-test, account
      │
      ├─ OSM tiles + public OSRM          (map waypoints; not our API)
      │
-     └─ fetch(HACKATHON_API + "/…")  ← Cloud Run  (hackathon-api-….run.app)
-           /health  /test_field  /register  /login  /users/me
+     └─ fetch(HACKATHON_API + "/…")  ← Docker on the same box, port 8080
+           /health  /v1/board  /register  /login  /users/me
            /v1/devices  /v1/locations  /v1/buses  /docs
-           buses: Firestore BusCache; API fetches bustimes.org only when a tab is looking
+           SQLite. Buses: cache 15s, then bustimes.org.
 
-  Phone (Tyneside Tracker APK)
-     └─ POST /v1/locations  ← same Cloud Run
+  GitHub Pages (https://hackathon.tyneside.software)
+     └─ same static files. The page is HTTPS and the API is HTTP,
+        so the browser will not call the box. The board falls back
+        to board-snapshot.json.
+
+  Phone (committed APK)
+     └─ API_BASE is still the old Cloud Run URL. That host is not
+        the live API. See Linux box and deploy.
 ```
 
 Locally the site is `python -m http.server 5500`, the API is `uvicorn` on `:8080`. `.\start.ps1` starts both. The phone is Android Studio / a debug APK.
 
-**11 September 2026:** live phones work end to end (cards 32–34). The emulator POSTs every minute; last-seen is last communication; Newcastle is on the map. Noah shipped the device drawer and ping-history path (36–38), then **register / login / Fetch me** (41). Live API **0.1.8**. `GET /v1/locations?device_id=` reads Firestore, Datastore fallback. Live buses are a map toggle (39, 43–46): `GET /v1/buses` from Firestore, with a 10-minute fading trail. A physical phone is still card 35.
+**Current:** the live API is SQLite in Docker on the Linux box. Deploy is SSH to `192.168.0.52` as `michael`, then `/usr/local/bin/update`. The password is not in git. On Michael’s PC it is `C:\Users\MichaelThomson\Desktop\hackathon-linux.md`. Read [Linux box and deploy](#linux) before connecting.
+
+**11 September 2026:** phones and the map were proved against the API of that week (cards 32–34, 36–38, 41). Buses are a map toggle (`GET /v1/buses`) with a 10-minute trail. The store since the move onto the box is SQLite. A physical phone is still card 35. The committed APK still names the old Cloud Run host.
 
 ## The three repos
 
@@ -31,9 +39,9 @@ Clone them as **siblings**. `start.ps1` finds the API as `../hackathon-api`. The
 |--|--------------------|-------------------|-----------------------|
 | Job | What people see | JSON the browser and phone can call | GPS toggle on a phone |
 | Code | HTML, CSS, a little JS | Python FastAPI | Kotlin |
-| Host | GitHub Pages | Cloud Run `europe-west2` | Sideloaded APK |
-| Deploy | Push `main` | Push `main` (Cloud Build **buildpacks**, not the Dockerfile) | Android Studio / `gradlew assembleDebug` |
-| Live | https://hackathon.tyneside.software | https://hackathon-api-git-975511976696.europe-west2.run.app | `app/build/outputs/apk/debug/app-debug.apk` |
+| Host | nginx on the Linux box, and GitHub Pages | Docker Compose on the Linux box | Sideloaded APK |
+| Deploy | Push `main`, then `/usr/local/bin/update` (Pages updates on the push) | Push `main`, then the same update script | Android Studio / `gradlew assembleDebug` |
+| Live | http://100.65.94.5/ and https://hackathon.tyneside.software | http://100.65.94.5:8080 | `app/build/outputs/apk/debug/app-debug.apk` |
 
 ## Site tree
 

@@ -38,13 +38,17 @@ uvicorn app.main:app --reload --port 8080
 
 ## Config
 
-`config.js` sets `window.HACKATHON_API`. The committed default is the Cloud Run URL. To hit local uvicorn instead, in the browser console:
+`config.js` sets `window.HACKATHON_API` to `http://100.65.94.5:8080`.
+
+The board pages, when the host is `localhost` or `127.0.0.1`, try `http://127.0.0.1:8080` first and then that Tailscale URL. The map, account page, progress page, and Katie shop always use `config.js`, so a local `start.ps1` API is not what they call.
+
+To point a page at local uvicorn from the browser console, set this before the page fetches:
 
 ```js
 window.HACKATHON_API = "http://127.0.0.1:8080"
 ```
 
-or edit `config.js` on your machine and do not push that change unless the team agrees.
+Deploy of the box is [Linux box and deploy](#linux). The SSH password is on Michael’s Desktop, file `hackathon-linux.md`, not in git.
 
 ## Night walkthrough
 

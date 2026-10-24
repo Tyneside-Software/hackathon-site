@@ -2,22 +2,24 @@
 
 Sibling repo: [Tyneside-Software/hackathon-api](https://github.com/Tyneside-Software/hackathon-api).
 
-How it fits the site: [Architecture](#architecture). Map consumers: [The map](#map). Deploy notes in the API repo: [DEPLOY.md](https://github.com/Tyneside-Software/hackathon-api/blob/main/docs/DEPLOY.md).
+How it fits the site: [Architecture](#architecture). Map consumers: [The map](#map). Deploy: [Linux box and deploy](#linux) and, in the API repo, [DEPLOY.md](https://github.com/Tyneside-Software/hackathon-api/blob/main/docs/DEPLOY.md).
 
-**Live:** `https://hackathon-api-git-975511976696.europe-west2.run.app`  
-The site stores that in `config.js` as `window.HACKATHON_API`.
+**Live:** `http://100.65.94.5:8080`  
+`config.js` sets `window.HACKATHON_API` to that. The SSH password is not in git. On Michael’s PC: `C:\Users\MichaelThomson\Desktop\hackathon-linux.md`.
 
-Code `VERSION` is **0.1.8**. After a deploy, `GET /health` should match that (or later). If live `/test_field` is 404, the Cloud Run revision is behind `main`.
+Code `VERSION` is `app/config.py`. `GET /health` on the box must match it after `.\scripts\box.ps1 update`. The old Cloud Run URL is not this API.
 
-Layout: routes live in `app/routers/` (`health`, `auth`, `fields`, `locations`, `devices`, `buses`). `app/main.py` builds the app and still has `uvicorn.run(app)` at the bottom for Cloud Run.
+Layout: routes live in `app/routers/` (`health`, `auth`, `fields`, `locations`, `devices`, `buses`, `board`, Katie). `app/main.py` builds the app. The box runs it from the Dockerfile. The `__main__` uvicorn block is there for the old buildpacks entrypoint.
 
-Accounts (Noah, `830036a`, card **41**): `POST /register`, `POST /login` (JSON), `POST /token` (OAuth2 password form for Swagger Authorize), `GET /users/me` (bearer). Users are a `User` model in Firestore (`User` documents), Datastore fallback, process cache. Passwords hashed with pwdlib; JWT via PyJWT. Set `JWT_SECRET_KEY` on Cloud Run or tokens die on a new revision. Site page: [account.html](../account.html).
+Accounts (Noah, card **41**): `POST /register`, `POST /login` (JSON), `POST /token` (OAuth2 password form for Swagger Authorize), `GET /users/me` (bearer). Users are SQLite. Passwords hashed with pwdlib; JWT via PyJWT. Set `JWT_SECRET_KEY` in the box `.env` or tokens die when the container restarts. Site page: [account.html](../account.html).
 
 GPS, fields, `/health`, and map reads stay **unauthenticated**.
 
-## How Cloud Run builds this
+## How the box runs this
 
-The GitHub trigger uses **Google Cloud buildpacks** (`pack` on **ubuntu2404**), **not** the Dockerfile.
+`/usr/local/bin/update` builds the Dockerfile and recreates the container. See [Linux box and deploy](#linux).
+
+The old Cloud Run trigger used **buildpacks** (`pack` on **ubuntu2404**), not the Dockerfile. Those files are still in the API repo:
 
 | File | Why it exists |
 |------|----------------|
@@ -25,7 +27,7 @@ The GitHub trigger uses **Google Cloud buildpacks** (`pack` on **ubuntu2404**), 
 | `main.py` (repo root) | Re-exports `app` because pack defaults to `main:app` |
 | `Procfile` | `web: uvicorn app.main:app --host 0.0.0.0 --port $PORT` |
 | `.python-version` / `project.toml` | **Python 3.13** — ubuntu2404 has 3.13 and 3.14 only. **3.12 fails the build** |
-| `Dockerfile` | For a Docker-based trigger only |
+| `Dockerfile` | What the Linux box builds. `python:3.14-slim`. |
 
 A Cloud Build log that says `gcr.io/k8s-skaffold/pack` is buildpacks. A log that says `invalid Python version specified: 3.12` means the pin is wrong for that OS.
 

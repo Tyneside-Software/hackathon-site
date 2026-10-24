@@ -8,7 +8,7 @@ Static front end for the Tyneside Logistics hackathon: dispatch → field work. 
 **API:** https://github.com/Tyneside-Software/hackathon-api  
 **Android:** https://github.com/Tyneside-Software/hackathon-android  
 
-Push to `main` deploys this site (GitHub Pages) and the API (Cloud Run). Local still works.
+Push to `main` updates GitHub Pages. The board the team edits, and the API, update when `/usr/local/bin/update` runs on the Linux box. See [docs/linux.md](docs/linux.md). The SSH password is not in git. On Michael’s PC it is `C:\Users\MichaelThomson\Desktop\hackathon-linux.md`.
 
 ## Documentation
 
@@ -21,6 +21,7 @@ Push to `main` deploys this site (GitHub Pages) and the API (Cloud Run). Local s
 | [docs/#android](docs/#android) | Android tracker (emulator test, logcat) |
 | [docs/#map](docs/#map) | Map layers: waypoints, phones, drawer, buses |
 | [docs/#buses](docs/#buses) | Live buses via `GET /v1/buses` (Firestore cache, 30 miles) |
+| [docs/#linux](docs/#linux) | **Linux box and deploy** — SSH, then `/usr/local/bin/update` |
 | [docs/#grok](docs/#grok) | **For Grok** — briefing Connor (or anyone) points an AI at |
 | [docs/#connor](docs/#connor) | Connor’s wiki shelf |
 | [docs/STACK.md](docs/STACK.md) | HTML/CSS, Alpine.js, Leaflet, OSRM, Pages, board script |
@@ -86,7 +87,7 @@ Filter the board with `?person=lewis`. Open a card with `#t-04`.
 
 `board.js` and `app/map.js` are vanilla leftovers. Keep them working; migrate by card, do not rewrite the night in one go. Leaflet stays for the map.
 
-API base URL: `config.js` → `window.HACKATHON_API` (Cloud Run URL in git). Include that file on any page that `fetch`es the API. Local override: `http://127.0.0.1:8080`.
+API base URL: `config.js` → `window.HACKATHON_API` (`http://100.65.94.5:8080`). Include that file on any page that `fetch`es the API. The board on localhost tries `http://127.0.0.1:8080` first. Other pages do not.
 
 ## Board cards
 
@@ -103,9 +104,10 @@ python scripts/update_board.py move 07 doing --by connor
 
 ## Deploy
 
-Merge to `main` on this repo → GitHub Pages at https://hackathon.tyneside.software  
+1. `git pull --rebase origin main`, commit, `git push origin main` on this repo and, if the API changed, on `hackathon-api`. `origin` is `Tyneside-Software`.
+2. From this folder run `.\scripts\box.ps1 update`. That SSHes to the box and runs `/usr/local/bin/update`.
 
-The API repo deploys to Cloud Run on its own `main` (GitHub **buildpacks**, Python 3.13). `config.js` already holds the Cloud Run URL.
+That fast-forwards nginx at `/var/www/hackathon-site` and rebuilds the API container. GitHub Pages updates from the site push alone. Password and the askpass snippet: `C:\Users\MichaelThomson\Desktop\hackathon-linux.md`. Details: [docs/linux.md](docs/linux.md).
 
 ## Rule
 

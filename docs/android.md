@@ -7,7 +7,7 @@ How it fits: [Architecture](#architecture). Map UI: [The map](#map). Physical ph
 ```
 phone  --POST /v1/locations-->  hackathon-api  -->  Device (last-known) + LocationPing (history)
 map    --GET  /v1/devices  -->  last-known, every 8s
-drawer --GET  /v1/locations?device_id= --> ping history (Firestore, Datastore fallback)
+drawer --GET  /v1/locations?device_id= --> ping history (SQLite)
 ```
 
 One switch: tracking on or off. While on, a foreground service POSTs **every minute**, even if lat/lng have not moved. That ping is the heartbeat. `recorded_at` is when the ping left the phone, so the map age is last communication, not a stale GPS clock.
@@ -29,7 +29,7 @@ This AVD ignores console `geo fix` and caches Google HQ as last-known. The debug
 
 1. Clone `hackathon-android` beside the site and API.
 2. Open that folder in Android Studio. Let Gradle sync.
-3. **JDK 17**, not Android Studio’s bundled JBR (that is Java 25; AGP 8.7 will not run on it). Microsoft OpenJDK 17 works. Set `JAVA_HOME` before `gradlew`.
+3. **JDK 17.** Microsoft OpenJDK 17 at `C:\Program Files\Microsoft\jdk-17.0.20.101-hotspot`. Set `JAVA_HOME` before `gradlew`. The project is AGP 9.4.1 / Gradle 9.6.
 4. Start an AVD (Pixel 6a is the one already tested) or plug in a phone with USB debugging.
 5. Run `app`. Grant location (and notifications on Android 13+).
 6. Flip the switch on, or from a shell:

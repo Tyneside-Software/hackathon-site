@@ -31,6 +31,12 @@
           "summary": "start.ps1, ports 5500 / 8080, never file://."
         },
         {
+          "id": "linux",
+          "title": "Linux box and deploy",
+          "file": "linux.md",
+          "summary": "SSH to 192.168.0.52, then /usr/local/bin/update. Password is on Michael's Desktop, not in git."
+        },
+        {
           "id": "onboarding",
           "title": "Onboarding (night)",
           "href": "../onboarding.html",

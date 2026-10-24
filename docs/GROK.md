@@ -19,6 +19,16 @@ https://github.com/Tyneside-Software/hackathon-site/blob/main/docs/GROK.md
 
 ---
 
+## Live box — read this before a deploy
+
+The API and the board the team edits run on the Linux box. Cloud Run is not the live API. The procedure is [Linux box and deploy](#linux) (`docs/linux.md`).
+
+SSH as `michael` to `192.168.0.52`. Do not SSH to `100.65.94.5` (Tailscale SSH wants a browser check). After `git push origin main`, run `/usr/local/bin/update` on the box.
+
+The SSH password is not in git. On Michael’s PC it is in `C:\Users\MichaelThomson\Desktop\hackathon-linux.md`. Do not copy that file into a repo. Connor’s machine does not have it.
+
+---
+
 ## What you are allowed to do
 
 1. **Execute** — edit files, run commands, commit, **push `origin/main`** unless Connor says not to.
@@ -36,6 +46,8 @@ https://github.com/Tyneside-Software/hackathon-site/blob/main/docs/GROK.md
 - Do not rewrite `board.js` / `app/map.js` in one go. New map behaviour is a module inside the existing IIFE (phones, buses).
 - Do not impersonate Michael, Reeve, Lewis, or Noah in git author unless that is actually the machine user.
 - Do not copy `C:\Users\MichaelThomson\Desktop\confidential docs` (that is Michael’s private folder, not this repo).
+- Do not copy `C:\Users\MichaelThomson\Desktop\hackathon-linux.md` into git. That file holds the SSH password.
+- Do not delete the live SQLite file, `docker compose down -v`, or re-seed the board. `/usr/local/bin/update` rebuilds the image and keeps `data/hackathon.db`.
 
 ---
 
@@ -45,14 +57,14 @@ Three **sibling** folders:
 
 ```
 …/hackathon-site       ← this wiki, static Pages site
-…/hackathon-api        ← FastAPI, Cloud Run
+…/hackathon-api        ← FastAPI, Docker on the Linux box
 …/hackathon-android    ← Kotlin tracker APK
 ```
 
 | | Site | API | Android |
 |--|------|-----|---------|
 | GitHub | https://github.com/Tyneside-Software/hackathon-site | https://github.com/Tyneside-Software/hackathon-api | https://github.com/Tyneside-Software/hackathon-android |
-| Live | https://hackathon.tyneside.software | Cloud Run `/health` | debug APK |
+| Live | http://100.65.94.5/ and Pages | http://100.65.94.5:8080/health | debug APK |
 | Local | http://127.0.0.1:5500/ | http://127.0.0.1:8080/health | Android Studio |
 
 Connor’s clone path may differ from Michael’s (`C:\Users\MichaelThomson\source\…`). Discover it with the workspace root; do not hard-code Michael’s home directory into Connor’s docs.
@@ -79,7 +91,7 @@ Onboarding (human night notes): `onboarding.html`
 | CSS | `styles.css` — Tyneside amber/navy tokens |
 | New chrome JS | **Alpine.js 3.14.8** from jsDelivr, `defer`, `x-data` (wiki, API test) |
 | Map | Leaflet 1.9.4 + OSM + public OSRM. **Vanilla `app/map.js` IIFE** — append, do not rewrite. Phones, drawer, buses live here |
-| API base | `config.js` → `window.HACKATHON_API` (Cloud Run URL committed) |
+| API base | `config.js` → `window.HACKATHON_API` (`http://100.65.94.5:8080`) |
 | Board | SQLite `GET /v1/board`. Git seed: `scripts/cards.json`, `board-snapshot.json`, `hackathon-api/app/board_seed.json` |
 
 No `package.json`. What you push is what Pages serves.
@@ -100,7 +112,7 @@ Working Alpine + API example: `api-test.html` (`GET /test_field`).
 
 ## Tech stack (API)
 
-FastAPI + Uvicorn on Cloud Run `europe-west2`. GitHub deploys with **buildpacks** (Python **3.13**, ubuntu2404). The Dockerfile is unused by that trigger. Root `main.py` re-exports the app for pack’s `main:app`.
+FastAPI + Uvicorn in Docker Compose on the Linux box. Image `python:3.14-slim`, one worker, SQLite. `VERSION` is `hackathon-api/app/config.py`. After deploy, `/health` must show that same string. From the site folder an AI runs `.\scripts\box.ps1 update` (password stays in the Desktop sheet). See [Linux box and deploy](#linux). Buildpacks files are still in the API repo for the old Cloud Run trigger. That host is not what the site calls.
 
 | Method | Path |
 |--------|------|
@@ -108,18 +120,19 @@ FastAPI + Uvicorn on Cloud Run `europe-west2`. GitHub deploys with **buildpacks*
 | GET | `/health` |
 | GET | `/test_field` → `{ ok, key, value }` |
 | GET | `/docs` Swagger |
-| POST | `/create_field` (Datastore) |
+| POST | `/create_field` (SQLite) |
 | GET | `/view_field/{key}` |
 | POST | `/register` · `/login` · `/token` (Noah, card 41) |
 | GET | `/users/me` (bearer) |
-| POST | `/v1/locations` (phone GPS) |
+| POST | `/v1/locations` (phone GPS, SQLite) |
 | GET | `/v1/devices` (map poll) |
-| GET | `/v1/locations?device_id=` (ping history; `source` firestore or datastore) |
-| GET | `/v1/buses` (Firestore `BusCache` + 10 min trails; bustimes.org only if the snapshot is stale) |
+| GET | `/v1/locations?device_id=` (ping history, SQLite) |
+| GET | `/v1/board` (kanban, SQLite) |
+| GET | `/v1/buses` (SQLite cache, 15s; bustimes.org when the cache is stale) |
 
-CORS must allow `https://hackathon.tyneside.software` and `http://127.0.0.1:5500`. If Cloud Run has `CORS_ORIGINS` set, code defaults are ignored.
+CORS always keeps `https://hackathon.tyneside.software`, localhost port 5500, and `http://100.65.94.5`, and adds whatever `CORS_ORIGINS` lists. See [API](#api) and [Linux box and deploy](#linux).
 
-If live `/test_field` is 404, the Cloud Run revision is behind `main`. Check `/health` for `version` (code is **0.1.8**). See [API](#api).
+Live health is http://100.65.94.5:8080/health . Its `version` must match `app/config.py`.
 
 Android tracker: [Android](#android). Map surface: [The map](#map). Live buses: [Buses](#buses). Emulator posts every minute; last-seen is last communication. Cards 32–34, 36–41, 43–48 are done. Account page: `/account.html`. Buses: `/v1/buses` (card 45) with a 10-minute fading trail (46) snapped to streets via OSRM (48). Noah: phone show/hide (47).
 
