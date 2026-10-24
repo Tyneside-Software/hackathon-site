@@ -59,6 +59,11 @@ def cancel_before():
     return []
 
 
+def cancel_after_zero_miles():
+    """Started, but no miles: no fuel and no fare."""
+    return []
+
+
 def cancel_after_one_mile(game_day=1):
     return [line("fuel", -FUEL_PENCE_A_MILE, game_day, job_id=1, taxi_id=1)]
 

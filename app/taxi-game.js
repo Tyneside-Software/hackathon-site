@@ -85,6 +85,10 @@
     return [];
   }
 
+  function cancelAfterZeroMiles() {
+    return [];
+  }
+
   function cancelAfterOneMile() {
     return [line("fuel", -FUEL_PENCE_A_MILE)];
   }
@@ -146,6 +150,7 @@
     workedDay: workedDay,
     cancelBefore: cancelBefore,
     cancelAfterOneMile: cancelAfterOneMile,
+    cancelAfterZeroMiles: cancelAfterZeroMiles,
     newCar: newCar,
     sumPence: sumPence,
     formatPounds: formatPounds,

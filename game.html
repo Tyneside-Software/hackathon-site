@@ -54,6 +54,7 @@
     <div class="map-actions" style="display:flex;gap:0.5rem;flex-wrap:wrap;margin-top:1rem">
       <button type="button" class="btn btn-ghost" id="btn-before">Cancel before the car starts</button>
       <button type="button" class="btn btn-ghost" id="btn-after">Cancel after 1 mile</button>
+      <button type="button" class="btn btn-ghost" id="btn-zero">Cancel after start with 0 miles</button>
       <button type="button" class="btn btn-ghost" id="btn-car">Buy a second car</button>
     </div>
     <p class="lede" id="case-result">Choose a case.</p>
@@ -112,6 +113,10 @@
       result.textContent = rows.length === 0 ? "No lines." : rows.map(function (row) {
         return row.kind + " " + game.formatPounds(row.amountPence);
       }).join(", ");
+    });
+    document.getElementById("btn-zero").addEventListener("click", function () {
+      var rows = game.cancelAfterZeroMiles();
+      result.textContent = rows.length === 0 ? "No lines." : "A zero-mile cancel wrote a line.";
     });
     document.getElementById("btn-after").addEventListener("click", function () {
       var rows = game.cancelAfterOneMile();
