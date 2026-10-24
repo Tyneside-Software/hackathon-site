@@ -143,6 +143,7 @@
       "play-fare-t12",
       "play-next-feed",
       "play-feed-401",
+      "play-fare-name",
       "play-locks",
       "play-osrm",
       "play-buses",
@@ -545,6 +546,7 @@
     playFares.length = 0;
     const fares = feed && Array.isArray(feed.fares) ? feed.fares : [];
     let skippedT12 = 0;
+    const fareNames = [];
     fares.forEach((fare) => {
       if (!fare) return;
       if (String(fare.sign || "") === "T12") {
@@ -558,20 +560,29 @@
       const marker = L.marker([lat, lng], {
         icon: L.divIcon({
           className: "play-chip-icon",
-          html: '<span class="play-fare" style="display:inline-block;padding:2px 6px;border-radius:6px;background:#fff;color:#0c1219;font:700 11px/1.2 system-ui,sans-serif;white-space:nowrap">' + name + " waiting</span>",
+          html: '<span class="play-fare" style="display:inline-block;padding:2px 6px;border-radius:6px;background:#fff;color:#0c1219;font:700 11px/1.2 system-ui,sans-serif;white-space:nowrap">' + name + "</span>",
           iconSize: [120, 22],
           iconAnchor: [60, 22]
         }),
-        title: name + " waiting",
+        title: name,
         zIndexOffset: 650
       }).addTo(map);
       playFares.push(marker);
+      fareNames.push(name);
     });
     const note = document.getElementById("play-fare-t12");
     if (note) {
       note.dataset.t12 = skippedT12 ? "hidden" : "none";
       note.dataset.skipped = String(skippedT12);
     }
+    noteFareName(fareNames);
+  }
+
+  function noteFareName(names) {
+    const node = document.getElementById("play-fare-name");
+    if (!node) return;
+    node.dataset.text = "name";
+    node.dataset.pins = String(names.length);
   }
 
   function showPlayAccount() {
