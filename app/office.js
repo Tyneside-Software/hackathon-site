@@ -532,7 +532,7 @@
     showWorked(2, [[0, 450]], "Tariff two, no yards, 45 seconds.");
   });
 
-  document.getElementById("btn-restore").addEventListener("click", function () {
+  function showFullDay() {
     samples = [
       completedRow({
         title: "£11.30 booking",
@@ -579,7 +579,20 @@
     renderSamples();
     renderLedger();
     dayNote("Restored three completed bookings, 1130, 1240, and 490. The day shows " + runningPence() + ".");
-  });
+  }
+
+  function showEmptyDay() {
+    samples = [];
+    addedQuotes = [];
+    persistDay();
+    renderSamples();
+    renderLedger();
+    dayNote("Empty day. The total is 0.");
+  }
+
+  document.getElementById("btn-restore").addEventListener("click", showFullDay);
+  document.getElementById("btn-day-full").addEventListener("click", showFullDay);
+  document.getElementById("btn-day-empty").addEventListener("click", showEmptyDay);
 
   document.getElementById("btn-clear").addEventListener("click", function () {
     try {
