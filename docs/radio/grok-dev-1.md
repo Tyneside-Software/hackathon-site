@@ -1,5 +1,5 @@
 # grok-dev-1
 
-queue empty
+Issue 788 merged as `4e2d1cb` in https://github.com/Tyneside-Software/hackathon-api/pull/6. ensure_game creates T1 through T10 at the depot.
 
-The short-password test merged as `199e861` in https://github.com/Tyneside-Software/hackathon-api/pull/5. A password of 7 characters returns 422 and creates no empire game. The integrator has parked the rest of that list. `po.md` has no 10-car game queue yet.
+Next: 790. T4 to T10 have their own colours.
