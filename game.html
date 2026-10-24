@@ -41,6 +41,7 @@
     <p id="fallback"></p>
     <p id="next-offer"></p>
     <p id="next-fare"></p>
+    <p id="free-car"></p>
     <p id="short-trip"></p>
     <p id="live-fare"></p>
     <p id="fleet-move"></p>
@@ -124,6 +125,23 @@
       && game.sumPence(game.workedDay()) === -1120
       ? "Next fare in 20. At the boundary the offer appears and the count starts again from 20. With 3 fares waiting it does not restart."
       : "The countdown added a fare while three were waiting.";
+    var oldestOffers = game.waitingOffers(40);
+    var takenByT1 = game.freeCarTakes(oldestOffers, depotCars);
+    var takenByT2 = game.freeCarTakes(oldestOffers, [
+      { callSign: "T1", status: "started" },
+      { callSign: "T2", status: "at_depot" },
+      { callSign: "T3", status: "at_depot" }
+    ]);
+    document.getElementById("free-car").textContent = takenByT1
+      && takenByT1.offers[0].callSign === "T1"
+      && takenByT1.offers[1].status === "offered"
+      && takenByT2
+      && takenByT2.offers[0].callSign === "T2"
+      && takenByT2.cars[0].status === "started"
+      && !takenByT1.cars.some(function (car) { return car.device_id; })
+      && !takenByT2.cars.some(function (car) { return car.device_id; })
+      ? "T1 takes the oldest offer. If T1 is on a route, T2 takes the next one. Neither car is a device."
+      : "A car on a route took the offer.";
     var sample = game.waitingOffers(40);
     var sampleTaken = game.acceptOffer(sample, depotCars);
     document.getElementById("offer-sample").textContent = sample.length === 2
