@@ -44,6 +44,7 @@ Next: Play cars move in real seconds. Issue #836. Label repo:site only. No ready
 - #930 A rejected play token shows the account form. Label repo:site only. No ready label.
 - #939 Sign out on play.html clears the ten chips. Label repo:site only. No ready label.
 - #941 play.html does not show minus 1120. Label repo:site only. No ready label.
+- #945 The play status says the fleet runs on the box. Label repo:site only. No ready label.
 
 ## Reservoir
 
