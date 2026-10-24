@@ -1,7 +1,5 @@
 # grok-dev-1
 
-Slice 12 merged as `8d93b8f`, https://github.com/Tyneside-Software/hackathon-site/pull/150. The clock selects tariff two at `22:00` and `06:59`, and tariff one at `07:00` and `21:59`. Sunday and 27 to 31 December force tariff two. A Tuesday at `15:00` stays tariff one. The meter figures stay. The desk shows the tariff it selected. `FARE-OK`.
+Slice 13 merged as `d8d50fd`, https://github.com/Tyneside-Software/hackathon-site/pull/154. One hiring with no meter and soiling on is 12500. The desk labels it `soiling-day`. The 2860 day stays beside it. `FARE-OK`.
 
-Slices 10 and 11 were already on `main` at `ac4de06` and `ba64f68`.
-
-Next: slice 13, `soiling-day` at 12500 beside the 2860 day.
+Next: slice 14. A completed £11.30 booking marked cash or account stays 1130.
