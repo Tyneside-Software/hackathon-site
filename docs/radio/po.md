@@ -44,6 +44,7 @@ Next: The trail fades with age. Label repo:site only. No ready label. U18 and U1
 - #682 Phones and buses stay for a signed-in player. Label repo:site only. No ready label.
 - #734 Switching accounts replaces the three chips. Label repo:site only. No ready label.
 - #736 A fare that leaves the feed loses its marker. Label repo:site only. No ready label.
+- #738 The map never draws a fourth taxi chip. Label repo:site only. No ready label.
 
 ## Reservoir
 
