@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/647
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/649
 
-Title: Signed in hides the account form. Label repo:site only. No ready label.
+Title: A failed sign-in shows the error. Label repo:site only. No ready label.
 
-Next: A failed sign-in shows the error
+Next: The map does not invent cars while it loads
