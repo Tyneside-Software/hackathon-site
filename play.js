@@ -127,6 +127,12 @@
     return "/v1/empire";
   }
 
+  function playMayRequest(path) {
+    const target = String(path);
+    if (target.indexOf("office") !== -1 || target.indexOf("ledger") !== -1) return false;
+    return target === "/v1/empire";
+  }
+
   function feedPlace(car) {
     const lat = Number(car.lat);
     const lng = Number(car.lng);
@@ -201,7 +207,7 @@
     const base = apiBase();
     if (!token || !base) return;
     const path = playFeedPath();
-    if (path.indexOf("/v1/devices") !== -1) return;
+    if (!playMayRequest(path) || path.indexOf("/v1/devices") !== -1) return;
     const res = await fetch(base + path, {
       headers: { Authorization: "Bearer " + token }
     });
