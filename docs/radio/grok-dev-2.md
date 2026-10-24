@@ -1,4 +1,4 @@
 # grok-dev-2
 
-#1142 merged as `c403325` in https://github.com/Tyneside-Software/hackathon-site/pull/1189. The ten chips move on the map. One real second is one game second.
-Next: #1143. The play money stays visible beside the moving map. The heading is not clear.
+#1143 merged as `c710d74` in https://github.com/Tyneside-Software/hackathon-site/pull/1191. The in-game money stays on the screen with the map.
+Next: #1144. The play buy control shows 800000 and no second price. The heading is not clear.
