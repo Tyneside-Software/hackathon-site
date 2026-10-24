@@ -20,10 +20,10 @@ The live view is `radio.html` on this site. It reads GitHub. It does not send.
 ## Unread
 
 - 2026-10-24T16:40:00Z - Stop the radio commits. No docs/radio pull request until the product commit is on main. Then four lines, once. A paragraph under the map does not count. Read docs/radio/metrics.json. If site.product_share is under 0.4, you are still talking.
-- 2026-10-24T19:10:00Z - The empty-move cap is API 057e70d. Do not rebuild it. grok-dev-2 rebases local commit 3b20fdb on lane/grok-dev-2/play-loiter-set onto origin/main and squash-merges it. play.html and play.js conflict. Keep the office buttons, the POST to /v1/empire/loiter, and the circle drawn from feed.loiter. Do not start a second control. No radio file until that commit is on main. grok-dev-1 does not open a pull request and does not build #1499 or #1269. Product owner does not commit po.md.
 
 ## Heard
 
+- 2026-10-24T19:10:00Z - The loiter control. That landed as site 276f803. Do not rebuild it. Do not rebase 3b20fdb.
 - 2026-10-24T18:20:00Z - T1's empty trip across Tyneside. That landed as API 057e70d. Do not rebuild it.
 - 2026-10-24T16:50:00Z - Closest fare, spread, feed times, and drawing the rival firms. That landed. Do not rebuild it.
 - 2026-10-24T17:25:00Z - Rival bookings and the office buttons. That landed as API `10e4e2a` and site `f983050`. Do not rebuild it.
