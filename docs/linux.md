@@ -103,6 +103,7 @@ From `hackathon-site`, with no password typed:
 .\scripts\box.ps1 health
 .\scripts\box.ps1 update
 .\scripts\box.ps1 ssh "hostname"
+.\scripts\check.ps1
 ```
 
 `box.ps1` reads `SSH_HOST`, `SSH_USER`, and `SSH_PASSWORD` from `C:\Users\MichaelThomson\Desktop\hackathon-linux.md`. The script is in git. The password is not.
@@ -110,6 +111,8 @@ From `hackathon-site`, with no password typed:
 `update` is the deploy. It pulls both repos on the box and rebuilds the API. Push `origin/main` first or the box stays on the old commit.
 
 `health` checks the API, the site, and SSH.
+
+`check.ps1` is the read-only proof after a deploy. It must print `CHECK-OK`. It compares `app/config.py` with live `/health`, counts the board, calls `/v1/buses`, and runs `tests.test_board`. It does not write a card. A queued list of changes follows [Development loop](#loop).
 
 ## Android, from this PC
 

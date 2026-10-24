@@ -15,11 +15,11 @@ Value is 1 to 5. Hours can be blank, which shows as no estimate. A card can move
 | [todo.html](../todo.html) | Every to-do card |
 | [done.html](../done.html) | Finished cards |
 
-On this machine, `http://127.0.0.1:5500/board.html` talks to `http://127.0.0.1:8080`. The public site uses `config.js`, then falls back if that API has no board yet.
+On this machine, `http://127.0.0.1:5500/board.html` talks to `http://127.0.0.1:8080` first. The board the team edits is http://100.65.94.5/board.html, which uses the box API. GitHub Pages is HTTPS, so it cannot call that HTTP API and falls back to `board-snapshot.json`.
 
-## The cards are not only in the database
+## Copies of the board
 
-The database deployment is not the live server yet. Current cards are also in git, in three files that stay copies of each other:
+The live board is SQLite on the Linux box. These three files are copies. They are not the board people edit:
 
 | File | Why it exists |
 |------|----------------|
@@ -27,7 +27,7 @@ The database deployment is not the live server yet. Current cards are also in gi
 | `scripts/cards.json` | Same copy, in the site repo |
 | `board-snapshot.json` | What the pages show when `/v1/board` does not answer, so GitHub Pages still has every card |
 
-After edits in SQLite, copy them back before you depend on a new machine or a fresh deploy:
+`/usr/local/bin/update` does not copy the live board into git, and it does not replace the live database from these files. Run `pull` only when the git seed and the Pages fallback should catch up with the box:
 
 ```powershell
 python scripts/update_board.py pull

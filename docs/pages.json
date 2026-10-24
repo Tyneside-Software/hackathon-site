@@ -37,6 +37,12 @@
           "summary": "SSH to 192.168.0.52, then /usr/local/bin/update. Password is on Michael's Desktop, not in git."
         },
         {
+          "id": "loop",
+          "title": "Development loop",
+          "file": "LOOP.md",
+          "summary": "How an AI takes a queue of changes through test, push, deploy, and check.ps1."
+        },
+        {
           "id": "onboarding",
           "title": "Onboarding (night)",
           "href": "../onboarding.html",
@@ -70,7 +76,7 @@
           "id": "board",
           "title": "Kanban board",
           "file": "board.md",
-          "summary": "cards.json and update_board.py."
+          "summary": "Live SQLite board. Git seed is a copy, not the board people edit."
         },
         {
           "id": "pages",
@@ -82,7 +88,7 @@
           "id": "buses",
           "title": "Live buses",
           "file": "buses.md",
-          "summary": "Show buses via GET /v1/buses, Firestore cache, dots then chips."
+          "summary": "Show buses via GET /v1/buses. SQLite cache, dots then chips."
         }
       ]
     },
@@ -94,7 +100,7 @@
           "id": "api",
           "title": "API stack and routes",
           "file": "api.md",
-          "summary": "FastAPI, CORS, Cloud Run, GPS and field routes."
+          "summary": "FastAPI on the Linux box, SQLite, GPS, board, and buses."
         },
         {
           "id": "android",

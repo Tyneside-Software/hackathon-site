@@ -2,7 +2,7 @@
 
 A **Show buses** toggle on [the map](../app/). Off by default. While on, the page polls **our API** `GET /v1/buses` every 15 seconds and draws vehicles inside a **30 mile** circle of Newcastle. How it sits next to waypoints and phones: [The map](#map).
 
-The browser does **not** call bustimes.org. It does **not** call BODS. One looking tab is enough to refresh a Firestore snapshot; every other tab reads that snapshot. If nobody has the layer on, nothing is fetched.
+The browser does **not** call bustimes.org. It does **not** call BODS. One looking tab is enough to refresh the SQLite snapshot; every other tab reads that snapshot. If nobody has the layer on, nothing is fetched.
 
 ## Behaviour
 
@@ -18,7 +18,7 @@ The browser does **not** call bustimes.org. It does **not** call BODS. One looki
 | Zoom 14+ | Upright **line-number chips** with a heading pip. |
 | Stale vehicle | Pings older than **10 minutes** are not drawn. |
 | Status | Count in view, 30-mile count, newest ping age, **cache age** or **refreshed**. |
-| Trail | Last **10 minutes** of positions, stored on the Firestore snapshot. Snapped to streets with the same public OSRM driving router as **Calculate route** (in-view buses only, queued, cached). Fades to invisible at 10 minutes. Straight line until OSRM answers, so the trail still appears immediately. |
+| Trail | Last **10 minutes** of positions, stored on the SQLite snapshot. Snapped to streets with the same public OSRM driving router as **Calculate route** (in-view buses only, queued, cached). Fades to invisible at 10 minutes. Straight line until OSRM answers, so the trail still appears immediately. |
 | Click | Popup. Does **not** drop a waypoint. |
 | Feed down | Status line. Waypoints and phones stay. |
 
@@ -27,18 +27,18 @@ Demo URL: [`/app/?buses=1`](../app/?buses=1) (optional `&zoom=14` for chips).
 ## Shared cache
 
 ```
-  Map tab(s)                  hackathon-api                 Firestore
-  GET /v1/buses  ──────────►  snapshot younger than 15s? ──► BusCache/newcastle
+  Map tab(s)                  hackathon-api                 SQLite
+  GET /v1/buses  ──────────►  snapshot younger than 15s? ──► bus_cache, region newcastle
        ▲                         │ no: fetch bustimes.org
        │                         │ write snapshot
        └──── vehicles JSON ──────┘
 ```
 
-- **TTL 15s.** Fresh snapshot is served from memory (same Cloud Run instance) or Firestore (every instance).
-- **Lazy.** No Cloud Scheduler. No looking clients → no GET → no bustimes.org hit.
-- **One upstream.** A lock plus a second cache read stop a thundering herd on one instance. Occasional double-fetch across instances is still far cheaper than every browser hitting bustimes.org.
-- **Slim payload.** id, coordinates `[lng,lat]`, heading, datetime, destination, line name, colours. ~300 vehicles, well under the 1MB document limit.
-- **Fallback.** Firestore first, Datastore `BusCache` blob, then in-memory. If bustimes.org is quiet we serve the last snapshot with `stale: true`.
+- **TTL 15s.** A fresh snapshot is served from memory in that process, then from the SQLite `bus_cache` row.
+- **Lazy.** No scheduler. No looking clients means no `GET /v1/buses`, which means no bustimes.org hit.
+- **One upstream.** One Docker worker. A lock plus a second cache read stop a thundering herd in that process.
+- **Slim payload.** id, coordinates `[lng,lat]`, heading, datetime, destination, line name, colours. About 300 vehicles, one SQLite row.
+- **Fallback.** Memory, then SQLite. If bustimes.org is quiet and a snapshot exists, the response says `stale: true`.
 
 `GET /v1/buses` stays **unauthenticated**, same as map phone reads. Card **45**. First toggle: **39**. Readable chips: **44**.
 

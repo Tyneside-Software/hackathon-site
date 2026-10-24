@@ -12,6 +12,8 @@ The wiki people use is [index.html](index.html) (live `/docs/`). Markdown here i
 | [JAVASCRIPT.md](JAVASCRIPT.md) | `#javascript` | Alpine.js |
 | [board.md](board.md) | `#board` | Kanban generator |
 | [api.md](api.md) | `#api` | FastAPI on the Linux box |
-| [GROK.md](GROK.md) | `#grok` | Briefing for Connor’s AI |
+| [GROK.md](GROK.md) | `#grok` | Briefing for an AI |
+| [linux.md](linux.md) | `#linux` | Box, SSH, deploy, emulator |
+| [LOOP.md](LOOP.md) | `#loop` | Queued changes: test, push, update, check |
 | [connor/](connor/home.md) | `#connor` | Connor’s shelf |
 | [adding.md](adding.md) | `#adding` | How to add a page |

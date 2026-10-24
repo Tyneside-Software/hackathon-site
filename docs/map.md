@@ -1,6 +1,6 @@
 # The map
 
-Live at [hackathon.tyneside.software/app/](../app/). One Leaflet canvas, three layers, one vanilla IIFE in `app/map.js`. Do **not** rewrite that file. Append a module, the same way phones and buses were added.
+One Leaflet canvas, three layers, one vanilla IIFE in `app/map.js`. Do **not** rewrite that file. Append a module, the same way phones and buses were added. On the tailnet the page is http://100.65.94.5/app/.
 
 Centre: Newcastle `[54.9783, -1.6178]`.
 
@@ -10,7 +10,7 @@ Centre: Newcastle `[54.9783, -1.6178]`.
 |-------|---------|------|------|
 | Waypoints + route | On | Clicks on the map. Public OSRM driving geometry; haversine straight-line if OSRM fails | None |
 | Phones | On | Our API `GET /v1/devices` last-known. Drawer: `GET /v1/locations?device_id=` | 8s |
-| Buses | **Off** | Our API `GET /v1/buses` (Firestore cache of bustimes.org). Browser never calls bustimes.org | 15s, only while the toggle is on |
+| Buses | **Off** | Our API `GET /v1/buses` (SQLite cache of bustimes.org). Browser never calls bustimes.org | 15s, only while the toggle is on |
 
 None of these `fitBounds` over the others except: clicking a phone card flies to that device, and **Show history on map** may pad to the ping path. **Show buses** must not steal the camera.
 
@@ -30,11 +30,9 @@ The drawer lists LocationPings. Consecutive pings at the same place are hidden (
 
 ## Buses
 
-**Show buses** / **Hide buses**. Off means no request at all. While on: `GET /v1/buses` every 15s. The API serves a Firestore snapshot (TTL 15s) or, if that snapshot is stale, fetches bustimes.org once and writes it. Each vehicle keeps a **10-minute trail** snapped to the streets (public OSRM, same as Calculate route) that fades to nothing at the far end. Buses stay on the map at **every zoom**. Below 14 they are coloured dots; 14+ they are upright line-number chips. Hidden tab: skip the tick. Clicking a bus opens a popup and does **not** add a waypoint.
+**Show buses** / **Hide buses**. Off means no request at all. While on: `GET /v1/buses` every 15s. The API serves a SQLite snapshot (TTL 15s) or, if that snapshot is stale, fetches bustimes.org once and writes it. Each vehicle keeps a **10-minute trail** snapped to the streets (public OSRM, same as Calculate route) that fades to nothing at the far end. Buses stay on the map at **every zoom**. Below 14 they are coloured dots; 14+ they are upright line-number chips. Hidden tab: skip the tick. Clicking a bus opens a popup and does **not** add a waypoint.
 
-Full page: [Live buses](#buses).
-
-Full page: [Live buses](#buses).
+Full page: [Live buses](#buses). The live map on the tailnet is http://100.65.94.5/app/. GitHub Pages cannot call the HTTP API.
 
 ## Files
 

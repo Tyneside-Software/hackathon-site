@@ -2,7 +2,9 @@
 
 This page is the briefing for an AI (Grok, or anything similar) helping **Connor** on the Tyneside Logistics hackathon. Connor works the same way Michael does: he asks Grok, Grok reads the repo, Grok does the work.
 
-If you have been pointed at this URL and given a task, **read this whole page, then [Architecture](#architecture), then execute**. Do not ask Connor to paste stack notes that are already here.
+If you have been pointed at this URL and given a task, **read this whole page, then [Architecture](#architecture), then execute**. Do not ask the human to paste stack notes that are already here.
+
+A queued list of changes is one job. Follow [Development loop](#loop) and finish every item, including `.\scripts\box.ps1 update` and `.\scripts\check.ps1`, before reporting back.
 
 Been away, or the board looks noisy: the human catch-up page is [Current progress](../progress.html).
 

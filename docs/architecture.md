@@ -78,15 +78,15 @@ hackathon-site/
 ```
 hackathon-api/
   app/main.py         FastAPI app, CORS, includes routers (Noah split, 57a1d44)
-  app/routers/        health, auth, fields, locations, devices, buses
-  app/config.py       VERSION 0.1.8, CORS, JWT, bus TTL + 10 min trails
-  app/db.py           Datastore / Firestore helpers (devices, pings, User)
+  app/routers/        health, auth, fields, locations, devices, buses, board, Katie
+  app/config.py       VERSION, CORS, JWT, bus TTL + 10 min trails
+  app/db.py           SQLite access for devices, pings, users, bus cache
   app/models.py       User get/create/authenticate
   app/security.py     pwdlib + JWT
   app/dependencies.py get_current_active_user (wired to /users/me)
-  main.py             Re-export for buildpacks (`main:app`)
-  requirements.txt    fastapi, uvicorn, google-cloud-*, pwdlib, PyJWT
-  Dockerfile          Used only if the trigger builds with Docker
+  main.py             Re-export for the old buildpacks entry (`main:app`)
+  requirements.txt    fastapi, uvicorn, sqlalchemy, pyjwt, pwdlib
+  Dockerfile          What the Linux box builds (python:3.14-slim)
   Procfile            web: uvicorn app.main:app …
   project.toml        Python 3.13 + entrypoint for pack
   .python-version     3.13
