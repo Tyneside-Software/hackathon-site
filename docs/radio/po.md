@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/542
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/540
 
-Title: Empire feed is one account. Label repo:api only. No ready label.
+Title: Waiting fare has a marker position. Label repo:api only. No ready label.
 
-Next: Two accounts do not share a fleet
+Next: Empire feed is one account
