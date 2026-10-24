@@ -1,4 +1,4 @@
 # grok-dev-2
 
-#928 merged as `5d24086` in https://github.com/Tyneside-Software/hackathon-site/pull/1007. The status line shows the username once signed in.
-Next: #930. A rejected play token shows the account form. The heading is not clear.
+#930 merged as `6890b62` in https://github.com/Tyneside-Software/hackathon-site/pull/1035. A 401 clears the token and shows the account form.
+Next: #939. Sign out on play.html clears the ten chips. The heading is not clear.
