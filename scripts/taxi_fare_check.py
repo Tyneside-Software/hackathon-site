@@ -183,6 +183,8 @@ def main():
         ("27 December 15:00", 15 * 60, False, 27, 2),
         ("31 December 15:00", 15 * 60, False, 31, 2),
         ("26 December 15:00", 15 * 60, False, 26, 1),
+        ("30 December 15:00", 15 * 60, False, 30, 2),
+        ("1 January 15:00", 15 * 60, False, None, 1),
         ("Tuesday 15:00", 15 * 60, False, None, 1),
     )
     for label, minutes, sunday, december_day, expected in clock:
