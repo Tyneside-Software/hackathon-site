@@ -30,9 +30,9 @@ foreach ($name in $names) {
         git fetch origin
         if ($LASTEXITCODE -ne 0) { throw "git fetch failed in $name" }
         $branch = (git rev-parse --abbrev-ref HEAD).Trim()
-        $dirty = git status --porcelain
+        $dirty = git status --porcelain --untracked-files=no
         if ($dirty) {
-            throw "$name has uncommitted work on $branch. lane-sync will not stash it."
+            throw "$name has uncommitted changes on $branch. lane-sync will not stash them."
         }
         if ($branch -eq "main") {
             git pull --ff-only origin main
