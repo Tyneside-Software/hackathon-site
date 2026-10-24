@@ -1241,6 +1241,7 @@
     notePersonStays(stayed, arrived);
     notePersonSign();
     showWaitingCount(waitingPeople(feed));
+    showWaitingNames(waitingNames(feed));
   }
 
   function personPinText(person) {
@@ -1270,6 +1271,34 @@
       count += 1;
     });
     return count;
+  }
+
+  function waitingNames(feed) {
+    const people = feed && Array.isArray(feed.people) ? feed.people : [];
+    const names = [];
+    people.forEach((person) => {
+      if (!person || allocatedTaxiArrived(feed, person)) return;
+      const name = String(person.name || "").trim();
+      if (!name) return;
+      names.push(name);
+    });
+    return names;
+  }
+
+  function showWaitingNames(names) {
+    const list = document.getElementById("play-waiting-names");
+    if (!list) return;
+    list.textContent = "";
+    if (!names || !names.length) {
+      list.hidden = true;
+      return;
+    }
+    list.hidden = false;
+    names.forEach((name) => {
+      const item = document.createElement("li");
+      item.textContent = name;
+      list.appendChild(item);
+    });
   }
 
   function jobCounts(feed) {
@@ -1311,12 +1340,14 @@
 
   function showWaitingCount(count) {
     const node = document.getElementById("play-waiting-count");
-    if (!node) return;
     if (count === null || count === undefined) {
+      showWaitingNames(null);
+      if (!node) return;
       node.textContent = "";
       node.hidden = true;
       return;
     }
+    if (!node) return;
     node.hidden = false;
     node.textContent = count + " waiting";
   }
