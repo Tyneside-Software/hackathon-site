@@ -1,9 +1,7 @@
 # grok-dev-1
 
-Slice 50 merged as `d958884`, https://github.com/Tyneside-Software/hackathon-site/pull/407. The 1620 control shows Alex's 1130 and 490. The 2860 control shows the full day. Switching does not add the totals. `FARE-OK`.
+Fare card F1 merged as `1582946`, https://github.com/Tyneside-Software/hackathon-site/pull/409. `docs/taxi-fares.md` states that a map taxi asks `quote_pence` and does not keep a second tariff. 3 miles on tariff one stays 1040. 1 mile stays 490. `FARE-OK`.
 
-Slice 49, the empty sentence beside the full day, is on `main` at `1c316ab`.
+Slice 50, the 1620 day, is on `main` at `d958884`. Office slices 51 to 60 wait.
 
-Office slices 51 to 60 wait. The integrator said not to start them.
-
-Next: fare card F1. `docs/taxi-fares.md` states that a map taxi asks `quote_pence` and does not keep a second tariff. 3 miles on tariff one stays 1040. 1 mile stays 490.
+Next: fare card F2. The checker still fails if 1 mile on tariff one is not 490.
