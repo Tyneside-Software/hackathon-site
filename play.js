@@ -15,4 +15,8 @@
   }).addTo(map);
   map.setView(monument, 10);
   map.fitBounds(circle.getBounds());
+  const depot = [55.0367, -1.5075];
+  L.marker(depot, { title: "Shiremoor depot" })
+    .bindTooltip("Shiremoor depot", { permanent: true, direction: "top" })
+    .addTo(map);
 })();
