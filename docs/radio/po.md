@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/527
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/577
 
-Title: Empire tables are not devices. Label repo:api only. No ready label.
+Title: A car at the depot still checks in. Label repo:api only. No ready label.
 
-Next: Register starts the fleet on the box
+Next: One car failing does not stop the others
