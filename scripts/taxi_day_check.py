@@ -575,6 +575,20 @@ def main():
     if "data.server_now" not in remembered:
         print("the glide did not use server_now", file=sys.stderr)
         return 1
+    faded = map_js.split("function paintEmpireTrails", 1)
+    if len(faded) != 2:
+        print("the taxi trail was not drawn", file=sys.stderr)
+        return 1
+    faded_body = faded[1].split("function ", 1)[0]
+    if "car.trail" not in faded_body or "car.colour" not in faded_body or "opacity" not in faded_body:
+        print("the trail did not fade in the car colour", file=sys.stderr)
+        return 1
+    if "empireHidden" not in faded_body:
+        print("hide taxis left the trail on the map", file=sys.stderr)
+        return 1
+    if "paintEmpireTrails()" not in handler:
+        print("the hide button did not remove the trail", file=sys.stderr)
+        return 1
     posted_trip = taxi_game.post_live_trip(7, 3, ())
     posted_kinds = [row["kind"] for row in posted_trip["lines"]]
     posted_amounts = [row["amount_pence"] for row in posted_trip["lines"]]

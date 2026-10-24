@@ -1445,6 +1445,7 @@
   const EMPIRE_POLL_MS = 2000;
   let empirePoll = 0;
   let empireFeed = null;
+  let empireHidden = false;
   let empireClock = null;
   let empireMotion = 0;
   const empireMarkers = new Map();
@@ -1762,22 +1763,25 @@
   const btnTaxis = document.getElementById("btn-taxis");
   function syncTaxiButton() {
     if (!btnTaxis) return;
-    btnTaxis.textContent = taxisOn ? "Hide taxis" : "Show taxis";
-    btnTaxis.classList.toggle("is-on", taxisOn);
-    btnTaxis.setAttribute("aria-pressed", taxisOn ? "true" : "false");
+    const shown = !!empireFeed && !empireHidden;
+    btnTaxis.textContent = shown ? "Hide taxis" : "Show taxis";
+    btnTaxis.classList.toggle("is-on", shown);
+    btnTaxis.setAttribute("aria-pressed", shown ? "true" : "false");
   }
   if (btnTaxis) {
     btnTaxis.addEventListener("click", () => {
-      if (!empireAccount) {
+      if (!empireFeed) {
         taxisOn = false;
+        empireHidden = true;
         syncTaxiButton();
         paintTaxiList(true);
         return;
       }
-      taxisOn = !taxisOn;
+      empireHidden = !empireHidden;
+      taxisOn = false;
       syncTaxiButton();
-      if (taxisOn && empireAccount) paintTaxiList(true);
-      else stopFleet();
+      paintEmpireTrails();
+      paintTaxiList(true);
     });
   }
   const empireForm = document.getElementById("empire-account");
@@ -1855,6 +1859,7 @@
     empireAccount = false;
     taxisOn = false;
     paintTaxiList(true);
+    syncTaxiButton();
   }
 
   async function signInEmpire() {
@@ -1950,6 +1955,36 @@
       client: Date.now() / 1000,
     };
     if (!empireMotion) empireMotion = requestAnimationFrame(glideEmpire);
+    paintEmpireTrails();
+  }
+
+  function paintEmpireTrails() {
+    empireTrails.forEach((layer) => map.removeLayer(layer));
+    empireTrails = [];
+    if (empireHidden || !empireFeed || !Array.isArray(empireFeed.cars)) return;
+    empireFeed.cars.forEach((car) => {
+      const raw = Array.isArray(car.trail) ? car.trail : [];
+      const points = [];
+      raw.forEach((row) => {
+        if (!Array.isArray(row) || row.length < 2) return;
+        const lat = Number(row[1]);
+        const lng = Number(row[0]);
+        if (!Number.isFinite(lat) || !Number.isFinite(lng)) return;
+        points.push([lat, lng]);
+      });
+      if (points.length < 2) return;
+      const group = L.layerGroup();
+      for (let i = 1; i < points.length; i += 1) {
+        const opacity = Math.max(0.12, i / (points.length - 1));
+        L.polyline([points[i - 1], points[i]], {
+          color: car.colour || "#94a3b8",
+          weight: 4,
+          opacity: opacity,
+        }).addTo(group);
+      }
+      group.addTo(map);
+      empireTrails.push(group);
+    });
   }
 
   function empireNow() {
