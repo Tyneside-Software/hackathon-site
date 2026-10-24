@@ -6,7 +6,7 @@ The old app/ queue is paused. Do not build issues #699 through #786. Do not edit
 
 A line marked OPEN has no issue number yet. The product owner opens it. A dev skips that line and takes the next numbered line. A dev does not invent the OPEN sentence.
 
-cash_pence is on main as 834d811. The place table is on main as 6ecd1d3. The morning journey is on main as ca1819a. Do not rebuild #1262, #1331, or #1332. Do not build #1180, #1152, #1231, #1232, #1233, or #1234 until the local-journey slices in front of #1263 are on main. fare_in is not the cash balance. 800000 is not added to fare_in.
+cash_pence is on main as 834d811. The place table is on main as 6ecd1d3. The morning journey is on main as ca1819a. The day journey is on main as c045352. Do not rebuild #1262, #1331, #1332, or #1333. Do not build #1180, #1152, #1231, #1232, #1233, or #1234 until the local-journey slices in front of #1263 are on main. fare_in is not the cash balance. 800000 is not added to fare_in.
 
 The dashboard compares GitHub with the live box, and each code line-count graph is the last 3 hours. The devs do not edit scripts/agents_dashboard.py. A dashboard change is not a deploy.
 
@@ -14,11 +14,10 @@ The dashboard compares GitHub with the live box, and each code line-count graph 
 
 Files in hackathon-api only: app/empire.py, app/routers/empire.py, app/models.py, tests/test_empire.py. Do not edit play.html, play.js, or scripts/agents_dashboard.py. An ALTER may add cash_pence. Do not wipe the live database.
 
-Skip these. They are already on main: #808, #810, #812, #814, #816, #818, #921, #923, #926, #932, #936, #943, #948, #952, #954, #959, #970, #973, #975, #979, #988, #1010, #1011, #1012, #1013, #1014, #1126, #1127, #1128, #1129, #1130, #1131, #1132, #1133, #1134, #1147, #1148, #1149, #1150, #1151, #1153, #1178, #1184, #1185, #1186, #1135, #1226, #1227, #1228, #1230, #1235, #1154, #1262, #1331, #1332.
+Skip these. They are already on main: #808, #810, #812, #814, #816, #818, #921, #923, #926, #932, #936, #943, #948, #952, #954, #959, #970, #973, #975, #979, #988, #1010, #1011, #1012, #1013, #1014, #1126, #1127, #1128, #1129, #1130, #1131, #1132, #1133, #1134, #1147, #1148, #1149, #1150, #1151, #1153, #1178, #1184, #1185, #1186, #1135, #1226, #1227, #1228, #1230, #1235, #1154, #1262, #1331, #1332, #1333.
 
-Next: From 09:30 to 16:30 Europe/London the journey uses Silverlink, Royal Quays, the coast, the hospitals, Grey's Monument, and Central Station. Issue #1333. Label repo:api only. No ready label. Keep going for about 30 minutes.
+Next: From 16:30 to 19:30 Europe/London the journey runs from Cobalt and town back to the homes and the coast. Issue #1334. Label repo:api only. No ready label. Keep going for about 30 minutes.
 
-- #1333 From 09:30 to 16:30 Europe/London the journey uses Silverlink, Royal Quays, the coast, the hospitals, Grey's Monument, and Central Station. Label repo:api only. No ready label.
 - #1334 From 16:30 to 19:30 Europe/London the journey runs from Cobalt and town back to the homes and the coast. Label repo:api only. No ready label.
 - #1335 From 19:30 to 01:00 Europe/London the journey runs from the Quayside, Osborne Road, Tynemouth, and Whitley Bay back to the homes, the quiet hours make fewer fares, and Newcastle Airport stays a small share at every hour. Label repo:api only. No ready label.
 - #1336 The drop is the other end of the journey, the two ends do not share one bearing from the depot, and the old 1.2 mile pickup and 3 mile drop on that bearing are not the journey. Label repo:api only. No ready label.
@@ -44,17 +43,16 @@ Next: From 09:30 to 16:30 Europe/London the journey uses Silverlink, Royal Quays
 - #1269 cash_pence on the feed is never 2860, 1130, or 1240. Label repo:api only. No ready label.
 - #1270 A second account has its own ten cars and its own cash_pence. Label repo:api only. No ready label.
 - #1281 The bought car holds at the Shiremoor depot for four seconds before its first fare. Label repo:api only. No ready label.
-Do not build #1180, #1152, #1231, #1232, #1233, or #1234 until the local-journey slices in front of #1263 are on main. Do not rebuild #1262, #1331, or #1332.
+Do not build #1180, #1152, #1231, #1232, #1233, or #1234 until the local-journey slices in front of #1263 are on main. Do not rebuild #1262, #1331, #1332, or #1333.
 
 ### grok-dev-2
 
 Files: play.html and play.js only. Do not edit app/map.js, app/empire.py, tests/test_empire.py, or scripts/agents_dashboard.py. Keep the map filling the screen under the bar. Keep the money in the corner panel.
 
-Skip these. They are already on main: #836, #838, #840, #842, #845, #847, #849, #851, #928, #930, #939, #941, #945, #950, #956, #961, #977, #982, #991, #993, #1022, #1023, #1024, #1025, #1136, #1137, #1138, #1139, #1140, #1141, #1142, #1143, #1144, #1145, #1146, #1155, #1156, #1157, #1158, #1159, #1160, #1161, #1195, #1198, #1203, #1194, #1218, #1221, #1202, #1223, #1224, #1222, #1196, #1197, #1214, #1215, #1217, #1216, #1220, #1271, #1282, #1272, #1273, #1274, #1275, #1277, #1278, #1299, #1300, #1301.
+Skip these. They are already on main: #836, #838, #840, #842, #845, #847, #849, #851, #928, #930, #939, #941, #945, #950, #956, #961, #977, #982, #991, #993, #1022, #1023, #1024, #1025, #1136, #1137, #1138, #1139, #1140, #1141, #1142, #1143, #1144, #1145, #1146, #1155, #1156, #1157, #1158, #1159, #1160, #1161, #1195, #1198, #1203, #1194, #1218, #1221, #1202, #1223, #1224, #1222, #1196, #1197, #1214, #1215, #1217, #1216, #1220, #1271, #1282, #1272, #1273, #1274, #1275, #1277, #1278, #1299, #1300, #1301, #1302.
 
-Next: The play map fare pin shows the passenger name as text. Issue #1302. Label repo:site only. No ready label. Keep going for about 30 minutes.
+Next: A later good feed clears Buy failed. Issue #1303. Label repo:site only. No ready label. Keep going for about 30 minutes.
 
-- #1302 The play map fare pin shows the passenger name as text. Label repo:site only. No ready label.
 - #1303 A later good feed clears Buy failed. Label repo:site only. No ready label.
 - #1304 The taxi list on play.html names with_passenger the same way it names returning. Label repo:site only. No ready label.
 - #1305 Sign out clears Buy failed. Label repo:site only. No ready label.
@@ -70,6 +68,7 @@ Next: The play map fare pin shows the passenger name as text. Issue #1302. Label
 - #1347 Starting another account clears the previous account's fare pins before the next feed. Label repo:site only. No ready label.
 - #1352 A 401 on the empire feed removes the fare pins. Label repo:site only. No ready label.
 - #1355 A 401 on the empire feed clears Buy failed. Label repo:site only. No ready label.
+- #1361 A 401 on the empire feed clears the taxi chips and the taxi list. Label repo:site only. No ready label.
 
 ## Reservoir
 
@@ -105,4 +104,4 @@ Not assigned. Do not start these until the product owner moves a line into a dev
 - When a numbered line lands on main, move one reservoir line into that queue and write a new reservoir line. Keep at least 16 unfinished lines in front of each dev. Do not copy issues #699 through #786, the office list, or map titles M1 to M32.
 - Read both dev radios. Point grok-dev-1 at the first unfinished line in ### grok-dev-1 and grok-dev-2 at the first unfinished line in ### grok-dev-2. If a dev stopped after one slice, say the turn was short and name the next numbered line.
 - One dashboard change in scripts/agents_dashboard.py. The empire card says whether the spent line shows 800000 pence only when the feed lists T11. No second line-count graph. No agents.html. No password.
-- The next player-visible slice is #1302. The play map fare pin shows the passenger name as text. Do not rebuild the fullscreen map. Do not edit play.html, play.js, or the API. Do not deploy.
+- The next player-visible slice is #1303. A later good feed clears Buy failed. Do not rebuild the fullscreen map. Do not edit play.html, play.js, or the API. Do not deploy.
