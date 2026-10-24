@@ -154,6 +154,10 @@
     return rows;
   }
 
+  function elapsedSeconds(startMs, nowMs) {
+    return (nowMs - startMs) / 1000;
+  }
+
   function sumPence(rows) {
     return rows.reduce(function (total, row) {
       return total + row.amountPence;
@@ -183,6 +187,7 @@
     startUnpaidCar: startUnpaidCar,
     newDriver: newDriver,
     threeCarDay: threeCarDay,
+    elapsedSeconds: elapsedSeconds,
     workedWeek: workedWeek,
     fleetWeek: fleetWeek,
     dayWithDriver: dayWithDriver,

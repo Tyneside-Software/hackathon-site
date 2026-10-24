@@ -135,6 +135,11 @@ def fleet_week():
     return rows
 
 
+def elapsed_seconds(start_ms, now_ms):
+    """One real second is one game second. There is no multiplier."""
+    return (now_ms - start_ms) / 1000
+
+
 def second_car():
     taxi = {
         "id": 2,

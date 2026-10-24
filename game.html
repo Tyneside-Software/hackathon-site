@@ -37,6 +37,7 @@
     <p class="hero-kicker">Empire · Shiremoor depot</p>
     <h1 style="font-size:1.7rem;margin-bottom:0.4rem">One empire day</h1>
     <p class="lede">The depot is Shiremoor. The worked day below is the example already checked at −1120 pence. This page does not call the API.</p>
+    <p id="clock"></p>
     <ul id="places"></ul>
     <p class="lede" id="berwick-job"></p>
     <p class="lede" id="hexham-job"></p>
@@ -69,6 +70,7 @@
   <script src="app/taxi-game.js"></script>
   <script>
     var game = window.TaxiGame;
+    document.getElementById("clock").textContent = "Ten real seconds are " + game.elapsedSeconds(0, 10000) + ".";
     var labels = {
       standing: "Standing for the one car",
       fare_in: "Fare in",

@@ -28,6 +28,6 @@ Issue 28 is One empire day at Shiremoor: https://github.com/Tyneside-Software/ha
 
 ## Checkers
 
-The worked day still sums to −1120. `scripts/taxi_day_check.py` prints `DAY-OK`. Seven identical days are `scripts/taxi_week_check.py`, which prints `WEEK-OK` and sums to −7840. `scripts/taxi_geo_check.py` prints `GEO-OK`.
+The worked day still sums to −1120. `scripts/taxi_day_check.py` prints `DAY-OK` and `TIME-OK`. One real second is one game second. Ten real seconds are 10. There is no multiplier. Seven identical days are `scripts/taxi_week_check.py`, which prints `WEEK-OK` and sums to −7840. `scripts/taxi_geo_check.py` prints `GEO-OK`.
 
 The map shows the circle and the Shiremoor depot. The sample car is not a device. Its drawn path does not reprice this day.
