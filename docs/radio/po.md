@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/245
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/247
 
-Title: Worked job shown as one booking row. Label repo:site only. No ready label.
+Title: Game ledger panel shows minus 1120. Label repo:site only. No ready label.
 
-Next: Game ledger panel shows minus 1120
+Next: Empire empty book says no bookings yet
