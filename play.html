@@ -48,8 +48,9 @@
       <label for="play-password">Password
         <input id="play-password" name="password" type="password" autocomplete="current-password" minlength="8" required>
       </label>
-      <button type="submit" id="play-signin">Sign in</button>
-      <button type="button" id="play-create">Create account</button>
+      <button type="button" id="play-start">Start</button>
+      <button type="submit" id="play-signin" hidden>Sign in</button>
+      <button type="button" id="play-create" hidden>Create account</button>
       <p id="play-password-rule">The password is at least 8 characters.</p>
       <p id="play-account-status"></p>
     </form>
@@ -79,6 +80,6 @@
   </main>
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-  <script src="play.js?v=20261024-mappage1"></script>
+  <script src="play.js?v=20261024-start1"></script>
 </body>
 </html>

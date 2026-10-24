@@ -281,6 +281,12 @@
   function showPlayAccount() {
     const form = document.getElementById("play-account");
     if (form) form.hidden = false;
+    const start = document.getElementById("play-start");
+    if (start) start.hidden = false;
+    const signIn = document.getElementById("play-signin");
+    const create = document.getElementById("play-create");
+    if (signIn) signIn.hidden = true;
+    if (create) create.hidden = true;
   }
 
   function hidePlayAccount() {
@@ -338,6 +344,43 @@
     localStorage.setItem("hackathon-empire-user", username);
     if (status) status.textContent = "";
     hidePlayAccount();
+    paintPlayStatus(null);
+    pollPlay();
+  }
+
+  async function startPlay(event) {
+    if (event) event.preventDefault();
+    const usernameEl = document.getElementById("play-username");
+    const passwordEl = document.getElementById("play-password");
+    const status = document.getElementById("play-account-status");
+    const username = usernameEl ? usernameEl.value.trim() : "";
+    const password = passwordEl ? passwordEl.value : "";
+    const base = apiBase();
+    if (!base) {
+      if (status) status.textContent = "The API address is missing.";
+      return;
+    }
+    await fetch(base + "/register", {
+      method: "POST",
+      headers: { Accept: "application/json", "Content-Type": "application/json" },
+      body: JSON.stringify({ username: username, password: password })
+    });
+    const logged = await fetch(base + "/login", {
+      method: "POST",
+      headers: { Accept: "application/json", "Content-Type": "application/json" },
+      body: JSON.stringify({ username: username, password: password })
+    });
+    const session = await logged.json().catch(function () { return null; });
+    if (!logged.ok || !session || !session.access_token) {
+      if (status) status.textContent = "Start failed.";
+      return;
+    }
+    localStorage.setItem("hackathon-empire-token", session.access_token);
+    localStorage.setItem("hackathon-empire-user", username);
+    if (status) status.textContent = "";
+    hidePlayAccount();
+    const page = document.getElementById("play-map-page");
+    if (page && page.scrollIntoView) page.scrollIntoView();
     paintPlayStatus(null);
     pollPlay();
   }
@@ -489,7 +532,9 @@
   }
 
   const playAccount = document.getElementById("play-account");
-  if (playAccount) playAccount.addEventListener("submit", signInPlay);
+  if (playAccount) playAccount.addEventListener("submit", startPlay);
+  const playStart = document.getElementById("play-start");
+  if (playStart) playStart.addEventListener("click", startPlay);
   const playCreate = document.getElementById("play-create");
   if (playCreate) playCreate.addEventListener("click", createPlayAccount);
   const playSignOut = document.getElementById("play-signout");
