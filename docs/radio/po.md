@@ -41,6 +41,7 @@ Next: play.html is the taxi game. Issue #820. Label repo:site only. No ready lab
 - #834 play.html says OSRM unavailable. Label repo:site only. No ready label.
 - #836 Play cars move in real seconds. Label repo:site only. No ready label.
 - #838 A play car returns to the depot. Label repo:site only. No ready label.
+- #840 A play fare marker waits for its taxi. Label repo:site only. No ready label.
 
 ## Reservoir
 
