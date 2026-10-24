@@ -22,19 +22,19 @@ Master has unpaused the lanes. This section is the order. An older line that say
 
 The only products are the tracker, the booking office, and the empire game in `docs/TAXI.md`. Issues 22 and 29 stay `blocked`. Do not migrate the live database. The open work is the taxi game on `play.html`.
 
-`play.js` posts `{ pence: 800000 }` to `POST /v1/empire/buy`. `app/routers/empire.py` still only has `GET /v1/empire`, so the live POST is 404. `buy_car` can add T11 and is not the purchase until that route calls it. The page can paint a sign outside T1 to T10. `paintPlayTrails` still skips that sign, so the bought car has no trail. There is no `cash_pence` column yet. Do not pretend `fare_in` is the cash balance. `fare_in` stays 0 until a completed job adds a tariff fare, and 800000 is not added to `fare_in`.
+`POST /v1/empire/buy` is on API `main` as `0ac0626` and deployed. #1178 and #1184 are done. Do not rebuild them. The bought-car trail is on site `main` as `c8b0851`, and its colour is `08ea42d`. Do not rebuild those. #1221 is committed on `lane/grok-dev-2/play-trail-order` as `10d5b35` and is not merged. There is no `cash_pence` column yet. `fare_in` stays 0 until a completed job adds a tariff fare, and 800000 is not added to `fare_in`.
 
 | Lane | State | Next slice |
 |------|--------|------------|
-| Product owner | Both devs had stopped, and the queues behind the route were cash locks for a column that does not exist. | You are not paused. Do `## Next for me` in `po.md` from the top. Open every line marked OPEN, in one `po.md` commit, and replace OPEN with the issue number. Do not change the sentence. Do not put a new issue in front of #1178 or #1194. Do not edit `play.html`, `play.js`, or the API. Do not deploy. |
-| grok-dev-1 | The last radio says `morning order not at the front`. That note is wrong. #1178 is the front. | Pull. Build #1178, then the next numbered line in `### grok-dev-1`, for about 30 minutes. One product pull request, four radio lines, then the next slice. Skip a line marked OPEN. Do not build #1180, #1152, #1231, #1232, #1233, or #1234 until the `cash_pence` issue is on `main`. Do not edit `play.html` or `play.js`. A tick must not invent an eleventh car. |
-| grok-dev-2 | The bought car chip can already paint. The trail cannot. | Pull. Build #1194, then the next numbered line in `### grok-dev-2`, for about 30 minutes. One product pull request, four radio lines, then the next slice. Skip a line marked OPEN. Do not edit the API. Do not put the money column back beside the map. |
+| Product owner | The devs moved. The OPEN lines in `po.md` still have no issue numbers. | You are not paused. Open every line marked OPEN, in one `po.md` commit, and replace OPEN with the issue number. Do not change the sentence. Do not put a new issue in front of #1185 or #1221. Do not edit `play.html`, `play.js`, or the API. Do not deploy. |
+| grok-dev-1 | #1178 is `2a5273a`. #1184 is `0ac0626`. The live buy route answers. | Pull. Build #1185, then the next numbered line in `### grok-dev-1`, for about 30 minutes. One product pull request, four radio lines, then the next slice. Skip #1178 and #1184. Skip a line marked OPEN. Do not build #1180, #1152, #1231, #1232, #1233, or #1234 until the `cash_pence` issue is on `main`. Do not edit `play.html` or `play.js`. A tick must not invent an eleventh car. |
+| grok-dev-2 | #1194 is `c8b0851`. #1218 is `08ea42d`. #1221 is on the lane branch and not on `main`. | Pull. Merge #1221, then build #1202 and the next numbered line, for about 30 minutes. One product pull request, four radio lines, then the next slice. Do not redo the trail or the colour. Skip a line marked OPEN. Do not edit the API. Do not put the money column back beside the map. |
 
 Do not redo a slice that is already on `main`. Do not start `## Reservoir` until a line from it is in your numbered list. The fullscreen map and the Start error text are already on `main` as `715b7c9`. Do not rebuild them.
 
 ## The route is the gap
 
-`buy_car` on API `main` spends 800000 and can add T11. `play.js` on site `main` posts `{ pence: 800000 }` to `POST /v1/empire/buy`. `app/routers/empire.py` still only serves `GET /v1/empire`, so the live call is 404 until that route exists. The page paints the sign the feed returns and glide moves it. Do not redo that chip. Trails still skip a sign outside T1 to T10. The route is the gap.
+The route is no longer the gap. `POST /v1/empire/buy` is deployed from API `0ac0626`. The bought-car trail is deployed from site `c8b0851`. The open slice is #1221, the point order, then #1185, the buy uses the token account. Do not redo the route or the trail.
 
 The integrator deploys this PC when those files change. Lanes do not deploy.
 
