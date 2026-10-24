@@ -1813,6 +1813,18 @@
     return true;
   }
 
+  function empireUser() {
+    return localStorage.getItem("hackathon-empire-user") || "";
+  }
+
+  function showSignedIn(username) {
+    const name = username || empireUser();
+    const form = document.getElementById("empire-account");
+    if (form) form.hidden = true;
+    const status = document.getElementById("empire-account-status");
+    if (status && name) status.textContent = name;
+  }
+
   async function createEmpireAccount() {
     if (notePagesEmpire()) return;
     const status = document.getElementById("empire-account-status");
@@ -1858,7 +1870,8 @@
         return;
       }
       localStorage.setItem("hackathon-empire-token", session.access_token);
-      if (status) status.textContent = "Account created. Token stored for " + username + ".";
+      localStorage.setItem("hackathon-empire-user", username);
+      showSignedIn(username);
       startEmpirePoll();
     } catch (err) {
       if (status) status.textContent = "Network or CORS failure.";
@@ -1923,7 +1936,8 @@
         return;
       }
       localStorage.setItem("hackathon-empire-token", session.access_token);
-      if (status) status.textContent = "Signed in as " + username + ".";
+      localStorage.setItem("hackathon-empire-user", username);
+      showSignedIn(username);
       startEmpirePoll();
     } catch (err) {
       if (status) status.textContent = "Network or CORS failure.";
@@ -1933,7 +1947,10 @@
   function signOutEmpire() {
     stopEmpirePoll();
     localStorage.removeItem("hackathon-empire-token");
+    localStorage.removeItem("hackathon-empire-user");
     clearEmpireDraw();
+    const form = document.getElementById("empire-account");
+    if (form) form.hidden = false;
     const status = document.getElementById("empire-account-status");
     if (status) status.textContent = "Signed out.";
   }
@@ -1974,6 +1991,7 @@
       if (res.status === 401) {
         stopEmpirePoll();
         localStorage.removeItem("hackathon-empire-token");
+        localStorage.removeItem("hackathon-empire-user");
         clearEmpireDraw();
         const form = document.getElementById("empire-account");
         if (form) form.hidden = false;
@@ -2001,7 +2019,9 @@
     paintEmpireFares();
     const line = document.getElementById("empire-account-status");
     if (line) {
-      line.textContent = "The fleet runs on the box." + (data.osrm_unavailable ? " OSRM unavailable" : "");
+      const fleet = "The fleet runs on the box." + (data.osrm_unavailable ? " OSRM unavailable" : "");
+      const name = empireUser();
+      line.textContent = name ? (name + " · " + fleet) : fleet;
     }
   }
 
@@ -2141,7 +2161,10 @@
   const empireSignOut = document.getElementById("empire-signout");
   if (empireSignOut) empireSignOut.addEventListener("click", () => { signOutEmpire(); });
   if (notePagesEmpire()) stopEmpirePoll();
-  else if (empireToken()) startEmpirePoll();
+  else if (empireToken()) {
+    showSignedIn(empireUser());
+    startEmpirePoll();
+  }
   syncTaxiButton();
   paintTaxiList(true);
 })();

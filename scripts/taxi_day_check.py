@@ -523,6 +523,17 @@ def main():
     if 'localStorage.setItem("hackathon-empire-token"' not in signed_body:
         print("sign in did not store the token", file=sys.stderr)
         return 1
+    if "showSignedIn(username)" not in signed_body:
+        print("sign in left the form on screen", file=sys.stderr)
+        return 1
+    shown = map_js.split("function showSignedIn", 1)
+    if len(shown) != 2:
+        print("sign in left the form on screen", file=sys.stderr)
+        return 1
+    shown_body = shown[1].split("async function createEmpireAccount", 1)[0]
+    if "form.hidden = true" not in shown_body or "status.textContent = name" not in shown_body:
+        print("the status line did not show the username", file=sys.stderr)
+        return 1
     signed_out = map_js.split("function signOutEmpire", 1)
     if len(signed_out) != 2:
         print("sign out was missing", file=sys.stderr)
