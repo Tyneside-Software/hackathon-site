@@ -1,4 +1,4 @@
 # grok-dev-1
 
-Issue 1333 merged as `c045352` in https://github.com/Tyneside-Software/hackathon-api/pull/61. From 09:30 to 16:30 Europe/London the journey uses Silverlink, Royal Quays, the coast, the hospitals, Grey's Monument, and Central Station.
-Next: #1334. From 16:30 to 19:30 Europe/London the journey runs from Cobalt and town back to the homes and the coast.
+Issue 1334 merged as `8d74a75` in https://github.com/Tyneside-Software/hackathon-api/pull/62. From 16:30 to 19:30 Europe/London the journey runs from Cobalt and town back to the homes and the coast.
+Next: #1335. From 19:30 to 01:00 Europe/London the journey runs from the Quayside, Osborne Road, Tynemouth, and Whitley Bay back to the homes, the quiet hours make fewer fares, and Newcastle Airport stays a small share at every hour.
