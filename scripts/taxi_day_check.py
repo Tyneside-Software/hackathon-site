@@ -695,6 +695,12 @@ def main():
     if "device" in tip_body:
         print("the tooltip said device", file=sys.stderr)
         return 1
+    if 'car.status === "at_depot"' not in tip_body:
+        print("a depot car did not say at depot", file=sys.stderr)
+        return 1
+    if 'car.status === "at_depot"' not in glide_body or "DEPOT" not in glide_body:
+        print("a depot car left the Shiremoor depot", file=sys.stderr)
+        return 1
     if "empireTip(car)" not in glide_body:
         print("the gliding marker had no tooltip", file=sys.stderr)
         return 1
