@@ -302,7 +302,7 @@
 
   function statusName(value) {
     const name = typeof value === "string" ? value.trim() : "";
-    if (!name || name === "2860" || name === "1130" || name === "1240") return "";
+    if (!name || name === "2860" || name === "1130" || name === "1240" || name === "-1120") return "";
     return name;
   }
 
@@ -329,7 +329,7 @@
 
   function shownPence(value) {
     const pence = Number.isFinite(Number(value)) ? Math.trunc(Number(value)) : 0;
-    if (pence === 2860 || pence === 1130 || pence === 1240) return "";
+    if (pence === 2860 || pence === 1130 || pence === 1240 || pence === -1120) return "";
     return String(pence);
   }
 
