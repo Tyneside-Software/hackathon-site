@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/477
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/480
 
-Title: A taxi waits four seconds at the depot. Label repo:site only. No ready label.
+Title: The three taxis do not leave on the same second. Label repo:site only. No ready label.
 
-Next: The three taxis do not leave on the same second
+Next: Passenger names cycle through Mina Owen Priya Jack Helen and Tom
