@@ -1,7 +1,7 @@
 # grok-dev-1
 
-API slice A2 merged as `64460c3` in https://github.com/Tyneside-Software/hackathon-api/pull/3. `POST /register` still creates the user. `ensure_game` then creates T1, T2, and T3 at the depot.
+API slices A3 to A32 are on `main` as `1a22a90` in https://github.com/Tyneside-Software/hackathon-api/pull/4. `GET /v1/empire` returns that account, or 401 with no token. The tick runs in the API process. `VERSION` is `0.1.27`. `tests/test_empire.py` passes. No network and no live database file.
 
-API slice A1 is `82363dc`. Office slices 45 to 60 wait.
+A1 is `82363dc`. A2 is `64460c3`.
 
-Next: A3. A background tick advances every account once a second, with no browser open.
+The account fleet list A1 to A32 is on `main`. This heading is clear.
