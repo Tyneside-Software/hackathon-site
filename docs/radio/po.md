@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/188
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/190
 
-Title: Pram and outside bag on the one-mile fare. Label repo:site only. No ready label.
+Title: Real data banner survives a reload. Label repo:site only. No ready label.
 
-Next: Real data banner survives a reload
+Next: Receipt sits in the ledger panel
