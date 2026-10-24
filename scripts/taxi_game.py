@@ -367,6 +367,35 @@ def moving_row(call_sign, duration_s, elapsed_s):
     }
 
 
+def fares_waiting(elapsed_s, accepted=0):
+    """At most 3 offers wait. Accepting one lets the next 20 seconds add one."""
+    if elapsed_s < 0 or accepted < 0:
+        return 0
+    waiting = int(elapsed_s // 20) - int(accepted)
+    if waiting < 0:
+        return 0
+    return min(3, waiting)
+
+
+def waiting_label(elapsed_s, accepted=0):
+    """The page says this when three offers are open."""
+    if fares_waiting(elapsed_s, accepted) == 3:
+        return "3 fares waiting"
+    return None
+
+
+def seconds_until_fare(elapsed_s, accepted=0):
+    """Seconds until another offer may appear. None while 3 are waiting."""
+    if fares_waiting(elapsed_s, accepted) >= 3:
+        return None
+    if elapsed_s < 0:
+        return 20
+    remainder = elapsed_s % 20
+    if remainder == 0:
+        return 20
+    return 20 - remainder
+
+
 def position_on_route(points, duration_s, elapsed_s):
     """Place on a polyline. The checker passes points and a duration. It does not call OSRM."""
     if not points:

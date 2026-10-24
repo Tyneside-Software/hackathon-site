@@ -395,6 +395,25 @@
     };
   }
 
+  function faresWaiting(elapsedS, accepted) {
+    if (elapsedS < 0 || accepted < 0) return 0;
+    var waiting = Math.floor(elapsedS / 20) - (accepted || 0);
+    if (waiting < 0) return 0;
+    return Math.min(3, waiting);
+  }
+
+  function waitingLabel(elapsedS, accepted) {
+    return faresWaiting(elapsedS, accepted) === 3 ? "3 fares waiting" : null;
+  }
+
+  function secondsUntilFare(elapsedS, accepted) {
+    if (faresWaiting(elapsedS, accepted) >= 3) return null;
+    if (elapsedS < 0) return 20;
+    var remainder = elapsedS % 20;
+    if (remainder === 0) return 20;
+    return 20 - remainder;
+  }
+
   function sumPence(rows) {
     return rows.reduce(function (total, row) {
       return total + row.amountPence;
@@ -439,6 +458,9 @@
     postLiveFuel: postLiveFuel,
     secondsRemaining: secondsRemaining,
     movingRow: movingRow,
+    faresWaiting: faresWaiting,
+    waitingLabel: waitingLabel,
+    secondsUntilFare: secondsUntilFare,
     shortTrip: shortTrip,
     positionOnRoute: positionOnRoute,
     workedWeek: workedWeek,
