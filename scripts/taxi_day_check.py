@@ -534,6 +534,21 @@ def main():
     if "form.hidden = true" not in shown_body or "status.textContent = name" not in shown_body:
         print("the status line did not show the username", file=sys.stderr)
         return 1
+    failed_create = map_js.split("async function createEmpireAccount", 1)[1].split("async function signInEmpire", 1)[0]
+    failed_create = failed_create.split("if (!registered.ok)", 1)[1].split('localStorage.setItem("hackathon-empire-token"', 1)[0]
+    if "apiError(created, registered.status)" not in failed_create or "apiError(session, logged.status)" not in failed_create:
+        print("a failed create did not show the API error", file=sys.stderr)
+        return 1
+    if "setItem" in failed_create:
+        print("a failed create stored a token", file=sys.stderr)
+        return 1
+    failed_sign = signed_body.split("if (!logged.ok", 1)[1].split('localStorage.setItem("hackathon-empire-token"', 1)[0]
+    if "apiError(session, logged.status)" not in failed_sign:
+        print("a failed sign-in did not show the API error", file=sys.stderr)
+        return 1
+    if "setItem" in failed_sign:
+        print("a failed sign-in stored a token", file=sys.stderr)
+        return 1
     signed_out = map_js.split("function signOutEmpire", 1)
     if len(signed_out) != 2:
         print("sign out was missing", file=sys.stderr)

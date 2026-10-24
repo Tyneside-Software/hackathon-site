@@ -1825,6 +1825,21 @@
     if (status && name) status.textContent = name;
   }
 
+  function apiError(body, statusCode) {
+    const detail = body && body.detail;
+    if (typeof detail === "string" && detail) return detail;
+    if (Array.isArray(detail)) {
+      const parts = [];
+      detail.forEach((row) => {
+        if (!row) return;
+        const msg = row.msg || row.message;
+        if (msg) parts.push(String(msg));
+      });
+      if (parts.length) return parts.join(" ");
+    }
+    return "HTTP " + statusCode;
+  }
+
   async function createEmpireAccount() {
     if (notePagesEmpire()) return;
     const status = document.getElementById("empire-account-status");
@@ -1854,8 +1869,7 @@
       });
       const created = await registered.json().catch(() => null);
       if (!registered.ok) {
-        const detail = created && typeof created.detail === "string" ? created.detail : ("HTTP " + registered.status);
-        if (status) status.textContent = "Account not created — " + detail;
+        if (status) status.textContent = apiError(created, registered.status);
         return;
       }
       const logged = await fetch(base + "/login", {
@@ -1865,8 +1879,7 @@
       });
       const session = await logged.json().catch(() => null);
       if (!logged.ok || !session || !session.access_token) {
-        const detail = session && typeof session.detail === "string" ? session.detail : ("HTTP " + logged.status);
-        if (status) status.textContent = "Sign-in after create failed — " + detail;
+        if (status) status.textContent = apiError(session, logged.status);
         return;
       }
       localStorage.setItem("hackathon-empire-token", session.access_token);
@@ -1931,8 +1944,7 @@
       });
       const session = await logged.json().catch(() => null);
       if (!logged.ok || !session || !session.access_token) {
-        const detail = session && typeof session.detail === "string" ? session.detail : ("HTTP " + logged.status);
-        if (status) status.textContent = "Sign-in failed — " + detail;
+        if (status) status.textContent = apiError(session, logged.status);
         return;
       }
       localStorage.setItem("hackathon-empire-token", session.access_token);
