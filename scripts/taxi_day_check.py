@@ -411,6 +411,24 @@ def main():
     if 'car.status === "returning"' not in map_js and 'sign + " · returning"' not in map_js:
         print("the way home did not say returning", file=sys.stderr)
         return 1
+    if "const NEXT_PASSENGER_MS = 4000" not in map_js:
+        print("the next passenger was not locked to 4 seconds", file=sys.stderr)
+        return 1
+    nxt = map_js.split("function scheduleNextPassenger", 1)
+    if (
+        len(nxt) != 2
+        or "NEXT_PASSENGER_MS" not in nxt[1].split("function beginFare", 1)[0]
+        or "beginFare(car)" not in nxt[1].split("function beginFare", 1)[0]
+    ):
+        print("the new passenger did not appear after the depot wait", file=sys.stderr)
+        return 1
+    if "scheduleNextPassenger(car, token)" not in home_leg[1].split("function startFleet", 1)[0]:
+        print("the next passenger was not scheduled when the taxi reached the depot", file=sys.stderr)
+        return 1
+    fare = map_js.split("function beginFare", 1)[1].split("function startFleet", 1)[0]
+    if 'car.passenger + " waiting"' not in fare or "showPassenger(car, pickup)" not in fare:
+        print("the new passenger did not show on the map", file=sys.stderr)
+        return 1
     posted_trip = taxi_game.post_live_trip(7, 3, ())
     posted_kinds = [row["kind"] for row in posted_trip["lines"]]
     posted_amounts = [row["amount_pence"] for row in posted_trip["lines"]]

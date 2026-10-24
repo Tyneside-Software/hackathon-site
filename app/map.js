@@ -1631,6 +1631,15 @@
     paintTaxiList(true);
   }
 
+  const NEXT_PASSENGER_MS = 4000;
+
+  function scheduleNextPassenger(car, token) {
+    setTimeout(() => {
+      if (token !== car.token || !taxisOn || car.status !== "at_depot") return;
+      beginFare(car);
+    }, NEXT_PASSENGER_MS);
+  }
+
   function beginFare(car) {
     if (!taxisOn) return;
     const token = car.token;
@@ -1641,6 +1650,10 @@
     showPassenger(car, pickup);
     ensureTaxi(car);
     car.marker.setLatLng(DEPOT);
+    const hail = car.sign + " · " + car.passenger + " waiting";
+    const tip = car.marker.getTooltip();
+    if (tip) tip.setContent(hail);
+    else car.marker.bindTooltip(hail, { permanent: true, direction: "right" });
     driveLeg(car, DEPOT, pickup, "to_passenger", () => {
       if (token !== car.token || !taxisOn) return;
       if (car.pin) map.removeLayer(car.pin);
@@ -1650,9 +1663,7 @@
         driveLeg(car, dropoff, DEPOT, "returning", () => {
           if (token !== car.token || !taxisOn) return;
           markAtDepot(car);
-          setTimeout(() => {
-            if (token === car.token && taxisOn) beginFare(car);
-          }, 4000);
+          scheduleNextPassenger(car, token);
         });
       });
     });
