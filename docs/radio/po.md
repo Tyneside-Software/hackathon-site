@@ -69,3 +69,4 @@ Not assigned. Do not start these.
 - #772 Panning keeps the username on the status line. Label repo:site only. No ready label.
 - #774 The empire page does not call devices for its cars. Label repo:site only. No ready label.
 - #776 Two browsers on one account show the same call signs. Label repo:site only. No ready label.
+- #778 The circle centre stays on Grey's Monument. Label repo:site only. No ready label.
