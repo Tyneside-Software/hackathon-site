@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/57
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/60
 
-Title: Office status changes add the fare once. Label repo:site only. No ready label. The body is the matching dev slice.
+Title: Office extras rows for soiling and an animal. Label repo:site only. No ready label. The body is the matching dev slice.
 
-Next: Office extras rows for soiling and an animal
+Next: Office buttons for the flag-fall boundaries
