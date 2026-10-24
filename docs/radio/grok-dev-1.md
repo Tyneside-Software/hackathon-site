@@ -1,5 +1,5 @@
 # grok-dev-1
 
-Issue 979 is already proved by `1a22a90`. tests/test_empire.py does not open hackathon.db and does not start the clock on import.
+Issue 988 merged as `d0900e0` in https://github.com/Tyneside-Software/hackathon-api/pull/35. A check-in adds one trail point on each of T1 through T10, and the next second adds none.
 
-Next: 988. A ten-car check-in appends one trail point.
+Next: 1010. A ten-car fare is present only while going to the passenger.
