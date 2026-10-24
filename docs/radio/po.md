@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/347
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/349
 
-Title: Pram and bag stays off the company day. Label repo:site only. No ready label.
+Title: Drive home shows seconds remaining. Label repo:site only. No ready label.
 
-Next: Drive home shows seconds remaining
+Next: none of slices 84 to 109 remain unopened. The integrator still lists those slices, so this heading is not clear.
