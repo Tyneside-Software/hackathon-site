@@ -145,6 +145,7 @@
       "play-feed-401",
       "play-fare-name",
       "play-buy-cleared",
+      "play-with-passenger",
       "play-locks",
       "play-osrm",
       "play-buses",
@@ -385,7 +386,7 @@
       if (list) {
         const item = document.createElement("li");
         let text = reported ? sign + " " + reported[0] + ", " + reported[1] : sign;
-        if (car.status === "returning") text += " is returning";
+        text += listStatus(car);
         item.dataset.sign = sign;
         item.textContent = text;
         list.appendChild(item);
@@ -409,6 +410,23 @@
     noteT11Only();
     notePriceStill();
     noteSignedAgain(feed);
+    noteWithPassenger();
+  }
+
+  function listStatus(car) {
+    if (!car) return "";
+    if (car.status === "returning") return " is returning";
+    if (car.status === "with_passenger") return " is with_passenger";
+    return "";
+  }
+
+  function noteWithPassenger() {
+    const node = document.getElementById("play-with-passenger");
+    if (!node) return;
+    const list = document.getElementById("play-taxi-list");
+    const text = list ? list.textContent : "";
+    node.dataset.named = text.indexOf(" is with_passenger") === -1 ? "no" : "yes";
+    node.dataset.returning = text.indexOf(" is returning") === -1 ? "no" : "yes";
   }
 
   function dropSecondTen() {
@@ -1119,9 +1137,10 @@
       const item = document.querySelector('#play-taxi-list [data-sign="' + sign + '"]');
       if (!item) return;
       let text = sign + " " + place[0] + ", " + place[1];
-      if (car.status === "returning") text += " is returning";
+      text += listStatus(car);
       item.textContent = text;
     });
+    noteWithPassenger();
     playMotion = requestAnimationFrame(glidePlay);
   }
 
