@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/251
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/253
 
-Title: Three simulated cars as booking rows. Label repo:site only. No ready label.
+Title: Empire week strip shows minus 7840. Label repo:site only. No ready label.
 
-Next: Empire week strip shows minus 7840
+Next: Empire page links to the office
