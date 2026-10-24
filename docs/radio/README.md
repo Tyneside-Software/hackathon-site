@@ -30,15 +30,25 @@ On `continue`:
 
 1. Fetch and rebase onto `origin/main`, or fast-forward if you are on `main`.
 2. Read this file, `docs/radio/integrator.md`, and the other radio files.
-3. Do the Next slice in the `## Now` table of `docs/radio/integrator.md`, then the rest of that lane's list in `## Account fleet`, in order. Skip a slice already on `origin/main`. A list marked Waiting is not work. The reservoir is not work. Office slices, desk slices, fare cards, and map titles M1 to M32 are Waiting. A heading is clear only when that lane's Account fleet list is all on `origin/main`. A radio note that says the heading is clear is stale while any of that list remains. If the list is empty, merge one line saying so, then stop. Do not invent a new product area.
-4. Keep going through the remaining Open slices in the same turn. Commit and merge each one before the next. Merge your radio note in the middle of the turn. Do not stop while any Open slice under your heading is still undone.
-5. Do not write `C:\Users\MichaelThomson\source\lanes\desk`. The integrator is the only session that deploys, and only after product code has merged.
+3. A continue is a long turn, about 30 minutes of work. Do not finish early. Do not stop after one slice or one issue. The product owner keeps both devs supplied. The devs are not specialised: either may do API or map work, whichever queue the product owner assigned. The integrator does not write the slice text.
+4. Product owner: read `## Now` in `docs/radio/integrator.md`, then spend the turn in `docs/radio/po.md`. Both devs need a deep queue before you stop. Write the slices yourself. Open the issues. Keep a reservoir. Details are in `## Queue depth` below.
+5. grok-dev-1 and grok-dev-2: do the slices the product owner listed for you in `docs/radio/po.md`, then any slices `## Now` still names that are not already on `origin/main`. Skip a slice already on `origin/main`. A list marked Waiting is not work. Office slices, desk slices, fare cards, and map titles M1 to M32 are Waiting. If your queue runs out before the turn has run, pull `main` again. Take the next slice the product owner has put in the reservoir and assigned to either dev. Do not invent a product area. Do not write that the heading is clear. If the product owner has not posted work yet, say `queue empty` in your radio and pull once more before you stop.
+6. Do not write `C:\Users\MichaelThomson\source\lanes\desk`. The integrator is the only session that deploys, and only after product code has merged.
 
 ## Queue depth
 
-The integrator's `continue` is the leadership pass. Read every radio, keep each lane on its next Open slice, and deploy product that has merged. The integrator watches productivity against the tracker, the real booking desk, and the real-time empire. Before a deploy, count Open slices that are not yet on `origin/main` for the product owner, grok-dev-1, and grok-dev-2. If any of those three has fewer than 12, move slices out of that lane's reservoir until it has 12, or write new slices from those three products. Do not invent a fourth product. Do not add `ready`. Do not migrate the live database. Issues 22 and 29 stay `blocked`. A refill commit is not a deploy.
+The product owner keeps the devs working. The integrator does not write slice text. A continue does not wait for the integrator to invent the next batch.
 
-A lane that still has an Open slice must not write that its heading is clear.
+On the product owner's turn, `docs/radio/po.md` has two queues and a reservoir:
+
+- `### grok-dev-1` and `### grok-dev-2`. Each lists the next slice and at least 16 unfinished slices. Name the files that dev may edit, so the two devs do not edit the same file.
+- `## Reservoir`. At least 24 slices not yet assigned, from the tracker, the booking office, or the empire. Not a fourth product.
+
+If either dev is under 16 unfinished slices, filling that queue is the whole turn. Write the slice, open the issue, merge the radio, and write the next, for about 30 minutes. Do not stop after one issue. Do not write that the titles are finished. Do not reopen a title that already has an issue. No `ready`. Issues 22 and 29 stay `blocked`. Slices 115 to 134 and map titles M1 to M32 stay waiting. Do not migrate the live database.
+
+A dev turn is about 30 minutes of merges. One slice is one pull request, then the radio line, then the next slice, in the same turn. Do not batch the queue into one pull request. Do not stop because an old list such as A1 to A32 or U1 to U32 has ended, if `po.md` still has slices. A note that says a heading is clear is stale.
+
+The integrator reads the radios, watches the dashboard, and deploys product that has merged. If a dev queue is short, the integrator says so in `## Now` and the product owner fills it. A refill note is not a deploy.
 
 ## During a turn
 

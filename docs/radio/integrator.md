@@ -8,11 +8,13 @@ A radio note that says a heading is clear is stale when this file lists Open sli
 
 ## How to read this
 
-Each session does the Next slice in `## Now`, then the rest of that lane's list in `## Account fleet`, in order. When a slice is already on `origin/main`, skip it and say so in your radio file. Merge each finished slice before starting the next. Re-read this file from `origin/main` between slices, because it may have moved. Do not stop while an Account fleet slice for your lane is still undone. A list marked Waiting is not work. Office slices, desk slices, fare cards, and map titles M1 to M32 are Waiting.
+`continue` is a long turn, about 30 minutes. The rule is in `docs/radio/README.md`. The product owner writes the next slices in `docs/radio/po.md`. The devs build those slices. They are not specialised. The integrator does not write the slice text.
+
+When a slice is already on `origin/main`, skip it. A list marked Waiting is not work. Office slices, desk slices, fare cards, and map titles M1 to M32 are Waiting. Do not stop after one slice. Do not write that a heading is clear while `po.md` still lists work.
 
 The product brief is `docs/TAXI.md`. Do not invent a second fare table, a second map centre, or a fourth product. Do not edit `docs/TAXI.md`. Do not add `ready`. Leave September 2026 issues 1, 2, 3, 4, and 18 alone. Do not touch API pull request `reeve-branch`. Issues 22 and 29 stay `blocked`. Do not migrate `device_links` and do not write the live database.
 
-Queue depth is in `docs/radio/README.md`. Each of the three lanes keeps at least 12 Open slices that are not yet on `origin/main`.
+Queue depth is in `docs/radio/README.md`. The product owner keeps at least 16 unfinished slices in front of each dev, and at least 24 more in the reservoir.
 
 ## Now
 
@@ -24,9 +26,9 @@ The office and the empire are the same booking desk. `office.html` is the real c
 
 | Lane | State | Next slice |
 |------|--------|------------|
-| Product owner | On task. Issue 538 is `Depot pause then the next fare`, label `repo:api`. Slices 115 to 134 wait. Map titles M1 to M32 wait. Do not open those. Do not write `queue low`. | Open `Waiting fare has a marker position`, label `repo:api`, then the rest of titles 1 to 64. Skip titles 17, 18, and 19. |
-| grok-dev-1 | 32 API slices are not on `main`. Office slices 45 to 60 wait. Fare cards F1 to F30 are done. Do not start them. Do not edit the site map. | API slice A1. Empire tables `empire_games` and `empire_cars` have no `device_id`. Then A2 to A32. |
-| grok-dev-2 | U1 to U5 are on `main`. U5 is `3cbde90`. 27 map slices remain. Desk slices and map titles M1 to M32 wait. Do not start them. | Map slice U6. The marker glides with `route`, `leg_started`, `duration_s`, and `server_now`. Then U7 to U32. |
+| Product owner | Titles 1 to 64 are opened, except 17, 18, and 19. grok-dev-1 has no unfinished API slices. A1 to A32 are on `main` (`82363dc`, `64460c3`, `1a22a90`). grok-dev-2 is on U18 to U32. That is not a 30 minute reserve. You are finishing early. | This turn, write `docs/radio/po.md` with a queue for each dev and a reservoir. grok-dev-1 needs 16 slices now. grok-dev-2 needs the U18 to U32 list topped up to 16, then keep going until the reservoir has 24. About 30 minutes. Do not stop after one issue. |
+| grok-dev-1 | A1 to A32 are on `main`. Do not rebuild them. The heading-clear note is stale. You are not API-only. | Pull `main` and do the grok-dev-1 queue in `docs/radio/po.md` for about 30 minutes, one pull request each. If that queue is not on `main` yet, say `queue empty`, pull once more, then stop. Do not invent the slices. |
+| grok-dev-2 | U1 to U17 are on `main`. The signed-in form is `714303e`. Desk slices and map titles M1 to M32 wait. You are not map-only. | U18, then U19 to U32, and then the grok-dev-2 queue in `docs/radio/po.md`. About 30 minutes. One pull request each. Do not stop at U32 if `po.md` lists more. |
 
 Do not redo a slice that is already on `main`. Do not start the reservoir.
 
@@ -50,7 +52,7 @@ Play on `http://100.65.94.5/app/`. The HTTPS site cannot call the HTTP API. Pass
 
 One issue, then a radio note, then the next. Body is the matching slice. If the exact title exists, comment and do not open a second. No `ready`.
 
-Titles 1 to 16 and 33 to 48: label `repo:api` only. Titles 20 to 32 and 49 to 64: label `repo:site` only. Skip titles 17, 18, and 19. Those slices are already on `main`: `15d66fb`, `d41eed7`, and `c0c2f02`. Do not open them again.
+Titles 1 to 16 and 33 to 48: label `repo:api` only. Titles 20 to 32 and 49 to 64: label `repo:site` only. Skip titles 17, 18, and 19. Those slices are already on `main`: `15d66fb`, `d41eed7`, and `c0c2f02`. Do not open them again. Titles 1 to 64 except those three are already opened. The next slices are yours to write in `docs/radio/po.md`. Do not wait for the integrator to name them.
 
 1. `Empire tables are not devices`
 2. `Register starts the fleet on the box`
@@ -156,6 +158,8 @@ A30. Each car's `route` is `[lat, lng]` pairs. A leg that leaves the depot start
 A31. Status is only `at_depot`, `to_passenger`, `with_passenger`, or `returning`.
 A32. `tests/test_empire.py` passes for A1 to A31 before the merge. No network. No live database file.
 
+A1 to A32 are on `main`. Skip them. A1 is `82363dc`. A2 is `64460c3`. A3 to A32 are `1a22a90`. Do not rebuild them. The next API slices are written by the product owner in `docs/radio/po.md`, not here.
+
 ### grok-dev-2 — map slices U1 to U32
 
 Checkout `C:\Users\MichaelThomson\source\lanes\grok-dev-2\hackathon-site`. You may edit `app/map.js`, `app/map.css`, and the Empire block in `app/index.html`. Do not edit the API. Do not bring back a browser-only fleet as the source of truth. The sample car button stays.
@@ -199,7 +203,7 @@ No product code. You may commit and squash-merge a branch that changes only `doc
 
 Done, already on `main`: issues 30, 31, 32, 33, and 34 are open. Issues 23 and 24 are commented. Issues 22, 29, and 34 stay `blocked`. Do not open those titles again.
 
-Open slices. Account fleet titles 1 to 64 in `## Account fleet` above, in order. Skip titles 17, 18, and 19. Those slices are already on `main` at `15d66fb`, `d41eed7`, and `c0c2f02`. One issue, then a radio note, then the next. If that exact title already exists, comment on it and do not open a second. Titles 1 to 16 and 33 to 48: label `repo:api` only. Titles 20 to 32 and 49 to 64: label `repo:site` only. The issue body is the matching slice. Do not add `ready`. Do not write `queue low` while any title from 1 to 64 except 17, 18, and 19 is still unopened. Map titles M1 to M32 are not the open work. Slices 115 to 134 wait. Do not open them. The next title is `Empire tables are not devices`.
+Your turn is the queues. Titles 1 to 64 are already opened except 17, 18, and 19. Do not reopen them. Do not stop because that list ended. grok-dev-1 has no unfinished slices. grok-dev-2 has U18 to U32 only. Write new slices into `docs/radio/po.md` under `### grok-dev-1`, `### grok-dev-2`, and `## Reservoir`, as `docs/radio/README.md` describes. At least 16 unfinished for each dev, and 24 in the reservoir, before this turn ends. About 30 minutes. One issue, then the radio, then the next issue. Name which files each dev may edit. Either dev may do API or map work. Do not give both the same file. Do not add `ready`. Do not write `queue low`. Map titles M1 to M32 and slices 115 to 134 wait. Do not open them. The integrator will not write these slices for you.
 
 Waiting. The numbered list below is the old office queue. Do not open it. Issues 219 to 255 already cover slices 32 to 48. Issues 312 and 263 already exist, so do not open `Receipt names tariff one` or `Two cars move at the same time` again.
 
@@ -386,7 +390,7 @@ Reservoir. Do not open these yet.
 
 ## grok-dev-1
 
-Open slices. Account fleet A1 to A32 in `## Account fleet` above, in order. None of A1 to A32 are on `main`. Checkout `C:\Users\MichaelThomson\source\lanes\grok-dev-1\hackathon-api`. Branch `lane/grok-dev-1/<slug>` from `origin/main`. Squash-merge into `Tyneside-Software/hackathon-api`. Do not run `box.ps1`. You may add `app/empire.py`, `tests/test_empire.py`, `app/routers/empire.py`, and the smallest hooks in `app/models.py`, `app/main.py`, `app/routers/auth.py`, and `app/config.py`. Do not edit the site, `app/map.js`, the office files, or `scripts/taxi_fare.py`. Do not wipe SQLite. No `device_id`.
+A1 to A32 are on `main`. Skip them. You are not API-only. On `continue`, do the `### grok-dev-1` queue in `docs/radio/po.md` for about 30 minutes. One slice is one pull request, then the radio, then the next slice. Do not put the queue in one pull request. Do not write that the heading is clear. If that queue is not on `main` yet, say `queue empty` and pull once more. Do not invent slices. Checkout `C:\Users\MichaelThomson\source\lanes\grok-dev-1\hackathon-api` for API work, and the site checkout beside it when the product owner assigns site files. Branch `lane/grok-dev-1/<slug>` from `origin/main`. Do not run `box.ps1`. Do not wipe SQLite. No `device_id`. Do not edit a file the other dev's radio says they are editing.
 
 Stop the fare cards. F1 to F30 are done. Office slices 45 to 60 wait. Do not start them. Pull request 26 is merged as `fa3b6e3`.
 
@@ -499,7 +503,7 @@ Reservoir. Do not start these.
 
 ## grok-dev-2
 
-Open slices. Account fleet U6 to U32 in `## Account fleet` above, in order. U1 is `15d66fb`, U2 is `d41eed7`, U3 is `c0c2f02`, U4 is `8b9910c`, and U5 is `3cbde90`. Skip those five. Checkout `C:\Users\MichaelThomson\source\lanes\grok-dev-2\hackathon-site`. Branch `lane/grok-dev-2/<slug>` from `origin/main`. You may edit `app/map.js`, `app/map.css`, and the Empire block in `app/index.html`. Call `POST /register`, `POST /login`, and `GET /v1/empire`. Do not edit the API. Do not edit the office files, `scripts/taxi_fare.py`, or `app/office.css`. Do not bring back a browser-only fleet as the source of truth. The sample car button stays. Do not run `box.ps1`.
+Open slices. U18 to U32, then the `### grok-dev-2` queue in `docs/radio/po.md`. U1 to U17 are on `main`. The signed-in form is `714303e`. Skip those. About 30 minutes. Do not stop at U32 if `po.md` lists more. You are not map-only. Checkout `C:\Users\MichaelThomson\source\lanes\grok-dev-2\hackathon-site`. Branch `lane/grok-dev-2/<slug>` from `origin/main`. For U18 to U32, edit `app/map.js`, `app/map.css`, and the Empire block in `app/index.html`. Call `POST /register`, `POST /login`, and `GET /v1/empire`. When `po.md` assigns API work, do that instead. Do not edit a file the other dev is on. Do not edit the office files, `scripts/taxi_fare.py`, or `app/office.css`. Do not bring back a browser-only fleet as the source of truth. The sample car button stays. Do not run `box.ps1`.
 
 Desk slices 45 to 58, slices 11 to 23, and map titles M1 to M32 wait. Do not start them. A radio that names M6 or M8 is stale as an order. The game runs on the box per account. The browser must not invent the cars.
 
@@ -612,6 +616,6 @@ Reservoir. Do not start these.
 
 ## Integrator
 
-On `continue`, lead. Watch productivity against the three objectives: the tracker, the real booking desk, and the real-time empire. Read the radios and the lane checkouts. Do not edit those checkouts. Name the next slice in `## Now`. Keep at least 12 Account fleet slices that are not yet on `origin/main` in front of each lane. Deploy once when the account-fleet API is on `main`. A radio-only commit is not a deploy. Do not deploy the account form by itself. The box still shows the preview cars until `GET /v1/empire` is real.
+On `continue`, read the radios. Do not write the slice text. The product owner does that, in a turn of about 30 minutes, so neither dev runs dry. If a dev queue is under 16, say so in `## Now` and leave the slices to the product owner. Deploy only after product code has merged. A radio-only commit is not a deploy. The box still shows the preview cars until `GET /v1/empire` is deployed. Do not deploy this note by itself.
 
 Last deploy checked in this note: box site `79c0c10`, health `0.1.26`, `CHECK-OK`. U1, the account form shell, is on `main` at `15d66fb` and has not been deployed. The preview cars stay on the box until the API fleet is deployed with the map.
