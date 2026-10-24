@@ -279,6 +279,7 @@ def parse_po_plan(text: str) -> tuple[str, list[dict], list[dict]]:
                 "section": kind,
                 "jobs": jobs,
                 "count": len(items) - before,
+                "skipped": skip_issue_numbers(body),
             }
         )
     return preamble, items, sections
@@ -826,6 +827,64 @@ def queue_state(item: dict, next_by_lane: dict[str, int | None], paused: set[int
     if item["is_next"]:
         return "next"
     return "queued"
+
+
+def skip_issue_numbers(body: str) -> list[int]:
+    """Issue numbers named on the line that says they are already on main."""
+    match = re.search(r"(?im)^.*already on main:\s*(.+)$", body or "")
+    if not match:
+        return []
+    return [int(number) for number in re.findall(r"#(\d+)", match.group(1))]
+
+
+def plan_bucket(section: str, state: str) -> str:
+    """Which list draws this row.
+
+    A done queue row is already on main. Next and queued stay unfinished.
+    A reservoir row stays in the waiting list.
+    """
+    if section != "queue":
+        return "held"
+    if state == "done":
+        return "done"
+    if state in {"next", "queued"}:
+        return "open"
+    return "paused"
+
+
+def plan_button(sid: str, state: str, number: int, title: str) -> str:
+    """One clickable plan row."""
+    return (
+        f'<button type="button" class="plan-row {state}" data-slice="{sid}">'
+        f'<span class="num">#{number}</span>'
+        f'<span class="title">{html.escape(title)}</span>'
+        f'<span class="badge">{html.escape(state)}</span>'
+        "</button>"
+    )
+
+
+def queue_lists(unfinished: list[str], done: list[str]) -> str:
+    """Unfinished slices in one list, lines already on main in another."""
+    def block(heading: str, rows: list[str], empty: str) -> str:
+        body = (
+            f'<div class="plan-list">{"".join(rows)}</div>'
+            if rows
+            else f'<p class="fine">{html.escape(empty)}</p>'
+        )
+        return f"<h4>{html.escape(heading)}</h4>{body}"
+
+    return (
+        block(
+            f"Unfinished · {len(unfinished)}",
+            unfinished,
+            "No unfinished slices in this list.",
+        )
+        + block(
+            f"Already on main · {len(done)}",
+            done,
+            "No lines in this list are already on main.",
+        )
+    )
 
 
 _progress_cache: dict[str, dict] = {}
@@ -1556,7 +1615,11 @@ def build_page() -> str:
             "labelText": "",
         }
     )
-    row_html: dict[str, list[str]] = {}
+    open_rows: dict[str, list[str]] = {}
+    done_rows: dict[str, list[str]] = {}
+    held_rows: dict[str, list[str]] = {}
+    paused_rows: dict[str, list[str]] = {}
+    seen_numbers: dict[str, set[int]] = {}
     paused_count = 0
     unfinished_by: dict[str, int] = {}
     stale_list = not po_names_play
@@ -1595,13 +1658,59 @@ def build_page() -> str:
                 "labelText": label_text,
             }
         )
-        row_html.setdefault(item["lane"], []).append(
-            f'<button type="button" class="plan-row {state}" data-slice="{sid}">'
-            f'<span class="num">#{item["number"]}</span>'
-            f'<span class="title">{html.escape(item["title"])}</span>'
-            f'<span class="badge">{html.escape(state)}</span>'
-            "</button>"
-        )
+        button = plan_button(sid, state, item["number"], item["title"])
+        seen_numbers.setdefault(item["lane"], set()).add(item["number"])
+        bucket = plan_bucket(item["section"], state)
+        if bucket == "done":
+            done_rows.setdefault(item["lane"], []).append(button)
+        elif bucket == "open":
+            open_rows.setdefault(item["lane"], []).append(button)
+        elif bucket == "paused":
+            paused_rows.setdefault(item["lane"], []).append(button)
+        else:
+            held_rows.setdefault(item["lane"], []).append(button)
+    for sec in plan_sections:
+        if sec["section"] != "queue":
+            continue
+        lane = sec["lane"]
+        have = seen_numbers.setdefault(lane, set())
+        extra: list[str] = []
+        for number in sec.get("skipped") or []:
+            if number in have:
+                continue
+            have.add(number)
+            issue = by_number.get(number)
+            title = str(issue.get("title") or "").strip() if issue else ""
+            if not title:
+                title = "Already on main"
+            sid = f"Q{number}"
+            href = str(issue.get("url") or "") if issue else (
+                f"https://github.com/Tyneside-Software/hackathon-site/issues/{number}"
+            )
+            catalog_slices.append(
+                {
+                    "id": sid,
+                    "kind": lane,
+                    "state": "done",
+                    "title": title,
+                    "order": title,
+                    "href": href,
+                    "sha": "",
+                    "issue": number,
+                    "issueState": str(issue.get("state") or "") if issue else "",
+                    "labels": label_names(issue) if issue else [],
+                    "body": str(issue.get("body") or "") if issue else "",
+                    "paused": False,
+                    "lane": lane,
+                    "section": "queue",
+                    "files": sec["files"],
+                    "nextNote": sec["next"],
+                    "labelText": "",
+                }
+            )
+            extra.append(plan_button(sid, "done", number, title))
+        if extra:
+            done_rows[lane] = extra + done_rows.get(lane, [])
     plan_html = []
     if preamble:
         plan_html.append(f'<p class="fine">{html.escape(preamble)}</p>')
@@ -1637,12 +1746,24 @@ def build_page() -> str:
                 "</section>"
             )
             continue
-        rows = row_html.get(sec["lane"], [])
-        empty = (
-            '<p class="fine">No issue lines in this list yet.</p>'
-            if not rows
-            else "<div class=\"plan-list\">" + "".join(rows) + "</div>"
-        )
+        if sec["section"] == "reservoir":
+            rows = held_rows.get(sec["lane"], [])
+            body = (
+                '<p class="fine">No issue lines in this list yet.</p>'
+                if not rows
+                else "<div class=\"plan-list\">" + "".join(rows) + "</div>"
+            )
+        else:
+            body = queue_lists(
+                open_rows.get(sec["lane"], []),
+                done_rows.get(sec["lane"], []),
+            )
+            parked = paused_rows.get(sec["lane"], [])
+            if parked:
+                body += (
+                    f"<h4>Paused · {len(parked)}</h4>"
+                    "<div class=\"plan-list\">" + "".join(parked) + "</div>"
+                )
         named = sec["next"]
         if sec["section"] == "reservoir":
             heading = f"{sec['lane']} · {sec['count']} waiting · target 24"
@@ -1654,7 +1775,7 @@ def build_page() -> str:
             f"<h3>{html.escape(heading)}</h3>"
             f"<p class=\"fine\">{html.escape(sec['files'])}</p>"
             + (f"<p class=\"next\"><span>Next</span> {html.escape(named)}</p>" if named else "")
-            + empty
+            + body
             + "</section>"
         )
     car_label = f"{cars} cars" if cars is not None else "an unknown fleet"
@@ -1887,6 +2008,7 @@ def build_page() -> str:
       margin: 0 0 0.8rem;
     }}
     .board h3 {{ margin: 0 0 0.45rem; color: var(--heading); letter-spacing: 0; text-transform: none; font-size: 1rem; }}
+    .board h4 {{ margin: 0.75rem 0 0.35rem; color: var(--muted); font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600; }}
     .chips {{ display: flex; flex-wrap: wrap; gap: 0.28rem; }}
     .chip {{
       width: 1.7rem; height: 1.7rem;
