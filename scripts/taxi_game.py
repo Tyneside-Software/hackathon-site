@@ -301,6 +301,21 @@ def free_car_takes(offers, cars):
     return accept_offer(offers, cars)
 
 
+def two_cars_out(elapsed_s):
+    """Two accepted offers move T1 and T2 at the same moment. T3 can stay at the depot."""
+    offers = waiting_offers(40)
+    first = start_accepted(free_car_takes(offers, three_cars()))
+    second = start_accepted(free_car_takes(first["offers"], first["cars"]))
+    routes = []
+    for car in second["cars"]:
+        route = car.get("route")
+        if car.get("status") == "started" and route:
+            routes.append(route)
+        else:
+            routes.append(None)
+    return {"cars": fleet_positions(routes, elapsed_s), "offers": second["offers"]}
+
+
 def customer_pins(offers):
     """A waiting offer marks its pickup. The marker is not a device."""
     pins = []

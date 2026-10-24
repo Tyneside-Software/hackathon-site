@@ -42,6 +42,7 @@
     <p id="next-offer"></p>
     <p id="next-fare"></p>
     <p id="free-car"></p>
+    <p id="two-out"></p>
     <p id="short-trip"></p>
     <p id="live-fare"></p>
     <p id="fleet-move"></p>
@@ -142,6 +143,22 @@
       && !takenByT2.cars.some(function (car) { return car.device_id; })
       ? "T1 takes the oldest offer. If T1 is on a route, T2 takes the next one. Neither car is a device."
       : "A car on a route took the offer.";
+    var outNow = game.twoCarsOut(0);
+    var outLater = game.twoCarsOut(120);
+    document.getElementById("two-out").textContent = outNow && outLater
+      && outNow.cars[0].status === "started"
+      && outNow.cars[1].status === "started"
+      && outNow.cars[2].status === "at_depot"
+      && outNow.offers[0].callSign === "T1"
+      && outNow.offers[1].callSign === "T2"
+      && (outNow.cars[0].lat !== outLater.cars[0].lat || outNow.cars[0].lng !== outLater.cars[0].lng)
+      && (outNow.cars[1].lat !== outLater.cars[1].lat || outNow.cars[1].lng !== outLater.cars[1].lng)
+      && outLater.cars[2].status === "at_depot"
+      && game.sumPence(game.workedDay()) === -1120
+      && !outNow.cars.some(function (car) { return car.device_id; })
+      && !outLater.cars.some(function (car) { return car.device_id; })
+      ? "T1 and T2 move on two accepted offers. T3 can stay at the depot. The checked day stays −1120."
+      : "Two cars did not move together.";
     var sample = game.waitingOffers(40);
     var sampleTaken = game.acceptOffer(sample, depotCars);
     document.getElementById("offer-sample").textContent = sample.length === 2

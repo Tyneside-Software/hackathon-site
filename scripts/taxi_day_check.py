@@ -295,6 +295,32 @@ def main():
     if taken_by_t2["cars"][0]["status"] != "started" or taken_by_t2["cars"][1]["status"] != "accepted":
         print(f"free car {taken_by_t2['cars']}", file=sys.stderr)
         return 1
+    out = taxi_game.two_cars_out(0)
+    later = taxi_game.two_cars_out(120)
+    if has_device_id(out) or has_device_id(later):
+        print("a moving car is a device", file=sys.stderr)
+        return 1
+    if [car["status"] for car in out["cars"]] != ["started", "started", "at_depot"]:
+        print(f"two cars out {out['cars']}", file=sys.stderr)
+        return 1
+    if out["offers"][0]["call_sign"] != "T1" or out["offers"][1]["call_sign"] != "T2":
+        print(f"accepted offers {out['offers']}", file=sys.stderr)
+        return 1
+    if out["offers"][0]["status"] != "accepted" or out["offers"][1]["status"] != "accepted":
+        print("an accepted offer was not accepted", file=sys.stderr)
+        return 1
+    if later["cars"][2]["status"] != "at_depot":
+        print("T3 left the depot", file=sys.stderr)
+        return 1
+    if (later["cars"][2]["lat"], later["cars"][2]["lng"]) != taxi_game.DEPOT:
+        print("T3 left the depot pin", file=sys.stderr)
+        return 1
+    if (out["cars"][0]["lat"], out["cars"][0]["lng"]) == (later["cars"][0]["lat"], later["cars"][0]["lng"]):
+        print("T1 did not move with T2", file=sys.stderr)
+        return 1
+    if (out["cars"][1]["lat"], out["cars"][1]["lng"]) == (later["cars"][1]["lat"], later["cars"][1]["lng"]):
+        print("T2 did not move with T1", file=sys.stderr)
+        return 1
     posted_trip = taxi_game.post_live_trip(7, 3, ())
     posted_kinds = [row["kind"] for row in posted_trip["lines"]]
     posted_amounts = [row["amount_pence"] for row in posted_trip["lines"]]
