@@ -41,6 +41,12 @@ foreach ($repo in $repos) {
         Write-Host "fetch $name"
         git -C $path fetch origin
         if ($LASTEXITCODE -ne 0) { throw "fetch failed for $name" }
+        $branch = (git -C $path rev-parse --abbrev-ref HEAD).Trim()
+        $dirty = git -C $path status --porcelain --untracked-files=no
+        if (-not $dirty -and $branch -eq "main") {
+            git -C $path pull --ff-only origin main
+            if ($LASTEXITCODE -ne 0) { throw "fast-forward failed for $name" }
+        }
     }
     else {
         Write-Host "clone $name"
