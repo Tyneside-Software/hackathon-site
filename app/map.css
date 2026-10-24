@@ -172,10 +172,26 @@
   .map-stage { height: 55vh; min-height: 0; }
 }
 #btn-buses.is-on,
-#btn-phones.is-on {
+#btn-phones.is-on,
+#btn-taxis.is-on {
   background: var(--accent);
   color: #0c1219;
   border-color: #d97706;
+}
+.taxi-marker {
+  background: none;
+  border: 0;
+}
+.taxi-chip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 22px;
+  border-radius: 6px;
+  font: 700 11px/1 system-ui, sans-serif;
+  color: #0c1219;
+  box-shadow: 0 0 0 2px #0b1220, 0 2px 6px rgba(0, 0, 0, 0.45);
 }
 .bus-marker {
   background: none;

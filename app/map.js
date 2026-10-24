@@ -399,7 +399,7 @@
 
   map.on("click", (e) => {
     const t = e.originalEvent && e.originalEvent.target;
-    if (t && t.closest && t.closest(".bus-marker, .bus-chip-wrap, .bus-chip, .bus-dot, .leaflet-popup")) return;
+    if (t && t.closest && t.closest(".bus-marker, .bus-chip-wrap, .bus-chip, .bus-dot, .taxi-marker, .taxi-chip, .leaflet-popup")) return;
     const n = markers.length + 1;
     const marker = L.marker(e.latlng, { draggable: true, title: "Stop " + n }).addTo(map);
     marker.on("dragend", () => {
@@ -1432,4 +1432,266 @@
   setTimeout(() => map.invalidateSize(), 0);
 
   renderStops();
+
+  const TAXI_CARS = [
+    { sign: "T1", colour: "#f5b942", bearing: 210, miles: 2 },
+    { sign: "T2", colour: "#38bdf8", bearing: 250, miles: 3 },
+    { sign: "T3", colour: "#4ade80", bearing: 175, miles: 2 },
+  ];
+  const TAXI_NAMES = ["Mina", "Owen", "Priya", "Jack", "Helen", "Tom"];
+  let taxiNameAt = 0;
+  let taxisOn = true;
+  let taxiPaintAt = 0;
+  let fleetFramed = false;
+  const taxiCars = TAXI_CARS.map((spec) => ({
+    sign: spec.sign,
+    colour: spec.colour,
+    bearing: spec.bearing,
+    miles: spec.miles,
+    marker: null,
+    line: null,
+    pin: null,
+    passenger: null,
+    status: "at_depot",
+    motion: 0,
+    token: 0,
+    osrm: true,
+  }));
+
+  function nextPassenger() {
+    const name = TAXI_NAMES[taxiNameAt % TAXI_NAMES.length];
+    taxiNameAt += 1;
+    return name;
+  }
+
+  function inlandBearing(deg) {
+    let bearing = ((deg % 360) + 360) % 360;
+    if (bearing < 160) bearing = 160 + (bearing % 50);
+    if (bearing > 300) bearing = 220 + (bearing % 70);
+    return bearing;
+  }
+
+  function taxiLabel(car) {
+    if (car.status === "with_passenger") return car.sign + " · " + car.passenger + " aboard";
+    if (car.status === "to_passenger") return car.sign + " · collecting " + car.passenger;
+    if (car.status === "returning") return car.sign + " · returning";
+    return car.sign + " · at depot";
+  }
+
+  function paintTaxiList(force) {
+    const now = Date.now();
+    if (!force && now - taxiPaintAt < 500) return;
+    taxiPaintAt = now;
+    const list = document.getElementById("taxi-list");
+    const status = document.getElementById("taxi-status");
+    if (list) {
+      list.replaceChildren();
+      taxiCars.forEach((car) => {
+        const li = document.createElement("li");
+        li.textContent = taxiLabel(car);
+        list.appendChild(li);
+      });
+    }
+    if (!status) return;
+    const aboard = taxiCars.filter((car) => car.status === "with_passenger").length;
+    let text = aboard === 0
+      ? "Taxis are between fares."
+      : aboard === 1
+        ? "1 taxi has a passenger."
+        : aboard + " taxis have passengers.";
+    if (taxiCars.some((car) => car.osrm === false)) text += " OSRM unavailable.";
+    status.textContent = text;
+  }
+
+  function stopCar(car) {
+    car.token += 1;
+    if (car.motion) cancelAnimationFrame(car.motion);
+    car.motion = 0;
+  }
+
+  function clearCarLayers(car) {
+    if (car.line) map.removeLayer(car.line);
+    if (car.pin) map.removeLayer(car.pin);
+    if (car.marker) map.removeLayer(car.marker);
+    car.line = null;
+    car.pin = null;
+    car.marker = null;
+  }
+
+  function ensureTaxi(car) {
+    if (car.marker) return;
+    car.marker = L.marker(DEPOT, {
+      icon: L.divIcon({
+        className: "taxi-marker",
+        html: '<span class="taxi-chip" style="background:' + car.colour + '">' + car.sign + "</span>",
+        iconSize: [36, 22],
+        iconAnchor: [18, 11],
+      }),
+      title: car.sign + " taxi",
+      zIndexOffset: 700,
+    }).addTo(map);
+    car.marker.on("click", (ev) => {
+      if (ev.originalEvent) L.DomEvent.stopPropagation(ev.originalEvent);
+    });
+  }
+
+  function drawCarLine(car, coords) {
+    if (car.line) map.removeLayer(car.line);
+    car.line = L.polyline(coords, {
+      color: car.colour,
+      weight: 4,
+      opacity: 0.9,
+    }).addTo(map);
+  }
+
+  function showPassenger(car, latlng) {
+    if (car.pin) map.removeLayer(car.pin);
+    car.pin = L.circleMarker(latlng, {
+      radius: 7,
+      color: "#6b21a8",
+      weight: 2,
+      fillColor: "#e9d5ff",
+      fillOpacity: 0.95,
+    }).addTo(map);
+    car.pin.bindTooltip(car.passenger + " · waiting", { permanent: true, direction: "bottom" });
+    car.pin.on("click", (ev) => {
+      if (ev.originalEvent) L.DomEvent.stopPropagation(ev.originalEvent);
+    });
+  }
+
+  function runLeg(car, coords, durationS, token, onDone) {
+    if (token !== car.token || !taxisOn) return;
+    ensureTaxi(car);
+    drawCarLine(car, coords);
+    const duration = durationS > 0 ? durationS : fallbackDuration(coords);
+    const started = Date.now();
+    const frame = () => {
+      if (token !== car.token || !taxisOn) return;
+      const elapsed = (Date.now() - started) / 1000;
+      const remaining = Math.max(0, duration - elapsed);
+      const place = placeOnRoute(coords, duration, Math.min(elapsed, duration));
+      car.marker.setLatLng(place);
+      const text = taxiLabel(car) + " · " + Math.ceil(remaining) + "s";
+      const tip = car.marker.getTooltip();
+      if (tip) tip.setContent(text);
+      else car.marker.bindTooltip(text, { permanent: true, direction: "right" });
+      paintTaxiList(false);
+      if (elapsed < duration) car.motion = requestAnimationFrame(frame);
+      else {
+        car.motion = 0;
+        car.marker.setLatLng(coords[coords.length - 1]);
+        if (onDone) onDone();
+      }
+    };
+    frame();
+  }
+
+  function driveLeg(car, from, to, status, onDone) {
+    const token = car.token;
+    car.status = status;
+    paintTaxiList(true);
+    const joined = [from, to].map((point) => point[1].toFixed(6) + "," + point[0].toFixed(6)).join(";");
+    fetch(OSRM + joined + "?overview=full&geometries=geojson")
+      .then((res) => {
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        return res.json();
+      })
+      .then((data) => {
+        if (token !== car.token || !taxisOn) return;
+        const route = data.routes && data.routes[0];
+        if (!route) throw new Error("no route");
+        car.osrm = true;
+        const coords = route.geometry.coordinates.map(([lng, lat]) => [lat, lng]);
+        runLeg(car, coords, route.duration, token, onDone);
+      })
+      .catch(() => {
+        if (token !== car.token || !taxisOn) return;
+        car.osrm = false;
+        paintTaxiList(true);
+        runLeg(car, [from, to], fallbackDuration([from, to]), token, onDone);
+      });
+  }
+
+  function beginFare(car) {
+    if (!taxisOn) return;
+    const token = car.token;
+    car.bearing = inlandBearing(car.bearing + 37);
+    const pickup = destinationPoint(DEPOT, car.bearing, 1.2);
+    const dropoff = destinationPoint(pickup, inlandBearing(car.bearing + 45), car.miles);
+    car.passenger = nextPassenger();
+    showPassenger(car, pickup);
+    ensureTaxi(car);
+    car.marker.setLatLng(DEPOT);
+    driveLeg(car, DEPOT, pickup, "to_passenger", () => {
+      if (token !== car.token || !taxisOn) return;
+      if (car.pin) map.removeLayer(car.pin);
+      car.pin = null;
+      driveLeg(car, pickup, dropoff, "with_passenger", () => {
+        if (token !== car.token || !taxisOn) return;
+        driveLeg(car, dropoff, DEPOT, "returning", () => {
+          if (token !== car.token || !taxisOn) return;
+          car.status = "at_depot";
+          car.passenger = null;
+          if (car.line) map.removeLayer(car.line);
+          car.line = null;
+          paintTaxiList(true);
+          setTimeout(() => {
+            if (token === car.token && taxisOn) beginFare(car);
+          }, 4000);
+        });
+      });
+    });
+  }
+
+  function startFleet() {
+    taxiCars.forEach((car, index) => {
+      stopCar(car);
+      clearCarLayers(car);
+      car.status = "at_depot";
+      car.passenger = null;
+      car.osrm = true;
+      const token = car.token;
+      ensureTaxi(car);
+      car.marker.setLatLng(DEPOT);
+      car.marker.bindTooltip(car.sign + " · at depot", { permanent: true, direction: "right" });
+      setTimeout(() => {
+        if (taxisOn && car.token === token) beginFare(car);
+      }, 1500 + index * 7000);
+    });
+    paintTaxiList(true);
+    const params = new URLSearchParams(location.search);
+    const busesAsked = params.get("buses") === "1" || location.hash === "#buses";
+    if (!fleetFramed && !params.get("zoom") && !busesAsked) {
+      fleetFramed = true;
+      map.setView([55.01, -1.57], 12);
+    }
+  }
+
+  function stopFleet() {
+    taxiCars.forEach((car) => {
+      stopCar(car);
+      clearCarLayers(car);
+      car.status = "at_depot";
+      car.passenger = null;
+    });
+    paintTaxiList(true);
+  }
+
+  const btnTaxis = document.getElementById("btn-taxis");
+  function syncTaxiButton() {
+    if (!btnTaxis) return;
+    btnTaxis.textContent = taxisOn ? "Hide taxis" : "Show taxis";
+    btnTaxis.classList.toggle("is-on", taxisOn);
+    btnTaxis.setAttribute("aria-pressed", taxisOn ? "true" : "false");
+  }
+  if (btnTaxis) {
+    btnTaxis.addEventListener("click", () => {
+      taxisOn = !taxisOn;
+      syncTaxiButton();
+      if (taxisOn) startFleet();
+      else stopFleet();
+    });
+  }
+  syncTaxiButton();
+  startFleet();
 })();
