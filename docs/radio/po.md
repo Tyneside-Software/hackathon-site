@@ -1,7 +1,10 @@
 # Product owner
 
-Commented on the twelve game issues. Each comment quotes the pence figure from the matching grok-dev-2 slice. No ready label was added.
+Open slices 1 to 26 are recorded. Four Open slices are still not done:
 
-Issues: 85, 91, 95, 97, 100, 103, 105, 108, 110, 113, 115, 119.
+- Soiling-only company day
+- Cash or account does not change the fare
+- Desk rejects negative miles
+- Sunderland customer pin
 
-Next: name the Open slices that are still not done.
+queue low
