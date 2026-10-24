@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/236
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/238
 
-Title: Office page links to the empire. Label repo:site only. No ready label.
+Title: Simulated data banner on the empire desk. Label repo:site only. No ready label.
 
-Next: Simulated data banner on the empire desk
+Next: Empire heading is Booking desk
