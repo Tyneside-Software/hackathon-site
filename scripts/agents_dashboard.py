@@ -1581,6 +1581,58 @@ def person_stays_lines(script: str) -> list[tuple[bool, str]]:
     return [(stays, line)]
 
 
+def empty_move_lines(empire: str) -> list[tuple[bool, str]]:
+    """Whether travelling to a better spot is an empty move inside the circle.
+
+    The text is origin/main. This does not read the box. The function body
+    is the check. A comment or a docstring alone does not count.
+    """
+    source = empire or ""
+    start = source.find("def _travel_to_a_better_spot")
+    if start < 0:
+        body = ""
+    else:
+        end = source.find("\ndef ", start + 1)
+        body = source[start:end if end > start else None]
+    code_lines = []
+    in_doc = False
+    quote = ""
+    for line in body.splitlines():
+        stripped = line.strip()
+        if in_doc:
+            if quote in stripped:
+                in_doc = False
+            continue
+        if stripped.startswith('"""') or stripped.startswith("'''"):
+            quote = stripped[:3]
+            if stripped.count(quote) >= 2:
+                continue
+            in_doc = True
+            continue
+        if stripped.startswith("#"):
+            continue
+        code_lines.append(line)
+    code = "\n".join(code_lines)
+    empty = (
+        'car.passenger = ""' in code
+        and 'car.fare_name = ""' in code
+        and "inside_circle" in code
+        and 'car.status != "at_depot"' in code
+        and '"to_better_spot"' in code
+    )
+    if empty:
+        line = (
+            "Travelling to a better spot is an empty move inside the circle, "
+            "with no passenger and no fare."
+        )
+    else:
+        line = (
+            "Travelling to a better spot is not an empty move inside the circle, "
+            "with no passenger and no fare."
+        )
+    return [(empty, line)]
+
+
 PAGE_SCRIPT = r"""
 (function () {
   var catalogEl = document.getElementById("catalog");
@@ -2299,6 +2351,10 @@ def build_page() -> str:
         f'<li class="{"done" if ok else "wait"}">{html.escape(text)}</li>'
         for ok, text in other_end_lines(empire_source)
     )
+    empty_html = "".join(
+        f'<li class="{"done" if ok else "wait"}">{html.escape(text)}</li>'
+        for ok, text in empty_move_lines(empire_source)
+    )
 
     chatter = radio_chatter()
     lane_name = {agent["key"]: agent["name"] for agent in AGENTS}
@@ -2714,6 +2770,8 @@ def build_page() -> str:
         <ol class="steps">{stays_html}</ol>
         <p class="fine">The drop is the other end of the journey.</p>
         <ol class="steps">{other_html}</ol>
+        <p class="fine">Travelling to a better spot is an empty move inside the circle.</p>
+        <ol class="steps">{empty_html}</ol>
         <div class="objective api" style="padding:0.7rem 0 0;border:0;background:transparent">
           <p class="fine">Queue depth</p>
           {depth_html}
