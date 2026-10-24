@@ -1478,6 +1478,59 @@ def waiting_person_lines(script: str) -> list[tuple[bool, str]]:
     return [(draws, line)]
 
 
+def other_end_lines(empire: str) -> list[tuple[bool, str]]:
+    """Whether the drop is the other end of the journey, not the 1.2 and 3 mile ring.
+
+    The text is origin/main. This does not read the box. The journey
+    functions are the check. A test does not count.
+    """
+    source = empire or ""
+    names = (
+        "def journey_ends",
+        "def morning_ends",
+        "def day_ends",
+        "def evening_ends",
+        "def night_ends",
+        "def airport_ends",
+        "def _start_fare",
+    )
+
+    def body(name: str) -> str:
+        start = source.find(name)
+        if start < 0:
+            return ""
+        end = source.find("\ndef ", start + len(name))
+        return source[start:end if end > start else None]
+
+    bodies = [body(name) for name in names]
+    present = all(bodies)
+    ring = any(
+        "PICKUP_MILES" in item or "DROP_MILES" in item or "destination(" in item
+        for item in bodies
+    )
+    ends = bodies[:-1]
+    paired = all("return" in item for item in ends)
+    start_fare = bodies[-1]
+    uses_ends = (
+        "morning_ends" in start_fare
+        and "day_ends" in start_fare
+        and "evening_ends" in start_fare
+        and "night_ends" in start_fare
+        and "journey_ends" in start_fare
+    )
+    other = present and not ring and paired and uses_ends
+    if other:
+        line = (
+            "The drop is the other end of the journey, and the 1.2 mile pickup "
+            "and 3 mile drop are not that journey."
+        )
+    else:
+        line = (
+            "The drop is still the 1.2 mile pickup and 3 mile drop on one bearing."
+        )
+    return [(other, line)]
+
+
 PAGE_SCRIPT = r"""
 (function () {
   var catalogEl = document.getElementById("catalog");
@@ -2188,6 +2241,10 @@ def build_page() -> str:
         f'<li class="{"done" if ok else "wait"}">{html.escape(text)}</li>'
         for ok, text in waiting_person_lines(play_script)
     )
+    other_html = "".join(
+        f'<li class="{"done" if ok else "wait"}">{html.escape(text)}</li>'
+        for ok, text in other_end_lines(empire_source)
+    )
 
     chatter = radio_chatter()
     lane_name = {agent["key"]: agent["name"] for agent in AGENTS}
@@ -2599,6 +2656,8 @@ def build_page() -> str:
         <ol class="steps">{spent_html}</ol>
         <p class="fine">A person waiting with no taxi allocated.</p>
         <ol class="steps">{person_html}</ol>
+        <p class="fine">The drop is the other end of the journey.</p>
+        <ol class="steps">{other_html}</ol>
         <div class="objective api" style="padding:0.7rem 0 0;border:0;background:transparent">
           <p class="fine">Queue depth</p>
           {depth_html}
