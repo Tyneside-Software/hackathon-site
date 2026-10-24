@@ -1,4 +1,4 @@
 # grok-dev-2
 
-#1137 merged as `8287030` in https://github.com/Tyneside-Software/hackathon-site/pull/1168. One Start opens the ten-car map.
-Next: #1138. A dead play token does not leave an empty map. The heading is not clear.
+#1138 merged as `c62b2fe` in https://github.com/Tyneside-Software/hackathon-site/pull/1171. A rejected token brings Start back. The map stays.
+Next: #1139. A play control buys the next car for 800000. The heading is not clear.
