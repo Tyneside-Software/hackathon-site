@@ -44,6 +44,7 @@
   };
   const playChips = new Map();
   const playFares = [];
+  const playTrails = [];
   let playFeed = null;
   let playClock = null;
   let playMotion = 0;
@@ -183,6 +184,39 @@
     });
   }
 
+  function clearPlayTrails() {
+    playTrails.forEach((line) => map.removeLayer(line));
+    playTrails.length = 0;
+  }
+
+  function paintPlayTrails(feed) {
+    clearPlayTrails();
+    const keep = Number(feed && feed.trail_s);
+    const trailS = Number.isFinite(keep) && keep > 0 ? keep : 600;
+    const now = playNow();
+    const cars = feed && Array.isArray(feed.cars) ? feed.cars : [];
+    cars.forEach((car) => {
+      if (!car || !PLAY_SIGNS.includes(car.sign) || !Array.isArray(car.trail)) return;
+      const points = [];
+      car.trail.forEach((row) => {
+        if (!Array.isArray(row) || row.length < 3) return;
+        const lng = Number(row[0]);
+        const lat = Number(row[1]);
+        const at = Number(row[2]);
+        if (!Number.isFinite(lat) || !Number.isFinite(lng) || !Number.isFinite(at)) return;
+        if (now - at > trailS) return;
+        points.push([lat, lng]);
+      });
+      if (points.length < 2) return;
+      const line = L.polyline(points, {
+        color: chipFill(car),
+        weight: 4,
+        opacity: 0.7
+      }).addTo(map);
+      playTrails.push(line);
+    });
+  }
+
   function paintPlayFares(feed) {
     playFares.forEach((marker) => map.removeLayer(marker));
     playFares.length = 0;
@@ -228,6 +262,7 @@
     localStorage.removeItem("hackathon-empire-token");
     localStorage.removeItem("hackathon-empire-user");
     clearPlayChips();
+    clearPlayTrails();
     showPlayAccount();
     paintPlayStatus(null);
   }
@@ -339,6 +374,7 @@
     paintPlayStatus(data);
     paintPlayMoney(data);
     paintPlayCars(data);
+    paintPlayTrails(data);
     paintPlayFares(data);
     paintPlayOsrm(data);
     if (!playMotion) playMotion = requestAnimationFrame(glidePlay);
