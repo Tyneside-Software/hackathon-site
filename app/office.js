@@ -1,57 +1,130 @@
 /* Booking-office desk. Quotes come from app/taxi-fare.js. No API and no database. */
 (function () {
-  var samples = [
-    {
-      title: "£11.30 booking",
-      detail: "Tariff one, 3 miles, no waiting, one extra passenger, one outside bag",
-      pickup: "Grey's Monument",
-      dropOff: "Shiremoor depot",
-      requestedTime: "15:00",
-      callSign: "T1",
-      tariff: 1,
-      segments: [[52800, 0]],
-      extras: { passengersAfterTwo: 1, bags: 1 },
-      status: "offered"
-    },
-    {
-      title: "£12.40 night booking",
-      detail: "Tariff two, 3 miles, no waiting, no extras",
-      pickup: "Shiremoor depot",
-      dropOff: "Grey's Monument",
-      requestedTime: "22:00",
-      callSign: "T2",
-      tariff: 2,
-      segments: [[52800, 0]],
-      extras: {},
-      status: "offered"
-    },
-    {
-      title: "Soiling only",
-      detail: "No miles, no waiting, soiling",
-      pickup: "Grey's Monument",
-      dropOff: "Shiremoor depot",
-      requestedTime: "15:00",
-      callSign: "T1",
-      tariff: 1,
-      segments: [[0, 0]],
-      extras: { soiling: 1 },
-      status: "offered"
-    },
-    {
-      title: "One animal",
-      detail: "Tariff one, 1 mile, no waiting, one animal, no soiling",
-      pickup: "Shiremoor depot",
-      dropOff: "Grey's Monument",
-      requestedTime: "15:00",
-      callSign: "T1",
-      tariff: 1,
-      segments: [[17600, 0]],
-      extras: { animals: 1 },
-      status: "offered"
+  var DAY_KEY = "hackathon-office-day";
+
+  function copyRow(row) {
+    var extras = {};
+    var name;
+    for (name in row.extras) {
+      if (Object.prototype.hasOwnProperty.call(row.extras, name)) {
+        extras[name] = row.extras[name];
+      }
     }
-  ];
+    return {
+      title: row.title,
+      detail: row.detail,
+      pickup: row.pickup,
+      dropOff: row.dropOff,
+      requestedTime: row.requestedTime,
+      callSign: row.callSign,
+      tariff: row.tariff,
+      segments: row.segments.map(function (pair) { return [pair[0], pair[1]]; }),
+      extras: extras,
+      status: row.status,
+      posted: !!row.posted,
+      postedPence: row.postedPence || 0
+    };
+  }
+
+  function defaultRows() {
+    return [
+      {
+        title: "£11.30 booking",
+        detail: "Tariff one, 3 miles, no waiting, one extra passenger, one outside bag",
+        pickup: "Grey's Monument",
+        dropOff: "Shiremoor depot",
+        requestedTime: "15:00",
+        callSign: "T1",
+        tariff: 1,
+        segments: [[52800, 0]],
+        extras: { passengersAfterTwo: 1, bags: 1 },
+        status: "offered"
+      },
+      {
+        title: "£12.40 night booking",
+        detail: "Tariff two, 3 miles, no waiting, no extras",
+        pickup: "Shiremoor depot",
+        dropOff: "Grey's Monument",
+        requestedTime: "22:00",
+        callSign: "T2",
+        tariff: 2,
+        segments: [[52800, 0]],
+        extras: {},
+        status: "offered"
+      },
+      {
+        title: "Soiling only",
+        detail: "No miles, no waiting, soiling",
+        pickup: "Grey's Monument",
+        dropOff: "Shiremoor depot",
+        requestedTime: "15:00",
+        callSign: "T1",
+        tariff: 1,
+        segments: [[0, 0]],
+        extras: { soiling: 1 },
+        status: "offered"
+      },
+      {
+        title: "One animal",
+        detail: "Tariff one, 1 mile, no waiting, one animal, no soiling",
+        pickup: "Shiremoor depot",
+        dropOff: "Grey's Monument",
+        requestedTime: "15:00",
+        callSign: "T1",
+        tariff: 1,
+        segments: [[17600, 0]],
+        extras: { animals: 1 },
+        status: "offered"
+      }
+    ].map(copyRow);
+  }
+
+  function completedRow(row) {
+    var copy = copyRow(row);
+    copy.status = "completed";
+    copy.posted = true;
+    copy.postedPence = window.TaxiFare.quotePence(copy.tariff, copy.segments, copy.extras);
+    return copy;
+  }
+
+  var samples = defaultRows();
   var addedQuotes = [];
   var lastQuote = null;
+
+  function persistDay() {
+    var payload = {
+      rows: samples.map(copyRow),
+      added: addedQuotes.slice()
+    };
+    try {
+      localStorage.setItem(DAY_KEY, JSON.stringify(payload));
+    } catch (err) {
+      return;
+    }
+  }
+
+  function loadDay() {
+    var raw;
+    try {
+      raw = localStorage.getItem(DAY_KEY);
+    } catch (err) {
+      return;
+    }
+    if (!raw) return;
+    var payload;
+    try {
+      payload = JSON.parse(raw);
+    } catch (err) {
+      return;
+    }
+    if (!payload || !payload.rows || !payload.rows.length) return;
+    samples = payload.rows.map(copyRow);
+    addedQuotes = (payload.added || []).slice();
+  }
+
+  function dayNote(text) {
+    document.getElementById("day-store").textContent = text;
+  }
 
   function money(pence) {
     var sign = pence < 0 ? "-" : "";
@@ -237,6 +310,7 @@
         button.textContent = label;
         button.addEventListener("click", function () {
           setStatus(row, next);
+          persistDay();
           renderSamples();
           renderLedger();
         });
@@ -279,6 +353,7 @@
     if (quote.error) return;
     if (quote.yards === 0 && quote.seconds === 0 && quote.extraPence === 0) return;
     addedQuotes.push(quote.pence);
+    persistDay();
     renderLedger();
   });
 
@@ -302,6 +377,66 @@
     showWorked(2, [[0, 450]], "Tariff two, no yards, 45 seconds.");
   });
 
+  document.getElementById("btn-restore").addEventListener("click", function () {
+    samples = [
+      completedRow({
+        title: "£11.30 booking",
+        detail: "Tariff one, 3 miles, no waiting, one extra passenger, one outside bag",
+        pickup: "Grey's Monument",
+        dropOff: "Shiremoor depot",
+        requestedTime: "15:00",
+        callSign: "T1",
+        tariff: 1,
+        segments: [[52800, 0]],
+        extras: { passengersAfterTwo: 1, bags: 1 },
+        status: "offered"
+      }),
+      completedRow({
+        title: "£12.40 night booking",
+        detail: "Tariff two, 3 miles, no waiting, no extras",
+        pickup: "Shiremoor depot",
+        dropOff: "Grey's Monument",
+        requestedTime: "22:00",
+        callSign: "T2",
+        tariff: 2,
+        segments: [[52800, 0]],
+        extras: {},
+        status: "offered"
+      }),
+      completedRow({
+        title: "Tariff one, 1 mile",
+        detail: "Tariff one, 1 mile, no waiting, no extras",
+        pickup: "Grey's Monument",
+        dropOff: "Shiremoor depot",
+        requestedTime: "15:00",
+        callSign: "T1",
+        tariff: 1,
+        segments: [[17600, 0]],
+        extras: {},
+        status: "offered"
+      })
+    ];
+    addedQuotes = [];
+    persistDay();
+    renderSamples();
+    renderLedger();
+    dayNote("Restored three completed bookings, 1130, 1240, and 490. The day shows " + runningPence() + ".");
+  });
+
+  document.getElementById("btn-clear").addEventListener("click", function () {
+    try {
+      localStorage.removeItem(DAY_KEY);
+    } catch (err) {
+      return;
+    }
+    samples = defaultRows();
+    addedQuotes = [];
+    renderSamples();
+    renderLedger();
+    dayNote("Cleared. The key hackathon-office-day is removed. A reload starts from the offered rows.");
+  });
+
+  loadDay();
   renderSamples();
   renderLedger();
   renderDay();
