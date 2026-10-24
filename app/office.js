@@ -110,6 +110,43 @@
     document.getElementById("ledger-total").textContent = penceText(runningPence());
   }
 
+  function renderDay() {
+    var completed = [
+      window.TaxiFare.quotePence(1, [[52800, 0]], { passengersAfterTwo: 1, bags: 1 }),
+      window.TaxiFare.quotePence(2, [[52800, 0]], {}),
+      window.TaxiFare.quotePence(1, [[17600, 0]], {})
+    ];
+    var cancel = 0;
+    var total = completed[0] + completed[1] + completed[2] + cancel;
+    var root = document.getElementById("day-ledger");
+    root.textContent = "";
+    var title = document.createElement("h3");
+    title.textContent = "Company day";
+    title.style.marginTop = "0.9rem";
+    var note = document.createElement("p");
+    note.className = "office-note";
+    note.textContent = "Three completed bookings and one cancel. This day is its own ledger, separate from any single booking above and separate from the game.";
+    root.appendChild(title);
+    root.appendChild(note);
+    [
+      ["Completed", completed[0]],
+      ["Completed", completed[1]],
+      ["Completed, tariff one, 1 mile", completed[2]],
+      ["Cancel", cancel],
+      ["Company day", total]
+    ].forEach(function (line) {
+      var row = document.createElement("p");
+      row.className = "ledger-line";
+      var name = document.createElement("span");
+      name.textContent = line[0];
+      var amount = document.createElement("strong");
+      amount.textContent = penceText(line[1]);
+      row.appendChild(name);
+      row.appendChild(amount);
+      root.appendChild(row);
+    });
+  }
+
   function renderSamples() {
     var root = document.getElementById("samples");
     root.textContent = "";
@@ -152,7 +189,6 @@
       block.appendChild(copy);
       block.appendChild(actions);
       root.appendChild(block);
-      void index;
     });
   }
 
@@ -179,4 +215,5 @@
 
   renderSamples();
   renderLedger();
+  renderDay();
 })();

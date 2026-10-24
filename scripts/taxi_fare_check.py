@@ -100,6 +100,19 @@ def main():
         "Tariff two, 3 miles, no waiting, one bicycle",
         night_meter, bicycle, night_meter + bicycle, 1240, 300, 1540,
     ) or failed
+    mile = quote_pence(TARIFF_ONE, ((17600, 0),))
+    mile_extra = extras_pence()
+    failed = _expect(
+        "Tariff one, 1 mile, no waiting, no extras",
+        mile, mile_extra, mile + mile_extra, 490, 0, 490,
+    ) or failed
+    company_day = (meter + extra) + (night_meter + night_extra) + (mile + mile_extra) + 0
+    if company_day != 2860:
+        failed = True
+        print(
+            "Company day, three completed bookings and one cancel: got %s, expected 2860" % company_day,
+            file=sys.stderr,
+        )
     if failed:
         return 1
     print("FARE-OK")
