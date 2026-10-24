@@ -49,6 +49,9 @@ def main():
     if [(row["kind"], row["amount_pence"]) for row in after] != [("fuel", -20)]:
         print(f"cancel after {after}", file=sys.stderr)
         return 1
+    if taxi_game.cancel_after_zero_miles() != []:
+        print("zero miles wrote lines", file=sys.stderr)
+        return 1
     if any(row["kind"] == "fare_in" for row in after):
         print("cancel after wrote a fare", file=sys.stderr)
         return 1
