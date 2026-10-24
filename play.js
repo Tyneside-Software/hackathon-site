@@ -15,6 +15,15 @@
   }).addTo(map);
   map.setView(monument, 10);
   map.fitBounds(circle.getBounds());
+  function clearBusToggle() {
+    document.querySelectorAll("button, input, select").forEach((node) => {
+      const label = ((node.textContent || "") + " " + (node.id || "") + " " + (node.getAttribute("aria-label") || "")).toLowerCase();
+      if (label.indexOf("bus") === -1) return;
+      node.remove();
+    });
+  }
+  clearBusToggle();
+
   const depot = [55.0367, -1.5075];
   L.marker(depot, { title: "Shiremoor depot" })
     .bindTooltip("Shiremoor depot", { permanent: true, direction: "top" })
@@ -187,6 +196,7 @@
     playFeed = data;
     const server = Number(data.server_now);
     if (Number.isFinite(server)) playClock = { server: server, client: Date.now() / 1000 };
+    clearBusToggle();
     paintPlayMoney(data);
     paintPlayCars(data);
     paintPlayFares(data);
