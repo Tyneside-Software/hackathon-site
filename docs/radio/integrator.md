@@ -12,7 +12,7 @@ Each session does the Open slices under its own heading, in order. When a slice 
 
 The product brief is `docs/TAXI.md`. Do not invent a second fare table, a second map centre, or a fourth product. Do not edit `docs/TAXI.md`. Do not add `ready`. Leave September 2026 issues 1, 2, 3, 4, and 18 alone. Do not touch API pull request `reeve-branch`. Issues 22 and 29 stay `blocked`. Do not migrate `device_links` and do not write the live database.
 
-Queue depth is in `docs/radio/README.md`. Each of the three lanes keeps at least 8 Open slices that are not yet on `origin/main`.
+Queue depth is in `docs/radio/README.md`. Each of the three lanes keeps at least 12 Open slices that are not yet on `origin/main`.
 
 ## Now
 
@@ -24,9 +24,9 @@ The office and the empire are the same booking desk. `office.html` is the real c
 
 | Lane | State | Next slice |
 |------|--------|------------|
-| Product owner | The radio still says `queue low`. Slices 32 to 50 are open, and so are 51 to 60. | Slice 51, `Real-time clock for the empire`, before slice 32. Then 52 to 60. Then return to slice 32. Do not stop. Skip a title that already has an issue. |
-| grok-dev-1 | On task. The receipt is on `main` at `ac4de06`. | Slice 11. Alex takes 1130 and 490, Sam takes 1240, and the day stays 2860. Then keep going. Slice 17 starts the shared desk. |
-| grok-dev-2 | On task. Slice 10, the seven-day list, is on `main` at `b1917d3`. | Slice 24 next, not slice 11. Real time: one real second is one game second. OSRM duration is the journey. A new fare every 20 seconds until 3 are waiting. Slices 11 to 23 wait until slice 32 is on `main`. |
+| Product owner | Idle on an old checkout. The `queue low` note is stale. | Pull `origin/main`. Open slice 51, then 52 to 76, then slices 32 to 50. Do not stop. Skip a title that already has an issue. |
+| grok-dev-1 | On task. A driver-takings edit is in progress. | Finish slice 11. Alex 1620, Sam 1240, day 2860. Then slices 12 to 31. Do not stop. |
+| grok-dev-2 | The radio line that says slice 11 is next is stale. | Slice 24. Real time, OSRM duration, a fare every 20 seconds. Then slices 25 to 38. Slices 11 to 23 wait until slice 38 is on `main`. |
 
 Do not redo a slice that is already on `main`. Do not start the reservoir.
 
@@ -40,7 +40,7 @@ No product code. You may commit and squash-merge a branch that changes only `doc
 
 Done, already on `main`: issues 30, 31, 32, 33, and 34 are open. Issues 23 and 24 are commented. Issues 22, 29, and 34 stay `blocked`. Do not open those titles again.
 
-Open slices. One issue, then a radio note, then the next. If that exact title already exists, comment on it and do not open a second. Label `repo:site` only. The issue body is the matching dev slice in this file. Do not add `ready`. Skip a title that already has an issue. The next title is `Real-time clock for the empire`. Open slices 51 to 60 before slices 32 to 50.
+Open slices. One issue, then a radio note, then the next. If that exact title already exists, comment on it and do not open a second. Label `repo:site` only. The issue body is the matching dev slice in this file. Do not add `ready`. Skip a title that already has an issue. The next title is `Real-time clock for the empire`. Open slices 51 to 76 before slices 32 to 50.
 
 1. `Office booking fields for pickup and drop-off`
 2. `Office status changes add the fare once`
@@ -102,15 +102,27 @@ Open slices. One issue, then a radio note, then the next. If that exact title al
 58. `Three cars can be out at once`
 59. `Live offers appear on the booking desk`
 60. Comment on issues 51 to 59. Quote 20 seconds, 30 miles per hour, and −1120. Do not add `ready`.
+61. `Alex takings after the night booking is cancelled`
+62. `One-mile fare shown as flag and units`
+63. `Exact 322.6 yards on the desk`
+64. `Pram and outside bag on the one-mile fare`
+65. `Real data banner survives a reload`
+66. `Receipt sits in the ledger panel`
+67. `Switch between the full day and the empty day`
+68. `Office page keeps the empire link`
+69. `Customer pin for a waiting fare`
+70. `Car drives back to the depot`
+71. `Live fuel at 20 pence a mile`
+72. `Seconds remaining on the booking row`
+73. `Three fares waiting and no fourth`
+74. `A live trip posts its fare once`
+75. Comment on issues 61 to 74. Quote 1620, 580, 20 seconds, and −1120. Do not add `ready`.
+76. If fewer than 12 Open slices remain for any lane, write `queue low`.
 
 Reservoir. Do not open these yet.
 
 1. `Desk help panel for the two flag falls`
-2. `Alex takings after the night booking is cancelled`
-4. `One-mile fare shown as flag and units`
-5. `Exact 322.6 yards on the desk`
-6. `Pram and outside bag on the one-mile fare`
-7. `Sample car returns to the depot pin`
+2. `Sample car returns to the depot pin`
 11. `Game drivers Jamie and Alex`
 12. `Fuel for four miles after the start`
 13. `Standing only, when no job runs`
@@ -153,13 +165,18 @@ Open slices.
 21. Week strip. The company week stays 20020 pence and is labelled `company-week` inside the ledger panel.
 22. Empire link. The nav on `office.html` includes a link to `game.html` named `Empire`. Do not edit `index.html`.
 23. Status words. The row status is one of `offered`, `accepted`, `started`, `completed`, or `cancelled`. Completing the £11.30 row still adds 1130 once.
+24. Alex after the night booking is cancelled. Cancel Sam's 1240. Complete Alex's 1130 and 490. The desk shows 1620. The 2860 day is still available. `FARE-OK`.
+25. One-mile breakdown. Tariff one at 1 mile is shown as flag 240 plus 10 units of 25, total 490. `FARE-OK`.
+26. Two units. Exact 322.6 yards on tariff one shows 265. The mixed button stays 265, not 290. `FARE-OK`.
+27. Pram and bag. Tariff one, 1 mile, one pram, and one outside bag is 490 + 50 + 40 = 580. `FARE-OK`.
+28. Banner survives reload. After the browser book is restored, the page still says `Real data` and the total is 2860. `FARE-OK`.
+29. Receipt in the ledger. The plain-text slip is inside the ledger panel. It still contains `1130` and `£11.30` and does not contain `driver_share`, `standing`, or `800000`.
+30. Two saved days. A control shows the 2860 day. Another shows the empty day at 0. Switching does not add the totals together. `FARE-OK`.
+31. Simulated desk link. The Empire link on `office.html` is present. The office page does not copy the game's −1120 total.
 
 Reservoir. Do not start these.
 
-1. Cancelling Sam's 1240 and completing Alex's 1130 and 490 sums to 1620.
-4. The 1-mile tariff-one fare is shown as flag 240 plus 10 units of 25, total 490.
-5. Exact 322.6 yards on tariff one shows 265.
-6. Tariff one, 1 mile, one pram, and one outside bag is 490 + 50 + 40 = 580.
+1. A help line on the restored day repeats the tariff one flag fall of 240 and the tariff two flag fall of 315.
 
 ## grok-dev-2
 
@@ -171,7 +188,7 @@ You own the circle, the game ledger, the sample car, and the map drawing for thi
 
 Done, on `e4a2c1c`: the checkers, `game.html`, the 80467 metre circle, the `Shiremoor depot` marker, and the sample car that asks OSRM or shows `OSRM unavailable` without repricing the day. Open slices 1 to 10 are also on `main`, through the seven-day list at `b1917d3`. Skip them.
 
-Do slices 24 to 32 before slices 11 to 23. The real-time game is the priority. One real second is one game second. `scripts/taxi_day_check.py` must still print `DAY-OK`, and it must also print `TIME-OK`. Do not edit `app/office.css` or `scripts/taxi_fare.py`. The page may load `app/taxi-fare.js`. A live offer must not change the checked day of −1120.
+Do slices 24 to 38 before slices 11 to 23. The real-time game is the priority. A radio note that names slice 11 is stale. One real second is one game second. `scripts/taxi_day_check.py` must still print `DAY-OK`, and it must also print `TIME-OK`. Do not edit `app/office.css` or `scripts/taxi_fare.py`. The page may load `app/taxi-fare.js`. A live offer must not change the checked day of −1120.
 
 Open slices. Use the coordinates already in `scripts/taxi_geo_check.py`. Do not invent a new town.
 
@@ -207,6 +224,12 @@ Open slices. Use the coordinates already in `scripts/taxi_geo_check.py`. Do not 
 30. Live tariff. The offer's fare is `quote_pence` from `scripts/taxi_fare.py`, using the trip's yards and seconds. The unit that finishes first is the one that counts. Three miles, no waiting, tariff one, no extras, is 1040. The page may load `app/taxi-fare.js` and must not edit it. A live offer does not change the checked −1120 day. `TIME-OK`.
 31. Three moving cars. `T1`, `T2`, and `T3` can each follow a route at the same time. Offers still arrive every 20 seconds until 3 are waiting. None of the cars is a device. `DAY-OK` still requires −1120 for the checked day.
 32. Offers on the desk. Each waiting offer is a booking row: pickup, drop-off, status `offered`, and the fare in pounds. Accepting one sets a free car onto that route. The banner says `Simulated data` if that banner is already on the page.
+33. Customer pin. A waiting offer puts a marker on its pickup. The marker is not a device. Accepting the offer removes that marker and starts the car. Phones and buses stay.
+34. Drive home. After the drop-off the car status is `returning` and it drives to the Shiremoor depot in real time. Arrival sets `at_depot`. The checked day stays −1120. `TIME-OK`.
+35. Live fuel. When a live trip completes, fuel is 20 pence for each mile driven, added once. Three miles add −60. A second completion does not add it again. The checked seven-mile fuel of −140 stays on the checked day. `TIME-OK`.
+36. Seconds on the row. The booking row of a moving car shows the seconds remaining. At the start of a 600 second route it shows 600. Halfway it shows 300. `TIME-OK`.
+37. Three waiting is the cap. The page says `3 fares waiting` when three offers are open. The twentieth second does not add a fourth. When one is accepted, the next 20 seconds may add one. `TIME-OK`.
+38. One ledger post. Completing a live trip appends one fare line and one fuel line. Doing it again does not append them again. `DAY-OK` still requires −1120 for the checked day.
 
 Reservoir. Do not start these.
 
@@ -219,6 +242,6 @@ Reservoir. Do not start these.
 
 ## Integrator
 
-On `continue`, lead. Read the three radio files and look at the lane checkouts. Do not edit those checkouts. Name the next slice in `## Now`. Top up any lane with fewer than 8 Open slices not yet on `origin/main`. Deploy once when product code has merged since the site commit in `## Now`. Write the result back here. A radio-only commit is not a deploy.
+On `continue`, lead. Watch productivity against the three objectives: the tracker, the real booking desk, and the real-time empire. Read the radios and the lane checkouts. Do not edit those checkouts. Name the next slice in `## Now`. Keep at least 12 Open slices that are not yet on `origin/main` in front of each lane. Deploy once when product code has merged since the site commit in `## Now`. A radio-only commit is not a deploy.
 
 Last deploy: box site `c3812c3`, health `0.1.26`, `CHECK-OK`. Do not deploy a later radio-only note.
