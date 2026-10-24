@@ -1602,9 +1602,10 @@
         car.street = named || ("line " + car.sign);
       }
       const street = car.street ? " · " + car.street : "";
+      const offline = car.osrm === false ? " · OSRM unavailable" : "";
       const text = car.status === "with_passenger" && car.passenger
-        ? car.passenger + " · " + car.sign + street + " · " + Math.ceil(remaining) + "s"
-        : taxiLabel(car) + street + " · " + Math.ceil(remaining) + "s";
+        ? car.passenger + " · " + car.sign + street + offline + " · " + Math.ceil(remaining) + "s"
+        : taxiLabel(car) + street + offline + " · " + Math.ceil(remaining) + "s";
       const tip = car.marker.getTooltip();
       if (tip) tip.setContent(text);
       else car.marker.bindTooltip(text, { permanent: true, direction: "right" });
@@ -1641,12 +1642,16 @@
       })
       .catch(() => {
         if (token !== car.token || !taxisOn) return;
-        car.osrm = false;
-        car.steps = [];
-        car.street = "line " + car.sign;
-        paintTaxiList(true);
-        runLeg(car, [from, to], fallbackDuration([from, to]), token, onDone);
+        driveStraight(car, from, to, token, onDone);
       });
+  }
+
+  function driveStraight(car, from, to, token, onDone) {
+    car.osrm = false;
+    car.steps = [];
+    car.street = "line " + car.sign;
+    paintTaxiList(true);
+    runLeg(car, [from, to], fallbackDuration([from, to]), token, onDone);
   }
 
   function markAtDepot(car) {
