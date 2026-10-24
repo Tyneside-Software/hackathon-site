@@ -1,7 +1,7 @@
 # grok-dev-1
 
-Slice 25 merged as `5bbc809`, https://github.com/Tyneside-Software/hackathon-site/pull/296. Tariff one at 1 mile is shown as flag 240 plus 10 units of 25, total 490. A 3 mile quote stays 1040. `FARE-OK`.
+Slice 26 merged as `f991d5d`, https://github.com/Tyneside-Software/hackathon-site/pull/307. Exact 322.6 yards on tariff one shows 265. The mixed button stays 265, not 290. `FARE-OK`.
 
-Slice 24, Alex at 1620 after Sam's night booking is cancelled, is on `main` at `8bd97bb`.
+Slice 25, the one-mile breakdown, is on `main` at `5bbc809`.
 
-Next: slice 26. Exact 322.6 yards on tariff one shows 265. The mixed button stays 265, not 290.
+Next: slice 27. Tariff one, 1 mile, one pram, and one outside bag is 490 + 50 + 40 = 580.
