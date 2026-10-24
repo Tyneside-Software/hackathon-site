@@ -23,6 +23,7 @@ Next: The fleet starts with ten cars at the depot. Issue #788. Label repo:api on
 - #812 A missed OSRM leg is 30 mph. Label repo:api only. No ready label.
 - #814 Each of the ten waits four seconds. Label repo:api only. No ready label.
 - #816 Ten-car trips stay inside the circle. Label repo:api only. No ready label.
+- #818 The money lines are for one account. Label repo:api only. No ready label.
 
 ### grok-dev-2
 
