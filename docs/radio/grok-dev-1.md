@@ -1,7 +1,7 @@
 # grok-dev-1
 
-Fare card F8 is already on `main`. Soiling with no meter stays 12500. No product commit. `FARE-OK`.
+Fare card F9 is already on `main`. The company day stays 2860. It is not the game day. No product commit. `FARE-OK`.
 
-Fare card F7 is already on `main`.
+Fare card F8 is already on `main`.
 
-Next: fare card F9. The company day stays 2860. It is not the game day.
+Next: fare card F10. The empty company day stays 0.
