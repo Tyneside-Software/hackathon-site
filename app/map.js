@@ -1442,6 +1442,8 @@
   let taxiNameAt = 0;
   let taxisOn = false;
   let empireAccount = false;
+  let empireTrails = [];
+  let empireFares = [];
   let taxiPaintAt = 0;
   let fleetFramed = false;
   const taxiCars = TAXI_CARS.map((spec) => ({
@@ -1825,8 +1827,75 @@
     }
   }
 
+  function clearEmpireDraw() {
+    taxiCars.forEach((car) => {
+      stopCar(car);
+      clearCarLayers(car);
+      car.passenger = null;
+      car.street = "";
+      car.steps = [];
+    });
+    empireTrails.forEach((layer) => map.removeLayer(layer));
+    empireFares.forEach((layer) => map.removeLayer(layer));
+    empireTrails = [];
+    empireFares = [];
+    empireAccount = false;
+    taxisOn = false;
+    paintTaxiList(true);
+  }
+
+  async function signInEmpire() {
+    const status = document.getElementById("empire-account-status");
+    const usernameEl = document.getElementById("empire-username");
+    const passwordEl = document.getElementById("empire-password");
+    const username = usernameEl ? usernameEl.value.trim() : "";
+    const password = passwordEl ? passwordEl.value : "";
+    if (username.length < 3) {
+      if (status) status.textContent = "Username is at least 3 characters.";
+      return;
+    }
+    if (password.length < 8) {
+      if (status) status.textContent = "The password is at least 8 characters.";
+      return;
+    }
+    const base = apiBase();
+    if (!base) {
+      if (status) status.textContent = "The API address is missing.";
+      return;
+    }
+    if (status) status.textContent = "Signing in…";
+    try {
+      const logged = await fetch(base + "/login", {
+        method: "POST",
+        headers: { Accept: "application/json", "Content-Type": "application/json" },
+        body: JSON.stringify({ username: username, password: password }),
+      });
+      const session = await logged.json().catch(() => null);
+      if (!logged.ok || !session || !session.access_token) {
+        const detail = session && typeof session.detail === "string" ? session.detail : ("HTTP " + logged.status);
+        if (status) status.textContent = "Sign-in failed — " + detail;
+        return;
+      }
+      localStorage.setItem("hackathon-empire-token", session.access_token);
+      if (status) status.textContent = "Signed in as " + username + ".";
+    } catch (err) {
+      if (status) status.textContent = "Network or CORS failure.";
+    }
+  }
+
+  function signOutEmpire() {
+    localStorage.removeItem("hackathon-empire-token");
+    clearEmpireDraw();
+    const status = document.getElementById("empire-account-status");
+    if (status) status.textContent = "Signed out.";
+  }
+
   const empireCreate = document.getElementById("empire-create");
   if (empireCreate) empireCreate.addEventListener("click", () => { createEmpireAccount(); });
+  const empireSignIn = document.getElementById("empire-signin");
+  if (empireSignIn) empireSignIn.addEventListener("click", () => { signInEmpire(); });
+  const empireSignOut = document.getElementById("empire-signout");
+  if (empireSignOut) empireSignOut.addEventListener("click", () => { signOutEmpire(); });
   syncTaxiButton();
   paintTaxiList(true);
 })();
