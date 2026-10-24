@@ -160,6 +160,7 @@
       "play-feed-401-fares",
       "play-feed-401-failed",
       "play-feed-401-chips",
+      "play-signout-fares",
       "play-locks",
       "play-osrm",
       "play-buses",
@@ -812,6 +813,16 @@
       noteSignOutFlight();
     }
     clearSignOutFailed();
+    clearSignOutFares();
+  }
+
+  function clearSignOutFares() {
+    playFares.forEach((marker) => map.removeLayer(marker));
+    playFares.length = 0;
+    const node = document.getElementById("play-signout-fares");
+    if (!node) return;
+    node.dataset.fares = playFares.length === 0 ? "clear" : "shows";
+    node.dataset.signed = "out";
   }
 
   function clearSignOutFailed() {
