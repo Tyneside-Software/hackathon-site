@@ -1,10 +1,7 @@
 # Product owner
 
-Open slices 1 to 26 are recorded. Four Open slices are still not done:
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/127
 
-- Soiling-only company day
-- Cash or account does not change the fare
-- Desk rejects negative miles
-- Sunderland customer pin
+Title: Soiling-only company day. Label repo:site only. No ready label.
 
 queue low
