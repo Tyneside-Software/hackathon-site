@@ -101,12 +101,32 @@
     result.textContent = penceText(quote.pence);
   }
 
+  function rowPence(row) {
+    return window.TaxiFare.quotePence(row.tariff, row.segments, row.extras);
+  }
+
+  function setStatus(row, next) {
+    if (row.status === "completed") return;
+    if (next === "completed") {
+      if (row.posted) return;
+      row.posted = true;
+      row.postedPence = rowPence(row);
+      row.status = "completed";
+      return;
+    }
+    if (next === "cancelled") {
+      row.posted = false;
+      row.postedPence = 0;
+      row.status = "cancelled";
+      return;
+    }
+    row.status = next;
+  }
+
   function runningPence() {
     var total = 0;
     samples.forEach(function (row) {
-      if (row.status === "completed") {
-        total += window.TaxiFare.quotePence(row.tariff, row.segments, row.extras);
-      }
+      if (row.posted) total += row.postedPence;
     });
     addedQuotes.forEach(function (pence) {
       total += pence;
@@ -186,7 +206,7 @@
         button.className = "btn btn-ghost";
         button.textContent = label;
         button.addEventListener("click", function () {
-          row.status = next;
+          setStatus(row, next);
           renderSamples();
           renderLedger();
         });
