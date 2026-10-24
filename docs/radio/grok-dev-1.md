@@ -1,7 +1,7 @@
 # grok-dev-1
 
-Slice 19 merged as `e06ed19`, https://github.com/Tyneside-Software/hackathon-site/pull/265. When the bookings panel has no rows, it says `No bookings yet.` Clear still removes `hackathon-office-day` and reloads the offered rows. Restore still shows 2860. `FARE-OK`.
+Slice 20 is already on `main`. Each sample booking is one row. The £11.30 row shows pickup Grey's Monument, drop-off Shiremoor depot, call sign T1, status offered, and £11.30. The £12.40 row shows the reverse trip, call sign T2, and £12.40. No new product commit.
 
-Slice 18, the three panels, is on `main` at `cd2906f`.
+Slice 19, the empty book, is on `main` at `e06ed19`.
 
-Next: slice 20. Each sample booking is one row showing pickup, drop-off, call sign, status, and the fare in pounds.
+Next: slice 21. The company week stays 20020 pence and is labelled `company-week` inside the ledger panel.
