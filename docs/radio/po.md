@@ -71,3 +71,4 @@ Not assigned. Do not start these.
 - #776 Two browsers on one account show the same call signs. Label repo:site only. No ready label.
 - #778 The circle centre stays on Grey's Monument. Label repo:site only. No ready label.
 - #780 Bus trails keep moving while the taxis drive. Label repo:site only. No ready label.
+- #782 The empire status line hides the company totals. Label repo:site only. No ready label.
