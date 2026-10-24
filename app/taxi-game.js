@@ -11,6 +11,8 @@
   var NEW_DRIVER_PENCE = 0;
   var WORKED_FARE_PENCE = 1040;
   var WORKED_MILES = 7;
+  var CAR_STATUSES = ["at_depot", "offered", "accepted", "started", "returning"];
+  var carStatus = "at_depot";
   var CENTRE = { lat: 54.9783, lng: -1.6178 };
   var RADIUS_KM = 80.467;
   var EARTH_KM = 6371;
@@ -79,6 +81,16 @@
     return [line("fuel", -FUEL_PENCE_A_MILE)];
   }
 
+  function setCarStatus(status) {
+    if (CAR_STATUSES.indexOf(status) === -1) return carStatus;
+    carStatus = status;
+    return carStatus;
+  }
+
+  function completeWorkedDay() {
+    return workedDay();
+  }
+
   function newCar() {
     return {
       lines: [line("new_car", -NEW_CAR_PENCE)],
@@ -112,6 +124,10 @@
     depotLabel: "Shiremoor depot",
     places: places,
     jobOffered: jobOffered,
+    carStatuses: CAR_STATUSES,
+    setCarStatus: setCarStatus,
+    currentCarStatus: function () { return carStatus; },
+    completeWorkedDay: completeWorkedDay,
     workedDay: workedDay,
     cancelBefore: cancelBefore,
     cancelAfterOneMile: cancelAfterOneMile,

@@ -95,6 +95,18 @@
 
   const btnSample = document.getElementById("btn-sample");
   if (btnSample) btnSample.addEventListener("click", driveSample);
+  ["at_depot", "offered", "accepted", "started", "returning"].forEach((status) => {
+    if (!btnSample || !btnSample.parentElement) return;
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "btn btn-ghost";
+    button.textContent = status;
+    button.addEventListener("click", () => {
+      sampleMarker.unbindTooltip();
+      sampleMarker.bindTooltip("Sample car " + status, { permanent: true, direction: "right" });
+    });
+    btnSample.parentElement.appendChild(button);
+  });
 
   const markers = [];
   let routeLine = null;

@@ -43,6 +43,12 @@
     <ul id="day-lines"></ul>
     <p id="day-sum" style="font-size:1.25rem"></p>
 
+    <p class="lede" id="car-status"></p>
+    <div class="map-actions" id="status-buttons" style="display:flex;gap:0.5rem;flex-wrap:wrap;margin-top:1rem"></div>
+    <div class="map-actions" style="display:flex;gap:0.5rem;flex-wrap:wrap;margin-top:1rem">
+      <button type="button" class="btn btn-ghost" id="btn-complete">complete the worked day</button>
+    </div>
+    <p class="lede" id="complete-result"></p>
     <div class="map-actions" style="display:flex;gap:0.5rem;flex-wrap:wrap;margin-top:1rem">
       <button type="button" class="btn btn-ghost" id="btn-before">Cancel before the car starts</button>
       <button type="button" class="btn btn-ghost" id="btn-after">Cancel after 1 mile</button>
@@ -76,6 +82,22 @@
       list.appendChild(item);
     });
     document.getElementById("day-sum").textContent = "Sum " + game.formatPounds(game.sumPence(game.workedDay()));
+    document.getElementById("car-status").textContent = "Sample car is " + game.currentCarStatus();
+    game.carStatuses.forEach(function (status) {
+      var button = document.createElement("button");
+      button.type = "button";
+      button.className = "btn btn-ghost";
+      button.textContent = status;
+      button.addEventListener("click", function () {
+        game.setCarStatus(status);
+        document.getElementById("car-status").textContent = "Sample car is " + status;
+      });
+      document.getElementById("status-buttons").appendChild(button);
+    });
+    document.getElementById("btn-complete").addEventListener("click", function () {
+      var rows = game.completeWorkedDay();
+      document.getElementById("complete-result").textContent = "Sum " + game.formatPounds(game.sumPence(rows));
+    });
     var result = document.getElementById("case-result");
     document.getElementById("btn-before").addEventListener("click", function () {
       var rows = game.cancelBefore();
