@@ -46,6 +46,7 @@
     <ul id="offers"></ul>
     <p id="offer-sample"></p>
     <p id="customer-pin"></p>
+    <p id="drive-home"></p>
     <button type="button" class="btn btn-ghost" id="btn-accept">Accept the oldest offer</button>
     <p id="accept-result"></p>
     <ul id="places"></ul>
@@ -129,6 +130,15 @@
       && !started.cars.some(function (car) { return car.device_id; })
       ? "A waiting offer marks its pickup. Accepting removes that marker and starts the car."
       : "The customer pin was a device.";
+    var dropHome = game.shortTrip(90, 2);
+    var goingHome = game.returnLeg(dropHome.dropoff, 600, 0);
+    var arrivedHome = game.returnLeg(dropHome.dropoff, 600, 600);
+    document.getElementById("drive-home").textContent = dropHome
+      && goingHome.status === "returning"
+      && arrivedHome.status === "at_depot"
+      && game.sumPence(game.workedDay()) === -1120
+      ? "After the drop-off the car is returning. Arrival sets at_depot. The checked day stays −1120."
+      : "The drive home changed the day.";
     document.getElementById("btn-accept").addEventListener("click", function () {
       var elapsed = game.elapsedSeconds(offerStart, Date.now());
       var taken = game.acceptOffer(game.waitingOffers(elapsed), depotCars);

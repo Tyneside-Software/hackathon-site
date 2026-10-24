@@ -214,6 +214,23 @@ def main():
     if started["cars"][1]["status"] != "at_depot":
         print("starting T1 moved another car", file=sys.stderr)
         return 1
+    dropoff = taxi_game.short_trip(90, 2)["dropoff"]
+    leaving = taxi_game.return_leg(dropoff, 600, 0)
+    if leaving["status"] != "returning" or (leaving["lat"], leaving["lng"]) != dropoff:
+        print(f"return start {leaving}", file=sys.stderr)
+        return 1
+    halfway_home = taxi_game.return_leg(dropoff, 600, 300)
+    expect_home = taxi_game.position_on_route((dropoff, taxi_game.DEPOT), 600, 300)
+    if halfway_home["status"] != "returning" or (halfway_home["lat"], halfway_home["lng"]) != expect_home:
+        print(f"return halfway {halfway_home}", file=sys.stderr)
+        return 1
+    arrived_home = taxi_game.return_leg(dropoff, 600, 600)
+    if arrived_home["status"] != "at_depot" or (arrived_home["lat"], arrived_home["lng"]) != taxi_game.DEPOT:
+        print(f"return arrival {arrived_home}", file=sys.stderr)
+        return 1
+    if "device_id" in arrived_home:
+        print("the returning car was a device", file=sys.stderr)
+        return 1
     if taxi_game.live_fare_pence(3, 0) != 1040:
         print(f"live fare {taxi_game.live_fare_pence(3, 0)}", file=sys.stderr)
         return 1

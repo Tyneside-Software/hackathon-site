@@ -354,6 +354,18 @@
     };
   }
 
+  function returnLeg(origin, durationS, elapsedS) {
+    if (durationS <= 0 || elapsedS >= durationS) {
+      return { status: "at_depot", lat: DEPOT_POINT.lat, lng: DEPOT_POINT.lng };
+    }
+    var point = positionOnRoute(
+      [[origin.lat, origin.lng], [DEPOT_POINT.lat, DEPOT_POINT.lng]],
+      durationS,
+      elapsedS
+    );
+    return { status: "returning", lat: point[0], lng: point[1] };
+  }
+
   function sumPence(rows) {
     return rows.reduce(function (total, row) {
       return total + row.amountPence;
@@ -394,6 +406,7 @@
     acceptOffer: acceptOffer,
     customerPins: customerPins,
     startAccepted: startAccepted,
+    returnLeg: returnLeg,
     shortTrip: shortTrip,
     positionOnRoute: positionOnRoute,
     workedWeek: workedWeek,
