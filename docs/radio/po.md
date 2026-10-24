@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/492
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/494
 
-Title: Phones still load when taxis are hidden. Label repo:site only. No ready label.
+Title: Buses still load when taxis are shown. Label repo:site only. No ready label.
 
-Next: Buses still load when taxis are shown
+Next: The sample button still says Drive to the Monument and back
