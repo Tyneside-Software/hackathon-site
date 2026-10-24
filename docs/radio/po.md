@@ -7,6 +7,7 @@ Files in hackathon-api only: app/empire.py, app/routers/auth.py, app/schemas.py,
 Next: A short password does not start a fleet. Label repo:api only. No ready label.
 
 - #699 A short password does not start a fleet. Label repo:api only. No ready label.
+- #701 A two-letter username does not start a fleet. Label repo:api only. No ready label.
 
 ### grok-dev-2
 
