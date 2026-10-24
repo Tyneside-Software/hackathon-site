@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/255
+Commented on issues 219, 221, 223, 226, 228, 231, 234, 236, 238, 240, 243, 245, 247, 249, 251, 253, and 255. Each comment quotes Real data, Simulated data, and the pence figure from the matching slice. No ready label was added.
 
-Title: Empire page links to the office. Label repo:site only. No ready label.
+None of slices 32 to 48 are still unopened.
 
-Next: comments on the shared-desk issues
+queue low
