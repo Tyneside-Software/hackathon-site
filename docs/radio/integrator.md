@@ -24,9 +24,9 @@ The office and the empire are the same booking desk. `office.html` is the real c
 
 | Lane | State | Next slice |
 |------|--------|------------|
-| Product owner | On task. Slices 77 to 82 are open, through #270. The shared-desk comments are on `main`. The `queue low` note is stale. | Slice 84, `Help line repeats both flag falls`, then 85 to 96. Do not write `queue low`. Skip a title that already has an issue. |
-| grok-dev-1 | On task. Slice 19, the empty book, is on `main` at `e06ed19`. It is not on the live site yet. A radio line that still asks for slice 18 or 19 is stale. | Slice 20. Each sample booking is one row showing pickup, drop-off, call sign, status, and the fare in pounds. Then slices 21 to 42. Do not stop. |
-| grok-dev-2 | On task. Slice 30, the live tariff at 1040, is on `main` at `9fd0cb8`. It is not on the live site yet. A radio line that still asks for slice 29 or 30 is stale. | Slice 31. `T1`, `T2`, and `T3` can each follow a route at the same time. Then slices 32 to 44. Slices 11 to 23 still wait. |
+| Product owner | On task. Slices 77 to 82 are open, through #270. The shared-desk comments are on `main`. The `queue low` note is stale. | Slice 84, `Help line repeats both flag falls`, then 85 to 100. Do not write `queue low`. Skip a title that already has an issue. |
+| grok-dev-1 | On task. Slice 21, the company week at 20020, is already on `main` (`12aead8`, no new product commit). A radio line that still asks for slice 20 or 21 is stale. | Slice 22. The nav on `office.html` includes a link to `game.html` named `Empire`. Do not edit `index.html`. Then slices 23 to 42. Do not stop. |
+| grok-dev-2 | On task. Slice 31, three cars on routes together, is on `main` at `38be252`. A radio line that still asks for slice 30 or 31 is stale. | Slice 32. Each waiting offer is a booking row, and accepting one sets a free car onto that route. Then slices 33 to 48. Slices 11 to 23 still wait. |
 
 Do not redo a slice that is already on `main`. Do not start the reservoir.
 
@@ -40,7 +40,7 @@ No product code. You may commit and squash-merge a branch that changes only `doc
 
 Done, already on `main`: issues 30, 31, 32, 33, and 34 are open. Issues 23 and 24 are commented. Issues 22, 29, and 34 stay `blocked`. Do not open those titles again.
 
-Open slices. One issue, then a radio note, then the next. If that exact title already exists, comment on it and do not open a second. Label `repo:site` only. The issue body is the matching dev slice in this file. Do not add `ready`. Skip a title that already has an issue. The next title is `Help line repeats both flag falls`. Then slices 85 to 96. Slices 77 to 82 are already open, through #270. Do not open them again. Do not write `queue low` while slices 84 to 96 are open. Skip a title that already has an issue. Issues 219 to 255 already cover slices 32 to 48.
+Open slices. One issue, then a radio note, then the next. If that exact title already exists, comment on it and do not open a second. Label `repo:site` only. The issue body is the matching dev slice in this file. Do not add `ready`. Skip a title that already has an issue. The next title is `Help line repeats both flag falls`. Then slices 85 to 100. Slices 77 to 82 are already open, through #270. Do not open them again. Do not write `queue low` while slices 84 to 100 are open. Skip a title that already has an issue. Issues 219 to 255 already cover slices 32 to 48.
 
 1. `Office booking fields for pickup and drop-off`
 2. `Office status changes add the fare once`
@@ -91,7 +91,7 @@ Open slices. One issue, then a radio note, then the next. If that exact title al
 47. `Empire week strip shows minus 7840`
 48. `Empire page links to the office`
 49. Comment on issues 32 to 48. Quote `Real data`, `Simulated data`, and the pence figure from the matching slice. Do not add `ready`.
-50. Do not write `queue low`. Slices 84 to 96 are still unopened. Name the next unopened title in `docs/radio/po.md`.
+50. Do not write `queue low`. Slices 84 to 100 are still unopened. Name the next unopened title in `docs/radio/po.md`.
 51. `Real-time clock for the empire`
 52. `Car position from an OSRM duration`
 53. `Straight-line fallback at 30 miles per hour`
@@ -138,6 +138,10 @@ Open slices. One issue, then a radio note, then the next. If that exact title al
 94. Comment on issues 91 to 93 once they exist. Quote 1130, 12500, and 2370. Do not add `ready`.
 95. `Receipt names tariff one`
 96. `27 December quote uses tariff two`
+97. `Accepting a fare leaves two waiting`
+98. `A returning car does not take a fare`
+99. `The free car takes the oldest of three`
+100. `Each car shows its own seconds`
 
 Reservoir. Do not open these yet.
 
@@ -267,6 +271,10 @@ Open slices. Use the coordinates already in `scripts/taxi_geo_check.py`. Do not 
 42. Fare on the row. The completed row shows the tariff fare in pounds. Three miles, no waiting, tariff one, no extras, shows £10.40. Posting it twice does not add a second fare line.
 43. Berwick stays out. The generator must not return `55.7704, -2.0068`. A point that far out is discarded. `GEO-OK`.
 44. Simulated banner stays. While offers arrive, the page still shows `Simulated data`. It does not show 2860, 1130, or 1240.
+45. Accept drops the count. With 3 offers waiting, accepting one makes the page say `2 fares waiting`. The next offer still waits 20 seconds. `TIME-OK`.
+46. Returning stays out. A car whose status is `returning` does not take a new offer. The offer stays `offered` until a car is `at_depot`. `TIME-OK`.
+47. Oldest of three. A free car takes the oldest of three offers. The other two stay `offered`. Neither car is a device. `TIME-OK`.
+48. Own seconds. The tooltip on `T2` shows `T2`'s seconds remaining, not `T1`'s. Halfway through `T2`'s 600 second route it shows 300. `TIME-OK`.
 
 Reservoir. Do not start these.
 
