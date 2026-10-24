@@ -22,9 +22,9 @@ The tracker model is agreed. Issues 22 and 29 stay `blocked`. Do not migrate the
 
 | Lane | State | Next slice |
 |------|--------|------------|
-| Product owner | On task. Issue 108 is three cars at Shiremoor. | `Durham customer pin and OSRM`, then the rest of the list. Do not stop after one issue. Skip a title that already has an issue. |
-| grok-dev-1 | On task. Slices 1 to 7 are on `main`, through the split quote at `21c472d`. The radio line that still asks for slice 7 is stale. | Slice 8. A pickup or drop-off of `Berwick-upon-Tweed` is not saved and adds 0. `Hexham`, `Durham`, `Sunderland`, `Grey's Monument`, and `Shiremoor depot` may be saved. `FARE-OK`. Then slice 9. |
-| grok-dev-2 | On task. Slices 1 to 5 are on `main`, through the unpaid car at `8fd1b4b`. | Slice 6. A cancel after `started`, with 0 miles, adds no fuel and no fare. The one-mile cancel stays −20. Then slice 7. |
+| Product owner | On task. Issue 115 keeps the empire page off the company ledger. | `Map legend for phones, buses, depot, and the sample car`, then the rest of the list. Do not stop after one issue. Skip a title that already has an issue. |
+| grok-dev-1 | On task. Slices 1 to 8 are on `main`, through the Berwick name refusal at `157265a`. | Slice 9. The day's rows survive a reload in `localStorage` under `hackathon-office-day`. A restore rebuilds 1130, 1240, and 490 and shows 2860. Then slice 10. |
+| grok-dev-2 | On task. Slices 1 to 6 are on `main`, through the zero-mile cancel at `1107e54`. | Slice 7. Driver Jamie costs 0. The worked fare 1040 still pays −520. The day stays −1120. Then slice 8. |
 
 Do not redo a slice that is already on `main`. Do not start the reservoir.
 
@@ -36,7 +36,7 @@ No product code. You may commit and squash-merge a branch that changes only `doc
 
 Done, already on `main`: issues 30, 31, 32, 33, and 34 are open. Issues 23 and 24 are commented. Issues 22, 29, and 34 stay `blocked`. Do not open those titles again.
 
-Open slices. One issue, then a radio note, then the next. If that exact title already exists, comment on it and do not open a second. Label `repo:site` only. The issue body is the matching dev slice in this file. Do not add `ready`. Skip a title that already has an issue. The next title is `Durham customer pin and OSRM`.
+Open slices. One issue, then a radio note, then the next. If that exact title already exists, comment on it and do not open a second. Label `repo:site` only. The issue body is the matching dev slice in this file. Do not add `ready`. Skip a title that already has an issue. The next title is `Map legend for phones, buses, depot, and the sample car`.
 
 1. `Office booking fields for pickup and drop-off`
 2. `Office status changes add the fare once`
@@ -93,7 +93,7 @@ You own the fare maths and the office desk. You may edit `scripts/taxi_fare.py`,
 
 Do not rewrite the locked results: 490, 1040, 615, 1240, 1130, 265, 2370, 2860, and 12500. Money is integer pence. `py -3 scripts\taxi_fare_check.py` must print `FARE-OK` before each merge. The company ledger is not the game ledger. No driver share, no fuel, no standing, and no new-car cost on this desk. No API call and no database.
 
-Done, on `fa3b6e3`: the office desk, the £11.30 and £12.40 rows, the mixed button at 265, the company day at 2860, the cancelled mile at 2370, the empty hiring at 0, and soiling-only at 12500. Open slices 1 to 7 are also on `main`, through `21c472d`. Skip them.
+Done, on `fa3b6e3`: the office desk, the £11.30 and £12.40 rows, the mixed button at 265, the company day at 2860, the cancelled mile at 2370, the empty hiring at 0, and soiling-only at 12500. Open slices 1 to 8 are also on `main`, through `157265a`. Skip them.
 
 Open slices.
 
@@ -112,11 +112,11 @@ Open slices.
 13. Soiling-only day. One hiring, no meter, soiling on, sums the day to 12500. Label it `soiling-day`. The 2860 day stays available beside it. `FARE-OK`.
 14. Cash or account. A completed £11.30 booking can be marked cash or account. The pence stays 1130 either way. `FARE-OK`.
 15. Negative miles. The desk rejects them and the previous quote stays on screen. `FARE-OK`.
+16. Help panel. It states the tariff one flag fall of 240 pence and the tariff two flag fall of 315 pence. It does not change a quote. `FARE-OK`.
 
 Reservoir. Do not start these.
 
-1. A help panel states tariff one flag fall 240 and tariff two flag fall 315.
-3. Cancelling Sam's 1240 and completing Alex's 1130 and 490 sums to 1620.
+1. Cancelling Sam's 1240 and completing Alex's 1130 and 490 sums to 1620.
 4. The 1-mile tariff-one fare is shown as flag 240 plus 10 units of 25, total 490.
 5. Exact 322.6 yards on tariff one shows 265.
 6. Tariff one, 1 mile, one pram, and one outside bag is 490 + 50 + 40 = 580.
@@ -129,7 +129,7 @@ You own the circle, the game ledger, the sample car, and the map drawing for thi
 
 `GEO-OK`, `DAY-OK`, and `WEEK-OK` must pass before each merge that touches those scripts. The one-car worked day stays −1120 pence. Seven of those days stay −7840. A new car stays −800000 and never has a `device_id`. No API call. Do not import the office ledger and do not show 2860, 1130, or 1240 as game cash. The priced fare in the worked day stays 1040. Do not price Hexham, Durham, or Sunderland by distance.
 
-Done, on `e4a2c1c`: the checkers, `game.html`, the 80467 metre circle, the `Shiremoor depot` marker, and the sample car that asks OSRM or shows `OSRM unavailable` without repricing the day. Open slices 1 to 5 are also on `main`, through `8fd1b4b`. Skip them.
+Done, on `e4a2c1c`: the checkers, `game.html`, the 80467 metre circle, the `Shiremoor depot` marker, and the sample car that asks OSRM or shows `OSRM unavailable` without repricing the day. Open slices 1 to 6 are also on `main`, through `1107e54`. Skip them.
 
 Open slices. Use the coordinates already in `scripts/taxi_geo_check.py`. Do not invent a new pin.
 
@@ -146,11 +146,11 @@ Open slices. Use the coordinates already in `scripts/taxi_geo_check.py`. Do not 
 11. Separate ledgers. `game.html` states `Company ledger is not this page`. It does not show 2860, 1130, or 1240. Do not edit the office files.
 12. Map legend. The map names phones, buses, the depot, the circle, and the sample car as different things. The sample-car popup says `not a device`. The circle text includes `80467 m`. The depot label stays `Shiremoor depot`.
 13. Sunderland customer. A pin at `54.9069, -1.3838` is inside and has no fare of its own. `GEO-OK` still passes.
+14. Returning pin. Status `returning` draws the sample car on the depot pin. The worked day stays −1120. `DAY-OK`.
 
 Reservoir. Do not start these.
 
-1. Status `returning` draws the sample car on the depot pin.
-2. Game drivers Jamie and Alex. Alex runs `T1`. Jamie has no share until a fare. The one-car day stays −1120.
+1. Game drivers Jamie and Alex. Alex runs `T1`. Jamie has no share until a fare. The one-car day stays −1120.
 3. Cancel after 4 miles driven: fuel −80 and no fare. The miles are given by this slice, not by OSRM.
 4. A day with one car and no job is standing −1500 only.
 5. A new car and a new driver on the same day: −800000 and 0. The new car cannot start.
