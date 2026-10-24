@@ -186,9 +186,10 @@
     const seen = new Set();
     const list = document.getElementById("play-taxi-list");
     if (list) list.textContent = "";
-    PLAY_SIGNS.forEach((sign) => {
-      const car = cars.find((row) => row && row.sign === sign);
+    function paintOne(car) {
       if (!car) return;
+      const sign = String(car.sign || "");
+      if (!sign) return;
       const reported = feedPlace(car);
       const place = reported || playPlace(car, playNow());
       if (!place) return;
@@ -213,6 +214,14 @@
         item.textContent = text;
         list.appendChild(item);
       }
+    }
+    PLAY_SIGNS.forEach((sign) => {
+      const car = cars.find((row) => row && row.sign === sign);
+      if (car) paintOne(car);
+    });
+    cars.forEach((car) => {
+      if (!car || PLAY_SIGNS.indexOf(car.sign) !== -1) return;
+      paintOne(car);
     });
     playChips.forEach((marker, sign) => {
       if (seen.has(sign)) return;
