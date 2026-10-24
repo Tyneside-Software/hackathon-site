@@ -199,6 +199,21 @@ def main():
     if points[0] != taxi_game.DEPOT or taxi_game.position_on_route(points, duration, 0) != points[0]:
         print("the accepted car did not start on the route", file=sys.stderr)
         return 1
+    waiting_two = taxi_game.waiting_offers(40)
+    pins = taxi_game.customer_pins(waiting_two)
+    if len(pins) != 2 or any("device_id" in pin or pin["kind"] != "customer" for pin in pins):
+        print(f"customer pins {pins}", file=sys.stderr)
+        return 1
+    if (pins[0]["lat"], pins[0]["lng"]) != taxi_game.DEPOT:
+        print("a customer pin left the pickup", file=sys.stderr)
+        return 1
+    started = taxi_game.start_accepted(taxi_game.accept_offer(waiting_two, taxi_game.three_cars()))
+    if len(started["pins"]) != 1 or started["cars"][0]["status"] != "started" or has_device_id(started):
+        print(f"start {started['cars'][0]} pins {len(started['pins'])}", file=sys.stderr)
+        return 1
+    if started["cars"][1]["status"] != "at_depot":
+        print("starting T1 moved another car", file=sys.stderr)
+        return 1
     if taxi_game.live_fare_pence(3, 0) != 1040:
         print(f"live fare {taxi_game.live_fare_pence(3, 0)}", file=sys.stderr)
         return 1

@@ -45,6 +45,7 @@
     <p id="fleet-move"></p>
     <ul id="offers"></ul>
     <p id="offer-sample"></p>
+    <p id="customer-pin"></p>
     <button type="button" class="btn btn-ghost" id="btn-accept">Accept the oldest offer</button>
     <p id="accept-result"></p>
     <ul id="places"></ul>
@@ -119,6 +120,15 @@
       && game.sumPence(game.workedDay()) === -1120
       ? "At 40 seconds, 2 offers are waiting. Accepting the oldest sets T1 onto that route."
       : "An offer changed the day.";
+    var pinsBefore = game.customerPins(sample);
+    var started = game.startAccepted(sampleTaken);
+    document.getElementById("customer-pin").textContent = pinsBefore.length === 2
+      && started
+      && started.pins.length === 1
+      && started.cars[0].status === "started"
+      && !started.cars.some(function (car) { return car.device_id; })
+      ? "A waiting offer marks its pickup. Accepting removes that marker and starts the car."
+      : "The customer pin was a device.";
     document.getElementById("btn-accept").addEventListener("click", function () {
       var elapsed = game.elapsedSeconds(offerStart, Date.now());
       var taken = game.acceptOffer(game.waitingOffers(elapsed), depotCars);

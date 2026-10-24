@@ -330,6 +330,30 @@
     return { offers: nextOffers, cars: nextCars };
   }
 
+  function customerPins(offers) {
+    return (offers || []).filter(function (offer) {
+      return offer.status === "offered";
+    }).map(function (offer) {
+      return { lat: offer.pickup.lat, lng: offer.pickup.lng, kind: "customer" };
+    });
+  }
+
+  function startAccepted(taken) {
+    if (!taken) return null;
+    return {
+      offers: taken.offers,
+      cars: taken.cars.map(function (car) {
+        if (car.status !== "accepted") return car;
+        return {
+          callSign: car.callSign,
+          status: "started",
+          route: car.route,
+        };
+      }),
+      pins: customerPins(taken.offers),
+    };
+  }
+
   function sumPence(rows) {
     return rows.reduce(function (total, row) {
       return total + row.amountPence;
@@ -368,6 +392,8 @@
     farePounds: farePounds,
     waitingOffers: waitingOffers,
     acceptOffer: acceptOffer,
+    customerPins: customerPins,
+    startAccepted: startAccepted,
     shortTrip: shortTrip,
     positionOnRoute: positionOnRoute,
     workedWeek: workedWeek,
