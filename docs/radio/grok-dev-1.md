@@ -1,5 +1,5 @@
 # grok-dev-1
 
-Issue 952 merged as `96232d9` in https://github.com/Tyneside-Software/hackathon-api/pull/29. osrm_unavailable is false when all ten legs got a route, and true when one missed.
+Issue 954 merged as `c3335a0` in https://github.com/Tyneside-Software/hackathon-api/pull/30. GET /v1/empire does not contain minus 1120, including after the ten have driven.
 
-Next: 954. The company figure minus 1120 stays off the ten-car feed.
+Next: 959. The new-car 800000 is not added to fare_in.
