@@ -20,7 +20,7 @@ from __future__ import annotations
 
 import sys
 
-from taxi_fare import TARIFF_ONE, TARIFF_TWO, extras_pence, quote_pence
+from taxi_fare import TARIFF_ONE, TARIFF_TWO, extras_pence, quote_pence, tariff_for
 
 # (label, tariff, segments of (yards, seconds), expected pence)
 CASES = (
@@ -169,6 +169,25 @@ def main():
     if soiling_only != 12500:
         failed = True
         print("Soiling with no meter: got %s, expected 12500" % soiling_only, file=sys.stderr)
+    clock = (
+        ("22:00", 22 * 60, False, None, 2),
+        ("06:59", 6 * 60 + 59, False, None, 2),
+        ("07:00", 7 * 60, False, None, 1),
+        ("21:59", 21 * 60 + 59, False, None, 1),
+        ("Sunday 15:00", 15 * 60, True, None, 2),
+        ("27 December 15:00", 15 * 60, False, 27, 2),
+        ("31 December 15:00", 15 * 60, False, 31, 2),
+        ("26 December 15:00", 15 * 60, False, 26, 1),
+        ("Tuesday 15:00", 15 * 60, False, None, 1),
+    )
+    for label, minutes, sunday, december_day, expected in clock:
+        got = tariff_for(minutes, sunday, december_day)
+        if got != expected:
+            failed = True
+            print("%s: tariff %s, expected %s" % (label, got, expected), file=sys.stderr)
+    if quote_pence(TARIFF_ONE, ((52800, 0),)) != 1040 or quote_pence(TARIFF_TWO, ((52800, 0),)) != 1240:
+        failed = True
+        print("Clock slice moved a meter figure", file=sys.stderr)
     if failed:
         return 1
     print("FARE-OK")

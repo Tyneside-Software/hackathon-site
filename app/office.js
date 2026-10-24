@@ -360,8 +360,38 @@
     });
   }
 
+  function clockMinutes(value) {
+    var parts = String(value || "").split(":");
+    if (parts.length < 2) return null;
+    var hours = Number(parts[0]);
+    var mins = Number(parts[1]);
+    if (!isFinite(hours) || !isFinite(mins)) return null;
+    if (hours < 0 || hours > 23 || mins < 0 || mins > 59) return null;
+    return hours * 60 + mins;
+  }
+
+  function applyClock() {
+    var minutes = clockMinutes(document.getElementById("clock-time").value);
+    if (minutes === null) return null;
+    var dayRaw = document.getElementById("december-day").value;
+    var december = dayRaw === "" ? null : Number(dayRaw);
+    var tariff = window.TaxiFare.tariffFor(
+      minutes,
+      document.getElementById("sunday").checked,
+      december
+    );
+    document.getElementById("tariff").value = String(tariff);
+    var choice = document.getElementById("clock-choice");
+    choice.textContent = tariff === 2 ? "Tariff two" : "Tariff one";
+    return tariff;
+  }
+
   document.getElementById("btn-quote").addEventListener("click", function () {
+    applyClock();
     showQuote(readQuote());
+  });
+  ["clock-time", "december-day", "sunday"].forEach(function (id) {
+    document.getElementById(id).addEventListener("change", applyClock);
   });
 
   function placeRefused(value) {

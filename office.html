@@ -51,6 +51,15 @@
           <label>Drop-off
             <input id="drop-off" name="drop-off" type="text" autocomplete="off">
           </label>
+          <label>Requested time
+            <input id="clock-time" name="clock-time" type="time">
+          </label>
+          <label>Day in December
+            <input id="december-day" name="december-day" type="number" min="1" max="31" step="1">
+          </label>
+          <label class="office-check">Sunday
+            <input id="sunday" name="sunday" type="checkbox">
+          </label>
           <label>Tariff
             <select id="tariff" name="tariff" required>
               <option value="">Choose</option>
@@ -91,6 +100,7 @@
           <button type="button" class="btn btn-ghost" id="btn-t2-yards">Tariff two, 140.5 yards</button>
           <button type="button" class="btn btn-ghost" id="btn-t2-wait">Tariff two, 45 seconds</button>
         </div>
+        <p class="office-note" id="clock-choice">The clock has not selected a tariff yet.</p>
         <p class="office-quote" id="quote-result" role="status">No quote yet.</p>
       </section>
 

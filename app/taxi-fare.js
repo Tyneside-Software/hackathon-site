@@ -134,6 +134,19 @@
     return { units: units, intoYards: intoYards, intoSeconds: intoSeconds };
   }
 
+  function tariffFor(minutes, sunday, decemberDay) {
+    if (sunday) {
+      return 2;
+    }
+    if (decemberDay >= 27 && decemberDay <= 31) {
+      return 2;
+    }
+    if (minutes >= 22 * 60 || minutes < 7 * 60) {
+      return 2;
+    }
+    return 1;
+  }
+
   function quotePence(tariffNumber, segments, extras) {
     var meter = quoteMeter(tariffNumber, segments || []);
     if (meter === null) {
@@ -145,6 +158,7 @@
   root.TaxiFare = {
     quotePence: quotePence,
     quoteMeter: quoteMeter,
-    extrasPence: extrasPence
+    extrasPence: extrasPence,
+    tariffFor: tariffFor
   };
 })(typeof window !== "undefined" ? window : globalThis);
