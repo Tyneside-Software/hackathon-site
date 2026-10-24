@@ -179,6 +179,7 @@
       "play-signed-person",
       "play-signed-failed",
       "play-signed-spent",
+      "play-signed-money",
       "play-locks",
       "play-osrm",
       "play-buses",
@@ -1363,6 +1364,7 @@
       clearSignedPeople();
       clearSignedFailed();
       clearSignedSpent();
+      clearSignedMoney();
     }
     hidePlayAccount();
     keepStartedScreen();
@@ -1413,6 +1415,7 @@
     clearSignedPeople();
     clearSignedFailed();
     clearSignedSpent();
+    clearSignedMoney();
     hidePlayAccount();
     keepPlayMap();
     paintPlayStatus(null);
@@ -1472,6 +1475,21 @@
     const line = document.getElementById("play-spent");
     const text = line ? line.textContent : "";
     node.dataset.spent = text.indexOf("800000") === -1 ? "clear" : "shows";
+    node.dataset.feed = "waiting";
+  }
+
+  function clearSignedMoney() {
+    const rows = document.querySelectorAll("#play-money-lines li");
+    rows.forEach((row) => {
+      row.textContent = "";
+    });
+    const node = document.getElementById("play-signed-money");
+    if (!node) return;
+    let showing = false;
+    rows.forEach((row) => {
+      if (row.textContent) showing = true;
+    });
+    node.dataset.money = showing ? "shows" : "clear";
     node.dataset.feed = "waiting";
   }
 
