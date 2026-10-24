@@ -140,6 +140,33 @@ def elapsed_seconds(start_ms, now_ms):
     return (now_ms - start_ms) / 1000
 
 
+def position_on_route(points, duration_s, elapsed_s):
+    """Place on a polyline. The checker passes points and a duration. It does not call OSRM."""
+    if not points:
+        raise ValueError("a route needs a point")
+    if duration_s <= 0 or elapsed_s <= 0:
+        return points[0]
+    if elapsed_s >= duration_s:
+        return points[-1]
+    import taxi_geo
+    fraction = elapsed_s / duration_s
+    distances = [0.0]
+    for start, end in zip(points, points[1:]):
+        distances.append(distances[-1] + taxi_geo.haversine_km(start, end))
+    total = distances[-1]
+    if total == 0:
+        return points[0]
+    target = total * fraction
+    for index in range(1, len(distances)):
+        if distances[index] >= target:
+            span = distances[index] - distances[index - 1]
+            step = 0 if span == 0 else (target - distances[index - 1]) / span
+            lat1, lng1 = points[index - 1]
+            lat2, lng2 = points[index]
+            return (lat1 + (lat2 - lat1) * step, lng1 + (lng2 - lng1) * step)
+    return points[-1]
+
+
 def second_car():
     taxi = {
         "id": 2,

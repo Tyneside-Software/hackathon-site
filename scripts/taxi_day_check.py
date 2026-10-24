@@ -90,6 +90,16 @@ def main():
     if taxi_game.elapsed_seconds(5000, 6000) != 1:
         print("the clock multiplied the seconds", file=sys.stderr)
         return 1
+    route = ((0.0, 0.0), (0.0, 2.0))
+    at_start = taxi_game.position_on_route(route, 600, 0)
+    at_end = taxi_game.position_on_route(route, 600, 600)
+    halfway = taxi_game.position_on_route(route, 600, 300)
+    if at_start != route[0] or at_end != route[-1]:
+        print(f"route ends {at_start} {at_end}", file=sys.stderr)
+        return 1
+    if abs(halfway[0] - 0.0) > 1e-9 or abs(halfway[1] - 1.0) > 1e-6:
+        print(f"halfway {halfway}", file=sys.stderr)
+        return 1
     print("DAY-OK")
     print("TIME-OK")
     return 0
