@@ -63,6 +63,7 @@
     }
     [
       "play-moving",
+      "play-bought-moves",
       "play-locks",
       "play-osrm",
       "play-buses",
@@ -614,15 +615,16 @@
     const cars = playFeed && Array.isArray(playFeed.cars) ? playFeed.cars : [];
     const now = playNow();
     cars.forEach((car) => {
-      if (!car || !PLAY_SIGNS.includes(car.sign)) return;
-      const marker = playChips.get(car.sign);
+      if (!car || !car.sign) return;
+      const sign = String(car.sign);
+      const marker = playChips.get(sign);
       if (!marker) return;
       const place = playPlace(car, now);
       if (!place) return;
       marker.setLatLng(place);
-      const item = document.querySelector('#play-taxi-list [data-sign="' + car.sign + '"]');
+      const item = document.querySelector('#play-taxi-list [data-sign="' + sign + '"]');
       if (!item) return;
-      let text = car.sign + " " + place[0] + ", " + place[1];
+      let text = sign + " " + place[0] + ", " + place[1];
       if (car.status === "returning") text += " is returning";
       item.textContent = text;
     });
