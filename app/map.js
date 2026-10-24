@@ -1799,7 +1799,15 @@
   const empireForm = document.getElementById("empire-account");
   if (empireForm) empireForm.addEventListener("submit", (ev) => ev.preventDefault());
 
+  function notePagesEmpire() {
+    if (location.hostname !== "hackathon.tyneside.software") return false;
+    const status = document.getElementById("empire-account-status");
+    if (status) status.textContent = "Open http://100.65.94.5/app/ because this page cannot call the API.";
+    return true;
+  }
+
   async function createEmpireAccount() {
+    if (notePagesEmpire()) return;
     const status = document.getElementById("empire-account-status");
     const usernameEl = document.getElementById("empire-username");
     const passwordEl = document.getElementById("empire-password");
@@ -1875,6 +1883,7 @@
   }
 
   async function signInEmpire() {
+    if (notePagesEmpire()) return;
     const status = document.getElementById("empire-account-status");
     const usernameEl = document.getElementById("empire-username");
     const passwordEl = document.getElementById("empire-password");
@@ -1932,6 +1941,10 @@
   }
 
   async function pollEmpire() {
+    if (notePagesEmpire()) {
+      stopEmpirePoll();
+      return;
+    }
     const token = empireToken();
     if (!token) {
       stopEmpirePoll();
@@ -2119,7 +2132,8 @@
   if (empireSignIn) empireSignIn.addEventListener("click", () => { signInEmpire(); });
   const empireSignOut = document.getElementById("empire-signout");
   if (empireSignOut) empireSignOut.addEventListener("click", () => { signOutEmpire(); });
-  if (empireToken()) startEmpirePoll();
+  if (notePagesEmpire()) stopEmpirePoll();
+  else if (empireToken()) startEmpirePoll();
   syncTaxiButton();
   paintTaxiList(true);
 })();
