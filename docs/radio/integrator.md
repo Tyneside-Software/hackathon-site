@@ -24,13 +24,15 @@ The office and the empire are the same booking desk. `office.html` is the real c
 
 | Lane | State | Next slice |
 |------|--------|------------|
-| Product owner | The old list is done and the radio says `queue low`. | Slice 32, `Real data banner on the office desk`, then every new title below. Do not stop. Skip a title that already has an issue. |
+| Product owner | The radio still says `queue low`. Slices 32 to 50 are open, and so are 51 to 60. | Slice 51, `Real-time clock for the empire`, before slice 32. Then 52 to 60. Then return to slice 32. Do not stop. Skip a title that already has an issue. |
 | grok-dev-1 | On task. Slices 1 to 9 are on `main`, through the browser book at `ce8b980`. | Slice 10, the plain-text receipt. The £11.30 slip contains `1130` and `£11.30`. Then keep going. Slice 17 starts the shared desk. |
-| grok-dev-2 | On task. Slices 1 to 9 are on `main`, through the Durham pin at `7068f9a`. | Slice 10, seven worked days at −7840. Then keep going. Slice 15 starts the shared desk. Do not edit `app/office.css`. |
+| grok-dev-2 | On task. Slice 10, the seven-day list, is on `main` at `b1917d3`. | Slice 24 next, not slice 11. Real time: one real second is one game second. OSRM duration is the journey. A new fare every 20 seconds until 3 are waiting. Slices 11 to 23 wait until slice 32 is on `main`. |
 
 Do not redo a slice that is already on `main`. Do not start the reservoir.
 
-The box site is `580b0f3`. `/health` is `0.1.26`. `.\scripts\check.ps1` printed `CHECK-OK`. That deploy includes the browser book, the Durham pin, the three-car day, and Jamie. Open `http://100.65.94.5/office.html` and `http://100.65.94.5/game.html`. A later radio-only commit is not another deploy.
+The empire is a real-time game. One real second is one game second. There is no faster clock. When OSRM returns a duration, that duration is the journey. The car moves along the route as those seconds pass. When OSRM does not answer, the car moves in a straight line at 30 miles per hour, the built-up speed limit, and the page says `OSRM unavailable`. A new fare is offered every 20 real seconds while fewer than 3 offers are waiting. Each trip is inside the circle, not Berwick, and between 1 and 8 miles, so the drive is a few minutes rather than an hour. The checked day stays −1120. The company desk is unchanged.
+
+The box site is `580b0f3` and is behind the seven-day list at `b1917d3`. Deploy after this note. A later radio-only commit is not another deploy.
 
 ## Product owner
 
@@ -38,7 +40,7 @@ No product code. You may commit and squash-merge a branch that changes only `doc
 
 Done, already on `main`: issues 30, 31, 32, 33, and 34 are open. Issues 23 and 24 are commented. Issues 22, 29, and 34 stay `blocked`. Do not open those titles again.
 
-Open slices. One issue, then a radio note, then the next. If that exact title already exists, comment on it and do not open a second. Label `repo:site` only. The issue body is the matching dev slice in this file. Do not add `ready`. Skip a title that already has an issue. The old list is done. The next title is `Real data banner on the office desk`.
+Open slices. One issue, then a radio note, then the next. If that exact title already exists, comment on it and do not open a second. Label `repo:site` only. The issue body is the matching dev slice in this file. Do not add `ready`. Skip a title that already has an issue. The next title is `Real-time clock for the empire`. Open slices 51 to 60 before slices 32 to 50.
 
 1. `Office booking fields for pickup and drop-off`
 2. `Office status changes add the fare once`
@@ -90,6 +92,16 @@ Open slices. One issue, then a radio note, then the next. If that exact title al
 48. `Empire page links to the office`
 49. Comment on issues 32 to 48. Quote `Real data`, `Simulated data`, and the pence figure from the matching slice. Do not add `ready`.
 50. If fewer than 8 of these titles are still unopened, write `queue low`.
+51. `Real-time clock for the empire`
+52. `Car position from an OSRM duration`
+53. `Straight-line fallback at 30 miles per hour`
+54. `Sample car moves along the route`
+55. `A new fare every 20 seconds`
+56. `Live fares stay inside eight miles`
+57. `Live fare uses the November 2024 tariff`
+58. `Three cars can be out at once`
+59. `Live offers appear on the booking desk`
+60. Comment on issues 51 to 59. Quote 20 seconds, 30 miles per hour, and −1120. Do not add `ready`.
 
 Reservoir. Do not open these yet.
 
@@ -157,9 +169,11 @@ You own the circle, the game ledger, the sample car, and the map drawing for thi
 
 `GEO-OK`, `DAY-OK`, and `WEEK-OK` must pass before each merge that touches those scripts. The one-car worked day stays −1120 pence. Seven of those days stay −7840. A new car stays −800000 and never has a `device_id`. No API call. Do not import the office ledger and do not show 2860, 1130, or 1240 as game cash. The priced fare in the worked day stays 1040. Do not price Hexham, Durham, or Sunderland by distance.
 
-Done, on `e4a2c1c`: the checkers, `game.html`, the 80467 metre circle, the `Shiremoor depot` marker, and the sample car that asks OSRM or shows `OSRM unavailable` without repricing the day. Open slices 1 to 9 are also on `main`, through the Durham pin at `7068f9a` and the three-car day at `1f5a3ff`. Skip them.
+Done, on `e4a2c1c`: the checkers, `game.html`, the 80467 metre circle, the `Shiremoor depot` marker, and the sample car that asks OSRM or shows `OSRM unavailable` without repricing the day. Open slices 1 to 10 are also on `main`, through the seven-day list at `b1917d3`. Skip them.
 
-Open slices. Use the coordinates already in `scripts/taxi_geo_check.py`. Do not invent a new pin.
+Do slices 24 to 32 before slices 11 to 23. The real-time game is the priority. One real second is one game second. `scripts/taxi_day_check.py` must still print `DAY-OK`, and it must also print `TIME-OK`. Do not edit `app/office.css` or `scripts/taxi_fare.py`. The page may load `app/taxi-fare.js`. A live offer must not change the checked day of −1120.
+
+Open slices. Use the coordinates already in `scripts/taxi_geo_check.py`. Do not invent a new town.
 
 1. Places on the empire page. Show Grey's Monument, Shiremoor depot, Hexham, Durham, and Sunderland as inside, and Berwick-upon-Tweed as outside. A job that starts or ends at Berwick is not offered. `GEO-OK` still passes.
 2. Job pins. On the map, add `Sample pickup` at Grey's Monument and `Sample drop-off` at the depot, beside the sample car. Phones and buses stay. These markers are not devices.
@@ -184,6 +198,15 @@ Open slices. Use the coordinates already in `scripts/taxi_geo_check.py`. Do not 
 21. Week strip. Seven rows or seven lines of −1120 sit in the ledger panel. The total is −7840. The purchase control still reaches −807840. `WEEK-OK` and `FLEET-OK`.
 22. Office link. The nav on `game.html` includes `office.html` named `Office` and `game.html` named `Empire`. Do not edit `index.html`.
 23. Status words. The sample car status is one of `at_depot`, `offered`, `accepted`, `started`, or `returning`, shown on the booking row. Completing the worked day still adds −1120 once.
+24. Real-time clock. `elapsedSeconds(startMs, nowMs)` is the real difference in seconds. Ten real seconds return 10. There is no multiplier. `TIME-OK`.
+25. Position on a route. A list of points and an OSRM duration give the car's place. At 0 seconds the car is on the first point. At the full duration it is on the last point. Halfway through a 600 second duration, 300 seconds have elapsed and the car is halfway along the points. The checker does not call OSRM. `TIME-OK`.
+26. Fallback speed. With no OSRM duration, 3 miles take 360 seconds, because 30 miles per hour is the built-up limit. The page says `OSRM unavailable`. The checked day stays −1120. `TIME-OK`.
+27. Moving sample car. On the map, starting the sample car moves its marker along the depot-to-Monument route in real time. The tooltip shows the seconds remaining. If OSRM does not answer, the marker uses the straight line at 30 miles per hour and the page says `OSRM unavailable`. Phones and buses stay. The marker is not a device. The −1120 ledger does not change because the marker moved.
+28. Offer every 20 seconds. While fewer than 3 jobs are `offered`, the next offer appears when 20 real seconds have passed. At 0 seconds there are 0 offers. At 20, 40, and 60 seconds there are 1, 2, and 3. At 80 seconds there are still 3. The page shows the seconds until the next offer. `TIME-OK`.
+29. Short trips. A live pickup and drop-off are inside the 80.467 km circle, are not Berwick-upon-Tweed, and are at least 1 mile and at most 8 miles apart. Generate them from the Shiremoor depot by a bearing and a distance of 2, 4, or 6 miles. Do not add a new town. `GEO-OK` and `TIME-OK`.
+30. Live tariff. The offer's fare is `quote_pence` from `scripts/taxi_fare.py`, using the trip's yards and seconds. The unit that finishes first is the one that counts. Three miles, no waiting, tariff one, no extras, is 1040. The page may load `app/taxi-fare.js` and must not edit it. A live offer does not change the checked −1120 day. `TIME-OK`.
+31. Three moving cars. `T1`, `T2`, and `T3` can each follow a route at the same time. Offers still arrive every 20 seconds until 3 are waiting. None of the cars is a device. `DAY-OK` still requires −1120 for the checked day.
+32. Offers on the desk. Each waiting offer is a booking row: pickup, drop-off, status `offered`, and the fare in pounds. Accepting one sets a free car onto that route. The banner says `Simulated data` if that banner is already on the page.
 
 Reservoir. Do not start these.
 
@@ -198,4 +221,4 @@ Reservoir. Do not start these.
 
 On `continue`, lead. Read the three radio files and look at the lane checkouts. Do not edit those checkouts. Name the next slice in `## Now`. Top up any lane with fewer than 8 Open slices not yet on `origin/main`. Deploy once when product code has merged since the site commit in `## Now`. Write the result back here. A radio-only commit is not a deploy.
 
-Last deploy: box site `580b0f3`, health `0.1.26`, `CHECK-OK`. Do not deploy a later radio-only note.
+Last deploy: box site `580b0f3`, health `0.1.26`, `CHECK-OK`. The seven-day list `b1917d3` is not on the box yet. Deploy once after this note. Do not deploy a later radio-only note.
