@@ -64,3 +64,4 @@ Not assigned. Do not start these.
 - #762 Hide taxis leaves the fifty-mile circle. Label repo:site only. No ready label.
 - #764 The depot marker reads Shiremoor. Label repo:site only. No ready label.
 - #766 The fleet poll sends the bearer token. Label repo:site only. No ready label.
+- #768 Sign-out removes the fare markers. Label repo:site only. No ready label.
