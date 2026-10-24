@@ -555,6 +555,17 @@ def main():
     if 'getElementById("empire-account")' not in polled_body or "form.hidden = false" not in polled_body:
         print("a 401 did not show the form", file=sys.stderr)
         return 1
+    pages = map_js.split("function notePagesEmpire", 1)
+    if len(pages) != 2:
+        print("the pages site had no empire note", file=sys.stderr)
+        return 1
+    pages_body = pages[1].split("function ", 1)[0]
+    if "hackathon.tyneside.software" not in pages_body or "http://100.65.94.5/app/" not in pages_body:
+        print("the pages site did not point at the box", file=sys.stderr)
+        return 1
+    if "notePagesEmpire()" not in polled_body:
+        print("the pages poll still called the API", file=sys.stderr)
+        return 1
     if "startFleet()" in polled_body:
         print("the empire poll drew the old fleet", file=sys.stderr)
         return 1
