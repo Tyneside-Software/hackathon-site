@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/583
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/586
 
-Title: The car glides along the server route. Label repo:site only. No ready label.
+Title: The taxi trail fades like a bus. Label repo:site only. No ready label.
 
-Next: The taxi trail fades like a bus
+Next: Waiting fares are markers
