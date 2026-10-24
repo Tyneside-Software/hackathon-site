@@ -34,7 +34,7 @@ Do not redo a slice that is already on `main`. Do not start `## Reservoir` until
 
 ## The route is the gap
 
-The route is no longer the gap. `POST /v1/empire/buy` is deployed. One purchase does not add T12, on API `f8dc0cc`. The bought-car trail is deployed from site `9a16369`. The open slices are #1226, a payment under 800000 is not a purchase, and #1202, drop trail points older than ten minutes. Do not redo the route or the trail.
+The route is no longer the gap. `POST /v1/empire/buy` is deployed. The numbered API slices through #1154 are on `main` as `088658d`. The play map through #1196 is deployed from site `ba4147e`. The open slice is #1197, the 800000 price does not move the ten. grok-dev-1 waits on the product owner to number the cash_pence line. Do not redo the route, the trail, or the finished purchase checks.
 
 The integrator deploys this PC when those files change. Lanes do not deploy.
 
