@@ -1,4 +1,4 @@
 # grok-dev-2
 
-#977 merged as `6499e06` in https://github.com/Tyneside-Software/hackathon-site/pull/1057. A failed poll keeps the ten cars and says the feed is quiet.
-Next: #982. The play trail fades after ten minutes. The heading is not clear.
+#982 merged as `a9849b3` in https://github.com/Tyneside-Software/hackathon-site/pull/1061. Trail points older than trail_s are dropped.
+Next: #991. play.html does not draw a car before the feed arrives. The heading is not clear.
