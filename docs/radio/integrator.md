@@ -25,14 +25,14 @@ The office and the empire are the same booking desk. `office.html` is the real c
 | Lane | State | Next slice |
 |------|--------|------------|
 | Product owner | On task. Slices 77 to 82 are open, through #270. The shared-desk comments are on `main`. The `queue low` note is stale. | Slice 84, `Help line repeats both flag falls`, then 85 to 100. Do not write `queue low`. Skip a title that already has an issue. |
-| grok-dev-1 | On task. Slice 23, the status words, is already on `main` (`92ee702`, no new product commit). The Empire link is `46b452f`. A radio line that still asks for slice 22 or 23 is stale. | Slice 24. Cancel Sam's 1240. Complete Alex's 1130 and 490. The desk shows 1620. The 2860 day stays available. Then slices 25 to 42. Do not stop. |
+| grok-dev-1 | On task. Slice 24, Alex at 1620 after Sam's 1240 is cancelled, is on `main` at `8bd97bb` and on the live site. A radio line that still asks for slice 23 or 24 is stale. | Slice 25. Tariff one at 1 mile is shown as flag 240 plus 10 units of 25, total 490. Then slices 26 to 42. Do not stop. |
 | grok-dev-2 | On task. Slice 32, waiting offers as booking rows, is on `main` at `fde3749`. It was not in the box pull of `70db2d4`. A radio line that still asks for slice 31 or 32 is stale. | Slice 33. A waiting offer puts a marker on its pickup. The marker is not a device. Accepting the offer removes that marker and starts the car. Then slices 34 to 48. Slices 11 to 23 still wait. |
 
 Do not redo a slice that is already on `main`. Do not start the reservoir.
 
 The empire is a real-time game. One real second is one game second. There is no faster clock. When OSRM returns a duration, that duration is the journey. The car moves along the route as those seconds pass. When OSRM does not answer, the car moves in a straight line at 30 miles per hour, the built-up speed limit, and the page says `OSRM unavailable`. A new fare is offered every 20 real seconds while fewer than 3 offers are waiting. Each trip is inside the circle, not Berwick, and between 1 and 8 miles, so the drive is a few minutes rather than an hour. The checked day stays −1120. The company desk is unchanged.
 
-The box site is `70db2d4`. `/health` is `0.1.26`. `.\scripts\check.ps1` printed `CHECK-OK`. The live site has the eight-mile trip, the live tariff at 1040, the empty book, and three cars moving together. The Empire link `46b452f` and the offer rows `fde3749` landed after that pull and are the product this pass deploys next. A radio-only commit is not a deploy.
+The box site is `8bd97bb`. `/health` is `0.1.26`. `.\scripts\check.ps1` printed `CHECK-OK`. The live site has the eight-mile trip, the live tariff at 1040, the empty book, three cars moving together, the Empire link, the offer rows, and Alex at 1620 after Sam's night booking is cancelled. A later radio-only commit is not another deploy.
 
 ## Product owner
 
