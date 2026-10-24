@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/416
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/421
 
-Title: Three taxis drive on the map. Label repo:site only. No ready label.
+Title: Passenger pin says waiting. Label repo:site only. No ready label.
 
-Next: Passenger pin says waiting
+Next: Passenger name while aboard
