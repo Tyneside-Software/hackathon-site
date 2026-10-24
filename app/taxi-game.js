@@ -138,6 +138,22 @@
     };
   }
 
+  function workedWeek() {
+    var rows = [];
+    for (var day = 1; day <= 7; day++) {
+      workedDay().forEach(function (row) {
+        rows.push({ kind: row.kind, amountPence: row.amountPence, gameDay: day });
+      });
+    }
+    return rows;
+  }
+
+  function fleetWeek() {
+    var rows = [{ kind: "new_car", amountPence: -NEW_CAR_PENCE, gameDay: 1 }];
+    workedWeek().forEach(function (row) { rows.push(row); });
+    return rows;
+  }
+
   function sumPence(rows) {
     return rows.reduce(function (total, row) {
       return total + row.amountPence;
@@ -167,6 +183,8 @@
     startUnpaidCar: startUnpaidCar,
     newDriver: newDriver,
     threeCarDay: threeCarDay,
+    workedWeek: workedWeek,
+    fleetWeek: fleetWeek,
     dayWithDriver: dayWithDriver,
     workedDay: workedDay,
     cancelBefore: cancelBefore,

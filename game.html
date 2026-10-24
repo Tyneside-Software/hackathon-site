@@ -43,6 +43,10 @@
     <p class="lede" id="unpaid-car"></p>
     <p class="lede" id="jamie"></p>
     <p id="three-car-day"></p>
+    <ul id="week-days"></ul>
+    <p id="week-sum"></p>
+    <button type="button" class="btn btn-ghost" id="btn-fleet">Buy the second car on day 1</button>
+    <p class="lede" id="fleet-result"></p>
 
     <ul id="day-lines"></ul>
     <p id="day-sum" style="font-size:1.25rem"></p>
@@ -91,6 +95,23 @@
       ? "Jamie costs 0. The day stays −1120."
       : "Jamie changed the day.";
     document.getElementById("three-car-day").textContent = "three-car day " + game.sumPence(game.threeCarDay());
+    function showPence(n) {
+      return n < 0 ? "−" + (-n) : String(n);
+    }
+    var weekList = document.getElementById("week-days");
+    for (var day = 1; day <= 7; day++) {
+      var weekItem = document.createElement("li");
+      weekItem.textContent = "Day " + day + " " + showPence(game.sumPence(game.workedDay()));
+      weekList.appendChild(weekItem);
+    }
+    document.getElementById("week-sum").textContent = "Week " + showPence(game.sumPence(game.workedWeek()));
+    document.getElementById("btn-fleet").addEventListener("click", function () {
+      var bought = game.newCar();
+      document.getElementById("fleet-result").textContent = showPence(game.sumPence(game.fleetWeek())) + ". This car is not a device.";
+      if (bought.taxi && bought.taxi.device_id) {
+        document.getElementById("fleet-result").textContent = "The car was a device.";
+      }
+    });
     var list = document.getElementById("day-lines");
     game.workedDay().forEach(function (row) {
       var item = document.createElement("li");
