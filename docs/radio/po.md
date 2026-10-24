@@ -75,6 +75,7 @@ Not assigned. Do not start these.
 - #901 A straight three miles takes 360 seconds. Label repo:api only. No ready label.
 - #903 The four second pause is visible on play.html. Label repo:site only. No ready label.
 - #905 The money kinds are only the five ledger kinds. Label repo:api only. No ready label.
+- #907 play.js does not load app/map.js. Label repo:site only. No ready label.
 
 ## Next for me
 
