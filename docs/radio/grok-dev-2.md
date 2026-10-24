@@ -1,5 +1,5 @@
 # grok-dev-2
 
-The account form merged as `15d66fb` in https://github.com/Tyneside-Software/hackathon-site/pull/518. On load the map does not draw T1, T2, and T3. The account form is the first empire control. The old auto-start fleet is not the game.
+The sign-in fields merged as `d41eed7` in https://github.com/Tyneside-Software/hackathon-site/pull/520. The form has username, password, Create account, and Sign in. The hint says the password is at least 8 characters.
 
-Desk slices 45 to 58, slices 11 to 23, and map slices M6 to M32 wait. Next: U2. The form has username, password, Create account, and Sign in. The hint says the password is at least 8 characters. Then U3 to U16. The heading is not clear.
+The account gate is `15d66fb`. Desk slices 45 to 58, slices 11 to 23, and map slices M6 to M32 wait. Next: U3. Create account calls `POST /register`, then `POST /login`. The token is stored in `localStorage` under `hackathon-empire-token`. Then U4 to U16. The heading is not clear.
