@@ -26,9 +26,9 @@ The only products are the tracker, the booking office, and the empire game in `d
 
 | Lane | State | Next slice |
 |------|--------|------------|
-| Product owner | #1322 is API `195ad59`. #1423 is site `cba62be`. #1422 is site `ed2b5ef`. `po.md` on main still says Next #1377. The grok-dev-2 radio still says Next #1423. grok-dev-1 `Next` is already #1323. | Pull. Set grok-dev-2 `Next` to #1424. Do not leave #1423, #1422, #1416, or #1411 as Next. Do not put another issue in front of #1323 or #1424. Do not edit `play.html`, `play.js`, or the API. Do not deploy. |
+| Product owner | #1322 is API `195ad59`. #1425 is site `af377fa`. #1424 is site `03d2da5`. `po.md` on main still says Next #1377. The grok-dev-2 radio still says Next #1425. grok-dev-1 `Next` is already #1323. | Pull. Set grok-dev-2 `Next` to #1431. Then write Master's order as numbered lines behind #1323 and behind #1431. The first of those lines is where the taxi is going. Then more controls, more fares in the busy hour, and richer behaviour. Keep at least sixteen unfinished slices in front of each dev. Do not put any of that in front of #1323 or #1431. Do not leave #1425, #1424, or #1377 as Next. Do not edit `play.html`, `play.js`, or the API. Do not deploy. |
 | grok-dev-1 | #1322 is `195ad59`. #1321 is `9c2058d`, tests only. API `main` has no newer commit. No open pull request for #1323. The radio says Next #1323. | Pull. Build #1323 in hackathon-api. Travelling to a better spot is an empty move inside the circle, with no passenger and no fare, and it does not replace a leg already started. Do not rebuild #1322 or #1321. Do not add an eleventh car. One product pull request, four radio lines, then the next numbered line. Do not wipe the database. Do not edit `play.html` or `play.js`. |
-| grok-dev-2 | #1423 is `cba62be`. #1422 is `ed2b5ef`. The radio still says Next #1423. That line is stale. The words `the heading is not clear` do not mean stop. | Pull. Build #1424. Sign in again clears the previous account's trail before the next feed. Then the next numbered line in `### grok-dev-2`. The person stays on the feed latitude and longitude. Do not add a place list in `play.js`. Do not redo #1423, #1422, #1416, #1411, #1409, #1406, #1398, or #1393. Do not edit the API. Do not put the money column back beside the map. |
+| grok-dev-2 | #1425 is `af377fa`. #1424 is `03d2da5`. The radio still says Next #1425. That line is stale. The words `the heading is not clear` do not mean stop. | Pull. Build #1431. Sign in again clears Buy failed left by the previous account. Then the next numbered line in `### grok-dev-2`. The person stays on the feed latitude and longitude. Do not add a place list in `play.js`. Do not redo #1425, #1424, #1423, #1422, or #1416. Do not edit the API. Do not put the money column back beside the map. Do not draw the future route until that line is numbered. |
 
 Do not redo a slice that is already on `main`. Do not start `## Reservoir` until a line from it is in your numbered list. The fullscreen map and the Start error text are already on `main` as `715b7c9`. Do not rebuild them.
 
@@ -52,11 +52,21 @@ A person appears at the pickup and waits with no taxi allocated. One free taxi i
 
 Each taxi has one current job, stored on the car and shown on the chip and in the list: waiting, travelling to a better spot, collecting a passenger, carrying a passenger, or returning to the depot. Collecting is the drive to the person. Carrying is the paid trip. Waiting is the depot hold. Travelling to a better spot is an empty move toward where this hour is busy, with no passenger and no fare, and it does not replace a leg already started. The feed already has `at_depot`, `to_passenger`, `with_passenger`, and `returning`. Keep those rows working. The page draws the person at the feed latitude and longitude.
 
+Master's order. The player can see where each taxi is going. The trail on the map is where the car has been. The stored route is where it is going. The page draws the rest of that route ahead of the car, and the chip and the list name the place at the end of the leg. The place name comes from the feed. Do not add a place list in `play.js`. A car already on a leg keeps that route. Do not invent a second route.
+
+The page grows controls the player can use. Start, sign out, and buying a car stay. Each new control does one real thing, and the product owner names that thing in its own slice. A control that does nothing is not a slice. Do not put the money column back beside the map.
+
+More fares come from the same place table and the same `Europe/London` hour. A busy hour has more people waiting. A quiet hour stays quieter. The North Tyneside tariff stays the only fare table. 800000 is not a fare. Do not call the network for each fare.
+
+Behaviour gets richer after the empty move. A taxi waits, moves toward where this hour is busy, collects, carries, or returns. It does not replace a leg already started. A new status is added to `STATUSES` in the same change, because an unknown status is put back to `at_depot`. A new fare does not add an eleventh car. The opening ten stay.
+
+The product owner writes those outcomes as numbered lines. Where the taxi is going is the first of them. Put the page half after #1431 and the feed half after #1323. Do not put either half in front of #1323 or #1431. Keep at least sixteen unfinished slices in front of each dev.
+
 Do not invent a second fare table, a second depot, or a fourth product. Do not show 2860, 1130, or 1240.
 
 ## The route is the gap
 
-The route is no longer the gap. The place table is API `6ecd1d3`. Morning is API `ca1819a`, day is `c045352`, evening is `8d74a75`, and night is `7fa222a`. #1336 is API `c782539`. The open API slice is #1323, an empty move toward where this hour is busy. #1322 is API `195ad59`. The open play slice is #1424, sign in again clears the previous account's trail. #1423 is site `cba62be`. Do not redo #1322, #1423, or #1422. Do not wipe the database.
+The route is no longer the gap. The place table is API `6ecd1d3`. Morning is API `ca1819a`, day is `c045352`, evening is `8d74a75`, and night is `7fa222a`. #1336 is API `c782539`. The open API slice is #1323, an empty move toward where this hour is busy. #1322 is API `195ad59`. The open play slice is #1431, sign in again clears Buy failed. #1425 is site `af377fa`. Where the taxi is going comes after that slice, not in front of it. Do not redo #1322, #1425, or #1424. Do not wipe the database.
 
 The integrator deploys this PC when those files change. Lanes do not deploy.
 
