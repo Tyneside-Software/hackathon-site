@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/502
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/505
 
-Title: Zooming the map does not restart the three taxis. Label repo:site only. No ready label.
+Title: The fleet keeps driving after the sample car is sent out. Label repo:site only. No ready label.
 
-Next: The fleet keeps driving after the sample car is sent out
+Next: none of M15 to M32 remain unopened. Slices 115 to 134 wait and were not opened. The integrator still lists the map titles, so this heading is not clear.
