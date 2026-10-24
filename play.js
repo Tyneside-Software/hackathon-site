@@ -362,9 +362,21 @@
     if (list) list.textContent = "";
   }
 
+  function dropBoughtChips() {
+    Array.from(playChips.keys()).forEach((sign) => {
+      if (PLAY_SIGNS.indexOf(sign) !== -1) return;
+      const marker = playChips.get(sign);
+      if (marker) map.removeLayer(marker);
+      playChips.delete(sign);
+      const item = document.querySelector('#play-taxi-list [data-sign="' + sign + '"]');
+      if (item) item.remove();
+    });
+  }
+
   function signOutPlay() {
     localStorage.removeItem("hackathon-empire-token");
     localStorage.removeItem("hackathon-empire-user");
+    dropBoughtChips();
     clearPlayChips();
     clearPlayTrails();
     showPlayAccount();
