@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/594
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/597
 
-Title: A click on a fare does not add a waypoint. Label repo:site only. No ready label.
+Title: The sample car is not one of the account taxis. Label repo:site only. No ready label.
 
-Next: The sample car is not one of the account taxis
+Next: The status says the fleet runs on the box
