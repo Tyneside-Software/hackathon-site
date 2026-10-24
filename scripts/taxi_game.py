@@ -140,6 +140,14 @@ def elapsed_seconds(start_ms, now_ms):
     return (now_ms - start_ms) / 1000
 
 
+FALLBACK_MPH = 30
+
+
+def fallback_seconds(miles):
+    """No OSRM duration. 30 miles per hour is the built-up limit. 3 miles take 360 seconds."""
+    return miles * 3600 / FALLBACK_MPH
+
+
 def position_on_route(points, duration_s, elapsed_s):
     """Place on a polyline. The checker passes points and a duration. It does not call OSRM."""
     if not points:

@@ -100,6 +100,12 @@ def main():
     if abs(halfway[0] - 0.0) > 1e-9 or abs(halfway[1] - 1.0) > 1e-6:
         print(f"halfway {halfway}", file=sys.stderr)
         return 1
+    if taxi_game.fallback_seconds(3) != 360 or taxi_game.FALLBACK_MPH != 30:
+        print(f"fallback {taxi_game.fallback_seconds(3)}", file=sys.stderr)
+        return 1
+    if taxi_game.sum_pence(taxi_game.worked_day()) != -1120:
+        print("fallback changed the day", file=sys.stderr)
+        return 1
     print("DAY-OK")
     print("TIME-OK")
     return 0
