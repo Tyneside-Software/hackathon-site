@@ -69,6 +69,7 @@
   map.fitBounds(circle.getBounds());
   window.addEventListener("resize", seatPlayScreen);
   map.on("moveend", keepDepotClear);
+  map.on("click", fillLoiterPoint);
   function clearBusToggle() {
     document.querySelectorAll("button, input, select").forEach((node) => {
       const label = ((node.textContent || "") + " " + (node.id || "") + " " + (node.getAttribute("aria-label") || "")).toLowerCase();
@@ -233,6 +234,7 @@
   const playChips = new Map();
   const playFirmChips = new Map();
   const playDepots = [];
+  let feedLoiter = null;
   const playFares = [];
   const playPeople = [];
   const playTrails = [];
@@ -808,6 +810,48 @@
     playDepots.length = 0;
   }
 
+  function clearFeedLoiter() {
+    if (!feedLoiter) return;
+    map.removeLayer(feedLoiter);
+    feedLoiter = null;
+  }
+
+  function loiterTitle(patch) {
+    const name = patch && typeof patch.firm === "string" ? patch.firm.trim() : "";
+    if (!name || name === "2860" || name === "1130" || name === "1240" || name === "-1120") return "loiter";
+    return name + " loiter";
+  }
+
+  function paintFeedLoiter(feed) {
+    clearFeedLoiter();
+    const patch = feed && feed.loiter;
+    if (!patch) return;
+    const lat = Number(patch.lat);
+    const lng = Number(patch.lng);
+    const radiusKm = Number(patch.radius_km);
+    if (!Number.isFinite(lat) || !Number.isFinite(lng) || !Number.isFinite(radiusKm) || radiusKm <= 0) return;
+    const title = loiterTitle(patch);
+    feedLoiter = L.circle([lat, lng], {
+      radius: radiusKm * 1000,
+      color: "#38bdf8",
+      weight: 2,
+      fillColor: "#38bdf8",
+      fillOpacity: 0.12,
+      interactive: false
+    }).addTo(map);
+    feedLoiter.bindTooltip(mapHtml(title), { permanent: true, direction: "center", className: "play-leg-label", opacity: 0.95 });
+  }
+
+  function fillLoiterPoint(event) {
+    const form = document.getElementById("play-loiter");
+    if (!form || form.hidden) return;
+    if (!event || !event.latlng) return;
+    const latNode = document.getElementById("play-loiter-lat");
+    const lngNode = document.getElementById("play-loiter-lng");
+    if (latNode) latNode.value = String(event.latlng.lat);
+    if (lngNode) lngNode.value = String(event.latlng.lng);
+  }
+
   function depotFirmName(firm) {
     const name = firm && typeof firm.firm === "string" ? firm.firm.trim() : "";
     if (!name || name === "2860" || name === "1130" || name === "1240" || name === "-1120") return "";
@@ -1321,6 +1365,7 @@
     clearPlayAhead();
     clearPlayFirms();
     clearFeedDepots();
+    clearFeedLoiter();
     showJobCount(null);
     if (wasFollowing) map.fitBounds(circle.getBounds());
     noteFollow();
@@ -1481,6 +1526,7 @@
   }
 
   let playBuying = false;
+  let playLoitering = false;
 
   function playBuyPence() {
     return 800000;
@@ -1636,6 +1682,7 @@
     button.disabled = playBuying;
     noteBuyOnce(listed);
     paintPlaySpent(playFeed);
+    paintPlayLoiter();
   }
 
   async function buyPlayCar() {
@@ -1695,6 +1742,93 @@
     }
     if (status) status.textContent = "";
     showPlaySpent();
+    pollPlay();
+  }
+
+  function paintPlayLoiter() {
+    const form = document.getElementById("play-loiter");
+    if (!form) return;
+    const token = !!(localStorage.getItem("hackathon-empire-token") || "");
+    form.hidden = !token;
+    if (!token) {
+      const status = document.getElementById("play-loiter-status");
+      if (status) status.textContent = "";
+    }
+    const button = document.getElementById("play-loiter-set");
+    if (button) button.disabled = playLoitering;
+  }
+
+  function loiterFieldNumber(id) {
+    const node = document.getElementById(id);
+    const raw = node ? String(node.value).trim() : "";
+    if (raw === "") return null;
+    const value = Number(raw);
+    if (!Number.isFinite(value)) return null;
+    return value;
+  }
+
+  async function setPlayLoiter(event) {
+    if (event) event.preventDefault();
+    if (playLoitering) return;
+    const status = document.getElementById("play-loiter-status");
+    const token = localStorage.getItem("hackathon-empire-token") || "";
+    const base = apiBase();
+    const lat = loiterFieldNumber("play-loiter-lat");
+    const lng = loiterFieldNumber("play-loiter-lng");
+    const radiusKm = loiterFieldNumber("play-loiter-km");
+    const firmNode = document.getElementById("play-loiter-firm");
+    const firm = firmNode ? firmNode.value.trim() : "";
+    if (!token || !base) {
+      if (status) status.textContent = "";
+      showPlayAccount();
+      paintPlayLoiter();
+      return;
+    }
+    if (lat === null || lng === null || radiusKm === null) {
+      if (status) status.textContent = "The patch was not set.";
+      return;
+    }
+    playLoitering = true;
+    paintPlayLoiter();
+    let res;
+    try {
+      res = await fetch(base + "/v1/empire/loiter", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + token
+        },
+        body: JSON.stringify({ lat: lat, lng: lng, radius_km: radiusKm, firm: firm })
+      });
+    } catch (err) {
+      if (localStorage.getItem("hackathon-empire-token") || "") {
+        if (status) status.textContent = "The patch was not set.";
+      }
+      return;
+    } finally {
+      playLoitering = false;
+      paintPlayLoiter();
+    }
+    if (!(localStorage.getItem("hackathon-empire-token") || "")) return;
+    if (res.status === 401) {
+      localStorage.removeItem("hackathon-empire-token");
+      clearFeedLoiter();
+      paintPlayStatus(null);
+      showPlayAccount();
+      keepPlayMap();
+      paintPlayBuy();
+      clearPlaySpent();
+      noteBuyReject();
+      return;
+    }
+    if (!res.ok) {
+      if (status) status.textContent = "The patch was not set.";
+      return;
+    }
+    const data = await res.json().catch(function () { return null; });
+    if (status) status.textContent = "";
+    if (data) paintFeedLoiter(data);
     pollPlay();
   }
 
@@ -1843,6 +1977,7 @@
     clearMoneyForNextAccount(username);
     localStorage.setItem("hackathon-empire-token", session.access_token);
     localStorage.setItem("hackathon-empire-user", username);
+    paintPlayLoiter();
     if (clearedFeed) {
       paintPlayBuy();
       noteNextFeed();
@@ -1945,6 +2080,7 @@
     clearMoneyForNextAccount(username);
     localStorage.setItem("hackathon-empire-token", session.access_token);
     localStorage.setItem("hackathon-empire-user", username);
+    paintPlayLoiter();
     if (clearedFeed) {
       paintPlayBuy();
       noteNextFeed();
@@ -2001,6 +2137,7 @@
     }
     localStorage.setItem("hackathon-empire-token", session.access_token);
     localStorage.setItem("hackathon-empire-user", username);
+    paintPlayLoiter();
     if (status) status.textContent = "";
     playSignAgain = true;
     dropSignedChips();
@@ -2231,6 +2368,7 @@
     paintPlayCars(data);
     paintFeedDepots(data);
     paintPlayOffice();
+    paintFeedLoiter(data);
     showJobCount(jobCounts(data));
     noteStartedTen(data);
     paintPlayTrails(data);
@@ -2392,6 +2530,8 @@
   paintPlayBuy();
   const playBuy = document.getElementById("play-buy");
   if (playBuy) playBuy.addEventListener("click", buyPlayCar);
+  const playLoiterForm = document.getElementById("play-loiter");
+  if (playLoiterForm) playLoiterForm.addEventListener("submit", setPlayLoiter);
   paintPlayStatus(null);
   clearStandInTaxis();
   setInterval(pollPlay, 2000);
