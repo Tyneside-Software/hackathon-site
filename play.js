@@ -44,11 +44,23 @@
       node.remove();
     });
   }
+  function keepPlayMoney() {
+    const screen = document.getElementById("play-screen");
+    const money = document.getElementById("play-money");
+    if (screen) screen.hidden = false;
+    if (money) money.hidden = false;
+  }
+
   function seatPlayLocks() {
     const under = document.getElementById("play-under-map");
     const mapEl = document.getElementById("play-map");
-    if (!under || !mapEl || !mapEl.parentNode) return;
-    if (under.previousElementSibling !== mapEl) mapEl.insertAdjacentElement("afterend", under);
+    const screen = document.getElementById("play-screen");
+    if (!under || !mapEl) return;
+    if (screen && screen.contains(mapEl)) {
+      if (under.previousElementSibling !== screen) screen.insertAdjacentElement("afterend", under);
+    } else if (mapEl.parentNode && under.previousElementSibling !== mapEl) {
+      mapEl.insertAdjacentElement("afterend", under);
+    }
     [
       "play-moving",
       "play-locks",
@@ -71,6 +83,7 @@
       if (!node || node.parentElement === under) return;
       under.appendChild(node);
     });
+    keepPlayMoney();
   }
   clearBusToggle();
   clearOfficeGrid();
@@ -638,6 +651,9 @@
       row.textContent = (amount === "" ? key : key + " " + amount) + " pence";
     });
     hideCompanyTotals();
+    const money = document.getElementById("play-money");
+    if (money) money.dataset.follows = "feed";
+    keepPlayMoney();
   }
 
   const playAccount = document.getElementById("play-account");
