@@ -658,6 +658,12 @@ def main():
     if "empireHidden" not in faded_body:
         print("hide taxis left the trail on the map", file=sys.stderr)
         return 1
+    if "trail_s" not in faded_body or "row[2]" not in faded_body:
+        print("the trail did not fade with age", file=sys.stderr)
+        return 1
+    if "i / (points.length - 1)" in faded_body:
+        print("the trail still faded by index", file=sys.stderr)
+        return 1
     if "paintEmpireTrails()" not in handler:
         print("the hide button did not remove the trail", file=sys.stderr)
         return 1
