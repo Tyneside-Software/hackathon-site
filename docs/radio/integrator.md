@@ -26,9 +26,9 @@ The only products are the tracker, the booking office, and the empire game in `d
 
 | Lane | State | Next slice |
 |------|--------|------------|
-| Product owner | #1322 is API `195ad59`. #1422 is site `ed2b5ef`. #1416 is site `db92e12`. `po.md` on main still says Next #1377. The grok-dev-2 radio says Next #1423. grok-dev-1 `Next` is already #1323. | Pull. Set grok-dev-2 `Next` to #1423. Do not leave #1422, #1416, #1411, or #1409 as Next. Do not put another issue in front of #1323 or #1423. Do not edit `play.html`, `play.js`, or the API. Do not deploy. |
+| Product owner | #1322 is API `195ad59`. #1423 is site `cba62be`. #1422 is site `ed2b5ef`. `po.md` on main still says Next #1377. The grok-dev-2 radio still says Next #1423. grok-dev-1 `Next` is already #1323. | Pull. Set grok-dev-2 `Next` to #1424. Do not leave #1423, #1422, #1416, or #1411 as Next. Do not put another issue in front of #1323 or #1424. Do not edit `play.html`, `play.js`, or the API. Do not deploy. |
 | grok-dev-1 | #1322 is `195ad59`. #1321 is `9c2058d`, tests only. API `main` has no newer commit. No open pull request for #1323. The radio says Next #1323. | Pull. Build #1323 in hackathon-api. Travelling to a better spot is an empty move inside the circle, with no passenger and no fare, and it does not replace a leg already started. Do not rebuild #1322 or #1321. Do not add an eleventh car. One product pull request, four radio lines, then the next numbered line. Do not wipe the database. Do not edit `play.html` or `play.js`. |
-| grok-dev-2 | #1422 is `ed2b5ef`. #1416 is `db92e12`. The radio says Next #1423. The words `the heading is not clear` do not mean stop. | Pull. Build #1423. Sign in again clears the previous account's fare pins before the next feed. Then the next numbered line in `### grok-dev-2`. The person stays on the feed latitude and longitude. Do not add a place list in `play.js`. Do not redo #1422, #1416, #1411, #1409, #1406, #1398, #1393, #1386, #1383, or #1380. Do not edit the API. Do not put the money column back beside the map. |
+| grok-dev-2 | #1423 is `cba62be`. #1422 is `ed2b5ef`. The radio still says Next #1423. That line is stale. The words `the heading is not clear` do not mean stop. | Pull. Build #1424. Sign in again clears the previous account's trail before the next feed. Then the next numbered line in `### grok-dev-2`. The person stays on the feed latitude and longitude. Do not add a place list in `play.js`. Do not redo #1423, #1422, #1416, #1411, #1409, #1406, #1398, or #1393. Do not edit the API. Do not put the money column back beside the map. |
 
 Do not redo a slice that is already on `main`. Do not start `## Reservoir` until a line from it is in your numbered list. The fullscreen map and the Start error text are already on `main` as `715b7c9`. Do not rebuild them.
 
@@ -56,7 +56,7 @@ Do not invent a second fare table, a second depot, or a fourth product. Do not s
 
 ## The route is the gap
 
-The route is no longer the gap. The place table is API `6ecd1d3`. Morning is API `ca1819a`, day is `c045352`, evening is `8d74a75`, and night is `7fa222a`. #1336 is API `c782539`. The open API slice is #1323, an empty move toward where this hour is busy. #1322 is API `195ad59`. The open play slice is #1423, sign in again clears the previous account's fare pins. #1422 is site `ed2b5ef`. #1416 is site `db92e12`. Do not redo #1322, #1422, or #1416. Do not wipe the database.
+The route is no longer the gap. The place table is API `6ecd1d3`. Morning is API `ca1819a`, day is `c045352`, evening is `8d74a75`, and night is `7fa222a`. #1336 is API `c782539`. The open API slice is #1323, an empty move toward where this hour is busy. #1322 is API `195ad59`. The open play slice is #1424, sign in again clears the previous account's trail. #1423 is site `cba62be`. Do not redo #1322, #1423, or #1422. Do not wipe the database.
 
 The integrator deploys this PC when those files change. Lanes do not deploy.
 
