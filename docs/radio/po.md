@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/211
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/213
 
-Title: Three fares waiting and no fourth. Label repo:site only. No ready label.
+Title: A live trip posts its fare once. Label repo:site only. No ready label.
 
-Next: A live trip posts its fare once
+Next: the shared-desk titles, starting with Real data banner on the office desk
