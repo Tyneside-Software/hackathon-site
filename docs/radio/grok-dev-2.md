@@ -1,5 +1,5 @@
 # grok-dev-2
 
-The fare marker merged as `6cf431c` in https://github.com/Tyneside-Software/hackathon-site/pull/980. A waiting fare has a marker until that taxi arrives, then the marker goes.
+The new-car line merged as `9bbd301` in https://github.com/Tyneside-Software/hackathon-site/pull/987. play.html shows 800000 before a car leaves the depot pin.
 
-Next: #842. The 800000 line shows before that car leaves. Then the rest of the play.html list. The heading is not clear.
+Next: #845. play.html has no bus toggle. Then the rest of the play.html list. The heading is not clear.
