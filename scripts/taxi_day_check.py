@@ -549,6 +549,17 @@ def main():
     if "setItem" in failed_sign:
         print("a failed sign-in stored a token", file=sys.stderr)
         return 1
+    if "clearStandInCars()" not in shown_body:
+        print("sign in drew stand-in cars", file=sys.stderr)
+        return 1
+    listed = map_js.split("function paintTaxiList", 1)[1].split("function stopCar", 1)[0]
+    if "empireFeed.cars" not in listed or "taxiCars.forEach" in listed:
+        print("the list drew stand-in cars", file=sys.stderr)
+        return 1
+    ensured = map_js.split("function ensureTaxi", 1)[1].split("function drawCarLine", 1)[0]
+    if "if (!taxisOn) return;" not in ensured:
+        print("a stand-in taxi was drawn before the feed", file=sys.stderr)
+        return 1
     signed_out = map_js.split("function signOutEmpire", 1)
     if len(signed_out) != 2:
         print("sign out was missing", file=sys.stderr)
@@ -591,6 +602,9 @@ def main():
         return 1
     if "notePagesEmpire()" not in polled_body:
         print("the pages poll still called the API", file=sys.stderr)
+        return 1
+    if "clearStandInCars()" not in polled_body:
+        print("the poll drew stand-in cars before the feed", file=sys.stderr)
         return 1
     held = map_js.split("let playerMovedMap", 1)
     if len(held) != 2:

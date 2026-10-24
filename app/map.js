@@ -1507,26 +1507,26 @@
     const status = document.getElementById("taxi-status");
     if (list) {
       list.replaceChildren();
-      if (taxisOn && empireAccount) {
-        taxiCars.forEach((car) => {
-          const li = document.createElement("li");
-          li.textContent = taxiLabel(car);
-          list.appendChild(li);
-        });
-      }
+      const cars = empireFeed && Array.isArray(empireFeed.cars) ? empireFeed.cars : [];
+      cars.forEach((car) => {
+        if (!car || !car.sign) return;
+        const li = document.createElement("li");
+        li.textContent = car.sign;
+        list.appendChild(li);
+      });
     }
     if (!status) return;
-    if (!empireAccount) {
+    if (!empireFeed || !Array.isArray(empireFeed.cars)) {
       status.textContent = "An account comes before the taxis.";
       return;
     }
-    const aboard = taxiCars.filter((car) => car.status === "with_passenger").length;
+    const aboard = empireFeed.cars.filter((car) => car && car.status === "with_passenger").length;
     let text = aboard === 0
       ? "Taxis are between fares."
       : aboard === 1
         ? "1 taxi has a passenger."
         : aboard + " taxis have passengers.";
-    if (taxiCars.some((car) => car.osrm === false)) text += " OSRM unavailable.";
+    if (empireFeed.cars.some((car) => car && car.osrm === false)) text += " OSRM unavailable.";
     status.textContent = text;
   }
 
@@ -1546,6 +1546,7 @@
   }
 
   function ensureTaxi(car) {
+    if (!taxisOn) return;
     if (car.marker) return;
     car.marker = L.marker(DEPOT, {
       icon: L.divIcon({
@@ -1817,7 +1818,19 @@
     return localStorage.getItem("hackathon-empire-user") || "";
   }
 
+  function clearStandInCars() {
+    taxiCars.forEach((car) => {
+      if (car.marker) map.removeLayer(car.marker);
+      if (car.pin) map.removeLayer(car.pin);
+      if (car.line) map.removeLayer(car.line);
+      car.marker = null;
+      car.pin = null;
+      car.line = null;
+    });
+  }
+
   function showSignedIn(username) {
+    clearStandInCars();
     const name = username || empireUser();
     const form = document.getElementById("empire-account");
     if (form) form.hidden = true;
@@ -1981,6 +1994,7 @@
       stopEmpirePoll();
       return;
     }
+    clearStandInCars();
     const token = empireToken();
     if (!token) {
       stopEmpirePoll();
@@ -2174,6 +2188,7 @@
   if (empireSignOut) empireSignOut.addEventListener("click", () => { signOutEmpire(); });
   if (notePagesEmpire()) stopEmpirePoll();
   else if (empireToken()) {
+    clearStandInCars();
     showSignedIn(empireUser());
     startEmpirePoll();
   }
