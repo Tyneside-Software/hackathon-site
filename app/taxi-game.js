@@ -158,6 +158,35 @@
     return (nowMs - startMs) / 1000;
   }
 
+  function positionOnRoute(points, durationS, elapsedS) {
+    if (!points.length) return null;
+    if (durationS <= 0 || elapsedS <= 0) return points[0];
+    if (elapsedS >= durationS) return points[points.length - 1];
+    var fraction = elapsedS / durationS;
+    var distances = [0];
+    var i;
+    for (i = 1; i < points.length; i++) {
+      distances.push(distances[i - 1] + haversineKm(
+        { lat: points[i - 1][0], lng: points[i - 1][1] },
+        { lat: points[i][0], lng: points[i][1] }
+      ));
+    }
+    var total = distances[distances.length - 1];
+    if (total === 0) return points[0];
+    var target = total * fraction;
+    var j;
+    for (j = 1; j < distances.length; j++) {
+      if (distances[j] >= target) {
+        var span = distances[j] - distances[j - 1];
+        var step = span === 0 ? 0 : (target - distances[j - 1]) / span;
+        var start = points[j - 1];
+        var end = points[j];
+        return [start[0] + (end[0] - start[0]) * step, start[1] + (end[1] - start[1]) * step];
+      }
+    }
+    return points[points.length - 1];
+  }
+
   function sumPence(rows) {
     return rows.reduce(function (total, row) {
       return total + row.amountPence;
@@ -188,6 +217,7 @@
     newDriver: newDriver,
     threeCarDay: threeCarDay,
     elapsedSeconds: elapsedSeconds,
+    positionOnRoute: positionOnRoute,
     workedWeek: workedWeek,
     fleetWeek: fleetWeek,
     dayWithDriver: dayWithDriver,
