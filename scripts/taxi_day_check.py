@@ -549,6 +549,12 @@ def main():
     if '"/v1/empire"' not in polled_body or 'Authorization: "Bearer " + token' not in polled_body:
         print("the empire poll did not send the bearer token", file=sys.stderr)
         return 1
+    if "res.status === 401" not in polled_body or 'localStorage.removeItem("hackathon-empire-token")' not in polled_body:
+        print("a 401 left the token in place", file=sys.stderr)
+        return 1
+    if 'getElementById("empire-account")' not in polled_body or "form.hidden = false" not in polled_body:
+        print("a 401 did not show the form", file=sys.stderr)
+        return 1
     if "startFleet()" in polled_body:
         print("the empire poll drew the old fleet", file=sys.stderr)
         return 1

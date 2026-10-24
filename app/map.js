@@ -1951,6 +1951,15 @@
           Authorization: "Bearer " + token,
         },
       });
+      if (res.status === 401) {
+        stopEmpirePoll();
+        localStorage.removeItem("hackathon-empire-token");
+        clearEmpireDraw();
+        const form = document.getElementById("empire-account");
+        if (form) form.hidden = false;
+        if (status) status.textContent = "Sign in again.";
+        return;
+      }
       if (!res.ok) return;
       const data = await res.json().catch(() => null);
       rememberEmpire(data);
