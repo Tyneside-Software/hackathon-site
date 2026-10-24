@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/484
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/486
 
-Title: Hide taxis changes the button to Show taxis. Label repo:site only. No ready label.
+Title: The Shiremoor depot marker stays while a taxi is out. Label repo:site only. No ready label.
 
-Next: The Shiremoor depot marker stays while a taxi is out
+Next: The status line names the taxi and the passenger
