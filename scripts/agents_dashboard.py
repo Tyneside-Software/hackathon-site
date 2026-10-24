@@ -6,11 +6,15 @@ With --serve, http://127.0.0.1:5510/ rebuilds the page on each load.
 """
 from __future__ import annotations
 
+import hashlib
 import html
+import json
 import re
 import subprocess
 import threading
 import time
+import urllib.error
+import urllib.request
 from datetime import datetime, timedelta, timezone
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
@@ -40,7 +44,7 @@ AGENTS = (
         "colour": "#c4b5fd",
         "radio": "docs/radio/po.md",
         "checkout": Path(r"C:\Users\MichaelThomson\source\lanes\po\hackathon-site"),
-        "role": "Opens the issues. No product code.",
+        "role": "Feeds both queues and keeps improving this dashboard. No other product code.",
     },
     {
         "key": "dev1",
@@ -49,7 +53,7 @@ AGENTS = (
         "colour": "#38bdf8",
         "radio": "docs/radio/grok-dev-1.md",
         "checkout": Path(r"C:\Users\MichaelThomson\source\lanes\grok-dev-1\hackathon-api"),
-        "role": "Account-fleet API. Fare cards are finished.",
+        "role": "Not specialised. Builds the queue in po.md. The API checkout is beside this seat.",
     },
     {
         "key": "dev2",
@@ -58,7 +62,7 @@ AGENTS = (
         "colour": "#4ade80",
         "radio": "docs/radio/grok-dev-2.md",
         "checkout": Path(r"C:\Users\MichaelThomson\source\lanes\grok-dev-2\hackathon-site"),
-        "role": "Account-fleet map. The browser must not invent the cars.",
+        "role": "Not specialised. Builds the queue in po.md. The ops map is not the taxi game.",
     },
 )
 
@@ -174,6 +178,150 @@ def own_next(text: str) -> str:
     if not match:
         return ""
     return match.group(1).strip()
+
+
+def section_between(text: str, start: str, end: str) -> str:
+    """Slice from a heading at the start of a line to the next heading."""
+    match = re.search(rf"^{re.escape(start)}\s*$", text, re.M)
+    if not match:
+        return ""
+    begin = match.start()
+    finish = re.search(rf"^{re.escape(end)}\s*$", text[begin + len(start):], re.M)
+    if not finish:
+        return text[begin:].strip()
+    return text[begin: begin + len(start) + finish.start()].strip()
+
+
+def paused_issue_numbers(text: str) -> set[int]:
+    """Issue numbers the integrator has told the lanes not to build."""
+    found: set[int] = set()
+    for line in text.splitlines():
+        low = line.lower()
+        if not any(word in low for word in ("paus", "do not build", "do not start", "wrong work")):
+            continue
+        for start, finish in re.findall(r"#(\d+)\s+through\s+#(\d+)", line):
+            lo, hi = int(start), int(finish)
+            if 0 < hi - lo < 200:
+                found.update(range(lo, hi + 1))
+        found.update(int(number) for number in re.findall(r"#(\d+)", line))
+    return found
+
+
+def parse_po_plan(text: str) -> tuple[str, list[dict], list[dict]]:
+    """Preamble, issue rows, and every heading in po.md, including an empty queue."""
+    items: list[dict] = []
+    sections: list[dict] = []
+    preamble = ""
+    for chunk in re.split(r"(?=^#{2,3} )", text, flags=re.M):
+        lines = chunk.splitlines()
+        if not lines or not lines[0].startswith("#"):
+            continue
+        heading = lines[0].lstrip("#").strip()
+        body = "\n".join(lines[1:]).strip()
+        if heading.lower() == "product owner":
+            preamble = body
+            continue
+        files = ""
+        for line in lines[1:]:
+            if line.lower().startswith("files"):
+                files = line.strip()
+                break
+        nxt = ""
+        nxt_match = re.search(r"^Next:\s*(.+)$", body, re.M)
+        if nxt_match:
+            nxt = nxt_match.group(1).strip()
+        low_heading = heading.lower()
+        if low_heading.startswith("reservoir"):
+            kind = "reservoir"
+        elif low_heading.startswith("next for me"):
+            kind = "self"
+        else:
+            kind = "queue"
+        jobs = []
+        for line in lines[1:]:
+            stripped = line.strip()
+            if not stripped.startswith("- "):
+                continue
+            if stripped.lower() in {"- none yet", "- none"}:
+                continue
+            if re.match(r"- #\d+\b", stripped):
+                continue
+            jobs.append(stripped[2:].strip())
+        before = len(items)
+        for match in re.finditer(r"^- #(\d+)\s+(.+)$", body, re.M):
+            rest = match.group(2).strip()
+            labels = ""
+            title = rest
+            if ". Label " in rest:
+                title, labels = rest.split(". Label ", 1)
+                labels = labels.strip().rstrip(".")
+            title = title.strip().rstrip(".")
+            number = int(match.group(1))
+            items.append(
+                {
+                    "number": number,
+                    "title": title,
+                    "labels": labels,
+                    "files": files,
+                    "next": nxt,
+                    "is_next": bool(title) and (
+                        nxt.lower().startswith(title.lower()) or f"#{number}" in nxt
+                    ),
+                    "section": kind,
+                    "lane": heading,
+                }
+            )
+        sections.append(
+            {
+                "lane": heading,
+                "files": files,
+                "next": nxt,
+                "section": kind,
+                "jobs": jobs,
+                "count": len(items) - before,
+            }
+        )
+    return preamble, items, sections
+
+
+def markdown_table(text: str) -> list[list[str]]:
+    rows = []
+    for line in text.splitlines():
+        if not line.startswith("|"):
+            continue
+        cells = [cell.strip() for cell in line.strip().strip("|").split("|")]
+        if len(cells) < 2:
+            continue
+        if all(set(cell) <= set("-: ") and cell for cell in cells):
+            continue
+        if cells[0].lower() == "lane":
+            continue
+        rows.append(cells)
+    return rows
+
+
+def empire_car_count() -> int | None:
+    if not API.is_dir():
+        return None
+    source = git(["show", "origin/main:app/empire.py"], API)
+    if not source or source.startswith("("):
+        return None
+    signs = re.findall(r'\("T\d+"', source)
+    if signs:
+        return len(set(signs))
+    block = re.search(r"CARS\s*=\s*tuple\((.*?)\)\s*\n", source, re.S)
+    if block:
+        colours = re.findall(r'"#[0-9A-Fa-f]{3,8}"', block.group(1))
+        if colours:
+            return len(colours)
+    if re.search(r"T1 through T10", source):
+        return 10
+    return None
+
+
+def path_on_main(repo: Path, path: str) -> bool:
+    """True when git cat-file finds the path. Success prints nothing."""
+    return git(["cat-file", "-e", f"origin/main:{path}"], repo) == ""
 
 
 def checkout_line(path: Path) -> str:
@@ -391,11 +539,214 @@ def chips(
             state = "next"
         else:
             state = "wait"
-        title = blurbs.get((kind, num), "")
+        title = html.escape(blurbs.get((kind, num), ""), quote=True)
         cells.append(
-            f'<i class="chip {state}" title="{html.escape(kind + str(num) + " " + title)}">{num}</i>'
+            f'<button type="button" class="chip {state}" data-slice="{kind}{num}" '
+            f'title="{title}">{num}</button>'
         )
     return "".join(cells)
+
+
+def claimed_span(text: str, kind: str) -> set[int]:
+    """A radio that says A3 to A32 are on main has finished that range."""
+    found: set[int] = set()
+    pattern = re.compile(rf"{kind}(\d+)\s+to\s+{kind}(\d+)\s+(?:are|is) on", re.I)
+    for match in pattern.finditer(text or ""):
+        start, end = int(match.group(1)), int(match.group(2))
+        if end >= start:
+            found.update(range(start, end + 1))
+    return found
+
+
+def slice_shas(text: str) -> dict[str, str]:
+    found: dict[str, str] = {}
+    for match in re.finditer(r"\b([AU])(\d+) is `([0-9a-f]{7,})`", text or ""):
+        found[f"{match.group(1)}{int(match.group(2))}"] = match.group(3)
+    for match in re.finditer(
+        r"([AU])(\d+)\s+to\s+([AU])(\d+)[^\n]{0,120}?`([0-9a-f]{7,})`",
+        text or "",
+    ):
+        if match.group(1) != match.group(3):
+            continue
+        sha = match.group(5)
+        for num in range(int(match.group(2)), int(match.group(4)) + 1):
+            found.setdefault(f"{match.group(1)}{num}", sha)
+    return found
+
+
+_issues_at = 0.0
+_issues: list[dict] = []
+
+
+def issue_index(needed: set[int] | None = None) -> list[dict]:
+    """Site issues, cached so a refresh does not call GitHub every time."""
+    global _issues_at, _issues
+    have = {int(issue.get("number") or 0) for issue in _issues}
+    if _issues and time.time() - _issues_at < 90 and (not needed or needed <= have):
+        return _issues
+    try:
+        done = subprocess.run(
+            [
+                "gh",
+                "issue",
+                "list",
+                "--repo",
+                "Tyneside-Software/hackathon-site",
+                "--state",
+                "all",
+                "--limit",
+                "1000",
+                "--json",
+                "number,title,url,state,body,labels",
+            ],
+            capture_output=True,
+            text=True,
+            timeout=60,
+            encoding="utf-8",
+            errors="replace",
+        )
+    except (OSError, subprocess.TimeoutExpired):
+        _issues_at = time.time()
+        return _issues
+    if done.returncode != 0 or not done.stdout.strip():
+        _issues_at = time.time()
+        return _issues
+    try:
+        parsed = json.loads(done.stdout)
+    except json.JSONDecodeError:
+        _issues_at = time.time()
+        return _issues
+    if isinstance(parsed, list):
+        _issues = parsed
+    have = {int(issue.get("number") or 0) for issue in _issues}
+    for number in sorted((needed or set()) - have)[:40]:
+        try:
+            one = subprocess.run(
+                [
+                    "gh", "issue", "view", str(number),
+                    "--repo", "Tyneside-Software/hackathon-site",
+                    "--json", "number,title,url,state,body,labels",
+                ],
+                capture_output=True,
+                text=True,
+                timeout=20,
+                encoding="utf-8",
+                errors="replace",
+            )
+        except (OSError, subprocess.TimeoutExpired):
+            continue
+        if one.returncode != 0 or not one.stdout.strip():
+            continue
+        try:
+            row = json.loads(one.stdout)
+        except json.JSONDecodeError:
+            continue
+        if isinstance(row, dict):
+            _issues.append(row)
+    _issues_at = time.time()
+    return _issues
+
+
+def label_names(issue: dict) -> list[str]:
+    names = []
+    for label in issue.get("labels") or []:
+        if isinstance(label, dict):
+            name = str(label.get("name") or "")
+        else:
+            name = str(label)
+        if name:
+            names.append(name)
+    return names
+
+
+def match_issue(title: str, issues: list[dict]) -> dict | None:
+    want = title.lower().strip()
+    hits = [issue for issue in issues if str(issue.get("title") or "").lower().strip() == want]
+    if not hits:
+        return None
+    hits.sort(key=lambda issue: int(issue.get("number") or 0), reverse=True)
+    return hits[0]
+
+
+def radio_chatter(limit: int = 30) -> list[dict]:
+    raw = git(
+        [
+            "log",
+            f"-{limit}",
+            "-p",
+            "--format=%x1e%ct%x09%h%x09%s",
+            "origin/main",
+            "--",
+            "docs/radio/po.md",
+            "docs/radio/grok-dev-1.md",
+            "docs/radio/grok-dev-2.md",
+            "docs/radio/integrator.md",
+        ],
+        SITE,
+        timeout=60,
+    )
+    if not raw or raw.startswith("("):
+        return []
+    lane_file = {
+        "docs/radio/po.md": "po",
+        "docs/radio/grok-dev-1.md": "dev1",
+        "docs/radio/grok-dev-2.md": "dev2",
+        "docs/radio/integrator.md": "integrator",
+    }
+    items = []
+    for block in raw.split("\x1e"):
+        block = block.strip("\n")
+        if not block:
+            continue
+        head, _, patch = block.partition("\n")
+        parts = head.split("\t", 2)
+        if len(parts) != 3:
+            continue
+        ts, sha, subject = int(parts[0]), parts[1], parts[2]
+        files = re.findall(r"^diff --git a/(\S+)", patch, re.M)
+        lane = "integrator"
+        for path, name in lane_file.items():
+            if path in files:
+                lane = name
+                break
+        added = []
+        for line in patch.splitlines():
+            if (
+                line.startswith("+++")
+                or line.startswith("---")
+                or line.startswith("diff ")
+                or line.startswith("index ")
+                or line.startswith("@@")
+                or line.startswith("\\")
+            ):
+                continue
+            if line.startswith("+"):
+                added.append(line[1:])
+        body = "\n".join(added).strip()
+        if lane == "integrator" and len(body) > 2200:
+            start = body.find("## Now")
+            if start >= 0:
+                end = body.find("\n## ", start + 5)
+                body = body[start: end if end > 0 else start + 1600]
+            else:
+                body = body[:1600]
+            body = body.rstrip() + "\n\nThe rest of that order is in the Radios tab."
+        if not body:
+            body = subject
+        when, ago, _state = fmt_when(datetime.fromtimestamp(ts, timezone.utc))
+        items.append(
+            {
+                "id": sha,
+                "when": when,
+                "ago": ago,
+                "lane": lane,
+                "subject": subject,
+                "body": body,
+                "sha": sha,
+                "href": f"https://github.com/Tyneside-Software/hackathon-site/commit/{sha}",
+            }
+        )
+    return items
 
 
 def activity_chart(commits: list[dict], now_ts: int) -> str:
@@ -454,6 +805,348 @@ def activity_chart(commits: list[dict], now_ts: int) -> str:
     )
 
 
+def named_issue(text: str) -> int | None:
+    """The issue a dev radio names as next, such as 'Next: 798' or 'Next: #828'."""
+    match = re.search(r"Next:\s*#?(\d+)", text or "")
+    if not match:
+        return None
+    return int(match.group(1))
+
+
+def queue_state(item: dict, next_by_lane: dict[str, int | None], paused: set[int], stale: bool) -> str:
+    if stale or item["number"] in paused or item["section"] == "reservoir":
+        return "paused"
+    nxt = next_by_lane.get(item["lane"].lower())
+    if nxt is not None:
+        if item["number"] < nxt:
+            return "done"
+        if item["number"] == nxt:
+            return "next"
+        return "queued"
+    if item["is_next"]:
+        return "next"
+    return "queued"
+
+
+_progress_cache: dict[str, dict] = {}
+CODE_SUFFIXES = (".py", ".js", ".mjs", ".css", ".html", ".kt")
+
+
+def _apply_numstat(raw: str, total: int, points: list[tuple[int, int]], window_start: int) -> tuple[int, int]:
+    """Walk a git numstat log. Returns the new total and lines added inside the window."""
+    added_window = 0
+    ts = 0
+    for line in raw.splitlines():
+        if line.startswith("\x1e"):
+            if ts:
+                points.append((ts, total))
+            try:
+                ts = int(line[1:].strip() or "0")
+            except ValueError:
+                ts = 0
+            continue
+        parts = line.split("\t")
+        if len(parts) < 3 or not parts[2].endswith(CODE_SUFFIXES):
+            continue
+        try:
+            added = int(parts[0])
+            removed = int(parts[1])
+        except ValueError:
+            continue
+        total += added - removed
+        if ts >= window_start:
+            added_window += added
+    if ts:
+        points.append((ts, total))
+    return total, added_window
+
+
+def _sample_points(points: list[tuple[int, int]], count: int = 48) -> list[tuple[int, int]]:
+    if len(points) <= count:
+        return points
+    last = len(points) - 1
+    chosen = []
+    for index in range(count):
+        chosen.append(points[round(index * last / (count - 1))])
+    return chosen
+
+
+def code_progress(repo: Path) -> dict:
+    """Cumulative code lines on origin/main. Cached, then extended when main moves."""
+    empty = {"tip": "", "total": 0, "points": [], "added_3h": 0}
+    if not repo.is_dir():
+        return empty
+    tip = git(["rev-parse", "origin/main"], repo)
+    if not tip or tip.startswith("("):
+        return empty
+    cached = _progress_cache.get(str(repo))
+    if cached and cached.get("tip") == tip:
+        return cached
+    window_start = int(time.time()) - WINDOW_S
+    if cached and cached.get("tip"):
+        raw = git(
+            [
+                "log",
+                "--reverse",
+                "--pretty=format:%x1e%ct",
+                "--numstat",
+                f"{cached['tip']}..{tip}",
+            ],
+            repo,
+            timeout=60,
+        )
+        if raw.startswith("("):
+            return cached
+        points = list(cached.get("points_full") or [])
+        total, _added = _apply_numstat(raw, int(cached.get("total") or 0), points, window_start)
+    else:
+        raw = git(
+            ["log", "--reverse", "--pretty=format:%x1e%ct", "--numstat", "origin/main"],
+            repo,
+            timeout=120,
+        )
+        if not raw or raw.startswith("("):
+            return empty
+        points = []
+        total, _added = _apply_numstat(raw, 0, points, window_start)
+    recent = git(
+        ["log", "--since=3 hours ago", "--pretty=format:%x1e%ct", "--numstat", "origin/main"],
+        repo,
+        timeout=40,
+    )
+    added_3h = 0
+    if recent and not recent.startswith("("):
+        _ignored, added_3h = _apply_numstat(recent, 0, [], window_start)
+    result = {
+        "tip": tip,
+        "total": total,
+        "points_full": points,
+        "points": _sample_points(points),
+        "added_3h": added_3h,
+    }
+    _progress_cache[str(repo)] = result
+    return result
+
+
+def line_chart(series: list[tuple[str, str, list[tuple[int, int]]]]) -> str:
+    width, height = 720, 188
+    pad_l, pad_r, pad_t, pad_b = 52, 12, 14, 26
+    all_points = [point for _name, _colour, points in series for point in points]
+    if len(all_points) < 2:
+        return '<p class="fine">Not enough code history for a graph yet.</p>'
+    t0 = min(point[0] for point in all_points)
+    t1 = max(point[0] for point in all_points)
+    y_max = max(point[1] for point in all_points) or 1
+
+    def x_of(ts: int) -> float:
+        if t1 == t0:
+            return float(pad_l)
+        return pad_l + (ts - t0) / (t1 - t0) * (width - pad_l - pad_r)
+
+    def y_of(val: int) -> float:
+        return pad_t + (1 - val / y_max) * (height - pad_t - pad_b)
+
+    parts = [
+        f'<svg viewBox="0 0 {width} {height}" class="chart" role="img" '
+        f'aria-label="Code lines on main over time">'
+    ]
+    for frac in (0, 0.5, 1):
+        yy = y_of(int(y_max * frac))
+        parts.append(
+            f'<line x1="{pad_l}" y1="{yy:.1f}" x2="{width - pad_r}" y2="{yy:.1f}" stroke="#2a3544"/>'
+        )
+        parts.append(
+            f'<text x="4" y="{yy + 4:.1f}" fill="#94a3b8" font-size="10">{int(y_max * frac)}</text>'
+        )
+    for name, colour, points in series:
+        if len(points) < 2:
+            continue
+        drawn = " ".join(f"{x_of(ts):.1f},{y_of(val):.1f}" for ts, val in points)
+        parts.append(
+            f'<polyline fill="none" stroke="{colour}" stroke-width="2.4" points="{drawn}">'
+            f"<title>{html.escape(name)}</title></polyline>"
+        )
+    for frac, anchor in ((0, "start"), (0.5, "middle"), (1, "end")):
+        ts = int(t0 + (t1 - t0) * frac)
+        moment = datetime.fromtimestamp(ts, timezone.utc).astimezone()
+        parts.append(
+            f'<text x="{x_of(ts):.1f}" y="{height - 6}" fill="#94a3b8" font-size="10" '
+            f'text-anchor="{anchor}">{moment.strftime("%d %b %H:%M")}</text>'
+        )
+    parts.append("</svg>")
+    return "".join(parts)
+
+
+_play_at = 0.0
+_play_ok = False
+
+
+def box_has_play() -> bool:
+    """True when the box is serving the taxi game page, not an nginx 404."""
+    global _play_at, _play_ok
+    if time.time() - _play_at < 20:
+        return _play_ok
+    ok = False
+    try:
+        req = urllib.request.Request(
+            "http://100.65.94.5/play.html",
+            headers={"Cache-Control": "no-cache"},
+        )
+        with urllib.request.urlopen(req, timeout=4) as res:
+            chunk = res.read(500).decode("utf-8", "replace")
+            ok = res.status == 200 and "play-map" in chunk
+    except (OSError, urllib.error.URLError, TimeoutError, ValueError):
+        ok = False
+    _play_at = time.time()
+    _play_ok = ok
+    return ok
+
+
+def empire_has_money() -> bool:
+    if not API.is_dir():
+        return False
+    source = git(["show", "origin/main:app/empire.py"], API)
+    return "fare_in" in source and "driver_share" in source
+
+
+PAGE_SCRIPT = r"""
+(function () {
+  var catalogEl = document.getElementById("catalog");
+  if (!catalogEl) return;
+  var catalog = JSON.parse(catalogEl.textContent);
+  var slices = {};
+  catalog.slices.forEach(function (item) { slices[item.id] = item; });
+  var detail = document.getElementById("detail");
+  var find = document.getElementById("find");
+
+  function esc(text) {
+    return String(text == null ? "" : text).replace(/[&<>]/g, function (ch) {
+      return {"&": "&amp;", "<": "&lt;", ">": "&gt;"}[ch];
+    });
+  }
+
+  function showSlice(id) {
+    var item = slices[id];
+    if (!item || !detail) return;
+    sessionStorage.setItem("agents-open", id);
+    document.querySelectorAll("[data-slice].on").forEach(function (el) { el.classList.remove("on"); });
+    var btn = document.querySelector('[data-slice="' + id + '"]');
+    if (btn) {
+      btn.classList.add("on");
+      if (btn.hidden) btn.hidden = false;
+    }
+    var bits = ['<p class="seat">' + esc(item.kind) + " · " + esc(item.state) + "</p>"];
+    bits.push("<h3>" + esc((item.issue ? "#" + item.issue + " " : item.id + " ") + item.title) + "</h3>");
+    if (item.paused) {
+      bits.push('<p class="warn">Paused. The integrator told the lanes not to build this. The game page is the work.</p>');
+    }
+    if (item.lane) {
+      bits.push('<p class="fine">' + esc(item.lane) + (item.section ? " · " + esc(item.section) : "") + "</p>");
+    }
+    if (item.issue) {
+      var labelText = item.labels && item.labels.length ? item.labels.join(", ") : (item.labelText || "");
+      bits.push('<p class="fine">Issue ' + esc(item.issue) + (item.issueState ? " · " + esc(item.issueState) : "") + (labelText ? " · " + esc(labelText) : "") + "</p>");
+    }
+    if (item.href) {
+      bits.push('<p><a href="' + esc(item.href) + '" target="_blank" rel="noopener">Open on GitHub</a></p>');
+    }
+    if (item.sha) bits.push("<p class=\"fine\">Commit <code>" + esc(item.sha) + "</code></p>");
+    if (item.files) bits.push("<h3>Files</h3><pre class=\"prose\">" + esc(item.files) + "</pre>");
+    if (item.nextNote) bits.push("<h3>Named next in that queue</h3><pre class=\"prose\">" + esc(item.nextNote) + "</pre>");
+    bits.push("<h3>Order</h3><pre class=\"prose\">" + esc(item.order || item.title) + "</pre>");
+    if (item.body) bits.push("<h3>Issue text</h3><pre class=\"prose\">" + esc(item.body) + "</pre>");
+    detail.innerHTML = bits.join("");
+  }
+
+  function showRadio(key) {
+    sessionStorage.setItem("agents-tab", key);
+    document.querySelectorAll("[data-radio]").forEach(function (el) {
+      el.classList.toggle("on", el.getAttribute("data-radio") === key);
+    });
+    document.querySelectorAll("[data-pane]").forEach(function (el) {
+      el.hidden = el.getAttribute("data-pane") !== key;
+    });
+    var pane = document.querySelector('[data-pane="' + key + '"]');
+    if (pane) pane.scrollIntoView({block: "nearest"});
+  }
+
+  function showChat(id) {
+    var item = null;
+    catalog.chatter.forEach(function (row) { if (row.id === id) item = row; });
+    var box = document.getElementById("chat-read");
+    if (!item || !box) return;
+    sessionStorage.setItem("agents-chat", id);
+    document.querySelectorAll("[data-chat]").forEach(function (el) {
+      el.classList.toggle("on", el.getAttribute("data-chat") === id);
+    });
+    box.innerHTML = '<p class="fine">' + esc(item.when) + " · " + esc(item.ago) + " · " + esc(item.lane) + '</p><h3>' + esc(item.subject) + '</h3><p><a href="' + esc(item.href) + '" target="_blank" rel="noopener">' + esc(item.sha) + '</a></p><pre class="prose">' + esc(item.body) + "</pre>";
+  }
+
+  document.body.addEventListener("click", function (event) {
+    var slice = event.target.closest("[data-slice]");
+    if (slice) {
+      showSlice(slice.getAttribute("data-slice"));
+      var detailBox = document.getElementById("detail");
+      if (detailBox && window.matchMedia("(max-width: 980px)").matches) {
+        detailBox.scrollIntoView({behavior: "smooth", block: "start"});
+      }
+      return;
+    }
+    var chat = event.target.closest("[data-chat]");
+    if (chat) { showChat(chat.getAttribute("data-chat")); return; }
+    var tab = event.target.closest("[data-radio]");
+    if (tab) showRadio(tab.getAttribute("data-radio"));
+  });
+
+  if (find) {
+    find.addEventListener("input", function () {
+      var q = find.value.trim().toLowerCase();
+      document.querySelectorAll("[data-slice]").forEach(function (btn) {
+        var item = slices[btn.getAttribute("data-slice")];
+        var hay = ((item && (item.id + " " + item.title + " " + (item.order || "") + " " + (item.body || ""))) || "").toLowerCase();
+        btn.hidden = Boolean(q) && hay.indexOf(q) === -1;
+      });
+      document.querySelectorAll("[data-chat]").forEach(function (btn) {
+        var item = null;
+        catalog.chatter.forEach(function (row) { if (row.id === btn.getAttribute("data-chat")) item = row; });
+        var hay = item ? (item.subject + " " + item.body + " " + item.lane).toLowerCase() : "";
+        btn.hidden = Boolean(q) && hay.indexOf(q) === -1;
+      });
+    });
+  }
+
+  var open = sessionStorage.getItem("agents-open");
+  if (open && slices[open]) showSlice(open);
+  else if (slices.PLAN) showSlice("PLAN");
+  else {
+    var next = catalog.slices.filter(function (item) { return item.state === "next"; })[0];
+    if (next) showSlice(next.id);
+  }
+  showRadio(sessionStorage.getItem("agents-tab") || "po");
+  var chatId = sessionStorage.getItem("agents-chat");
+  if (chatId) showChat(chatId);
+  else if (catalog.chatter[0]) showChat(catalog.chatter[0].id);
+  var y = sessionStorage.getItem("agents-y");
+  if (y) scrollTo(0, Number(y));
+
+  if (location.protocol.indexOf("http") === 0) {
+    var rev = catalog.rev;
+    setInterval(function () {
+      fetch(location.href, {cache: "no-store"}).then(function (response) { return response.text(); }).then(function (text) {
+        var match = text.match(/<script type="application\/json" id="catalog">([\s\S]*?)<\/script>/);
+        if (!match) return;
+        var nextRev = JSON.parse(match[1]).rev;
+        if (nextRev !== rev) {
+          sessionStorage.setItem("agents-y", String(scrollY));
+          location.reload();
+        }
+      }).catch(function () {});
+    }, 20000);
+  }
+})();
+"""
+
+
 def build_page() -> str:
     refresh_origin()
     tip = git(["rev-parse", "--short", "origin/main"], SITE)
@@ -486,6 +1179,12 @@ def build_page() -> str:
         a_done.add(1)
     if registers_fleet:
         a_done.add(2)
+    for key in ("dev1", "dev2", "integrator"):
+        a_done |= claimed_span(radios[key], "A")
+        u_done |= claimed_span(radios[key], "U")
+    shas = {}
+    for key in radios:
+        shas.update(slice_shas(radios[key]))
     u_nums = series_numbers(blurbs, "U")
     a_nums = series_numbers(blurbs, "A")
     u_next = min((num for num in u_nums if num not in u_done), default=None)
@@ -562,11 +1261,13 @@ def build_page() -> str:
     for row in commits[:18]:
         when, ago, _state = fmt_when(datetime.fromtimestamp(row["ts"], timezone.utc))
         dot = colour.get(row["lane"], "#94a3b8")
+        repo = "hackathon-api" if row["repo"] == "api" else "hackathon-site"
+        href = f"https://github.com/Tyneside-Software/{repo}/commit/{row['sha']}"
         recent_rows.append(
             "<li>"
             f'<i class="dot" style="background:{dot}"></i>'
             f"<time>{html.escape(when)} · {html.escape(ago)}</time>"
-            f"<code>{html.escape(row['sha'])}</code>"
+            f'<a href="{href}" target="_blank" rel="noopener"><code>{html.escape(row["sha"])}</code></a>'
             f"<span>{html.escape(row['subject'])}</span>"
             f"<em>{html.escape(row['lane'])}</em>"
             "</li>"
@@ -587,7 +1288,7 @@ def build_page() -> str:
         else:
             state = "wait"
         po_cells.append(
-            f'<i class="chip {state}" title="{html.escape(str(number) + " " + title)}">{number}</i>'
+            f'<button type="button" class="chip {state}" data-slice="P{number}">{number}</button>'
         )
 
     tracker_steps = (
@@ -612,12 +1313,346 @@ def build_page() -> str:
         )
     )
 
+    preamble, plan_items, plan_sections = parse_po_plan(radios["po"])
+    issues = issue_index({item["number"] for item in plan_items})
+    catalog_slices = []
+    for kind, nums, done, nxt in (
+        ("U", u_nums, u_done, u_next),
+        ("A", a_nums, a_done, a_next),
+    ):
+        repo = "hackathon-api" if kind == "A" else "hackathon-site"
+        for num in nums:
+            if num in done:
+                state = "done"
+            elif nxt == num:
+                state = "next"
+            else:
+                state = "wait"
+            sid = f"{kind}{num}"
+            sha = shas.get(sid, "")
+            href = (
+                f"https://github.com/Tyneside-Software/{repo}/commit/{sha}" if sha else ""
+            )
+            catalog_slices.append(
+                {
+                    "id": sid,
+                    "kind": kind,
+                    "state": state,
+                    "title": blurbs.get((kind, num), ""),
+                    "order": blurbs.get((kind, num), ""),
+                    "href": href,
+                    "sha": sha,
+                    "issue": None,
+                    "issueState": "",
+                    "labels": [],
+                    "body": "",
+                }
+            )
+    for number, title in titles:
+        if number in po_skip:
+            state = "skip"
+        elif number <= po_opened:
+            state = "done"
+        elif number == po_opened + 1:
+            state = "next"
+        else:
+            state = "wait"
+        issue = match_issue(title, issues)
+        labels = label_names(issue) if issue else []
+        href = str(issue.get("url") or "") if issue else (
+            "https://github.com/Tyneside-Software/hackathon-site/issues?q="
+            + re.sub(r"\s+", "+", title)
+        )
+        catalog_slices.append(
+            {
+                "id": f"P{number}",
+                "kind": "Issue",
+                "state": state,
+                "title": title,
+                "order": title,
+                "href": href,
+                "sha": "",
+                "issue": int(issue["number"]) if issue else None,
+                "issueState": str(issue.get("state") or "") if issue else "",
+                "labels": labels,
+                "body": str(issue.get("body") or "") if issue else "",
+            }
+        )
+
+    paused = paused_issue_numbers(radios["integrator"]) | paused_issue_numbers(radios["po"])
+    game_text = section_between(radios["integrator"], "## Game page", "## Account fleet")
+    cars = empire_car_count()
+    has_money = empire_has_money()
+    has_play = path_on_main(SITE, "play.html")
+    play_on_box = box_has_play()
+    site_lines = code_progress(SITE)
+    api_lines = code_progress(API)
+    next_by_lane = {
+        "grok-dev-1": named_issue(radios["dev1"]),
+        "grok-dev-2": named_issue(radios["dev2"]),
+    }
+    po_names_play = "play.html" in radios["po"]
+    dev1_empty = "queue empty" in radios["dev1"].lower()
+    dev2_empty = "queue empty" in radios["dev2"].lower()
+    by_number = {}
+    for issue in issues:
+        try:
+            by_number[int(issue.get("number") or 0)] = issue
+        except (TypeError, ValueError):
+            continue
+    catalog_slices.append(
+        {
+            "id": "PLAN",
+            "kind": "Plan",
+            "state": "planned",
+            "title": "Ten taxis on play.html, with in-game money",
+            "order": game_text or "The game-page order is not in the integrator radio.",
+            "href": "https://github.com/Tyneside-Software/hackathon-site/blob/main/docs/TAXI.md",
+            "sha": "",
+            "issue": None,
+            "issueState": "",
+            "labels": [],
+            "body": "",
+            "paused": False,
+            "lane": "Product owner designs the slices. The devs build them.",
+            "section": "game page",
+            "files": "One dev owns play.html and its script. The other owns the API fleet of 10 and the money on GET /v1/empire.",
+            "nextNote": "",
+            "labelText": "",
+        }
+    )
+    row_html: dict[str, list[str]] = {}
+    paused_count = 0
+    unfinished_by: dict[str, int] = {}
+    stale_list = not po_names_play
+    for item in plan_items:
+        issue = by_number.get(item["number"]) or match_issue(item["title"], issues)
+        labels = label_names(issue) if issue else []
+        label_text = item["labels"]
+        state = queue_state(item, next_by_lane, paused, stale_list)
+        is_paused = state == "paused"
+        if is_paused:
+            paused_count += 1
+        elif item["section"] == "queue" and state in {"next", "queued"}:
+            unfinished_by[item["lane"]] = unfinished_by.get(item["lane"], 0) + 1
+        sid = f"Q{item['number']}"
+        href = str(issue.get("url") or "") if issue else (
+            f"https://github.com/Tyneside-Software/hackathon-site/issues/{item['number']}"
+        )
+        catalog_slices.append(
+            {
+                "id": sid,
+                "kind": item["lane"],
+                "state": state,
+                "title": item["title"],
+                "order": item["title"],
+                "href": href,
+                "sha": "",
+                "issue": item["number"],
+                "issueState": str(issue.get("state") or "") if issue else "",
+                "labels": labels,
+                "body": str(issue.get("body") or "") if issue else "",
+                "paused": is_paused,
+                "lane": item["lane"],
+                "section": item["section"],
+                "files": item["files"],
+                "nextNote": item["next"],
+                "labelText": label_text,
+            }
+        )
+        row_html.setdefault(item["lane"], []).append(
+            f'<button type="button" class="plan-row {state}" data-slice="{sid}">'
+            f'<span class="num">#{item["number"]}</span>'
+            f'<span class="title">{html.escape(item["title"])}</span>'
+            f'<span class="badge">{html.escape(state)}</span>'
+            "</button>"
+        )
+    plan_html = []
+    if preamble:
+        plan_html.append(f'<p class="fine">{html.escape(preamble)}</p>')
+    for sec in plan_sections:
+        if sec["section"] == "self":
+            jobs = "".join(f"<li>{html.escape(job)}</li>" for job in sec["jobs"])
+            catalog_slices.append(
+                {
+                    "id": "PO-NEXT",
+                    "kind": "Product owner",
+                    "state": "planned",
+                    "title": "Next for me",
+                    "order": "\n".join(sec["jobs"]) or "No jobs listed.",
+                    "href": "https://github.com/Tyneside-Software/hackathon-site/blob/main/docs/radio/po.md",
+                    "sha": "",
+                    "issue": None,
+                    "issueState": "",
+                    "labels": [],
+                    "body": "",
+                    "paused": False,
+                    "lane": "Product owner",
+                    "section": "next for me",
+                    "files": "",
+                    "nextNote": "",
+                    "labelText": "",
+                }
+            )
+            plan_html.append(
+                "<section class=\"board\">"
+                f"<h3>{html.escape(sec['lane'])}</h3>"
+                f"<ul class=\"steps\">{jobs}</ul>"
+                '<button type="button" class="pin" data-slice="PO-NEXT">Open this list</button>'
+                "</section>"
+            )
+            continue
+        rows = row_html.get(sec["lane"], [])
+        empty = (
+            '<p class="fine">No issue lines in this list yet.</p>'
+            if not rows
+            else "<div class=\"plan-list\">" + "".join(rows) + "</div>"
+        )
+        named = sec["next"]
+        if sec["section"] == "reservoir":
+            heading = f"{sec['lane']} · {sec['count']} waiting · target 24"
+        else:
+            left = unfinished_by.get(sec["lane"], 0)
+            heading = f"{sec['lane']} · {left} unfinished · {sec['count']} listed · target 16"
+        plan_html.append(
+            "<section class=\"board\">"
+            f"<h3>{html.escape(heading)}</h3>"
+            f"<p class=\"fine\">{html.escape(sec['files'])}</p>"
+            + (f"<p class=\"next\"><span>Next</span> {html.escape(named)}</p>" if named else "")
+            + empty
+            + "</section>"
+        )
+    car_label = f"{cars} cars" if cars is not None else "an unknown fleet"
+    queue_counts = [sec for sec in plan_sections if sec["section"] == "queue"]
+    situation_bits = [
+        f"GitHub main is {tip}. The API on main starts {car_label}. "
+        + ("play.html is on main." if has_play else "play.html is not on main yet."),
+        "The plan is a taxi-only page: the map, ten taxis, and the in-game money in pence. Phones and buses stay on the ops map.",
+    ]
+    if po_names_play:
+        listed = ", ".join(
+            f"{sec['lane']} {unfinished_by.get(sec['lane'], 0)} unfinished of {sec['count']} listed"
+            for sec in queue_counts
+        ) or "no queue headings"
+        reservoir_n = next((sec["count"] for sec in plan_sections if sec["section"] == "reservoir"), 0)
+        situation_bits.append(
+            f"The product owner queue names play.html. {listed}. "
+            f"Each dev is aimed at 16 unfinished. The reservoir has {reservoir_n} of 24."
+        )
+        situation_bits.append(
+            f"Code on main: site {site_lines['total']} lines, API {api_lines['total']} lines. "
+            f"In the last 3 hours the site added {site_lines['added_3h']} code lines and the API added {api_lines['added_3h']}."
+        )
+    else:
+        situation_bits.append(
+            f"The product owner queue does not name play.html. It lists {len(plan_items)} issues, "
+            f"and {paused_count} of those numbers are paused."
+        )
+    for seat, empty, needle in (
+        ("grok-dev-1", dev1_empty, "grok-dev-1"),
+        ("grok-dev-2", dev2_empty, "grok-dev-2"),
+    ):
+        count = next((sec["count"] for sec in queue_counts if sec["lane"].lower() == needle), 0)
+        if empty and count:
+            situation_bits.append(
+                f"{seat}'s last radio says queue empty. main now lists {count} slices for that seat, so the next continue should build them."
+            )
+        elif empty:
+            situation_bits.append(
+                f"{seat}'s last radio says queue empty, and that queue has no issue lines yet."
+            )
+    situation_html = "".join(f"<li>{html.escape(bit)}</li>" for bit in situation_bits)
+    now_rows_html = []
+    for cells in markdown_table(orders):
+        lane, state, nxt = (cells + ["", "", ""])[:3]
+        now_rows_html.append(
+            "<tr>"
+            f"<th>{html.escape(lane)}</th>"
+            f"<td>{html.escape(state)}</td>"
+            f"<td>{html.escape(nxt)}</td>"
+            "</tr>"
+        )
+    now_table = (
+        '<table class="now"><thead><tr><th>Lane</th><th>State</th><th>Next</th></tr></thead><tbody>'
+        + "".join(now_rows_html)
+        + "</tbody></table>"
+    )
+    dev_full = all(unfinished_by.get(sec["lane"], 0) >= 16 for sec in queue_counts) and bool(queue_counts)
+    reservoir_n = next((sec["count"] for sec in plan_sections if sec["section"] == "reservoir"), 0)
+    milestones = [
+        (has_empire, "The account fleet lives in the API and keeps running when the browser is closed."),
+        (cars == 10, f"A new account starts {car_label}. The plan is 10, T1 to T10."),
+        (has_play, "play.html is on GitHub main. The ops map keeps phones, buses, and waypoints."),
+        (play_on_box, "The box is serving the taxi game at http://100.65.94.5/play.html."),
+        (has_money, "The empire feed includes the money lines, in integer pence."),
+        (dev_full and reservoir_n >= 24, "Each dev has 16 unfinished slices, and the reservoir has 24."),
+    ]
+    depth_rows = []
+    for sec in queue_counts:
+        depth_rows.append((sec["lane"], unfinished_by.get(sec["lane"], 0), 16))
+    depth_rows.append(("Reservoir", reservoir_n, 24))
+    depth_html = "".join(
+        f"<p class=\"fine\">{html.escape(label)}</p>{bar(done, total)}"
+        for label, done, total in depth_rows
+    )
+    play_sentence = (
+        'The taxi game is on the box: <a href="http://100.65.94.5/play.html">http://100.65.94.5/play.html</a>.'
+        if play_on_box
+        else 'The taxi game link is <a href="http://100.65.94.5/play.html">http://100.65.94.5/play.html</a>. The box is not serving that page yet.'
+    )
+    line_svg = line_chart(
+        [
+            ("Site", "#fcd34d", site_lines["points"]),
+            ("API", "#38bdf8", api_lines["points"]),
+        ]
+    )
+    milestone_html = "".join(
+        f'<li class="{"done" if ok else "wait"}">{html.escape(text)}</li>'
+        for ok, text in milestones
+    )
+    game_steps_done = sum(1 for ok, _text in milestones if ok)
+
+    chatter = radio_chatter()
+    lane_name = {agent["key"]: agent["name"] for agent in AGENTS}
+    chat_buttons = []
+    for item in chatter:
+        chat_buttons.append(
+            "<li>"
+            f'<button type="button" class="chat-btn" data-chat="{html.escape(item["id"])}" '
+            f'style="--lane:{colour.get(item["lane"], "#94a3b8")}">'
+            f'<time>{html.escape(item["when"])}</time>'
+            f'<strong>{html.escape(lane_name.get(item["lane"], item["lane"]))}</strong>'
+            f'<span>{html.escape(item["ago"])}</span>'
+            f'<em>{html.escape(item["subject"])}</em>'
+            "</button></li>"
+        )
+    radio_panes = []
+    tab_buttons = []
+    for agent in AGENTS:
+        hidden = "" if agent["key"] == "po" else " hidden"
+        radio_panes.append(
+            f'<pre class="prose radio-pane" data-pane="{agent["key"]}"{hidden}>'
+            f'{html.escape(radios[agent["key"]])}</pre>'
+        )
+        tab_buttons.append(
+            f'<button type="button" data-radio="{agent["key"]}" style="--lane:{agent["colour"]}">'
+            f'{html.escape(agent["name"])}</button>'
+        )
+    rev = hashlib.sha256(
+        "\n".join(radios.values()).encode("utf-8", errors="replace")
+    ).hexdigest()[:12]
+    catalog = {
+        "rev": f"{tip}-{rev}-{len(u_done)}-{len(a_done)}-{po_opened}",
+        "slices": catalog_slices,
+        "chatter": chatter,
+    }
+    catalog_json = json.dumps(catalog, ensure_ascii=False).replace("<", "\\u003c")
+
     return f"""<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta http-equiv="refresh" content="20">
   <title>Agents · Tyneside</title>
   <style>
     :root {{
@@ -664,6 +1699,7 @@ def build_page() -> str:
     .bar-label {{ margin: 0.3rem 0 0; font-variant-numeric: tabular-nums; }}
     .steps {{ margin: 0.4rem 0 0; padding-left: 1.1rem; }}
     .steps li.done {{ color: #86efac; }}
+    .steps li.wait {{ color: #fde68a; }}
     .steps li.blocked {{ color: #fca5a5; }}
     .fine {{ color: var(--muted); margin: 0.45rem 0 0; font-size: 0.88rem; }}
     .pace {{
@@ -744,10 +1780,159 @@ def build_page() -> str:
     .commits em {{ color: var(--muted); font-style: normal; }}
     code {{ color: #fcd34d; }}
     a {{ color: #fcd34d; }}
+    header.top {{
+      position: sticky; top: 0; z-index: 4;
+      background: rgba(12, 18, 25, 0.94);
+      backdrop-filter: blur(8px);
+      margin: -1.4rem -1.1rem 0.4rem;
+      padding: 0.8rem 1.1rem 0.7rem;
+      border-bottom: 1px solid var(--border);
+    }}
+    .find {{
+      width: min(28rem, 100%);
+      margin: 0.4rem 0 0;
+      background: #0a1016;
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.45rem 0.6rem;
+      font: inherit;
+    }}
+    .tabs, .chat-list {{ display: flex; gap: 0.4rem; flex-wrap: wrap; }}
+    .tabs button, .chat-btn {{
+      background: var(--panel);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--lane, var(--border));
+      border-radius: 8px;
+      font: inherit;
+      cursor: pointer;
+      text-align: left;
+    }}
+    .tabs button {{ padding: 0.35rem 0.7rem; }}
+    .tabs button.on, .chat-btn.on, .chip.on {{ outline: 2px solid #fcd34d; }}
+    .reader {{
+      margin-top: 0.6rem;
+      max-height: 70vh;
+      overflow: auto;
+      background: #0a1016;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 0.8rem 1rem;
+    }}
+    .prose {{
+      white-space: pre-wrap;
+      font-family: Consolas, "Segoe UI", sans-serif;
+      font-size: 0.92rem;
+      line-height: 1.45;
+      margin: 0;
+    }}
+    .split {{ display: grid; grid-template-columns: minmax(16rem, 22rem) 1fr; gap: 0.8rem; align-items: start; }}
+    .chat-list {{ display: block; max-height: 70vh; overflow: auto; margin: 0; padding: 0; list-style: none; }}
+    .chat-btn {{
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 0.15rem 0.6rem;
+      width: 100%;
+      margin: 0 0 0.35rem;
+      padding: 0.45rem 0.6rem;
+    }}
+    .chat-btn em {{ grid-column: 1 / -1; color: var(--muted); font-style: normal; }}
+    .explorer {{ display: grid; grid-template-columns: 1fr minmax(18rem, 26rem); gap: 0.8rem; align-items: start; }}
+    .detail {{
+      position: sticky; top: 7.2rem;
+      max-height: calc(100vh - 8rem);
+      overflow: auto;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 0.9rem 1rem;
+    }}
+    .detail h3 {{ margin: 0.8rem 0 0.3rem; color: var(--heading); }}
+    .chip {{ cursor: pointer; font: inherit; }}
+    button.chip {{ width: 1.7rem; height: 1.7rem; padding: 0; }}
+    .shell {{
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(18rem, 28rem);
+      gap: 0.9rem;
+      align-items: start;
+    }}
+    .situation {{
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 0.2rem 1rem 0.8rem;
+    }}
+    .situation li {{ margin: 0.35rem 0; }}
+    table.now {{
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }}
+    table.now th, table.now td {{
+      text-align: left;
+      vertical-align: top;
+      padding: 0.55rem 0.7rem;
+      border-bottom: 1px solid var(--border);
+    }}
+    table.now th {{ width: 8.5rem; color: #fcd34d; font-weight: 600; }}
+    .brief {{ max-height: 16rem; overflow: auto; background: #0a1016; border-radius: 10px; padding: 0.7rem 0.8rem; }}
+    .plan-list {{ display: flex; flex-direction: column; gap: 0.28rem; }}
+    .plan-row {{
+      display: grid;
+      grid-template-columns: 4.4rem minmax(0, 1fr) auto;
+      gap: 0.55rem;
+      align-items: baseline;
+      width: 100%;
+      text-align: left;
+      font: inherit;
+      color: var(--text);
+      background: #0a1016;
+      border: 1px solid var(--border);
+      border-left: 4px solid #64748b;
+      border-radius: 8px;
+      padding: 0.4rem 0.6rem;
+      cursor: pointer;
+    }}
+    .plan-row .num {{ color: #fcd34d; font-variant-numeric: tabular-nums; }}
+    .plan-row .title {{ min-width: 0; }}
+    .plan-row .badge {{
+      color: var(--muted);
+      font-size: 0.72rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }}
+    .plan-row.next {{ border-left-color: #f59e0b; }}
+    .plan-row.paused {{ border-left-color: #f87171; }}
+    .plan-row.queued {{ border-left-color: #38bdf8; }}
+    .plan-row.done {{ border-left-color: #4ade80; }}
+    .plan-row.on {{ outline: 2px solid #fcd34d; }}
+    .warn {{
+      color: #fecaca;
+      background: rgba(248, 113, 113, 0.12);
+      border-radius: 8px;
+      padding: 0.4rem 0.55rem;
+    }}
+    .pin {{
+      margin-top: 0.5rem;
+      font: inherit;
+      color: #0c1219;
+      background: #fcd34d;
+      border: 0;
+      border-radius: 8px;
+      padding: 0.4rem 0.7rem;
+      cursor: pointer;
+    }}
     @media (max-width: 980px) {{
-      .strategy, .grid {{ grid-template-columns: 1fr; }}
+      .strategy, .grid, .split, .explorer, .shell {{ grid-template-columns: 1fr; }}
       .commits li {{ grid-template-columns: 0.7rem 1fr; }}
       .commits time, .commits em {{ grid-column: 2; }}
+      .detail {{ position: static; max-height: none; }}
+      .plan-row {{ grid-template-columns: 4.4rem minmax(0, 1fr); }}
+      .plan-row .badge {{ grid-column: 2; }}
     }}
   </style>
 </head>
@@ -756,16 +1941,46 @@ def build_page() -> str:
     <header class="top">
       <p class="kicker">Tyneside · four agents</p>
       <h1>Hackathon dashboard</h1>
-      <p class="built">Built {html.escape(built_label)} from GitHub <code>main</code> at <code>{html.escape(tip)}</code>. This page reloads every 20 seconds. A green chip is on main. An amber chip is the next slice.</p>
+      <p class="built">Built {html.escape(built_label)} from GitHub <code>main</code> at <code>{html.escape(tip)}</code>. The page keeps your place and reloads when the radios change. Click a chip or a note to read it.</p>
       <nav class="jumps">
+        <a href="#situation">Going on</a>
+        <a href="#plan">Planned</a>
         <a href="#strategy">Strategy</a>
-        <a href="#now">Right now</a>
-        <a href="#recent">Recent</a>
-        <a href="#slices">Slices</a>
+        <a href="#now">Lanes</a>
+        <a href="#radios">Radios</a>
+        <a href="#chatter">Chatter</a>
+        <a href="#slices">History</a>
       </nav>
+      <input class="find" id="find" type="search" placeholder="Find a slice, an issue, or a radio note" aria-label="Find">
     </header>
 
+    <div class="shell">
+    <div class="column">
+
+    <h2 class="band" id="situation">What's going on</h2>
+    <section class="situation"><ul>{situation_html}</ul></section>
+    <h2 class="band">Orders on main</h2>
+    {now_table}
+
+    <h2 class="band" id="plan">What's planned</h2>
+    <section class="board">
+      <h3>The taxi game</h3>
+      <p class="fine">This is the order. Click the button to keep it in the detail panel. Each issue below opens its GitHub text.</p>
+      <pre class="prose brief">{html.escape(game_text or "The game-page order is not in the integrator radio.")}</pre>
+      <button type="button" class="pin" data-slice="PLAN">Open the game order</button>
+    </section>
+    {''.join(plan_html)}
+
     <h2 class="band" id="strategy">Strategy</h2>
+    <section class="board">
+      <h3>The three products</h3>
+      <ol class="steps">
+        <li class="blocked">Tracker. Many phones, children, cars, and other things, linked to many people. Issues 22 and 29 stay blocked. This is not the open work.</li>
+        <li class="done">Booking office. office.html is the company desk, live on the box. The company ledger stays off the game. Further office slices are waiting. This is not the open work.</li>
+        <li class="{'done' if play_on_box else 'wait'}">Empire game. play.html is ten taxis and the in-game money. This is the open work. {play_sentence}</li>
+      </ol>
+      <p class="fine">GitHub site <code>{html.escape(tip)}</code>. The radio last recorded the box at <code>{html.escape(checked)}</code>. {play_sentence}</p>
+    </section>
     <section class="strategy">
       <article class="objective">
         <h3>Tracker</h3>
@@ -780,24 +1995,42 @@ def build_page() -> str:
         <p class="fine">{html.escape(office_note)} Further office slices are waiting. They are not the open work.</p>
       </article>
       <article class="objective map">
-        <h3>Empire</h3>
-        <p class="why">An account, then that account's taxis run on the Linux box, with a trail and a waiting fare.</p>
-        {bar(empire_done, empire_total)}
-        <p class="fine">Map {len(u_done)} / {len(u_nums)}. API {len(a_done)} / {len(a_nums)}. Issues reached {po_opened} / {po_total}.</p>
+        <h3>Empire game</h3>
+        <p class="why">Ten taxis on play.html, with the in-game money in pence. The ops map is a different page.</p>
+        {bar(game_steps_done, len(milestones))}
+        <ol class="steps">{milestone_html}</ol>
+        <p class="fine">Account-fleet history: map {len(u_done)} / {len(u_nums)}. API {len(a_done)} / {len(a_nums)}. Issue titles reached {po_opened} / {po_total}.</p>
         <div class="objective api" style="padding:0.7rem 0 0;border:0;background:transparent">
-          <p class="fine">Map</p>
-          {bar(len(u_done), len(u_nums))}
-          <p class="fine">API</p>
-          {bar(len(a_done), len(a_nums))}
+          <p class="fine">Queue depth</p>
+          {depth_html}
         </div>
         <p class="fine">{empire_box}</p>
       </article>
+    </section>
+    <section class="board">
+      <h3>Code on main</h3>
+      <p class="pace"><span><strong>{site_lines['total']}</strong> site lines</span><span><strong>{api_lines['total']}</strong> API lines</span><span>Last 3 hours: site +{site_lines['added_3h']}, API +{api_lines['added_3h']}</span></p>
+      <p class="legend"><span><i style="background:#fcd34d"></i>Site</span><span><i style="background:#38bdf8"></i>API</span></p>
+      <p class="fine">Python, JavaScript, CSS, HTML, and Kotlin. Docs are not in this count. The line is the running total on main.</p>
+      {line_svg}
     </section>
 
     <h2 class="band" id="now">Right now</h2>
     <section class="grid">
       {''.join(cards)}
     </section>
+
+    <h2 class="band" id="radios">Radios</h2>
+    <p class="fine">The four files on <code>main</code>, in the words last merged. This is what each session is saying now.</p>
+    <div class="tabs">{''.join(tab_buttons)}</div>
+    <div class="reader">{''.join(radio_panes)}</div>
+
+    <h2 class="band" id="chatter">Chatter</h2>
+    <p class="fine">Each radio note, newest first. The added words are what that commit said.</p>
+    <div class="split">
+      <ol class="chat-list">{''.join(chat_buttons)}</ol>
+      <article class="detail" id="chat-read"><p class="fine">Choose a note.</p></article>
+    </div>
 
     <h2 class="band" id="recent">Recent</h2>
     <p class="pace"><span><strong>{in_hour}</strong> commits in the last hour</span><span><strong>{in_window}</strong> in the last 3 hours</span></p>
@@ -812,7 +2045,8 @@ def build_page() -> str:
       {''.join(recent_rows)}
     </ol>
 
-    <h2 class="band" id="slices">Account fleet slices</h2>
+    <h2 class="band" id="slices">Account-fleet history</h2>
+    <p class="fine">Click a number. The detail panel shows the order for that slice. Green is on main, amber is the next unfinished number, grey is skipped.</p>
     <section class="board">
       <h3>Map · U1 to U{u_nums[-1] if u_nums else 0}</h3>
       <div class="chips">{chips("U", u_nums, u_done, u_next, blurbs)}</div>
@@ -822,13 +2056,20 @@ def build_page() -> str:
       <div class="chips">{chips("A", a_nums, a_done, a_next, blurbs)}</div>
     </section>
     <section class="board">
-      <h3>Issues · product owner · last title {html.escape(po_title or "none yet")}</h3>
+      <h3>Issue titles · last named {html.escape(po_title or "none yet")}</h3>
       <div class="chips">{''.join(po_cells)}</div>
       <p class="fine">{html.escape(po_note)}</p>
     </section>
 
-    <p class="built">Public site <a href="https://hackathon.tyneside.software/">hackathon.tyneside.software</a>. Play on the box when it has this map: <a href="http://100.65.94.5/app/">http://100.65.94.5/app/</a>. Orders live in <code>docs/radio/integrator.md</code>.</p>
+    <p class="built">Public site <a href="https://hackathon.tyneside.software/">hackathon.tyneside.software</a>. Ops map <a href="http://100.65.94.5/app/">http://100.65.94.5/app/</a>. {play_sentence} Orders live in <code>docs/radio/integrator.md</code>.</p>
+    </div>
+    <article class="detail" id="detail"><p class="fine">Click a planned issue or a numbered slice. The GitHub text opens here.</p></article>
+    </div>
   </main>
+  <script type="application/json" id="catalog">{catalog_json}</script>
+  <script>
+{PAGE_SCRIPT}
+  </script>
 </body>
 </html>
 """
@@ -836,16 +2077,21 @@ def build_page() -> str:
 
 def publish() -> str:
     global _page
+    page = build_page()
     with _lock:
-        page = build_page()
         _page = page
-        OUT.write_text(page, encoding="utf-8")
-        return page
+    OUT.write_text(page, encoding="utf-8")
+    return page
 
 
 class Handler(BaseHTTPRequestHandler):
     def do_GET(self) -> None:  # noqa: N802
-        body = publish().encode("utf-8")
+        # The background thread rebuilds the page. A click should not wait on git.
+        with _lock:
+            cached = _page
+        if not cached or "What's planned" not in cached:
+            cached = publish()
+        body = cached.encode("utf-8")
         self.send_response(200)
         self.send_header("Content-Type", "text/html; charset=utf-8")
         self.send_header("Cache-Control", "no-store")
