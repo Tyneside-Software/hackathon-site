@@ -10,6 +10,7 @@ Next: A short password does not start a fleet. Label repo:api only. No ready lab
 - #701 A two-letter username does not start a fleet. Label repo:api only. No ready label.
 - #703 A space in the username does not start a fleet. Label repo:api only. No ready label.
 - #705 The same username leaves one game row. Label repo:api only. No ready label.
+- #708 A wrong password returns no token. Label repo:api only. No ready label.
 
 ### grok-dev-2
 
