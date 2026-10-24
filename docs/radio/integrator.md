@@ -26,9 +26,9 @@ The office and the empire are the same booking desk. `office.html` is the real c
 
 | Lane | State | Next slice |
 |------|--------|------------|
-| Product owner | Master has set the short-term priority: the taxi game UI. The lists now in `po.md` (password checks, and the `app/` map with phones and buses) are the wrong work. Park them. | This turn, about 30 minutes, design `play.html` and the 10-car game below. Replace both dev queues and refill the reservoir. Leave `## Next for me`. Do not stop after one issue. |
-| grok-dev-1 | A1 to A32 are on `main`. Do not rebuild the three-car fleet as if it were still the goal. | Do the new grok-dev-1 queue in `po.md` after the product owner posts the 10-car game. About 30 minutes, one pull request each. If that queue is not on `main` yet, say `queue empty`, pull once more, then stop. Do not invent the slices. Do not keep doing the short-password list. |
-| grok-dev-2 | U18 to U32 and the phones-and-buses list in `po.md` wait. The game is not `app/`. | Do the new grok-dev-2 queue in `po.md` for `play.html`. About 30 minutes, one pull request each. If that queue is not on `main` yet, say `queue empty`, pull once more, then stop. Do not keep editing the ops map. |
+| Product owner | The turns after `6edbbb3` were the wrong work. `po.md` at `1f73f49` still assigns password checks and `app/map.js`, including three cars, and the reservoir is office slices. Issues #718, #720, #722, #724, #726, #730, #732, #734, #736, #738, and #740 through #756 are paused. #724, #734, and #738 describe three cars. That contradicts the ten-taxi game. | This turn, about 30 minutes, park that list in `po.md` and replace both queues. Design `play.html` and the 10-car game in `## Game page`. At least 16 unfinished slices for each dev, and 24 in the reservoir. Leave `## Next for me`. Do not open another three-car issue, another `app/` issue, or another office issue. |
+| grok-dev-1 | Stopped correctly. `0ef3b73` says `queue empty`. A1 to A32 stay done. Do not build #718, #720, #722, #724, #726, #730, or #732. Do not start #740 to #756. | The 10-car queue is not on `main`. Say `queue empty`, pull once more, then stop. Do not invent the slices. Do not start a three-car test. |
+| grok-dev-2 | Stopped correctly. `e6badc3` says the ops map is paused and `queue empty`. The depot pin `7b195ee` is done. Do not build #734, #736, or #738. Do not start #740 to #756. | The `play.html` queue is not on `main`. Say `queue empty`, pull once more, then stop. Do not edit `app/map.js` for this game. |
 
 Do not redo a slice that is already on `main`. Do not start the reservoir.
 
@@ -44,6 +44,8 @@ The page shows in-game money as it changes: fares earned, and the game costs alr
 
 The product owner writes at least 16 unfinished slices for each dev, and 24 in the reservoir, all for this game page. Name the files. One dev should own `play.html` and its script. The other should own the API fleet of 10 and the money figures on `GET /v1/empire`. Do not give both the same file. Say in the radio that the old `app/` queue is paused. Leave `## Next for me`.
 
+`po.md` at `1f73f49` is not that queue. Issues #718 through #738 and #740 through #756 stay paused. Do not build a rule that an account has three cars, or that the map never draws a fourth taxi. Do not open the office waiting list.
+
 The empire is a real-time game. One real second is one game second. There is no faster clock. When OSRM returns a duration, that duration is the journey. The car moves along the route as those seconds pass. When OSRM does not answer, the car moves in a straight line at 30 miles per hour, the built-up speed limit, and the page says `OSRM unavailable`. The account fleet does not use the old 20-second offer rule. A car finishes, waits four seconds at the depot, then takes the next fare. Each trip is inside the circle, not Berwick. The checked day stays −1120. The company desk is unchanged.
 
 GitHub Pages publishes https://hackathon.tyneside.software from `main` on every push. The home page and `progress.html` must describe that `main`. The box site last checked was `ff1e142`. `/health` was `0.1.27`. `check.ps1` printed `CHECK-OK`. The board was 50 cards. Map clicks do not add a waypoint unless Place stops is on. This note is orders only. It is not a deploy.
@@ -52,7 +54,7 @@ GitHub Pages publishes https://hackathon.tyneside.software from `main` on every 
 
 This is the objective. It replaces the fare-card queue and the map slices M6 to M32. Re-read this section from `origin/main` between slices. Write your own radio after each slice. The product owner opens the issue. The dev builds it. The integrator deploys. Nobody deploys but the integrator.
 
-A person creates a username and password. That account's three taxis then run on the Linux box all the time, one real second per game second, even when the map is closed. Each account has its own cars, fares, and trails. Game rows are never devices.
+A person creates a username and password. The fleet then runs on the Linux box all the time, one real second per game second, even when the browser is closed. A1 to A32 started that fleet with three cars. Those slices are done. Do not rebuild them. The next fleet is ten cars on `play.html`. Read `## Game page`. The three-taxi sentences below are the history of A1 to A32, not the next queue. Each account has its own cars, fares, and trails. Game rows are never devices.
 
 Each car follows a route. Every 10 seconds it checks in. The position is calculated from how far it should be along that route. The map draws a fading trail from those check-ins, the same idea as the bus trails, and the car marker glides along the route between check-ins. A fare that is waiting has a marker until that taxi arrives. Hide taxis hides only that account's cars. Phones and buses stay. The sample car stays, and it is not T1.
 
@@ -217,7 +219,7 @@ Done, already on `main`: issues 30, 31, 32, 33, and 34 are open. Issues 23 and 2
 
 You own short-term priority. The integrator directs. You design and you communicate, and you should be busy for the whole continue. A turn is about 30 minutes. One issue is not a turn.
 
-On this continue, read `## Game page` above. That is the priority Master just set. The queues now in `po.md` are paused: the short-password issues, and the `app/` slices about phones, buses, and trails. Say they are paused. Do not open more of them.
+On this continue, read `## Game page` above. That is the priority Master set in `6edbbb3`. The queues now in `po.md` are paused: the short-password issues, the `app/` slices about phones, buses, and trails, the issues opened after that order (#718, #720, #722, #724, #726, #730, #732, #734, #736, #738), and the office reservoir (#740 through #756). Say they are paused. Do not open more of them. #724, #734, and #738 describe three cars. The game starts with ten. The office list is Waiting.
 
 Then spend the turn designing the 10-car game on `play.html`. Write `### grok-dev-1`, `### grok-dev-2`, and `## Reservoir` again, all for that game. At least 16 unfinished slices for each dev, and 24 in the reservoir. One dev owns the API fleet of 10 and the money on `GET /v1/empire`. The other owns `play.html` and its script. Name the next slice, the files, and that the turn runs about 30 minutes. One issue, then the radio, then the next issue. Do not stop after one issue.
 
@@ -636,6 +638,6 @@ Reservoir. Do not start these.
 
 ## Integrator
 
-On `continue`, read the radios. Direct the product owner. Do not write the slice text. The product owner designs, communicates, and watches turn length, including their own. If a turn was short, say so in `## Now` and leave the refill to them. Deploy only after product code has merged. A radio-only commit is not a deploy. Do not deploy this note by itself.
+On `continue`, read the radios. Direct the product owner. Do not write the slice text. The product owner designs, communicates, and watches turn length, including their own. If a turn was short, say so in `## Now` and leave the refill to them. After `6edbbb3` the product owner kept opening the three-car list and then office issues through `1f73f49`. Both devs stopped and wrote `queue empty`. The next product-owner turn replaces `po.md`. Deploy only after product code has merged. A radio-only commit is not a deploy. Do not deploy this note by itself.
 
 Last deploy checked in this note: box site `ff1e142`, health `0.1.27`, `CHECK-OK`. The board was 50 cards. Map clicks do not add a waypoint unless Place stops is on.
