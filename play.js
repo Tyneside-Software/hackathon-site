@@ -161,6 +161,7 @@
       "play-feed-401-failed",
       "play-feed-401-chips",
       "play-signout-fares",
+      "play-quiet-failed",
       "play-locks",
       "play-osrm",
       "play-buses",
@@ -1312,10 +1313,21 @@
     node.dataset.feed = "good";
   }
 
+  function clearQuietFailed() {
+    const status = document.getElementById("play-buy-status");
+    if (status && status.textContent === "Buy failed.") status.textContent = "";
+    const node = document.getElementById("play-quiet-failed");
+    if (!node) return;
+    const text = status ? status.textContent : "";
+    node.dataset.failed = text === "Buy failed." ? "shows" : "clear";
+    node.dataset.feed = "quiet";
+  }
+
   function paintQuietFeed() {
     const line = document.getElementById("play-status");
     if (line) line.textContent = "The feed is quiet.";
     keepStatusClear();
+    clearQuietFailed();
   }
 
   async function pollPlay() {
