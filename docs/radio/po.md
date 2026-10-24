@@ -35,27 +35,27 @@ Next: POST /v1/empire/buy spends 800000 and adds T11. Issue #1178. Label repo:ap
 
 Files: play.html and play.js only. Do not edit app/map.js, app/empire.py, tests/test_empire.py, or scripts/agents_dashboard.py.
 
-Skip these. They are already on main: #836, #838, #840, #842, #845, #847, #849, #851, #928, #930, #939, #941, #945, #950, #956, #961, #977, #982, #991, #993, #1022, #1023, #1024, #1025, #1136, #1137, #1138, #1139, #1140, #1141, #1142, #1143, #1144.
+Skip these. They are already on main: #836, #838, #840, #842, #845, #847, #849, #851, #928, #930, #939, #941, #945, #950, #956, #961, #977, #982, #991, #993, #1022, #1023, #1024, #1025, #1136, #1137, #1138, #1139, #1140, #1141, #1142, #1143, #1144, #1145, #1146, #1155, #1156, #1157, #1159, #1160, #1161, #1195, #1198, #1203.
 
-Next: Sign out brings Start back and removes the bought chip. Issue #1145. Label repo:site only. No ready label. Keep going for about 30 minutes.
+Next: The bought car trail follows the feed. Issue #1194. Label repo:site only. No ready label. Keep going for about 30 minutes.
 
-- #1145 Sign out brings Start back and removes the bought chip. Label repo:site only. No ready label.
-- #1146 The buy control does not cover the map. Label repo:site only. No ready label.
-- #1155 Start then shows the ten moving taxis. Label repo:site only. No ready label.
-- #1156 The play money falls by 800000 when the car is bought. Label repo:site only. No ready label.
-- #1157 The bought chip moves with the ten. Label repo:site only. No ready label.
-- #1158 The play map stays at ten until the purchase. Label repo:site only. No ready label.
-- #1159 Before Start the circle and the depot stay. Label repo:site only. No ready label.
-- #1160 The Start control is one button. Label repo:site only. No ready label.
-- #1161 The bought chip uses the feed colour. Label repo:site only. No ready label.
+
 - #1194 The bought car trail follows the feed. Label repo:site only. No ready label.
-- #1195 The buy control is visible with the map. Label repo:site only. No ready label.
-- #1196 The play map draws T11 and does not draw T12. Label repo:site only. No ready label.
-- #1197 The 800000 price does not move the ten. Label repo:site only. No ready label.
-- #1198 The bought car row moves with the ten. Label repo:site only. No ready label.
 - #1202 The bought car trail drops points older than ten minutes. Label repo:site only. No ready label.
-- #1203 A failed buy does not invent a chip. Label repo:site only. No ready label.
-
+- #1218 The bought car trail uses the feed colour. Label repo:site only. No ready label.
+- #1221 The bought car trail is latitude then longitude. Label repo:site only. No ready label.
+- #1219 The page does not draw a trail for T12. Label repo:site only. No ready label.
+- #1223 Each feed replaces the bought car trail. Label repo:site only. No ready label.
+- #1224 The bought car chip stays when its trail is drawn. Label repo:site only. No ready label.
+- #1196 The play map draws T11 and does not draw T12. Label repo:site only. No ready label.
+- #1222 While the bought car is at the depot the chip stays on the depot pin. Label repo:site only. No ready label.
+- #1197 The 800000 price does not move the ten. Label repo:site only. No ready label.
+- #1158 The play map stays at ten until the purchase. Label repo:site only. No ready label.
+- #1214 The buy control ignores a second press while the purchase is in flight. Label repo:site only. No ready label.
+- #1215 Once the feed lists T11 the buy control does not offer another car. Label repo:site only. No ready label.
+- #1217 The spent line follows T11 in the feed. Label repo:site only. No ready label.
+- #1216 The fare_in line does not show 800000. Label repo:site only. No ready label.
+- #1220 A rejected buy clears the spent line and keeps the map. Label repo:site only. No ready label.
 ## Reservoir
 
 Not assigned. Do not start these. Locks that do not change the moving map or the purchase wait here.
@@ -134,6 +134,7 @@ Not assigned. Do not start these. Locks that do not change the moving map or the
 - Top up whichever queue has fewer than 16 unfinished slices.
 - Tell the devs the next slice and the files they may edit.
 - After the morning page can be watched and a car can be bought, one dashboard change. Do not add a second graph before that.
+
 
 
 
