@@ -51,7 +51,7 @@
 
   const depot = [55.0367, -1.5075];
   L.marker(depot, { title: "Shiremoor depot" })
-    .bindTooltip("Shiremoor depot", { permanent: true, direction: "top" })
+    .bindTooltip("Shiremoor depot 55.0367, -1.5075", { permanent: true, direction: "top" })
     .addTo(map);
 
   const PLAY_SIGNS = ["T1", "T2", "T3", "T4", "T5", "T6", "T7", "T8", "T9", "T10"];
