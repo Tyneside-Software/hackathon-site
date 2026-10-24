@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/529
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/531
 
-Title: Register starts the fleet on the box. Label repo:api only. No ready label.
+Title: The box ticks every account every second. Label repo:api only. No ready label.
 
-Next: The box ticks every account every second
+Next: A car checks in every ten seconds
