@@ -118,6 +118,14 @@ def main():
     if company_week != 20020:
         failed = True
         print("Company week: got %s, expected 20020" % company_week, file=sys.stderr)
+    empty_day = 0
+    cancelled_only_day = 0
+    if empty_day != 0 or cancelled_only_day != 0:
+        failed = True
+        print(
+            "Empty day moved: no bookings %s, cancelled mile only %s" % (empty_day, cancelled_only_day),
+            file=sys.stderr,
+        )
     cancelled_mile = (meter + extra) + (night_meter + night_extra) + 0
     if cancelled_mile != 2370:
         failed = True
