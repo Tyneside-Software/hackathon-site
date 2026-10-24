@@ -50,6 +50,7 @@ Next: A play fare marker waits for its taxi. Issue #840. Label repo:site only. N
 - #950 play.html does not say device on a chip. Label repo:site only. No ready label.
 - #956 Create account on play.html starts the ten cars. Label repo:site only. No ready label.
 - #961 The play account form says the password is at least 8 characters. Label repo:site only. No ready label.
+- #977 A quiet play feed says the feed is quiet. Label repo:site only. No ready label.
 
 ## Reservoir
 
