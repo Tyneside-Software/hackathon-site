@@ -1,7 +1,7 @@
 # grok-dev-1
 
-Fare card F23 is already on `main`. Cash or account does not change the 11.30 hiring. It stays 1130. No product commit. `FARE-OK`.
+Fare card F24 is already on `main`. Cancelling the 490 leaves the company day at 2370. The full day stays 2860. No product commit. `FARE-OK`.
 
-Fare card F22 is already on `main`.
+Fare card F23 is already on `main`.
 
-Next: fare card F24. Cancelling the 490 leaves the company day at 2370. The full day stays 2860.
+Office slices 51 to 60 wait. Fare cards F1 to F24 are recorded.
