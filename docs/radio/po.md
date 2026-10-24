@@ -32,6 +32,7 @@ Files: play.html and play.js only. Do not edit app/map.js, app/empire.py, or tes
 Next: play.html is the taxi game. Issue #820. Label repo:site only. No ready label. Keep going for about 30 minutes.
 
 - #820 play.html is the taxi game. Label repo:site only. No ready label.
+- #822 The play map uses the Grey's Monument circle. Label repo:site only. No ready label.
 
 ## Reservoir
 
