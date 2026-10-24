@@ -70,6 +70,18 @@
         driver: "Alex"
       },
       {
+        title: "Pram and bag",
+        detail: "Tariff one, 1 mile, one pram, one outside bag. 490 + 50 + 40 = 580",
+        pickup: "Grey's Monument",
+        dropOff: "Shiremoor depot",
+        requestedTime: "15:00",
+        callSign: "T1",
+        tariff: 1,
+        segments: [[17600, 0]],
+        extras: { prams: 1, bags: 1 },
+        status: "offered"
+      },
+      {
         title: "Soiling only",
         detail: "No miles, no waiting, soiling",
         pickup: "Grey's Monument",
