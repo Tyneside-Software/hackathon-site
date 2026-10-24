@@ -217,6 +217,7 @@
     const server = Number(data.server_now);
     if (Number.isFinite(server)) playClock = { server: server, client: Date.now() / 1000 };
     clearBusToggle();
+    paintPlayStatus(data);
     paintPlayMoney(data);
     paintPlayCars(data);
     paintPlayFares(data);
@@ -236,6 +237,25 @@
       if (place) marker.setLatLng(place);
     });
     playMotion = requestAnimationFrame(glidePlay);
+  }
+
+  function statusName(value) {
+    const name = typeof value === "string" ? value.trim() : "";
+    if (!name || name === "2860" || name === "1130" || name === "1240") return "";
+    return name;
+  }
+
+  function paintPlayStatus(feed) {
+    const line = document.getElementById("play-status");
+    if (!line) return;
+    const token = localStorage.getItem("hackathon-empire-token") || "";
+    if (!token) {
+      line.textContent = "";
+      return;
+    }
+    const fromFeed = statusName(feed && feed.username);
+    const fromStore = statusName(localStorage.getItem("hackathon-empire-user"));
+    line.textContent = fromFeed || fromStore;
   }
 
   function paintPlayOsrm(feed) {
@@ -260,6 +280,7 @@
     });
   }
 
+  paintPlayStatus(null);
   setInterval(pollPlay, 2000);
   pollPlay();
 })();
