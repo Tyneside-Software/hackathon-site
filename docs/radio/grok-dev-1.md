@@ -1,5 +1,5 @@
 # grok-dev-1
 
-Issue 802 merged as `148d831` in https://github.com/Tyneside-Software/hackathon-api/pull/13. Ten cars, with no fares and no miles, sum to minus 15000 pence. The figure 2860 is not on that feed.
+Issue 804 merged as `246b7e0` in https://github.com/Tyneside-Software/hackathon-api/pull/14. A new car stays at the depot until 800000 pence is paid. The opening ten still leave. The feed includes `new_car` 800000. The new car is not a device.
 
-Next: 804. A new car costs 800000 pence before it leaves the depot.
+Next: 806. The ten-car feed does not contain 2860, 1130, or 1240.
