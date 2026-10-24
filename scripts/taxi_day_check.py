@@ -254,6 +254,18 @@ def main():
     if taxi_game.seconds_remaining(600, 600) != 0:
         print("a finished route still showed seconds", file=sys.stderr)
         return 1
+    if taxi_game.fares_waiting(60, 0) != 3 or taxi_game.waiting_label(60, 0) != "3 fares waiting":
+        print("three open fares were not named", file=sys.stderr)
+        return 1
+    if taxi_game.fares_waiting(80, 0) != 3 or taxi_game.seconds_until_fare(80, 0) is not None:
+        print("the twentieth second added a fourth fare", file=sys.stderr)
+        return 1
+    if taxi_game.fares_waiting(60, 1) != 2 or taxi_game.seconds_until_fare(60, 1) != 20:
+        print("accepting a fare did not open the next 20 seconds", file=sys.stderr)
+        return 1
+    if taxi_game.fares_waiting(80, 1) != 3:
+        print("the next 20 seconds did not add one fare", file=sys.stderr)
+        return 1
     if taxi_game.live_fare_pence(3, 0) != 1040:
         print(f"live fare {taxi_game.live_fare_pence(3, 0)}", file=sys.stderr)
         return 1

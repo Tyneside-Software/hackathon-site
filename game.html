@@ -49,6 +49,7 @@
     <p id="drive-home"></p>
     <p id="live-fuel"></p>
     <p id="row-seconds"></p>
+    <p id="fare-cap"></p>
     <button type="button" class="btn btn-ghost" id="btn-accept">Accept the oldest offer</button>
     <p id="accept-result"></p>
     <ul id="places"></ul>
@@ -101,14 +102,15 @@
       { callSign: "T2", status: "at_depot" },
       { callSign: "T3", status: "at_depot" }
     ];
+    var acceptedOffers = 0;
     function paintOffers() {
       var elapsed = game.elapsedSeconds(offerStart, Date.now());
-      var count = game.offeredCount(elapsed);
-      var wait = game.secondsUntilNextOffer(elapsed);
-      var text = count + " offers.";
+      var waiting = game.faresWaiting(elapsed, acceptedOffers);
+      var wait = game.secondsUntilFare(elapsed, acceptedOffers);
+      var text = waiting === 3 ? "3 fares waiting" : waiting + " offers.";
       if (wait !== null) text += " Next offer in " + Math.ceil(wait) + " seconds.";
       document.getElementById("next-offer").textContent = text;
-      var live = game.waitingOffers(elapsed);
+      var live = game.waitingOffers(elapsed).slice(0, waiting);
       paintOfferRows(live.length ? live : game.waitingOffers(40));
     }
     paintOffers();
@@ -159,12 +161,26 @@
       && game.sumPence(game.workedDay()) === -1120
       ? "T1 · started · 600 seconds remaining. Halfway, 300 seconds remaining."
       : "The row showed the wrong seconds.";
+    document.getElementById("fare-cap").textContent = game.waitingLabel(60, 0) === "3 fares waiting"
+      && game.faresWaiting(80, 0) === 3
+      && game.faresWaiting(60, 1) === 2
+      && game.secondsUntilFare(60, 1) === 20
+      && game.faresWaiting(80, 1) === 3
+      && game.sumPence(game.workedDay()) === -1120
+      ? "3 fares waiting. At 80 seconds there are still 3. After one is accepted, the next 20 seconds may add one."
+      : "A fourth fare was offered.";
     document.getElementById("btn-accept").addEventListener("click", function () {
       var elapsed = game.elapsedSeconds(offerStart, Date.now());
-      var taken = game.acceptOffer(game.waitingOffers(elapsed), depotCars);
-      document.getElementById("accept-result").textContent = taken
-        ? taken.cars[0].callSign + " is on that route. " + taken.offers[0].farePounds + "."
-        : "No offer is waiting.";
+      var open = game.waitingOffers(elapsed).slice(0, game.faresWaiting(elapsed, acceptedOffers));
+      var taken = game.acceptOffer(open, depotCars);
+      if (!taken) {
+        document.getElementById("accept-result").textContent = "No offer is waiting.";
+        return;
+      }
+      acceptedOffers += 1;
+      paintOffers();
+      document.getElementById("accept-result").textContent = taken.cars[0].callSign
+        + " is on that route. " + taken.offers[0].farePounds + ".";
     });
     var shortTrip = game.shortTrip(90, 4);
     document.getElementById("short-trip").textContent = shortTrip && shortTrip.inside && shortTrip.miles === 4
