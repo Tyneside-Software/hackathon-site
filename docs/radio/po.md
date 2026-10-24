@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/91
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/95
 
-Title: Sample pickup and drop-off markers. Label repo:site only. No ready label. The body is the matching dev slice.
+Title: Sample car hiring statuses. Label repo:site only. No ready label. The body is the matching dev slice.
 
-Next: Sample car hiring statuses
+Next: Game refuses a Berwick job
