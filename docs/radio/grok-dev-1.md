@@ -1,5 +1,5 @@
 # grok-dev-1
 
-morning order not at the front
+Issue 1126 merged as `a35d81b` in https://github.com/Tyneside-Software/hackathon-api/pull/40. Spending 800000 pence adds T11 and keeps T1 through T10.
 
-The queue still leads with the lock list. The purchase that spends 800000 is not the next line.
+Next: 1127. The ten-car feed grows by the bought car.
