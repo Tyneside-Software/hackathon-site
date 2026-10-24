@@ -277,6 +277,26 @@
     });
   }
 
+  function receiptText(row) {
+    var yards = 0;
+    var seconds = 0;
+    row.segments.forEach(function (pair) {
+      yards += pair[0];
+      seconds += pair[1];
+    });
+    var meter = window.TaxiFare.quoteMeter(row.tariff, row.segments);
+    var extras = window.TaxiFare.extrasPence(row.extras);
+    var total = meter + extras;
+    var tariffName = row.tariff === 2 ? "two" : "one";
+    return "Receipt\n"
+      + "Tariff " + tariffName + "\n"
+      + "Miles " + (yards / 17600) + "\n"
+      + "Waiting seconds " + (seconds / 10) + "\n"
+      + "Extras " + extras + "\n"
+      + "Quoted pence " + total + "\n"
+      + money(total);
+  }
+
   function renderSamples() {
     var root = document.getElementById("samples");
     root.textContent = "";
@@ -301,6 +321,12 @@
       copy.appendChild(title);
       copy.appendChild(detail);
       copy.appendChild(status);
+      if (row.status === "completed") {
+        var slip = document.createElement("pre");
+        slip.className = "office-slip";
+        slip.textContent = receiptText(row);
+        copy.appendChild(slip);
+      }
       var actions = document.createElement("div");
       actions.className = "office-actions";
       function addButton(label, next) {
