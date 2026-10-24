@@ -1616,6 +1616,21 @@
       });
   }
 
+  function markAtDepot(car) {
+    car.status = "at_depot";
+    car.passenger = null;
+    if (car.marker) {
+      car.marker.setLatLng(DEPOT);
+      const home = car.sign + " · at depot";
+      const tip = car.marker.getTooltip();
+      if (tip) tip.setContent(home);
+      else car.marker.bindTooltip(home, { permanent: true, direction: "right" });
+    }
+    if (car.line) map.removeLayer(car.line);
+    car.line = null;
+    paintTaxiList(true);
+  }
+
   function beginFare(car) {
     if (!taxisOn) return;
     const token = car.token;
@@ -1634,11 +1649,7 @@
         if (token !== car.token || !taxisOn) return;
         driveLeg(car, dropoff, DEPOT, "returning", () => {
           if (token !== car.token || !taxisOn) return;
-          car.status = "at_depot";
-          car.passenger = null;
-          if (car.line) map.removeLayer(car.line);
-          car.line = null;
-          paintTaxiList(true);
+          markAtDepot(car);
           setTimeout(() => {
             if (token === car.token && taxisOn) beginFare(car);
           }, 4000);
