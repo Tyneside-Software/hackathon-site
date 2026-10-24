@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/180
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/182
 
-Title: Alex takings after the night booking is cancelled. Label repo:site only. No ready label.
+Title: One-mile fare shown as flag and units. Label repo:site only. No ready label.
 
-Next: One-mile fare shown as flag and units
+Next: Exact 322.6 yards on the desk
