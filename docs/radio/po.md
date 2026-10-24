@@ -26,11 +26,10 @@ Next: A new car costs 800000 before it leaves. Issue #804. Label repo:api only. 
 
 Files: play.html and play.js only. Do not edit app/map.js, app/empire.py, or tests/test_empire.py.
 
-Skip these. They are already on main: #820, #822, #824, #826, #828, #830.
+Skip these. They are already on main: #820, #822, #824, #826, #828, #830, #832.
 
-Next: play.html hides the company totals. Issue #832. Label repo:site only. No ready label. Keep going for about 30 minutes.
+Next: play.html says OSRM unavailable. Issue #834. Label repo:site only. No ready label. Keep going for about 30 minutes.
 
-- #832 play.html hides the company totals. Label repo:site only. No ready label.
 - #834 play.html says OSRM unavailable. Label repo:site only. No ready label.
 - #836 Play cars move in real seconds. Label repo:site only. No ready label.
 - #838 A play car returns to the depot. Label repo:site only. No ready label.
@@ -40,6 +39,7 @@ Next: play.html hides the company totals. Issue #832. Label repo:site only. No r
 - #847 play.html does not call devices. Label repo:site only. No ready label.
 - #849 Play shows the fleet that ran while closed. Label repo:site only. No ready label.
 - #851 play.html does not write the office ledger. Label repo:site only. No ready label.
+- #928 play.html shows the username on the status line. Label repo:site only. No ready label.
 
 ## Reservoir
 
