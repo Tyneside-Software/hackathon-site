@@ -95,6 +95,21 @@ def hiring_pence(tariff, segments, **extras):
     return quote_pence(tariff, segments) + extras_pence(**extras)
 
 
+def tariff_for(minutes, sunday=False, december_day=None):
+    """Return 1 or 2 from the clock. Minutes are minutes after midnight.
+
+    Tariff two covers Sunday, 27 to 31 December, and 22:00 until 07:00.
+    A Tuesday at 15:00 is tariff one. The meter prices do not change.
+    """
+    if sunday:
+        return 2
+    if december_day is not None and 27 <= int(december_day) <= 31:
+        return 2
+    if minutes >= 22 * 60 or minutes < 7 * 60:
+        return 2
+    return 1
+
+
 def _apply_segment(yards, seconds, unit_yards, unit_seconds, into_yards, into_seconds, units):
     """Advance one segment. Return units completed and progress into the open unit."""
     guard = 0

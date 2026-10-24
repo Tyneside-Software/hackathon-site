@@ -43,6 +43,8 @@ These figures are game settings. They are not this company's charges.
 
 `office.html` is the booking desk. It loads `app/office.js` and `app/office.css`. The quote uses `window.TaxiFare.quotePence` in `app/taxi-fare.js`. The Python checker is the proof. The desk does not call the API and it does not read the live database.
 
+The clock chooses the tariff. Requested time 22:00 or 06:59 selects tariff two. 07:00 or 21:59 selects tariff one. A Sunday checkbox forces tariff two. 27 December through 31 December forces tariff two. A Tuesday at 15:00 stays tariff one. The meter figures do not change. The desk shows the tariff it selected.
+
 The quote form takes tariff one or tariff two, miles, waiting seconds, extra passengers, outside bags, animals other than a guide or hearing dog, bicycles, prams, and a soiling checkbox. One mile is 1760 yards. The result is shown in pence and in pounds. The form needs a tariff. Empty miles and empty waiting quote 0 pence, and the desk adds no fare to the ledger. A soiling charge with no meter is still 12500 pence, because soiling is an extra on a hiring that happened.
 
 Each desk row stores a pickup, a drop-off, a requested time, a vehicle call sign, and a status. The £11.30 sample picks up at Grey's Monument and drops at Shiremoor depot. The £12.40 sample picks up at Shiremoor depot and drops at Grey's Monument.
