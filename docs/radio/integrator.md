@@ -22,15 +22,37 @@ The integrator leads on `continue`. The only products are the tracker, the booki
 
 The tracker model is agreed. Issues 22 and 29 stay `blocked`. Do not migrate the live database.
 
-The office and the empire are the same booking desk. `office.html` is the real company. `game.html` is the same desk filled with simulated rows. The banner is the visible difference: `Real data` on the office, `Simulated data` on the empire. Same nav, same `office-grid`, same three panels (`Quote`, `Bookings`, `Ledger`), same `app/office.css`. The company ledger never shows game costs. The game ledger never shows the company totals 2860, 1130, or 1240. Live progress is `http://100.65.94.5/office.html` and `http://100.65.94.5/game.html`.
+The office and the empire desk stay as they are. `office.html` is the real company. `game.html` is the same desk filled with simulated rows. The banner is the visible difference: `Real data` on the office, `Simulated data` on the empire. The company ledger never shows game costs. The game ledger never shows the company totals 2860, 1130, or 1240. Those two pages are not the open work. The open work is the taxi game on `play.html`.
 
 | Lane | State | Next slice |
 |------|--------|------------|
-| Product owner | You are autonomous. Master talks to the integrator. You feed both devs, and you keep improving the dashboard, unless `## Now` gives a different direct order. The game order is still the ten-taxi `play.html` game. `po.md` is that queue. Issues #699 through #786 stay paused. grok-dev-1's radio says next is #806. grok-dev-2's radio says next is #834. Skip a slice already on `main`. Both assigned lists are under 16 unfinished. The reservoir is about 24. | This turn, about 30 minutes. Top both queues to 16 unfinished slices and keep 24 in the reservoir. All of them are `play.html` and the ten-car money. Also improve `scripts/agents_dashboard.py`: the three products, GitHub against the box, queue depth, and the code line-count graph. One issue or one dashboard change, then the radio, then the next. Leave `## Next for me` with at least four jobs, and one of them is the next dashboard improvement. Do not stop after one. Do not wait for the integrator to name the slices. The devs do not edit the dashboard script. |
-| grok-dev-1 | Your radio says next is #806. #804 is on API main as `246b7e0`. Skip a slice already on `main`. The queue in `po.md` is real work. Do not say `queue empty`. | Build the next unfinished slice in `### grok-dev-1`, then the rest, for about 30 minutes. One pull request, then the radio, then the next. Do not invent. Do not start the reservoir. Do not edit `play.html`, `play.js`, or `scripts/agents_dashboard.py`. |
-| grok-dev-2 | The company totals stay off `play.html` as `11d0ca4`. Your radio says next is #834. Skip a slice already on `main`. | Build #834 if it is not already on `main`, then the rest of `### grok-dev-2`, for about 30 minutes. One pull request, then the radio, then the next. Do not edit `app/map.js` or `scripts/agents_dashboard.py`. Do not say `queue empty` while that list still has issues. |
+| Product owner | You are autonomous for this whole stretch. Master has left a long run of continues. Do not wait for Master or for a new integrator note. Keep both devs supplied, and keep improving the dashboard. | Every turn, about 30 minutes. First count unfinished slices, meaning lines whose work is not already on `main`. If either dev is under 16, or the reservoir is under 24, fill that before the dashboard. The new slices make `play.html` more playable. Then one improvement to `scripts/agents_dashboard.py`. Leave `## Next for me` with at least four jobs. Do not stop after one issue. |
+| grok-dev-1 | The queue in `po.md` is the work. An issue number in an older sentence of this file is a hint. If that issue is already on `main`, skip it. Do not say `queue empty` while unfinished lines remain. | Build the next unfinished slice in `### grok-dev-1`, then the rest, for about 30 minutes. One pull request, then the radio, then the next. Do not invent. Do not start the reservoir. Do not edit `play.html`, `play.js`, or `scripts/agents_dashboard.py`. |
+| grok-dev-2 | The queue in `po.md` is the work. An issue number in an older sentence of this file is a hint. If that issue is already on `main`, skip it. Do not say `queue empty` while unfinished lines remain. | Build the next unfinished slice in `### grok-dev-2`, then the rest, for about 30 minutes. One pull request, then the radio, then the next. Do not edit `app/map.js` or `scripts/agents_dashboard.py`. |
 
 Do not redo a slice that is already on `main`. Do not start the reservoir.
+
+## This stretch
+
+Master has queued a long run of continues. This order stays until Master gives a different one. Do not wait for a new integrator note between turns. An issue number written here goes stale. The list that matters is `docs/radio/po.md`, minus anything already on `main`.
+
+The result to aim at is a `play.html` someone can play. Ten taxis move on the map. The in-game money changes. The circle and the Shiremoor depot stay. There is no phone list, no bus toggle, and no Place stops. The product owner turns that into slices. The devs build those slices. The integrator does not name them.
+
+Unfinished means the work is not already on `main`. A heading that still shows 16 lines is short if many of those lines are done. Keep 16 unfinished in front of each dev, and 24 in the reservoir. For this stretch the new slices and the reservoir are the taxi game, not the office waiting list, not map titles M1 to M32, and not issues #699 through #786. Those stay paused. When you move a reservoir line into a dev queue, write a new reservoir line so the 24 does not shrink.
+
+If a dev writes `queue empty`, the supply failed. The next product-owner turn starts by refilling that queue. Say that the dev turn stopped early. Leave enough slices for about 30 minutes. A dev who stopped after one or two slices also had a short turn. Say so.
+
+Supply comes before the dashboard. If the refill takes the whole 30 minutes, do the dashboard on the next turn. If the queues are already deep enough, still land one dashboard change in the turn. The devs do not edit `scripts/agents_dashboard.py`.
+
+Dashboard, one change a turn, in this order. Skip a step that is already true:
+
+1. GitHub against the box for the three products. That comparison has started. Keep it true.
+2. Show unfinished slices separately from lines already on `main`.
+3. Show each lane's last radio time, and whether that turn was about 30 minutes or short.
+4. Keep the code line-count graph. Do not add a second graph of the same commits.
+5. Then the next gap in the strategy picture. One change. Do not rewrite the whole page in one turn.
+
+Do not commit `agents.html`. Do not put a password in the script. A dashboard commit is not a deploy. These turns do not deploy the box. Merge to `main` only. The integrator deploys when Master is back.
 
 ## Game page
 
@@ -223,7 +245,7 @@ You own short-term priority. The integrator directs. You design and you communic
 
 On this continue, read `## Game page` and `## Now`. You do not wait for Master. Master talks to the integrator. You own the short-term plan inside that order. The order is still the ten-taxi game on `play.html`, and the dashboard. Issues #699 through #786 stay paused. Do not open more of them.
 
-You feed grok-dev-1, grok-dev-2, and yourself. If either dev queue has fewer than 16 unfinished slices, or the reservoir has fewer than 24, filling them is part of the turn. grok-dev-1's radio says next is #806. grok-dev-2's radio says next is #834. Skip a slice already on `main`. Both assigned lists were under 16 unfinished when this note was written, and the reservoir was about 24. Design the next `play.html` slices, open the issue, merge the radio, and write the next. In the same turn, improve `scripts/agents_dashboard.py` and merge that too. Read the dev radios and the commit times. If a dev stopped after a slice or two, say the turn was short and leave enough slices for half an hour. Leave `## Next for me` with at least four jobs, and one of them is the next dashboard improvement. If that heading would be empty, you are finishing early.
+You feed grok-dev-1, grok-dev-2, and yourself. Read `## This stretch`. Unfinished means not already on `main`. If either dev is under 16 unfinished slices, or the reservoir is under 24, filling them is the first part of the turn. Design the next `play.html` slices, open the issue, merge the radio, and write the next. If the queues are already deep enough, or once they are, improve `scripts/agents_dashboard.py` once and merge that too. Read the dev radios and the commit times. If a dev stopped after a slice or two, or wrote `queue empty`, say the turn was short and leave enough slices for half an hour. Leave `## Next for me` with at least four jobs, and one of them is the next dashboard improvement. If that heading would be empty, you are finishing early.
 
 Then spend the turn designing the 10-car game on `play.html`. Write `### grok-dev-1`, `### grok-dev-2`, and `## Reservoir` again, all for that game. At least 16 unfinished slices for each dev, and 24 in the reservoir. One dev owns the API fleet of 10 and the money on `GET /v1/empire`. The other owns `play.html` and its script. Name the next slice, the files, and that the turn runs about 30 minutes. One issue, then the radio, then the next issue. Do not stop after one issue.
 
@@ -642,6 +664,6 @@ Reservoir. Do not start these.
 
 ## Integrator
 
-On `continue`, read the radios. Direct the product owner. Do not write the slice text. Master gives direction here. The product owner and the devs then work on their own: the product owner keeps both queues and `## Next for me` full, keeps improving `scripts/agents_dashboard.py`, and the devs build the game for about 30 minutes. They do not wait for a new note before the next slice. If a turn was short, say so in `## Now` and leave the refill to the product owner. If `scripts/agents_dashboard.py` moved on `main`, pull this checkout and restart the serve on port 5510 so Master sees it. Do not deploy that restart. Deploy only after product code has merged. A radio-only commit is not a deploy. A dashboard-only commit is not a deploy. Do not deploy this note by itself.
+On `continue`, read the radios. Direct the product owner. Do not write the slice text. Master gives direction here. While `## This stretch` is the order, leave the lanes on it. Do not name their slices. The product owner keeps both queues and `## Next for me` full, keeps improving `scripts/agents_dashboard.py`, and the devs build the game for about 30 minutes. They do not wait for a new note before the next slice. If a dev wrote `queue empty` or stopped after a slice or two, the supply failed or the turn was short. Say so in `## Now` only if the standing stretch order is not enough, and leave the refill to the product owner. If `scripts/agents_dashboard.py` moved on `main`, pull this checkout and restart the serve on port 5510 so Master sees it. Do not deploy that restart. Deploy only after product code has merged. A radio-only commit is not a deploy. A dashboard-only commit is not a deploy. Do not deploy this note by itself. When Master returns, deploy the `play.html` and API commits that landed during the stretch, then restart the dashboard.
 
 Last deploy checked in this note: box site `ff1e142`, health `0.1.27`, `CHECK-OK`. The board was 50 cards. Map clicks do not add a waypoint unless Place stops is on.
