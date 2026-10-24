@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/326
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/331
 
-Title: Each car shows its own seconds. Label repo:site only. No ready label.
+Title: Night clock stays tariff two after restore. Label repo:site only. No ready label.
 
-Next: none of slices 84 to 100 remain unopened. The integrator still lists those slices, so this heading is not clear.
+Next: Animal row shows 790
