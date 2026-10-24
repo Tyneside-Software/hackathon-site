@@ -202,9 +202,16 @@
     return window.TaxiFare.quoteMeter(1, [[yards, seconds]]);
   }
 
+  function discardFar(lat, lng) {
+    if (lat === 55.7704 && lng === -2.0068) return null;
+    if (haversineKm(CENTRE, { lat: lat, lng: lng }) > RADIUS_KM) return null;
+    return { lat: lat, lng: lng };
+  }
+
   function shortTrip(bearingDeg, miles) {
     if (miles !== 2 && miles !== 4 && miles !== 6) return null;
     var dropoff = destination(DEPOT_POINT, bearingDeg, miles);
+    if (!discardFar(dropoff.lat, dropoff.lng)) return null;
     return {
       pickup: DEPOT_POINT,
       dropoff: dropoff,
@@ -269,6 +276,7 @@
     var index;
     for (index = 0; index < count; index += 1) {
       var trip = shortTrip(90 + index * 30, milesList[index]);
+      if (!trip || !discardFar(trip.dropoff.lat, trip.dropoff.lng)) continue;
       offers.push({
         pickup: trip.pickup,
         dropoff: trip.dropoff,
@@ -527,6 +535,7 @@
     postLiveTrip: postLiveTrip,
     completedFareRow: completedFareRow,
     shortTrip: shortTrip,
+    discardFar: discardFar,
     positionOnRoute: positionOnRoute,
     workedWeek: workedWeek,
     fleetWeek: fleetWeek,

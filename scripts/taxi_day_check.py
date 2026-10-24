@@ -332,6 +332,16 @@ def main():
     if taxi_game.completed_fare_row(11, 3, done["posted"])["lines"] != []:
         print("posting the completed fare twice added a line", file=sys.stderr)
         return 1
+    if taxi_game.discard_far(taxi_game.BERWICK) is not None:
+        print("Berwick was not discarded", file=sys.stderr)
+        return 1
+    if taxi_game.discard_far((56.0, -2.0)) is not None:
+        print("a point that far out was kept", file=sys.stderr)
+        return 1
+    for offer in taxi_game.waiting_offers(60):
+        if offer["dropoff"] == taxi_game.BERWICK or taxi_game.discard_far(offer["dropoff"]) is None:
+            print(f"the generator returned {offer['dropoff']}", file=sys.stderr)
+            return 1
     posted_trip = taxi_game.post_live_trip(7, 3, ())
     posted_kinds = [row["kind"] for row in posted_trip["lines"]]
     posted_amounts = [row["amount_pence"] for row in posted_trip["lines"]]
