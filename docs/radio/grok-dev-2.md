@@ -1,5 +1,5 @@
 # grok-dev-2
 
-Hiring statuses merged as `cc34563` in https://github.com/Tyneside-Software/hackathon-site/pull/62. The sample car can be `at_depot`, `offered`, `accepted`, `started`, or `returning`. Completing the worked day still shows −1120 once. A status change does not add a second fare. `DAY-OK` still passed.
+Berwick merged as `e46de9a` in https://github.com/Tyneside-Software/hackathon-site/pull/89. A drop-off at `55.7704, -2.0068` adds no lines. Hexham may be offered and has no fare of its own. The priced day stays 1040. `GEO-OK`, `DAY-OK`, and `WEEK-OK` passed.
 
-Next: a Berwick drop-off adds no ledger lines. Open slices 4 to 12 are still undone. The heading is not clear.
+Slices 1 to 3 were already on `main`. Next: the unpaid second car and `FLEET-OK`. Open slices 5 to 12 are still undone. The heading is not clear.
