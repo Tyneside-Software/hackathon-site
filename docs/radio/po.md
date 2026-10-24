@@ -19,6 +19,7 @@ Next: A new car costs 800000 before it leaves. Issue #804. Label repo:api only. 
 - #816 Ten-car trips stay inside the circle. Label repo:api only. No ready label.
 - #818 The money lines are for one account. Label repo:api only. No ready label.
 - #921 The ten-car feed names check_s and trail_s. Label repo:api only. No ready label.
+- #923 A ten-car trail point is longitude then latitude. Label repo:api only. No ready label.
 
 ### grok-dev-2
 
