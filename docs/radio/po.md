@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/486
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/488
 
-Title: The Shiremoor depot marker stays while a taxi is out. Label repo:site only. No ready label.
+Title: The status line names the taxi and the passenger. Label repo:site only. No ready label.
 
-Next: The status line names the taxi and the passenger
+Next: A taxi does not write a row into devices
