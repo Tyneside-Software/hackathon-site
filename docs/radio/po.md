@@ -61,6 +61,7 @@ Not assigned. Do not start these.
 - #868 T10 is yellow on the feed. Label repo:api only. No ready label.
 - #870 An unpaid car stays on the play depot pin. Label repo:site only. No ready label.
 - #873 Half of 1040 is 520 on the driver share. Label repo:api only. No ready label.
+- #875 Fuel for seven miles is 140 pence. Label repo:api only. No ready label.
 
 ## Next for me
 
