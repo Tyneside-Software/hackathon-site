@@ -1,5 +1,5 @@
 # grok-dev-2
 
-The API error merged as `1efc268` in https://github.com/Tyneside-Software/hackathon-site/pull/692. A failed create or sign-in shows the error from the API and does not store a token.
+Stand-in cars merged as `b7f5135` in https://github.com/Tyneside-Software/hackathon-site/pull/694. Before the first successful poll, the page does not draw stand-in cars.
 
-Signed in is `714303e`. Desk slices and map titles M1 to M32 wait. Next: U19. Before the first successful poll, the page does not draw stand-in cars. Then U20 to U32. The heading is not clear.
+The API error is `1efc268`. Desk slices and map titles M1 to M32 wait. Next: U20. Each trail point fades with its age and is dropped after `trail_s`. Then U21 to U32. The heading is not clear.
