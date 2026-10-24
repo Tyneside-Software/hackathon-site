@@ -159,6 +159,7 @@
       "play-next-fares",
       "play-feed-401-fares",
       "play-feed-401-failed",
+      "play-feed-401-chips",
       "play-locks",
       "play-osrm",
       "play-buses",
@@ -880,6 +881,16 @@
     node.dataset.pence = String(playBuyPence());
   }
 
+  function clearFeed401Chips() {
+    clearPlayChips();
+    const list = document.getElementById("play-taxi-list");
+    const node = document.getElementById("play-feed-401-chips");
+    if (!node) return;
+    node.dataset.chips = playChips.size === 0 ? "clear" : "shows";
+    node.dataset.list = list && list.textContent === "" ? "clear" : "shows";
+    node.dataset.feed = "401";
+  }
+
   function clearFeed401Failed() {
     const status = document.getElementById("play-buy-status");
     if (status && status.textContent === "Buy failed.") status.textContent = "";
@@ -1320,6 +1331,7 @@
       showPlayAccount();
       keepPlayMap();
       dropBoughtChips();
+      clearFeed401Chips();
       paintPlayBuy();
       clearPlaySpent();
       noteFeed401();
