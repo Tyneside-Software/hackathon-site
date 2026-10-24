@@ -187,7 +187,8 @@
       ["Completed, tariff one, 1 mile", completed[2]],
       ["Cancel", cancel],
       ["completed-day", completedDay],
-      ["cancelled-mile", cancelledMile]
+      ["cancelled-mile", cancelledMile],
+      ["company-week", completedDay * 7]
     ].forEach(function (line) {
       var row = document.createElement("p");
       row.className = "ledger-line";
