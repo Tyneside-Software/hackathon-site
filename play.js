@@ -300,22 +300,36 @@
     pollPlay();
   }
 
+  function paintQuietFeed() {
+    const line = document.getElementById("play-status");
+    if (line) line.textContent = "The feed is quiet.";
+  }
+
   async function pollPlay() {
     const token = localStorage.getItem("hackathon-empire-token") || "";
     const base = apiBase();
     if (!token || !base) return;
     const path = playFeedPath();
     if (!playMayRequest(path) || path.indexOf("/v1/devices") !== -1) return;
-    const res = await fetch(base + path, {
-      headers: { Authorization: "Bearer " + token }
-    });
+    let res;
+    try {
+      res = await fetch(base + path, {
+        headers: { Authorization: "Bearer " + token }
+      });
+    } catch (err) {
+      paintQuietFeed();
+      return;
+    }
     if (res.status === 401) {
       localStorage.removeItem("hackathon-empire-token");
       paintPlayStatus(null);
       showPlayAccount();
       return;
     }
-    if (!res.ok) return;
+    if (!res.ok) {
+      paintQuietFeed();
+      return;
+    }
     const data = await res.json();
     playFeed = data;
     const server = Number(data.server_now);
