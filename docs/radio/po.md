@@ -54,6 +54,7 @@ Not assigned. Do not start these.
 
 - #853 T4 is violet on the feed. Label repo:api only. No ready label.
 - #855 T5 is rose on the feed. Label repo:api only. No ready label.
+- #859 T6 is orange on the feed. Label repo:api only. No ready label.
 
 ## Next for me
 
