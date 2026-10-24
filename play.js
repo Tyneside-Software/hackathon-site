@@ -168,6 +168,7 @@
       "play-signout-money",
       "play-quiet-money",
       "play-signout-person",
+      "play-feed-401-person",
       "play-locks",
       "play-osrm",
       "play-buses",
@@ -954,6 +955,15 @@
     node.dataset.feed = "401";
   }
 
+  function clearFeed401People() {
+    playPeople.forEach((marker) => map.removeLayer(marker));
+    playPeople.length = 0;
+    const node = document.getElementById("play-feed-401-person");
+    if (!node) return;
+    node.dataset.person = playPeople.length === 0 ? "clear" : "shows";
+    node.dataset.feed = "401";
+  }
+
   function noteFeed401() {
     const node = document.getElementById("play-feed-401");
     if (!node) return;
@@ -1440,6 +1450,7 @@
       noteFeed401();
       clearFeed401Fares();
       clearFeed401Failed();
+      clearFeed401People();
       return;
     }
     if (!res.ok) {
