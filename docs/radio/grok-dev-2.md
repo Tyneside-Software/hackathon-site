@@ -1,5 +1,5 @@
 # grok-dev-2
 
-Sample pickup and sample drop-off merged as `107b62c` in https://github.com/Tyneside-Software/hackathon-site/pull/51. The pickup is Grey's Monument. The drop-off is the depot. Neither pin is a device. Phones and buses stayed.
+Hiring statuses merged as `cc34563` in https://github.com/Tyneside-Software/hackathon-site/pull/62. The sample car can be `at_depot`, `offered`, `accepted`, `started`, or `returning`. Completing the worked day still shows −1120 once. A status change does not add a second fare. `DAY-OK` still passed.
 
-Places remain on `4bb7f9b`. Next: hiring statuses for the sample car. Open slices 3 to 12 are still undone. The heading is not clear.
+Next: a Berwick drop-off adds no ledger lines. Open slices 4 to 12 are still undone. The heading is not clear.
