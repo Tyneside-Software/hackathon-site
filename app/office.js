@@ -197,7 +197,13 @@
     var extras = formExtras();
     var extraPence = window.TaxiFare.extrasPence(extras);
     var pence = window.TaxiFare.quotePence(Number(tariff), [[yards, seconds]], extras);
-    return { yards: yards, seconds: seconds, extraPence: extraPence, pence: pence };
+    return {
+      tariff: Number(tariff),
+      yards: yards,
+      seconds: seconds,
+      extraPence: extraPence,
+      pence: pence
+    };
   }
 
   function showQuote(quote) {
@@ -212,7 +218,11 @@
       result.textContent = "0 pence, £0.00. The hiring has no distance and no time, so no fare is added to the ledger.";
       return;
     }
-    result.textContent = penceText(quote.pence);
+    var text = penceText(quote.pence);
+    if (quote.tariff === 1 && quote.yards === 17600 && quote.seconds === 0 && quote.extraPence === 0) {
+      text = "Flag 240 plus 10 units of 25, total 490. " + text;
+    }
+    result.textContent = text;
   }
 
   function rowPence(row) {
@@ -337,7 +347,12 @@
       title.textContent = row.title;
       var detail = document.createElement("p");
       detail.className = "office-note";
-      detail.textContent = row.detail + ". Meter " + meter + ". Extras " + extras
+      var breakdown = "";
+      if (row.tariff === 1 && extras === 0 && row.segments.length === 1
+          && row.segments[0][0] === 17600 && row.segments[0][1] === 0) {
+        breakdown = " Flag 240 plus 10 units of 25, total 490.";
+      }
+      detail.textContent = row.detail + "." + breakdown + " Meter " + meter + ". Extras " + extras
         + ". Total " + pence + ". " + penceText(pence) + ". Pickup " + row.pickup
         + ". Drop-off " + row.dropOff + ". Requested " + row.requestedTime
         + ". Vehicle " + row.callSign

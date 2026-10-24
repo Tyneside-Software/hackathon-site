@@ -190,6 +190,10 @@ def main():
         if got != expected:
             failed = True
             print("%s: tariff %s, expected %s" % (label, got, expected), file=sys.stderr)
+    mile_parts = quote_pence(TARIFF_ONE, ((17600, 0),))
+    if mile_parts != 240 + 10 * 25:
+        failed = True
+        print("One-mile breakdown: got %s, expected 490" % mile_parts, file=sys.stderr)
     if quote_pence(TARIFF_ONE, ((52800, 0),)) != 1040 or quote_pence(TARIFF_TWO, ((52800, 0),)) != 1240:
         failed = True
         print("Clock slice moved a meter figure", file=sys.stderr)
