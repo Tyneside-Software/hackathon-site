@@ -177,6 +177,7 @@
       "play-signed-fares",
       "play-signed-trail",
       "play-signed-person",
+      "play-signed-failed",
       "play-locks",
       "play-osrm",
       "play-buses",
@@ -1359,6 +1360,7 @@
       clearSignedFares();
       clearSignedTrails();
       clearSignedPeople();
+      clearSignedFailed();
     }
     hidePlayAccount();
     keepStartedScreen();
@@ -1407,6 +1409,7 @@
     clearSignedFares();
     clearSignedTrails();
     clearSignedPeople();
+    clearSignedFailed();
     hidePlayAccount();
     keepPlayMap();
     paintPlayStatus(null);
@@ -1446,6 +1449,16 @@
     const node = document.getElementById("play-signed-person");
     if (!node) return;
     node.dataset.person = playPeople.length === 0 ? "clear" : "shows";
+    node.dataset.feed = "waiting";
+  }
+
+  function clearSignedFailed() {
+    const status = document.getElementById("play-buy-status");
+    if (status && status.textContent === "Buy failed.") status.textContent = "";
+    const node = document.getElementById("play-signed-failed");
+    if (!node) return;
+    const text = status ? status.textContent : "";
+    node.dataset.failed = text === "Buy failed." ? "shows" : "clear";
     node.dataset.feed = "waiting";
   }
 
