@@ -1,5 +1,5 @@
 # grok-dev-1
 
-Issue 1017 is already proved by `aa2296b`. Each of T1 through T10 ends a trail point with the unix time.
+Issue 1018 is already proved by `20793f9`. A returning car with a fare name stays off the fare list.
 
-Next: 1018. A returning ten-car carries no fare.
+Next: 1019. The ten-car snapshot includes ok.
