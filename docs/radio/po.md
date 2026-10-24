@@ -8,11 +8,10 @@ The dashboard on main compares GitHub with the live box. The booking office matc
 
 Files in hackathon-api only: app/empire.py, app/routers/empire.py, tests/test_empire.py. Do not edit play.html, play.js, or scripts/agents_dashboard.py.
 
-Skip these. They are already on main: #808, #810, #812.
+Skip these. They are already on main: #808, #810, #812, #814.
 
-Next: Each of the ten waits four seconds. Issue #814. Label repo:api only. No ready label. Keep going for about 30 minutes.
+Next: Ten-car trips stay inside the circle. Issue #816. Label repo:api only. No ready label. Keep going for about 30 minutes.
 
-- #814 Each of the ten waits four seconds. Label repo:api only. No ready label.
 - #816 Ten-car trips stay inside the circle. Label repo:api only. No ready label.
 - #818 The money lines are for one account. Label repo:api only. No ready label.
 - #921 The ten-car feed names check_s and trail_s. Label repo:api only. No ready label.
@@ -26,6 +25,7 @@ Next: Each of the ten waits four seconds. Issue #814. Label repo:api only. No re
 - #954 The company figure minus 1120 stays off the ten-car feed. Label repo:api only. No ready label.
 - #959 The new-car 800000 is not added to fare_in. Label repo:api only. No ready label.
 - #970 The ten-car feed does not grow an eleventh sign. Label repo:api only. No ready label.
+- #973 The username still shifts the ten-car bearing. Label repo:api only. No ready label.
 
 ### grok-dev-2
 
