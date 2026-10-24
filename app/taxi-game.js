@@ -195,6 +195,13 @@
     return { lat: lat2 * 180 / Math.PI, lng: lng };
   }
 
+  function liveFarePence(miles, waitingSeconds) {
+    if (!window.TaxiFare) return null;
+    var yards = Math.round(miles * 1760 * 10);
+    var seconds = Math.round((waitingSeconds || 0) * 10);
+    return window.TaxiFare.quoteMeter(1, [[yards, seconds]]);
+  }
+
   function shortTrip(bearingDeg, miles) {
     if (miles !== 2 && miles !== 4 && miles !== 6) return null;
     var dropoff = destination(DEPOT_POINT, bearingDeg, miles);
@@ -202,6 +209,7 @@
       pickup: DEPOT_POINT,
       dropoff: dropoff,
       miles: miles,
+      farePence: liveFarePence(miles, 0),
       inside: haversineKm(CENTRE, DEPOT_POINT) <= RADIUS_KM && haversineKm(CENTRE, dropoff) <= RADIUS_KM,
     };
   }
@@ -268,6 +276,7 @@
     fallbackSeconds: fallbackSeconds,
     offeredCount: offeredCount,
     secondsUntilNextOffer: secondsUntilNextOffer,
+    liveFarePence: liveFarePence,
     shortTrip: shortTrip,
     positionOnRoute: positionOnRoute,
     workedWeek: workedWeek,

@@ -41,6 +41,7 @@
     <p id="fallback"></p>
     <p id="next-offer"></p>
     <p id="short-trip"></p>
+    <p id="live-fare"></p>
     <ul id="places"></ul>
     <p class="lede" id="berwick-job"></p>
     <p class="lede" id="hexham-job"></p>
@@ -70,6 +71,7 @@
     <p class="lede" id="case-result">Choose a case.</p>
   </main>
 
+  <script src="app/taxi-fare.js"></script>
   <script src="app/taxi-game.js"></script>
   <script>
     var game = window.TaxiGame;
@@ -90,6 +92,10 @@
     document.getElementById("short-trip").textContent = shortTrip && shortTrip.inside && shortTrip.miles === 4
       ? "A 4 mile trip from the depot is inside."
       : "A short trip left the circle.";
+    var liveFare = game.liveFarePence(3, 0);
+    document.getElementById("live-fare").textContent = liveFare === 1040 && game.sumPence(game.workedDay()) === -1120
+      ? "A live 3 mile fare is 1040. The checked day stays −1120."
+      : "A live fare changed the day.";
     var labels = {
       standing: "Standing for the one car",
       fare_in: "Fare in",

@@ -190,6 +190,14 @@ def destination(origin, bearing_deg, miles):
     return (math.degrees(lat2), lng)
 
 
+def live_fare_pence(miles, waiting_seconds=0):
+    """Tariff one, no extras. The unit that finishes first is the one that counts."""
+    import taxi_fare
+    yards_tenths = int(round(miles * 1760 * 10))
+    seconds_tenths = int(round(waiting_seconds * 10))
+    return taxi_fare.quote_pence(taxi_fare.TARIFF_ONE, ((yards_tenths, seconds_tenths),))
+
+
 def short_trip(bearing_deg, miles):
     """Pickup at the depot. Drop-off is 2, 4, or 6 miles away. No new town."""
     if miles not in SHORT_MILES:
@@ -198,6 +206,7 @@ def short_trip(bearing_deg, miles):
         "pickup": DEPOT,
         "dropoff": destination(DEPOT, bearing_deg, miles),
         "miles": miles,
+        "fare_pence": live_fare_pence(miles, 0),
     }
 
 
