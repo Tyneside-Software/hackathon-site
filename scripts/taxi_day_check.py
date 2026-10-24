@@ -566,6 +566,21 @@ def main():
     if "notePagesEmpire()" not in polled_body:
         print("the pages poll still called the API", file=sys.stderr)
         return 1
+    held = map_js.split("let playerMovedMap", 1)
+    if len(held) != 2:
+        print("a pan could still jump the map back", file=sys.stderr)
+        return 1
+    held_body = held[1].split("map.createPane", 1)[0]
+    if "dragstart" not in held_body or "zoomstart" not in held_body:
+        print("a pan or zoom was not remembered", file=sys.stderr)
+        return 1
+    feed_view = map_js.split("function rememberEmpire", 1)[1].split("function paintEmpireTrails", 1)[0]
+    if "playerMovedMap" not in feed_view:
+        print("a poll could jump the map back", file=sys.stderr)
+        return 1
+    if "setView" in feed_view or "fitBounds" in feed_view or "flyTo" in feed_view:
+        print("the empire feed moved the map", file=sys.stderr)
+        return 1
     if "startFleet()" in polled_body:
         print("the empire poll drew the old fleet", file=sys.stderr)
         return 1
