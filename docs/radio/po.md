@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/193
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/195
 
-Title: Receipt sits in the ledger panel. Label repo:site only. No ready label.
+Title: Switch between the full day and the empty day. Label repo:site only. No ready label.
 
-Next: Switch between the full day and the empty day
+Next: Office page keeps the empire link
