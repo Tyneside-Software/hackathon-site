@@ -68,7 +68,7 @@ if ($Clear) {
         throw "Keep a message under 500 characters. The sessions read it in one line."
     }
     $stamp = [DateTime]::UtcNow.ToString("yyyy-MM-ddTHH:mm:ssZ")
-    $line = "- $stamp — $flat"
+    $line = "- $stamp - $flat"
     $newUnread = "`r`n`r`n$line`r`n`r`n"
     $existing = Bullets $unreadBody
     if ($existing.Count -gt 0) {
