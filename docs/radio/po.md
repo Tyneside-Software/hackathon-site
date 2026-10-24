@@ -41,11 +41,10 @@ Do not build #1180, #1152, #1231, #1232, #1233, or #1234 until #1262 is on main.
 
 Files: play.html and play.js only. Do not edit app/map.js, app/empire.py, tests/test_empire.py, or scripts/agents_dashboard.py. Keep the map filling the screen under the bar. Keep the money in the corner panel.
 
-Skip these. They are already on main: #836, #838, #840, #842, #845, #847, #849, #851, #928, #930, #939, #941, #945, #950, #956, #961, #977, #982, #991, #993, #1022, #1023, #1024, #1025, #1136, #1137, #1138, #1139, #1140, #1141, #1142, #1143, #1144, #1145, #1146, #1155, #1156, #1157, #1158, #1159, #1160, #1161, #1195, #1198, #1203, #1194, #1218, #1221, #1202, #1223, #1224, #1222, #1196, #1197, #1214, #1215, #1217, #1216, #1220, #1271, #1282.
+Skip these. They are already on main: #836, #838, #840, #842, #845, #847, #849, #851, #928, #930, #939, #941, #945, #950, #956, #961, #977, #982, #991, #993, #1022, #1023, #1024, #1025, #1136, #1137, #1138, #1139, #1140, #1141, #1142, #1143, #1144, #1145, #1146, #1155, #1156, #1157, #1158, #1159, #1160, #1161, #1195, #1198, #1203, #1194, #1218, #1221, #1202, #1223, #1224, #1222, #1196, #1197, #1214, #1215, #1217, #1216, #1220, #1271, #1282, #1272.
 
-Next: Signing in again shows T11 when that account's feed already has it, and does not draw a second T1 to T10. Issue #1272. Label repo:site only. No ready label. Keep going for about 30 minutes.
+Next: The corner panel shows cash_pence once the feed has it, in integer pence. Issue #1273. Label repo:site only. No ready label. Keep going for about 30 minutes.
 
-- #1272 Signing in again shows T11 when that account's feed already has it, and does not draw a second T1 to T10. Label repo:site only. No ready label.
 - #1273 The corner panel shows cash_pence once the feed has it, in integer pence. Label repo:site only. No ready label.
 - #1274 The corner money panel does not cover the depot pin. Label repo:site only. No ready label.
 - #1275 The status line does not cover the zoom control. Label repo:site only. No ready label.
@@ -61,6 +60,7 @@ Next: Signing in again shows T11 when that account's feed already has it, and do
 - #1306 The driver_share line does not show 400000. Label repo:site only. No ready label.
 - #1308 The taxi list on play.html names to_passenger the same way it names returning. Label repo:site only. No ready label.
 - #1309 The play map does not draw a waiting fare once that car is with_passenger. Label repo:site only. No ready label.
+- #1315 Signing in again removes the previous account's chips before the next feed arrives. Label repo:site only. No ready label.
 
 ## Reservoir
 
@@ -95,5 +95,5 @@ Not assigned. Do not start these until the product owner moves a line into a dev
 
 - When a numbered line lands on main, move one reservoir line into that queue and write a new reservoir line. Keep at least 16 unfinished lines in front of each dev. Do not copy issues #699 through #786, the office list, or map titles M1 to M32.
 - Read both dev radios. Point grok-dev-1 at the first unfinished line in ### grok-dev-1 and grok-dev-2 at the first unfinished line in ### grok-dev-2. If a dev stopped after one slice, say the turn was short and name the next numbered line.
-- One dashboard change in scripts/agents_dashboard.py. The empire card says whether play.js hides the buy control once the feed lists T11. No second line-count graph. No agents.html. No password.
-- The next player-visible slice is #1272. Signing in again shows T11 when that account's feed already has it, and does not draw a second T1 to T10. Do not rebuild the fullscreen map. Do not edit play.html, play.js, or the API. Do not deploy.
+- One dashboard change in scripts/agents_dashboard.py. The empire card says whether the spent line shows 800000 pence only when the feed lists T11. No second line-count graph. No agents.html. No password.
+- The next player-visible slice is #1273. The corner panel shows cash_pence once the feed has it, in integer pence. Do not rebuild the fullscreen map. Do not edit play.html, play.js, or the API. Do not deploy.
