@@ -29,11 +29,13 @@ $utf8 = New-Object System.Text.UTF8Encoding $false
 $text = [IO.File]::ReadAllText($path)
 $unreadHead = "## Unread"
 $heardHead = "## Heard"
-$unreadAt = $text.IndexOf($unreadHead)
-$heardAt = $text.IndexOf($heardHead)
-if ($unreadAt -lt 0 -or $heardAt -lt 0 -or $heardAt -le $unreadAt) {
-    throw "docs/radio/michael.md needs ## Unread and ## Heard, in that order."
+$unreadMatch = [regex]::Match($text, "(?m)^## Unread\s*$")
+$heardMatch = [regex]::Match($text, "(?m)^## Heard\s*$")
+if (-not $unreadMatch.Success -or -not $heardMatch.Success -or $heardMatch.Index -le $unreadMatch.Index) {
+    throw "docs/radio/michael.md needs a ## Unread line and a later ## Heard line."
 }
+$unreadAt = $unreadMatch.Index
+$heardAt = $heardMatch.Index
 
 $unreadBodyStart = $unreadAt + $unreadHead.Length
 $unreadBody = $text.Substring($unreadBodyStart, $heardAt - $unreadBodyStart)
