@@ -73,6 +73,12 @@
           "summary": "Company booking fields, the tariff quote, and a ledger separate from the game."
         },
         {
+          "id": "taxi-model",
+          "title": "Tracker model",
+          "file": "taxi-model.md",
+          "summary": "Many-to-many device links, and why game taxis are not devices."
+        },
+        {
           "id": "onboarding",
           "title": "Onboarding (night)",
           "href": "../onboarding.html",
