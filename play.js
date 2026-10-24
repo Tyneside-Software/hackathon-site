@@ -380,6 +380,7 @@
     localStorage.removeItem("hackathon-empire-user");
     dropBoughtChips();
     clearPlayChips();
+    clearPlaySpent();
     clearPlayTrails();
     showPlayAccount();
     paintPlayStatus(null);
@@ -390,6 +391,17 @@
     return 800000;
   }
 
+  function showPlaySpent() {
+    const line = document.getElementById("play-spent");
+    if (!line) return;
+    line.textContent = String(playBuyPence()) + " spent";
+  }
+
+  function clearPlaySpent() {
+    const line = document.getElementById("play-spent");
+    if (line) line.textContent = "";
+  }
+
   function seatPlayBuy() {
     const money = document.getElementById("play-money");
     const mapEl = document.getElementById("play-map");
@@ -398,6 +410,10 @@
     const button = document.getElementById("play-buy");
     if (money && row && !money.contains(row)) money.appendChild(row);
     if (money && note && !money.contains(note)) money.appendChild(note);
+    ["play-spent-rule", "play-spent"].forEach((id) => {
+      const node = document.getElementById(id);
+      if (money && node && !money.contains(node)) money.appendChild(node);
+    });
     if (!button) return;
     button.style.position = "static";
     button.style.inset = "auto";
@@ -450,6 +466,7 @@
       return;
     }
     if (status) status.textContent = "";
+    showPlaySpent();
     pollPlay();
   }
 
