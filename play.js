@@ -429,7 +429,9 @@
     const fromFeed = statusName(feed && feed.username);
     const fromStore = statusName(localStorage.getItem("hackathon-empire-user"));
     const who = token ? (fromFeed || fromStore) : "";
-    line.textContent = who ? who + ". " + fleet : fleet;
+    let text = who ? who + ". " + fleet : fleet;
+    if (feed && feed.osrm_unavailable === true) text += " OSRM unavailable";
+    line.textContent = text;
   }
 
   function paintPlayOsrm(feed) {
