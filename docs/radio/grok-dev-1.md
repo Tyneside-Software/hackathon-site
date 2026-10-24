@@ -1,7 +1,7 @@
 # grok-dev-1
 
-Slice 40 merged as `ad5c05a`, https://github.com/Tyneside-Software/hackathon-site/pull/382. The 2370 day cancels the 490 pence mile. The running total is 2370. Selecting the 2860 day again shows 2860. The totals are not added. A completed booking has no cancel button. `FARE-OK`.
+Slice 41 merged as `225262b`, https://github.com/Tyneside-Software/hackathon-site/pull/385. The slip says `tariff one`. It contains `1130` and `£11.30`. It does not contain `driver_share`, `standing`, or `800000`. `FARE-OK`.
 
-Slice 39, soiling-day at 12500, is on `main` at `d8d50fd`.
+Slice 40, the cancelled mile at 2370, is on `main` at `ad5c05a`.
 
-Next: slice 41. The plain-text slip says `tariff one` and still contains `1130` and `£11.30`.
+Next: slice 42. 27 December at `15:00`, 3 miles, no waiting, no extras, quotes 1240. 26 December at the same clock quotes 1040.
