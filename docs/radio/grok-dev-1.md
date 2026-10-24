@@ -1,7 +1,7 @@
 # grok-dev-1
 
-API slice A1 merged as `82363dc` in https://github.com/Tyneside-Software/hackathon-api/pull/2. `empire_games` and `empire_cars` have no `device_id`.
+API slice A2 merged as `64460c3` in https://github.com/Tyneside-Software/hackathon-api/pull/3. `POST /register` still creates the user. `ensure_game` then creates T1, T2, and T3 at the depot.
 
-Fare cards F1 to F30 stay done. Office slices 45 to 60 wait.
+API slice A1 is `82363dc`. Office slices 45 to 60 wait.
 
-Next: A2. `POST /register` still creates the user. `ensure_game` then creates T1, T2, and T3 at the depot.
+Next: A3. A background tick advances every account once a second, with no browser open.
