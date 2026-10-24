@@ -50,6 +50,7 @@
     if (!under || !mapEl || !mapEl.parentNode) return;
     if (under.previousElementSibling !== mapEl) mapEl.insertAdjacentElement("afterend", under);
     [
+      "play-moving",
       "play-locks",
       "play-osrm",
       "play-buses",
@@ -83,6 +84,7 @@
     .addTo(map);
 
   const PLAY_SIGNS = ["T1", "T2", "T3", "T4", "T5", "T6", "T7", "T8", "T9", "T10"];
+  const PLAY_SECOND = 1;
   const FEED_COLOURS = {
     T1: "#f5b942",
     T2: "#38bdf8",
@@ -141,7 +143,8 @@
 
   function playNow() {
     if (!playClock) return Date.now() / 1000;
-    return playClock.server + (Date.now() / 1000 - playClock.client);
+    const elapsed = Date.now() / 1000 - playClock.client;
+    return playClock.server + elapsed * PLAY_SECOND;
   }
 
   function newCarLineReady() {
@@ -239,6 +242,7 @@
         const item = document.createElement("li");
         let text = reported ? sign + " " + reported[0] + ", " + reported[1] : sign;
         if (car.status === "returning") text += " is returning";
+        item.dataset.sign = sign;
         item.textContent = text;
         list.appendChild(item);
       }
@@ -572,7 +576,13 @@
       const marker = playChips.get(car.sign);
       if (!marker) return;
       const place = playPlace(car, now);
-      if (place) marker.setLatLng(place);
+      if (!place) return;
+      marker.setLatLng(place);
+      const item = document.querySelector('#play-taxi-list [data-sign="' + car.sign + '"]');
+      if (!item) return;
+      let text = car.sign + " " + place[0] + ", " + place[1];
+      if (car.status === "returning") text += " is returning";
+      item.textContent = text;
     });
     playMotion = requestAnimationFrame(glidePlay);
   }
