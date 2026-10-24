@@ -25,14 +25,14 @@ The office and the empire are the same booking desk. `office.html` is the real c
 | Lane | State | Next slice |
 |------|--------|------------|
 | Product owner | The `queue low` note is stale. The checkout is behind `main`. | Pull `origin/main`. Open slice 51, `Real-time clock for the empire`, then 52 to 76, then 32 to 50. Do not stop. Skip a title that already has an issue. |
-| grok-dev-1 | On task. Slice 12, the tariff clock, is on `main` at `8d93b8f`. The soiling day is in progress. | Finish slice 13. A soiling-only day is 12500 and labelled `soiling-day`, beside the 2860 day. Then slices 14 to 31. Do not stop. |
-| grok-dev-2 | On task. Slice 24, the real-time clock, is on `main` at `2d3e25c`. Slice 25 is in progress on `lane/grok-dev-2/position`. | Finish slice 25 and merge it. Halfway through a 600 second route is 300 seconds. Then slice 26: 3 miles with no OSRM duration take 360 seconds at 30 miles per hour. Then slices 27 to 38. Slices 11 to 23 still wait. |
+| grok-dev-1 | On task. Slice 13, the soiling day, is on `main` at `d8d50fd`. The radio line that still asks for slice 13 is stale. | Slice 14. A completed £11.30 booking marked cash or account stays 1130. Then slices 15 to 31. Do not stop. |
+| grok-dev-2 | On task. Slice 25, the place on a route, is on `main` at `5a4883a`. The radio line that still asks for slice 25 is stale. | Slice 26. With no OSRM duration, 3 miles take 360 seconds at 30 miles per hour, and the page says `OSRM unavailable`. Then slices 27 to 38. Slices 11 to 23 still wait. |
 
 Do not redo a slice that is already on `main`. Do not start the reservoir.
 
 The empire is a real-time game. One real second is one game second. There is no faster clock. When OSRM returns a duration, that duration is the journey. The car moves along the route as those seconds pass. When OSRM does not answer, the car moves in a straight line at 30 miles per hour, the built-up speed limit, and the page says `OSRM unavailable`. A new fare is offered every 20 real seconds while fewer than 3 offers are waiting. Each trip is inside the circle, not Berwick, and between 1 and 8 miles, so the drive is a few minutes rather than an hour. The checked day stays −1120. The company desk is unchanged.
 
-The box site was `265adfc`. The tariff clock `8d93b8f` and the real-time clock `2d3e25c` are on `main` and not on the box yet. Deploy after this note. The moving car is the next empire slice, so it is not on the live page until slice 27 lands. A later radio-only commit is not another deploy.
+The box site is `0302dfd`. `/health` is `0.1.26`. `.\scripts\check.ps1` printed `CHECK-OK`. That includes the tariff clock, the real-time clock, the soiling day, and the car's place on a route. The car does not move on the map until slice 27. A later radio-only commit is not another deploy.
 
 ## Product owner
 
@@ -244,4 +244,4 @@ Reservoir. Do not start these.
 
 On `continue`, lead. Watch productivity against the three objectives: the tracker, the real booking desk, and the real-time empire. Read the radios and the lane checkouts. Do not edit those checkouts. Name the next slice in `## Now`. Keep at least 12 Open slices that are not yet on `origin/main` in front of each lane. Deploy once when product code has merged since the site commit in `## Now`. A radio-only commit is not a deploy.
 
-Last deploy: box site `265adfc`, health `0.1.26`, `CHECK-OK`. The tariff clock and the real-time clock are newer. Deploy once after this note. Do not deploy a later radio-only note.
+Last deploy: box site `0302dfd`, health `0.1.26`, `CHECK-OK`. Do not deploy a later radio-only note.
