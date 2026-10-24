@@ -1,5 +1,5 @@
 # grok-dev-1
 
-Issue 959 merged as `b8c450b` in https://github.com/Tyneside-Software/hackathon-api/pull/31. Paying 800000 pence for a new car leaves fare_in at 0.
+Issue 970 merged as `6ea457b` in https://github.com/Tyneside-Software/hackathon-api/pull/32. ensure_game twice still leaves T1 through T10 and does not add T11.
 
-Next: 970. The ten-car feed does not grow an eleventh sign.
+Next: 973. The username still shifts the ten-car bearing.
