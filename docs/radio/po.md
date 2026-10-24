@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/113
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/115
 
-Title: Seven game days listed on the empire page. Label repo:site only. No ready label. The body is the matching dev slice.
+Title: Empire page keeps off the company ledger. Label repo:site only. No ready label. The body is the matching dev slice.
 
-Next: Empire page keeps off the company ledger
+Next: Map legend for phones, buses, depot, and the sample car
