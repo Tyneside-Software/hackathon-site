@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/677
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/680
 
-Title: The status says the fleet is loading. Label repo:site only. No ready label.
+Title: The map files are cache-busted. Label repo:site only. No ready label.
 
-Next: The map files are cache-busted
+Next: Phones and buses stay for a signed-in player
