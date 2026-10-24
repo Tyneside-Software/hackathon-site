@@ -837,12 +837,14 @@ def _apply_numstat(raw: str, total: int, points: list[tuple[int, int]], window_s
     added_window = 0
     ts = 0
     for line in raw.splitlines():
-        if line.startswith("\x1e"):
+        # A plain timestamp marker. Record-separator bytes are line breaks in
+        # Python, so they never stay at the start of a split line.
+        if line.startswith("COMMIT "):
             if ts:
                 points.append((ts, total))
             try:
-                ts = int(line[1:].strip() or "0")
-            except ValueError:
+                ts = int(line.split()[1])
+            except (IndexError, ValueError):
                 ts = 0
             continue
         parts = line.split("\t")
@@ -888,7 +890,7 @@ def code_progress(repo: Path) -> dict:
             [
                 "log",
                 "--reverse",
-                "--pretty=format:%x1e%ct",
+                "--pretty=format:COMMIT %ct",
                 "--numstat",
                 f"{cached['tip']}..{tip}",
             ],
@@ -901,7 +903,7 @@ def code_progress(repo: Path) -> dict:
         total, _added = _apply_numstat(raw, int(cached.get("total") or 0), points, window_start)
     else:
         raw = git(
-            ["log", "--reverse", "--pretty=format:%x1e%ct", "--numstat", "origin/main"],
+            ["log", "--reverse", "--pretty=format:COMMIT %ct", "--numstat", "origin/main"],
             repo,
             timeout=120,
         )
@@ -910,7 +912,7 @@ def code_progress(repo: Path) -> dict:
         points = []
         total, _added = _apply_numstat(raw, 0, points, window_start)
     recent = git(
-        ["log", "--since=3 hours ago", "--pretty=format:%x1e%ct", "--numstat", "origin/main"],
+        ["log", "--since=3 hours ago", "--pretty=format:COMMIT %ct", "--numstat", "origin/main"],
         repo,
         timeout=40,
     )
@@ -993,7 +995,7 @@ def box_has_play() -> bool:
             headers={"Cache-Control": "no-cache"},
         )
         with urllib.request.urlopen(req, timeout=4) as res:
-            chunk = res.read(500).decode("utf-8", "replace")
+            chunk = res.read(8000).decode("utf-8", "replace")
             ok = res.status == 200 and "play-map" in chunk
     except (OSError, urllib.error.URLError, TimeoutError, ValueError):
         ok = False
