@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/258
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/260
 
-Title: Next fare countdown on the empire page. Label repo:site only. No ready label.
+Title: The car at the depot takes the oldest fare. Label repo:site only. No ready label.
 
-Next: The car at the depot takes the oldest fare
+Next: Two cars move at the same time
