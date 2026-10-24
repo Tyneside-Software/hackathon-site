@@ -452,6 +452,7 @@
     let text = who ? who + ". " + fleet : fleet;
     if (feed && feed.osrm_unavailable === true) text += " OSRM unavailable";
     line.textContent = text;
+    hideCompanyTotals();
   }
 
   function paintPlayOsrm(feed) {
@@ -460,6 +461,15 @@
     const cars = feed && Array.isArray(feed.cars) ? feed.cars : [];
     const missing = (feed && feed.osrm_unavailable === true) || cars.some((car) => car && car.osrm === false);
     line.textContent = missing ? "OSRM unavailable" : "";
+  }
+
+  function hideCompanyTotals() {
+    ["2860", "1130", "1240"].forEach((bad) => {
+      document.querySelectorAll("#play-money-lines li, #play-status").forEach((node) => {
+        if (!node || node.textContent.indexOf(bad) === -1) return;
+        node.textContent = node.textContent.split(bad).join("").replace(/\s{2,}/g, " ").trim();
+      });
+    });
   }
 
   function shownPence(value) {
@@ -475,6 +485,7 @@
       const amount = shownPence(feed && feed[key]);
       row.textContent = (amount === "" ? key : key + " " + amount) + " pence";
     });
+    hideCompanyTotals();
   }
 
   const playAccount = document.getElementById("play-account");
