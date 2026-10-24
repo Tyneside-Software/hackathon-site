@@ -18,17 +18,19 @@ Queue depth is in `docs/radio/README.md`. Each of the three lanes keeps at least
 
 The integrator leads on `continue`. The only products are the tracker, the booking office, and the empire game in `docs/TAXI.md`.
 
-The tracker model is agreed. Issues 22 and 29 stay `blocked`. Do not migrate the live database. The office and the empire are the work in progress.
+The tracker model is agreed. Issues 22 and 29 stay `blocked`. Do not migrate the live database.
+
+The office and the empire are the same booking desk. `office.html` is the real company. `game.html` is the same desk filled with simulated rows. The banner is the visible difference: `Real data` on the office, `Simulated data` on the empire. Same nav, same `office-grid`, same three panels (`Quote`, `Bookings`, `Ledger`), same `app/office.css`. The company ledger never shows game costs. The game ledger never shows the company totals 2860, 1130, or 1240. Live progress is `http://100.65.94.5/office.html` and `http://100.65.94.5/game.html`.
 
 | Lane | State | Next slice |
 |------|--------|------------|
-| Product owner | On task. Issue 115 keeps the empire page off the company ledger. | `Map legend for phones, buses, depot, and the sample car`, then the rest of the list. Do not stop after one issue. Skip a title that already has an issue. |
-| grok-dev-1 | On task. Slices 1 to 8 are on `main`, through the Berwick name refusal at `157265a`. | Slice 9. The day's rows survive a reload in `localStorage` under `hackathon-office-day`. A restore rebuilds 1130, 1240, and 490 and shows 2860. Then slice 10. |
-| grok-dev-2 | On task. Slices 1 to 6 are on `main`, through the zero-mile cancel at `1107e54`. | Slice 7. Driver Jamie costs 0. The worked fare 1040 still pays −520. The day stays −1120. Then slice 8. |
+| Product owner | The old list is done and the radio says `queue low`. | Slice 32, `Real data banner on the office desk`, then every new title below. Do not stop. Skip a title that already has an issue. |
+| grok-dev-1 | On task. Slices 1 to 8 are on `main`, through `157265a`. | Slice 9, the browser book under `hackathon-office-day`. Then keep going. Slice 17 starts the shared desk. |
+| grok-dev-2 | On task. Slices 1 to 9 are on `main`, through the Durham pin at `7068f9a`. | Slice 10, seven worked days at −7840. Then keep going. Slice 15 starts the shared desk. Do not edit `app/office.css`. |
 
 Do not redo a slice that is already on `main`. Do not start the reservoir.
 
-The box site is `7cb4db0`. `/health` is `0.1.26`. `.\scripts\check.ps1` printed `CHECK-OK` (board 50, 9 todo, 2 ready, 39 done, buses sqlite). That includes the empty day, the split quote, the Berwick refusal, and the unpaid second car. Do not deploy this note.
+The box was behind `main`. Deploy after this note so the live site shows the Durham pin, the three-car day, and Jamie. Record the site commit in the integrator section. A later radio-only commit is not another deploy.
 
 ## Product owner
 
@@ -36,7 +38,7 @@ No product code. You may commit and squash-merge a branch that changes only `doc
 
 Done, already on `main`: issues 30, 31, 32, 33, and 34 are open. Issues 23 and 24 are commented. Issues 22, 29, and 34 stay `blocked`. Do not open those titles again.
 
-Open slices. One issue, then a radio note, then the next. If that exact title already exists, comment on it and do not open a second. Label `repo:site` only. The issue body is the matching dev slice in this file. Do not add `ready`. Skip a title that already has an issue. The next title is `Map legend for phones, buses, depot, and the sample car`.
+Open slices. One issue, then a radio note, then the next. If that exact title already exists, comment on it and do not open a second. Label `repo:site` only. The issue body is the matching dev slice in this file. Do not add `ready`. Skip a title that already has an issue. The old list is done. The next title is `Real data banner on the office desk`.
 
 1. `Office booking fields for pickup and drop-off`
 2. `Office status changes add the fare once`
@@ -69,6 +71,25 @@ Open slices. One issue, then a radio note, then the next. If that exact title al
 29. `Cash or account does not change the fare`
 30. `Desk rejects negative miles`
 31. `Sunderland customer pin`
+32. `Real data banner on the office desk`
+33. `Office heading is Booking desk`
+34. `Office page uses the three shared panels`
+35. `Company ledger panel stays free of game costs`
+36. `Office empty book says no bookings yet`
+37. `Office bookings use the shared row`
+38. `Office week strip stays 20020`
+39. `Office page links to the empire`
+40. `Simulated data banner on the empire desk`
+41. `Empire heading is Booking desk`
+42. `Empire page uses the three shared panels`
+43. `Worked job shown as one booking row`
+44. `Game ledger panel shows minus 1120`
+45. `Empire empty book says no bookings yet`
+46. `Three simulated cars as booking rows`
+47. `Empire week strip shows minus 7840`
+48. `Empire page links to the office`
+49. Comment on issues 32 to 48. Quote `Real data`, `Simulated data`, and the pence figure from the matching slice. Do not add `ready`.
+50. If fewer than 8 of these titles are still unopened, write `queue low`.
 
 Reservoir. Do not open these yet.
 
@@ -113,6 +134,13 @@ Open slices.
 14. Cash or account. A completed £11.30 booking can be marked cash or account. The pence stays 1130 either way. `FARE-OK`.
 15. Negative miles. The desk rejects them and the previous quote stays on screen. `FARE-OK`.
 16. Help panel. It states the tariff one flag fall of 240 pence and the tariff two flag fall of 315 pence. It does not change a quote. `FARE-OK`.
+17. Real banner. Add `<p class="desk-banner">Real data</p>` above the heading. The heading is `Booking desk`. Describe both in `docs/taxi-office.md`. The locked pence do not move. `FARE-OK`.
+18. Shared panels. Keep the three panels in `office-grid`, with headings `Quote`, `Bookings`, and `Ledger`. The ledger note says the money is the company's. It does not show a driver share, fuel, standing, or −1120.
+19. Empty book. When the bookings panel has no rows, it says `No bookings yet.`
+20. Shared row. Each sample booking is one row showing pickup, drop-off, call sign, status, and the fare in pounds. The £11.30 row and the £12.40 row use it.
+21. Week strip. The company week stays 20020 pence and is labelled `company-week` inside the ledger panel.
+22. Empire link. The nav on `office.html` includes a link to `game.html` named `Empire`. Do not edit `index.html`.
+23. Status words. The row status is one of `offered`, `accepted`, `started`, `completed`, or `cancelled`. Completing the £11.30 row still adds 1130 once.
 
 Reservoir. Do not start these.
 
@@ -125,11 +153,11 @@ Reservoir. Do not start these.
 
 Checkout `C:\Users\MichaelThomson\source\lanes\grok-dev-2\hackathon-site`. Pull request 25 is merged as `e4a2c1c`. Branch the next slice from current `origin/main` as `lane/grok-dev-2/<slug>`.
 
-You own the circle, the game ledger, the sample car, and the map drawing for this game. You may edit `scripts/taxi_geo.py`, `scripts/taxi_geo_check.py`, `scripts/taxi_game.py`, `scripts/taxi_day_check.py`, `scripts/taxi_week_check.py`, `app/taxi-game.js`, `game.html`, `app/map.js`, `app/map.css`, `docs/taxi-game.md`, and `docs/taxi-day.md`. Do not edit the fare module, `office.html`, `index.html`, `docs/pages.json`, `docs/TAXI.md`, `docs/taxi-model.md`, or `app/models.py`. Do not write the live database. The Empire link is already on the home page. Do not edit `docs/pages.json`.
+You own the circle, the game ledger, the sample car, and the map drawing for this game. You may edit `scripts/taxi_geo.py`, `scripts/taxi_geo_check.py`, `scripts/taxi_game.py`, `scripts/taxi_day_check.py`, `scripts/taxi_week_check.py`, `app/taxi-game.js`, `game.html`, `app/map.js`, `app/map.css`, `docs/taxi-game.md`, and `docs/taxi-day.md`. You may link `app/office.css` from `game.html`. Do not edit that file, `office.html`, `app/office.js`, the fare module, `index.html`, `docs/pages.json`, `docs/TAXI.md`, `docs/taxi-model.md`, or `app/models.py`. Do not write the live database. The Empire link is already on the home page.
 
 `GEO-OK`, `DAY-OK`, and `WEEK-OK` must pass before each merge that touches those scripts. The one-car worked day stays −1120 pence. Seven of those days stay −7840. A new car stays −800000 and never has a `device_id`. No API call. Do not import the office ledger and do not show 2860, 1130, or 1240 as game cash. The priced fare in the worked day stays 1040. Do not price Hexham, Durham, or Sunderland by distance.
 
-Done, on `e4a2c1c`: the checkers, `game.html`, the 80467 metre circle, the `Shiremoor depot` marker, and the sample car that asks OSRM or shows `OSRM unavailable` without repricing the day. Open slices 1 to 6 are also on `main`, through `1107e54`. Skip them.
+Done, on `e4a2c1c`: the checkers, `game.html`, the 80467 metre circle, the `Shiremoor depot` marker, and the sample car that asks OSRM or shows `OSRM unavailable` without repricing the day. Open slices 1 to 9 are also on `main`, through the Durham pin at `7068f9a` and the three-car day at `1f5a3ff`. Skip them.
 
 Open slices. Use the coordinates already in `scripts/taxi_geo_check.py`. Do not invent a new pin.
 
@@ -147,6 +175,15 @@ Open slices. Use the coordinates already in `scripts/taxi_geo_check.py`. Do not 
 12. Map legend. The map names phones, buses, the depot, the circle, and the sample car as different things. The sample-car popup says `not a device`. The circle text includes `80467 m`. The depot label stays `Shiremoor depot`.
 13. Sunderland customer. A pin at `54.9069, -1.3838` is inside and has no fare of its own. `GEO-OK` still passes.
 14. Returning pin. Status `returning` draws the sample car on the depot pin. The worked day stays −1120. `DAY-OK`.
+15. Simulated banner. `game.html` links `styles.css` and `app/office.css`. Add `<p class="desk-banner">Simulated data</p>`. The heading is `Booking desk`. Do not edit `app/office.css`. The worked day stays −1120. `DAY-OK`.
+16. Shared panels. Use `office-grid` and three `office-panel` sections headed `Quote`, `Bookings`, and `Ledger`. Keep the place list and the checkers' results. Do not show 2860, 1130, or 1240.
+17. One booking row. The worked job is a row: pickup `Grey's Monument`, drop-off `Shiremoor depot`, call sign `T1`, status `completed`, fare £10.40. It is not a device.
+18. Ledger panel. The ledger uses the same ledger line markup as the office and shows standing −£15.00, fare £10.40, driver share −£5.20, fuel −£1.40, and the sum −£11.20.
+19. Empty book. Cancel before the car starts shows `No bookings yet.` and no fare. `DAY-OK` still expects no lines for that case.
+20. Three rows. The three-car day shows `T1`, `T2`, and `T3` as booking rows. The sum stays −4120. `DAY-OK`.
+21. Week strip. Seven rows or seven lines of −1120 sit in the ledger panel. The total is −7840. The purchase control still reaches −807840. `WEEK-OK` and `FLEET-OK`.
+22. Office link. The nav on `game.html` includes `office.html` named `Office` and `game.html` named `Empire`. Do not edit `index.html`.
+23. Status words. The sample car status is one of `at_depot`, `offered`, `accepted`, `started`, or `returning`, shown on the booking row. Completing the worked day still adds −1120 once.
 
 Reservoir. Do not start these.
 
@@ -161,4 +198,4 @@ Reservoir. Do not start these.
 
 On `continue`, lead. Read the three radio files and look at the lane checkouts. Do not edit those checkouts. Name the next slice in `## Now`. Top up any lane with fewer than 8 Open slices not yet on `origin/main`. Deploy once when product code has merged since the site commit in `## Now`. Write the result back here. A radio-only commit is not a deploy.
 
-Last deploy: box site `7cb4db0`, health `0.1.26`, `CHECK-OK`. Do not deploy a later radio-only note.
+Last deploy recorded before this pass: box site `a939a85`. `main` has moved. Deploy once after this note, then write the new site commit here. Do not deploy a later radio-only note.
