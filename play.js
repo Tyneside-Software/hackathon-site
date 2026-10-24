@@ -85,6 +85,7 @@
       "play-buy-flight",
       "play-buy-once",
       "play-spent-feed",
+      "play-fare-in",
       "play-started-ten",
       "play-locks",
       "play-osrm",
@@ -922,14 +923,28 @@
     return String(pence);
   }
 
+  function fareInAmount(value) {
+    const amount = shownPence(value);
+    if (amount === "800000") return "";
+    return amount;
+  }
+
+  function noteFareIn() {
+    const row = document.querySelector('[data-money="fare_in"]');
+    const note = document.getElementById("play-fare-in");
+    if (!note) return;
+    note.dataset.fare = row && row.textContent.indexOf("800000") !== -1 ? "shows" : "clear";
+  }
+
   function paintPlayMoney(feed) {
     ["fare_in", "driver_share", "fuel", "standing", "new_car"].forEach((key) => {
       const row = document.querySelector('[data-money="' + key + '"]');
       if (!row) return;
-      const amount = shownPence(feed && feed[key]);
+      const amount = key === "fare_in" ? fareInAmount(feed && feed[key]) : shownPence(feed && feed[key]);
       row.textContent = (amount === "" ? key : key + " " + amount) + " pence";
     });
     hideCompanyTotals();
+    noteFareIn();
     const money = document.getElementById("play-money");
     if (money) money.dataset.follows = "feed";
     keepPlayMoney();
