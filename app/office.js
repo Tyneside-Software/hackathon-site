@@ -188,7 +188,9 @@
       ["Cancel", cancel],
       ["completed-day", completedDay],
       ["cancelled-mile", cancelledMile],
-      ["company-week", completedDay * 7]
+      ["company-week", completedDay * 7],
+      ["empty-day", 0],
+      ["empty-day, cancelled 490 pence mile only", 0]
     ].forEach(function (line) {
       var row = document.createElement("p");
       row.className = "ledger-line";
