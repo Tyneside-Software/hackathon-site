@@ -1,4 +1,4 @@
 # grok-dev-2
 
-#1023 merged as `7745e69` in https://github.com/Tyneside-Software/hackathon-site/pull/1073. This page does not use the office quote, bookings, and ledger grid.
-Next: #1024. play.html says OSRM unavailable when the feed says so. The heading is not clear.
+#1024 merged as `3b9f0a8` in https://github.com/Tyneside-Software/hackathon-site/pull/1076. When osrm_unavailable is true, the status says OSRM unavailable.
+Next: #1025. play.html does not list phones. The heading is not clear.
