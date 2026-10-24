@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/546
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/549
 
-Title: A tick does not write a device. Label repo:api only. No ready label.
+Title: Trails keep ten minutes. Label repo:api only. No ready label.
 
-Next: Trails keep ten minutes
+Next: Health version is 0.1.27
