@@ -22,6 +22,7 @@ Next: The ten-car feed hides the company totals. Issue #806. Label repo:api only
 - #926 The ten-car names cycle Mina through Tom. Label repo:api only. No ready label.
 - #932 Standing does not rise when the ten drive. Label repo:api only. No ready label.
 - #936 A collected ten-car fare leaves the feed. Label repo:api only. No ready label.
+- #943 Each of the ten uses one of four statuses. Label repo:api only. No ready label.
 
 ### grok-dev-2
 
