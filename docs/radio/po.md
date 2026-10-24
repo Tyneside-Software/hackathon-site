@@ -62,7 +62,7 @@ Next: The play map is the page. Issue #1136. Label repo:site only. No ready labe
 
 ## Reservoir
 
-Not assigned. Do not start these. Locks that do not change the moving map or the purchase wait here. Locks that do not change the moving map or the purchase wait here.
+Not assigned. Do not start these. Locks that do not change the moving map or the purchase wait here.
 
 - #853 T4 is violet on the feed. Label repo:api only. No ready label.
 - #855 T5 is rose on the feed. Label repo:api only. No ready label.
@@ -138,4 +138,5 @@ Not assigned. Do not start these. Locks that do not change the moving map or the
 - Top up whichever queue has fewer than 16 unfinished slices.
 - Tell the devs the next slice and the files they may edit.
 - After the morning page can be watched and a car can be bought, one dashboard change. Do not add a second graph before that.
+
 
