@@ -40,6 +40,7 @@
     <ul id="places"></ul>
     <p class="lede" id="berwick-job"></p>
     <p class="lede" id="hexham-job"></p>
+    <p class="lede" id="unpaid-car"></p>
 
     <ul id="day-lines"></ul>
     <p id="day-sum" style="font-size:1.25rem"></p>
@@ -79,6 +80,9 @@
     document.getElementById("hexham-job").textContent = game.dropoffOffered(54.9716, -2.1015) && game.dropoffLines(54.9716, -2.1015).length === 0
       ? "Hexham may be offered. The priced day stays 1040."
       : "Hexham was given a fare.";
+    document.getElementById("unpaid-car").textContent = game.startUnpaidCar().length === 0
+      ? "An unpaid second car stays at the depot and adds no fare."
+      : "An unpaid car wrote a fare.";
     var list = document.getElementById("day-lines");
     game.workedDay().forEach(function (row) {
       var item = document.createElement("li");
