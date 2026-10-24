@@ -620,6 +620,21 @@ def main():
     if "empireTip(car)" not in glide_body:
         print("the gliding marker had no tooltip", file=sys.stderr)
         return 1
+    if "empireMarkers" not in handler or "paintEmpireFares()" not in handler:
+        print("hide taxis left the chips or the fare markers", file=sys.stderr)
+        return 1
+    if "setPhonesOn" in handler or "setBusesOn" in handler:
+        print("hide taxis stopped the phones or the buses", file=sys.stderr)
+        return 1
+    if '"/v1/devices"' not in map_js or '"/v1/buses"' not in map_js:
+        print("phones or buses no longer load", file=sys.stderr)
+        return 1
+    if "empireHidden" not in glide_body:
+        print("the glide put the chips back while taxis were hidden", file=sys.stderr)
+        return 1
+    if "empireHidden" not in waiting_body:
+        print("hide taxis left the fare markers on the map", file=sys.stderr)
+        return 1
     posted_trip = taxi_game.post_live_trip(7, 3, ())
     posted_kinds = [row["kind"] for row in posted_trip["lines"]]
     posted_amounts = [row["amount_pence"] for row in posted_trip["lines"]]
