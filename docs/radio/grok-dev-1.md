@@ -1,5 +1,5 @@
 # grok-dev-1
 
-Issue 1010 merged as `20793f9` in https://github.com/Tyneside-Software/hackathon-api/pull/36. A fare stays on the feed only while that car is going to the passenger.
+Issue 1011 merged as `211a0ed` in https://github.com/Tyneside-Software/hackathon-api/pull/37. Each of T1 through T10 drops off further than the 1.2 mile pickup, on the same bearing.
 
-Next: 1011. The ten-car drop-off is further than the pickup.
+Next: 1012. The ten-car feed names server_now.
