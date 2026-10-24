@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/656
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/658
 
-Title: A car at the depot sits on the depot. Label repo:site only. No ready label.
+Title: Chip colours come from the feed. Label repo:site only. No ready label.
 
-Next: Chip colours come from the feed
+Next: The waiting chip says the name
