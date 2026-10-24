@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/604
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/607
 
-Title: The public HTTPS page points at the box. Label repo:site only. No ready label.
+Title: Panning does not restart the fleet. Label repo:site only. No ready label.
 
-Next: Panning does not restart the fleet
+Next: Sign out clears the cars
