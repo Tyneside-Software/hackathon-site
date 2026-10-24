@@ -487,6 +487,15 @@ def main():
     if 'id="empire-account"' not in empire or empire.find('id="empire-account"') > empire.find('id="btn-taxis"'):
         print("the account form was not the first empire control", file=sys.stderr)
         return 1
+    if 'id="empire-username"' not in empire or 'type="password"' not in empire or 'id="empire-password"' not in empire:
+        print("the account form had no username or password", file=sys.stderr)
+        return 1
+    if ">Create account<" not in empire or ">Sign in<" not in empire:
+        print("the account form had no create or sign-in control", file=sys.stderr)
+        return 1
+    if "The password is at least 8 characters." not in empire:
+        print("the password hint was missing", file=sys.stderr)
+        return 1
     posted_trip = taxi_game.post_live_trip(7, 3, ())
     posted_kinds = [row["kind"] for row in posted_trip["lines"]]
     posted_amounts = [row["amount_pence"] for row in posted_trip["lines"]]

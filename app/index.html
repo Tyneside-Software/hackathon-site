@@ -7,7 +7,7 @@
   <link rel="icon" href="../logo.svg" type="image/svg+xml">
   <link rel="stylesheet" href="../styles.css?v=20260912-trails1">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
-  <link rel="stylesheet" href="map.css?v=20261024-fleet2">
+  <link rel="stylesheet" href="map.css?v=20261024-account2">
 </head>
 <body class="site">
   <nav class="site-nav" aria-label="Primary">
@@ -68,6 +68,17 @@
       <p class="hero-kicker" style="margin-top:1.25rem">Empire</p>
       <form id="empire-account" class="empire-account">
         <p class="hero-kicker">Account</p>
+        <label class="form-field" for="empire-username">Username
+          <input id="empire-username" name="username" autocomplete="username" required>
+        </label>
+        <label class="form-field" for="empire-password">Password
+          <input id="empire-password" name="password" type="password" autocomplete="current-password" minlength="8" required>
+        </label>
+        <p class="map-status" id="empire-account-hint">The password is at least 8 characters.</p>
+        <div class="map-actions">
+          <button type="button" class="btn btn-fill" id="empire-create">Create account</button>
+          <button type="button" class="btn btn-ghost" id="empire-signin">Sign in</button>
+        </div>
         <p class="map-status" id="empire-account-status">An account comes before the taxis.</p>
       </form>
       <p class="lede" style="font-size:0.88rem">The account form comes first. This page does not start T1, T2, and T3 by itself.</p>

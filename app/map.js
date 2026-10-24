@@ -1772,6 +1772,8 @@
       else stopFleet();
     });
   }
+  const empireForm = document.getElementById("empire-account");
+  if (empireForm) empireForm.addEventListener("submit", (ev) => ev.preventDefault());
   syncTaxiButton();
   paintTaxiList(true);
 })();
