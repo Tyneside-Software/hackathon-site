@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/110
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/113
 
-Title: Durham customer pin and OSRM. Label repo:site only. No ready label. The body is the matching dev slice.
+Title: Seven game days listed on the empire page. Label repo:site only. No ready label. The body is the matching dev slice.
 
-Next: Seven game days listed on the empire page
+Next: Empire page keeps off the company ledger
