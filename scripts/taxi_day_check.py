@@ -231,6 +231,18 @@ def main():
     if "device_id" in arrived_home:
         print("the returning car was a device", file=sys.stderr)
         return 1
+    checked_fuel = [row for row in taxi_game.worked_day() if row["kind"] == "fuel"]
+    if len(checked_fuel) != 1 or checked_fuel[0]["amount_pence"] != -140:
+        print(f"checked fuel {checked_fuel}", file=sys.stderr)
+        return 1
+    first_fuel = taxi_game.post_live_fuel(9, 3, ())
+    if first_fuel["fuel_pence"] != -60 or taxi_game.sum_pence(first_fuel["lines"]) != -60:
+        print(f"live fuel {first_fuel}", file=sys.stderr)
+        return 1
+    second_fuel = taxi_game.post_live_fuel(9, 3, first_fuel["posted"])
+    if second_fuel["fuel_pence"] != 0 or second_fuel["lines"] != []:
+        print("a second completion added fuel", file=sys.stderr)
+        return 1
     if taxi_game.live_fare_pence(3, 0) != 1040:
         print(f"live fare {taxi_game.live_fare_pence(3, 0)}", file=sys.stderr)
         return 1
