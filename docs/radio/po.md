@@ -9,6 +9,7 @@ Files in hackathon-api only: app/empire.py, app/routers/empire.py, tests/test_em
 Next: The fleet starts with ten cars at the depot. Issue #788. Label repo:api only. No ready label. Keep going for about 30 minutes.
 
 - #788 The fleet starts with ten cars at the depot. Label repo:api only. No ready label.
+- #790 T4 to T10 have their own colours. Label repo:api only. No ready label.
 
 ### grok-dev-2
 
