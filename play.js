@@ -142,6 +142,7 @@
       "play-next-account",
       "play-fare-t12",
       "play-next-feed",
+      "play-feed-401",
       "play-locks",
       "play-osrm",
       "play-buses",
@@ -689,6 +690,16 @@
     node.dataset.pence = String(playBuyPence());
   }
 
+  function noteFeed401() {
+    const node = document.getElementById("play-feed-401");
+    if (!node) return;
+    const line = document.getElementById("play-spent");
+    const text = line ? line.textContent : "";
+    node.dataset.spent = text.indexOf("800000") === -1 ? "clear" : "shows";
+    node.dataset.chip = playChips.has("T11") ? "stays" : "gone";
+    node.dataset.feed = "empire";
+  }
+
   function seatPlayBuy() {
     const money = document.getElementById("play-money");
     const mapEl = document.getElementById("play-map");
@@ -1038,7 +1049,10 @@
       paintPlayStatus(null);
       showPlayAccount();
       keepPlayMap();
+      dropBoughtChips();
       paintPlayBuy();
+      clearPlaySpent();
+      noteFeed401();
       return;
     }
     if (!res.ok) {
