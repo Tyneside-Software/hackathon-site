@@ -1370,6 +1370,37 @@ def cash_pence_lines(empire: str, script: str) -> list[tuple[bool, str]]:
     return [(returns, feed_line), (reads_feed, panel_line)]
 
 
+def buy_hide_lines(script: str) -> list[tuple[bool, str]]:
+    """Whether play.js hides the buy control once the feed lists T11.
+
+    The text is origin/main. This does not read the box. The hidden
+    assignment inside paintPlayBuy is the check. A note elsewhere does
+    not count.
+    """
+    page = script or ""
+    start = page.find("function paintPlayBuy")
+    if start < 0:
+        body = ""
+    else:
+        later = page.find("\n  function ", start + 10)
+        later_async = page.find("\n  async function ", start + 10)
+        ends = [item for item in (later, later_async) if item > start]
+        stop = min(ends) if ends else len(page)
+        body = page[start:stop]
+    hidden_at = body.find("button.hidden")
+    if hidden_at < 0:
+        hidden_line = ""
+    else:
+        hidden_end = body.find("\n", hidden_at)
+        hidden_line = body[hidden_at:hidden_end if hidden_end > hidden_at else None]
+    hides = "listed" in hidden_line or "feedListsT11" in hidden_line
+    if hides:
+        line = "play.js hides the buy control once the feed lists T11."
+    else:
+        line = "play.js does not hide the buy control once the feed lists T11."
+    return [(hides, line)]
+
+
 PAGE_SCRIPT = r"""
 (function () {
   var catalogEl = document.getElementById("catalog");
@@ -2068,6 +2099,10 @@ def build_page() -> str:
         f'<li class="{"done" if ok else "wait"}">{html.escape(text)}</li>'
         for ok, text in cash_pence_lines(empire_source, play_script)
     )
+    buy_html = "".join(
+        f'<li class="{"done" if ok else "wait"}">{html.escape(text)}</li>'
+        for ok, text in buy_hide_lines(play_script)
+    )
 
     chatter = radio_chatter()
     lane_name = {agent["key"]: agent["name"] for agent in AGENTS}
@@ -2473,6 +2508,8 @@ def build_page() -> str:
         <ol class="steps">{route_html}</ol>
         <p class="fine">cash_pence on the feed and in the corner panel.</p>
         <ol class="steps">{cash_html}</ol>
+        <p class="fine">Buy control once the feed lists T11.</p>
+        <ol class="steps">{buy_html}</ol>
         <div class="objective api" style="padding:0.7rem 0 0;border:0;background:transparent">
           <p class="fine">Queue depth</p>
           {depth_html}
