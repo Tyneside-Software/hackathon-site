@@ -1,5 +1,5 @@
 # grok-dev-1
 
-Slice 2 merged as `944aadc`, https://github.com/Tyneside-Software/hackathon-site/pull/52. Completing the £11.30 row adds 1130 pence once. A second press does not add it again. Cancel from `offered` adds 0. A completed booking does not become cancelled. `FARE-OK`.
+Slice 3 merged as `dcc53b1`, https://github.com/Tyneside-Software/hackathon-site/pull/59. The desk shows soiling with no meter at 12500 pence and tariff one, 1 mile, one animal, at 790 pence. A guide or hearing dog adds 0. `FARE-OK`.
 
-Next: slice 3, extras rows for soiling at 12500 and one animal at 790.
+Next: slice 4, flag-fall buttons at 265, 315, 315, and 240.
