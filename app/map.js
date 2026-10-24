@@ -1444,6 +1444,10 @@
   let empireAccount = false;
   const EMPIRE_POLL_MS = 2000;
   let empirePoll = 0;
+  let empireFeed = null;
+  let empireClock = null;
+  let empireMotion = 0;
+  const empireMarkers = new Map();
   let empireTrails = [];
   let empireFares = [];
   let taxiPaintAt = 0;
@@ -1842,6 +1846,12 @@
     empireFares.forEach((layer) => map.removeLayer(layer));
     empireTrails = [];
     empireFares = [];
+    if (empireMotion) cancelAnimationFrame(empireMotion);
+    empireMotion = 0;
+    empireFeed = null;
+    empireClock = null;
+    empireMarkers.forEach((marker) => map.removeLayer(marker));
+    empireMarkers.clear();
     empireAccount = false;
     taxisOn = false;
     paintTaxiList(true);
@@ -1925,10 +1935,68 @@
         },
       });
       if (!res.ok) return;
-      await res.json().catch(() => null);
+      const data = await res.json().catch(() => null);
+      rememberEmpire(data);
     } catch (err) {
       if (status) status.textContent = "Asking the box for this account.";
     }
+  }
+
+  function rememberEmpire(data) {
+    if (!data || !Array.isArray(data.cars)) return;
+    empireFeed = data;
+    empireClock = {
+      server: Number(data.server_now) || 0,
+      client: Date.now() / 1000,
+    };
+    if (!empireMotion) empireMotion = requestAnimationFrame(glideEmpire);
+  }
+
+  function empireNow() {
+    if (!empireClock) return 0;
+    return empireClock.server + (Date.now() / 1000 - empireClock.client);
+  }
+
+  function glideEmpire() {
+    empireMotion = 0;
+    if (!empireToken() || !empireFeed || !Array.isArray(empireFeed.cars)) return;
+    const now = empireNow();
+    const seen = new Set();
+    empireFeed.cars.forEach((car) => {
+      if (!car || !car.sign) return;
+      seen.add(car.sign);
+      const route = Array.isArray(car.route) ? car.route : [];
+      const duration = Number(car.duration_s) || 0;
+      const started = Number(car.leg_started) || 0;
+      const elapsed = now - started;
+      const place = route.length
+        ? placeOnRoute(route, duration, elapsed)
+        : (Number.isFinite(Number(car.lat)) && Number.isFinite(Number(car.lng)) ? [Number(car.lat), Number(car.lng)] : null);
+      if (!place) return;
+      let marker = empireMarkers.get(car.sign);
+      if (!marker) {
+        marker = L.marker(place, {
+          icon: L.divIcon({
+            className: "taxi-marker",
+            html: '<span class="taxi-chip" style="background:' + (car.colour || "#94a3b8") + '">' + car.sign + "</span>",
+            iconSize: [36, 22],
+            iconAnchor: [18, 11],
+          }),
+          title: car.sign + " taxi",
+          zIndexOffset: 700,
+        }).addTo(map);
+        empireMarkers.set(car.sign, marker);
+      } else {
+        marker.setLatLng(place);
+      }
+    });
+    Array.from(empireMarkers.keys()).forEach((sign) => {
+      if (!seen.has(sign)) {
+        map.removeLayer(empireMarkers.get(sign));
+        empireMarkers.delete(sign);
+      }
+    });
+    empireMotion = requestAnimationFrame(glideEmpire);
   }
 
   function startEmpirePoll() {
