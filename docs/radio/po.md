@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/649
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/652
 
-Title: A failed sign-in shows the error. Label repo:site only. No ready label.
+Title: The map does not invent cars while it loads. Label repo:site only. No ready label.
 
-Next: The map does not invent cars while it loads
+Next: The trail fades with age
