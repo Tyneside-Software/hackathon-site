@@ -334,6 +334,26 @@
     return acceptOffer(offers, cars);
   }
 
+  function twoCarsOut(elapsedS) {
+    var offers = waitingOffers(40);
+    var depot = [
+      { callSign: "T1", status: "at_depot" },
+      { callSign: "T2", status: "at_depot" },
+      { callSign: "T3", status: "at_depot" }
+    ];
+    var first = startAccepted(freeCarTakes(offers, depot));
+    if (!first) return null;
+    var second = startAccepted(freeCarTakes(first.offers, first.cars));
+    if (!second) return null;
+    var routes = second.cars.map(function (car) {
+      if (car.status === "started" && car.route) {
+        return { points: car.route.points, durationS: car.route.durationS };
+      }
+      return null;
+    });
+    return { cars: fleetPositions(routes, elapsedS), offers: second.offers };
+  }
+
   function customerPins(offers) {
     return (offers || []).filter(function (offer) {
       return offer.status === "offered";
@@ -481,6 +501,7 @@
     waitingOffers: waitingOffers,
     acceptOffer: acceptOffer,
     freeCarTakes: freeCarTakes,
+    twoCarsOut: twoCarsOut,
     customerPins: customerPins,
     startAccepted: startAccepted,
     returnLeg: returnLeg,
