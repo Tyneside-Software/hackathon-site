@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/448
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/450
 
-Title: One real second is one game second. Label repo:site only. No ready label.
+Title: Circle and depot stay while taxis drive. Label repo:site only. No ready label.
 
-Next: Circle and depot stay while taxis drive
+Next: Sidebar lists T1 T2 and T3
