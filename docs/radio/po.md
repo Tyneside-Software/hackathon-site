@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/666
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/668
 
-Title: Sign out is not hide taxis. Label repo:site only. No ready label.
+Title: The account form leaves the sample car. Label repo:site only. No ready label.
 
-Next: The account form leaves the sample car
+Next: Hide taxis keeps the token
