@@ -52,6 +52,7 @@ Next: The 800000 line shows before that car leaves. Issue #842. Label repo:site 
 - #961 The play account form says the password is at least 8 characters. Label repo:site only. No ready label.
 - #977 A quiet play feed says the feed is quiet. Label repo:site only. No ready label.
 - #982 The play trail fades after ten minutes. Label repo:site only. No ready label.
+- #991 play.html does not draw a car before the feed arrives. Label repo:site only. No ready label.
 
 ## Reservoir
 
