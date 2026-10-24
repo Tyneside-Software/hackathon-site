@@ -78,6 +78,7 @@
       "play-trail-order",
       "play-trail-age",
       "play-trail-replace",
+      "play-trail-chip",
       "play-started-ten",
       "play-locks",
       "play-osrm",
@@ -340,6 +341,20 @@
     node.dataset.signs = signs.join(",");
   }
 
+  function keepTrailChip(sign) {
+    const marker = playChips.get(String(sign));
+    if (!marker) return false;
+    if (!map.hasLayer(marker)) marker.addTo(map);
+    marker._keptWithTrail = true;
+    return true;
+  }
+
+  function noteTrailChips(signs) {
+    const node = document.getElementById("play-trail-chip");
+    if (!node) return;
+    node.dataset.kept = signs.join(",");
+  }
+
   function paintPlayTrails(feed) {
     clearPlayTrails();
     const keep = Number(feed && feed.trail_s);
@@ -347,6 +362,7 @@
     const now = playNow();
     const cars = feed && Array.isArray(feed.cars) ? feed.cars : [];
     const fedSigns = [];
+    const keptSigns = [];
     cars.forEach((car) => {
       if (!car || !car.sign || !Array.isArray(car.trail)) return;
       const sign = String(car.sign);
@@ -376,6 +392,7 @@
       }).addTo(map);
       line._feedStamps = stamps.slice();
       playTrails.push(line);
+      if (keepTrailChip(sign)) keptSigns.push(sign);
     });
     const stale = [];
     playTrailFed.forEach(function (stamps, sign) {
@@ -383,6 +400,7 @@
     });
     stale.forEach(function (sign) { playTrailFed.delete(sign); });
     noteTrailReplaced(fedSigns);
+    noteTrailChips(keptSigns);
   }
 
   function paintPlayFares(feed) {
