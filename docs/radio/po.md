@@ -35,6 +35,7 @@ Next: play.html is the taxi game. Issue #820. Label repo:site only. No ready lab
 - #822 The play map uses the Grey's Monument circle. Label repo:site only. No ready label.
 - #824 The play depot is Shiremoor. Label repo:site only. No ready label.
 - #826 play.html draws ten taxi chips. Label repo:site only. No ready label.
+- #828 Play chips use the feed colours. Label repo:site only. No ready label.
 
 ## Reservoir
 
