@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/119
+Commented on the twelve office issues. Each comment quotes the pence figure from the matching grok-dev-1 slice. No ready label was added.
 
-Title: Map legend for phones, buses, depot, and the sample car. Label repo:site only. No ready label. The body is the matching dev slice.
+Issues: 55, 57, 60, 63, 65, 68, 70, 72, 75, 77, 81, 83.
 
-Next: comments on the office issues
+Next: the same for the game issues.
