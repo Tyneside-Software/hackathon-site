@@ -6,7 +6,7 @@ The old app/ queue is paused. Do not build issues #699 through #786. Do not edit
 
 A line marked OPEN has no issue number yet. The product owner opens it. A dev skips that line and takes the next numbered line. A dev does not invent the OPEN sentence.
 
-cash_pence is on main as 834d811. The place table is on main as 6ecd1d3. The morning journey is on main as ca1819a. The day journey is on main as c045352. Do not rebuild #1262, #1331, #1332, or #1333. Do not build #1180, #1152, #1231, #1232, #1233, or #1234 until the local-journey slices in front of #1263 are on main. fare_in is not the cash balance. 800000 is not added to fare_in.
+cash_pence is on main as 834d811. The place table is on main as 6ecd1d3. The morning journey is on main as ca1819a. The day journey is on main as c045352. The evening journey is on main as 8d74a75. Do not rebuild #1262, #1331, #1332, #1333, or #1334. Do not build #1180, #1152, #1231, #1232, #1233, or #1234 until the local-journey slices in front of #1263 are on main. fare_in is not the cash balance. 800000 is not added to fare_in.
 
 The dashboard compares GitHub with the live box, and each code line-count graph is the last 3 hours. The devs do not edit scripts/agents_dashboard.py. A dashboard change is not a deploy.
 
@@ -14,11 +14,10 @@ The dashboard compares GitHub with the live box, and each code line-count graph 
 
 Files in hackathon-api only: app/empire.py, app/routers/empire.py, app/models.py, tests/test_empire.py. Do not edit play.html, play.js, or scripts/agents_dashboard.py. An ALTER may add cash_pence. Do not wipe the live database.
 
-Skip these. They are already on main: #808, #810, #812, #814, #816, #818, #921, #923, #926, #932, #936, #943, #948, #952, #954, #959, #970, #973, #975, #979, #988, #1010, #1011, #1012, #1013, #1014, #1126, #1127, #1128, #1129, #1130, #1131, #1132, #1133, #1134, #1147, #1148, #1149, #1150, #1151, #1153, #1178, #1184, #1185, #1186, #1135, #1226, #1227, #1228, #1230, #1235, #1154, #1262, #1331, #1332, #1333.
+Skip these. They are already on main: #808, #810, #812, #814, #816, #818, #921, #923, #926, #932, #936, #943, #948, #952, #954, #959, #970, #973, #975, #979, #988, #1010, #1011, #1012, #1013, #1014, #1126, #1127, #1128, #1129, #1130, #1131, #1132, #1133, #1134, #1147, #1148, #1149, #1150, #1151, #1153, #1178, #1184, #1185, #1186, #1135, #1226, #1227, #1228, #1230, #1235, #1154, #1262, #1331, #1332, #1333, #1334.
 
-Next: From 16:30 to 19:30 Europe/London the journey runs from Cobalt and town back to the homes and the coast. Issue #1334. Label repo:api only. No ready label. Keep going for about 30 minutes.
+Next: From 19:30 to 01:00 Europe/London the journey runs from the Quayside, Osborne Road, Tynemouth, and Whitley Bay back to the homes, the quiet hours make fewer fares, and Newcastle Airport stays a small share at every hour. Issue #1335. Label repo:api only. No ready label. Keep going for about 30 minutes.
 
-- #1334 From 16:30 to 19:30 Europe/London the journey runs from Cobalt and town back to the homes and the coast. Label repo:api only. No ready label.
 - #1335 From 19:30 to 01:00 Europe/London the journey runs from the Quayside, Osborne Road, Tynemouth, and Whitley Bay back to the homes, the quiet hours make fewer fares, and Newcastle Airport stays a small share at every hour. Label repo:api only. No ready label.
 - #1336 The drop is the other end of the journey, the two ends do not share one bearing from the depot, and the old 1.2 mile pickup and 3 mile drop on that bearing are not the journey. Label repo:api only. No ready label.
 - #1320 A person waits inside the 50 mile circle with no taxi allocated. Label repo:api only. No ready label.
@@ -43,7 +42,7 @@ Next: From 16:30 to 19:30 Europe/London the journey runs from Cobalt and town ba
 - #1269 cash_pence on the feed is never 2860, 1130, or 1240. Label repo:api only. No ready label.
 - #1270 A second account has its own ten cars and its own cash_pence. Label repo:api only. No ready label.
 - #1281 The bought car holds at the Shiremoor depot for four seconds before its first fare. Label repo:api only. No ready label.
-Do not build #1180, #1152, #1231, #1232, #1233, or #1234 until the local-journey slices in front of #1263 are on main. Do not rebuild #1262, #1331, #1332, or #1333.
+Do not build #1180, #1152, #1231, #1232, #1233, or #1234 until the local-journey slices in front of #1263 are on main. Do not rebuild #1262, #1331, #1332, #1333, or #1334.
 
 ### grok-dev-2
 
