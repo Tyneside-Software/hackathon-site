@@ -424,15 +424,25 @@
     return "";
   }
 
-  function chipText(sign, job, endName) {
+  function carriedName(car) {
+    if (!car) return "";
+    const status = String(car.status || "").trim();
+    if (status !== "with_passenger" && carJob(car) !== "carrying") return "";
+    const name = typeof car.passenger === "string" ? car.passenger.trim() : "";
+    if (!name || name === "2860" || name === "1130" || name === "1240" || name === "-1120") return "";
+    return name;
+  }
+
+  function chipText(sign, job, endName, passenger) {
     let text = chipLabel(sign);
     if (job) text += " " + job;
+    if (passenger) text += " " + passenger;
     if (endName) text += " " + endName;
     return text;
   }
 
-  function chipIcon(sign, fill, job, endName) {
-    const raw = chipText(sign, job, endName);
+  function chipIcon(sign, fill, job, endName, passenger) {
+    const raw = chipText(sign, job, endName, passenger);
     const text = raw.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
     const width = Math.max(36, 8 + raw.length * 7);
     const html = '<span class="play-chip" style="display:flex;align-items:center;justify-content:center;min-width:' + width + 'px;height:22px;padding:0 4px;border-radius:6px;background:' + fill + ';color:#0c1219;font:700 11px/1 system-ui,sans-serif;white-space:nowrap">' + text + "</span>";
@@ -499,16 +509,18 @@
       const fill = chipFill(car);
       const job = carJob(car);
       const endName = feedPlaceName(car);
-      const title = chipText(sign, job, endName);
+      const passenger = carriedName(car);
+      const title = chipText(sign, job, endName, passenger);
       let marker = playChips.get(sign);
       if (!marker) {
         marker = L.marker(place, {
-          icon: chipIcon(sign, fill, job, endName),
+          icon: chipIcon(sign, fill, job, endName, passenger),
           title: title
         }).addTo(map);
         marker._playFill = fill;
         marker._playJob = job;
         marker._playPlace = endName;
+        marker._playPassenger = passenger;
         marker._playClick = true;
         marker.on("click", function () {
           playChosen = sign;
@@ -516,11 +528,12 @@
           paintPlayCars(playFeed);
         });
         playChips.set(sign, marker);
-      } else if (marker._playFill !== fill || marker._playJob !== job || marker._playPlace !== endName) {
-        marker.setIcon(chipIcon(sign, fill, job, endName));
+      } else if (marker._playFill !== fill || marker._playJob !== job || marker._playPlace !== endName || marker._playPassenger !== passenger) {
+        marker.setIcon(chipIcon(sign, fill, job, endName, passenger));
         marker._playFill = fill;
         marker._playJob = job;
         marker._playPlace = endName;
+        marker._playPassenger = passenger;
       }
       marker.options.title = title;
       if (marker._icon) marker._icon.title = title;
@@ -744,10 +757,11 @@
     return null;
   }
 
-  function firmChipText(sign, firm, job, place) {
+  function firmChipText(sign, firm, job, place, passenger) {
     let text = chipLabel(sign);
     if (firm) text += " " + firm;
     if (job) text += " " + job;
+    if (passenger) text += " " + passenger;
     if (place) text += " " + place;
     return text;
   }
@@ -775,12 +789,13 @@
         const fill = chipFill(car);
         const job = carJob(car);
         const placeName = feedPlaceName(car);
-        const title = firmChipText(sign, name, job, placeName);
+        const passenger = carriedName(car);
+        const title = firmChipText(sign, name, job, placeName, passenger);
         const iconEnd = name && placeName ? name + " " + placeName : (name || placeName);
         let marker = playFirmChips.get(sign);
         if (!marker) {
           marker = L.marker(place, {
-            icon: chipIcon(sign, fill, job, iconEnd),
+            icon: chipIcon(sign, fill, job, iconEnd, passenger),
             title: title
           }).addTo(map);
           marker.on("click", function () {
@@ -790,7 +805,7 @@
           });
           playFirmChips.set(sign, marker);
         } else if (marker._playFirmTitle !== title || marker._playFill !== fill) {
-          marker.setIcon(chipIcon(sign, fill, job, iconEnd));
+          marker.setIcon(chipIcon(sign, fill, job, iconEnd, passenger));
           marker._playFill = fill;
         }
         marker._playFirmTitle = title;
@@ -825,8 +840,10 @@
 
   function taxiListText(sign, car, lat, lng) {
     const placeName = feedPlaceName(car);
+    const passenger = carriedName(car);
     let text = String(sign || "");
     text += listStatus(car);
+    if (passenger) text += " " + passenger;
     if (placeName) text += " " + placeName;
     else if (lat !== null && lat !== undefined && lng !== null && lng !== undefined && Number.isFinite(Number(lat)) && Number.isFinite(Number(lng))) {
       text += " " + lat + ", " + lng;
