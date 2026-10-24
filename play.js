@@ -146,6 +146,7 @@
       "play-fare-name",
       "play-buy-cleared",
       "play-with-passenger",
+      "play-signout-failed",
       "play-locks",
       "play-osrm",
       "play-buses",
@@ -661,6 +662,17 @@
       clearPlaySpent();
       noteSignOutFlight();
     }
+    clearSignOutFailed();
+  }
+
+  function clearSignOutFailed() {
+    const status = document.getElementById("play-buy-status");
+    if (status && status.textContent === "Buy failed.") status.textContent = "";
+    const node = document.getElementById("play-signout-failed");
+    if (!node) return;
+    const text = status ? status.textContent : "";
+    node.dataset.failed = text === "Buy failed." ? "shows" : "clear";
+    node.dataset.signed = "out";
   }
 
   function noteSignOutFlight() {
