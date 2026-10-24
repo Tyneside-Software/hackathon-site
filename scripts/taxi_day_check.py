@@ -496,6 +496,22 @@ def main():
     if "The password is at least 8 characters." not in empire:
         print("the password hint was missing", file=sys.stderr)
         return 1
+    created = map_js.split("async function createEmpireAccount", 1)
+    if len(created) != 2:
+        print("create account did not call the API", file=sys.stderr)
+        return 1
+    created_body = created[1].split("const empireCreate", 1)[0]
+    register_at = created_body.find('"/register"')
+    login_at = created_body.find('"/login"')
+    if register_at < 0 or login_at < 0 or register_at > login_at:
+        print("create account did not register and then log in", file=sys.stderr)
+        return 1
+    if 'localStorage.setItem("hackathon-empire-token"' not in created_body:
+        print("the token was not stored for the empire", file=sys.stderr)
+        return 1
+    if "startFleet()" in created_body:
+        print("create account started the old fleet", file=sys.stderr)
+        return 1
     posted_trip = taxi_game.post_live_trip(7, 3, ())
     posted_kinds = [row["kind"] for row in posted_trip["lines"]]
     posted_amounts = [row["amount_pence"] for row in posted_trip["lines"]]

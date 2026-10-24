@@ -1774,6 +1774,59 @@
   }
   const empireForm = document.getElementById("empire-account");
   if (empireForm) empireForm.addEventListener("submit", (ev) => ev.preventDefault());
+
+  async function createEmpireAccount() {
+    const status = document.getElementById("empire-account-status");
+    const usernameEl = document.getElementById("empire-username");
+    const passwordEl = document.getElementById("empire-password");
+    const username = usernameEl ? usernameEl.value.trim() : "";
+    const password = passwordEl ? passwordEl.value : "";
+    if (username.length < 3) {
+      if (status) status.textContent = "Username is at least 3 characters.";
+      return;
+    }
+    if (password.length < 8) {
+      if (status) status.textContent = "The password is at least 8 characters.";
+      return;
+    }
+    const base = apiBase();
+    if (!base) {
+      if (status) status.textContent = "The API address is missing.";
+      return;
+    }
+    if (status) status.textContent = "Creating the account…";
+    try {
+      const registered = await fetch(base + "/register", {
+        method: "POST",
+        headers: { Accept: "application/json", "Content-Type": "application/json" },
+        body: JSON.stringify({ username: username, password: password }),
+      });
+      const created = await registered.json().catch(() => null);
+      if (!registered.ok) {
+        const detail = created && typeof created.detail === "string" ? created.detail : ("HTTP " + registered.status);
+        if (status) status.textContent = "Account not created — " + detail;
+        return;
+      }
+      const logged = await fetch(base + "/login", {
+        method: "POST",
+        headers: { Accept: "application/json", "Content-Type": "application/json" },
+        body: JSON.stringify({ username: username, password: password }),
+      });
+      const session = await logged.json().catch(() => null);
+      if (!logged.ok || !session || !session.access_token) {
+        const detail = session && typeof session.detail === "string" ? session.detail : ("HTTP " + logged.status);
+        if (status) status.textContent = "Sign-in after create failed — " + detail;
+        return;
+      }
+      localStorage.setItem("hackathon-empire-token", session.access_token);
+      if (status) status.textContent = "Account created. Token stored for " + username + ".";
+    } catch (err) {
+      if (status) status.textContent = "Network or CORS failure.";
+    }
+  }
+
+  const empireCreate = document.getElementById("empire-create");
+  if (empireCreate) empireCreate.addEventListener("click", () => { createEmpireAccount(); });
   syncTaxiButton();
   paintTaxiList(true);
 })();
