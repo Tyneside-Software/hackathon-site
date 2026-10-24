@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/445
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/448
 
-Title: Route line uses the taxi colour. Label repo:site only. No ready label.
+Title: One real second is one game second. Label repo:site only. No ready label.
 
-Next: One real second is one game second
+Next: Circle and depot stay while taxis drive
