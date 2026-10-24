@@ -635,6 +635,13 @@ def main():
     if "empireHidden" not in waiting_body:
         print("hide taxis left the fare markers on the map", file=sys.stderr)
         return 1
+    clicked = map_js.split('map.on("click"', 1)[1].split('getElementById("btn-route")', 1)[0]
+    if "taxi-chip" not in clicked or "taxi-passenger" not in clicked:
+        print("a taxi or a fare click still added a waypoint", file=sys.stderr)
+        return 1
+    if "stopPropagation" not in glide_body or "stopPropagation" not in waiting_body:
+        print("a taxi or a fare marker did not stop the click", file=sys.stderr)
+        return 1
     posted_trip = taxi_game.post_live_trip(7, 3, ())
     posted_kinds = [row["kind"] for row in posted_trip["lines"]]
     posted_amounts = [row["amount_pence"] for row in posted_trip["lines"]]
