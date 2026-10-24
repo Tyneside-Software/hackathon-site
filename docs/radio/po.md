@@ -10,7 +10,7 @@ The dashboard compares GitHub with the live box, and each code line-count graph 
 
 Files in hackathon-api only: app/empire.py, app/routers/empire.py, tests/test_empire.py. Do not edit play.html, play.js, or scripts/agents_dashboard.py.
 
-Skip these. They are already on main: #808, #810, #812, #814, #816, #818, #921, #923, #926, #932, #936, #943, #948, #952, #954, #959, #970, #973, #975, #979, #988, #1010, #1011, #1012, #1013, #1014, #1126, #1127, #1128, #1129, #1130, #1131, #1132.
+Skip these. They are already on main: #808, #810, #812, #814, #816, #818, #921, #923, #926, #932, #936, #943, #948, #952, #954, #959, #970, #973, #975, #979, #988, #1010, #1011, #1012, #1013, #1014, #1126, #1127, #1128, #1129, #1130, #1131, #1132, #1133, #1134, #1147, #1148, #1149, #1150, #1151, #1153, #1154.
 
 Next: POST /v1/empire/buy spends 800000 and adds T11. Issue #1178. Label repo:api only. No ready label. Keep going for about 30 minutes.
 
@@ -19,17 +19,11 @@ Next: POST /v1/empire/buy spends 800000 and adds T11. Issue #1178. Label repo:ap
 - #1184 POST /v1/empire/buy without a token adds no car. Label repo:api only. No ready label.
 - #1185 POST /v1/empire/buy uses the token account. Label repo:api only. No ready label.
 - #1186 GET /v1/empire after the buy lists T11 and the ten. Label repo:api only. No ready label.
-- #1133 The bought car colour is 2dd4bf. Label repo:api only. No ready label.
-- #1134 One purchase adds T11 and not T12. Label repo:api only. No ready label.
 - #1135 One purchase spends 800000 once. Label repo:api only. No ready label.
-- #1147 An unpaid tick does not add an eleventh car. Label repo:api only. No ready label.
-- #1148 The purchase is not a tick. Label repo:api only. No ready label.
-- #1149 The bought car checks in every ten seconds. Label repo:api only. No ready label.
-- #1150 The standing rate stays 1500 after the purchase. Label repo:api only. No ready label.
-- #1151 The purchase answer names T11. Label repo:api only. No ready label.
 - #1152 The purchase reduces the game cash by 800000. Label repo:api only. No ready label.
-- #1153 The bought car uses the same four statuses. Label repo:api only. No ready label.
-- #1154 The bought car first fare stays inside the circle. Label repo:api only. No ready label.
+- #1226 A payment under 800000 is not a successful purchase. Label repo:api only. No ready label.
+- #1227 A purchase body with no pence adds no car. Label repo:api only. No ready label.
+- #1228 A rejected bearer token on the purchase adds no car. Label repo:api only. No ready label.
 
 ### grok-dev-2
 
@@ -134,6 +128,7 @@ Not assigned. Do not start these. Locks that do not change the moving map or the
 - Top up whichever queue has fewer than 16 unfinished slices.
 - Tell the devs the next slice and the files they may edit.
 - After the morning page can be watched and a car can be bought, one dashboard change. Do not add a second graph before that.
+
 
 
 
