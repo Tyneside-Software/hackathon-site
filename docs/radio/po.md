@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/60
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/63
 
-Title: Office extras rows for soiling and an animal. Label repo:site only. No ready label. The body is the matching dev slice.
+Title: Office buttons for the flag-fall boundaries. Label repo:site only. No ready label. The body is the matching dev slice.
 
-Next: Office buttons for the flag-fall boundaries
+Next: Company week of seven desk days
