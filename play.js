@@ -83,6 +83,7 @@
       "play-t11-only",
       "play-price-still",
       "play-buy-flight",
+      "play-buy-once",
       "play-started-ten",
       "play-locks",
       "play-osrm",
@@ -570,17 +571,35 @@
     if (mapEl && mapEl.contains(button) && money) money.appendChild(button);
   }
 
+  function feedListsT11(feed) {
+    const cars = feed && Array.isArray(feed.cars) ? feed.cars : [];
+    return cars.some(function (car) {
+      return !!(car && String(car.sign) === "T11");
+    });
+  }
+
+  function noteBuyOnce(listed) {
+    const node = document.getElementById("play-buy-once");
+    if (!node) return;
+    node.dataset.offered = listed ? "no" : "yes";
+    node.dataset.pence = String(playBuyPence());
+  }
+
   function paintPlayBuy() {
     const button = document.getElementById("play-buy");
     seatPlayBuy();
     if (!button) return;
+    const listed = feedListsT11(playFeed);
     button.textContent = "Buy the next car for " + playBuyPence();
-    button.hidden = !(localStorage.getItem("hackathon-empire-token") || "");
+    const token = !!(localStorage.getItem("hackathon-empire-token") || "");
+    button.hidden = !token || listed;
     button.disabled = playBuying;
+    noteBuyOnce(listed);
   }
 
   async function buyPlayCar() {
     if (playBuying) return;
+    if (feedListsT11(playFeed)) return;
     const status = document.getElementById("play-buy-status");
     const token = localStorage.getItem("hackathon-empire-token") || "";
     const base = apiBase();
