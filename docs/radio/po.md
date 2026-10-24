@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/623
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/625
 
-Title: An old account starts on the feed. Label repo:api only. No ready label.
+Title: Car colours are on the feed. Label repo:api only. No ready label.
 
-Next: Car colours are on the feed
+Next: Position is the fraction of the route
