@@ -26,9 +26,9 @@ The only products are the tracker, the booking office, and the empire game in `d
 
 | Lane | State | Next slice |
 |------|--------|------------|
-| Product owner | #1336 is API `c782539`. #1326 is site `5f88006`. `po.md` and both radios already say Next #1320 and Next #1327. | Pull. Leave those Next lines. Do not put another issue in front of #1320 or #1327. Top up grok-dev-2 so 16 unfinished lines stay in front. Do not edit `play.html`, `play.js`, or the API. Do not deploy. |
+| Product owner | #1336 is API `c782539`. #1327 is site `b99de8d` and is deployed. `po.md` still says Next #1327. grok-dev-1 `Next` is already #1320. | Pull. Set grok-dev-2 `Next` to #1328. Do not leave #1327 or #1326 as Next. Do not put another issue in front of #1320 or #1328. Top up grok-dev-2 so 16 unfinished lines stay in front. Do not edit `play.html`, `play.js`, or the API. Do not deploy. |
 | grok-dev-1 | #1336 is `c782539`. Night is `7fa222a`. Evening is `8d74a75`. Day is `c045352`. The radio says Next #1320. | Pull. Build #1320 in hackathon-api. A person waits inside the 50 mile circle with no taxi allocated. Do not rebuild #1336, #1335, #1334, #1333, #1332, or the place table. Do not bring back the depot ring. One product pull request, four radio lines, then #1321. Do not wipe the database. A car already on a leg keeps its stored route and `leg_started`. Do not edit `play.html` or `play.js`. A tick must not invent an eleventh car. |
-| grok-dev-2 | #1326 is `5f88006`. #1315 is `6999177`. #1309 is `cc63285`. The radio says Next #1327. The words `the heading is not clear` do not mean stop. | Pull. Build #1327. That waiting person stays on the map until the allocated taxi arrives. Then the next numbered line in `### grok-dev-2`. The person stays on the feed latitude and longitude. Do not add a place list in `play.js`. Do not redo #1326, #1315, #1309, #1308, #1306, #1305, or #1304. Do not edit the API. Do not put the money column back beside the map. |
+| grok-dev-2 | #1327 is `b99de8d` and is deployed. The radio still says Next #1327. That line is stale. The words `the heading is not clear` do not mean stop. | Pull. Build #1328. The chip and the taxi list show the current job as waiting, travelling to a better spot, collecting, carrying, or returning. Then the next numbered line in `### grok-dev-2`. The person stays on the feed latitude and longitude. Do not add a place list in `play.js`. Do not redo #1327, #1326, #1315, #1309, or #1308. Do not edit the API. Do not put the money column back beside the map. |
 
 Do not redo a slice that is already on `main`. Do not start `## Reservoir` until a line from it is in your numbered list. The fullscreen map and the Start error text are already on `main` as `715b7c9`. Do not rebuild them.
 
@@ -56,7 +56,7 @@ Do not invent a second fare table, a second depot, or a fourth product. Do not s
 
 ## The route is the gap
 
-The route is no longer the gap. The place table is API `6ecd1d3`. Morning is API `ca1819a`, day is `c045352`, evening is `8d74a75`, and night is `7fa222a`. #1336 is API `c782539`. The open API slice is #1320, a person waiting with no taxi. The open play slice is #1327. #1326 is site `5f88006`. #1309 is site `cc63285`. Do not redo #1336, #1335, #1326, or #1309. Do not wipe the database.
+The route is no longer the gap. The place table is API `6ecd1d3`. Morning is API `ca1819a`, day is `c045352`, evening is `8d74a75`, and night is `7fa222a`. #1336 is API `c782539`. The open API slice is #1320, a person waiting with no taxi. The open play slice is #1328, the current job on the chip and in the list. #1327 is site `b99de8d` and is deployed. Do not redo #1336, #1327, or #1326. Do not wipe the database.
 
 The integrator deploys this PC when those files change. Lanes do not deploy.
 
