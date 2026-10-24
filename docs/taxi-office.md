@@ -55,7 +55,7 @@ Each desk row stores a pickup, a drop-off, a requested time, a vehicle call sign
 
 The day's rows survive a reload in this browser. The desk stores them in `localStorage` under `hackathon-office-day`. Clear day removes that key and removes the rows. The bookings panel says No bookings yet and the total is 0. The next reload starts from the offered rows. Restore day brings the three bookings back and shows 2860. Restore day rebuilds three completed bookings, 1130, 1240, and 490 pence, and the running total shows 2860. When the bookings panel has no rows, it says No bookings yet. A control shows the 2860 day. Another shows the empty day at 0. Switching replaces the running total and does not add the two days together. The desk still does not call the API.
 
-The desk has two sample rows. The £11.30 row is tariff one, 3 miles, no waiting, one extra passenger, and one outside bag. The £12.40 row is tariff two, 3 miles, no waiting, and no extras. The £11.30 row shows meter 1040, extras 90, and total 1130. The £12.40 row shows meter 1240, extras 0, and total 1240.
+The desk has two sample rows. The £11.30 row is tariff one, 3 miles, no waiting, one extra passenger, and one outside bag. The £12.40 row is tariff two, 3 miles, no waiting, and no extras. The £11.30 row shows meter 1040, extras 90, and total 1130. A guide or hearing dog on that booking adds 0, so the row stays 1130. The £12.40 row shows meter 1240, extras 0, and total 1240.
 
 A completed booking renders a plain-text receipt inside the ledger panel. The slip names the tariff, the miles, the waiting seconds, the extras in pence, and the quoted pence. The £11.30 slip contains 1130 and £11.30. The slip does not include a driver share, a standing charge, or the price of a new car.
 

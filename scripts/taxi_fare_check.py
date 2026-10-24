@@ -75,7 +75,7 @@ def main():
         failed = True
         print("A guide or hearing dog must add 0 pence", file=sys.stderr)
     meter = quote_pence(TARIFF_ONE, ((52800, 0),))
-    extra = extras_pence(passengers_after_two=1, bags=1)
+    extra = extras_pence(passengers_after_two=1, bags=1, guide_or_hearing_dogs=1)
     failed = _expect(
         "Tariff one, 3 miles, one extra passenger, one outside bag",
         meter, extra, meter + extra, 1040, 90, 1130,
