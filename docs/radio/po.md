@@ -61,3 +61,4 @@ Not assigned. Do not start these.
 - #756 A phone marker is not drawn as a taxi. Label repo:site only. No ready label.
 - #758 The board still loads when the empire feed is unauthorised. Label repo:site only. No ready label.
 - #760 A device check-in does not move an empire car. Label repo:api only. No ready label.
+- #762 Hide taxis leaves the fifty-mile circle. Label repo:site only. No ready label.
