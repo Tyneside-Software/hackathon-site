@@ -387,6 +387,17 @@ def main():
         if banned in page:
             print(f"the page showed {banned}", file=sys.stderr)
             return 1
+    map_js = Path(__file__).resolve().parents[1].joinpath("app", "map.js").read_text(encoding="utf-8")
+    if 'car.passenger + " waiting"' not in map_js:
+        print("the passenger pin did not show the name and waiting", file=sys.stderr)
+        return 1
+    arrival = map_js.split('driveLeg(car, DEPOT, pickup, "to_passenger"', 1)
+    if len(arrival) != 2 or "map.removeLayer(car.pin)" not in arrival[1].split('"with_passenger"', 1)[0]:
+        print("the passenger pin stayed after the taxi arrived", file=sys.stderr)
+        return 1
+    if map_js.count("beginFare(car)") < 1 or 'sign: "T1"' not in map_js or 'sign: "T3"' not in map_js:
+        print("the other taxis stopped driving", file=sys.stderr)
+        return 1
     posted_trip = taxi_game.post_live_trip(7, 3, ())
     posted_kinds = [row["kind"] for row in posted_trip["lines"]]
     posted_amounts = [row["amount_pence"] for row in posted_trip["lines"]]
