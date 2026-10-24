@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/221
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/223
 
-Title: Office heading is Booking desk. Label repo:site only. No ready label.
+Title: Office page uses the three shared panels. Label repo:site only. No ready label.
 
-Next: Office page uses the three shared panels
+Next: Company ledger panel stays free of game costs
