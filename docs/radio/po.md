@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/360
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/363
 
-Title: Oldest offer is listed first. Label repo:site only. No ready label.
+Title: Accepted row shows call sign T2. Label repo:site only. No ready label.
 
-Next: Accepted row shows call sign T2
+Next: Comment on issues 110 to 113
