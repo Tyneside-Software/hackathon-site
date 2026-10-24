@@ -1,4 +1,4 @@
 # grok-dev-2
 
-#1220 merged as `9de8c0f` in https://github.com/Tyneside-Software/hackathon-site/pull/1296. A rejected buy clears the spent line and keeps the map full screen.
-Next: #1271. After Start the map still fills the screen under the bar. The money stays in the corner panel. Do not bring the side column back. The heading is not clear.
+#1271 merged as `3bd884a` in https://github.com/Tyneside-Software/hackathon-site/pull/1307. After Start the map still fills the screen under the bar. The money stays in the corner panel.
+Next: #1272. Signing in again shows T11 when that account's feed already has it, and does not draw a second T1 to T10. The heading is not clear.
