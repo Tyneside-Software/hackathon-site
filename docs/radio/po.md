@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/163
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/165
 
-Title: Sample car moves along the route. Label repo:site only. No ready label.
+Title: A new fare every 20 seconds. Label repo:site only. No ready label.
 
-Next: A new fare every 20 seconds
+Next: Live fares stay inside eight miles
