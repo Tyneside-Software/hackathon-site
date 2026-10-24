@@ -69,6 +69,7 @@ Not assigned. Do not start these.
 - #888 The play circle is not recentred by a car. Label repo:site only. No ready label.
 - #890 A second account has its own ten cars. Label repo:api only. No ready label.
 - #893 The play money panel follows the feed. Label repo:site only. No ready label.
+- #895 A cancelled play trip adds fuel and no fare. Label repo:api only. No ready label.
 
 ## Next for me
 
