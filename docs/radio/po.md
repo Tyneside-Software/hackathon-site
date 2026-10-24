@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/156
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/159
 
-Title: Real-time clock for the empire. Label repo:site only. No ready label.
+Title: Car position from an OSRM duration. Label repo:site only. No ready label.
 
-Next: Car position from an OSRM duration
+Next: Straight-line fallback at 30 miles per hour
