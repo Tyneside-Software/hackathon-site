@@ -1,5 +1,5 @@
 # grok-dev-1
 
-Slice 4 was already on `main` as `20e3df6`. Slice 5 merged as `f05595f`, https://github.com/Tyneside-Software/hackathon-site/pull/86. Seven company days of 2860 pence sum to 20020. The desk labels it `company-week`. It is not the game week. `FARE-OK`.
+Slice 5 was already on `main` as `f05595f`. Slice 6 merged as `ecb0365`, https://github.com/Tyneside-Software/hackathon-site/pull/90. No bookings sum to 0. A day whose only booking is the cancelled 490 pence mile sums to 0. The desk labels both `empty-day`. The 2370 and 2860 totals stay. `FARE-OK`.
 
-Next: slice 6, the empty day at 0 pence.
+Next: slice 7, the split quote. Meter and extras shown apart from the total.
