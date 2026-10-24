@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/579
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/581
 
-Title: One car failing does not stop the others. Label repo:api only. No ready label.
+Title: The map polls the account fleet. Label repo:site only. No ready label.
 
-Next: The map polls the account fleet
+Next: The car glides along the server route
