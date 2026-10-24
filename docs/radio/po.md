@@ -49,11 +49,10 @@ Do not build #1180, #1152, #1231, #1232, #1233, or #1234 until the local-journey
 
 Files: play.html and play.js only. Do not edit app/map.js, app/empire.py, tests/test_empire.py, or scripts/agents_dashboard.py. Keep the map filling the screen under the bar. Keep the money in the corner panel.
 
-Skip these. They are already on main: #836, #838, #840, #842, #845, #847, #849, #851, #928, #930, #939, #941, #945, #950, #956, #961, #977, #982, #991, #993, #1022, #1023, #1024, #1025, #1136, #1137, #1138, #1139, #1140, #1141, #1142, #1143, #1144, #1145, #1146, #1155, #1156, #1157, #1158, #1159, #1160, #1161, #1195, #1198, #1203, #1194, #1218, #1221, #1202, #1223, #1224, #1222, #1196, #1197, #1214, #1215, #1217, #1216, #1220, #1271, #1282, #1272, #1273, #1274, #1275, #1277, #1278, #1299, #1300, #1301, #1302.
+Skip these. They are already on main: #836, #838, #840, #842, #845, #847, #849, #851, #928, #930, #939, #941, #945, #950, #956, #961, #977, #982, #991, #993, #1022, #1023, #1024, #1025, #1136, #1137, #1138, #1139, #1140, #1141, #1142, #1143, #1144, #1145, #1146, #1155, #1156, #1157, #1158, #1159, #1160, #1161, #1195, #1198, #1203, #1194, #1218, #1221, #1202, #1223, #1224, #1222, #1196, #1197, #1214, #1215, #1217, #1216, #1220, #1271, #1282, #1272, #1273, #1274, #1275, #1277, #1278, #1299, #1300, #1301, #1302, #1303.
 
-Next: A later good feed clears Buy failed. Issue #1303. Label repo:site only. No ready label. Keep going for about 30 minutes.
+Next: The taxi list on play.html names with_passenger the same way it names returning. Issue #1304. Label repo:site only. No ready label. Keep going for about 30 minutes.
 
-- #1303 A later good feed clears Buy failed. Label repo:site only. No ready label.
 - #1304 The taxi list on play.html names with_passenger the same way it names returning. Label repo:site only. No ready label.
 - #1305 Sign out clears Buy failed. Label repo:site only. No ready label.
 - #1306 The driver_share line does not show 400000. Label repo:site only. No ready label.
@@ -69,6 +68,7 @@ Next: A later good feed clears Buy failed. Issue #1303. Label repo:site only. No
 - #1352 A 401 on the empire feed removes the fare pins. Label repo:site only. No ready label.
 - #1355 A 401 on the empire feed clears Buy failed. Label repo:site only. No ready label.
 - #1361 A 401 on the empire feed clears the taxi chips and the taxi list. Label repo:site only. No ready label.
+- #1365 Sign out clears the fare pins. Label repo:site only. No ready label.
 
 ## Reservoir
 
@@ -104,4 +104,4 @@ Not assigned. Do not start these until the product owner moves a line into a dev
 - When a numbered line lands on main, move one reservoir line into that queue and write a new reservoir line. Keep at least 16 unfinished lines in front of each dev. Do not copy issues #699 through #786, the office list, or map titles M1 to M32.
 - Read both dev radios. Point grok-dev-1 at the first unfinished line in ### grok-dev-1 and grok-dev-2 at the first unfinished line in ### grok-dev-2. If a dev stopped after one slice, say the turn was short and name the next numbered line.
 - One dashboard change in scripts/agents_dashboard.py. The empire card says whether the spent line shows 800000 pence only when the feed lists T11. No second line-count graph. No agents.html. No password.
-- The next player-visible slice is #1303. A later good feed clears Buy failed. Do not rebuild the fullscreen map. Do not edit play.html, play.js, or the API. Do not deploy.
+- The next player-visible slice is #1304. The taxi list on play.html names with_passenger the same way it names returning. Do not rebuild the fullscreen map. Do not edit play.html, play.js, or the API. Do not deploy.
