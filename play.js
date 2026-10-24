@@ -127,6 +127,13 @@
     return "/v1/empire";
   }
 
+  function feedPlace(car) {
+    const lat = Number(car.lat);
+    const lng = Number(car.lng);
+    if (Number.isFinite(lat) && Number.isFinite(lng)) return [lat, lng];
+    return null;
+  }
+
   function paintPlayCars(feed) {
     const cars = feed && Array.isArray(feed.cars) ? feed.cars : [];
     const seen = new Set();
@@ -135,7 +142,8 @@
     PLAY_SIGNS.forEach((sign) => {
       const car = cars.find((row) => row && row.sign === sign);
       if (!car) return;
-      const place = playPlace(car, playNow());
+      const reported = feedPlace(car);
+      const place = reported || playPlace(car, playNow());
       if (!place) return;
       seen.add(sign);
       const fill = chipFill(car);
@@ -153,7 +161,7 @@
       }
       if (list) {
         const item = document.createElement("li");
-        item.textContent = sign;
+        item.textContent = reported ? sign + " " + reported[0] + ", " + reported[1] : sign;
         list.appendChild(item);
       }
     });
