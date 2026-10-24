@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/462
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/471
 
-Title: The map does not jump after the player pans. Label repo:site only. No ready label.
+Title: The taxi chip shows the call sign. Label repo:site only. No ready label.
 
-Next: none of M1 to M16 remain unopened. Slices 115 to 134 wait and were not opened. The integrator still lists the map titles, so this heading is not clear.
+Next: T1 is amber and T2 is blue and T3 is green
