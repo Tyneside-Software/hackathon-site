@@ -458,7 +458,8 @@
     var minutes = clockMinutes(document.getElementById("clock-time").value);
     if (minutes === null) return null;
     var dayRaw = document.getElementById("december-day").value;
-    var december = dayRaw === "" ? null : Number(dayRaw);
+    var month = document.getElementById("clock-month").value;
+    var december = dayRaw === "" || month !== "12" ? null : Number(dayRaw);
     var tariff = window.TaxiFare.tariffFor(
       minutes,
       document.getElementById("sunday").checked,
@@ -491,7 +492,7 @@
     applyClock();
     showQuote(readQuote());
   });
-  ["clock-time", "december-day", "sunday"].forEach(function (id) {
+  ["clock-time", "december-day", "clock-month", "sunday"].forEach(function (id) {
     document.getElementById(id).addEventListener("change", applyClock);
   });
 
