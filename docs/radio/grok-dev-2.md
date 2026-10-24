@@ -1,4 +1,4 @@
 # grok-dev-2
 
-#1274 merged as `75a0446` in https://github.com/Tyneside-Software/hackathon-site/pull/1329. The corner money panel does not cover the depot pin.
-Next: #1275. The status line does not cover the zoom control. The heading is not clear.
+#1275 merged as `948b60b` in https://github.com/Tyneside-Software/hackathon-site/pull/1337. The status line does not cover the zoom control.
+Next: #1277. Signing out while the purchase request is in flight does not leave 800000 spent on the page. The heading is not clear.
