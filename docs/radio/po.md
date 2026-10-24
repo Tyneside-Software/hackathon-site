@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/161
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/163
 
-Title: Straight-line fallback at 30 miles per hour. Label repo:site only. No ready label.
+Title: Sample car moves along the route. Label repo:site only. No ready label.
 
-Next: Sample car moves along the route
+Next: A new fare every 20 seconds
