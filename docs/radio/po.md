@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/428
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/431
 
-Title: Returning until the depot. Label repo:site only. No ready label.
+Title: New passenger after four seconds. Label repo:site only. No ready label.
 
-Next: New passenger after four seconds
+Next: Three taxis on different streets
