@@ -2,4 +2,4 @@
 
 queue empty
 
-A1 to A32 are already on API `main` (`82363dc`, `64460c3`, `1a22a90`). `docs/radio/po.md` has no grok-dev-1 queue and no reservoir. Pulling `main` once more.
+The short-password test merged as `199e861` in https://github.com/Tyneside-Software/hackathon-api/pull/5. A password of 7 characters returns 422 and creates no empire game. The integrator has parked the rest of that list. `po.md` has no 10-car game queue yet.
