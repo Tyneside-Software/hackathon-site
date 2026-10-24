@@ -65,6 +65,8 @@
   const DURHAM = [54.7753, -1.5849];
   gamePin(DURHAM, "Durham customer", "#d9c2ff");
   let sampleRoute = null;
+  let sampleMotion = 0;
+  const MILE_KM = 80.467 / 50;
 
   function drawSample(latlngList) {
     if (sampleRoute) map.removeLayer(sampleRoute);
@@ -73,6 +75,63 @@
       L.polyline(latlngList, { ...lineOpts, color: ROUTE_OUTLINE, weight: 9, opacity: 0.9 }),
       L.polyline(latlngList, { ...lineOpts, color: ROUTE_COLOR, weight: 5, opacity: 1 }),
     ]).addTo(map);
+  }
+
+  function placeOnRoute(points, durationS, elapsedS) {
+    if (!points.length) return null;
+    if (durationS <= 0 || elapsedS <= 0) return points[0];
+    if (elapsedS >= durationS) return points[points.length - 1];
+    const fraction = elapsedS / durationS;
+    const distances = [0];
+    for (let i = 1; i < points.length; i++) {
+      distances.push(distances[i - 1] + haversineKm(
+        { lat: points[i - 1][0], lng: points[i - 1][1] },
+        { lat: points[i][0], lng: points[i][1] }
+      ));
+    }
+    const total = distances[distances.length - 1];
+    if (total === 0) return points[0];
+    const target = total * fraction;
+    for (let j = 1; j < distances.length; j++) {
+      if (distances[j] >= target) {
+        const span = distances[j] - distances[j - 1];
+        const step = span === 0 ? 0 : (target - distances[j - 1]) / span;
+        const start = points[j - 1];
+        const end = points[j];
+        return [start[0] + (end[0] - start[0]) * step, start[1] + (end[1] - start[1]) * step];
+      }
+    }
+    return points[points.length - 1];
+  }
+
+  function fallbackDuration(points) {
+    let km = 0;
+    for (let i = 1; i < points.length; i++) {
+      km += haversineKm(
+        { lat: points[i - 1][0], lng: points[i - 1][1] },
+        { lat: points[i][0], lng: points[i][1] }
+      );
+    }
+    return (km / MILE_KM) * 3600 / 30;
+  }
+
+  function moveSample(points, durationS) {
+    if (sampleMotion) cancelAnimationFrame(sampleMotion);
+    const started = Date.now();
+    const duration = durationS > 0 ? durationS : fallbackDuration(points);
+    function frame() {
+      const elapsed = (Date.now() - started) / 1000;
+      const remaining = Math.max(0, duration - elapsed);
+      const place = placeOnRoute(points, duration, Math.min(elapsed, duration));
+      sampleMarker.setLatLng(place);
+      const tip = sampleMarker.getTooltip();
+      const text = Math.ceil(remaining) + " seconds remaining";
+      if (tip) tip.setContent(text);
+      else sampleMarker.bindTooltip(text, { permanent: true, direction: "right" });
+      if (elapsed < duration) sampleMotion = requestAnimationFrame(frame);
+      else sampleMotion = 0;
+    }
+    frame();
   }
 
   async function driveSample(dest, doneText) {
@@ -87,10 +146,13 @@
       const data = await res.json();
       const route = data.routes && data.routes[0];
       if (!route) throw new Error("no route");
-      drawSample(route.geometry.coordinates.map(([lng, lat]) => [lat, lng]));
+      const coords = route.geometry.coordinates.map(([lng, lat]) => [lat, lng]);
+      drawSample(coords);
+      moveSample(coords, route.duration);
       if (sampleStatus) sampleStatus.textContent = doneText;
     } catch (err) {
       drawSample(path);
+      moveSample(path, fallbackDuration(path));
       if (sampleStatus) sampleStatus.textContent = "OSRM unavailable";
     }
   }
