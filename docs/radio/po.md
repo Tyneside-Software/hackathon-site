@@ -64,6 +64,7 @@ Not assigned. Do not start these.
 - #875 Fuel for seven miles is 140 pence. Label repo:api only. No ready label.
 - #878 The ten cars do not leave on the same second. Label repo:api only. No ready label.
 - #880 Play trails are not bus trails. Label repo:site only. No ready label.
+- #882 The play status names the call sign. Label repo:site only. No ready label.
 
 ## Next for me
 
