@@ -26,6 +26,8 @@ The quote is the November 2024 meter, plus extras on top of it. The checker char
 
 Worked quote. Tariff one, 3 miles, no waiting, one extra passenger, one bag carried outside. The meter is 1040 pence (£10.40). The extras are 50 + 40 = 90 pence. The quoted fare is 1130 pence (£11.30).
 
+Night booking. Tariff two is 22:00–07:00, all Sunday, bank holidays, and 27–31 December. Three miles, no waiting, no extras. The meter is 1240 pence (£12.40). Extras are 0. The quoted fare is 1240 pence (£12.40).
+
 ## Ledger
 
 Money for a real company is that company's ledger. It is separate from the game ledger. Company money is not written into the game ledger, and the game does not write into the company ledger.

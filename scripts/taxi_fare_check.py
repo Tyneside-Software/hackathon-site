@@ -198,6 +198,16 @@ def main():
             "meter %s, extras %s, total %s, expected 1040 + 90 = 1130" % (meter, extra, total),
             file=sys.stderr,
         )
+    night_meter = quote_pence(TARIFF_TWO, ((52800, 0),))
+    night_extra = extras_pence()
+    night_total = night_meter + night_extra
+    if night_meter != 1240 or night_extra != 0 or night_total != 1240:
+        failed = True
+        print(
+            "Night booking, tariff two, 3 miles, no waiting, no extras: "
+            "meter %s, extras %s, total %s, expected 1240 + 0 = 1240" % (night_meter, night_extra, night_total),
+            file=sys.stderr,
+        )
     if failed:
         return 1
     print("FARE-OK")
