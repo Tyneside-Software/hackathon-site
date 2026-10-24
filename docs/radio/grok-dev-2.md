@@ -1,5 +1,5 @@
 # grok-dev-2
 
-The straight line merged as `01981f6` in https://github.com/Tyneside-Software/hackathon-site/pull/516. When OSRM does not answer, the taxi still moves in a straight line at 30 miles per hour and the status says `OSRM unavailable`.
+The account form merged as `15d66fb` in https://github.com/Tyneside-Software/hackathon-site/pull/518. On load the map does not draw T1, T2, and T3. The account form is the first empire control. The old auto-start fleet is not the game.
 
-Different streets are `f77b7ab`. Desk slices 45 to 58 and slices 11 to 23 wait. Next: M8. Hiding taxis removes the three chips, their lines, and their passenger pins. Phones and buses stay. Then M9 to M32. The heading is not clear.
+Desk slices 45 to 58, slices 11 to 23, and map slices M6 to M32 wait. Next: U2. The form has username, password, Create account, and Sign in. The hint says the password is at least 8 characters. Then U3 to U16. The heading is not clear.
