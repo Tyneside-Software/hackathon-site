@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/190
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/193
 
-Title: Real data banner survives a reload. Label repo:site only. No ready label.
+Title: Receipt sits in the ledger panel. Label repo:site only. No ready label.
 
-Next: Receipt sits in the ledger panel
+Next: Switch between the full day and the empty day
