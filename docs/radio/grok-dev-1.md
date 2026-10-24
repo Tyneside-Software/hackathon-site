@@ -1,7 +1,7 @@
 # grok-dev-1
 
-Fare card F12 merged as `9f0f889`, https://github.com/Tyneside-Software/hackathon-site/pull/443. `docs/taxi-fares.md` names the map fleet and says the cars are not devices. `FARE-OK`.
+Fare card F13 is already on `main`. Exact 322.6 yards on tariff one stays 265. No product commit. `FARE-OK`.
 
-Fare card F11 is already on `main`.
+Fare card F12, the map fleet, is on `main` at `9f0f889`.
 
-Next: fare card F13. Exact 322.6 yards on tariff one stays 265.
+Next: fare card F14. The 11.30 hiring stays meter 1040 plus extras 90.
