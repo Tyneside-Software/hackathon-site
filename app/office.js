@@ -532,9 +532,9 @@
     showWorked(2, [[0, 450]], "Tariff two, no yards, 45 seconds.");
   });
 
-  function showFullDay() {
-    samples = [
-      completedRow({
+  function workedRows() {
+    return [
+      {
         title: "£11.30 booking",
         detail: "Tariff one, 3 miles, no waiting, one extra passenger, one outside bag. A guide or hearing dog adds 0",
         pickup: "Grey's Monument",
@@ -546,8 +546,8 @@
         extras: { passengersAfterTwo: 1, bags: 1, guideOrHearingDogs: 1 },
         status: "offered",
         driver: "Alex"
-      }),
-      completedRow({
+      },
+      {
         title: "£12.40 night booking",
         detail: "Tariff two, 3 miles, no waiting, no extras",
         pickup: "Shiremoor depot",
@@ -559,8 +559,8 @@
         extras: {},
         status: "offered",
         driver: "Sam"
-      }),
-      completedRow({
+      },
+      {
         title: "Tariff one, 1 mile",
         detail: "Tariff one, 1 mile, no waiting, no extras",
         pickup: "Grey's Monument",
@@ -572,13 +572,31 @@
         extras: {},
         status: "offered",
         driver: "Alex"
-      })
+      }
     ];
+  }
+
+  function showFullDay() {
+    samples = workedRows().map(completedRow);
     addedQuotes = [];
     persistDay();
     renderSamples();
     renderLedger();
     dayNote("Restored three completed bookings, 1130, 1240, and 490. The day shows " + runningPence() + ".");
+  }
+
+  function showCancelledMile() {
+    var rows = workedRows();
+    var mile = copyRow(rows[2]);
+    mile.status = "cancelled";
+    mile.posted = false;
+    mile.postedPence = 0;
+    samples = [completedRow(rows[0]), completedRow(rows[1]), mile];
+    addedQuotes = [];
+    persistDay();
+    renderSamples();
+    renderLedger();
+    dayNote("The 490 pence mile is cancelled. The day shows " + runningPence() + ".");
   }
 
   function showEmptyDay() {
@@ -593,6 +611,7 @@
   document.getElementById("btn-restore").addEventListener("click", showFullDay);
   document.getElementById("btn-day-full").addEventListener("click", showFullDay);
   document.getElementById("btn-day-empty").addEventListener("click", showEmptyDay);
+  document.getElementById("btn-day-cancel").addEventListener("click", showCancelledMile);
 
   document.getElementById("btn-clear").addEventListener("click", function () {
     try {
