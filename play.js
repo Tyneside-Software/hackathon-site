@@ -164,6 +164,7 @@
       "play-quiet-failed",
       "play-quiet-spent",
       "play-quiet-fares",
+      "play-quiet-chips",
       "play-locks",
       "play-osrm",
       "play-buses",
@@ -1344,6 +1345,16 @@
     node.dataset.feed = "quiet";
   }
 
+  function clearQuietChips() {
+    clearPlayChips();
+    const list = document.getElementById("play-taxi-list");
+    const node = document.getElementById("play-quiet-chips");
+    if (!node) return;
+    node.dataset.chips = playChips.size === 0 ? "clear" : "shows";
+    node.dataset.list = list && list.textContent === "" ? "clear" : "shows";
+    node.dataset.feed = "quiet";
+  }
+
   function paintQuietFeed() {
     const line = document.getElementById("play-status");
     if (line) line.textContent = "The feed is quiet.";
@@ -1351,6 +1362,7 @@
     clearQuietFailed();
     clearQuietSpent();
     clearQuietFares();
+    clearQuietChips();
   }
 
   async function pollPlay() {
