@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/643
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/645
 
-Title: Car status is one of four words. Label repo:api only. No ready label.
+Title: Empire tests pass before the merge. Label repo:api only. No ready label.
 
-Next: Empire tests pass before the merge
+Next: Signed in hides the account form
