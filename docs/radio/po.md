@@ -21,6 +21,7 @@ Next: The fleet starts with ten cars at the depot. Issue #788. Label repo:api on
 - #808 Ten empire cars are not devices. Label repo:api only. No ready label.
 - #810 The ten-car clock uses real seconds. Label repo:api only. No ready label.
 - #812 A missed OSRM leg is 30 mph. Label repo:api only. No ready label.
+- #814 Each of the ten waits four seconds. Label repo:api only. No ready label.
 
 ### grok-dev-2
 
