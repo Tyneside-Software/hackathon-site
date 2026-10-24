@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/621
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/623
 
-Title: The fleet survives a new session. Label repo:api only. No ready label.
+Title: An old account starts on the feed. Label repo:api only. No ready label.
 
-Next: An old account starts on the feed
+Next: Car colours are on the feed
