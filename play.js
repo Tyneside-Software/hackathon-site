@@ -139,6 +139,7 @@
       "play-depot-clear",
       "play-zoom-clear",
       "play-signout-flight",
+      "play-next-account",
       "play-locks",
       "play-osrm",
       "play-buses",
@@ -780,6 +781,18 @@
     pollPlay();
   }
 
+  function clearSpentForNextAccount(username) {
+    const previous = localStorage.getItem("hackathon-empire-user") || "";
+    if (!previous || previous === username) return;
+    clearPlaySpent();
+    const node = document.getElementById("play-next-account");
+    if (!node) return;
+    const line = document.getElementById("play-spent");
+    const text = line ? line.textContent : "";
+    node.dataset.spent = text.indexOf("800000") === -1 ? "clear" : "shows";
+    node.dataset.account = "next";
+  }
+
   async function createPlayAccount() {
     const usernameEl = document.getElementById("play-username");
     const passwordEl = document.getElementById("play-password");
@@ -810,6 +823,7 @@
       if (status) status.textContent = "Sign in failed.";
       return;
     }
+    clearSpentForNextAccount(username);
     localStorage.setItem("hackathon-empire-token", session.access_token);
     localStorage.setItem("hackathon-empire-user", username);
     if (status) status.textContent = "";
@@ -900,6 +914,7 @@
       if (status) status.textContent = registerProblem || accountProblem(session, "Start failed.");
       return;
     }
+    clearSpentForNextAccount(username);
     localStorage.setItem("hackathon-empire-token", session.access_token);
     localStorage.setItem("hackathon-empire-user", username);
     if (status) status.textContent = "";
