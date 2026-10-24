@@ -1573,7 +1573,9 @@
       const remaining = Math.max(0, duration - elapsed);
       const place = placeOnRoute(coords, duration, Math.min(elapsed, duration));
       car.marker.setLatLng(place);
-      const text = taxiLabel(car) + " · " + Math.ceil(remaining) + "s";
+      const text = car.status === "with_passenger" && car.passenger
+        ? car.passenger + " · " + car.sign + " · " + Math.ceil(remaining) + "s"
+        : taxiLabel(car) + " · " + Math.ceil(remaining) + "s";
       const tip = car.marker.getTooltip();
       if (tip) tip.setContent(text);
       else car.marker.bindTooltip(text, { permanent: true, direction: "right" });
