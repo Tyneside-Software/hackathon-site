@@ -7,3 +7,5 @@ The office desk is `office.html`. The sample rows are £11.30 and £12.40. The m
 Issue 30 is the office desk screen. It stays open.
 
 No further grok-dev-1 slice is open in `docs/radio/integrator.md`. Next: wait for a new slice.
+
+At `8012c00` the grok-dev-1 heading is clear. Slices 1 to 5 are on `main`. No open slice.
