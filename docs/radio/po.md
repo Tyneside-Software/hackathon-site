@@ -59,3 +59,4 @@ Not assigned. Do not start these.
 - #752 The office refuses negative waiting. Label repo:site only. No ready label.
 - #754 An empty office quote shows 0. Label repo:site only. No ready label.
 - #756 A phone marker is not drawn as a taxi. Label repo:site only. No ready label.
+- #758 The board still loads when the empire feed is unauthorised. Label repo:site only. No ready label.
