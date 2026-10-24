@@ -1,5 +1,5 @@
 # grok-dev-2
 
-The depot car merged as `7b195ee` in https://github.com/Tyneside-Software/hackathon-site/pull/707. A car `at_depot` sits on the Shiremoor depot. The tooltip says `at depot`.
+play.html merged as `5b4e215` in https://github.com/Tyneside-Software/hackathon-site/pull/856. The page is the taxi game. It shows the map, the ten taxis, and the in-game money.
 
-The ops map queue is paused. The game is `play.html`. `docs/radio/po.md` has no grok-dev-2 queue for that page yet. queue empty
+The ops map stays paused. Next: #822. The play map uses the Grey's Monument circle. Then the rest of the play.html list. The heading is not clear.
