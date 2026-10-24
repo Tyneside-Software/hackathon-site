@@ -342,6 +342,30 @@
     return acceptOffer(offers, cars);
   }
 
+  function returningStays(offers, cars) {
+    var free = (cars || []).some(function (car) {
+      return car.status === "at_depot" && !car.device_id;
+    });
+    if (!free) {
+      return {
+        offers: (offers || []).map(function (offer) {
+          return {
+            pickup: offer.pickup,
+            dropoff: offer.dropoff,
+            status: offer.status,
+            miles: offer.miles,
+            farePence: offer.farePence,
+            farePounds: offer.farePounds,
+          };
+        }),
+        cars: (cars || []).map(function (car) {
+          return { callSign: car.callSign, status: car.status };
+        }),
+      };
+    }
+    return acceptOffer(offers, cars);
+  }
+
   function twoCarsOut(elapsedS) {
     var offers = waitingOffers(40);
     var depot = [
@@ -528,6 +552,7 @@
     waitingOffers: waitingOffers,
     acceptOffer: acceptOffer,
     freeCarTakes: freeCarTakes,
+    returningStays: returningStays,
     twoCarsOut: twoCarsOut,
     customerPins: customerPins,
     startAccepted: startAccepted,

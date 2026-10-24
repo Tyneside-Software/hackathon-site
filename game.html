@@ -49,6 +49,7 @@
     <p id="berwick-out"></p>
     <p id="banner-stays"></p>
     <p id="accept-count"></p>
+    <p id="returning-out"></p>
     <p id="short-trip"></p>
     <p id="live-fare"></p>
     <p id="fleet-move"></p>
@@ -201,6 +202,25 @@
       && game.sumPence(game.workedDay()) === -1120
       ? "2 fares waiting. The next offer still waits 20 seconds."
       : "Accepting one left the wrong count.";
+    var waitingOne = game.waitingOffers(20);
+    var keptOffer = game.returningStays(waitingOne, [
+      { callSign: "T1", status: "returning" },
+      { callSign: "T2", status: "returning" },
+      { callSign: "T3", status: "returning" }
+    ]);
+    var takenAtDepot = game.returningStays(waitingOne, [
+      { callSign: "T1", status: "returning" },
+      { callSign: "T2", status: "returning" },
+      { callSign: "T3", status: "at_depot" }
+    ]);
+    document.getElementById("returning-out").textContent = keptOffer
+      && keptOffer.offers[0].status === "offered"
+      && keptOffer.cars.every(function (car) { return car.status === "returning" && !car.device_id; })
+      && takenAtDepot
+      && takenAtDepot.offers[0].callSign === "T3"
+      && takenAtDepot.offers[0].status === "accepted"
+      ? "A returning car leaves the offer offered. A car at the depot takes it."
+      : "A returning car took the offer.";
     var sample = game.waitingOffers(40);
     var sampleTaken = game.acceptOffer(sample, depotCars);
     document.getElementById("offer-sample").textContent = sample.length === 2
