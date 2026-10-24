@@ -103,6 +103,18 @@ def main():
     if taxi_game.fallback_seconds(3) != 360 or taxi_game.FALLBACK_MPH != 30:
         print(f"fallback {taxi_game.fallback_seconds(3)}", file=sys.stderr)
         return 1
+    offers = [(0, 0), (20, 1), (40, 2), (60, 3), (80, 3)]
+    for elapsed, expect in offers:
+        got = taxi_game.offered_count(elapsed)
+        if got != expect:
+            print(f"offers at {elapsed}s were {got}", file=sys.stderr)
+            return 1
+    if taxi_game.seconds_until_next_offer(0) != 20:
+        print("the first offer was not 20 seconds away", file=sys.stderr)
+        return 1
+    if taxi_game.seconds_until_next_offer(80) is not None:
+        print("an 80 second clock added a fourth offer", file=sys.stderr)
+        return 1
     if taxi_game.sum_pence(taxi_game.worked_day()) != -1120:
         print("fallback changed the day", file=sys.stderr)
         return 1

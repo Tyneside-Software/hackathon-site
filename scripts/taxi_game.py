@@ -148,6 +148,23 @@ def fallback_seconds(miles):
     return miles * 3600 / FALLBACK_MPH
 
 
+def offered_count(elapsed_s):
+    """One new offer each 20 real seconds, and never more than 3 waiting."""
+    if elapsed_s < 0:
+        return 0
+    return min(3, int(elapsed_s // 20))
+
+
+def seconds_until_next_offer(elapsed_s):
+    """Seconds until the next offer. None once 3 are already waiting."""
+    if offered_count(elapsed_s) >= 3:
+        return None
+    remainder = elapsed_s % 20
+    if remainder == 0:
+        return 20
+    return 20 - remainder
+
+
 def position_on_route(points, duration_s, elapsed_s):
     """Place on a polyline. The checker passes points and a duration. It does not call OSRM."""
     if not points:
