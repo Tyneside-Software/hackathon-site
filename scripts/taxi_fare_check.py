@@ -108,6 +108,14 @@ def main():
         mile, mile_extra, mile + mile_extra, 490, 0, 490,
     ) or failed
     company_day = (meter + extra) + (night_meter + night_extra) + (mile + mile_extra) + 0
+    alex = (meter + extra) + (mile + mile_extra)
+    sam = night_meter + night_extra
+    if alex != 1620 or sam != 1240 or alex + sam != 2860:
+        failed = True
+        print(
+            "Driver takings moved: Alex %s, Sam %s, day %s" % (alex, sam, alex + sam),
+            file=sys.stderr,
+        )
     if company_day != 2860:
         failed = True
         print(

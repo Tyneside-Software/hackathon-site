@@ -22,7 +22,8 @@
       extras: extras,
       status: row.status,
       posted: !!row.posted,
-      postedPence: row.postedPence || 0
+      postedPence: row.postedPence || 0,
+      driver: row.driver || ""
     };
   }
 
@@ -38,7 +39,8 @@
         tariff: 1,
         segments: [[52800, 0]],
         extras: { passengersAfterTwo: 1, bags: 1 },
-        status: "offered"
+        status: "offered",
+        driver: "Alex"
       },
       {
         title: "£12.40 night booking",
@@ -50,7 +52,8 @@
         tariff: 2,
         segments: [[52800, 0]],
         extras: {},
-        status: "offered"
+        status: "offered",
+        driver: "Sam"
       },
       {
         title: "Soiling only",
@@ -260,6 +263,8 @@
       ["Completed, tariff one, 1 mile", completed[2]],
       ["Cancel", cancel],
       ["completed-day", completedDay],
+      ["Alex", completed[0] + completed[2]],
+      ["Sam", completed[1]],
       ["cancelled-mile", cancelledMile],
       ["company-week", completedDay * 7],
       ["empty-day", 0],
@@ -314,7 +319,8 @@
       detail.textContent = row.detail + ". Meter " + meter + ". Extras " + extras
         + ". Total " + pence + ". " + penceText(pence) + ". Pickup " + row.pickup
         + ". Drop-off " + row.dropOff + ". Requested " + row.requestedTime
-        + ". Vehicle " + row.callSign + ".";
+        + ". Vehicle " + row.callSign
+        + (row.driver ? ". Driver " + row.driver : "") + ".";
       var status = document.createElement("p");
       status.className = "office-status";
       status.textContent = row.status;
@@ -415,7 +421,8 @@
         tariff: 1,
         segments: [[52800, 0]],
         extras: { passengersAfterTwo: 1, bags: 1 },
-        status: "offered"
+        status: "offered",
+        driver: "Alex"
       }),
       completedRow({
         title: "£12.40 night booking",
@@ -427,7 +434,8 @@
         tariff: 2,
         segments: [[52800, 0]],
         extras: {},
-        status: "offered"
+        status: "offered",
+        driver: "Sam"
       }),
       completedRow({
         title: "Tariff one, 1 mile",
@@ -439,7 +447,8 @@
         tariff: 1,
         segments: [[17600, 0]],
         extras: {},
-        status: "offered"
+        status: "offered",
+        driver: "Alex"
       })
     ];
     addedQuotes = [];
