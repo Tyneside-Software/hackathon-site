@@ -21,6 +21,27 @@
     document.documentElement.style.setProperty("--play-nav", top + "px");
     map.invalidateSize();
     keepDepotClear();
+    keepStatusClear();
+  }
+  function keepStatusClear() {
+    const status = document.getElementById("play-status");
+    const zoom = document.querySelector("#play-map .leaflet-control-zoom");
+    const node = document.getElementById("play-zoom-clear");
+    if (!status) return;
+    status.style.marginLeft = "0px";
+    if (zoom) {
+      const zoomBox = zoom.getBoundingClientRect();
+      let box = status.getBoundingClientRect();
+      const hits = function (rect) {
+        return rect.left < zoomBox.right && rect.right > zoomBox.left && rect.top < zoomBox.bottom && rect.bottom > zoomBox.top;
+      };
+      if (hits(box)) status.style.marginLeft = Math.ceil(zoomBox.right - box.left + 12) + "px";
+      box = status.getBoundingClientRect();
+      if (node) node.dataset.cover = hits(box) ? "covers" : "clear";
+    } else if (node) {
+      node.dataset.cover = "clear";
+    }
+    if (node) node.dataset.zoom = zoom ? "control" : "absent";
   }
   function keepDepotClear() {
     const money = document.getElementById("play-money");
@@ -116,6 +137,7 @@
       "play-signed-again",
       "play-cash-pence",
       "play-depot-clear",
+      "play-zoom-clear",
       "play-locks",
       "play-osrm",
       "play-buses",
@@ -912,6 +934,7 @@
   function paintQuietFeed() {
     const line = document.getElementById("play-status");
     if (line) line.textContent = "The feed is quiet.";
+    keepStatusClear();
   }
 
   async function pollPlay() {
@@ -1002,6 +1025,7 @@
     if (feed && feed.osrm_unavailable === true) text += " OSRM unavailable";
     line.textContent = text;
     hideCompanyTotals();
+    keepStatusClear();
   }
 
   function paintPlayOsrm(feed) {
