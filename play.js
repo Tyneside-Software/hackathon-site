@@ -46,6 +46,7 @@
   const playFares = [];
   const playTrails = [];
   let playFeed = null;
+  let playFed = false;
   let playClock = null;
   let playMotion = 0;
 
@@ -146,7 +147,16 @@
     return null;
   }
 
+  function clearStandInTaxis() {
+    if (playFed) return;
+    playChips.forEach((marker) => map.removeLayer(marker));
+    playChips.clear();
+    const list = document.getElementById("play-taxi-list");
+    if (list) list.textContent = "";
+  }
+
   function paintPlayCars(feed) {
+    if (!playFed) return;
     const cars = feed && Array.isArray(feed.cars) ? feed.cars : [];
     const seen = new Set();
     const list = document.getElementById("play-taxi-list");
@@ -373,6 +383,7 @@
     hidePlayAccount();
     paintPlayStatus(data);
     paintPlayMoney(data);
+    playFed = true;
     paintPlayCars(data);
     paintPlayTrails(data);
     paintPlayFares(data);
@@ -441,6 +452,7 @@
   if (playSignOut) playSignOut.addEventListener("click", signOutPlay);
   if (!(localStorage.getItem("hackathon-empire-token") || "")) showPlayAccount();
   paintPlayStatus(null);
+  clearStandInTaxis();
   setInterval(pollPlay, 2000);
   pollPlay();
 })();
