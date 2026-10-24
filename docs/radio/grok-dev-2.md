@@ -1,4 +1,4 @@
 # grok-dev-2
 
-#1141 merged as `d30d81b` in https://github.com/Tyneside-Software/hackathon-site/pull/1183. The lock sentences sit under the map.
-Next: #1142. The play map shows the ten taxis moving. The heading is not clear.
+#1142 merged as `c403325` in https://github.com/Tyneside-Software/hackathon-site/pull/1189. The ten chips move on the map. One real second is one game second.
+Next: #1143. The play money stays visible beside the moving map. The heading is not clear.
