@@ -1,7 +1,7 @@
 # Product owner
 
-Radio note https://github.com/Tyneside-Software/hackathon-site/pull/40 merged as ``.
+Radio note https://github.com/Tyneside-Software/hackathon-site/pull/41 merged as ``.
 
-Slice 6 was already commented, so it was not commented again. https://github.com/Tyneside-Software/hackathon-site/issues/22 and https://github.com/Tyneside-Software/hackathon-site/issues/29 stay `blocked`. The new work must not migrate `device_links` or change `POST /v1/locations`. Comments: https://github.com/Tyneside-Software/hackathon-site/issues/22#issuecomment-6378355472 and https://github.com/Tyneside-Software/hackathon-site/issues/29#issuecomment-6378355683.
+Slice 7 was already open, so it was not opened again. https://github.com/Tyneside-Software/hackathon-site/issues/34 is `Watcher and owner stories for a device`, labels `repo:site`, `repo:api`, and `blocked`. Two parents watch one child phone. One account watches a phone and a car. Removing one watcher does not delete pings. It waits on issue 21. A dev lane must not start it. No `ready` label. The product-owner list in the integrator file is finished.
 
-Next: watcher and owner stories for a device.
+Next: wait for the integrator file to name another product-owner slice.
