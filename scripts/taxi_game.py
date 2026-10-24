@@ -335,6 +335,20 @@ def return_leg(origin, duration_s, elapsed_s):
     return {"status": "returning", "lat": point[0], "lng": point[1]}
 
 
+def post_live_fuel(trip_id, miles, posted=()):
+    """20 pence a mile, once for this trip. A second completion adds nothing."""
+    already = set(posted)
+    if trip_id in already or miles <= 0:
+        return {"fuel_pence": 0, "lines": [], "posted": already}
+    fuel = -(int(miles) * FUEL_PENCE_A_MILE)
+    already.add(trip_id)
+    return {
+        "fuel_pence": fuel,
+        "lines": [line("fuel", fuel, job_id=trip_id)],
+        "posted": already,
+    }
+
+
 def position_on_route(points, duration_s, elapsed_s):
     """Place on a polyline. The checker passes points and a duration. It does not call OSRM."""
     if not points:

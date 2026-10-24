@@ -366,6 +366,21 @@
     return { status: "returning", lat: point[0], lng: point[1] };
   }
 
+  function postLiveFuel(tripId, miles, posted) {
+    var already = {};
+    (posted || []).forEach(function (id) { already[id] = true; });
+    if (already[tripId] || miles <= 0) {
+      return { fuelPence: 0, lines: [], posted: Object.keys(already).map(Number) };
+    }
+    var fuel = -(miles * FUEL_PENCE_A_MILE);
+    already[tripId] = true;
+    return {
+      fuelPence: fuel,
+      lines: [{ kind: "fuel", amountPence: fuel, jobId: tripId }],
+      posted: Object.keys(already).map(Number),
+    };
+  }
+
   function sumPence(rows) {
     return rows.reduce(function (total, row) {
       return total + row.amountPence;
@@ -407,6 +422,7 @@
     customerPins: customerPins,
     startAccepted: startAccepted,
     returnLeg: returnLeg,
+    postLiveFuel: postLiveFuel,
     shortTrip: shortTrip,
     positionOnRoute: positionOnRoute,
     workedWeek: workedWeek,

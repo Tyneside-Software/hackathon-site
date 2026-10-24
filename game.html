@@ -47,6 +47,7 @@
     <p id="offer-sample"></p>
     <p id="customer-pin"></p>
     <p id="drive-home"></p>
+    <p id="live-fuel"></p>
     <button type="button" class="btn btn-ghost" id="btn-accept">Accept the oldest offer</button>
     <p id="accept-result"></p>
     <ul id="places"></ul>
@@ -139,6 +140,16 @@
       && game.sumPence(game.workedDay()) === -1120
       ? "After the drop-off the car is returning. Arrival sets at_depot. The checked day stays −1120."
       : "The drive home changed the day.";
+    var liveFuel = game.postLiveFuel(9, 3, []);
+    var fuelAgain = game.postLiveFuel(9, 3, liveFuel.posted);
+    var checkedFuel = game.workedDay().filter(function (row) { return row.kind === "fuel"; })[0];
+    document.getElementById("live-fuel").textContent = liveFuel.fuelPence === -60
+      && fuelAgain.fuelPence === 0
+      && fuelAgain.lines.length === 0
+      && checkedFuel.amountPence === -140
+      && game.sumPence(game.workedDay()) === -1120
+      ? "A live 3 mile trip adds −60 fuel once. The checked day still has −140."
+      : "Live fuel changed the day.";
     document.getElementById("btn-accept").addEventListener("click", function () {
       var elapsed = game.elapsedSeconds(offerStart, Date.now());
       var taken = game.acceptOffer(game.waitingOffers(elapsed), depotCars);
