@@ -1489,13 +1489,19 @@
     const status = document.getElementById("taxi-status");
     if (list) {
       list.replaceChildren();
-      taxiCars.forEach((car) => {
-        const li = document.createElement("li");
-        li.textContent = taxiLabel(car);
-        list.appendChild(li);
-      });
+      if (taxisOn) {
+        taxiCars.forEach((car) => {
+          const li = document.createElement("li");
+          li.textContent = taxiLabel(car);
+          list.appendChild(li);
+        });
+      }
     }
     if (!status) return;
+    if (!taxisOn) {
+      status.textContent = "Taxis are hidden.";
+      return;
+    }
     const aboard = taxiCars.filter((car) => car.status === "with_passenger").length;
     let text = aboard === 0
       ? "Taxis are between fares."
@@ -1512,13 +1518,13 @@
     car.motion = 0;
   }
 
-  function clearCarLayers(car) {
+  function hideTaxiLayers(car) {
+    if (car.marker) map.removeLayer(car.marker);
     if (car.line) map.removeLayer(car.line);
     if (car.pin) map.removeLayer(car.pin);
-    if (car.marker) map.removeLayer(car.marker);
+    car.marker = null;
     car.line = null;
     car.pin = null;
-    car.marker = null;
   }
 
   function ensureTaxi(car) {
@@ -1713,7 +1719,7 @@
   function startFleet() {
     taxiCars.forEach((car, index) => {
       stopCar(car);
-      clearCarLayers(car);
+      hideTaxiLayers(car);
       car.status = "at_depot";
       car.passenger = null;
       car.osrm = true;
@@ -1737,9 +1743,11 @@
   function stopFleet() {
     taxiCars.forEach((car) => {
       stopCar(car);
-      clearCarLayers(car);
+      hideTaxiLayers(car);
       car.status = "at_depot";
       car.passenger = null;
+      car.street = "";
+      car.steps = [];
     });
     paintTaxiList(true);
   }

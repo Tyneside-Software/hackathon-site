@@ -471,6 +471,30 @@ def main():
     )[0]:
         print("a failed route did not take the straight line", file=sys.stderr)
         return 1
+    hidden = map_js.split("function hideTaxiLayers", 1)
+    if len(hidden) != 2:
+        print("hiding taxis left the chips on the map", file=sys.stderr)
+        return 1
+    hidden_body = hidden[1].split("function ", 1)[0]
+    for needle in (
+        "map.removeLayer(car.marker)",
+        "map.removeLayer(car.line)",
+        "map.removeLayer(car.pin)",
+    ):
+        if needle not in hidden_body:
+            print("hiding taxis left a chip, a line, or a pin", file=sys.stderr)
+            return 1
+    stopped = map_js.split("function stopFleet", 1)[1].split("const btnTaxis", 1)[0]
+    if "hideTaxiLayers(car)" not in stopped or "else stopFleet()" not in map_js:
+        print("the hide button left the taxis on the map", file=sys.stderr)
+        return 1
+    if "clearBuses" in stopped or "stopBusPoll" in stopped or "deviceMarkers" in stopped:
+        print("hiding taxis removed phones or buses", file=sys.stderr)
+        return 1
+    painted = map_js.split("function paintTaxiList", 1)[1].split("function stopCar", 1)[0]
+    if 'status.textContent = "Taxis are hidden."' not in painted or "if (taxisOn)" not in painted:
+        print("the taxi list stayed up after hide", file=sys.stderr)
+        return 1
     posted_trip = taxi_game.post_live_trip(7, 3, ())
     posted_kinds = [row["kind"] for row in posted_trip["lines"]]
     posted_amounts = [row["amount_pence"] for row in posted_trip["lines"]]
