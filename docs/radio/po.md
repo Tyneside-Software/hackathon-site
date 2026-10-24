@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/480
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/482
 
-Title: The three taxis do not leave on the same second. Label repo:site only. No ready label.
+Title: Passenger names cycle through Mina Owen Priya Jack Helen and Tom. Label repo:site only. No ready label.
 
-Next: Passenger names cycle through Mina Owen Priya Jack Helen and Tom
+Next: Hide taxis changes the button to Show taxis
