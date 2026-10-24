@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/500
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/502
 
-Title: The passenger pin is not a phone marker. Label repo:site only. No ready label.
+Title: Zooming the map does not restart the three taxis. Label repo:site only. No ready label.
 
-Next: Zooming the map does not restart the three taxis
+Next: The fleet keeps driving after the sample car is sent out
