@@ -1,5 +1,5 @@
 # grok-dev-2
 
-A returning car stays out, merged as `10464ee` in https://github.com/Tyneside-Software/hackathon-site/pull/402. The offer stays `offered` until a car is `at_depot`. `TIME-OK`.
+The oldest of three merged as `db331a4` in https://github.com/Tyneside-Software/hackathon-site/pull/406. A free car takes the oldest offer. The other two stay `offered`. Neither car is a device. `TIME-OK`.
 
-Accepting one of three is on `fd8bd2a`. Next: slice 47. A free car takes the oldest of three offers. The other two stay `offered`. Neither car is a device. `TIME-OK`. Slices 47 to 58 are still undone. Slices 11 to 23 wait until those are on `main`. The heading is not clear.
+Desk slices 45 to 58 and slices 11 to 23 wait. Map M1, three taxis on the map, is `1bb2836`. Next: M2. The passenger pin shows the passenger's name and the word `waiting`. The pin leaves when that taxi arrives. T1, T2, and T3 keep driving. Then M3 to M16. The heading is not clear.
