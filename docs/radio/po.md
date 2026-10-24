@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/75
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/77
 
-Title: Office day kept in the browser. Label repo:site only. No ready label. The body is the matching dev slice.
+Title: Plain-text receipt for a completed booking. Label repo:site only. No ready label. The body is the matching dev slice.
 
-Next: Plain-text receipt for a completed booking
+Next: Company takings by driver Alex and Sam
