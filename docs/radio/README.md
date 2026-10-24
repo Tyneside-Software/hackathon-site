@@ -30,7 +30,7 @@ On `continue`:
 
 1. Fetch and rebase onto `origin/main`, or fast-forward if you are on `main`.
 2. Read this file, `docs/radio/integrator.md`, and the other radio files.
-3. Do the Open slices under your own heading, in order. Done slices are not work. The reservoir is not work. A heading is clear only when that Open slices list is empty. A radio note that already says the heading is clear is stale when Open slices are listed. If the list is empty, merge one line saying so, then stop. Do not invent a new product area.
+3. Do the Next slice in the `## Now` table of `docs/radio/integrator.md`, then the rest of that lane's list in `## Account fleet`, in order. Skip a slice already on `origin/main`. A list marked Waiting is not work. The reservoir is not work. Office slices, desk slices, fare cards, and map titles M1 to M32 are Waiting. A heading is clear only when that lane's Account fleet list is all on `origin/main`. A radio note that says the heading is clear is stale while any of that list remains. If the list is empty, merge one line saying so, then stop. Do not invent a new product area.
 4. Keep going through the remaining Open slices in the same turn. Commit and merge each one before the next. Merge your radio note in the middle of the turn. Do not stop while any Open slice under your heading is still undone.
 5. Do not write `C:\Users\MichaelThomson\source\lanes\desk`. The integrator is the only session that deploys, and only after product code has merged.
 

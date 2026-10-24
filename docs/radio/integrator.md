@@ -8,7 +8,7 @@ A radio note that says a heading is clear is stale when this file lists Open sli
 
 ## How to read this
 
-Each session does the Open slices under its own heading, in order. When a slice is already on `origin/main`, skip it and say so in your radio file. Merge each finished slice before starting the next. Re-read this file from `origin/main` between slices, because it may have moved. Do not stop while an Open slice under your heading is still undone.
+Each session does the Next slice in `## Now`, then the rest of that lane's list in `## Account fleet`, in order. When a slice is already on `origin/main`, skip it and say so in your radio file. Merge each finished slice before starting the next. Re-read this file from `origin/main` between slices, because it may have moved. Do not stop while an Account fleet slice for your lane is still undone. A list marked Waiting is not work. Office slices, desk slices, fare cards, and map titles M1 to M32 are Waiting.
 
 The product brief is `docs/TAXI.md`. Do not invent a second fare table, a second map centre, or a fourth product. Do not edit `docs/TAXI.md`. Do not add `ready`. Leave September 2026 issues 1, 2, 3, 4, and 18 alone. Do not touch API pull request `reeve-branch`. Issues 22 and 29 stay `blocked`. Do not migrate `device_links` and do not write the live database.
 
@@ -24,13 +24,13 @@ The office and the empire are the same booking desk. `office.html` is the real c
 
 | Lane | State | Next slice |
 |------|--------|------------|
-| Product owner | On task. Slices 115 to 134 wait. Map titles M1 to M32 wait. Do not open more of them. Do not write `queue low`. | Open `Empire tables are not devices`, label `repo:api`, then the rest of the Account fleet titles. Skip a title that already has an issue. |
-| grok-dev-1 | Office slices 45 to 60 wait. Fare cards F1 to F30 are done. Do not start another fare card. Do not edit `app/map.js`. | API slice A1. Empire tables `empire_games` and `empire_cars` have no `device_id`. Then A2 to A16. |
-| grok-dev-2 | Desk slices 45 to 58, slices 11 to 23, and map slices M6 to M32 wait. Do not start another M slice. | Map slice U1. The map asks for an account before it draws T1, T2, and T3. Then U2 to U16. |
+| Product owner | On task. 61 titles are unopened. Slices 115 to 134 wait. Map titles M1 to M32 wait. Do not open those. Do not write `queue low`. | Open `Empire tables are not devices`, label `repo:api`, then titles 2 to 64. Skip titles 17, 18, and 19. Those slices are already on `main`. |
+| grok-dev-1 | 32 API slices are not on `main`. Office slices 45 to 60 wait. Fare cards F1 to F30 are done. Do not start them. Do not edit the site map. | API slice A1. Empire tables `empire_games` and `empire_cars` have no `device_id`. Then A2 to A32. |
+| grok-dev-2 | U1 is `15d66fb`, U2 is `d41eed7`, U3 is `c0c2f02`. 29 map slices remain. Desk slices and map titles M1 to M32 wait. Do not start them. | Map slice U4. Sign in calls `POST /login`. Sign out removes the token and the cars. Then U5 to U32. |
 
 Do not redo a slice that is already on `main`. Do not start the reservoir.
 
-The empire is a real-time game. One real second is one game second. There is no faster clock. When OSRM returns a duration, that duration is the journey. The car moves along the route as those seconds pass. When OSRM does not answer, the car moves in a straight line at 30 miles per hour, the built-up speed limit, and the page says `OSRM unavailable`. A new fare is offered every 20 real seconds while fewer than 3 offers are waiting. Each trip is inside the circle, not Berwick, and between 1 and 8 miles, so the drive is a few minutes rather than an hour. The checked day stays −1120. The company desk is unchanged.
+The empire is a real-time game. One real second is one game second. There is no faster clock. When OSRM returns a duration, that duration is the journey. The car moves along the route as those seconds pass. When OSRM does not answer, the car moves in a straight line at 30 miles per hour, the built-up speed limit, and the page says `OSRM unavailable`. The account fleet does not use the old 20-second offer rule. A car finishes, waits four seconds at the depot, then takes the next fare. Each trip is inside the circle, not Berwick. The checked day stays −1120. The company desk is unchanged.
 
 The box site last checked was `79c0c10`. `/health` was `0.1.26`. `.\scripts\check.ps1` printed `CHECK-OK`. The board was 50 cards. The browser fleet on that map is not the finished game. The next objective is the Account fleet below. This note is orders only. It is not a deploy.
 
@@ -50,7 +50,7 @@ Play on `http://100.65.94.5/app/`. The HTTPS site cannot call the HTTP API. Pass
 
 One issue, then a radio note, then the next. Body is the matching slice. If the exact title exists, comment and do not open a second. No `ready`.
 
-A1 to A12: label `repo:api` only. U1 to U12: label `repo:site` only.
+Titles 1 to 16 and 33 to 48: label `repo:api` only. Titles 20 to 32 and 49 to 64: label `repo:site` only. Skip titles 17, 18, and 19. Those slices are already on `main`: `15d66fb`, `d41eed7`, and `c0c2f02`. Do not open them again.
 
 1. `Empire tables are not devices`
 2. `Register starts the fleet on the box`
@@ -84,8 +84,40 @@ A1 to A12: label `repo:api` only. U1 to U12: label `repo:site` only.
 30. `The public HTTPS page points at the box`
 31. `Panning does not restart the fleet`
 32. `Sign out clears the cars`
+33. `The three cars leave a few seconds apart`
+34. `Trips stay inland of the North Sea`
+35. `Pickup and drop-off stay inside the circle`
+36. `The clock does not start during tests`
+37. `The fleet survives a new session`
+38. `An old account starts on the feed`
+39. `Car colours are on the feed`
+40. `Position is the fraction of the route`
+41. `One account has one game row`
+42. `A check-in writes one trail point`
+43. `Three cars can be on different legs`
+44. `The feed names the clock and the trail`
+45. `The feed says when OSRM missed`
+46. `A leaving leg starts at the depot`
+47. `Car status is one of four words`
+48. `Empire tests pass before the merge`
+49. `Signed in hides the account form`
+50. `A failed sign-in shows the error`
+51. `The map does not invent cars while it loads`
+52. `The trail fades with age`
+53. `A car at the depot sits on the depot`
+54. `Chip colours come from the feed`
+55. `The waiting chip says the name`
+56. `A quiet feed keeps the last cars`
+57. `Sign out is not hide taxis`
+58. `The account form leaves the sample car`
+59. `Hide taxis keeps the token`
+60. `A late poll does not jump the car back`
+61. `The empire block hides both ledgers`
+62. `The status says the fleet is loading`
+63. `The map files are cache-busted`
+64. `Phones and buses stay for a signed-in player`
 
-### grok-dev-1 — API slices A1 to A16
+### grok-dev-1 — API slices A1 to A32
 
 Checkout `C:\Users\MichaelThomson\source\lanes\grok-dev-1\hackathon-api`. Branch `lane/grok-dev-1/<slug>` from `origin/main`. Squash-merge into `Tyneside-Software/hackathon-api`. Do not run `box.ps1`.
 
@@ -107,14 +139,30 @@ A13. The bearing is shifted by the username. Two accounts do not get the same pi
 A14. Names cycle Mina, Owen, Priya, Jack, Helen, Tom.
 A15. A car at the depot still checks in, so it has a position.
 A16. If one car raises, the tick logs it and still advances the other accounts. `tests/test_empire.py` passes before the merge.
+A17. The three cars do not start the first fare on the same second. Stagger the first departures by about 7 seconds.
+A18. Bearings used for a trip stay inside 160 to 300 inclusive, so the trip does not go into the North Sea. A username whose raw bearing falls outside that range is clamped. The test does not call the network.
+A19. The pickup is about 1.2 miles from the depot. The drop-off is further along the inland bearing. Both points are inside the 50-mile circle and are not Berwick.
+A20. The clock starts in the FastAPI lifespan and stops on shutdown. Importing the app inside `tests/test_empire.py` does not start the clock and does not open the live database file.
+A21. Create a game, close that session, open a new session, and T1, T2, and T3 are still there for that username. The rows are in SQLite, so the game survives a process restart. Do not wipe the live database.
+A22. `GET /v1/empire` for a user who has no empire row yet calls `ensure_game` and then returns the three cars. No token is still 401.
+A23. The feed colours are T1 `#f5b942`, T2 `#38bdf8`, and T3 `#4ade80`.
+A24. The position is the fraction of the route by elapsed time over `duration_s`. At 0 the car is on the first point. At `duration_s` it is on the last point. Halfway it is halfway along the points. The test uses a known route and does not call OSRM.
+A25. Many ticks still leave one `empire_games` row for that username.
+A26. A check-in appends one trail point. A one-second tick that is not a check-in does not append a point. Points stay `[lng, lat, unix]`.
+A27. T1, T2, and T3 of one account can be on three different statuses at the same time.
+A28. The feed includes `ok`, `username`, `server_now`, `check_s`, `trail_s`, `osrm_unavailable`, `cars`, and `fares`. `check_s` is 10. `trail_s` is 600. `server_now` is the server clock.
+A29. `osrm_unavailable` is true when a current leg did not get an OSRM route. It is false when every current leg did.
+A30. Each car's `route` is `[lat, lng]` pairs. A leg that leaves the depot starts at `55.0367, -1.5075`.
+A31. Status is only `at_depot`, `to_passenger`, `with_passenger`, or `returning`.
+A32. `tests/test_empire.py` passes for A1 to A31 before the merge. No network. No live database file.
 
-### grok-dev-2 — map slices U1 to U16
+### grok-dev-2 — map slices U1 to U32
 
 Checkout `C:\Users\MichaelThomson\source\lanes\grok-dev-2\hackathon-site`. You may edit `app/map.js`, `app/map.css`, and the Empire block in `app/index.html`. Do not edit the API. Do not bring back a browser-only fleet as the source of truth. The sample car button stays.
 
-U1. On load the map does not draw T1, T2, and T3. The account form is the first empire control. The old auto-start fleet is not the game.
-U2. The form has username, password, Create account, and Sign in. The hint says the password is at least 8 characters.
-U3. Create account calls `POST /register`, then `POST /login`. The token is stored in `localStorage` under `hackathon-empire-token`.
+U1 is on `main` at `15d66fb`. Skip it. The account form is the first empire control, and the page does not start T1, T2, and T3 by itself.
+U2 is on `main` at `d41eed7`. Skip it. The form has username, password, Create account, and Sign in. The hint says the password is at least 8 characters.
+U3 is on `main` at `c0c2f02`. Skip it. Create account calls `POST /register`, then `POST /login`. The token is stored in `localStorage` under `hackathon-empire-token`.
 U4. Sign in calls `POST /login`. Sign out removes the token and the cars, trails, and fare markers.
 U5. While signed in, `GET /v1/empire` is called with `Authorization: Bearer` about every 2 seconds.
 U6. The marker glides with `route`, `leg_started`, `duration_s`, and `server_now`. It does not jump only when a poll arrives.
@@ -127,7 +175,23 @@ U12. The sample car still has its own button. It is not T1.
 U13. The status line says the fleet runs on the box. If `osrm_unavailable` is true, it also says `OSRM unavailable`.
 U14. A `401` clears the token and shows the form again.
 U15. On `https://hackathon.tyneside.software/app/` the empire status tells the person to open `http://100.65.94.5/app/` because that page cannot call the API.
-U16. After the player pans or zooms, the map does not jump back. Do not stop while U1 to U16 remain.
+U16. After the player pans or zooms, the map does not jump back.
+U17. Once signed in, the form is hidden and the status line shows the username.
+U18. A failed create or sign-in shows the error from the API and does not store a token.
+U19. Before the first successful poll, the page does not draw stand-in cars.
+U20. Each trail point fades with its age and is dropped after `trail_s`.
+U21. A car `at_depot` sits on the Shiremoor depot. The tooltip says `at depot`.
+U22. The chip colour is the feed colour. T1 is `#f5b942`, T2 is `#38bdf8`, and T3 is `#4ade80`.
+U23. A waiting fare uses the lilac chip. The text is the passenger name plus `waiting`.
+U24. A poll that fails for a reason other than 401 leaves the last cars on the map. The status says the feed is quiet.
+U25. Sign out is a button in the empire block. It is not the Hide taxis button. It removes the token, the cars, the trails, and the fare markers, and shows the form.
+U26. The account form does not cover the sample-car button. The sample car stays off until that button is pressed.
+U27. Hide taxis does not remove the token. Sign out does not change the Hide taxis control.
+U28. The glide uses `server_now` against the browser clock, so a late poll does not jump the car backwards.
+U29. The empire block does not show 2860, 1130, 1240, −1120, or 800000.
+U30. When the token is present and `cars` has not arrived, the status says the fleet is loading.
+U31. The cache query on `map.js` and `map.css` changes with this client, so a refresh loads the new files.
+U32. Phones and buses still load for a signed-in player. Do not stop while U4 to U32 remain.
 
 ## Product owner
 
@@ -135,7 +199,9 @@ No product code. You may commit and squash-merge a branch that changes only `doc
 
 Done, already on `main`: issues 30, 31, 32, 33, and 34 are open. Issues 23 and 24 are commented. Issues 22, 29, and 34 stay `blocked`. Do not open those titles again.
 
-Open slices. One issue, then a radio note, then the next. If that exact title already exists, comment on it and do not open a second. Label `repo:site` only. The issue body is the matching dev slice in this file. Do not add `ready`. Skip a title that already has an issue. The next title is `Empire tables are not devices`. Then the Account fleet titles in order. Map titles M1 to M32 wait. Slices 115 to 134 wait. Do not open them. Slices 84 to 114 are already open. Do not open them again. Issues through 455 are already open. Do not write `queue low` while the Account fleet titles remain. Map titles M1 to M32 are not the open work. Skip a title that already has an issue. Issues 219 to 255 already cover slices 32 to 48. Issues 312 and 263 already exist, so do not open `Receipt names tariff one` or `Two cars move at the same time` again.
+Open slices. Account fleet titles 1 to 64 in `## Account fleet` above, in order. Skip titles 17, 18, and 19. Those slices are already on `main` at `15d66fb`, `d41eed7`, and `c0c2f02`. One issue, then a radio note, then the next. If that exact title already exists, comment on it and do not open a second. Titles 1 to 16 and 33 to 48: label `repo:api` only. Titles 20 to 32 and 49 to 64: label `repo:site` only. The issue body is the matching slice. Do not add `ready`. Do not write `queue low` while any title from 1 to 64 except 17, 18, and 19 is still unopened. Map titles M1 to M32 are not the open work. Slices 115 to 134 wait. Do not open them. The next title is `Empire tables are not devices`.
+
+Waiting. The numbered list below is the old office queue. Do not open it. Issues 219 to 255 already cover slices 32 to 48. Issues 312 and 263 already exist, so do not open `Receipt names tariff one` or `Two cars move at the same time` again.
 
 1. `Office booking fields for pickup and drop-off`
 2. `Office status changes add the fare once`
@@ -320,11 +386,13 @@ Reservoir. Do not open these yet.
 
 ## grok-dev-1
 
-Stop the fare cards. F1 to F30 are done. Office slices 45 to 60 wait. The open work is Account fleet A1 to A16, in the API repo. Checkout `C:\Users\MichaelThomson\source\lanes\grok-dev-1\hackathon-api` as well as the site. Pull request 26 is merged as `fa3b6e3`.
+Open slices. Account fleet A1 to A32 in `## Account fleet` above, in order. None of A1 to A32 are on `main`. Checkout `C:\Users\MichaelThomson\source\lanes\grok-dev-1\hackathon-api`. Branch `lane/grok-dev-1/<slug>` from `origin/main`. Squash-merge into `Tyneside-Software/hackathon-api`. Do not run `box.ps1`. You may add `app/empire.py`, `tests/test_empire.py`, `app/routers/empire.py`, and the smallest hooks in `app/models.py`, `app/main.py`, `app/routers/auth.py`, and `app/config.py`. Do not edit the site, `app/map.js`, the office files, or `scripts/taxi_fare.py`. Do not wipe SQLite. No `device_id`.
 
-You own the fare maths and the office desk. You may edit `scripts/taxi_fare.py`, `scripts/taxi_fare_check.py`, `app/taxi-fare.js`, `office.html`, `app/office.js`, `app/office.css`, `docs/taxi-fares.md`, and `docs/taxi-office.md`. Do not edit `app/map.js`, `game.html`, `app/taxi-game.js`, `index.html`, `docs/pages.json`, `docs/TAXI.md`, or the API. The Office link is already on the home page.
+Stop the fare cards. F1 to F30 are done. Office slices 45 to 60 wait. Do not start them. Pull request 26 is merged as `fa3b6e3`.
 
-Do not rewrite the locked results: 490, 1040, 615, 1240, 1130, 265, 2370, 2860, and 12500. Money is integer pence. `py -3 scripts\taxi_fare_check.py` must print `FARE-OK` before each merge. The company ledger is not the game ledger. No driver share, no fuel, no standing, and no new-car cost on this desk. No API call and no database.
+Waiting. The fare cards and the office list below are not work. Do not edit those files for this wave.
+
+Waiting, office desk only. Do not rewrite the locked results: 490, 1040, 615, 1240, 1130, 265, 2370, 2860, and 12500. Money is integer pence. `py -3 scripts\taxi_fare_check.py` must print `FARE-OK` before each merge of an office slice. The company ledger is not the game ledger. No driver share, no fuel, no standing, and no new-car cost on this desk. That desk makes no API call. The account fleet above does, in the API repo.
 
 Done, on `fa3b6e3`: the office desk, the £11.30 and £12.40 rows, the mixed button at 265, the company day at 2860, the cancelled mile at 2370, the empty hiring at 0, and soiling-only at 12500. Open slices 1 to 44 are also on `main`, through the animal row at 790 at `dcc53b1`. Office slices 45 to 60 wait. Do not start them. Do not edit `app/map.js`, `app/map.css`, or `app/index.html`.
 
@@ -362,7 +430,7 @@ F28. A guide or hearing dog on the £11.30 row keeps that row at 1130. `FARE-OK`
 F29. 22:00 and 06:59 are tariff two. 07:00 and 21:59 are tariff one. `FARE-OK`.
 F30. The office does not show −7840 or −807840. `FARE-OK`.
 
-Open slices.
+Waiting. Office list. Do not start these.
 
 1. Booking fields. Each row stores pickup, drop-off, requested time, vehicle call sign, and status. The £11.30 sample picks up at `Grey's Monument` and drops at `Shiremoor depot`. The £12.40 sample is the reverse. Describe the fields in `docs/taxi-office.md`.
 2. Status adds the fare once. Buttons move `offered` to `accepted` to `started` to `completed`. Cancel is allowed until `completed`. Completing the £11.30 row adds 1130 once. A second press does not add it again. Cancel from `offered` adds 0. A completed booking does not become cancelled.
@@ -431,17 +499,13 @@ Reservoir. Do not start these.
 
 ## grok-dev-2
 
-Checkout `C:\Users\MichaelThomson\source\lanes\grok-dev-2\hackathon-site`. Pull request 25 is merged as `e4a2c1c`. Branch the next slice from current `origin/main` as `lane/grok-dev-2/<slug>`.
+Open slices. Account fleet U4 to U32 in `## Account fleet` above, in order. U1 is `15d66fb`, U2 is `d41eed7`, and U3 is `c0c2f02`. Skip those three. Checkout `C:\Users\MichaelThomson\source\lanes\grok-dev-2\hackathon-site`. Branch `lane/grok-dev-2/<slug>` from `origin/main`. You may edit `app/map.js`, `app/map.css`, and the Empire block in `app/index.html`. Call `POST /register`, `POST /login`, and `GET /v1/empire`. Do not edit the API. Do not edit the office files, `scripts/taxi_fare.py`, or `app/office.css`. Do not bring back a browser-only fleet as the source of truth. The sample car button stays. Do not run `box.ps1`.
 
-You own the circle, the game ledger, the sample car, and the map drawing for this game. You may edit `scripts/taxi_geo.py`, `scripts/taxi_geo_check.py`, `scripts/taxi_game.py`, `scripts/taxi_day_check.py`, `scripts/taxi_week_check.py`, `app/taxi-game.js`, `game.html`, `app/map.js`, `app/map.css`, `docs/taxi-game.md`, and `docs/taxi-day.md`. You may link `app/office.css` from `game.html`. Do not edit that file, `office.html`, `app/office.js`, the fare module, `index.html`, `docs/pages.json`, `docs/TAXI.md`, `docs/taxi-model.md`, or `app/models.py`. Do not write the live database. The Empire link is already on the home page.
+Desk slices 45 to 58, slices 11 to 23, and map titles M1 to M32 wait. Do not start them. A radio that names M6 or M8 is stale as an order. The game runs on the box per account. The browser must not invent the cars.
 
-`GEO-OK`, `DAY-OK`, and `WEEK-OK` must pass before each merge that touches those scripts. The one-car worked day stays −1120 pence. Seven of those days stay −7840. A new car stays −800000 and never has a `device_id`. No API call. Do not import the office ledger and do not show 2860, 1130, or 1240 as game cash. The priced fare in the worked day stays 1040. Do not price Hexham, Durham, or Sunderland by distance.
+Waiting. The map list and the desk list below are not work. Pull request 25 is merged as `e4a2c1c`. Open slices 1 to 10 of that old desk are on `main`. Skip them.
 
-Done, on `e4a2c1c`: the checkers, `game.html`, the 80467 metre circle, the `Shiremoor depot` marker, and the sample car that asks OSRM or shows `OSRM unavailable` without repricing the day. Open slices 1 to 10 are also on `main`, through the seven-day list at `b1917d3`. Skip them.
-
-Desk slices 45 to 58, slices 11 to 23, and map slices M6 to M32 wait. Do not start them. A radio that names M6 is stale as an order. The open work is Account fleet U1 to U16. The game runs on the box per account. The browser must not invent the cars.
-
-Map fleet. Do these before any waiting desk slice.
+Waiting. Map titles M1 to M32. Do not start these. M1 to M7 and U1 are already on `main`. U1 replaced the auto-start fleet.
 
 M1. Three taxis drive on the map. T1, T2, and T3 leave the Shiremoor depot, collect a virtual passenger, drive the street geometry, and return. This is on `main` in this pass. Skip it if the map already shows the three chips.
 M2 is on `main` at `58697ba`. Skip it. M2. The passenger pin shows the passenger's name and the word `waiting`. The pin leaves when that taxi arrives.
@@ -476,7 +540,7 @@ M30. The passenger pin is not a phone marker.
 M31. Zooming the map does not restart the three taxis.
 M32. The fleet keeps driving after the sample car is sent out. `DAY-OK` and `TIME-OK`.
 
-Open slices. Use the coordinates already in `scripts/taxi_geo_check.py`. Do not invent a new town.
+Waiting. Desk list. Do not start these. Use the coordinates already in `scripts/taxi_geo_check.py`. Do not invent a new town.
 
 1. Places on the empire page. Show Grey's Monument, Shiremoor depot, Hexham, Durham, and Sunderland as inside, and Berwick-upon-Tweed as outside. A job that starts or ends at Berwick is not offered. `GEO-OK` still passes.
 2. Job pins. On the map, add `Sample pickup` at Grey's Monument and `Sample drop-off` at the depot, beside the sample car. Phones and buses stay. These markers are not devices.
@@ -548,6 +612,6 @@ Reservoir. Do not start these.
 
 ## Integrator
 
-On `continue`, lead. Watch productivity against the three objectives: the tracker, the real booking desk, and the real-time empire. Read the radios and the lane checkouts. Do not edit those checkouts. Name the next slice in `## Now`. Keep at least 12 Open slices that are not yet on `origin/main` in front of each lane. Deploy once when product code has merged since the site commit in `## Now`. A radio-only commit is not a deploy.
+On `continue`, lead. Watch productivity against the three objectives: the tracker, the real booking desk, and the real-time empire. Read the radios and the lane checkouts. Do not edit those checkouts. Name the next slice in `## Now`. Keep at least 12 Account fleet slices that are not yet on `origin/main` in front of each lane. Deploy once when the account-fleet API is on `main`. A radio-only commit is not a deploy. Do not deploy the account form by itself. The box still shows the preview cars until `GET /v1/empire` is real.
 
-Last deploy: box site `79c0c10`, health `0.1.26`, `CHECK-OK`. The three map taxis and the waiting pins are on that check. A radio-only commit after that is not a deploy.
+Last deploy checked in this note: box site `79c0c10`, health `0.1.26`, `CHECK-OK`. U1, the account form shell, is on `main` at `15d66fb` and has not been deployed. The preview cars stay on the box until the API fleet is deployed with the map.
