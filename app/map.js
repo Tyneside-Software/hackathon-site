@@ -13,6 +13,13 @@
   const statEngine = document.getElementById("stat-engine");
 
   const map = L.map("map").setView(NEWCASTLE, 12);
+  let playerMovedMap = false;
+  map.on("dragstart", (ev) => {
+    if (ev.originalEvent) playerMovedMap = true;
+  });
+  map.on("zoomstart", (ev) => {
+    if (ev.originalEvent) playerMovedMap = true;
+  });
   map.createPane("phones");
   map.getPane("phones").style.zIndex = 560;
   L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
@@ -788,7 +795,7 @@
         deviceMarkers.delete(id);
       }
     });
-    if (!fittedPhones && rows.length) {
+    if (!playerMovedMap && !fittedPhones && rows.length) {
       const pts = rows
         .map((d) => [Number(d.last_lat), Number(d.last_lng)])
         .filter((p) => Number.isFinite(p[0]) && Number.isFinite(p[1]));
@@ -1745,7 +1752,7 @@
     paintTaxiList(true);
     const params = new URLSearchParams(location.search);
     const busesAsked = params.get("buses") === "1" || location.hash === "#buses";
-    if (!fleetFramed && !params.get("zoom") && !busesAsked) {
+    if (!playerMovedMap && !fleetFramed && !params.get("zoom") && !busesAsked) {
       fleetFramed = true;
       map.setView([55.01, -1.57], 12);
     }
@@ -1984,6 +1991,7 @@
   function rememberEmpire(data) {
     if (!data || !Array.isArray(data.cars)) return;
     empireFeed = data;
+    if (playerMovedMap) fleetFramed = true;
     empireClock = {
       server: Number(data.server_now) || 0,
       client: Date.now() / 1000,
