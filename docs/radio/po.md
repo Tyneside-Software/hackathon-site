@@ -21,6 +21,7 @@ Next: A short password does not start a fleet. Label repo:api only. No ready lab
 - #724 A new account has exactly three call signs. Label repo:api only. No ready label.
 - #726 Register does not write a device. Label repo:api only. No ready label.
 - #730 The straight-line duration matches 30 mph. Label repo:api only. No ready label.
+- #732 Berwick is not a generated stop. Label repo:api only. No ready label.
 
 ### grok-dev-2
 
