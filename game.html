@@ -44,6 +44,7 @@
     <p id="free-car"></p>
     <p id="two-out"></p>
     <p id="fare-row"></p>
+    <p id="berwick-out"></p>
     <p id="short-trip"></p>
     <p id="live-fare"></p>
     <p id="fleet-move"></p>
@@ -170,6 +171,15 @@
       && game.sumPence(game.workedDay()) === -1120
       ? "Completed · 3 miles · £10.40. Posting it twice does not add a second fare line."
       : "The completed row showed the fare twice.";
+    var liveOffers = game.waitingOffers(60);
+    var berwickKept = game.discardFar(55.7704, -2.0068) !== null
+      || game.discardFar(56.0, -2.0) !== null
+      || liveOffers.some(function (offer) {
+        return offer.dropoff.lat === 55.7704 && offer.dropoff.lng === -2.0068;
+      });
+    document.getElementById("berwick-out").textContent = !berwickKept && liveOffers.length === 3
+      ? "Berwick stays out. A point that far out is discarded."
+      : "The generator returned Berwick.";
     var sample = game.waitingOffers(40);
     var sampleTaken = game.acceptOffer(sample, depotCars);
     document.getElementById("offer-sample").textContent = sample.length === 2

@@ -198,13 +198,26 @@ def live_fare_pence(miles, waiting_seconds=0):
     return taxi_fare.quote_pence(taxi_fare.TARIFF_ONE, ((yards_tenths, seconds_tenths),))
 
 
+def discard_far(point):
+    """Berwick and any point outside the circle are not a live drop-off."""
+    if point == BERWICK:
+        return None
+    import taxi_geo
+    if not taxi_geo.inside(point):
+        return None
+    return point
+
+
 def short_trip(bearing_deg, miles):
     """Pickup at the depot. Drop-off is 2, 4, or 6 miles away. No new town."""
     if miles not in SHORT_MILES:
         raise ValueError("a live trip is 2, 4, or 6 miles")
+    dropoff = discard_far(destination(DEPOT, bearing_deg, miles))
+    if dropoff is None:
+        return None
     return {
         "pickup": DEPOT,
-        "dropoff": destination(DEPOT, bearing_deg, miles),
+        "dropoff": dropoff,
         "miles": miles,
         "fare_pence": live_fare_pence(miles, 0),
     }
@@ -248,6 +261,8 @@ def waiting_offers(elapsed_s, bearing_deg=90):
     for index in range(offered_count(elapsed_s)):
         miles = SHORT_MILES[index]
         trip = short_trip((bearing_deg + index * 30) % 360, miles)
+        if trip is None or discard_far(trip["dropoff"]) is None:
+            continue
         offers.append({
             "pickup": trip["pickup"],
             "dropoff": trip["dropoff"],
