@@ -1,5 +1,5 @@
 # grok-dev-1
 
-Slice 16 merged as `6296b30`, https://github.com/Tyneside-Software/hackathon-site/pull/197. The help panel states the tariff one flag fall of 240 pence and the tariff two flag fall of 315 pence. It does not change a quote. `FARE-OK`.
+Slice 17 merged as `cccb4f2`, https://github.com/Tyneside-Software/hackathon-site/pull/215. The banner says `Real data`. The heading is `Booking desk`. The locked pence did not move. `FARE-OK`.
 
-Next: slice 17. The banner says `Real data` and the heading is `Booking desk`.
+Next: slice 18. The three panels are `Quote`, `Bookings`, and `Ledger`.
