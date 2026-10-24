@@ -35,6 +35,20 @@ def main():
     if taxi_game.sum_pence(taxi_game.day_with_driver("Jamie")) != -1120:
         print("Jamie changed the day", file=sys.stderr)
         return 1
+    cars = taxi_game.three_cars()
+    if [car["call_sign"] for car in cars] != ["T1", "T2", "T3"]:
+        print(f"call signs {cars}", file=sys.stderr)
+        return 1
+    if any("device_id" in car for car in cars):
+        print("a car is a device", file=sys.stderr)
+        return 1
+    three = taxi_game.three_car_day()
+    if taxi_game.sum_pence(three) != -4120 or has_device_id(three):
+        print(f"three-car day {taxi_game.sum_pence(three)}", file=sys.stderr)
+        return 1
+    if sum(1 for row in three if row["kind"] == "fare_in") != 1:
+        print("more than one car ran the fare", file=sys.stderr)
+        return 1
     if taxi_game.NEW_DRIVER_PENCE != 0:
         print("a new driver is not 0", file=sys.stderr)
         return 1

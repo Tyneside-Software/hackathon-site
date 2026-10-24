@@ -59,6 +59,30 @@ def cancel_before():
     return []
 
 
+def three_cars():
+    cars = []
+    for taxi_id, call_sign in ((1, "T1"), (2, "T2"), (3, "T3")):
+        cars.append({
+            "id": taxi_id,
+            "call_sign": call_sign,
+            "status": "at_depot",
+            "lat": DEPOT[0],
+            "lng": DEPOT[1],
+        })
+    return cars
+
+
+def three_car_day():
+    """Standing for T1, T2, and T3. Only T1 runs the worked fare."""
+    rows = [line("standing", -STANDING_PENCE, taxi_id=car["id"]) for car in three_cars()]
+    rows.extend([
+        line("fare_in", WORKED_FARE_PENCE, job_id=1, taxi_id=1),
+        line("driver_share", -(WORKED_FARE_PENCE // 2), job_id=1, taxi_id=1),
+        line("fuel", -(WORKED_MILES * FUEL_PENCE_A_MILE), job_id=1, taxi_id=1),
+    ])
+    return rows
+
+
 def new_driver(name):
     return {"name": name, "cost_pence": NEW_DRIVER_PENCE}
 
