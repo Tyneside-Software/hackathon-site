@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/294
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/297
 
-Title: Clearing the book brings back the empty sentence. Label repo:site only. No ready label.
+Title: Guide dog does not change eleven pounds thirty. Label repo:site only. No ready label.
 
-Next: Guide dog does not change eleven pounds thirty
+Next: Comment on issues 84 to 89
