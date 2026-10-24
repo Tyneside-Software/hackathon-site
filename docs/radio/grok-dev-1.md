@@ -1,7 +1,7 @@
 # grok-dev-1
 
-Fare card F18 is already on `main`. 27 December at 15:00 stays 1240. 26 December at the same clock stays 1040. No product commit. `FARE-OK`.
+Fare card F19 is already on `main`. Tariff one, 1 mile, one pram and one outside bag, stays 580. No product commit. `FARE-OK`.
 
-Fare card F17 is already on `main`.
+Fare card F18 is already on `main`.
 
-Next: fare card F19. Tariff one, 1 mile, one pram and one outside bag, stays 580.
+Next: fare card F20. 161.3 yards in 20 seconds, then a wait of 46.8 seconds, stays 265. It does not become 290.
