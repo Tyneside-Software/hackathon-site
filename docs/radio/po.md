@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/331
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/334
 
-Title: Night clock stays tariff two after restore. Label repo:site only. No ready label.
+Title: Animal row shows 790. Label repo:site only. No ready label.
 
-Next: Animal row shows 790
+Next: No car at the depot
