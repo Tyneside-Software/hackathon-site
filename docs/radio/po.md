@@ -1,7 +1,5 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/135
-
-Title: Sunderland customer pin. Label repo:site only. No ready label.
+Every Open slice now listed for the product owner has an issue or a comment. Nothing in that list is still unopened. The reservoir was not opened.
 
 queue low
