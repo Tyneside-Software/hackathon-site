@@ -80,6 +80,7 @@
       "play-trail-replace",
       "play-trail-chip",
       "play-depot-chip",
+      "play-t11-only",
       "play-started-ten",
       "play-locks",
       "play-osrm",
@@ -265,6 +266,19 @@
     if (list) list.textContent = "";
   }
 
+  function drawnPlaySign(sign) {
+    const name = String(sign || "");
+    if (PLAY_SIGNS.indexOf(name) !== -1) return true;
+    return name === "T11";
+  }
+
+  function noteT11Only() {
+    const node = document.getElementById("play-t11-only");
+    if (!node) return;
+    node.dataset.t11 = playChips.has("T11") ? "drawn" : "waiting";
+    node.dataset.t12 = playChips.has("T12") ? "drawn" : "not-drawn";
+  }
+
   function paintPlayCars(feed) {
     if (!playFed) return;
     const cars = feed && Array.isArray(feed.cars) ? feed.cars : [];
@@ -308,6 +322,7 @@
     });
     cars.forEach((car) => {
       if (!car || PLAY_SIGNS.indexOf(car.sign) !== -1) return;
+      if (!drawnPlaySign(car.sign)) return;
       paintOne(car);
     });
     playChips.forEach((marker, sign) => {
@@ -315,6 +330,7 @@
       map.removeLayer(marker);
       playChips.delete(sign);
     });
+    noteT11Only();
   }
 
   function clearPlayTrails() {
@@ -381,6 +397,7 @@
     const keptSigns = [];
     cars.forEach((car) => {
       if (!car || !car.sign || !Array.isArray(car.trail)) return;
+      if (!drawnPlaySign(car.sign)) return;
       const sign = String(car.sign);
       const boughtS = boughtTrailSeconds(car);
       const keepS = boughtS === null ? trailS : boughtS;
