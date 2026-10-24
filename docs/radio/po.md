@@ -18,6 +18,7 @@ Next: A short password does not start a fleet. Label repo:api only. No ready lab
 - #718 A missing token does not return cars. Label repo:api only. No ready label.
 - #720 A login token reads only that account. Label repo:api only. No ready label.
 - #722 The car stays at the depot through the pause. Label repo:api only. No ready label.
+- #724 A new account has exactly three call signs. Label repo:api only. No ready label.
 
 ### grok-dev-2
 
