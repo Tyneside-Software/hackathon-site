@@ -67,3 +67,4 @@ Not assigned. Do not start these.
 - #768 Sign-out removes the fare markers. Label repo:site only. No ready label.
 - #770 The loading line is replaced when the feed arrives. Label repo:site only. No ready label.
 - #772 Panning keeps the username on the status line. Label repo:site only. No ready label.
+- #774 The empire page does not call devices for its cars. Label repo:site only. No ready label.
