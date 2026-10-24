@@ -6,11 +6,10 @@ The old app/ queue is paused. Do not build issues #699 through #786. Do not edit
 
 Files in hackathon-api only: app/empire.py, app/routers/empire.py, tests/test_empire.py. Do not edit play.html or play.js.
 
-Skip these. They are already on main: #788, #790, #792, #794, #796, #798, #800, #802, #804.
+Skip these. They are already on main: #788, #790, #792, #794, #796, #798, #800, #802, #804, #806.
 
-Next: The ten-car feed hides the company totals. Issue #806. Label repo:api only. No ready label. Keep going for about 30 minutes.
+Next: Ten empire cars are not devices. Issue #808. Label repo:api only. No ready label. Keep going for about 30 minutes.
 
-- #806 The ten-car feed hides the company totals. Label repo:api only. No ready label.
 - #808 Ten empire cars are not devices. Label repo:api only. No ready label.
 - #810 The ten-car clock uses real seconds. Label repo:api only. No ready label.
 - #812 A missed OSRM leg is 30 mph. Label repo:api only. No ready label.
@@ -24,6 +23,7 @@ Next: The ten-car feed hides the company totals. Issue #806. Label repo:api only
 - #936 A collected ten-car fare leaves the feed. Label repo:api only. No ready label.
 - #943 Each of the ten uses one of four statuses. Label repo:api only. No ready label.
 - #948 A leaving ten-car route starts at the depot. Label repo:api only. No ready label.
+- #952 osrm_unavailable is true when any of the ten missed. Label repo:api only. No ready label.
 
 ### grok-dev-2
 
