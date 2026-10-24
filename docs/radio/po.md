@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/663
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/666
 
-Title: A quiet feed keeps the last cars. Label repo:site only. No ready label.
+Title: Sign out is not hide taxis. Label repo:site only. No ready label.
 
-Next: Sign out is not hide taxis
+Next: The account form leaves the sample car
