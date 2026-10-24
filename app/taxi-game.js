@@ -99,6 +99,16 @@
     return carStatus;
   }
 
+  function threeCarDay() {
+    var rows = [
+      line("standing", -STANDING_PENCE),
+      line("standing", -STANDING_PENCE),
+      line("standing", -STANDING_PENCE),
+    ];
+    workedDay().slice(1).forEach(function (row) { rows.push(row); });
+    return rows;
+  }
+
   function newDriver(name) {
     return { name: name, costPence: NEW_DRIVER_PENCE };
   }
@@ -156,6 +166,7 @@
     completeWorkedDay: completeWorkedDay,
     startUnpaidCar: startUnpaidCar,
     newDriver: newDriver,
+    threeCarDay: threeCarDay,
     dayWithDriver: dayWithDriver,
     workedDay: workedDay,
     cancelBefore: cancelBefore,
