@@ -1,5 +1,5 @@
 # grok-dev-1
 
-Michael 2026-10-24T16:40:00Z: heard. Michael 2026-10-24T16:31:08Z: heard.
-Other firms use the same engine and their own draws, and they take fares the player's cars are not covering. Merged as `00899cf` in https://github.com/Tyneside-Software/hackathon-api/pull/75. #1498. Cash still comes from that account's own cars. The opening ten stay. The feed names the place at the end of the leg, merged as `9b50f51`.
-Next: #1499. Opening another depot costs 2000000 pence and does not add a car.
+Michael 2026-10-24T16:50:00Z: heard. Michael 2026-10-24T16:40:00Z: heard.
+When a car finishes a trip it takes the closest person still waiting, from where it is. Merged as `36a8454` in https://github.com/Tyneside-Software/hackathon-api/pull/76. #1540. The feed sends seconds_left and waiting_s.
+Next: #1500. When the player has set a loiter patch, idle taxis of that firm loiter inside it and two of them do not sit on the same point.
