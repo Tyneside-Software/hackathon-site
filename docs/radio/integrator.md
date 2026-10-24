@@ -24,15 +24,15 @@ The office and the empire are the same booking desk. `office.html` is the real c
 
 | Lane | State | Next slice |
 |------|--------|------------|
-| Product owner | On task. Slices 115 to 134 wait. Do not open them. Do not write `queue low`. | Slice M1, `Three taxis drive on the map`, then M2 to M12. Skip a title that already has an issue. |
-| grok-dev-1 | Office slices 45 to 60 wait. Do not start them. Do not edit `app/map.js`. | Fare card F1. In `docs/taxi-fares.md`, state that a map taxi asks `quote_pence` and does not keep a second tariff. 3 miles, no waiting, tariff one, no extras, stays 1040. 1 mile stays 490. `FARE-OK`. Then F2 to F14. |
-| grok-dev-2 | Desk slices 45 to 58 and slices 11 to 23 wait. The game is the map at `app/`. | Map slice M2. The passenger pin shows the passenger's name and the word `waiting`. The pin leaves when that taxi arrives. T1, T2, and T3 keep driving. Then M3 to M12. Do not stop. |
+| Product owner | On task. Slices 115 to 134 wait. Do not open them. Do not write `queue low`. | M1 is on the live map. Open `Three taxis drive on the map` if that issue is missing, then M2 to M16. Skip a title that already has an issue. |
+| grok-dev-1 | Office slices 45 to 60 wait. F1 is on `main` at `1582946`. F2, F3, and F4 are already recorded. The checker already fails those cases. Do not redo them. Do not edit `app/map.js`. | Fare card F5. A guide or hearing dog still adds 0. `FARE-OK`. Then F6 to F24. |
+| grok-dev-2 | Desk slices 45 to 58 and slices 11 to 23 wait. A radio that names slice 47 is stale. The oldest of three offers is already `db331a4`. The game is the map at `app/`. | Map slice M2. The passenger pin shows the passenger's name and the word `waiting`. The pin leaves when that taxi arrives. T1, T2, and T3 keep driving. Then M3 to M16. Do not stop. |
 
 Do not redo a slice that is already on `main`. Do not start the reservoir.
 
 The empire is a real-time game. One real second is one game second. There is no faster clock. When OSRM returns a duration, that duration is the journey. The car moves along the route as those seconds pass. When OSRM does not answer, the car moves in a straight line at 30 miles per hour, the built-up speed limit, and the page says `OSRM unavailable`. A new fare is offered every 20 real seconds while fewer than 3 offers are waiting. Each trip is inside the circle, not Berwick, and between 1 and 8 miles, so the drive is a few minutes rather than an hour. The checked day stays −1120. The company desk is unchanged.
 
-The box site is `50bb982`. `/health` is `0.1.26`. `.\scripts\check.ps1` printed `CHECK-OK`. The board was 50 cards. GitHub Pages serves the same `main` at `https://hackathon.tyneside.software`. The playable empire is the map at `app/`. T1, T2, and T3 collect virtual passengers there. This pass deploys that map, and the product merged since `50bb982`. A later radio-only commit is not another deploy.
+The box site is `1582946`. `/health` is `0.1.26`. `.\scripts\check.ps1` printed `CHECK-OK`. The board was 50 cards: 9 to do, 2 ready, 39 done. Buses were 13. The API stayed `2602d02`. GitHub Pages serves the same `main` at `https://hackathon.tyneside.software`. The playable empire is the map at `app/`. T1, T2, and T3 collect virtual passengers there. This check covers the fleet at `1bb2836` and the product merged after `50bb982`. This note is radio and briefing only. It is not another deploy.
 
 ## Product owner
 
@@ -219,7 +219,8 @@ Done, on `fa3b6e3`: the office desk, the £11.30 and £12.40 rows, the mixed but
 
 Fare card for the map fleet. `FARE-OK` before each merge. Do not invent a second tariff.
 
-F1. In `docs/taxi-fares.md`, state that a map taxi asks `quote_pence` and does not keep a second tariff. 3 miles, no waiting, tariff one, no extras, stays 1040. 1 mile stays 490.
+F1 is on `main` at `1582946`. Skip it. F1. In `docs/taxi-fares.md`, state that a map taxi asks `quote_pence` and does not keep a second tariff. 3 miles, no waiting, tariff one, no extras, stays 1040. 1 mile stays 490.
+F2, F3, and F4 are already recorded on `main`. Skip them.
 F2. The checker still fails if 1 mile on tariff one is not 490.
 F3. The checker still fails if 3 miles on tariff one, no waiting, no extras, is not 1040.
 F4. The checker still fails if 3 miles on tariff two, no waiting, no extras, is not 1240.
@@ -233,6 +234,16 @@ F11. The office desk still does not show −1120, driver share, fuel, or standin
 F12. `docs/taxi-fares.md` names the map fleet and says the cars are not devices. `FARE-OK`.
 F13. Exact 322.6 yards on tariff one stays 265. `FARE-OK`.
 F14. The £11.30 hiring stays meter 1040 plus extras 90. `FARE-OK`.
+F15. Tariff two, 1 mile, no waiting, no extras, stays 615. `FARE-OK`.
+F16. Sunday at 15:00, 3 miles, no waiting, no extras, stays 1240. Tuesday at 15:00 stays 1040. `FARE-OK`.
+F17. 30 December at 15:00, 3 miles, no waiting, no extras, stays 1240. 1 January at the same clock stays 1040. `FARE-OK`.
+F18. 27 December at 15:00 stays 1240. 26 December at the same clock stays 1040. `FARE-OK`.
+F19. Tariff one, 1 mile, one pram and one outside bag, stays 580. `FARE-OK`.
+F20. 161.3 yards in 20 seconds, then a wait of 46.8 seconds, stays 265. It does not become 290. `FARE-OK`.
+F21. Tariff two at 0 yards and 45 seconds stays 315. `FARE-OK`.
+F22. Exact 161.3 yards on tariff one stays 240. Exact 140.5 yards on tariff two stays 315. `FARE-OK`.
+F23. Cash or account does not change the £11.30 hiring. It stays 1130. `FARE-OK`.
+F24. Cancelling the 490 leaves the company day at 2370. The full day stays 2860. `FARE-OK`.
 
 Open slices.
 
@@ -406,4 +417,4 @@ Reservoir. Do not start these.
 
 On `continue`, lead. Watch productivity against the three objectives: the tracker, the real booking desk, and the real-time empire. Read the radios and the lane checkouts. Do not edit those checkouts. Name the next slice in `## Now`. Keep at least 12 Open slices that are not yet on `origin/main` in front of each lane. Deploy once when product code has merged since the site commit in `## Now`. A radio-only commit is not a deploy.
 
-Last deploy: box site `50bb982`, health `0.1.26`, `CHECK-OK`. The three map taxis after that check are a deploy. A radio-only commit after that is not.
+Last deploy: box site `1582946`, health `0.1.26`, `CHECK-OK`. The three map taxis are on that check. A radio-only commit after that is not a deploy.
