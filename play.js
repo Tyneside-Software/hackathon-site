@@ -446,16 +446,26 @@
     return name;
   }
 
-  function chipText(sign, job, endName, passenger) {
+  function carriedJourney(car) {
+    if (!car) return "";
+    const status = String(car.status || "").trim();
+    if (status !== "with_passenger" && carJob(car) !== "carrying") return "";
+    const journey = typeof car.journey === "string" ? car.journey.trim() : "";
+    if (!journey || journey === "2860" || journey === "1130" || journey === "1240" || journey === "-1120") return "";
+    return journey;
+  }
+
+  function chipText(sign, job, endName, passenger, journey) {
     let text = chipLabel(sign);
     if (job) text += " " + job;
     if (passenger) text += " " + passenger;
+    if (journey) text += " " + journey;
     if (endName) text += " " + endName;
     return text;
   }
 
-  function chipIcon(sign, fill, job, endName, passenger) {
-    const raw = chipText(sign, job, endName, passenger);
+  function chipIcon(sign, fill, job, endName, passenger, journey) {
+    const raw = chipText(sign, job, endName, passenger, journey);
     const text = raw.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
     const width = Math.max(36, 8 + raw.length * 7);
     const html = '<span class="play-chip" style="display:flex;align-items:center;justify-content:center;min-width:' + width + 'px;height:22px;padding:0 4px;border-radius:6px;background:' + fill + ';color:#0c1219;font:700 11px/1 system-ui,sans-serif;white-space:nowrap">' + text + "</span>";
@@ -523,17 +533,19 @@
       const job = carJob(car);
       const endName = feedPlaceName(car);
       const passenger = carriedName(car);
-      const title = chipText(sign, job, endName, passenger);
+      const journey = carriedJourney(car);
+      const title = chipText(sign, job, endName, passenger, journey);
       let marker = playChips.get(sign);
       if (!marker) {
         marker = L.marker(place, {
-          icon: chipIcon(sign, fill, job, endName, passenger),
+          icon: chipIcon(sign, fill, job, endName, passenger, journey),
           title: title
         }).addTo(map);
         marker._playFill = fill;
         marker._playJob = job;
         marker._playPlace = endName;
         marker._playPassenger = passenger;
+        marker._playJourney = journey;
         marker._playClick = true;
         marker.on("click", function () {
           playChosen = sign;
@@ -541,12 +553,13 @@
           paintPlayCars(playFeed);
         });
         playChips.set(sign, marker);
-      } else if (marker._playFill !== fill || marker._playJob !== job || marker._playPlace !== endName || marker._playPassenger !== passenger) {
-        marker.setIcon(chipIcon(sign, fill, job, endName, passenger));
+      } else if (marker._playFill !== fill || marker._playJob !== job || marker._playPlace !== endName || marker._playPassenger !== passenger || marker._playJourney !== journey) {
+        marker.setIcon(chipIcon(sign, fill, job, endName, passenger, journey));
         marker._playFill = fill;
         marker._playJob = job;
         marker._playPlace = endName;
         marker._playPassenger = passenger;
+        marker._playJourney = journey;
       }
       marker.options.title = title;
       if (marker._icon) marker._icon.title = title;
@@ -894,12 +907,13 @@
         const job = carJob(car);
         const placeName = feedPlaceName(car);
         const passenger = carriedName(car);
+        const journey = carriedJourney(car);
         const title = firmChipText(sign, name, job, placeName, passenger);
         const iconEnd = name && placeName ? name + " " + placeName : (name || placeName);
         let marker = playFirmChips.get(sign);
         if (!marker) {
           marker = L.marker(place, {
-            icon: chipIcon(sign, fill, job, iconEnd, passenger),
+            icon: chipIcon(sign, fill, job, iconEnd, passenger, journey),
             title: title
           }).addTo(map);
           marker.on("click", function () {
@@ -908,10 +922,12 @@
             paintPlayCars(playFeed);
           });
           playFirmChips.set(sign, marker);
-        } else if (marker._playFirmTitle !== title || marker._playFill !== fill) {
-          marker.setIcon(chipIcon(sign, fill, job, iconEnd, passenger));
+        } else if (marker._playFirmTitle !== title || marker._playFill !== fill || marker._playJourney !== journey) {
+          marker.setIcon(chipIcon(sign, fill, job, iconEnd, passenger, journey));
           marker._playFill = fill;
+          marker._playJourney = journey;
         }
+        marker._playJourney = journey;
         marker._playFirmTitle = title;
         marker._playFirmName = name;
         marker._playFirmCar = car;
