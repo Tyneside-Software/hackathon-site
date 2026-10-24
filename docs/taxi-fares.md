@@ -8,7 +8,7 @@ The August 2026 proposal is not on that page. This worksheet does not use it. Th
 
 ## Map taxi
 
-A map taxi asks `quote_pence`. It does not keep a second tariff. Tariff one, 3 miles, no waiting, and no extras stays 1040 pence. Tariff one, 1 mile, no waiting, and no extras stays 490 pence.
+A map taxi asks `quote_pence`. It does not keep a second tariff. Tariff one, 3 miles, no waiting, and no extras stays 1040 pence. Tariff one, 1 mile, no waiting, and no extras stays 490 pence. The map fleet cars are not devices.
 
 ## What the council page says
 
