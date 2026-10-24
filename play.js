@@ -156,6 +156,7 @@
       "play-car-job",
       "play-next-failed",
       "play-next-trail",
+      "play-next-fares",
       "play-locks",
       "play-osrm",
       "play-buses",
@@ -1027,6 +1028,17 @@
     node.dataset.feed = "waiting";
   }
 
+  function clearFaresForNextAccount(username) {
+    const previous = localStorage.getItem("hackathon-empire-user") || "";
+    if (!previous || previous === username) return;
+    playFares.forEach((marker) => map.removeLayer(marker));
+    playFares.length = 0;
+    const node = document.getElementById("play-next-fares");
+    if (!node) return;
+    node.dataset.fares = playFares.length === 0 ? "clear" : "shows";
+    node.dataset.feed = "waiting";
+  }
+
   function clearFeedForNextAccount(username) {
     const previous = localStorage.getItem("hackathon-empire-user") || "";
     if (!previous || previous === username) return false;
@@ -1079,6 +1091,7 @@
     clearFailedForNextAccount(username);
     const clearedFeed = clearFeedForNextAccount(username);
     clearTrailForNextAccount(username);
+    clearFaresForNextAccount(username);
     localStorage.setItem("hackathon-empire-token", session.access_token);
     localStorage.setItem("hackathon-empire-user", username);
     if (clearedFeed) {
@@ -1177,6 +1190,7 @@
     clearFailedForNextAccount(username);
     const clearedFeed = clearFeedForNextAccount(username);
     clearTrailForNextAccount(username);
+    clearFaresForNextAccount(username);
     localStorage.setItem("hackathon-empire-token", session.access_token);
     localStorage.setItem("hackathon-empire-user", username);
     if (clearedFeed) {
