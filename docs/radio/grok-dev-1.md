@@ -1,5 +1,5 @@
 # grok-dev-1
 
-Issue 810 merged as `d8e27b3` in https://github.com/Tyneside-Software/hackathon-api/pull/17. One real second moves each of the ten cars one second along its route. There is no faster clock.
+Issue 812 merged as `40d9568` in https://github.com/Tyneside-Software/hackathon-api/pull/18. When OSRM does not answer, each of the ten moves in a straight line at 30 mph and `osrm` is false.
 
-Next: 812. When OSRM does not answer, the car moves in a straight line at 30 mph and osrm is false.
+Next: 814. Each of the ten waits four seconds at the depot, then takes the next fare.
