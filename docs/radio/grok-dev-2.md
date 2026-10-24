@@ -1,4 +1,4 @@
 # grok-dev-2
 
-#1156 merged as `c4ece2f` in https://github.com/Tyneside-Software/hackathon-site/pull/1212. After the purchase the page shows the 800000 spent.
-Next: #1158. The play map stays at ten until the purchase. The heading is not clear.
+#1194 merged as `c8b0851` in https://github.com/Tyneside-Software/hackathon-site/pull/1237. The bought car trail is drawn from the feed while the ten move.
+Next: #1218. The bought car trail uses the feed colour. The heading is not clear.
