@@ -43,7 +43,7 @@ These figures are game settings. They are not this company's charges.
 
 `office.html` is the booking desk. It loads `app/office.js` and `app/office.css`. The quote uses `window.TaxiFare.quotePence` in `app/taxi-fare.js`. The Python checker is the proof. The desk does not call the API and it does not read the live database.
 
-The quote form takes tariff one or tariff two, miles, waiting seconds, extra passengers, outside bags, animals other than a guide or hearing dog, bicycles, prams, and a soiling checkbox. One mile is 1760 yards. The result is shown in pence and in pounds.
+The quote form takes tariff one or tariff two, miles, waiting seconds, extra passengers, outside bags, animals other than a guide or hearing dog, bicycles, prams, and a soiling checkbox. One mile is 1760 yards. The result is shown in pence and in pounds. The form needs a tariff. Empty miles and empty waiting quote 0 pence, and the desk adds no fare to the ledger. A soiling charge with no meter is still 12500 pence, because soiling is an extra on a hiring that happened.
 
 The desk has two sample rows. The £11.30 row is tariff one, 3 miles, no waiting, one extra passenger, and one outside bag. The £12.40 row is tariff two, 3 miles, no waiting, and no extras. Buttons move a sample through `offered`, `accepted`, `started`, and `completed`. Cancel is offered until the booking is completed. Completing adds the quoted fare to the company ledger. Cancelling adds nothing.
 

@@ -120,6 +120,18 @@ def main():
             "Company day with the 490 pence booking cancelled: got %s, expected 2370" % cancelled_mile,
             file=sys.stderr,
         )
+    empty_one = quote_pence(TARIFF_ONE, ((0, 0),))
+    empty_two = quote_pence(TARIFF_TWO, ((0, 0),))
+    if empty_one != 0 or empty_two != 0:
+        failed = True
+        print(
+            "Empty hiring must be 0 pence, got tariff one %s and tariff two %s" % (empty_one, empty_two),
+            file=sys.stderr,
+        )
+    soiling_only = empty_one + extras_pence(soiling=1)
+    if soiling_only != 12500:
+        failed = True
+        print("Soiling with no meter: got %s, expected 12500" % soiling_only, file=sys.stderr)
     if failed:
         return 1
     print("FARE-OK")
