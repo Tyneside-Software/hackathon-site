@@ -193,6 +193,12 @@ def main():
     if quote_pence(TARIFF_ONE, ((52800, 0),)) != 1040 or quote_pence(TARIFF_TWO, ((52800, 0),)) != 1240:
         failed = True
         print("Clock slice moved a meter figure", file=sys.stderr)
+    try:
+        quote_pence(TARIFF_ONE, ((-17600, 0),))
+        failed = True
+        print("A negative mile was quoted", file=sys.stderr)
+    except ValueError:
+        pass
     if failed:
         return 1
     print("FARE-OK")

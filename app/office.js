@@ -404,7 +404,24 @@
     return tariff;
   }
 
+  function negativeMiles() {
+    var value = document.getElementById("miles").value;
+    if (value === "") return false;
+    var miles = Number(value);
+    return isFinite(miles) && miles < 0;
+  }
+
+  function rejectNegativeMiles() {
+    if (!negativeMiles()) {
+      document.getElementById("mile-note").textContent = "";
+      return false;
+    }
+    document.getElementById("mile-note").textContent = "Negative miles are rejected.";
+    return true;
+  }
+
   document.getElementById("btn-quote").addEventListener("click", function () {
+    if (rejectNegativeMiles()) return;
     applyClock();
     showQuote(readQuote());
   });
@@ -417,6 +434,7 @@
   }
 
   document.getElementById("btn-add").addEventListener("click", function () {
+    if (rejectNegativeMiles()) return;
     var quote = readQuote();
     var pickup = document.getElementById("pickup").value;
     var dropOff = document.getElementById("drop-off").value;
