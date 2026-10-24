@@ -1004,6 +1004,109 @@ def box_has_play() -> bool:
     return ok
 
 
+BOX_SITE = "http://100.65.94.5"
+BOX_API = "http://100.65.94.5:8080"
+_box_at = 0.0
+_box_rows: list[dict] = []
+
+
+def _http_text(url: str, limit: int = 200_000) -> str | None:
+    try:
+        req = urllib.request.Request(url, headers={"Cache-Control": "no-cache"})
+        with urllib.request.urlopen(req, timeout=4) as res:
+            if getattr(res, "status", 200) != 200:
+                return None
+            return res.read(limit).decode("utf-8", "replace")
+    except (OSError, urllib.error.URLError, TimeoutError, ValueError):
+        return None
+
+
+def _same_text(left: str, right: str) -> bool:
+    def norm(text: str) -> str:
+        return text.replace("\r\n", "\n").replace("\r", "\n").strip()
+
+    return norm(left) == norm(right)
+
+
+def github_vs_box(version: str) -> list[dict]:
+    """Live read of the three product pages and the API health, against origin/main.
+
+    No password. A miss here is not a deploy.
+    """
+    global _box_at, _box_rows
+    if _box_rows and time.time() - _box_at < 20:
+        return _box_rows
+    rows = [
+        {
+            "name": "Tracker",
+            "state": "Issues 22 and 29 stay blocked. There is no box page for this product.",
+            "url": "",
+        }
+    ]
+    pages = (
+        ("Booking office", "office.html", f"{BOX_SITE}/office.html", "Real data"),
+        ("Empire desk", "game.html", f"{BOX_SITE}/game.html", "Simulated data"),
+        ("Taxi game", "play.html", f"{BOX_SITE}/play.html", "play-map"),
+    )
+    for name, path, url, marker in pages:
+        gh = git(["show", f"origin/main:{path}"], SITE, timeout=20)
+        live = _http_text(url)
+        if not gh or gh.startswith("("):
+            state = "not on GitHub main"
+        elif live is None:
+            state = "the box did not answer"
+        elif marker not in live:
+            state = "the box answered without the page marker"
+        elif _same_text(live, gh):
+            state = "box matches GitHub"
+        else:
+            state = "box is behind GitHub"
+        rows.append({"name": name, "state": state, "url": url})
+    health = _http_text(f"{BOX_API}/health", limit=4000)
+    live_ver = ""
+    if health:
+        found = re.search(r'"version"\s*:\s*"([^"]+)"', health)
+        if found:
+            live_ver = found.group(1)
+    if not live_ver:
+        state = "box health did not answer"
+    elif live_ver == version:
+        state = f"health {live_ver} matches GitHub"
+    else:
+        state = f"box health is {live_ver} and GitHub is {version}"
+    rows.append({"name": "API", "state": state, "url": f"{BOX_API}/health"})
+    _box_rows = rows
+    _box_at = time.time()
+    return rows
+
+
+def compare_table(rows: list[dict]) -> str:
+    body = []
+    for row in rows:
+        state = row["state"]
+        if "matches GitHub" in state:
+            tone = "match"
+        elif state.startswith("Issues 22"):
+            tone = "quiet"
+        else:
+            tone = "behind"
+        url = row.get("url") or ""
+        link = f'<a href="{html.escape(url)}">{html.escape(url)}</a>' if url else "—"
+        body.append(
+            "<tr>"
+            f"<th>{html.escape(row['name'])}</th>"
+            f'<td class="{tone}">{html.escape(state)}</td>'
+            f"<td>{link}</td>"
+            "</tr>"
+        )
+    return (
+        '<table class="now"><thead><tr><th>Surface</th><th>GitHub against the box</th><th>Live</th></tr></thead>'
+        "<tbody>"
+        + "".join(body)
+        + "</tbody></table>"
+    )
+
+
 def empire_has_money() -> bool:
     if not API.is_dir():
         return False
@@ -1387,6 +1490,8 @@ def build_page() -> str:
     has_money = empire_has_money()
     has_play = path_on_main(SITE, "play.html")
     play_on_box = box_has_play()
+    box_rows = github_vs_box(version)
+    box_table = compare_table(box_rows)
     site_lines = code_progress(SITE)
     api_lines = code_progress(API)
     next_by_lane = {
@@ -1699,6 +1804,9 @@ def build_page() -> str:
     .objective.map .bar span {{ background: linear-gradient(90deg, #166534, #4ade80); }}
     .objective.api .bar span {{ background: linear-gradient(90deg, #075985, #38bdf8); }}
     .bar-label {{ margin: 0.3rem 0 0; font-variant-numeric: tabular-nums; }}
+    td.match {{ color: #4ade80; }}
+    td.behind {{ color: #fbbf24; }}
+    td.quiet {{ color: var(--muted); }}
     .steps {{ margin: 0.4rem 0 0; padding-left: 1.1rem; }}
     .steps li.done {{ color: #86efac; }}
     .steps li.wait {{ color: #fde68a; }}
@@ -1981,7 +2089,9 @@ def build_page() -> str:
         <li class="done">Booking office. office.html is the company desk, live on the box. The company ledger stays off the game. Further office slices are waiting. This is not the open work.</li>
         <li class="{'done' if play_on_box else 'wait'}">Empire game. play.html is ten taxis and the in-game money. This is the open work. {play_sentence}</li>
       </ol>
-      <p class="fine">GitHub site <code>{html.escape(tip)}</code>. The radio last recorded the box at <code>{html.escape(checked)}</code>. {play_sentence}</p>
+      <p class="fine">GitHub site <code>{html.escape(tip)}</code>. The integrator last wrote the box as <code>{html.escape(checked)}</code>. The table below is a live read of the pages. It is not a deploy.</p>
+      <h3>GitHub against the box</h3>
+      {box_table}
     </section>
     <section class="strategy">
       <article class="objective">
