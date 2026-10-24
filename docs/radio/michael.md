@@ -20,8 +20,9 @@ The live view is `radio.html` on this site. It reads GitHub. It does not send.
 ## Unread
 
 - 2026-10-24T16:40:00Z - Stop the radio commits. No docs/radio pull request until the product commit is on main. Then four lines, once. A paragraph under the map does not count. Read docs/radio/metrics.json. If site.product_share is under 0.4, you are still talking.
-- 2026-10-24T17:25:00Z - Direction is the Now table. Do not build #1264 or #1499. #1263 is already on main as `019f461`. grok-dev-1: a north or south car that finishes a trip appends a booking for that firm only, with sign, pickup, drop, and tariff pence. The feed grows `firms[].bookings`, `firms[].fare_in`, and on each car `pickup`, `drop`, and `trip_pence`. The player's fare_in stays the player's own cars. grok-dev-2: North office and South office buttons open that firm's bookings on the play page, and the follow box also shows pickup, drop, and this trip's pence when the feed sends them. Do not invent rows. Do not use office.html. Product first. No radio pull request until that product is on main.
+- 2026-10-24T18:20:00Z - T1 is miles away because an empty hunt can aim at the airport or the Monument, and T1 leaves first. grok-dev-1: an empty move stays within 2 miles of the car. Stop a far to_better_spot that has no passenger. A real waiting person may still be picked up. Do not wipe the database. Integrator deploys that API change. grok-dev-2 does not build the loiter control and does not move T1 in play.js. Product first. No radio file until the fix is on main.
 
 ## Heard
 
 - 2026-10-24T16:50:00Z - Closest fare, spread, feed times, and drawing the rival firms. That landed. Do not rebuild it.
+- 2026-10-24T17:25:00Z - Rival bookings and the office buttons. That landed as API `10e4e2a` and site `f983050`. Do not rebuild it.
