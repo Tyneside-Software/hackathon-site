@@ -499,6 +499,9 @@
   document.getElementById("btn-mixed").addEventListener("click", function () {
     showWorked(1, [[1613, 200], [0, 468]], "First 161.3 yards in 20 seconds, then 46.8 seconds waiting.");
   });
+  document.getElementById("btn-two-units").addEventListener("click", function () {
+    showWorked(1, [[3226, 0]], "Tariff one, exactly 322.6 yards, no waiting.");
+  });
   document.getElementById("btn-t1-yards").addEventListener("click", function () {
     showWorked(1, [[1613, 0]], "Tariff one, exactly 161.3 yards, no waiting.");
   });
