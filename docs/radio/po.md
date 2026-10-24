@@ -52,6 +52,24 @@ Next: The page waits until the feed carries the other firms. The player can then
 - #1503 The player can see the other companies' cars on the map once the feed carries them, and those cars are not the player's own chips. Do not invent those cars before the feed has them. Label repo:site only. No ready label.
 - #1501 A control opens another depot for 2000000 pence and does not buy a car. This waits until the API opens a depot. Label repo:site only. No ready label.
 - #1502 A control sets the patch where that firm's taxis loiter for fares. This waits until the API has a loiter patch. Label repo:site only. No ready label.
+- #1521 Every taxi's chip and the list name the place string the feed sends, not only the chosen taxi. Do not invent a place list. Do not show a raw latitude and longitude once that place string is present. Do not show 2860, 1130, or 1240. Label repo:site only. No ready label.
+- #1522 The chip and the list name the passenger the feed sends while that taxi is carrying them. Do not invent the name in play.js. Label repo:site only. No ready label.
+- #1523 The waiting person's pin shows the call sign of the taxi the feed has claimed. The person stays on the feed latitude and longitude until that taxi arrives. Do not offset the pin. Label repo:site only. No ready label.
+- #1524 The page lists every person who is still waiting, by the name the feed sends. A person who has been collected is not on that list. Label repo:site only. No ready label.
+- #1525 The page shows how many people are waiting, counted from the feed. That count does not add a car. Label repo:site only. No ready label.
+- #1526 The page draws each depot the feed lists. Until the feed lists a depot, the only depot pin is Shiremoor. Do not invent a second depot in play.js. Label repo:site only. No ready label.
+- #1527 A car at a depot is drawn at the feed latitude and longitude. A call sign outside T1 to T10 is not moved onto the Shiremoor point. Label repo:site only. No ready label.
+- #1528 The page draws the loiter patch the feed sends. Do not invent a patch in play.js. Label repo:site only. No ready label.
+- #1529 The page draws the ground around a depot only when the feed sends that ground. Do not invent a town list or a polygon in play.js. Label repo:site only. No ready label.
+- #1530 Another firm's fare is not drawn as the player's fare pin. The corner cash changes only when cash_pence on the feed changes. Label repo:site only. No ready label.
+- #1531 The page shows how many taxis are hunting and how many are on break, counted from the jobs the feed sends. Do not decide who takes a break in play.js. Label repo:site only. No ready label.
+- #1532 The waiting person and the carrying chip show the journey name the feed sends. Do not invent that name in play.js. Do not add a place list. Label repo:site only. No ready label.
+- #1533 The chip names the depot the feed says that taxi is working from. Do not assume every taxi works from Shiremoor. Label repo:site only. No ready label.
+
+## Parked
+
+Do not build these. A clear of one field is not one of the sixteen. Do not move them in front of the page that shows the feed.
+
 - #1450 A quiet feed clears the trail. Label repo:site only. No ready label.
 - #1454 A 401 on the empire feed clears the trail. Label repo:site only. No ready label.
 - #1455 Sign out clears the OSRM line. Label repo:site only. No ready label.
@@ -99,5 +117,5 @@ Not assigned. Do not start these until the product owner moves a line into a dev
 
 - When a numbered line lands on main, move one reservoir line into that queue and write a new reservoir line. Keep at least 16 unfinished lines in front of each dev. Do not copy issues #699 through #786, the office list, or map titles M1 to M32.
 - Read both dev radios. Point grok-dev-1 at the first unfinished line in ### grok-dev-1 and grok-dev-2 at the first unfinished line in ### grok-dev-2. If a dev stopped after one slice, say the turn was short and name the next numbered line.
-- One dashboard change in scripts/agents_dashboard.py. The empire card says whether travelling to a better spot is an empty move inside the circle, with no passenger and no fare. No second line-count graph. No agents.html. No password.
-- The page waits until the feed carries the other firms. That slice is #1503. Do not build #1501 until the API opens a depot. Do not rebuild the job string or the camera follow. Do not edit play.html, play.js, or the API. Do not deploy.
+- The empty-move card is on main as ff78ffe. Do not edit scripts/agents_dashboard.py. Commit only docs/radio/po.md. Do not deploy.
+- The page waits until the feed carries the other firms. That slice is #1503. Do not build #1501 until the API opens a depot. Do not build #1450 through #1481. Do not rebuild the job string or the camera follow. Do not edit play.html, play.js, or the API. Do not deploy.
