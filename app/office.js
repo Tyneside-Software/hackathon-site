@@ -117,7 +117,8 @@
       window.TaxiFare.quotePence(1, [[17600, 0]], {})
     ];
     var cancel = 0;
-    var total = completed[0] + completed[1] + completed[2] + cancel;
+    var completedDay = completed[0] + completed[1] + completed[2] + cancel;
+    var cancelledMile = completed[0] + completed[1] + 0;
     var root = document.getElementById("day-ledger");
     root.textContent = "";
     var title = document.createElement("h3");
@@ -125,7 +126,7 @@
     title.style.marginTop = "0.9rem";
     var note = document.createElement("p");
     note.className = "office-note";
-    note.textContent = "Three completed bookings and one cancel. This day is its own ledger, separate from any single booking above and separate from the game.";
+    note.textContent = "This day is its own ledger, separate from any single booking above and separate from the game. Cancelling the 1 mile booking before it is completed leaves that fare off the ledger. Completed cannot become cancelled.";
     root.appendChild(title);
     root.appendChild(note);
     [
@@ -133,7 +134,8 @@
       ["Completed", completed[1]],
       ["Completed, tariff one, 1 mile", completed[2]],
       ["Cancel", cancel],
-      ["Company day", total]
+      ["completed-day", completedDay],
+      ["cancelled-mile", cancelledMile]
     ].forEach(function (line) {
       var row = document.createElement("p");
       row.className = "ledger-line";

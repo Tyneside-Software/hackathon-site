@@ -113,6 +113,13 @@ def main():
             "Company day, three completed bookings and one cancel: got %s, expected 2860" % company_day,
             file=sys.stderr,
         )
+    cancelled_mile = (meter + extra) + (night_meter + night_extra) + 0
+    if cancelled_mile != 2370:
+        failed = True
+        print(
+            "Company day with the 490 pence booking cancelled: got %s, expected 2370" % cancelled_mile,
+            file=sys.stderr,
+        )
     if failed:
         return 1
     print("FARE-OK")
