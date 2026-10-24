@@ -32,12 +32,23 @@
     <h1 style="font-size:1.7rem;margin-bottom:0.4rem">Taxi game</h1>
     <section class="panel" id="play-map-page" aria-label="Map">
       <div id="play-map" style="height: calc(100vh - 8rem); min-height: 24rem; border-radius: 12px"></div>
-      <p id="play-osrm"></p>
-      <p id="play-buses">This page has no bus toggle.</p>
-      <p id="play-phones">This page has no phone list.</p>
-      <p id="play-stops">This page has no Place stops control.</p>
-      <p id="play-depot">The depot pin is at 55.0367, -1.5075.</p>
-      <p id="play-dead-token">A rejected token brings Start back. The map stays.</p>
+      <div id="play-under-map">
+        <p id="play-locks">Sentences a test still needs stay on the page, under the map, not in front of the taxis.</p>
+        <p id="play-osrm"></p>
+        <p id="play-buses">This page has no bus toggle.</p>
+        <p id="play-phones">This page has no phone list.</p>
+        <p id="play-stops">This page has no Place stops control.</p>
+        <p id="play-depot">The depot pin is at 55.0367, -1.5075.</p>
+        <p id="play-dead-token">A rejected token brings Start back. The map stays.</p>
+        <p id="play-from-feed">The ten taxis are drawn from the empire feed. They open where that feed left them. Each chip shows its call sign.</p>
+        <p id="play-standin">No stand-in taxis are drawn before the feed.</p>
+        <p id="play-returning">When the feed status is returning, that car is returning.</p>
+        <p id="play-bought">The bought car chip appears on the map. The ten stay.</p>
+        <p id="play-ledger">These game lines are not written to the office ledger.</p>
+        <p id="play-pence">The money lines are integer pence.</p>
+        <p id="play-office-grid">This page does not use the office quote, bookings, and ledger grid.</p>
+        <p id="play-totals">Those company totals are not drawn on this page.</p>
+      </div>
     </section>
     <p class="lede">This page is the taxi game. It shows the map, the ten taxis, and the in-game money.</p>
     <p id="play-status">The fleet runs on the box.</p>
@@ -58,19 +69,11 @@
 
     <section class="panel" id="play-taxis" aria-label="Ten taxis">
       <h2>Ten taxis</h2>
-      <p>The ten taxis are drawn from the empire feed. They open where that feed left them. Each chip shows its call sign.</p>
-      <p id="play-standin">No stand-in taxis are drawn before the feed.</p>
-      <p id="play-returning">When the feed status is returning, that car is returning.</p>
-      <p id="play-bought">The bought car chip appears on the map. The ten stay.</p>
       <ul id="play-taxi-list"></ul>
     </section>
 
     <section class="panel" id="play-money" aria-label="In-game money">
       <h2>In-game money</h2>
-      <p id="play-ledger">These game lines are not written to the office ledger.</p>
-      <p id="play-pence">The money lines are integer pence.</p>
-      <p id="play-office-grid">This page does not use the office quote, bookings, and ledger grid.</p>
-      <p id="play-totals">Those company totals are not drawn on this page.</p>
       <ul id="play-money-lines">
         <li data-money="fare_in">fare_in 0 pence</li>
         <li data-money="driver_share">driver_share 0 pence</li>
@@ -84,6 +87,6 @@
   </main>
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-  <script src="play.js?v=20261024-bought1"></script>
+  <script src="play.js?v=20261024-undermap1"></script>
 </body>
 </html>
