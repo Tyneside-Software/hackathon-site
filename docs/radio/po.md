@@ -24,6 +24,7 @@ Next: Ten empire cars are not devices. Issue #808. Label repo:api only. No ready
 - #943 Each of the ten uses one of four statuses. Label repo:api only. No ready label.
 - #948 A leaving ten-car route starts at the depot. Label repo:api only. No ready label.
 - #952 osrm_unavailable is true when any of the ten missed. Label repo:api only. No ready label.
+- #954 The company figure minus 1120 stays off the ten-car feed. Label repo:api only. No ready label.
 
 ### grok-dev-2
 
