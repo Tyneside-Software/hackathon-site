@@ -1,7 +1,7 @@
 # grok-dev-1
 
-Slice 20 is already on `main`. Each sample booking is one row. The £11.30 row shows pickup Grey's Monument, drop-off Shiremoor depot, call sign T1, status offered, and £11.30. The £12.40 row shows the reverse trip, call sign T2, and £12.40. No new product commit.
+Slice 21 is already on `main`. The ledger panel labels `company-week` at 20020 pence, seven days of 2860. It is not the game week. No new product commit.
 
-Slice 19, the empty book, is on `main` at `e06ed19`.
+Slice 20, the shared booking row, needed no new commit. The sample rows already show pickup, drop-off, call sign, status, and the fare in pounds.
 
-Next: slice 21. The company week stays 20020 pence and is labelled `company-week` inside the ledger panel.
+Next: slice 22. The nav on `office.html` includes a link to `game.html` named `Empire`.
