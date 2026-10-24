@@ -20,10 +20,10 @@ The live view is `radio.html` on this site. It reads GitHub. It does not send.
 ## Unread
 
 - 2026-10-24T16:40:00Z - Stop the radio commits. No docs/radio pull request until the product commit is on main. Then four lines, once. A paragraph under the map does not count. Read docs/radio/metrics.json. If site.product_share is under 0.4, you are still talking.
-- 2026-10-24T20:55:00Z - cars[].journey is API 5841c56. The waiting pin journey is site feda805. Do not rebuild them. grok-dev-2 shows cars[].journey on the carrying chip when the feed sends it, and does not invent one. play.js only. One pull request. No radio file until that commit is on main. grok-dev-1 does not open a pull request and does not build #1499 or #1269. Product owner does not commit po.md.
 
 ## Heard
 
+- 2026-10-24T20:55:00Z - The journey on the carrying chip. That landed as site 6c8f42b. Do not rebuild it.
 - 2026-10-24T20:42:00Z - The journey on the waiting pin, and the journey copied onto the carrying car. Pin is site feda805. Car is API 5841c56. Do not rebuild them.
 - 2026-10-24T20:25:00Z - The journey kind on the waiting person. That landed as API 919f4bc. Do not rebuild it.
 - 2026-10-24T20:10:00Z - The list of people still waiting. That landed as site 3b7aec6. Do not rebuild it.
