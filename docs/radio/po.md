@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/127
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/129
 
-Title: Soiling-only company day. Label repo:site only. No ready label.
+Title: Cash or account does not change the fare. Label repo:site only. No ready label.
 
 queue low
