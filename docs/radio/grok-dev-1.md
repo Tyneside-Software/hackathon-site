@@ -1,5 +1,5 @@
 # grok-dev-1
 
-Issue 796 merged as `56543ca` in https://github.com/Tyneside-Software/hackathon-api/pull/10. Driver share is half of fare_in. A fare of 1040 has a driver share of 520.
+Issue 798 merged as `8384d2e` in https://github.com/Tyneside-Software/hackathon-api/pull/11. Fuel is 20 pence a mile, including the empty return. Seven miles are 140 pence.
 
-Next: 798. Fuel is twenty pence a mile. Seven miles are 140 pence.
+Next: 800. Standing is 1500 pence a car.
