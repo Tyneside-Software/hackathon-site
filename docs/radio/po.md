@@ -6,7 +6,7 @@ The old app/ queue is paused. Do not build issues #699 through #786. Do not edit
 
 A line marked OPEN has no issue number yet. The product owner opens it. A dev skips that line and takes the next numbered line. A dev does not invent the OPEN sentence.
 
-cash_pence is on main as 834d811. The place table is on main as 6ecd1d3. The morning journey is on main as ca1819a. The day journey is on main as c045352. The evening journey is on main as 8d74a75. The night journey is on main as 7fa222a. The other end of the journey is on main as c782539. The waiting person with no taxi is on main as 2827e6b. A tick does not add a car because that person appeared, on main as 9c2058d. One free taxi is allocated on main as 195ad59. The current job on the chip and the taxi list is on main as cdcf722. Starting another account clears Buy failed, on main as b8f49a0, clears the previous trail, on main as c63dfd1, and clears the previous fare pins, on main as 1cad211. A 401 removes the fare pins, on main as a5c54ac. A 401 clears Buy failed, on main as ac036ed. A 401 clears the taxi chips and the taxi list, on main as 62c0204. Sign out clears the fare pins, on main as 1de0fe3. A quiet feed clears Buy failed, on main as 605220f. A quiet feed clears the spent line, on main as 9240257. Do not rebuild #1262, #1331, #1332, #1333, #1334, #1335, #1336, #1320, #1321, #1322, #1328, #1344, #1345, #1347, #1352, #1355, #1361, #1365, #1375, or #1376. Do not build #1180, #1152, #1231, #1232, #1233, or #1234 until the local-journey slices in front of #1263 are on main. fare_in is not the cash balance. 800000 is not added to fare_in.
+cash_pence is on main as 834d811. The place table is on main as 6ecd1d3. The morning journey is on main as ca1819a. The day journey is on main as c045352. The evening journey is on main as 8d74a75. The night journey is on main as 7fa222a. The other end of the journey is on main as c782539. The waiting person with no taxi is on main as 2827e6b. A tick does not add a car because that person appeared, on main as 9c2058d. One free taxi is allocated on main as 195ad59. The current job on the chip and the taxi list is on main as cdcf722. Starting another account clears Buy failed, on main as b8f49a0, clears the previous trail, on main as c63dfd1, and clears the previous fare pins, on main as 1cad211. A 401 removes the fare pins, on main as a5c54ac. A 401 clears Buy failed, on main as ac036ed. A 401 clears the taxi chips and the taxi list, on main as 62c0204. Sign out clears the fare pins, on main as 1de0fe3. A quiet feed clears Buy failed, on main as 605220f. A quiet feed clears the spent line, on main as 9240257. A quiet feed removes the fare pins, on main as 3b0f076. A quiet feed clears the taxi chips and the taxi list, on main as 0317972. Sign out clears the corner money lines, on main as 9aa53b2. A quiet feed clears the corner money lines, on main as a1b0aa5. Sign out clears the waiting person, on main as 4ea6b8f. A 401 clears the waiting person, on main as b559da4. A quiet feed clears the waiting person, on main as a7595c2. Starting another account clears the waiting person, on main as d10dd2b. Do not rebuild #1262, #1331, #1332, #1333, #1334, #1335, #1336, #1320, #1321, #1322, #1328, #1344, #1345, #1347, #1352, #1355, #1361, #1365, #1375, #1376, #1377, #1380, #1383, #1386, #1393, #1398, #1406, or #1409. Do not build #1180, #1152, #1231, #1232, #1233, or #1234 until the local-journey slices in front of #1263 are on main. fare_in is not the cash balance. 800000 is not added to fare_in.
 
 The dashboard compares GitHub with the live box, and each code line-count graph is the last 3 hours. The devs do not edit scripts/agents_dashboard.py. A dashboard change is not a deploy.
 
@@ -43,18 +43,10 @@ Do not build #1180, #1152, #1231, #1232, #1233, or #1234 until the local-journey
 
 Files: play.html and play.js only. Do not edit app/map.js, app/empire.py, tests/test_empire.py, or scripts/agents_dashboard.py. Keep the map filling the screen under the bar. Keep the money in the corner panel.
 
-Skip these. They are already on main: #836, #838, #840, #842, #845, #847, #849, #851, #928, #930, #939, #941, #945, #950, #956, #961, #977, #982, #991, #993, #1022, #1023, #1024, #1025, #1136, #1137, #1138, #1139, #1140, #1141, #1142, #1143, #1144, #1145, #1146, #1155, #1156, #1157, #1158, #1159, #1160, #1161, #1195, #1198, #1203, #1194, #1218, #1221, #1202, #1223, #1224, #1222, #1196, #1197, #1214, #1215, #1217, #1216, #1220, #1271, #1282, #1272, #1273, #1274, #1275, #1277, #1278, #1299, #1300, #1301, #1302, #1303, #1304, #1305, #1306, #1308, #1309, #1315, #1326, #1327, #1328, #1344, #1345, #1347, #1352, #1355, #1361, #1365, #1375, #1376.
+Skip these. They are already on main: #836, #838, #840, #842, #845, #847, #849, #851, #928, #930, #939, #941, #945, #950, #956, #961, #977, #982, #991, #993, #1022, #1023, #1024, #1025, #1136, #1137, #1138, #1139, #1140, #1141, #1142, #1143, #1144, #1145, #1146, #1155, #1156, #1157, #1158, #1159, #1160, #1161, #1195, #1198, #1203, #1194, #1218, #1221, #1202, #1223, #1224, #1222, #1196, #1197, #1214, #1215, #1217, #1216, #1220, #1271, #1282, #1272, #1273, #1274, #1275, #1277, #1278, #1299, #1300, #1301, #1302, #1303, #1304, #1305, #1306, #1308, #1309, #1315, #1326, #1327, #1328, #1344, #1345, #1347, #1352, #1355, #1361, #1365, #1375, #1376, #1377, #1380, #1383, #1386, #1393, #1398, #1406, #1409.
 
-Next: A quiet feed removes the fare pins. Issue #1377. Label repo:site only. No ready label. Keep going for about 30 minutes.
+Next: Starting another account clears the previous accounts taxi chips before the next feed. Issue #1411. Label repo:site only. No ready label. Keep going for about 30 minutes.
 
-- #1377 A quiet feed removes the fare pins. Label repo:site only. No ready label.
-- #1380 A quiet feed clears the taxi chips and the taxi list. Label repo:site only. No ready label.
-- #1383 Sign out clears the corner money lines. Label repo:site only. No ready label.
-- #1386 A quiet feed clears the corner money lines. Label repo:site only. No ready label.
-- #1393 Sign out clears the waiting person. Label repo:site only. No ready label.
-- #1398 A 401 on the empire feed clears the waiting person. Label repo:site only. No ready label.
-- #1406 A quiet feed clears the waiting person. Label repo:site only. No ready label.
-- #1409 Starting another account clears the waiting person before the next feed. Label repo:site only. No ready label.
 - #1411 Starting another account clears the previous account's taxi chips before the next feed. Label repo:site only. No ready label.
 - #1416 Starting another account clears the previous account's corner money before the next feed. Label repo:site only. No ready label.
 - #1422 A 401 on the empire feed clears the corner money lines. Label repo:site only. No ready label.
@@ -63,6 +55,14 @@ Next: A quiet feed removes the fare pins. Issue #1377. Label repo:site only. No 
 - #1425 Sign in again clears the waiting person before the next feed. Label repo:site only. No ready label.
 - #1431 Sign in again clears Buy failed left by the previous account. Label repo:site only. No ready label.
 - #1436 Sign in again clears the spent line before the next feed. Label repo:site only. No ready label.
+- #1448 Sign in again clears the previous account's corner money before the next feed. Label repo:site only. No ready label.
+- #1450 A quiet feed clears the trail. Label repo:site only. No ready label.
+- #1454 A 401 on the empire feed clears the trail. Label repo:site only. No ready label.
+- #1455 Sign out clears the OSRM line. Label repo:site only. No ready label.
+- #1456 A quiet feed clears the OSRM line. Label repo:site only. No ready label.
+- #1458 A 401 on the empire feed clears the OSRM line. Label repo:site only. No ready label.
+- #1461 Sign in again clears the OSRM line before the next feed. Label repo:site only. No ready label.
+- #1463 Starting another account clears the OSRM line before the next feed. Label repo:site only. No ready label.
 
 ## Reservoir
 
@@ -98,4 +98,4 @@ Not assigned. Do not start these until the product owner moves a line into a dev
 - When a numbered line lands on main, move one reservoir line into that queue and write a new reservoir line. Keep at least 16 unfinished lines in front of each dev. Do not copy issues #699 through #786, the office list, or map titles M1 to M32.
 - Read both dev radios. Point grok-dev-1 at the first unfinished line in ### grok-dev-1 and grok-dev-2 at the first unfinished line in ### grok-dev-2. If a dev stopped after one slice, say the turn was short and name the next numbered line.
 - One dashboard change in scripts/agents_dashboard.py. The empire card says whether travelling to a better spot is an empty move inside the circle, with no passenger and no fare. No second line-count graph. No agents.html. No password.
-- The next player-visible slice is #1377. A quiet feed removes the fare pins. Do not rebuild the fullscreen map. Do not edit play.html, play.js, or the API. Do not deploy.
+- The next player-visible slice is #1411. Starting another account clears the previous accounts taxi chips before the next feed. Do not rebuild the fullscreen map. Do not edit play.html, play.js, or the API. Do not deploy.
