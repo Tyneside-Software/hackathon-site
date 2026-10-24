@@ -30,9 +30,9 @@ On `continue`:
 
 1. Fetch and rebase onto `origin/main`, or fast-forward if you are on `main`.
 2. Read this file, `docs/radio/integrator.md`, and the other radio files.
-3. A continue is a long turn, about 30 minutes of work. Do not finish early. Do not stop after one slice or one issue. The product owner keeps both devs supplied. The devs are not specialised: either may do API or map work, whichever queue the product owner assigned. The integrator does not write the slice text.
-4. Product owner: you own short-term priority. Read `## Now`, then the dev radios, then spend the turn in `docs/radio/po.md`. You design, you communicate, and you watch turn length. Details are in `## Turn length` below.
-5. grok-dev-1 and grok-dev-2: do the slices the product owner listed for you in `docs/radio/po.md`, then any slices `## Now` still names that are not already on `origin/main`. Skip a slice already on `origin/main`. A list marked Waiting is not work. Office slices, desk slices, fare cards, and map titles M1 to M32 are Waiting. If your queue runs out before the turn has run, pull `main` again. Take the next slice the product owner has put in the reservoir and assigned to either dev. Do not invent a product area. Do not write that the heading is clear. If the product owner has not posted work yet, say `queue empty` in your radio and pull once more before you stop.
+3. A continue is a long turn, about 30 minutes of work. Do not finish early. Do not stop after one slice or one issue. Master talks to the integrator. The product owner and the devs do not wait for Master, and they do not wait for a new integrator note before the next slice. The product owner keeps both devs supplied, and leaves work for the product owner too. The devs are not specialised: either may do API or page work, whichever queue the product owner assigned. The integrator does not write the slice text.
+4. Product owner: you own short-term priority unless `## Now` gives a direct order. Read `## Now`, then the dev radios and their commit times, then spend the whole turn in `docs/radio/po.md`. You design, you communicate, and you watch turn length, including your own. Details are in `## Turn length` below.
+5. grok-dev-1 and grok-dev-2: do the slices in your `po.md` heading that are not already on `origin/main`. Skip one that is already merged. A list marked Waiting is not work. Office slices, desk slices, fare cards, and map titles M1 to M32 are Waiting. Do not start a reservoir line that says it is not assigned. Keep going for about 30 minutes: one pull request, then your radio, then the next slice. If the heading runs out before that, pull `main` once more. If it is still empty, write `queue empty` and say the turn stopped early because the queue ran out. Do not invent a slice. Do not write that the heading is clear while `po.md` still lists your issues.
 6. Do not write `C:\Users\MichaelThomson\source\lanes\desk`. The integrator is the only session that deploys, and only after product code has merged.
 
 ## Queue depth
@@ -56,9 +56,9 @@ The product owner watches the length of every turn, including their own. A turn 
 
 On each continue, read `docs/radio/grok-dev-1.md`, `docs/radio/grok-dev-2.md`, and your own last note. Look at the commit times. If a dev stopped after a slice or two, say that the turn was short, and leave them enough new slices for about 30 minutes. Tell them the next slice, the files they may edit, and to keep going.
 
-Your own turn is the same length. Designing slices, opening issues, and writing those notes is the work. You should be busy the whole time. When a list is finished, write the next one. Leave yourself the next job in `po.md` under `## Next for me`, so the following continue already has work. Do not end because the old titles were all opened.
+Your own turn is the same length. Designing slices, opening issues, and writing those notes is the work. You should be busy the whole time. When a list is finished, write the next one. Leave yourself the next job in `po.md` under `## Next for me`, at least four jobs, so the following continue already has work. If `## Next for me` would be empty, you are finishing early. Do not end because the old titles were all opened.
 
-You choose the short-term order. Stay inside the tracker, the booking office, and the empire. The integrator points. You do the communicating.
+You choose the short-term order. Stay inside the tracker, the booking office, and the empire. The integrator points when Master has given a direction. Between those notes you keep going. You do the communicating. A dev who stops after one or two slices had a short turn. Say so, and leave enough slices for about 30 minutes.
 
 ## During a turn
 
