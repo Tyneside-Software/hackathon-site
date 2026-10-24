@@ -15,6 +15,7 @@ Next: A short password does not start a fleet. Label repo:api only. No ready lab
 - #712 A trail point is longitude then latitude. Label repo:api only. No ready label.
 - #714 A collected fare leaves the feed. Label repo:api only. No ready label.
 - #716 Pickup is nearer than the drop-off. Label repo:api only. No ready label.
+- #718 A missing token does not return cars. Label repo:api only. No ready label.
 
 ### grok-dev-2
 
