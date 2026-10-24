@@ -4,7 +4,7 @@ This page is the briefing for an AI (Grok, or anything similar) helping **Connor
 
 If you have been pointed at this URL and given a task, **read this whole page, then [Architecture](#architecture), then execute**. Do not ask the human to paste stack notes that are already here.
 
-A queued list of changes is one job. Follow [Development loop](#loop) and finish every item, including `.\scripts\box.ps1 update` and `.\scripts\check.ps1`, before reporting back.
+A queued list of changes is one job. On the integrator checkout, follow [Development loop](#loop), including `.\scripts\box.ps1 update` and `.\scripts\check.ps1`. If several sessions are working at once, follow [Lanes](#lanes). A checkout with `LANE.txt` beside it does not push `main` and does not deploy.
 
 Been away, or the board looks noisy: the human catch-up page is [Current progress](../progress.html).
 
@@ -50,6 +50,7 @@ The SSH password is not in git. On Michael’s PC it is in `C:\Users\MichaelThom
 - Do not copy `C:\Users\MichaelThomson\Desktop\confidential docs` (that is Michael’s private folder, not this repo).
 - Do not copy `C:\Users\MichaelThomson\Desktop\hackathon-linux.md` into git. That file holds the SSH password.
 - Do not delete the live SQLite file, `docker compose down -v`, or re-seed the board. `/usr/local/bin/update` rebuilds the image and keeps `data/hackathon.db`.
+- Do not push `main` or deploy from a lane checkout (`LANE.txt` next to the three repos). Open a pull request. See [Lanes](#lanes).
 
 ---
 

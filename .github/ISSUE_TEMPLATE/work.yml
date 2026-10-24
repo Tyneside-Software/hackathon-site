@@ -1,0 +1,33 @@
+name: Work
+description: One unit of work for a lane
+title: "[work] "
+body:
+  - type: textarea
+    id: summary
+    attributes:
+      label: What to change
+      description: One unit of work. Say which behaviour should be different when it is done.
+    validations:
+      required: true
+  - type: checkboxes
+    id: repos
+    attributes:
+      label: Repos
+      options:
+        - label: hackathon-site
+        - label: hackathon-api
+        - label: hackathon-android
+  - type: textarea
+    id: accept
+    attributes:
+      label: Acceptance
+      description: What the product owner can see to call this done.
+    validations:
+      required: true
+  - type: textarea
+    id: prove
+    attributes:
+      label: How to prove it
+      description: Tests, a URL, or a command. The dev lane runs these before opening the pull request.
+    validations:
+      required: true

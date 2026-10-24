@@ -43,6 +43,12 @@
           "summary": "How an AI takes a queue of changes through test, push, deploy, and check.ps1."
         },
         {
+          "id": "lanes",
+          "title": "Lanes",
+          "file": "LANES.md",
+          "summary": "Separate checkouts, lane branches, and pull requests into main. Only the integrator deploys."
+        },
+        {
           "id": "onboarding",
           "title": "Onboarding (night)",
           "href": "../onboarding.html",

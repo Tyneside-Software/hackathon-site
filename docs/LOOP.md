@@ -2,7 +2,11 @@
 
 This is the page an AI follows when someone queues several changes and expects them to land without being asked to run a command.
 
-Read [For Grok](#grok) and [Linux box and deploy](#linux) as well. This page is the order of work.
+Read [For Grok](#grok) and [Linux box and deploy](#linux) as well. This page is the order of work for the integrator checkout.
+
+## If this checkout is a lane
+
+If `LANE.txt` sits beside these three repos, you are a dev lane or the product owner. Follow [Lanes](#lanes). Do not push `main`. Do not run `.\scripts\box.ps1`. The steps below are for the integrator folders `C:\Users\MichaelThomson\source\hackathon-site`, `hackathon-api`, and `hackathon-android`. That session is the one that deploys.
 
 ## What a queue is
 
