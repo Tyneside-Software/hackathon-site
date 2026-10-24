@@ -231,6 +231,7 @@
     T10: "#facc15"
   };
   const playChips = new Map();
+  const playFirmChips = new Map();
   const playFares = [];
   const playPeople = [];
   const playTrails = [];
@@ -555,6 +556,7 @@
     noteToPassenger();
     noteCarJob();
     paintPlayAhead(feed);
+    paintPlayFirms(feed);
     followChosenTaxi(feed);
   }
 
@@ -594,11 +596,18 @@
 
   function followChosenTaxi(feed) {
     noteFollow();
+    refreshCarLabels(feed);
     if (!playFollow || !playChosen) return;
     const cars = feed && Array.isArray(feed.cars) ? feed.cars : [];
-    const car = cars.find((row) => row && String(row.sign) === playChosen);
-    if (!car) return;
-    const here = playPlace(car, playNow());
+    const own = cars.find((row) => row && String(row.sign) === playChosen);
+    if (own) {
+      const here = playPlace(own, playNow());
+      if (here) map.panTo(here, { animate: false });
+      return;
+    }
+    const rival = chosenFirmCar(feed);
+    if (!rival) return;
+    const here = firmPlace(rival.car, playNow());
     if (!here) return;
     map.panTo(here, { animate: false });
   }
@@ -607,6 +616,205 @@
     playFollow = false;
     map.fitBounds(circle.getBounds());
     noteFollow();
+    refreshCarLabels(playFeed);
+  }
+
+  function mapHtml(text) {
+    return String(text).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  }
+
+  function sentSeconds(value) {
+    if (value === undefined || value === null || value === "") return null;
+    const sent = Number(value);
+    if (!Number.isFinite(sent)) return null;
+    return Math.max(0, Math.round(sent));
+  }
+
+  function feedSecondsLeft(car, now) {
+    if (!car) return null;
+    const sent = sentSeconds(car.seconds_left);
+    if (sent !== null) return sent;
+    const duration = Number(car.duration_s);
+    const started = Number(car.leg_started);
+    if (!Number.isFinite(duration) || !Number.isFinite(started) || duration <= 0) return null;
+    return Math.max(0, Math.round(duration - (now - started)));
+  }
+
+  function destinationName(car) {
+    if (!car || typeof car.destination !== "string") return "";
+    const name = car.destination.trim();
+    if (!name || name === "2860" || name === "1130" || name === "1240" || name === "-1120") return "";
+    return name;
+  }
+
+  function carOnLeg(car) {
+    return !!(car && car.status && car.status !== "at_depot");
+  }
+
+  function legLabel(car, now) {
+    if (!carOnLeg(car)) return "";
+    const parts = [];
+    const place = destinationName(car);
+    if (place) parts.push(place);
+    const left = feedSecondsLeft(car, now);
+    if (left !== null) parts.push(left + "s");
+    return parts.join(" ");
+  }
+
+  function followBoxText(car, now, firm) {
+    const lines = [];
+    const place = destinationName(car);
+    if (place) lines.push(place);
+    const left = feedSecondsLeft(car, now);
+    if (left !== null) lines.push(left + "s");
+    const passenger = typeof car.passenger === "string" ? car.passenger.trim() : "";
+    if (passenger) lines.push(passenger);
+    const job = carJob(car);
+    if (job) lines.push(job);
+    if (firm) lines.push(firm);
+    return lines.map(mapHtml).join("<br>");
+  }
+
+  function setMapLabel(marker, text, followed) {
+    if (!marker) return;
+    const want = followed ? "play-follow-box" : "play-leg-label";
+    if (!text) {
+      if (marker.getTooltip()) marker.unbindTooltip();
+      marker._playLabelKind = "";
+      return;
+    }
+    const html = followed ? text : mapHtml(text);
+    if (marker.getTooltip() && marker._playLabelKind === want) {
+      marker.setTooltipContent(html);
+      return;
+    }
+    if (marker.getTooltip()) marker.unbindTooltip();
+    marker._playLabelKind = want;
+    marker.bindTooltip(html, { permanent: true, direction: "top", className: want, opacity: 0.95 });
+  }
+
+  function chosenFirmCar(feed) {
+    const firms = feed && Array.isArray(feed.firms) ? feed.firms : [];
+    for (let i = 0; i < firms.length; i++) {
+      const firm = firms[i];
+      const name = firm && typeof firm.firm === "string" ? firm.firm.trim() : "";
+      const rows = firm && Array.isArray(firm.cars) ? firm.cars : [];
+      for (let j = 0; j < rows.length; j++) {
+        const car = rows[j];
+        if (car && String(car.sign || "") === playChosen) return { car: car, firm: name };
+      }
+    }
+    return null;
+  }
+
+  function labelOneCar(marker, car, now, firm) {
+    const followed = !!(playFollow && car && String(car.sign || "") === playChosen);
+    const text = followed ? followBoxText(car, now, firm) : legLabel(car, now);
+    setMapLabel(marker, text, followed);
+  }
+
+  function refreshCarLabels(feed) {
+    const now = playNow();
+    const cars = feed && Array.isArray(feed.cars) ? feed.cars : [];
+    cars.forEach((car) => {
+      if (!car || !car.sign) return;
+      const marker = playChips.get(String(car.sign));
+      if (!marker) return;
+      labelOneCar(marker, car, now, "");
+    });
+    playFirmChips.forEach((marker) => {
+      if (!marker || !marker._playFirmCar) return;
+      labelOneCar(marker, marker._playFirmCar, now, marker._playFirmName || "");
+    });
+  }
+
+  function firmPlace(car, now) {
+    if (!car) return null;
+    if (car.status === "at_depot") {
+      const lat = Number(car.lat);
+      const lng = Number(car.lng);
+      if (Number.isFinite(lat) && Number.isFinite(lng)) return [lat, lng];
+      return null;
+    }
+    const route = Array.isArray(car.route) ? car.route : [];
+    const duration = Number(car.duration_s) || 0;
+    const started = Number(car.leg_started) || 0;
+    if (route.length) return placeOnRoute(route, duration, now - started);
+    const lat = Number(car.lat);
+    const lng = Number(car.lng);
+    if (Number.isFinite(lat) && Number.isFinite(lng)) return [lat, lng];
+    return null;
+  }
+
+  function firmChipText(sign, firm, job) {
+    let text = chipLabel(sign);
+    if (firm) text += " " + firm;
+    if (job) text += " " + job;
+    return text;
+  }
+
+  function clearPlayFirms() {
+    playFirmChips.forEach((marker) => map.removeLayer(marker));
+    playFirmChips.clear();
+  }
+
+  function paintPlayFirms(feed) {
+    const seen = new Set();
+    const firms = feed && Array.isArray(feed.firms) ? feed.firms : [];
+    const now = playNow();
+    firms.forEach((firm) => {
+      if (!firm) return;
+      const name = typeof firm.firm === "string" ? firm.firm.trim() : "";
+      const rows = Array.isArray(firm.cars) ? firm.cars : [];
+      rows.forEach((car) => {
+        if (!car) return;
+        const sign = String(car.sign || "");
+        if (!sign || seen.has(sign)) return;
+        const place = firmPlace(car, now);
+        if (!place) return;
+        seen.add(sign);
+        const fill = chipFill(car);
+        const job = carJob(car);
+        const title = firmChipText(sign, name, job);
+        let marker = playFirmChips.get(sign);
+        if (!marker) {
+          marker = L.marker(place, {
+            icon: chipIcon(sign, fill, job, name),
+            title: title
+          }).addTo(map);
+          marker.on("click", function () {
+            playChosen = sign;
+            playFollow = true;
+            paintPlayCars(playFeed);
+          });
+          playFirmChips.set(sign, marker);
+        } else if (marker._playFirmTitle !== title || marker._playFill !== fill) {
+          marker.setIcon(chipIcon(sign, fill, job, name));
+          marker._playFill = fill;
+        }
+        marker._playFirmTitle = title;
+        marker._playFirmName = name;
+        marker._playFirmCar = car;
+        marker.setLatLng(place);
+        marker.options.title = title;
+        labelOneCar(marker, car, now, name);
+      });
+    });
+    playFirmChips.forEach((marker, sign) => {
+      if (seen.has(sign)) return;
+      map.removeLayer(marker);
+      playFirmChips.delete(sign);
+    });
+  }
+
+  function personTimeText(person) {
+    const sign = personTaxiSign(person);
+    if (sign) {
+      const left = sentSeconds(person.seconds_left);
+      return left === null ? "" : left + "s";
+    }
+    const waited = sentSeconds(person.waiting_s);
+    return waited === null ? "" : waited + "s";
   }
 
   function listStatus(car) {
@@ -887,6 +1095,8 @@
         title: name,
         zIndexOffset: 700
       }).addTo(map);
+      const time = personTimeText(person);
+      if (time) marker.bindTooltip(mapHtml(time), { permanent: true, direction: "top", className: "play-leg-label", opacity: 0.95 });
       playPeople.push(marker);
       drawn += 1;
       if (person.allocated === true || personTaxiSign(person)) stayed += 1;
@@ -961,6 +1171,7 @@
     playChosen = "";
     playFollow = false;
     clearPlayAhead();
+    clearPlayFirms();
     if (wasFollowing) map.fitBounds(circle.getBounds());
     noteFollow();
     playChips.forEach((marker) => map.removeLayer(marker));
@@ -1817,6 +2028,7 @@
       const place = playPlace(car, now);
       if (!place) return;
       marker.setLatLng(place);
+      labelOneCar(marker, car, now, "");
       const item = document.querySelector('#play-taxi-list [data-sign="' + sign + '"]');
       if (!item) return;
       let text = sign + " " + place[0] + ", " + place[1];
@@ -1831,6 +2043,7 @@
     noteToPassenger();
     noteCarJob();
     paintPlayAhead(playFeed);
+    paintPlayFirms(playFeed);
     followChosenTaxi(playFeed);
     playMotion = requestAnimationFrame(glidePlay);
   }
