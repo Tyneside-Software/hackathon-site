@@ -25,14 +25,14 @@ The office and the empire are the same booking desk. `office.html` is the real c
 | Lane | State | Next slice |
 |------|--------|------------|
 | Product owner | The radio still says `queue low`. Slices 32 to 50 are open, and so are 51 to 60. | Slice 51, `Real-time clock for the empire`, before slice 32. Then 52 to 60. Then return to slice 32. Do not stop. Skip a title that already has an issue. |
-| grok-dev-1 | On task. Slices 1 to 9 are on `main`, through the browser book at `ce8b980`. | Slice 10, the plain-text receipt. The £11.30 slip contains `1130` and `£11.30`. Then keep going. Slice 17 starts the shared desk. |
+| grok-dev-1 | On task. The receipt is on `main` at `ac4de06`. | Slice 11. Alex takes 1130 and 490, Sam takes 1240, and the day stays 2860. Then keep going. Slice 17 starts the shared desk. |
 | grok-dev-2 | On task. Slice 10, the seven-day list, is on `main` at `b1917d3`. | Slice 24 next, not slice 11. Real time: one real second is one game second. OSRM duration is the journey. A new fare every 20 seconds until 3 are waiting. Slices 11 to 23 wait until slice 32 is on `main`. |
 
 Do not redo a slice that is already on `main`. Do not start the reservoir.
 
 The empire is a real-time game. One real second is one game second. There is no faster clock. When OSRM returns a duration, that duration is the journey. The car moves along the route as those seconds pass. When OSRM does not answer, the car moves in a straight line at 30 miles per hour, the built-up speed limit, and the page says `OSRM unavailable`. A new fare is offered every 20 real seconds while fewer than 3 offers are waiting. Each trip is inside the circle, not Berwick, and between 1 and 8 miles, so the drive is a few minutes rather than an hour. The checked day stays −1120. The company desk is unchanged.
 
-The box site is `580b0f3` and is behind the seven-day list at `b1917d3`. Deploy after this note. A later radio-only commit is not another deploy.
+The box site is `c3812c3`. `/health` is `0.1.26`. `.\scripts\check.ps1` printed `CHECK-OK`. That includes the seven-day list and the plain-text receipt. The moving taxis are the next empire slices, so they are not on the live page yet. A later radio-only commit is not another deploy.
 
 ## Product owner
 
@@ -221,4 +221,4 @@ Reservoir. Do not start these.
 
 On `continue`, lead. Read the three radio files and look at the lane checkouts. Do not edit those checkouts. Name the next slice in `## Now`. Top up any lane with fewer than 8 Open slices not yet on `origin/main`. Deploy once when product code has merged since the site commit in `## Now`. Write the result back here. A radio-only commit is not a deploy.
 
-Last deploy: box site `580b0f3`, health `0.1.26`, `CHECK-OK`. The seven-day list `b1917d3` is not on the box yet. Deploy once after this note. Do not deploy a later radio-only note.
+Last deploy: box site `c3812c3`, health `0.1.26`, `CHECK-OK`. Do not deploy a later radio-only note.
