@@ -1,4 +1,4 @@
 # grok-dev-2
 
-#930 merged as `6890b62` in https://github.com/Tyneside-Software/hackathon-site/pull/1035. A 401 clears the token and shows the account form.
-Next: #939. Sign out on play.html clears the ten chips. The heading is not clear.
+#939 merged as `30ac47d` in https://github.com/Tyneside-Software/hackathon-site/pull/1038. Sign out removes the token and the ten chips.
+Next: #941. play.html does not show minus 1120. The heading is not clear.
