@@ -35,6 +35,50 @@
   depotMarker.on("click", (ev) => {
     if (ev.originalEvent) L.DomEvent.stopPropagation(ev.originalEvent);
   });
+  const sampleMarker = L.circleMarker(DEPOT, {
+    radius: 8,
+    color: "#8a5a00",
+    weight: 2,
+    fillColor: "#f5b942",
+    fillOpacity: 0.95,
+  }).addTo(map);
+  sampleMarker.bindTooltip("Sample car", { permanent: true, direction: "right" });
+  sampleMarker.on("click", (ev) => {
+    if (ev.originalEvent) L.DomEvent.stopPropagation(ev.originalEvent);
+  });
+  let sampleRoute = null;
+
+  function drawSample(latlngList) {
+    if (sampleRoute) map.removeLayer(sampleRoute);
+    const lineOpts = { lineJoin: "round", lineCap: "round" };
+    sampleRoute = L.layerGroup([
+      L.polyline(latlngList, { ...lineOpts, color: ROUTE_OUTLINE, weight: 9, opacity: 0.9 }),
+      L.polyline(latlngList, { ...lineOpts, color: ROUTE_COLOR, weight: 5, opacity: 1 }),
+    ]).addTo(map);
+  }
+
+  async function driveSample() {
+    const path = [DEPOT, NEWCASTLE, DEPOT];
+    const joined = path.map((p) => `${p[1].toFixed(6)},${p[0].toFixed(6)}`).join(";");
+    const url = `${OSRM}${joined}?overview=full&geometries=geojson`;
+    const sampleStatus = document.getElementById("sample-status");
+    if (sampleStatus) sampleStatus.textContent = "Asking OSRM…";
+    try {
+      const res = await fetch(url);
+      if (!res.ok) throw new Error("HTTP " + res.status);
+      const data = await res.json();
+      const route = data.routes && data.routes[0];
+      if (!route) throw new Error("no route");
+      drawSample(route.geometry.coordinates.map(([lng, lat]) => [lat, lng]));
+      if (sampleStatus) sampleStatus.textContent = "Sample car drove to Grey's Monument and back.";
+    } catch (err) {
+      drawSample(path);
+      if (sampleStatus) sampleStatus.textContent = "OSRM unavailable";
+    }
+  }
+
+  const btnSample = document.getElementById("btn-sample");
+  if (btnSample) btnSample.addEventListener("click", driveSample);
 
   const markers = [];
   let routeLine = null;
