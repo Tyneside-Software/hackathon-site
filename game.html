@@ -40,6 +40,7 @@
     <p id="clock"></p>
     <p id="fallback"></p>
     <p id="next-offer"></p>
+    <p id="short-trip"></p>
     <ul id="places"></ul>
     <p class="lede" id="berwick-job"></p>
     <p class="lede" id="hexham-job"></p>
@@ -85,6 +86,10 @@
     }
     paintOffers();
     setInterval(paintOffers, 1000);
+    var shortTrip = game.shortTrip(90, 4);
+    document.getElementById("short-trip").textContent = shortTrip && shortTrip.inside && shortTrip.miles === 4
+      ? "A 4 mile trip from the depot is inside."
+      : "A short trip left the circle.";
     var labels = {
       standing: "Standing for the one car",
       fare_in: "Fare in",

@@ -165,6 +165,42 @@ def seconds_until_next_offer(elapsed_s):
     return 20 - remainder
 
 
+MILE_KM = 80.467 / 50
+SHORT_MILES = (2, 4, 6)
+
+
+def destination(origin, bearing_deg, miles):
+    """Point reached from origin on a bearing. Miles use the same 80.467 km circle."""
+    import math
+    import taxi_geo
+    km = miles * MILE_KM
+    lat1 = math.radians(origin[0])
+    lng1 = math.radians(origin[1])
+    bearing = math.radians(bearing_deg % 360)
+    ang = km / taxi_geo.EARTH_KM
+    lat2 = math.asin(
+        math.sin(lat1) * math.cos(ang)
+        + math.cos(lat1) * math.sin(ang) * math.cos(bearing)
+    )
+    lng2 = lng1 + math.atan2(
+        math.sin(bearing) * math.sin(ang) * math.cos(lat1),
+        math.cos(ang) - math.sin(lat1) * math.sin(lat2),
+    )
+    lng = (math.degrees(lng2) + 540) % 360 - 180
+    return (math.degrees(lat2), lng)
+
+
+def short_trip(bearing_deg, miles):
+    """Pickup at the depot. Drop-off is 2, 4, or 6 miles away. No new town."""
+    if miles not in SHORT_MILES:
+        raise ValueError("a live trip is 2, 4, or 6 miles")
+    return {
+        "pickup": DEPOT,
+        "dropoff": destination(DEPOT, bearing_deg, miles),
+        "miles": miles,
+    }
+
+
 def position_on_route(points, duration_s, elapsed_s):
     """Place on a polyline. The checker passes points and a duration. It does not call OSRM."""
     if not points:
