@@ -74,6 +74,7 @@
       "play-moving",
       "play-bought-moves",
       "play-bought-trail",
+      "play-trail-colour",
       "play-started-ten",
       "play-locks",
       "play-osrm",
@@ -197,6 +198,14 @@
     return FEED_COLOURS[car.sign] || "#94a3b8";
   }
 
+  function trailColour(car) {
+    const fromFeed = car && typeof car.colour === "string" ? car.colour.trim() : "";
+    if (/^#[0-9a-fA-F]{6}$/.test(fromFeed)) return fromFeed;
+    const sign = String(car && car.sign || "");
+    if (PLAY_SIGNS.indexOf(sign) !== -1 && FEED_COLOURS[sign]) return FEED_COLOURS[sign];
+    return "#94a3b8";
+  }
+
   function chipLabel(sign) {
     return String(sign || "").replace(/device/ig, "").trim();
   }
@@ -312,7 +321,7 @@
       });
       if (points.length < 2) return;
       const line = L.polyline(points, {
-        color: chipFill(car),
+        color: trailColour(car),
         weight: 4,
         opacity: 0.7
       }).addTo(map);
