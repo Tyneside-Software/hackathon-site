@@ -26,7 +26,7 @@ The office and the empire are the same booking desk. `office.html` is the real c
 
 | Lane | State | Next slice |
 |------|--------|------------|
-| Product owner | Titles 1 to 64 are opened, except 17, 18, and 19. grok-dev-1 has no unfinished API slices. A1 to A32 are on `main` (`82363dc`, `64460c3`, `1a22a90`). grok-dev-2 is on U18 to U32. That is not a 30 minute reserve. You are finishing early. | This turn, write `docs/radio/po.md` with a queue for each dev and a reservoir. grok-dev-1 needs 16 slices now. grok-dev-2 needs the U18 to U32 list topped up to 16, then keep going until the reservoir has 24. About 30 minutes. Do not stop after one issue. |
+| Product owner | You own short-term priority. Titles 1 to 64 are opened, except 17, 18, and 19. grok-dev-1 finished A1 to A32 and stopped. grok-dev-2's U18 to U32 is not a 30 minute reserve. Both of those turns were short. You have been finishing early. | This turn is about 30 minutes of designing and communicating. Read both dev radios. Fill `### grok-dev-1`, `### grok-dev-2`, and `## Reservoir` in `po.md`. Then write `## Next for me` so your next continue already has work. Do not stop after one issue. |
 | grok-dev-1 | A1 to A32 are on `main`. Do not rebuild them. The heading-clear note is stale. You are not API-only. | Pull `main` and do the grok-dev-1 queue in `docs/radio/po.md` for about 30 minutes, one pull request each. If that queue is not on `main` yet, say `queue empty`, pull once more, then stop. Do not invent the slices. |
 | grok-dev-2 | U1 to U17 are on `main`. The signed-in form is `714303e`. Desk slices and map titles M1 to M32 wait. You are not map-only. | U18, then U19 to U32, and then the grok-dev-2 queue in `docs/radio/po.md`. About 30 minutes. One pull request each. Do not stop at U32 if `po.md` lists more. |
 
@@ -34,7 +34,7 @@ Do not redo a slice that is already on `main`. Do not start the reservoir.
 
 The empire is a real-time game. One real second is one game second. There is no faster clock. When OSRM returns a duration, that duration is the journey. The car moves along the route as those seconds pass. When OSRM does not answer, the car moves in a straight line at 30 miles per hour, the built-up speed limit, and the page says `OSRM unavailable`. The account fleet does not use the old 20-second offer rule. A car finishes, waits four seconds at the depot, then takes the next fare. Each trip is inside the circle, not Berwick. The checked day stays −1120. The company desk is unchanged.
 
-GitHub Pages publishes https://hackathon.tyneside.software from `main` on every push. The home page and `progress.html` must describe that `main`. Do not tell Master the box matches this site until `check.ps1` has printed `CHECK-OK` for that commit. The box site last checked was `79c0c10`. `/health` was `0.1.26`. The board was 50 cards. The browser fleet on that check is not the finished game. The next objective is the Account fleet below. This note is orders only. It is not a deploy.
+GitHub Pages publishes https://hackathon.tyneside.software from `main` on every push. The home page and `progress.html` must describe that `main`. The box site last checked was `ff1e142`. `/health` was `0.1.27`. `check.ps1` printed `CHECK-OK`. The board was 50 cards. Map clicks do not add a waypoint unless Place stops is on. This note is orders only. It is not a deploy.
 
 ## Account fleet
 
@@ -203,7 +203,15 @@ No product code. You may commit and squash-merge a branch that changes only `doc
 
 Done, already on `main`: issues 30, 31, 32, 33, and 34 are open. Issues 23 and 24 are commented. Issues 22, 29, and 34 stay `blocked`. Do not open those titles again.
 
-Your turn is the queues. Titles 1 to 64 are already opened except 17, 18, and 19. Do not reopen them. Do not stop because that list ended. grok-dev-1 has no unfinished slices. grok-dev-2 has U18 to U32 only. Write new slices into `docs/radio/po.md` under `### grok-dev-1`, `### grok-dev-2`, and `## Reservoir`, as `docs/radio/README.md` describes. At least 16 unfinished for each dev, and 24 in the reservoir, before this turn ends. About 30 minutes. One issue, then the radio, then the next issue. Name which files each dev may edit. Either dev may do API or map work. Do not give both the same file. Do not add `ready`. Do not write `queue low`. Map titles M1 to M32 and slices 115 to 134 wait. Do not open them. The integrator will not write these slices for you.
+You own short-term priority. The integrator directs. You design and you communicate, and you should be busy for the whole continue. A turn is about 30 minutes. One issue is not a turn.
+
+On this continue, read `docs/radio/grok-dev-1.md` and `docs/radio/grok-dev-2.md` before you write. grok-dev-1 finished A1 to A32 and stopped. grok-dev-2 has only U18 to U32 left. Both turns were short. Say that in your radio. Then spend the rest of the turn filling work so the next dev turn can run for about 30 minutes.
+
+Write `docs/radio/po.md` with `### grok-dev-1`, `### grok-dev-2`, and `## Reservoir`. At least 16 unfinished slices for each dev, and 24 in the reservoir. Name the next slice, the files that dev may edit, and that they keep going. Either dev may do API or map work. Do not give both the same file. One issue, then the radio, then the next issue. Do not stop when the old titles are all opened.
+
+Leave yourself work. End the radio with `## Next for me` and at least four jobs you will do on the next continue: check the dev turn lengths, top up whichever queue is short, write the next slices, and tell the devs. If `## Next for me` would be empty, you are finishing early. Write more before you stop.
+
+Titles 1 to 64 are already opened except 17, 18, and 19. Do not reopen them. Do not add `ready`. Do not write `queue low`. Map titles M1 to M32 and slices 115 to 134 wait. Do not open them. The integrator will not write these slices for you. Map clicks on the box do not add a waypoint unless Place stops is on. That shipped in `ff1e142`. Do not redo it.
 
 Waiting. The numbered list below is the old office queue. Do not open it. Issues 219 to 255 already cover slices 32 to 48. Issues 312 and 263 already exist, so do not open `Receipt names tariff one` or `Two cars move at the same time` again.
 
@@ -616,6 +624,6 @@ Reservoir. Do not start these.
 
 ## Integrator
 
-On `continue`, read the radios. Do not write the slice text. The product owner does that, in a turn of about 30 minutes, so neither dev runs dry. If a dev queue is under 16, say so in `## Now` and leave the slices to the product owner. Deploy only after product code has merged. A radio-only commit is not a deploy. The box still shows the preview cars until `GET /v1/empire` is deployed. Do not deploy this note by itself.
+On `continue`, read the radios. Direct the product owner. Do not write the slice text. The product owner designs, communicates, and watches turn length, including their own. If a turn was short, say so in `## Now` and leave the refill to them. Deploy only after product code has merged. A radio-only commit is not a deploy. Do not deploy this note by itself.
 
-Last deploy checked in this note: box site `79c0c10`, health `0.1.26`, `CHECK-OK`. U1, the account form shell, is on `main` at `15d66fb` and has not been deployed. The preview cars stay on the box until the API fleet is deployed with the map.
+Last deploy checked in this note: box site `ff1e142`, health `0.1.27`, `CHECK-OK`. The board was 50 cards. Map clicks do not add a waypoint unless Place stops is on.

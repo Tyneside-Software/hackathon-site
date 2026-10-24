@@ -31,7 +31,7 @@ On `continue`:
 1. Fetch and rebase onto `origin/main`, or fast-forward if you are on `main`.
 2. Read this file, `docs/radio/integrator.md`, and the other radio files.
 3. A continue is a long turn, about 30 minutes of work. Do not finish early. Do not stop after one slice or one issue. The product owner keeps both devs supplied. The devs are not specialised: either may do API or map work, whichever queue the product owner assigned. The integrator does not write the slice text.
-4. Product owner: read `## Now` in `docs/radio/integrator.md`, then spend the turn in `docs/radio/po.md`. Both devs need a deep queue before you stop. Write the slices yourself. Open the issues. Keep a reservoir. Details are in `## Queue depth` below.
+4. Product owner: you own short-term priority. Read `## Now`, then the dev radios, then spend the turn in `docs/radio/po.md`. You design, you communicate, and you watch turn length. Details are in `## Turn length` below.
 5. grok-dev-1 and grok-dev-2: do the slices the product owner listed for you in `docs/radio/po.md`, then any slices `## Now` still names that are not already on `origin/main`. Skip a slice already on `origin/main`. A list marked Waiting is not work. Office slices, desk slices, fare cards, and map titles M1 to M32 are Waiting. If your queue runs out before the turn has run, pull `main` again. Take the next slice the product owner has put in the reservoir and assigned to either dev. Do not invent a product area. Do not write that the heading is clear. If the product owner has not posted work yet, say `queue empty` in your radio and pull once more before you stop.
 6. Do not write `C:\Users\MichaelThomson\source\lanes\desk`. The integrator is the only session that deploys, and only after product code has merged.
 
@@ -48,7 +48,17 @@ If either dev is under 16 unfinished slices, filling that queue is the whole tur
 
 A dev turn is about 30 minutes of merges. One slice is one pull request, then the radio line, then the next slice, in the same turn. Do not batch the queue into one pull request. Do not stop because an old list such as A1 to A32 or U1 to U32 has ended, if `po.md` still has slices. A note that says a heading is clear is stale.
 
-The integrator reads the radios, watches the dashboard, and deploys product that has merged. If a dev queue is short, the integrator says so in `## Now` and the product owner fills it. A refill note is not a deploy.
+The integrator directs. The product owner carries it out. The integrator does not design the slices unless Master asks for an intervention. If a dev queue is short, the integrator says so in `## Now` and the product owner fills it. A refill note is not a deploy.
+
+## Turn length
+
+The product owner watches the length of every turn, including their own. A turn is about 30 minutes of real work. One issue, or one slice, is too short.
+
+On each continue, read `docs/radio/grok-dev-1.md`, `docs/radio/grok-dev-2.md`, and your own last note. Look at the commit times. If a dev stopped after a slice or two, say that the turn was short, and leave them enough new slices for about 30 minutes. Tell them the next slice, the files they may edit, and to keep going.
+
+Your own turn is the same length. Designing slices, opening issues, and writing those notes is the work. You should be busy the whole time. When a list is finished, write the next one. Leave yourself the next job in `po.md` under `## Next for me`, so the following continue already has work. Do not end because the old titles were all opened.
+
+You choose the short-term order. Stay inside the tracker, the booking office, and the empire. The integrator points. You do the communicating.
 
 ## During a turn
 
