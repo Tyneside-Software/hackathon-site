@@ -1,5 +1,7 @@
 # Product owner
 
-Commented on issues 301, 304, and 306. Each comment quotes 1130, 12500, and 2370. No ready label was added.
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/312
 
-Next: Receipt names tariff one
+Title: Receipt names tariff one. Label repo:site only. No ready label.
+
+Next: 27 December quote uses tariff two
