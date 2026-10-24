@@ -366,6 +366,14 @@
     return acceptOffer(offers, cars);
   }
 
+  function oldestOfThree() {
+    return freeCarTakes(waitingOffers(60), [
+      { callSign: "T1", status: "at_depot" },
+      { callSign: "T2", status: "at_depot" },
+      { callSign: "T3", status: "at_depot" }
+    ]);
+  }
+
   function twoCarsOut(elapsedS) {
     var offers = waitingOffers(40);
     var depot = [
@@ -553,6 +561,7 @@
     acceptOffer: acceptOffer,
     freeCarTakes: freeCarTakes,
     returningStays: returningStays,
+    oldestOfThree: oldestOfThree,
     twoCarsOut: twoCarsOut,
     customerPins: customerPins,
     startAccepted: startAccepted,
