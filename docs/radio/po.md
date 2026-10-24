@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/292
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/294
 
-Title: Company day shown as twenty-eight pounds sixty. Label repo:site only. No ready label.
+Title: Clearing the book brings back the empty sentence. Label repo:site only. No ready label.
 
-Next: Clearing the book brings back the empty sentence
+Next: Guide dog does not change eleven pounds thirty
