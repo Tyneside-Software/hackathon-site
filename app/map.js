@@ -46,6 +46,22 @@
   sampleMarker.on("click", (ev) => {
     if (ev.originalEvent) L.DomEvent.stopPropagation(ev.originalEvent);
   });
+  function gamePin(latlng, label, fill) {
+    const pin = L.circleMarker(latlng, {
+      radius: 7,
+      color: "#054a9e",
+      weight: 2,
+      fillColor: fill,
+      fillOpacity: 0.9,
+    }).addTo(map);
+    pin.bindTooltip(label, { permanent: true, direction: "left" });
+    pin.on("click", (ev) => {
+      if (ev.originalEvent) L.DomEvent.stopPropagation(ev.originalEvent);
+    });
+    return pin;
+  }
+  gamePin(NEWCASTLE, "Sample pickup", "#7ec8ff");
+  gamePin(DEPOT, "Sample drop-off", "#b7f0c2");
   let sampleRoute = null;
 
   function drawSample(latlngList) {
