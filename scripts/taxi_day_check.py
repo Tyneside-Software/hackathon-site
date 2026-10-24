@@ -653,6 +653,12 @@ def main():
     if "not T1" not in sample_marker or "#f5b942" in sample_marker:
         print("the sample marker used T1", file=sys.stderr)
         return 1
+    if "The fleet runs on the box." not in remembered or "data.osrm_unavailable" not in remembered:
+        print("the status line did not say the fleet runs on the box", file=sys.stderr)
+        return 1
+    if "OSRM unavailable" not in remembered:
+        print("the status line left out OSRM unavailable", file=sys.stderr)
+        return 1
     posted_trip = taxi_game.post_live_trip(7, 3, ())
     posted_kinds = [row["kind"] for row in posted_trip["lines"]]
     posted_amounts = [row["amount_pence"] for row in posted_trip["lines"]]
