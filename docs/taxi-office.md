@@ -45,6 +45,8 @@ These figures are game settings. They are not this company's charges.
 
 The quote form takes tariff one or tariff two, miles, waiting seconds, extra passengers, outside bags, animals other than a guide or hearing dog, bicycles, prams, and a soiling checkbox. One mile is 1760 yards. The result is shown in pence and in pounds. The form needs a tariff. Empty miles and empty waiting quote 0 pence, and the desk adds no fare to the ledger. A soiling charge with no meter is still 12500 pence, because soiling is an extra on a hiring that happened.
 
+Each desk row stores a pickup, a drop-off, a requested time, a vehicle call sign, and a status. The £11.30 sample picks up at Grey's Monument and drops at Shiremoor depot. The £12.40 sample picks up at Shiremoor depot and drops at Grey's Monument.
+
 The desk has two sample rows. The £11.30 row is tariff one, 3 miles, no waiting, one extra passenger, and one outside bag. The £12.40 row is tariff two, 3 miles, no waiting, and no extras. Buttons move a sample through `offered`, `accepted`, `started`, and `completed`. Cancel is offered until the booking is completed. Completing adds the quoted fare to the company ledger. Cancelling adds nothing.
 
 A button fills the mixed tariff-one case from [Taxi fares](#taxi-fares): the first 161.3 yards in 20 seconds, then 46.8 seconds waiting. The desk shows 265 pence, £2.65.

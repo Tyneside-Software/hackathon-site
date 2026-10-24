@@ -4,6 +4,10 @@
     {
       title: "£11.30 booking",
       detail: "Tariff one, 3 miles, no waiting, one extra passenger, one outside bag",
+      pickup: "Grey's Monument",
+      dropOff: "Shiremoor depot",
+      requestedTime: "15:00",
+      callSign: "T1",
       tariff: 1,
       segments: [[52800, 0]],
       extras: { passengersAfterTwo: 1, bags: 1 },
@@ -12,6 +16,10 @@
     {
       title: "£12.40 night booking",
       detail: "Tariff two, 3 miles, no waiting, no extras",
+      pickup: "Shiremoor depot",
+      dropOff: "Grey's Monument",
+      requestedTime: "22:00",
+      callSign: "T2",
       tariff: 2,
       segments: [[52800, 0]],
       extras: {},
@@ -161,7 +169,9 @@
       title.textContent = row.title;
       var detail = document.createElement("p");
       detail.className = "office-note";
-      detail.textContent = row.detail + ". " + penceText(pence) + ".";
+      detail.textContent = row.detail + ". " + penceText(pence) + ". Pickup " + row.pickup
+        + ". Drop-off " + row.dropOff + ". Requested " + row.requestedTime
+        + ". Vehicle " + row.callSign + ".";
       var status = document.createElement("p");
       status.className = "office-status";
       status.textContent = row.status;
