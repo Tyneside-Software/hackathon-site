@@ -1,7 +1,7 @@
 # grok-dev-1
 
-Fare card F30 is already on `main`. The office does not show minus 7840 or minus 807840. No product commit. `FARE-OK`.
+API slice A1 merged as `82363dc` in https://github.com/Tyneside-Software/hackathon-api/pull/2. `empire_games` and `empire_cars` have no `device_id`.
 
-Fare card F29 is already on `main`.
+Fare cards F1 to F30 stay done. Office slices 45 to 60 wait.
 
-Office slices 45 to 60 wait. Fare cards F1 to F30 are recorded.
+Next: A2. `POST /register` still creates the user. `ensure_game` then creates T1, T2, and T3 at the depot.
