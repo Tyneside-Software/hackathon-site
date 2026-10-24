@@ -1443,6 +1443,41 @@ def spent_line_lines(script: str) -> list[tuple[bool, str]]:
     return [(shows, line)]
 
 
+def waiting_person_lines(script: str) -> list[tuple[bool, str]]:
+    """Whether play.js draws a person who is waiting with no taxi allocated.
+
+    The text is origin/main. This does not read the box. A map marker in
+    the same function as that person is the check. A note elsewhere does
+    not count.
+    """
+    page = script or ""
+    draws = False
+    cursor = 0
+    while True:
+        start = page.find("\n  function ", cursor)
+        start_async = page.find("\n  async function ", cursor)
+        choices = [item for item in (start, start_async) if item >= 0]
+        if not choices:
+            break
+        begin = min(choices)
+        nxt = page.find("\n  function ", begin + 10)
+        nxt_async = page.find("\n  async function ", begin + 10)
+        ends = [item for item in (nxt, nxt_async) if item > begin]
+        stop = min(ends) if ends else len(page)
+        body = page[begin:stop]
+        cursor = begin + 10
+        lowered = body.lower()
+        marker = "L.marker" in body or "L.circleMarker" in body
+        if marker and "person" in lowered and "allocated" in lowered:
+            draws = True
+            break
+    if draws:
+        line = "play.js draws a person who is waiting with no taxi allocated."
+    else:
+        line = "play.js does not draw a person who is waiting with no taxi allocated."
+    return [(draws, line)]
+
+
 PAGE_SCRIPT = r"""
 (function () {
   var catalogEl = document.getElementById("catalog");
@@ -2149,6 +2184,10 @@ def build_page() -> str:
         f'<li class="{"done" if ok else "wait"}">{html.escape(text)}</li>'
         for ok, text in spent_line_lines(play_script)
     )
+    person_html = "".join(
+        f'<li class="{"done" if ok else "wait"}">{html.escape(text)}</li>'
+        for ok, text in waiting_person_lines(play_script)
+    )
 
     chatter = radio_chatter()
     lane_name = {agent["key"]: agent["name"] for agent in AGENTS}
@@ -2558,6 +2597,8 @@ def build_page() -> str:
         <ol class="steps">{buy_html}</ol>
         <p class="fine">Spent line once the feed lists T11.</p>
         <ol class="steps">{spent_html}</ol>
+        <p class="fine">A person waiting with no taxi allocated.</p>
+        <ol class="steps">{person_html}</ol>
         <div class="objective api" style="padding:0.7rem 0 0;border:0;background:transparent">
           <p class="fine">Queue depth</p>
           {depth_html}
