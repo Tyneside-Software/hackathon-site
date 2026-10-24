@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/434
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/436
 
-Title: Three taxis on different streets. Label repo:site only. No ready label.
+Title: OSRM unavailable still moves the taxi. Label repo:site only. No ready label.
 
-Next: OSRM unavailable still moves the taxi
+Next: Phones and buses stay when taxis hide
