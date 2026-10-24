@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/450
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/452
 
-Title: Circle and depot stay while taxis drive. Label repo:site only. No ready label.
+Title: Sidebar lists T1 T2 and T3. Label repo:site only. No ready label.
 
-Next: Sidebar lists T1 T2 and T3
+Next: A click on a taxi does not add a waypoint
