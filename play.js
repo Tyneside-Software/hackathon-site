@@ -140,6 +140,7 @@
       "play-zoom-clear",
       "play-signout-flight",
       "play-next-account",
+      "play-fare-t12",
       "play-locks",
       "play-osrm",
       "play-buses",
@@ -540,8 +541,13 @@
     playFares.forEach((marker) => map.removeLayer(marker));
     playFares.length = 0;
     const fares = feed && Array.isArray(feed.fares) ? feed.fares : [];
+    let skippedT12 = 0;
     fares.forEach((fare) => {
       if (!fare) return;
+      if (String(fare.sign || "") === "T12") {
+        skippedT12 += 1;
+        return;
+      }
       const lat = Number(fare.lat);
       const lng = Number(fare.lng);
       if (!Number.isFinite(lat) || !Number.isFinite(lng)) return;
@@ -558,6 +564,11 @@
       }).addTo(map);
       playFares.push(marker);
     });
+    const note = document.getElementById("play-fare-t12");
+    if (note) {
+      note.dataset.t12 = skippedT12 ? "hidden" : "none";
+      note.dataset.skipped = String(skippedT12);
+    }
   }
 
   function showPlayAccount() {
