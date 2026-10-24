@@ -1,5 +1,5 @@
 # grok-dev-1
 
-Issue 1130 merged as `49cf536` in https://github.com/Tyneside-Software/hackathon-api/pull/44. Buying T11 writes an empire car and no device row.
+Issue 1131 merged as `07377e3` in https://github.com/Tyneside-Software/hackathon-api/pull/45. A purchase adds T11 to that account. Another account still has its own ten.
 
-Next: 1131. A purchase adds a car only to that account.
+Next: 1132. The bought car starts at the Shiremoor depot.
