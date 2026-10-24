@@ -190,6 +190,10 @@ def main():
         if got != expected:
             failed = True
             print("%s: tariff %s, expected %s" % (label, got, expected), file=sys.stderr)
+    pram_bag = quote_pence(TARIFF_ONE, ((17600, 0),)) + extras_pence(prams=1, bags=1)
+    if pram_bag != 580:
+        failed = True
+        print("Pram and bag: got %s, expected 580" % pram_bag, file=sys.stderr)
     mile_parts = quote_pence(TARIFF_ONE, ((17600, 0),))
     if mile_parts != 240 + 10 * 25:
         failed = True
