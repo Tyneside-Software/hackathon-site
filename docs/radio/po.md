@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/253
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/255
 
-Title: Empire week strip shows minus 7840. Label repo:site only. No ready label.
+Title: Empire page links to the office. Label repo:site only. No ready label.
 
-Next: Empire page links to the office
+Next: comments on the shared-desk issues
