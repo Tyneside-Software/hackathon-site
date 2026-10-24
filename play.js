@@ -90,6 +90,7 @@
       "play-started-screen",
       "play-started-ten",
       "play-signed-again",
+      "play-cash-pence",
       "play-locks",
       "play-osrm",
       "play-buses",
@@ -1001,6 +1002,24 @@
     return String(pence);
   }
 
+  function feedHasCash(feed) {
+    return !!(feed && Object.prototype.hasOwnProperty.call(feed, "cash_pence") && Number.isFinite(Number(feed.cash_pence)));
+  }
+
+  function cashPenceAmount(feed) {
+    if (!feedHasCash(feed)) return "";
+    return shownPence(feed.cash_pence);
+  }
+
+  function noteCashPence(feed) {
+    const node = document.getElementById("play-cash-pence");
+    const row = document.querySelector('[data-money="cash_pence"]');
+    if (row) row.dataset.place = "corner";
+    if (!node) return;
+    node.dataset.cash = feedHasCash(feed) ? "pence" : "waiting";
+    node.dataset.amount = cashPenceAmount(feed);
+  }
+
   function fareInAmount(value) {
     const amount = shownPence(value);
     if (amount === "800000") return "";
@@ -1015,14 +1034,15 @@
   }
 
   function paintPlayMoney(feed) {
-    ["fare_in", "driver_share", "fuel", "standing", "new_car"].forEach((key) => {
+    ["fare_in", "driver_share", "fuel", "standing", "new_car", "cash_pence"].forEach((key) => {
       const row = document.querySelector('[data-money="' + key + '"]');
       if (!row) return;
-      const amount = key === "fare_in" ? fareInAmount(feed && feed[key]) : shownPence(feed && feed[key]);
+      const amount = key === "fare_in" ? fareInAmount(feed && feed[key]) : key === "cash_pence" ? cashPenceAmount(feed) : shownPence(feed && feed[key]);
       row.textContent = (amount === "" ? key : key + " " + amount) + " pence";
     });
     hideCompanyTotals();
     noteFareIn();
+    noteCashPence(feed);
     const money = document.getElementById("play-money");
     if (money) money.dataset.follows = "feed";
     keepPlayMoney();
