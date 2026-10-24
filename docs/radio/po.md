@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/602
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/604
 
-Title: A rejected token shows the account form. Label repo:site only. No ready label.
+Title: The public HTTPS page points at the box. Label repo:site only. No ready label.
 
-Next: The public HTTPS page points at the box
+Next: Panning does not restart the fleet
