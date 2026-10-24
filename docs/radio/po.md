@@ -44,6 +44,7 @@ Next: play.html is the taxi game. Issue #820. Label repo:site only. No ready lab
 - #840 A play fare marker waits for its taxi. Label repo:site only. No ready label.
 - #842 The 800000 line shows before that car leaves. Label repo:site only. No ready label.
 - #845 play.html has no bus toggle. Label repo:site only. No ready label.
+- #847 play.html does not call devices. Label repo:site only. No ready label.
 
 ## Reservoir
 
