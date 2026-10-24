@@ -166,6 +166,39 @@ def main():
     else:
         print("a fourth car joined the fleet", file=sys.stderr)
         return 1
+    if taxi_game.waiting_offers(0) != []:
+        print("a fare was waiting at 0 seconds", file=sys.stderr)
+        return 1
+    waiting = taxi_game.waiting_offers(40)
+    if len(waiting) != 2 or any(offer["status"] != "offered" for offer in waiting):
+        print(f"waiting offers {waiting}", file=sys.stderr)
+        return 1
+    if waiting[0]["pickup"] != taxi_game.DEPOT:
+        print("an offer did not start at the depot", file=sys.stderr)
+        return 1
+    if waiting[0]["fare_pence"] != taxi_game.live_fare_pence(2, 0):
+        print("an offer did not use the meter", file=sys.stderr)
+        return 1
+    if waiting[0]["fare_pounds"] != taxi_game.fare_pounds(waiting[0]["fare_pence"]):
+        print("the row did not show pounds", file=sys.stderr)
+        return 1
+    if len(taxi_game.waiting_offers(80)) != 3:
+        print("the desk showed a fourth offer", file=sys.stderr)
+        return 1
+    taken = taxi_game.accept_offer(taxi_game.waiting_offers(20), taxi_game.three_cars())
+    if has_device_id(taken) or taken["offers"][0]["status"] != "accepted":
+        print("accept did not take the offer", file=sys.stderr)
+        return 1
+    if taken["cars"][0]["call_sign"] != "T1" or taken["cars"][0]["status"] != "accepted":
+        print(f"accept car {taken['cars'][0]}", file=sys.stderr)
+        return 1
+    if taken["cars"][1]["status"] != "at_depot" or taken["cars"][2]["status"] != "at_depot":
+        print("accept moved a second car", file=sys.stderr)
+        return 1
+    points, duration = taken["cars"][0]["route"]
+    if points[0] != taxi_game.DEPOT or taxi_game.position_on_route(points, duration, 0) != points[0]:
+        print("the accepted car did not start on the route", file=sys.stderr)
+        return 1
     if taxi_game.live_fare_pence(3, 0) != 1040:
         print(f"live fare {taxi_game.live_fare_pence(3, 0)}", file=sys.stderr)
         return 1

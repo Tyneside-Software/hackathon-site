@@ -43,6 +43,10 @@
     <p id="short-trip"></p>
     <p id="live-fare"></p>
     <p id="fleet-move"></p>
+    <ul id="offers"></ul>
+    <p id="offer-sample"></p>
+    <button type="button" class="btn btn-ghost" id="btn-accept">Accept the oldest offer</button>
+    <p id="accept-result"></p>
     <ul id="places"></ul>
     <p class="lede" id="berwick-job"></p>
     <p class="lede" id="hexham-job"></p>
@@ -79,6 +83,20 @@
     document.getElementById("clock").textContent = "Ten real seconds are " + game.elapsedSeconds(0, 10000) + ".";
     document.getElementById("fallback").textContent = "With no OSRM duration, 3 miles take " + game.fallbackSeconds(3) + " seconds. OSRM unavailable.";
     var offerStart = Date.now();
+    function paintOfferRows(offers) {
+      var list = document.getElementById("offers");
+      list.textContent = "";
+      offers.forEach(function (offer) {
+        var item = document.createElement("li");
+        item.textContent = "Shiremoor depot → " + offer.miles + " miles · " + offer.status + " · " + offer.farePounds;
+        list.appendChild(item);
+      });
+    }
+    var depotCars = [
+      { callSign: "T1", status: "at_depot" },
+      { callSign: "T2", status: "at_depot" },
+      { callSign: "T3", status: "at_depot" }
+    ];
     function paintOffers() {
       var elapsed = game.elapsedSeconds(offerStart, Date.now());
       var count = game.offeredCount(elapsed);
@@ -86,9 +104,28 @@
       var text = count + " offers.";
       if (wait !== null) text += " Next offer in " + Math.ceil(wait) + " seconds.";
       document.getElementById("next-offer").textContent = text;
+      var live = game.waitingOffers(elapsed);
+      paintOfferRows(live.length ? live : game.waitingOffers(40));
     }
     paintOffers();
     setInterval(paintOffers, 1000);
+    var sample = game.waitingOffers(40);
+    var sampleTaken = game.acceptOffer(sample, depotCars);
+    document.getElementById("offer-sample").textContent = sample.length === 2
+      && sample[0].status === "offered"
+      && sampleTaken
+      && sampleTaken.cars[0].callSign === "T1"
+      && sampleTaken.cars[0].status === "accepted"
+      && game.sumPence(game.workedDay()) === -1120
+      ? "At 40 seconds, 2 offers are waiting. Accepting the oldest sets T1 onto that route."
+      : "An offer changed the day.";
+    document.getElementById("btn-accept").addEventListener("click", function () {
+      var elapsed = game.elapsedSeconds(offerStart, Date.now());
+      var taken = game.acceptOffer(game.waitingOffers(elapsed), depotCars);
+      document.getElementById("accept-result").textContent = taken
+        ? taken.cars[0].callSign + " is on that route. " + taken.offers[0].farePounds + "."
+        : "No offer is waiting.";
+    });
     var shortTrip = game.shortTrip(90, 4);
     document.getElementById("short-trip").textContent = shortTrip && shortTrip.inside && shortTrip.miles === 4
       ? "A 4 mile trip from the depot is inside."
