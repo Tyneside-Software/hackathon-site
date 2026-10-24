@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Radio — Tyneside sessions</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    body.site { padding: 1.25rem clamp(1rem, 3vw, 2.5rem) 3rem; }
+    h1 { font-size: 1.6rem; color: var(--heading); margin: 0.2rem 0 0.3rem; }
+    .lede { color: var(--muted); max-width: 46rem; margin-bottom: 1rem; }
+    .bar { display: flex; flex-wrap: wrap; gap: 0.6rem; align-items: center; margin-bottom: 1rem; }
+    .bar a, .bar button {
+      color: var(--link); background: var(--panel); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 0.35rem 0.7rem; text-decoration: none;
+      font: inherit; cursor: pointer;
+    }
+    .status { color: var(--muted); font-size: 0.9rem; }
+    form.send {
+      background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 0.9rem 1rem; margin-bottom: 1rem; max-width: 52rem;
+    }
+    form.send p { color: var(--muted); margin: 0.4rem 0 0.6rem; }
+    textarea {
+      width: 100%; min-height: 4.5rem; resize: vertical; font: inherit; color: var(--text);
+      background: #0a1016; border: 1px solid var(--border); border-radius: 8px; padding: 0.6rem;
+    }
+    .inbox { margin: 0.6rem 0 1rem; }
+    .inbox li { margin: 0.35rem 0; }
+    .empty { color: var(--muted); }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr)); gap: 0.8rem; }
+    article {
+      background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 0.8rem 0.9rem; min-width: 0;
+    }
+    article h2 { font-size: 1rem; color: var(--heading); margin-bottom: 0.4rem; }
+    article pre {
+      white-space: pre-wrap; word-break: break-word; font: 0.86rem/1.45 ui-monospace, Consolas, monospace;
+      color: var(--text); margin: 0;
+    }
+    table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+    th, td { text-align: left; vertical-align: top; border-top: 1px solid var(--border); padding: 0.45rem 0.35rem; }
+    th { color: var(--muted); font-weight: 600; }
+    .commits { margin-top: 1rem; }
+    .commits li { margin: 0.25rem 0; }
+    .commits a { color: var(--link); }
+  </style>
+</head>
+<body class="site">
+  <p class="bar">
+    <a href="play.html">Game</a>
+    <a href="docs/#radio">Manual</a>
+    <a href="https://github.com/Tyneside-Software/hackathon-site/edit/main/docs/radio/michael.md">Edit inbox on GitHub</a>
+    <button type="button" id="reload">Refresh</button>
+    <span class="status" id="status">Loading GitHub…</span>
+  </p>
+  <h1>Session radio</h1>
+  <p class="lede">What the four sessions last wrote on <code>main</code>, and the inbox they read before the next slice. This page only watches. Sending is a push to <code>docs/radio/michael.md</code>.</p>
+
+  <form class="send" id="send">
+    <strong>Message the sessions</strong>
+    <p>From the <code>hackathon-site</code> folder on this laptop. They see it the next time they pull.</p>
+    <textarea id="message" placeholder="What you want them to do"></textarea>
+    <p class="bar">
+      <button type="submit">Copy the send command</button>
+      <button type="button" id="copy-clear">Copy the clear command</button>
+    </p>
+    <pre id="command" class="api-json">.\scripts\tell-agents.ps1 "…"</pre>
+  </form>
+
+  <h2>Unread</h2>
+  <ul class="inbox" id="unread"><li class="empty">Loading…</li></ul>
+
+  <div class="grid">
+    <article>
+      <h2>Order this turn</h2>
+      <div id="now">Loading…</div>
+    </article>
+    <article>
+      <h2>Product owner, next</h2>
+      <pre id="po">Loading…</pre>
+    </article>
+    <article>
+      <h2>grok-dev-1</h2>
+      <pre id="dev1">Loading…</pre>
+    </article>
+    <article>
+      <h2>grok-dev-2</h2>
+      <pre id="dev2">Loading…</pre>
+    </article>
+  </div>
+
+  <article class="commits">
+    <h2>Latest commits</h2>
+    <ul id="commits"><li class="empty">Loading…</li></ul>
+  </article>
+
+  <script>
+    var RAW = "https://raw.githubusercontent.com/Tyneside-Software/hackathon-site/main/";
+    var files = {
+      inbox: "docs/radio/michael.md",
+      integrator: "docs/radio/integrator.md",
+      po: "docs/radio/po.md",
+      dev1: "docs/radio/grok-dev-1.md",
+      dev2: "docs/radio/grok-dev-2.md"
+    };
+
+    function text(id, value) {
+      document.getElementById(id).textContent = value || "—";
+    }
+
+    function between(body, start, end) {
+      var at = body.indexOf(start);
+      if (at < 0) return "";
+      var from = at + start.length;
+      var stop = end ? body.indexOf(end, from) : -1;
+      return (stop < 0 ? body.slice(from) : body.slice(from, stop)).trim();
+    }
+
+    function unreadLines(body) {
+      var block = between(body, "## Unread", "## Heard");
+      return block.split(/\r?\n/).map(function (line) {
+        return line.trim();
+      }).filter(function (line) {
+        return line.indexOf("- ") === 0;
+      });
+    }
+
+    function nextLines(body) {
+      return body.split(/\r?\n/).filter(function (line) {
+        return line.indexOf("Next:") === 0;
+      });
+    }
+
+    function nowTable(body) {
+      var section = between(body, "## Now", "\n## ");
+      var rows = [];
+      section.split(/\r?\n/).forEach(function (line) {
+        if (line.charAt(0) !== "|") return;
+        var cells = line.trim().replace(/^\|/, "").replace(/\|$/, "").split("|").map(function (cell) {
+          return cell.trim();
+        });
+        if (cells.length < 3) return;
+        if (cells[0].toLowerCase() === "lane") return;
+        if (/^[-: ]+$/.test(cells.join(""))) return;
+        rows.push(cells);
+      });
+      return rows;
+    }
+
+    function fillTable(rows) {
+      var host = document.getElementById("now");
+      host.textContent = "";
+      if (!rows.length) {
+        host.textContent = "No order table in ## Now.";
+        return;
+      }
+      var table = document.createElement("table");
+      var head = document.createElement("tr");
+      ["Lane", "Next slice"].forEach(function (label) {
+        var th = document.createElement("th");
+        th.textContent = label;
+        head.appendChild(th);
+      });
+      table.appendChild(head);
+      rows.forEach(function (cells) {
+        var tr = document.createElement("tr");
+        [cells[0], cells[cells.length - 1]].forEach(function (value) {
+          var td = document.createElement("td");
+          td.textContent = value;
+          tr.appendChild(td);
+        });
+        table.appendChild(tr);
+      });
+      host.appendChild(table);
+    }
+
+    function fillUnread(lines) {
+      var host = document.getElementById("unread");
+      host.textContent = "";
+      if (!lines.length) {
+        var empty = document.createElement("li");
+        empty.className = "empty";
+        empty.textContent = "None. The sessions follow ## Now.";
+        host.appendChild(empty);
+        return;
+      }
+      lines.forEach(function (line) {
+        var li = document.createElement("li");
+        li.textContent = line.replace(/^- /, "");
+        host.appendChild(li);
+      });
+    }
+
+    function loadCommits() {
+      var host = document.getElementById("commits");
+      var repos = ["hackathon-site", "hackathon-api"];
+      Promise.all(repos.map(function (repo) {
+        return fetch("https://api.github.com/repos/Tyneside-Software/" + repo + "/commits?per_page=5")
+          .then(function (res) { return res.json(); })
+          .then(function (rows) { return { repo: repo, rows: rows }; });
+      })).then(function (groups) {
+        host.textContent = "";
+        groups.forEach(function (group) {
+          if (!group.rows || !group.rows.length || group.rows.message) return;
+          group.rows.forEach(function (row) {
+            var li = document.createElement("li");
+            var a = document.createElement("a");
+            a.href = row.html_url;
+            a.textContent = group.repo + " " + row.sha.slice(0, 7);
+            li.appendChild(a);
+            li.appendChild(document.createTextNode(" " + (row.commit.message || "").split("\n")[0]));
+            host.appendChild(li);
+          });
+        });
+        if (!host.childNodes.length) {
+          var li = document.createElement("li");
+          li.className = "empty";
+          li.textContent = "Commit list did not load.";
+          host.appendChild(li);
+        }
+      }).catch(function () {
+        text("commits", "");
+      });
+    }
+
+    function load() {
+      var status = document.getElementById("status");
+      status.textContent = "Loading GitHub…";
+      var stamp = Date.now();
+      Promise.all(Object.keys(files).map(function (key) {
+        return fetch(RAW + files[key] + "?t=" + stamp).then(function (res) {
+          if (!res.ok) throw new Error(files[key] + " " + res.status);
+          return res.text().then(function (body) { return { key: key, body: body }; });
+        });
+      })).then(function (parts) {
+        var byKey = {};
+        parts.forEach(function (part) { byKey[part.key] = part.body; });
+        fillUnread(unreadLines(byKey.inbox || ""));
+        fillTable(nowTable(byKey.integrator || ""));
+        text("po", nextLines(byKey.po || "").join("\n\n") || "No Next line.");
+        text("dev1", (byKey.dev1 || "").trim());
+        text("dev2", (byKey.dev2 || "").trim());
+        var clock = new Date().toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit", second: "2-digit" });
+        status.textContent = "Updated " + clock;
+      }).catch(function (err) {
+        status.textContent = "Could not read GitHub. " + err.message;
+      });
+    }
+
+    function quote(value) {
+      return "'" + String(value).replace(/'/g, "''") + "'";
+    }
+
+    document.getElementById("send").addEventListener("submit", function (event) {
+      event.preventDefault();
+      var message = document.getElementById("message").value.trim();
+      var command = message
+        ? ".\\scripts\\tell-agents.ps1 " + quote(message)
+        : ".\\scripts\\tell-agents.ps1 \"…\"";
+      document.getElementById("command").textContent = command;
+      if (message && navigator.clipboard) navigator.clipboard.writeText(command);
+    });
+    document.getElementById("copy-clear").addEventListener("click", function () {
+      var command = ".\\scripts\\tell-agents.ps1 -Clear";
+      document.getElementById("command").textContent = command;
+      if (navigator.clipboard) navigator.clipboard.writeText(command);
+    });
+    document.getElementById("reload").addEventListener("click", load);
+    load();
+    loadCommits();
+    setInterval(load, 20000);
+    setInterval(loadCommits, 60000);
+  </script>
+</body>
+</html>

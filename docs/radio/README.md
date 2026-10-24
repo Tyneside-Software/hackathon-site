@@ -10,8 +10,9 @@ Sessions talk through GitHub `main`. There is no `master` branch. There is no sh
 | `docs/radio/po.md` | The product owner only |
 | `docs/radio/grok-dev-1.md` | grok-dev-1 only |
 | `docs/radio/grok-dev-2.md` | grok-dev-2 only |
+| `docs/radio/michael.md` | Michael only. The four sessions read it and do not write it. |
 
-Read all four before a slice and again after a merge. Write only your own file.
+Read every file in the table before a slice and again after a merge. Write only your own file. Do not write `docs/radio/michael.md`.
 
 ## The four sessions
 
@@ -31,11 +32,12 @@ The human pastes `continue` into each session. That word is the whole order. Do 
 1. Confirm the checkout path. That is the role. Read `LANE.txt` if it sits beside the three repos.
 2. In every repo you will touch: `git fetch origin`, then `git pull --rebase origin main` on `main`, or `.\scripts\lane-sync.ps1` from `hackathon-site` on a `lane/*` branch.
 3. Read this file.
-4. In `docs/radio/integrator.md`, read only `## Now`, `## A running game stays up`, and `## The route is the gap`. Every other heading in that file is history. Do not follow it.
-5. Read `docs/radio/po.md` and the two dev radio files.
-6. Do the work for the role, for about 30 minutes. Do not stop after one slice.
+4. Read `docs/radio/michael.md`. A line under `## Unread` that starts with `- ` and a UTC timestamp is an order from Michael. Do it before the next slice. Do not edit that file. The first line of your next radio note is `Michael <timestamp>: heard`. `None yet.` means the inbox is empty.
+5. In `docs/radio/integrator.md`, read only `## Now`, `## A running game stays up`, and `## The route is the gap`. Every other heading in that file is history. Do not follow it.
+6. Read `docs/radio/po.md` and the two dev radio files.
+7. Do the work for the role, for about 30 minutes. Do not stop after one slice. An unread line in `michael.md` is done first. When the inbox is empty, `## Now` is the order.
 
-When two docs disagree, the code on `origin/main` wins over a SHA named in an old paragraph. `## Now` wins over `po.md` when `po.md` names a finished slice, a clear of one field, or a control the API cannot do yet. A lane radio that still names a finished issue is stale. Skip that issue.
+When two docs disagree, the code on `origin/main` wins over a SHA named in an old paragraph. An unread line in `docs/radio/michael.md` wins over `## Now` for what to do next. Standing safety rules in this file still hold. `## Now` wins over `po.md` when `po.md` names a finished slice, a clear of one field, or a control the API cannot do yet. A lane radio that still names a finished issue is stale. Skip that issue.
 
 ## What each role does
 
@@ -61,6 +63,7 @@ A dev does not invent a slice. A dev does not write `queue empty` while `## Now`
 | `docs/radio/integrator.md` | Integrator |
 | `docs/radio/po.md` | Product owner |
 | One dev radio file | That dev |
+| `docs/radio/michael.md` | Michael, from the laptop or any other machine. `scripts/tell-agents.ps1` pushes one line. Sessions do not write this file. |
 
 Do not give both devs the same file. Issues live on `Tyneside-Software/hackathon-site` only, even when the edit is in the API. One issue, one branch, one pull request.
 
@@ -140,6 +143,7 @@ An open browser keeps the JavaScript it already loaded. A refresh loads the new 
 - Touch API pull request `reeve-branch`.
 - Move issues 22 or 29 off `blocked`.
 - Edit another session's radio file.
+- Edit `docs/radio/michael.md`. That file is Michael's. Read `## Unread`, then leave it alone.
 - Commit `build-err.txt`, `*.db`, `.env`, or the Desktop SSH sheet.
 - Hand git, SSH, or deploy commands back to the human. Do them, or say what failed.
 - Restart the agent dashboard on port 5510 unless Michael asks.

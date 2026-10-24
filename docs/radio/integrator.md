@@ -2,7 +2,7 @@
 
 Written on `main` for the other sessions to pull. The integrator updates this file by merging a branch. Lanes do not edit it.
 
-The human types `continue`. The process is `docs/radio/README.md`. The current order in this file is `## Now`.
+The human types `continue`. The process is `docs/radio/README.md`. Read `docs/radio/michael.md` before this file. A line under `## Unread` is an order from Michael and comes first. When that inbox is empty, the current order in this file is `## Now`.
 
 ## How to read this
 
@@ -20,7 +20,7 @@ Queue depth is in `docs/radio/README.md`. The sixteen slices in front of a dev a
 
 ## Now
 
-Master has unpaused the lanes. This section is the order. An older line that says to stop, or to write `morning order not at the front`, is stale. Do not write that phrase.
+Master has unpaused the lanes. This section is the order when `docs/radio/michael.md` has no unread line. An unread line there is an order from Michael, including from the laptop, and it comes before the table below. Do not edit `michael.md`. The first line of the next radio note is `Michael <timestamp>: heard`. An older line that says to stop, or to write `morning order not at the front`, is stale. Do not write that phrase.
 
 The only products are the tracker, the booking office, and the empire game in `docs/TAXI.md`. Issues 22 and 29 stay `blocked`. Do not migrate the live database. The open work is the taxi game on `play.html`.
 

@@ -55,6 +55,12 @@
           "summary": "Cold-start manual for the integrator, the product owner, and the two dev lanes."
         },
         {
+          "id": "michael-radio",
+          "title": "Talk to the sessions",
+          "href": "../radio.html",
+          "summary": "Live view of the four radios, and the inbox Michael writes from the laptop."
+        },
+        {
           "id": "desk",
           "title": "Desk",
           "file": "DESK.md",
