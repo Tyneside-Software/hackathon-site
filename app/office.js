@@ -339,12 +339,25 @@
       + money(total);
   }
 
+  function renderSlips() {
+    var root = document.getElementById("ledger-slips");
+    root.textContent = "";
+    samples.forEach(function (row) {
+      if (row.status !== "completed") return;
+      var slip = document.createElement("pre");
+      slip.className = "office-slip";
+      slip.textContent = receiptText(row);
+      root.appendChild(slip);
+    });
+  }
+
   function renderSamples() {
     var root = document.getElementById("samples");
     var empty = document.getElementById("empty-book");
     root.textContent = "";
     if (!samples.length) {
       empty.hidden = false;
+      renderSlips();
       return;
     }
     empty.hidden = true;
@@ -376,12 +389,6 @@
       copy.appendChild(title);
       copy.appendChild(detail);
       copy.appendChild(status);
-      if (row.status === "completed") {
-        var slip = document.createElement("pre");
-        slip.className = "office-slip";
-        slip.textContent = receiptText(row);
-        copy.appendChild(slip);
-      }
       var actions = document.createElement("div");
       actions.className = "office-actions";
       function addButton(label, next) {
@@ -422,6 +429,7 @@
       block.appendChild(actions);
       root.appendChild(block);
     });
+    renderSlips();
   }
 
   function clockMinutes(value) {
