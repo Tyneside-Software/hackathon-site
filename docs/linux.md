@@ -80,7 +80,7 @@ Run it as michael. No sudo password. The script switches to `website` itself.
 
 1. If the user is not `website`: `exec sudo -n -u website -H -- /usr/local/bin/update`.
 2. `git pull --ff-only origin main` in `/home/website/hackathon-api`.
-3. `docker compose up -d --build --force-recreate`.
+3. If that pull moved `HEAD`, `docker compose up -d --build --force-recreate`. If `HEAD` did not move, the container stays up and the script prints `api unchanged; container left running`.
 4. `git pull --ff-only origin main` in `/var/www/hackathon-site` when that directory is a checkout.
 5. Poll `http://127.0.0.1:8080/health`. Non-zero exit if it never answers.
 6. `docker compose ps`.
