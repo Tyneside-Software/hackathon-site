@@ -152,6 +152,7 @@
       "play-fare-riding",
       "play-signed-chips",
       "play-person-waiting",
+      "play-person-stays",
       "play-locks",
       "play-osrm",
       "play-buses",
@@ -621,9 +622,20 @@
     noteFareRiding(skippedRiding);
   }
 
-  function personTaxi(person) {
-    if (!person || person.allocated === true) return "allocated";
+  function personTaxiSign(person) {
+    if (!person) return "";
     return String(person.sign || person.taxi || "").trim();
+  }
+
+  function allocatedTaxiArrived(feed, person) {
+    if (!person) return false;
+    if (person.arrived === true) return true;
+    const sign = personTaxiSign(person);
+    if (!sign) return false;
+    const cars = feed && Array.isArray(feed.cars) ? feed.cars : [];
+    return cars.some(function (car) {
+      return !!(car && String(car.sign || "") === sign && car.status === "with_passenger");
+    });
   }
 
   function paintPlayPeople(feed) {
@@ -631,11 +643,12 @@
     playPeople.length = 0;
     const people = feed && Array.isArray(feed.people) ? feed.people : [];
     let drawn = 0;
-    let skipped = 0;
+    let stayed = 0;
+    let arrived = 0;
     people.forEach((person) => {
       if (!person) return;
-      if (personTaxi(person)) {
-        skipped += 1;
+      if (allocatedTaxiArrived(feed, person)) {
+        arrived += 1;
         return;
       }
       const lat = Number(person.lat);
@@ -654,16 +667,25 @@
       }).addTo(map);
       playPeople.push(marker);
       drawn += 1;
+      if (person.allocated === true || personTaxiSign(person)) stayed += 1;
     });
-    notePersonWaiting(drawn, skipped);
+    notePersonWaiting(drawn, stayed);
+    notePersonStays(stayed, arrived);
   }
 
-  function notePersonWaiting(drawn, skipped) {
+  function notePersonWaiting(drawn, stayed) {
     const node = document.getElementById("play-person-waiting");
     if (!node) return;
     node.dataset.person = drawn ? "drawn" : "none";
     node.dataset.drawn = String(drawn);
-    node.dataset.allocated = String(skipped);
+    node.dataset.allocated = String(stayed);
+  }
+
+  function notePersonStays(stayed, arrived) {
+    const node = document.getElementById("play-person-stays");
+    if (!node) return;
+    node.dataset.stayed = stayed ? "stays" : "none";
+    node.dataset.arrived = String(arrived);
   }
 
   function fareCarRiding(feed, fare) {
