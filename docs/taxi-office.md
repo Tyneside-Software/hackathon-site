@@ -49,7 +49,7 @@ Each desk row stores a pickup, a drop-off, a requested time, a vehicle call sign
 
 The desk has two sample rows. The £11.30 row is tariff one, 3 miles, no waiting, one extra passenger, and one outside bag. The £12.40 row is tariff two, 3 miles, no waiting, and no extras. Buttons move a sample through `offered`, `accepted`, `started`, and `completed`. Cancel is allowed until `completed`. Completing the £11.30 row adds 1130 pence once. A second press does not add it again. Cancel from `offered` adds 0. A completed booking does not become cancelled.
 
-A button fills the mixed tariff-one case from [Taxi fares](#taxi-fares): the first 161.3 yards in 20 seconds, then 46.8 seconds waiting. The desk shows 265 pence, £2.65.
+A button fills the mixed tariff-one case from [Taxi fares](#taxi-fares): the first 161.3 yards in 20 seconds, then 46.8 seconds waiting. The desk shows 265 pence, £2.65, not 290. Three more buttons quote the flag falls: tariff one at exact 161.3 yards and no waiting is 240 pence, tariff two at exact 140.5 yards and no waiting is 315 pence, and tariff two at 0 yards and 45 seconds is 315 pence.
 
 Two extras rows sit with the samples. A hiring with no miles, no waiting, and soiling is 12500 pence. A guide or hearing dog adds 0. Tariff one, 1 mile, no waiting, one animal, and no soiling is 490 + 300 = 790 pence.
 

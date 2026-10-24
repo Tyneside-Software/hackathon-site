@@ -261,12 +261,24 @@
     renderLedger();
   });
 
-  document.getElementById("btn-mixed").addEventListener("click", function () {
-    var pence = window.TaxiFare.quotePence(1, [[1613, 200], [0, 468]], {});
-    document.getElementById("tariff").value = "1";
-    document.getElementById("quote-result").textContent =
-      "First 161.3 yards in 20 seconds, then 46.8 seconds waiting. " + penceText(pence) + ".";
+  function showWorked(tariff, segments, sentence) {
+    var pence = window.TaxiFare.quotePence(tariff, segments, {});
+    document.getElementById("tariff").value = String(tariff);
+    document.getElementById("quote-result").textContent = sentence + " " + penceText(pence) + ".";
     lastQuote = null;
+  }
+
+  document.getElementById("btn-mixed").addEventListener("click", function () {
+    showWorked(1, [[1613, 200], [0, 468]], "First 161.3 yards in 20 seconds, then 46.8 seconds waiting.");
+  });
+  document.getElementById("btn-t1-yards").addEventListener("click", function () {
+    showWorked(1, [[1613, 0]], "Tariff one, exactly 161.3 yards, no waiting.");
+  });
+  document.getElementById("btn-t2-yards").addEventListener("click", function () {
+    showWorked(2, [[1405, 0]], "Tariff two, exactly 140.5 yards, no waiting.");
+  });
+  document.getElementById("btn-t2-wait").addEventListener("click", function () {
+    showWorked(2, [[0, 450]], "Tariff two, no yards, 45 seconds.");
   });
 
   renderSamples();
