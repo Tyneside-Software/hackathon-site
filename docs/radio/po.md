@@ -1,7 +1,5 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/297
+Commented on issues 285, 287, 289, 292, 294, and 297. Each comment quotes 240, 315, 1620, 1240, 2860, and 1130. No ready label was added.
 
-Title: Guide dog does not change eleven pounds thirty. Label repo:site only. No ready label.
-
-Next: Comment on issues 84 to 89
+Next: Cash or account on the shared row
