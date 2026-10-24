@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/234
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/236
 
-Title: Office week strip stays 20020. Label repo:site only. No ready label.
+Title: Office page links to the empire. Label repo:site only. No ready label.
 
-Next: Office page links to the empire
+Next: Simulated data banner on the empire desk
