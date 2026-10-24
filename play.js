@@ -99,7 +99,19 @@
       headers: { Authorization: "Bearer " + token }
     });
     if (!res.ok) return;
-    paintPlayCars(await res.json());
+    const data = await res.json();
+    paintPlayCars(data);
+    paintPlayMoney(data);
+  }
+
+  function paintPlayMoney(feed) {
+    ["fare_in", "driver_share", "fuel", "standing"].forEach((key) => {
+      const row = document.querySelector('[data-money="' + key + '"]');
+      if (!row) return;
+      const value = Number(feed && feed[key]);
+      const pence = Number.isFinite(value) ? Math.trunc(value) : 0;
+      row.textContent = key + " " + pence;
+    });
   }
 
   setInterval(pollPlay, 2000);
