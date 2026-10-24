@@ -173,6 +173,7 @@
       "play-next-person",
       "play-next-chips",
       "play-next-money",
+      "play-feed-401-money",
       "play-locks",
       "play-osrm",
       "play-buses",
@@ -968,6 +969,21 @@
     node.dataset.feed = "401";
   }
 
+  function clearFeed401Money() {
+    const rows = document.querySelectorAll("#play-money-lines li");
+    rows.forEach((row) => {
+      row.textContent = "";
+    });
+    const node = document.getElementById("play-feed-401-money");
+    if (!node) return;
+    let showing = false;
+    rows.forEach((row) => {
+      if (row.textContent) showing = true;
+    });
+    node.dataset.money = showing ? "shows" : "clear";
+    node.dataset.feed = "401";
+  }
+
   function noteFeed401() {
     const node = document.getElementById("play-feed-401");
     if (!node) return;
@@ -1511,6 +1527,7 @@
       clearFeed401Fares();
       clearFeed401Failed();
       clearFeed401People();
+      clearFeed401Money();
       return;
     }
     if (!res.ok) {
