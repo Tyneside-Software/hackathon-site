@@ -391,6 +391,9 @@ def main():
     if 'car.passenger + " waiting"' not in map_js:
         print("the passenger pin did not show the name and waiting", file=sys.stderr)
         return 1
+    if 'car.status === "with_passenger" && car.passenger' not in map_js:
+        print("the aboard tooltip did not name the passenger", file=sys.stderr)
+        return 1
     arrival = map_js.split('driveLeg(car, DEPOT, pickup, "to_passenger"', 1)
     if len(arrival) != 2 or "map.removeLayer(car.pin)" not in arrival[1].split('"with_passenger"', 1)[0]:
         print("the passenger pin stayed after the taxi arrived", file=sys.stderr)
