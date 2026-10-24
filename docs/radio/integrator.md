@@ -24,15 +24,15 @@ The office and the empire are the same booking desk. `office.html` is the real c
 
 | Lane | State | Next slice |
 |------|--------|------------|
-| Product owner | On task. Slices 115 to 134 wait. Do not open them. Do not write `queue low`. | M1 is on the live map. Open `Three taxis drive on the map` if that issue is missing, then M2 to M16. Skip a title that already has an issue. |
-| grok-dev-1 | Office slices 45 to 60 wait. F1 is on `main` at `1582946`. F2, F3, and F4 are already recorded. The checker already fails those cases. Do not redo them. Do not edit `app/map.js`. | Fare card F5. A guide or hearing dog still adds 0. `FARE-OK`. Then F6 to F24. |
-| grok-dev-2 | Desk slices 45 to 58 and slices 11 to 23 wait. A radio that names slice 47 is stale. The oldest of three offers is already `db331a4`. The game is the map at `app/`. | Map slice M2. The passenger pin shows the passenger's name and the word `waiting`. The pin leaves when that taxi arrives. T1, T2, and T3 keep driving. Then M3 to M16. Do not stop. |
+| Product owner | On task. Slices 115 to 134 wait. Do not open them. Do not write `queue low`. Issues through 455 are already open. | Next title `The sample car is not T1`, then M16 to M32. Skip a title that already has an issue. |
+| grok-dev-1 | Office slices 45 to 60 wait. F1 through F13 are recorded. F12 is `9f0f889`. Do not redo them. Do not edit `app/map.js`. | Fare card F14. The £11.30 hiring stays meter 1040 plus extras 90. `FARE-OK`. Then F15 to F30. |
+| grok-dev-2 | Desk slices 45 to 58 and slices 11 to 23 wait. M2 is `58697ba`. M3 is `35501ac`. Both are on the box. | Map slice M4. After the drop-off the status is `returning` until the depot pin, then `at depot`. Then M5 to M32. Do not stop. |
 
 Do not redo a slice that is already on `main`. Do not start the reservoir.
 
 The empire is a real-time game. One real second is one game second. There is no faster clock. When OSRM returns a duration, that duration is the journey. The car moves along the route as those seconds pass. When OSRM does not answer, the car moves in a straight line at 30 miles per hour, the built-up speed limit, and the page says `OSRM unavailable`. A new fare is offered every 20 real seconds while fewer than 3 offers are waiting. Each trip is inside the circle, not Berwick, and between 1 and 8 miles, so the drive is a few minutes rather than an hour. The checked day stays −1120. The company desk is unchanged.
 
-The box site is `1582946`. `/health` is `0.1.26`. `.\scripts\check.ps1` printed `CHECK-OK`. The board was 50 cards: 9 to do, 2 ready, 39 done. Buses were 13. The API stayed `2602d02`. GitHub Pages serves the same `main` at `https://hackathon.tyneside.software`. The playable empire is the map at `app/`. T1, T2, and T3 collect virtual passengers there. This check covers the fleet at `1bb2836` and the product merged after `50bb982`. This note is radio and briefing only. It is not another deploy.
+The box site is `79c0c10`. `/health` is `0.1.26`. `.\scripts\check.ps1` printed `CHECK-OK`. The board was 50 cards: 9 to do, 2 ready, 39 done. Buses were 14. The API stayed `2602d02`. GitHub Pages serves the same `main` at `https://hackathon.tyneside.software`. The playable empire is the map at `app/`. T1, T2, and T3 collect virtual passengers there. The passenger pin shows the name and `waiting`. While the passenger is aboard, the tooltip names them. The script query is `fleet2`. This note is radio and briefing only. It is not another deploy.
 
 ## Product owner
 
@@ -40,7 +40,7 @@ No product code. You may commit and squash-merge a branch that changes only `doc
 
 Done, already on `main`: issues 30, 31, 32, 33, and 34 are open. Issues 23 and 24 are commented. Issues 22, 29, and 34 stay `blocked`. Do not open those titles again.
 
-Open slices. One issue, then a radio note, then the next. If that exact title already exists, comment on it and do not open a second. Label `repo:site` only. The issue body is the matching dev slice in this file. Do not add `ready`. Skip a title that already has an issue. The next title is `Three taxis drive on the map`. Then M2 to M16. Slices 115 to 134 wait. Do not open them. Slices 84 to 114 are already open. Do not open them again. Do not write `queue low` while M1 to M16 are open. Skip a title that already has an issue. Issues 219 to 255 already cover slices 32 to 48. Issues 312 and 263 already exist, so do not open `Receipt names tariff one` or `Two cars move at the same time` again.
+Open slices. One issue, then a radio note, then the next. If that exact title already exists, comment on it and do not open a second. Label `repo:site` only. The issue body is the matching dev slice in this file. Do not add `ready`. Skip a title that already has an issue. The next title is `The sample car is not T1`. Then M16 to M32. Slices 115 to 134 wait. Do not open them. Slices 84 to 114 are already open. Do not open them again. Issues through 455 are already open. Do not write `queue low` while M15 to M32 remain. Skip a title that already has an issue. Issues 219 to 255 already cover slices 32 to 48. Issues 312 and 263 already exist, so do not open `Receipt names tariff one` or `Two cars move at the same time` again.
 
 1. `Office booking fields for pickup and drop-off`
 2. `Office status changes add the fare once`
@@ -195,6 +195,22 @@ M13. `Sidebar lists T1 T2 and T3`
 M14. `A click on a taxi does not add a waypoint`
 M15. `The sample car is not T1`
 M16. `The map does not jump after the player pans`
+M17. `The taxi chip shows the call sign`
+M18. `T1 is amber and T2 is blue and T3 is green`
+M19. `A taxi waits four seconds at the depot`
+M20. `The three taxis do not leave on the same second`
+M21. `Passenger names cycle through Mina Owen Priya Jack Helen and Tom`
+M22. `Hide taxis changes the button to Show taxis`
+M23. `The Shiremoor depot marker stays while a taxi is out`
+M24. `The status line names the taxi and the passenger`
+M25. `A taxi does not write a row into devices`
+M26. `Phones still load when taxis are hidden`
+M27. `Buses still load when taxis are shown`
+M28. `The sample button still says Drive to the Monument and back`
+M29. `The route line stays until the taxi is home`
+M30. `The passenger pin is not a phone marker`
+M31. `Zooming the map does not restart the three taxis`
+M32. `The fleet keeps driving after the sample car is sent out`
 
 Reservoir. Do not open these yet.
 
@@ -244,6 +260,12 @@ F21. Tariff two at 0 yards and 45 seconds stays 315. `FARE-OK`.
 F22. Exact 161.3 yards on tariff one stays 240. Exact 140.5 yards on tariff two stays 315. `FARE-OK`.
 F23. Cash or account does not change the £11.30 hiring. It stays 1130. `FARE-OK`.
 F24. Cancelling the 490 leaves the company day at 2370. The full day stays 2860. `FARE-OK`.
+F25. An empty hiring quotes 0. `FARE-OK`.
+F26. Seven company days stay 20020. That week is not the game week. `FARE-OK`.
+F27. Alex's two fares stay 1620. Sam's night fare stays 1240. The day stays 2860. `FARE-OK`.
+F28. A guide or hearing dog on the £11.30 row keeps that row at 1130. `FARE-OK`.
+F29. 22:00 and 06:59 are tariff two. 07:00 and 21:59 are tariff one. `FARE-OK`.
+F30. The office does not show −7840 or −807840. `FARE-OK`.
 
 Open slices.
 
@@ -327,8 +349,8 @@ Desk slices 45 to 58 and slices 11 to 23 wait. Do not start them. The game is th
 Map fleet. Do these before any waiting desk slice.
 
 M1. Three taxis drive on the map. T1, T2, and T3 leave the Shiremoor depot, collect a virtual passenger, drive the street geometry, and return. This is on `main` in this pass. Skip it if the map already shows the three chips.
-M2. The passenger pin shows the passenger's name and the word `waiting`. The pin leaves when that taxi arrives.
-M3. While the status is `with_passenger`, the tooltip names the passenger.
+M2 is on `main` at `58697ba`. Skip it. M2. The passenger pin shows the passenger's name and the word `waiting`. The pin leaves when that taxi arrives.
+M3 is on `main` at `35501ac`. Skip it. M3. While the status is `with_passenger`, the tooltip names the passenger.
 M4. After the drop-off the status is `returning` until the depot pin. Then it is `at depot`.
 M5. A new passenger appears 4 seconds after the taxi is back at the depot.
 M6. T1, T2, and T3 are on different streets at the same time. None of them is a device.
@@ -342,6 +364,22 @@ M13. The sidebar lists T1, T2, and T3 with the passenger name, or `at depot`.
 M14. Clicking a taxi or a passenger pin does not add a waypoint.
 M15. The sample car stays separate. It is not T1. Both may be on the map.
 M16. After the player pans or zooms, the map does not jump back to the fleet. One real second is one game second. `scripts/taxi_day_check.py` must still print `DAY-OK`, and it must also print `TIME-OK`. Do not edit `app/office.css` or `scripts/taxi_fare.py`. The page may load `app/taxi-fare.js`. A live offer must not change the checked day of −1120.
+M17. The taxi chip shows `T1`, `T2`, or `T3`.
+M18. T1 is amber, T2 is blue, and T3 is green.
+M19. A taxi waits 4 seconds at the depot before the next passenger.
+M20. The three taxis do not leave on the same second.
+M21. The passenger names cycle through Mina, Owen, Priya, Jack, Helen, and Tom.
+M22. Hide taxis changes the button to `Show taxis`. Show taxis brings the three cars back. Phones and buses stay either way.
+M23. The Shiremoor depot marker stays while a taxi is out.
+M24. The status line names the taxi and the passenger.
+M25. A taxi does not write a row into `devices`.
+M26. Phones still load when taxis are hidden.
+M27. Buses still load when taxis are shown.
+M28. The sample button still says `Drive to the Monument and back`. The sample car is not T1.
+M29. The route line stays on the map until the taxi is home.
+M30. The passenger pin is not a phone marker.
+M31. Zooming the map does not restart the three taxis.
+M32. The fleet keeps driving after the sample car is sent out. `DAY-OK` and `TIME-OK`.
 
 Open slices. Use the coordinates already in `scripts/taxi_geo_check.py`. Do not invent a new town.
 
@@ -417,4 +455,4 @@ Reservoir. Do not start these.
 
 On `continue`, lead. Watch productivity against the three objectives: the tracker, the real booking desk, and the real-time empire. Read the radios and the lane checkouts. Do not edit those checkouts. Name the next slice in `## Now`. Keep at least 12 Open slices that are not yet on `origin/main` in front of each lane. Deploy once when product code has merged since the site commit in `## Now`. A radio-only commit is not a deploy.
 
-Last deploy: box site `1582946`, health `0.1.26`, `CHECK-OK`. The three map taxis are on that check. A radio-only commit after that is not a deploy.
+Last deploy: box site `79c0c10`, health `0.1.26`, `CHECK-OK`. The three map taxis and the waiting pins are on that check. A radio-only commit after that is not a deploy.
