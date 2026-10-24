@@ -71,6 +71,31 @@ def worked_week():
     return rows
 
 
+def unpaid_second_car():
+    return {
+        "lines": [],
+        "taxi": {
+            "id": 2,
+            "call_sign": "second",
+            "status": "at_depot",
+            "lat": DEPOT[0],
+            "lng": DEPOT[1],
+        },
+    }
+
+
+def start_unpaid_car():
+    """No purchase line, so the car cannot leave and there is no fare."""
+    return []
+
+
+def fleet_week():
+    """Seven worked days plus the second-car purchase on day 1."""
+    rows = [line("new_car", -NEW_CAR_PENCE, game_day=1, taxi_id=2)]
+    rows.extend(worked_week())
+    return rows
+
+
 def second_car():
     taxi = {
         "id": 2,

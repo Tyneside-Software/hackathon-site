@@ -95,6 +95,10 @@
     return carStatus;
   }
 
+  function startUnpaidCar() {
+    return [];
+  }
+
   function completeWorkedDay() {
     return workedDay();
   }
@@ -138,6 +142,7 @@
     setCarStatus: setCarStatus,
     currentCarStatus: function () { return carStatus; },
     completeWorkedDay: completeWorkedDay,
+    startUnpaidCar: startUnpaidCar,
     workedDay: workedDay,
     cancelBefore: cancelBefore,
     cancelAfterOneMile: cancelAfterOneMile,

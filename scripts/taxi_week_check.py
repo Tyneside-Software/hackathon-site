@@ -27,6 +27,25 @@ def main():
         print(f"week days {days}", file=sys.stderr)
         return 1
     print("WEEK-OK")
+    fleet = taxi_game.fleet_week()
+    if taxi_game.sum_pence(fleet) != -807840:
+        print(f"fleet sum {taxi_game.sum_pence(fleet)}", file=sys.stderr)
+        return 1
+    purchases = [row for row in fleet if row["kind"] == "new_car"]
+    if len(purchases) != 1 or purchases[0]["game_day"] != 1 or purchases[0]["amount_pence"] != -800000:
+        print(f"fleet purchase {purchases}", file=sys.stderr)
+        return 1
+    unpaid = taxi_game.unpaid_second_car()
+    if unpaid["taxi"]["status"] != "at_depot" or "device_id" in unpaid["taxi"]:
+        print("unpaid car left the depot or is a device", file=sys.stderr)
+        return 1
+    if taxi_game.start_unpaid_car() != []:
+        print("unpaid car wrote a fare", file=sys.stderr)
+        return 1
+    if taxi_day_check.has_device_id(fleet):
+        print("a fleet row has a device_id", file=sys.stderr)
+        return 1
+    print("FLEET-OK")
     return 0
 
 
