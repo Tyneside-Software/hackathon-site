@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/482
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/484
 
-Title: Passenger names cycle through Mina Owen Priya Jack Helen and Tom. Label repo:site only. No ready label.
+Title: Hide taxis changes the button to Show taxis. Label repo:site only. No ready label.
 
-Next: Hide taxis changes the button to Show taxis
+Next: The Shiremoor depot marker stays while a taxi is out
