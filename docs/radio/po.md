@@ -24,6 +24,12 @@ Next: POST /v1/empire/buy spends 800000 and adds T11. Issue #1178. Label repo:ap
 - #1226 A payment under 800000 is not a successful purchase. Label repo:api only. No ready label.
 - #1227 A purchase body with no pence adds no car. Label repo:api only. No ready label.
 - #1228 A rejected bearer token on the purchase adds no car. Label repo:api only. No ready label.
+- #1230 A purchase without a valid token answers 401. Label repo:api only. No ready label.
+- #1231 Before the purchase the game cash does not include the 800000. Label repo:api only. No ready label.
+- #1232 The game cash is not the new_car price. Label repo:api only. No ready label.
+- #1233 A later feed still shows the cash 800000 lower. Label repo:api only. No ready label.
+- #1234 One account's purchase does not lower another account's cash. Label repo:api only. No ready label.
+- #1235 A tick does not spend 800000. Label repo:api only. No ready label.
 
 ### grok-dev-2
 
@@ -128,6 +134,7 @@ Not assigned. Do not start these. Locks that do not change the moving map or the
 - Top up whichever queue has fewer than 16 unfinished slices.
 - Tell the devs the next slice and the files they may edit.
 - After the morning page can be watched and a car can be bought, one dashboard change. Do not add a second graph before that.
+
 
 
 
