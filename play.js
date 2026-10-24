@@ -212,6 +212,20 @@
     if (form) form.hidden = true;
   }
 
+  function clearPlayChips() {
+    playChips.forEach((marker) => map.removeLayer(marker));
+    playChips.clear();
+    const list = document.getElementById("play-taxi-list");
+    if (list) list.textContent = "";
+  }
+
+  function signOutPlay() {
+    localStorage.removeItem("hackathon-empire-token");
+    localStorage.removeItem("hackathon-empire-user");
+    clearPlayChips();
+    paintPlayStatus(null);
+  }
+
   async function signInPlay(event) {
     event.preventDefault();
     const usernameEl = document.getElementById("play-username");
@@ -329,6 +343,8 @@
 
   const playAccount = document.getElementById("play-account");
   if (playAccount) playAccount.addEventListener("submit", signInPlay);
+  const playSignOut = document.getElementById("play-signout");
+  if (playSignOut) playSignOut.addEventListener("click", signOutPlay);
   paintPlayStatus(null);
   setInterval(pollPlay, 2000);
   pollPlay();
