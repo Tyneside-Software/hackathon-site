@@ -6,6 +6,7 @@
   <title>Tyneside Logistics — empire</title>
   <link rel="icon" href="logo.svg" type="image/svg+xml">
   <link rel="stylesheet" href="styles.css?v=20261009-board11">
+  <link rel="stylesheet" href="app/office.css">
 </head>
 <body class="site">
   <nav class="site-nav" aria-label="Primary">
@@ -35,6 +36,7 @@
 
   <main class="wrap" style="padding: 1.5rem 0 3rem">
     <p class="hero-kicker">Empire · Shiremoor depot</p>
+    <p class="desk-banner">Simulated data</p>
     <h1 style="font-size:1.7rem;margin-bottom:0.4rem">One empire day</h1>
     <p class="lede">The depot is Shiremoor. The worked day below is the example already checked at −1120 pence. This page does not call the API.</p>
     <p id="clock"></p>
@@ -45,6 +47,7 @@
     <p id="two-out"></p>
     <p id="fare-row"></p>
     <p id="berwick-out"></p>
+    <p id="banner-stays"></p>
     <p id="short-trip"></p>
     <p id="live-fare"></p>
     <p id="fleet-move"></p>
@@ -180,6 +183,16 @@
     document.getElementById("berwick-out").textContent = !berwickKept && liveOffers.length === 3
       ? "Berwick stays out. A point that far out is discarded."
       : "The generator returned Berwick.";
+    paintOffers();
+    var banner = document.querySelector(".desk-banner");
+    var shown = document.body.textContent;
+    document.getElementById("banner-stays").textContent = banner
+      && banner.textContent === "Simulated data"
+      && shown.indexOf("28" + "60") < 0
+      && shown.indexOf("11" + "30") < 0
+      && shown.indexOf("12" + "40") < 0
+      ? "Simulated data stays while offers arrive."
+      : "The banner left while offers arrived.";
     var sample = game.waitingOffers(40);
     var sampleTaken = game.acceptOffer(sample, depotCars);
     document.getElementById("offer-sample").textContent = sample.length === 2

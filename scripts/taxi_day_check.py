@@ -1,6 +1,7 @@
 """Print DAY-OK when the worked day matches the page."""
 
 import sys
+from pathlib import Path
 
 import taxi_game
 
@@ -341,6 +342,14 @@ def main():
     for offer in taxi_game.waiting_offers(60):
         if offer["dropoff"] == taxi_game.BERWICK or taxi_game.discard_far(offer["dropoff"]) is None:
             print(f"the generator returned {offer['dropoff']}", file=sys.stderr)
+            return 1
+    page = Path(__file__).resolve().parents[1].joinpath("game.html").read_text(encoding="utf-8")
+    if '<p class="desk-banner">Simulated data</p>' not in page:
+        print("the simulated banner left the page", file=sys.stderr)
+        return 1
+    for banned in ("2860", "1130", "1240"):
+        if banned in page:
+            print(f"the page showed {banned}", file=sys.stderr)
             return 1
     posted_trip = taxi_game.post_live_trip(7, 3, ())
     posted_kinds = [row["kind"] for row in posted_trip["lines"]]
