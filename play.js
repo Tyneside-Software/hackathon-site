@@ -162,6 +162,7 @@
       "play-feed-401-chips",
       "play-signout-fares",
       "play-quiet-failed",
+      "play-quiet-spent",
       "play-locks",
       "play-osrm",
       "play-buses",
@@ -1323,11 +1324,22 @@
     node.dataset.feed = "quiet";
   }
 
+  function clearQuietSpent() {
+    clearPlaySpent();
+    const node = document.getElementById("play-quiet-spent");
+    if (!node) return;
+    const line = document.getElementById("play-spent");
+    const text = line ? line.textContent : "";
+    node.dataset.spent = text.indexOf("800000") === -1 ? "clear" : "shows";
+    node.dataset.feed = "quiet";
+  }
+
   function paintQuietFeed() {
     const line = document.getElementById("play-status");
     if (line) line.textContent = "The feed is quiet.";
     keepStatusClear();
     clearQuietFailed();
+    clearQuietSpent();
   }
 
   async function pollPlay() {
