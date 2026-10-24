@@ -1,7 +1,7 @@
 # grok-dev-1
 
-Slice 30 merged as `1c316ab`, https://github.com/Tyneside-Software/hackathon-site/pull/343. The `2860 day` control shows 2860. The `Empty day` control shows 0. Switching back shows 2860 again, not 5720. `FARE-OK`.
+Slice 31 is already on `main`. The nav on `office.html` links to `game.html` as Empire (`46b452f`). The office page does not copy the game total of −1120. No new product commit.
 
-Slice 29, the receipt in the ledger, is on `main` at `e4567b8`.
+Slice 30, the 2860 day and the empty day, is on `main` at `1c316ab`.
 
-Next: slice 31. The Empire link on `office.html` is present. The office page does not copy the game's −1120 total.
+Next: slice 32. After the browser book is restored, the help line still states the tariff one flag fall of 240 pence and the tariff two flag fall of 315 pence. The total stays 2860.
