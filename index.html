@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Tyneside Logistics</title>
-  <meta name="description" content="Tyneside Logistics — dispatch to field work. Hackathon increment: desktop site + route visualiser.">
+  <meta name="description" content="24 October 2026. Tracker, real booking office, and real-time Shiremoor empire. The briefing is on this page and on Progress.">
   <link rel="icon" href="logo.svg" type="image/svg+xml">
   <link rel="stylesheet" href="styles.css">
 </head>
@@ -38,57 +38,47 @@
 
   <header class="hero">
     <div class="wrap">
-      <p class="hero-kicker">Hackathon night · local-first · releasable each card</p>
+      <p class="hero-kicker">24 October 2026 · this page is the briefing</p>
       <h1>TYNESIDE<br>LOGISTICS</h1>
       <p class="hero-tag">
-        Dispatch → field work.<br>
-        Phase 1 spine: jobs, workers, routes.
+        A tracker, a real booking office,<br>
+        and a real-time taxi empire.
       </p>
       <p class="hero-lead">
-        Tonight we start where the product is weakest and most visible:
-        <strong>a working desktop site</strong> and a
-        <strong>maps / route visualiser</strong> with waypoints.
-        No Cloud Run until Michael is back. Everything here runs on your machine.
+        The public site and the Linux box serve the same <code>main</code>.
+        A push updates <a href="https://hackathon.tyneside.software/progress.html">hackathon.tyneside.software</a>.
+        The box at <a href="http://100.65.94.5/">100.65.94.5</a> is that copy plus the API.
+        The last check was commit <code>1a4c065</code>, health 0.1.26, and <code>check.ps1</code> printed CHECK-OK.
       </p>
       <div class="hero-actions">
-        <a class="btn btn-fill" href="app/">Route visualiser →</a>
-        <a class="btn btn-ghost" href="progress.html">Current progress</a>
-        <a class="btn btn-ghost" href="onboarding.html">Onboarding</a>
-        <a class="btn btn-ghost" href="board.html">Kanban board</a>
-        <a class="btn btn-ghost" href="docs/">Docs wiki</a>
-        <a class="btn btn-ghost" href="api-test.html">Alpine API test</a>
-        <a class="btn btn-ghost" href="account.html">Account</a>
-        <a class="btn btn-ghost" href="lewis.html">Lewis's log</a>
+        <a class="btn btn-fill" href="progress.html">Progress →</a>
+        <a class="btn btn-ghost" href="office.html">Office</a>
+        <a class="btn btn-ghost" href="game.html">Empire</a>
+        <a class="btn btn-ghost" href="app/">Map</a>
       </div>
     </div>
   </header>
 
   <section class="section">
     <div class="wrap">
-      <div class="board-banner">
-        <div>24 October 2026. The office and the empire are on the live box. Read <a href="progress.html">Progress</a> for the briefing.</div>
-        <div class="btns">
-          <a class="btn btn-fill" href="progress.html">Progress →</a>
-        </div>
-      </div>
-      <h2>This increment is live</h2>
-      <p class="lede">The site is meant to look working at every step. Open the map, drop waypoints, get a route.</p>
+      <h2>Where we are</h2>
+      <p class="lede">Read this page. The long September notes live on <a href="progress.html#brief">Progress</a>, under September snapshot. They are not the current product.</p>
       <div class="grid-2">
         <div class="panel">
-          <h3>Desktop chrome</h3>
-          <p>Same family as tyneside.software: sticky nav, amber logistics skin, honest copy. This page is that slice.</p>
+          <h3>Tracker</h3>
+          <p>Many phones, children, cars, and other things, linked to many people. Issues 22 and 29 stay blocked, so the live database is not migrated. The map still shows every device. Game taxis are not devices.</p>
         </div>
         <div class="panel">
-          <h3>Map + waypoints</h3>
-          <p>Click the map to pin a stop. Route uses public OSRM when the network is up; otherwise a straight-line fallback so it never looks broken.</p>
+          <h3>Booking office</h3>
+          <p><a href="office.html">office.html</a> is the real company. The banner says <strong>Real data</strong>. It opens on an empty day, total 0, with the sentence <strong>No bookings yet</strong>. <strong>Restore day</strong> brings the 2860 book: Alex 1620, Sam 1240. The company ledger never shows −1120.</p>
         </div>
         <div class="panel">
-          <h3>Local, not Cloud Run</h3>
-          <p>First two hours: <code>serve.ps1</code> for the site, optional local API on :8080. Persistence and accounts wait until the backend is up.</p>
+          <h3>Empire</h3>
+          <p><a href="game.html">game.html</a> is the same desk with simulated rows. The banner says <strong>Simulated data</strong>. One real second is one game second. Offers arrive every 20 seconds and stop at 3. Cars T1, T2, and T3 drive the route. The checked day stays −1120.</p>
         </div>
         <div class="panel">
-          <h3>What this is for</h3>
-          <p>Tyneside Logistics: iCabbi-class dispatch, then cleaning on the same spine. Docs live on tyneside.software/logistics. Tonight we prove the visual layer.</p>
+          <h3>Next</h3>
+          <p>Office: cancelling the 490 pence mile leaves 2370, and the 2860 day can be selected again. Empire: a completed 3-mile tariff-one row shows £10.40. Issues: the next title is <strong>Empty day shows no bookings yet</strong>. The full list is <a href="docs/radio/integrator.md">docs/radio/integrator.md</a>.</p>
         </div>
       </div>
     </div>
