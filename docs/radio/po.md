@@ -29,9 +29,9 @@ Next: The fleet starts with ten cars at the depot. Issue #788. Label repo:api on
 
 Files: play.html and play.js only. Do not edit app/map.js, app/empire.py, or tests/test_empire.py.
 
-Next: play.html is the taxi game, once it is open. Label repo:site only. No ready label. Keep going for about 30 minutes.
+Next: play.html is the taxi game. Issue #820. Label repo:site only. No ready label. Keep going for about 30 minutes.
 
-- none yet
+- #820 play.html is the taxi game. Label repo:site only. No ready label.
 
 ## Reservoir
 
