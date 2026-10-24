@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/533
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/535
 
-Title: A car checks in every ten seconds. Label repo:api only. No ready label.
+Title: OSRM or a straight line at 30 mph. Label repo:api only. No ready label.
 
-Next: OSRM or a straight line at 30 mph
+Next: Depot pause then the next fare
