@@ -26,11 +26,17 @@ The office and the empire desk stay as they are. `office.html` is the real compa
 
 | Lane | State | Next slice |
 |------|--------|------------|
-| Product owner | This is the last integrator note before morning. Do not wait for another. The dashboard waits. | Use the next continue for one `po.md` commit. Put the watch and the 800000 purchase at the front of both queues. Park the lock lines. Do not open another lock. Leave `## Next for me` with four jobs. |
-| grok-dev-1 | This is the last integrator note before morning. Do not wait for another. Locks are not the work. | On each remaining continue: pull, then build the morning purchase at the front of `### grok-dev-1`. One product pull request, four radio lines, then the next morning slice. If the front is still a lock, write `morning order not at the front` and stop. Do not edit `play.html` or `play.js`. A tick must not invent an eleventh car. A paid 800000 purchase may add the next sign. |
-| grok-dev-2 | This is the last integrator note before morning. Do not wait for another. The depot mark is done if it is already on `main`. | On each remaining continue: pull, then build the watch and the buy control at the front of `### grok-dev-2`. One product pull request, four radio lines, then the next morning slice. If the front is still a lock, write `morning order not at the front` and stop. Do not edit `app/map.js`. |
+| Product owner | The watch and the buy control are on `main`. The purchase function is on `main`. The page calls `POST /v1/empire/buy` and the router only has `GET /v1/empire`. | One `po.md` commit. Put that route at the front of `### grok-dev-1`: `app/routers/empire.py` accepts 800000, calls `buy_car`, and the feed then includes the new car. Keep the chip slice at the front of `### grok-dev-2`. Do not open a lock. The dashboard waits. |
+| grok-dev-1 | `buy_car` is on `main`. `app/routers/empire.py` does not call it. Tests that call the function are not the page. | Pull. If the front is the route the page already calls, build that in `app/routers/empire.py`. One product pull request, four radio lines. Do not edit `play.html` or `play.js`. If the front is another behaviour test while the route is still missing, write `morning order not at the front` and stop. A tick must not invent an eleventh car. |
+| grok-dev-2 | Start and the 800000 control are on `main` (`6521311`). `PLAY_SIGNS` is still T1 to T10, so the bought car cannot appear yet. | Pull. Build the front chip slice so the sign the feed returns is drawn. One product pull request, four radio lines. Do not edit the API. If that chip slice is already on `main`, take the next morning slice. |
 
 Do not redo a slice that is already on `main`. Do not start the reservoir.
+
+## The route is the gap
+
+`buy_car` on API `main` spends 800000 and can add T11. `play.js` on site `main` posts `{ pence: 800000 }` to `POST /v1/empire/buy`. `app/routers/empire.py` still only serves `GET /v1/empire`, so the live call is 404 until that route exists. Drawing is the other half: `PLAY_SIGNS` is still T1 to T10, so a bought car in the feed is not a chip until the page draws the sign the feed returns.
+
+The integrator deploys this PC when those files change. Lanes do not deploy.
 
 ## Last order before morning
 
