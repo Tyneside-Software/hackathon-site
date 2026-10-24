@@ -10,17 +10,15 @@ The dashboard compares GitHub with the live box, and each code line-count graph 
 
 Files in hackathon-api only: app/empire.py, app/routers/empire.py, tests/test_empire.py. Do not edit play.html, play.js, or scripts/agents_dashboard.py.
 
-Skip these. They are already on main: #808, #810, #812, #814, #816, #818, #921, #923, #926, #932, #936, #943, #948, #952, #954, #959, #970, #973, #975, #979, #988, #1010, #1011, #1012, #1013, #1014.
+Skip these. They are already on main: #808, #810, #812, #814, #816, #818, #921, #923, #926, #932, #936, #943, #948, #952, #954, #959, #970, #973, #975, #979, #988, #1010, #1011, #1012, #1013, #1014, #1126, #1127, #1128, #1129, #1130, #1131, #1132.
 
-Next: A paid 800000 adds one car and keeps the ten. Issue #1126. Label repo:api only. No ready label. Keep going for about 30 minutes.
+Next: POST /v1/empire/buy spends 800000 and adds T11. Issue #1178. Label repo:api only. No ready label. Keep going for about 30 minutes.
 
-- #1126 A paid 800000 adds one car and keeps the ten. Label repo:api only. No ready label.
-- #1127 The ten-car feed grows by the bought car. Label repo:api only. No ready label.
-- #1128 A payment under 800000 does not add a car. Label repo:api only. No ready label.
-- #1129 Buying a car leaves fuel and standing unchanged. Label repo:api only. No ready label.
-- #1130 The bought car is not a device. Label repo:api only. No ready label.
-- #1131 A purchase adds a car only to that account. Label repo:api only. No ready label.
-- #1132 The bought car starts at the Shiremoor depot. Label repo:api only. No ready label.
+- #1178 POST /v1/empire/buy spends 800000 and adds T11. Label repo:api only. No ready label.
+- #1180 A negative game cash still allows the 800000 purchase. Label repo:api only. No ready label.
+- #1184 POST /v1/empire/buy without a token adds no car. Label repo:api only. No ready label.
+- #1185 POST /v1/empire/buy uses the token account. Label repo:api only. No ready label.
+- #1186 GET /v1/empire after the buy lists T11 and the ten. Label repo:api only. No ready label.
 - #1133 The bought car colour is 2dd4bf. Label repo:api only. No ready label.
 - #1134 One purchase adds T11 and not T12. Label repo:api only. No ready label.
 - #1135 One purchase spends 800000 once. Label repo:api only. No ready label.
@@ -37,16 +35,10 @@ Next: A paid 800000 adds one car and keeps the ten. Issue #1126. Label repo:api 
 
 Files: play.html and play.js only. Do not edit app/map.js, app/empire.py, tests/test_empire.py, or scripts/agents_dashboard.py.
 
-Skip these. They are already on main: #836, #838, #840, #842, #845, #847, #849, #851, #928, #930, #939, #941, #945, #950, #956, #961, #977, #982, #991, #993, #1022, #1023, #1024, #1025.
+Skip these. They are already on main: #836, #838, #840, #842, #845, #847, #849, #851, #928, #930, #939, #941, #945, #950, #956, #961, #977, #982, #991, #993, #1022, #1023, #1024, #1025, #1136, #1137, #1138, #1139, #1140, #1141.
 
-Next: The play map is the page. Issue #1136. Label repo:site only. No ready label. Keep going for about 30 minutes.
+Next: The play map shows the ten taxis moving. Issue #1142. Label repo:site only. No ready label. Keep going for about 30 minutes.
 
-- #1136 The play map is the page. Label repo:site only. No ready label.
-- #1137 One Start opens the ten-car map. Label repo:site only. No ready label.
-- #1138 A dead play token does not leave an empty map. Label repo:site only. No ready label.
-- #1139 A play control buys the next car for 800000. Label repo:site only. No ready label.
-- #1140 The bought car chip appears on the play map. Label repo:site only. No ready label.
-- #1141 Play lock sentences sit below the map. Label repo:site only. No ready label.
 - #1142 The play map shows the ten taxis moving. Label repo:site only. No ready label.
 - #1143 The play money stays visible beside the moving map. Label repo:site only. No ready label.
 - #1144 The play buy control shows 800000 and no second price. Label repo:site only. No ready label.
