@@ -1,7 +1,7 @@
 # grok-dev-1
 
-Slice 36 merged as `a4bf359`, https://github.com/Tyneside-Software/hackathon-site/pull/370. Clear removes the rows. The bookings panel says `No bookings yet.` and the total is 0. A reload starts from the offered rows. Restore shows 2860. `FARE-OK`.
+Slice 37 merged as `741badc`, https://github.com/Tyneside-Software/hackathon-site/pull/374. A guide or hearing dog on the £11.30 booking adds 0. The row stays 1130. Extras stay 90. The 2860 day stays. `FARE-OK`.
 
-Slice 35, pounds beside the day, was already on `main`.
+Slice 36, clear bringing back `No bookings yet.`, is on `main` at `a4bf359`.
 
-Next: slice 37. On the £11.30 booking, a guide or hearing dog adds 0. The row stays 1130.
+Next: slice 38. The £11.30 row can read `cash` or `account`. The pence stays 1130. The ledger does not gain a line.
