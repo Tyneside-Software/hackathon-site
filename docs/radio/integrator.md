@@ -14,13 +14,29 @@ The product brief is `docs/TAXI.md`. Do not invent a second fare table, a second
 
 Queue depth is in `docs/radio/README.md`. Each of the three lanes keeps at least 8 Open slices that are not yet on `origin/main`.
 
+## Now
+
+The integrator leads on `continue`. The only products are the tracker, the booking office, and the empire game in `docs/TAXI.md`.
+
+The tracker model is agreed. Issues 22 and 29 stay `blocked`. Do not migrate the live database. The office and the empire are the work in progress.
+
+| Lane | State | Next slice |
+|------|--------|------------|
+| Product owner | On task. Issues through 70 are open, up to the meter-and-extras quote. | `Office refuses a Berwick booking by name`, then the rest of the list through slice 27. Do not stop after one issue. |
+| grok-dev-1 | On task. Slices 1 to 3 are on `main` (`5c34052`, `944aadc`, `dcc53b1`). | Slice 4. Flag-fall buttons: mixed 265, tariff two at 140.5 yards is 315, tariff two at 45 seconds is 315, tariff one at 161.3 yards is 240. `FARE-OK`. Then slice 5. |
+| grok-dev-2 | On task. Slices 1 and 2 are on `main` (`4bb7f9b`, `107b62c`). The status slice is in progress on `lane/grok-dev-2/status`. | Finish that slice and merge it. Completing the worked day still shows −1120 once. Then slice 4, the Berwick job. |
+
+Do not redo a slice that is already on `main`. Do not start the reservoir.
+
+The box site is `694f0c3`. `/health` is `0.1.26`. `.\scripts\check.ps1` printed `CHECK-OK`. That deploy includes the office fields, the once-only fare, the places list, and the sample pins. A later radio commit is not another deploy.
+
 ## Product owner
 
 No product code. You may commit and squash-merge a branch that changes only `docs/radio/po.md`.
 
 Done, already on `main`: issues 30, 31, 32, 33, and 34 are open. Issues 23 and 24 are commented. Issues 22, 29, and 34 stay `blocked`. Do not open those titles again.
 
-Open slices. One issue, then a radio note, then the next. If that exact title already exists, comment on it and do not open a second. Label `repo:site` only. The issue body is the matching dev slice in this file. Do not add `ready`.
+Open slices. One issue, then a radio note, then the next. If that exact title already exists, comment on it and do not open a second. Label `repo:site` only. The issue body is the matching dev slice in this file. Do not add `ready`. Skip a title that already has an issue. The next title is `Office refuses a Berwick booking by name`.
 
 1. `Office booking fields for pickup and drop-off`
 2. `Office status changes add the fare once`
@@ -77,7 +93,7 @@ You own the fare maths and the office desk. You may edit `scripts/taxi_fare.py`,
 
 Do not rewrite the locked results: 490, 1040, 615, 1240, 1130, 265, 2370, 2860, and 12500. Money is integer pence. `py -3 scripts\taxi_fare_check.py` must print `FARE-OK` before each merge. The company ledger is not the game ledger. No driver share, no fuel, no standing, and no new-car cost on this desk. No API call and no database.
 
-Done, on `fa3b6e3`: the office desk, the £11.30 and £12.40 rows, the mixed button at 265, the company day at 2860, the cancelled mile at 2370, the empty hiring at 0, and soiling-only at 12500.
+Done, on `fa3b6e3`: the office desk, the £11.30 and £12.40 rows, the mixed button at 265, the company day at 2860, the cancelled mile at 2370, the empty hiring at 0, and soiling-only at 12500. Open slices 1 to 3 are also on `main` (`5c34052`, `944aadc`, `dcc53b1`). Skip them.
 
 Open slices.
 
@@ -113,7 +129,7 @@ You own the circle, the game ledger, the sample car, and the map drawing for thi
 
 `GEO-OK`, `DAY-OK`, and `WEEK-OK` must pass before each merge that touches those scripts. The one-car worked day stays −1120 pence. Seven of those days stay −7840. A new car stays −800000 and never has a `device_id`. No API call. Do not import the office ledger and do not show 2860, 1130, or 1240 as game cash. The priced fare in the worked day stays 1040. Do not price Hexham, Durham, or Sunderland by distance.
 
-Done, on `e4a2c1c`: the checkers, `game.html`, the 80467 metre circle, the `Shiremoor depot` marker, and the sample car that asks OSRM or shows `OSRM unavailable` without repricing the day.
+Done, on `e4a2c1c`: the checkers, `game.html`, the 80467 metre circle, the `Shiremoor depot` marker, and the sample car that asks OSRM or shows `OSRM unavailable` without repricing the day. Open slices 1 and 2 are also on `main` (`4bb7f9b`, `107b62c`). Skip them.
 
 Open slices. Use the coordinates already in `scripts/taxi_geo_check.py`. Do not invent a new pin.
 
@@ -143,6 +159,6 @@ Reservoir. Do not start these.
 
 ## Integrator
 
-The office worksheet `fa3b6e3` and the empire page `e4a2c1c` are on `origin/main`. `.\scripts\box.ps1 update` fast-forwarded the box site to `7ce7d63`. `/health` returned version `0.1.26`. `.\scripts\check.ps1` printed `CHECK-OK` (board 50, 9 todo, 2 ready, 39 done, buses sqlite). Do not deploy this refill. The next deploy waits until a later product slice has merged.
+On `continue`, lead. Read the three radio files and look at the lane checkouts. Do not edit those checkouts. Name the next slice in `## Now`. Top up any lane with fewer than 8 Open slices not yet on `origin/main`. Deploy once when product code has merged since the site commit in `## Now`. Write the result back here. A radio-only commit is not a deploy.
 
-On `continue`, top up any lane that has fewer than 8 Open slices not yet on `origin/main`, then read the other radio files. Deploy only after product code has merged, once, then write the result here.
+Last deploy: box site `694f0c3`, health `0.1.26`, `CHECK-OK` (board 50, 9 todo, 2 ready, 39 done, buses sqlite). Do not deploy this leadership note.

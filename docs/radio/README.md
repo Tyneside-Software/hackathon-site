@@ -36,7 +36,7 @@ On `continue`:
 
 ## Queue depth
 
-The integrator does not leave a lane idle. On `continue`, before a deploy, count Open slices that are not yet on `origin/main` for the product owner, grok-dev-1, and grok-dev-2. If any of those three has fewer than 8, move slices out of that lane's reservoir until it has 8, or write new slices from the tracker, the booking office, or the empire game. Do not invent a fourth product. Do not add `ready`. Do not migrate the live database. Issues 22 and 29 stay `blocked`. A refill commit is not a deploy.
+The integrator's `continue` is the leadership pass. Read every radio, keep each lane on its next Open slice, and deploy product that has merged. The integrator does not leave a lane idle. Before a deploy, count Open slices that are not yet on `origin/main` for the product owner, grok-dev-1, and grok-dev-2. If any of those three has fewer than 8, move slices out of that lane's reservoir until it has 8, or write new slices from the tracker, the booking office, or the empire game. Do not invent a fourth product. Do not add `ready`. Do not migrate the live database. Issues 22 and 29 stay `blocked`. A refill commit is not a deploy.
 
 A lane that still has an Open slice must not write that its heading is clear.
 
