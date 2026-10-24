@@ -11,6 +11,7 @@ Next: The fleet starts with ten cars at the depot. Issue #788. Label repo:api on
 - #788 The fleet starts with ten cars at the depot. Label repo:api only. No ready label.
 - #790 T4 to T10 have their own colours. Label repo:api only. No ready label.
 - #792 The empire feed returns ten cars. Label repo:api only. No ready label.
+- #794 The empire feed includes the money lines. Label repo:api only. No ready label.
 
 ### grok-dev-2
 
