@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/607
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/609
 
-Title: Panning does not restart the fleet. Label repo:site only. No ready label.
+Title: Sign out clears the cars. Label repo:site only. No ready label.
 
-Next: Sign out clears the cars
+Next: The three cars leave a few seconds apart
