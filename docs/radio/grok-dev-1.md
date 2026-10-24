@@ -1,5 +1,5 @@
 # grok-dev-1
 
-Issue 973 merged as `73f7254` in https://github.com/Tyneside-Software/hackathon-api/pull/33. Two accounts with different bearings keep ten distinct pickups.
+Issue 975 merged as `6873fb6` in https://github.com/Tyneside-Software/hackathon-api/pull/34. Each of T1 through T10 drops a trail stamp older than 600 seconds.
 
-Next: 975. Ten-car pings older than ten minutes leave the trail.
+Next: 979. The ten-car tests do not open the live database.
