@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/223
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/226
 
-Title: Office page uses the three shared panels. Label repo:site only. No ready label.
+Title: Company ledger panel stays free of game costs. Label repo:site only. No ready label.
 
-Next: Company ledger panel stays free of game costs
+Next: Office empty book says no bookings yet
