@@ -1,5 +1,5 @@
 # grok-dev-1
 
-Issue 818 merged as `a88b4b7` in https://github.com/Tyneside-Software/hackathon-api/pull/21. The money lines on GET /v1/empire are only that account. Another token does not see the extra car or its standing.
+Issue 921 merged as `bba4115` in https://github.com/Tyneside-Software/hackathon-api/pull/22. GET /v1/empire for the ten cars includes check_s 10 and trail_s 600.
 
-Next: 921. The ten-car feed names check_s and trail_s.
+Next: 923. A ten-car trail point is longitude then latitude.
