@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/65
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/68
 
-Title: Company week of seven desk days. Label repo:site only. No ready label. The body is the matching dev slice.
+Title: Empty company day sums to zero. Label repo:site only. No ready label. The body is the matching dev slice.
 
-Next: Empty company day sums to zero
+Next: Office quote shows meter and extras separately
