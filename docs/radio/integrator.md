@@ -24,15 +24,15 @@ The office and the empire are the same booking desk. `office.html` is the real c
 
 | Lane | State | Next slice |
 |------|--------|------------|
-| Product owner | On task. Issue 203 is the car driving back to the depot. | Slice 71, `Live fuel at 20 pence a mile`. Then 72 to 76, then 32 to 50. Do not stop. Skip a title that already has an issue. |
-| grok-dev-1 | On task. Slice 16, the two flag falls, is on `main` at `6296b30`. A radio line that still asks for slice 16 is stale. | Slice 17. Add the banner `Real data` and set the heading to `Booking desk`. Then slices 18 to 31. Do not stop. |
-| grok-dev-2 | On task. Slice 27, the moving sample car, is on `main` at `e06313d` and on the live site. | Slice 28. A new fare every 20 seconds until 3 are waiting. At 20, 40, and 60 seconds there are 1, 2, and 3 offers. At 80 seconds there are still 3. Then slices 29 to 38. Slices 11 to 23 still wait. |
+| Product owner | On task. Issue 211 is the cap of three waiting fares. | Slice 74, `A live trip posts its fare once`. Then 75 and 76, then slices 32 to 50. Do not stop. Skip a title that already has an issue. |
+| grok-dev-1 | On task. Slice 17 is in progress on `lane/grok-dev-1/real-banner`. | Finish it and merge it. The banner says `Real data` and the heading is `Booking desk`. Then slice 18, the three panels `Quote`, `Bookings`, and `Ledger`. Then slices 19 to 31. Do not stop. |
+| grok-dev-2 | On task. Slice 28, a fare every 20 seconds, is on `main` at `eb07f17`. A radio line that still asks for slice 28 is stale. | Slice 29. A live trip is inside the circle, not Berwick, and between 1 and 8 miles. Then slices 30 to 38. Slices 11 to 23 still wait. |
 
 Do not redo a slice that is already on `main`. Do not start the reservoir.
 
 The empire is a real-time game. One real second is one game second. There is no faster clock. When OSRM returns a duration, that duration is the journey. The car moves along the route as those seconds pass. When OSRM does not answer, the car moves in a straight line at 30 miles per hour, the built-up speed limit, and the page says `OSRM unavailable`. A new fare is offered every 20 real seconds while fewer than 3 offers are waiting. Each trip is inside the circle, not Berwick, and between 1 and 8 miles, so the drive is a few minutes rather than an hour. The checked day stays −1120. The company desk is unchanged.
 
-The box site is `1f3eeba`. `/health` is `0.1.26`. `.\scripts\check.ps1` printed `CHECK-OK`. Negative miles, the moving sample car, and the two flag falls are on the live site. A later radio-only commit is not another deploy.
+The box site was `1f3eeba`. The fare timer `eb07f17` is not on the box yet. Deploy after this note. The `Real data` banner is still on a lane branch, so this deploy does not show it. A later radio-only commit is not another deploy.
 
 ## Product owner
 
@@ -40,7 +40,7 @@ No product code. You may commit and squash-merge a branch that changes only `doc
 
 Done, already on `main`: issues 30, 31, 32, 33, and 34 are open. Issues 23 and 24 are commented. Issues 22, 29, and 34 stay `blocked`. Do not open those titles again.
 
-Open slices. One issue, then a radio note, then the next. If that exact title already exists, comment on it and do not open a second. Label `repo:site` only. The issue body is the matching dev slice in this file. Do not add `ready`. Skip a title that already has an issue. The next title is `Live fuel at 20 pence a mile`. Skip a title that already has an issue. Then open slices 72 to 76 before slices 32 to 50.
+Open slices. One issue, then a radio note, then the next. If that exact title already exists, comment on it and do not open a second. Label `repo:site` only. The issue body is the matching dev slice in this file. Do not add `ready`. Skip a title that already has an issue. The next title is `A live trip posts its fare once`. Skip a title that already has an issue. Then slices 75 and 76, then slices 32 to 50.
 
 1. `Office booking fields for pickup and drop-off`
 2. `Office status changes add the fare once`
@@ -244,4 +244,4 @@ Reservoir. Do not start these.
 
 On `continue`, lead. Watch productivity against the three objectives: the tracker, the real booking desk, and the real-time empire. Read the radios and the lane checkouts. Do not edit those checkouts. Name the next slice in `## Now`. Keep at least 12 Open slices that are not yet on `origin/main` in front of each lane. Deploy once when product code has merged since the site commit in `## Now`. A radio-only commit is not a deploy.
 
-Last deploy: box site `1f3eeba`, health `0.1.26`, `CHECK-OK`. Do not deploy a later radio-only note.
+Last deploy: box site `1f3eeba`, health `0.1.26`, `CHECK-OK`. The fare timer is newer. Deploy once after this note. Do not deploy a later radio-only note.
