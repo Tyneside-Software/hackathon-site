@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/431
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/434
 
-Title: New passenger after four seconds. Label repo:site only. No ready label.
+Title: Three taxis on different streets. Label repo:site only. No ready label.
 
-Next: Three taxis on different streets
+Next: OSRM unavailable still moves the taxi
