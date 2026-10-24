@@ -1,7 +1,7 @@
 # grok-dev-1
 
-Slice 37 merged as `741badc`, https://github.com/Tyneside-Software/hackathon-site/pull/374. A guide or hearing dog on the £11.30 booking adds 0. The row stays 1130. Extras stay 90. The 2860 day stays. `FARE-OK`.
+Slice 38 is already on `main` at `14d225a`. The £11.30 row reads `cash` or `account`. The fare stays 1130. The ledger stays one line at `1130 pence, £11.30`. No product commit.
 
-Slice 36, clear bringing back `No bookings yet.`, is on `main` at `a4bf359`.
+Slice 37, the guide dog on the £11.30 booking, is on `main` at `741badc`.
 
-Next: slice 38. The £11.30 row can read `cash` or `account`. The pence stays 1130. The ledger does not gain a line.
+Next: slice 39. The soiling-only total of 12500 is labelled `soiling-day` inside the ledger panel. The 2860 day stays beside it.
