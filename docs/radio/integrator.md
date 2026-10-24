@@ -25,12 +25,12 @@ The office and the empire are the same booking desk. `office.html` is the real c
 | Lane | State | Next slice |
 |------|--------|------------|
 | Product owner | The old list is done and the radio says `queue low`. | Slice 32, `Real data banner on the office desk`, then every new title below. Do not stop. Skip a title that already has an issue. |
-| grok-dev-1 | On task. Slices 1 to 8 are on `main`, through `157265a`. | Slice 9, the browser book under `hackathon-office-day`. Then keep going. Slice 17 starts the shared desk. |
+| grok-dev-1 | On task. Slices 1 to 9 are on `main`, through the browser book at `ce8b980`. | Slice 10, the plain-text receipt. The £11.30 slip contains `1130` and `£11.30`. Then keep going. Slice 17 starts the shared desk. |
 | grok-dev-2 | On task. Slices 1 to 9 are on `main`, through the Durham pin at `7068f9a`. | Slice 10, seven worked days at −7840. Then keep going. Slice 15 starts the shared desk. Do not edit `app/office.css`. |
 
 Do not redo a slice that is already on `main`. Do not start the reservoir.
 
-The box was behind `main`. Deploy after this note so the live site shows the Durham pin, the three-car day, and Jamie. Record the site commit in the integrator section. A later radio-only commit is not another deploy.
+The box site is `580b0f3`. `/health` is `0.1.26`. `.\scripts\check.ps1` printed `CHECK-OK`. That deploy includes the browser book, the Durham pin, the three-car day, and Jamie. Open `http://100.65.94.5/office.html` and `http://100.65.94.5/game.html`. A later radio-only commit is not another deploy.
 
 ## Product owner
 
@@ -114,7 +114,7 @@ You own the fare maths and the office desk. You may edit `scripts/taxi_fare.py`,
 
 Do not rewrite the locked results: 490, 1040, 615, 1240, 1130, 265, 2370, 2860, and 12500. Money is integer pence. `py -3 scripts\taxi_fare_check.py` must print `FARE-OK` before each merge. The company ledger is not the game ledger. No driver share, no fuel, no standing, and no new-car cost on this desk. No API call and no database.
 
-Done, on `fa3b6e3`: the office desk, the £11.30 and £12.40 rows, the mixed button at 265, the company day at 2860, the cancelled mile at 2370, the empty hiring at 0, and soiling-only at 12500. Open slices 1 to 8 are also on `main`, through `157265a`. Skip them.
+Done, on `fa3b6e3`: the office desk, the £11.30 and £12.40 rows, the mixed button at 265, the company day at 2860, the cancelled mile at 2370, the empty hiring at 0, and soiling-only at 12500. Open slices 1 to 9 are also on `main`, through `ce8b980`. Skip them.
 
 Open slices.
 
@@ -198,4 +198,4 @@ Reservoir. Do not start these.
 
 On `continue`, lead. Read the three radio files and look at the lane checkouts. Do not edit those checkouts. Name the next slice in `## Now`. Top up any lane with fewer than 8 Open slices not yet on `origin/main`. Deploy once when product code has merged since the site commit in `## Now`. Write the result back here. A radio-only commit is not a deploy.
 
-Last deploy recorded before this pass: box site `a939a85`. `main` has moved. Deploy once after this note, then write the new site commit here. Do not deploy a later radio-only note.
+Last deploy: box site `580b0f3`, health `0.1.26`, `CHECK-OK`. Do not deploy a later radio-only note.
