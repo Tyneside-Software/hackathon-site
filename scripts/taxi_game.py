@@ -236,6 +236,66 @@ def fleet_positions(routes, elapsed_s):
     return cars
 
 
+def fare_pounds(pence):
+    """A booking row shows the fare in pounds."""
+    whole, rem = divmod(int(pence), 100)
+    return f"£{whole}.{rem:02d}"
+
+
+def waiting_offers(elapsed_s, bearing_deg=90):
+    """One booking row for each offer that is waiting. Status is offered."""
+    offers = []
+    for index in range(offered_count(elapsed_s)):
+        miles = SHORT_MILES[index]
+        trip = short_trip((bearing_deg + index * 30) % 360, miles)
+        offers.append({
+            "pickup": trip["pickup"],
+            "dropoff": trip["dropoff"],
+            "status": "offered",
+            "miles": miles,
+            "fare_pence": trip["fare_pence"],
+            "fare_pounds": fare_pounds(trip["fare_pence"]),
+        })
+    return offers
+
+
+def accept_offer(offers, cars):
+    """Put the oldest waiting offer onto the first car that is at the depot."""
+    if not offers:
+        raise ValueError("no offer is waiting")
+    free = None
+    for car in cars:
+        if car.get("status") == "at_depot" and "device_id" not in car:
+            free = car
+            break
+    if free is None:
+        raise ValueError("no free car")
+    chosen_index = None
+    for index, offer in enumerate(offers):
+        if offer["status"] == "offered":
+            chosen_index = index
+            break
+    if chosen_index is None:
+        raise ValueError("no offer is waiting")
+    chosen = offers[chosen_index]
+    accepted = dict(chosen)
+    accepted["status"] = "accepted"
+    accepted["call_sign"] = free["call_sign"]
+    updated_offers = [dict(item) for item in offers]
+    updated_offers[chosen_index] = accepted
+    route = ((chosen["pickup"], chosen["dropoff"]), fallback_seconds(chosen["miles"]))
+    updated_cars = []
+    for car in cars:
+        if car["call_sign"] != free["call_sign"]:
+            updated_cars.append(dict(car))
+            continue
+        moved = dict(car)
+        moved["status"] = "accepted"
+        moved["route"] = route
+        updated_cars.append(moved)
+    return {"offers": updated_offers, "cars": updated_cars}
+
+
 def position_on_route(points, duration_s, elapsed_s):
     """Place on a polyline. The checker passes points and a duration. It does not call OSRM."""
     if not points:

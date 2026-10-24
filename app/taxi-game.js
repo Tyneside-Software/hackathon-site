@@ -256,6 +256,80 @@
     });
   }
 
+  function farePounds(pence) {
+    var whole = Math.floor(Math.abs(pence) / 100);
+    var rem = Math.abs(pence) % 100;
+    return "£" + whole + "." + String(rem).padStart(2, "0");
+  }
+
+  function waitingOffers(elapsedS) {
+    var count = offeredCount(elapsedS);
+    var milesList = [2, 4, 6];
+    var offers = [];
+    var index;
+    for (index = 0; index < count; index += 1) {
+      var trip = shortTrip(90 + index * 30, milesList[index]);
+      offers.push({
+        pickup: trip.pickup,
+        dropoff: trip.dropoff,
+        status: "offered",
+        miles: milesList[index],
+        farePence: trip.farePence,
+        farePounds: farePounds(trip.farePence),
+      });
+    }
+    return offers;
+  }
+
+  function acceptOffer(offers, cars) {
+    if (!offers || !offers.length || !cars) return null;
+    var free = null;
+    var index;
+    for (index = 0; index < cars.length; index += 1) {
+      if (cars[index].status === "at_depot" && !cars[index].device_id) {
+        free = cars[index];
+        break;
+      }
+    }
+    if (!free) return null;
+    var chosenIndex = -1;
+    for (index = 0; index < offers.length; index += 1) {
+      if (offers[index].status === "offered") {
+        chosenIndex = index;
+        break;
+      }
+    }
+    if (chosenIndex < 0) return null;
+    var chosen = offers[chosenIndex];
+    var accepted = {
+      pickup: chosen.pickup,
+      dropoff: chosen.dropoff,
+      status: "accepted",
+      miles: chosen.miles,
+      farePence: chosen.farePence,
+      farePounds: chosen.farePounds,
+      callSign: free.callSign,
+    };
+    var nextOffers = offers.map(function (offer, offerIndex) {
+      return offerIndex === chosenIndex ? accepted : offer;
+    });
+    var nextCars = cars.map(function (car) {
+      if (car.callSign !== free.callSign) return car;
+      return {
+        callSign: car.callSign,
+        status: "accepted",
+        route: {
+          points: [
+            [chosen.pickup.lat, chosen.pickup.lng],
+            [chosen.dropoff.lat, chosen.dropoff.lng],
+          ],
+          durationS: fallbackSeconds(chosen.miles),
+        },
+      };
+    });
+    return { offers: nextOffers, cars: nextCars };
+  }
+
   function sumPence(rows) {
     return rows.reduce(function (total, row) {
       return total + row.amountPence;
@@ -291,6 +365,9 @@
     secondsUntilNextOffer: secondsUntilNextOffer,
     liveFarePence: liveFarePence,
     fleetPositions: fleetPositions,
+    farePounds: farePounds,
+    waitingOffers: waitingOffers,
+    acceptOffer: acceptOffer,
     shortTrip: shortTrip,
     positionOnRoute: positionOnRoute,
     workedWeek: workedWeek,
