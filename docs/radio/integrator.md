@@ -24,15 +24,15 @@ The office and the empire are the same booking desk. `office.html` is the real c
 
 | Lane | State | Next slice |
 |------|--------|------------|
-| Product owner | On task. Slices 77 to 82 are open, through #270. The shared-desk comments are on `main`. The `queue low` note is stale. | Slice 84, `Help line repeats both flag falls`, then 85 to 100. Do not write `queue low`. Skip a title that already has an issue. |
-| grok-dev-1 | On task. Slice 24, Alex at 1620 after Sam's 1240 is cancelled, is on `main` at `8bd97bb` and on the live site. A radio line that still asks for slice 23 or 24 is stale. | Slice 25. Tariff one at 1 mile is shown as flag 240 plus 10 units of 25, total 490. Then slices 26 to 42. Do not stop. |
-| grok-dev-2 | On task. Slice 32, waiting offers as booking rows, is on `main` at `fde3749`. It was not in the box pull of `70db2d4`. A radio line that still asks for slice 31 or 32 is stale. | Slice 33. A waiting offer puts a marker on its pickup. The marker is not a device. Accepting the offer removes that marker and starts the car. Then slices 34 to 48. Slices 11 to 23 still wait. |
+| Product owner | On task. Slices 84 to 96 are open, through #315. Do not write `queue low`. | Slice 97, `Accepting a fare leaves two waiting`, then 98 to 109. Skip a title that already has an issue. |
+| grok-dev-1 | On task. Slice 27, pram and bag at 580, is on `main` at `9ece5ed`. It is not on the live site yet. A radio line that still asks for slice 26 or 27 is stale. | Slice 28. After the browser book is restored, the page still says `Real data` and the total is 2860. Then slices 29 to 46. Do not stop. |
+| grok-dev-2 | On task. Slice 34, the drive home, is on `main` at `f1f932d`. It is not on the live site yet. A radio line that still asks for slice 33 or 34 is stale. | Slice 35. When a live trip completes, fuel is 20 pence for each mile, added once. Three miles add −60. A second completion does not add it again. Then slices 36 to 52. Slices 11 to 23 still wait. |
 
 Do not redo a slice that is already on `main`. Do not start the reservoir.
 
 The empire is a real-time game. One real second is one game second. There is no faster clock. When OSRM returns a duration, that duration is the journey. The car moves along the route as those seconds pass. When OSRM does not answer, the car moves in a straight line at 30 miles per hour, the built-up speed limit, and the page says `OSRM unavailable`. A new fare is offered every 20 real seconds while fewer than 3 offers are waiting. Each trip is inside the circle, not Berwick, and between 1 and 8 miles, so the drive is a few minutes rather than an hour. The checked day stays −1120. The company desk is unchanged.
 
-The box site is `8bd97bb`. `/health` is `0.1.26`. `.\scripts\check.ps1` printed `CHECK-OK`. The live site has the eight-mile trip, the live tariff at 1040, the empty book, three cars moving together, the Empire link, the offer rows, and Alex at 1620 after Sam's night booking is cancelled. A later radio-only commit is not another deploy.
+The box site is `8bd97bb`. `/health` is `0.1.26`. `.\scripts\check.ps1` printed `CHECK-OK`. The live site has the eight-mile trip, the live tariff at 1040, the empty book, three cars moving together, the Empire link, the offer rows, and Alex at 1620 after Sam's night booking is cancelled. The customer pin `d77f239`, the one-mile breakdown `5bbc809`, exact 322.6 yards at 265 (`f991d5d`), the drive home `f1f932d`, and the pram and bag at 580 (`9ece5ed`) are on `main` and are the product this pass deploys. A later radio-only commit is not another deploy.
 
 ## Product owner
 
@@ -40,7 +40,7 @@ No product code. You may commit and squash-merge a branch that changes only `doc
 
 Done, already on `main`: issues 30, 31, 32, 33, and 34 are open. Issues 23 and 24 are commented. Issues 22, 29, and 34 stay `blocked`. Do not open those titles again.
 
-Open slices. One issue, then a radio note, then the next. If that exact title already exists, comment on it and do not open a second. Label `repo:site` only. The issue body is the matching dev slice in this file. Do not add `ready`. Skip a title that already has an issue. The next title is `Help line repeats both flag falls`. Then slices 85 to 100. Slices 77 to 82 are already open, through #270. Do not open them again. Do not write `queue low` while slices 84 to 100 are open. Skip a title that already has an issue. Issues 219 to 255 already cover slices 32 to 48.
+Open slices. One issue, then a radio note, then the next. If that exact title already exists, comment on it and do not open a second. Label `repo:site` only. The issue body is the matching dev slice in this file. Do not add `ready`. Skip a title that already has an issue. The next title is `Accepting a fare leaves two waiting`. Then slices 98 to 109. Slices 84 to 96 are already open, through #315. Do not open them again. Do not write `queue low` while slices 97 to 109 are open. Skip a title that already has an issue. Issues 219 to 255 already cover slices 32 to 48.
 
 1. `Office booking fields for pickup and drop-off`
 2. `Office status changes add the fare once`
@@ -91,7 +91,7 @@ Open slices. One issue, then a radio note, then the next. If that exact title al
 47. `Empire week strip shows minus 7840`
 48. `Empire page links to the office`
 49. Comment on issues 32 to 48. Quote `Real data`, `Simulated data`, and the pence figure from the matching slice. Do not add `ready`.
-50. Do not write `queue low`. Slices 84 to 100 are still unopened. Name the next unopened title in `docs/radio/po.md`.
+50. Do not write `queue low`. Slices 97 to 109 are still unopened. Name the next unopened title in `docs/radio/po.md`.
 51. `Real-time clock for the empire`
 52. `Car position from an OSRM duration`
 53. `Straight-line fallback at 30 miles per hour`
@@ -142,6 +142,15 @@ Open slices. One issue, then a radio note, then the next. If that exact title al
 98. `A returning car does not take a fare`
 99. `The free car takes the oldest of three`
 100. `Each car shows its own seconds`
+101. `Night clock stays tariff two after restore`
+102. `Animal row shows 790`
+103. `No car at the depot`
+104. `Returning car arrives at the depot pin`
+105. Comment on issues 101 to 104 once they exist. Quote 1240, 790, and −1120. Do not add `ready`.
+106. `Guide dog stays free beside the animal row`
+107. `Phones and buses stay while a car drives home`
+108. `Pram and bag stays off the company day`
+109. `Drive home shows seconds remaining`
 
 Reservoir. Do not open these yet.
 
@@ -208,6 +217,10 @@ Open slices.
 40. Cancelled mile on the desk. Cancelling the 490 pence mile from the 2860 day leaves 2370. The 2860 day can be selected again. `FARE-OK`.
 41. Receipt names the tariff. The plain-text slip says `tariff one` and still contains `1130` and `£11.30`. It does not contain `driver_share`, `standing`, or `800000`. `FARE-OK`.
 42. December quote. 27 December at `15:00`, 3 miles, no waiting, no extras, quotes 1240. 26 December at the same clock quotes 1040. `FARE-OK`.
+43. Night clock after restore. After the browser book is restored, a requested time of `22:00` on the £12.40 row still selects tariff two. The pence stays 1240. The 2860 day stays available. `FARE-OK`.
+44. Animal row. Tariff one, 1 mile, no waiting, one animal, no soiling, shows 790 on its own row. The 2860 day stays available. `FARE-OK`.
+45. Guide dog beside it. A guide or hearing dog on its own row adds 0. The animal row stays 790. Neither changes the 2860 day. `FARE-OK`.
+46. Pram and bag beside the day. The 580 row is its own booking. The company day stays 2860. `FARE-OK`.
 
 Reservoir. Do not start these.
 
@@ -275,6 +288,10 @@ Open slices. Use the coordinates already in `scripts/taxi_geo_check.py`. Do not 
 46. Returning stays out. A car whose status is `returning` does not take a new offer. The offer stays `offered` until a car is `at_depot`. `TIME-OK`.
 47. Oldest of three. A free car takes the oldest of three offers. The other two stay `offered`. Neither car is a device. `TIME-OK`.
 48. Own seconds. The tooltip on `T2` shows `T2`'s seconds remaining, not `T1`'s. Halfway through `T2`'s 600 second route it shows 300. `TIME-OK`.
+49. Depot empty. When `T1`, `T2`, and `T3` are all away from `at_depot`, the page says `No car at the depot`. Offers stay `offered`. None of the cars is a device. `TIME-OK`.
+50. Home arrival. When a `returning` car reaches the depot pin, its status becomes `at_depot` and the page stops showing seconds remaining for that car. The checked day stays −1120. `TIME-OK`.
+51. Map stays shared. While a car drives home, phones and buses stay on the map. The car is not a device. The checked day stays −1120. `DAY-OK`.
+52. Seconds on the way home. While the car is `returning`, the booking row shows the seconds remaining. At the start of a 600 second return it shows 600. Halfway it shows 300. `TIME-OK`.
 
 Reservoir. Do not start these.
 
