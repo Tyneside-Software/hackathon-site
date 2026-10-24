@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/544
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/546
 
-Title: Two accounts do not share a fleet. Label repo:api only. No ready label.
+Title: A tick does not write a device. Label repo:api only. No ready label.
 
-Next: A tick does not write a device
+Next: Trails keep ten minutes
