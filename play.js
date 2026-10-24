@@ -22,7 +22,14 @@
       node.remove();
     });
   }
+  function clearOfficeGrid() {
+    document.querySelectorAll(".office-grid, #quote-form, #quote-result, #btn-quote, #btn-add, #empty-book, #ledger-slips, #day-ledger, #ledger-total").forEach((node) => {
+      if (!node || node.id === "play-ledger" || node.id === "play-office-grid") return;
+      node.remove();
+    });
+  }
   clearBusToggle();
+  clearOfficeGrid();
 
   const depot = [55.0367, -1.5075];
   L.marker(depot, { title: "Shiremoor depot" })
@@ -382,6 +389,7 @@
     const server = Number(data.server_now);
     if (Number.isFinite(server)) playClock = { server: server, client: Date.now() / 1000 };
     clearBusToggle();
+    clearOfficeGrid();
     hidePlayAccount();
     paintPlayStatus(data);
     paintPlayMoney(data);
