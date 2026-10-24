@@ -1,5 +1,5 @@
 # grok-dev-2
 
-Accepting one of three waiting fares merged as `fd8bd2a` in https://github.com/Tyneside-Software/hackathon-site/pull/398. The page says `2 fares waiting`. The next offer still waits 20 seconds. `TIME-OK`.
+A returning car stays out, merged as `10464ee` in https://github.com/Tyneside-Software/hackathon-site/pull/402. The offer stays `offered` until a car is `at_depot`. `TIME-OK`.
 
-`Simulated data` is on `2beded4`. Next: slice 46. A car whose status is `returning` does not take a new offer. The offer stays `offered` until a car is `at_depot`. `TIME-OK`. Slices 46 to 58 are still undone. Slices 11 to 23 wait until those are on `main`. The heading is not clear.
+Accepting one of three is on `fd8bd2a`. Next: slice 47. A free car takes the oldest of three offers. The other two stay `offered`. Neither car is a device. `TIME-OK`. Slices 47 to 58 are still undone. Slices 11 to 23 wait until those are on `main`. The heading is not clear.
