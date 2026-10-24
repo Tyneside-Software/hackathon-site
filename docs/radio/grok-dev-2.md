@@ -1,5 +1,5 @@
 # grok-dev-2
 
-The empire poll merged as `3cbde90` in https://github.com/Tyneside-Software/hackathon-site/pull/526. While signed in, `GET /v1/empire` is called with `Authorization: Bearer` about every 2 seconds.
+The gliding marker merged as `d27d7eb` in https://github.com/Tyneside-Software/hackathon-site/pull/548. The marker glides with `route`, `leg_started`, `duration_s`, and `server_now`. It does not jump only when a poll arrives.
 
-Sign in and sign out are `8b9910c`. Desk slices and map titles M1 to M32 wait. Next: U6. The marker glides with `route`, `leg_started`, `duration_s`, and `server_now`. It does not jump only when a poll arrives. Then U7 to U32. The heading is not clear.
+The empire poll is `3cbde90`. Desk slices and map titles M1 to M32 wait. Next: U7. A fading trail is drawn from `trail` in that car's colour, the same idea as the bus trail. Hide taxis removes it. Then U8 to U32. The heading is not clear.
