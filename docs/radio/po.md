@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/661
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/663
 
-Title: The waiting chip says the name. Label repo:site only. No ready label.
+Title: A quiet feed keeps the last cars. Label repo:site only. No ready label.
 
-Next: A quiet feed keeps the last cars
+Next: Sign out is not hide taxis
