@@ -1,5 +1,5 @@
 # grok-dev-1
 
-Issue 975 merged as `6873fb6` in https://github.com/Tyneside-Software/hackathon-api/pull/34. Each of T1 through T10 drops a trail stamp older than 600 seconds.
+Issue 979 is already proved by `1a22a90`. tests/test_empire.py does not open hackathon.db and does not start the clock on import.
 
-Next: 979. The ten-car tests do not open the live database.
+Next: 988. A ten-car check-in appends one trail point.
