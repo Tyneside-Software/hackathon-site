@@ -21,7 +21,30 @@
     .addTo(map);
 
   const PLAY_SIGNS = ["T1", "T2", "T3", "T4", "T5", "T6", "T7", "T8", "T9", "T10"];
+  const FEED_COLOURS = {
+    T1: "#f5b942",
+    T2: "#38bdf8",
+    T3: "#4ade80",
+    T4: "#c084fc",
+    T5: "#fb7185",
+    T6: "#f97316",
+    T7: "#a3e635",
+    T8: "#22d3ee",
+    T9: "#e879f9",
+    T10: "#facc15"
+  };
   const playChips = new Map();
+
+  function chipFill(car) {
+    const fromFeed = car && typeof car.colour === "string" ? car.colour.trim() : "";
+    if (/^#[0-9a-fA-F]{6}$/.test(fromFeed)) return fromFeed;
+    return FEED_COLOURS[car.sign] || "#94a3b8";
+  }
+
+  function chipIcon(sign, fill) {
+    const html = '<span class="play-chip" style="display:flex;align-items:center;justify-content:center;width:36px;height:22px;border-radius:6px;background:' + fill + ';color:#0c1219;font:700 11px/1 system-ui,sans-serif">' + sign + "</span>";
+    return L.divIcon({ className: "play-chip-icon", html: html, iconSize: [36, 22], iconAnchor: [18, 11] });
+  }
 
   function apiBase() {
     return String(window.HACKATHON_API || "").replace(/\/$/, "");
@@ -39,16 +62,21 @@
       const lng = Number(car.lng);
       if (!Number.isFinite(lat) || !Number.isFinite(lng)) return;
       seen.add(sign);
-      const html = '<span class="play-chip" style="display:flex;align-items:center;justify-content:center;width:36px;height:22px;border-radius:6px;background:#94a3b8;color:#0c1219;font:700 11px/1 system-ui,sans-serif">' + sign + "</span>";
+      const fill = chipFill(car);
       let marker = playChips.get(sign);
       if (!marker) {
         marker = L.marker([lat, lng], {
-          icon: L.divIcon({ className: "play-chip-icon", html: html, iconSize: [36, 22], iconAnchor: [18, 11] }),
+          icon: chipIcon(sign, fill),
           title: sign
         }).addTo(map);
+        marker._playFill = fill;
         playChips.set(sign, marker);
       } else {
         marker.setLatLng([lat, lng]);
+        if (marker._playFill !== fill) {
+          marker.setIcon(chipIcon(sign, fill));
+          marker._playFill = fill;
+        }
       }
       if (list) {
         const item = document.createElement("li");
