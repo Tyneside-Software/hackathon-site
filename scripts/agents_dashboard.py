@@ -132,6 +132,49 @@ def fmt_when(when: datetime | None) -> tuple[str, str, str]:
     return f"{day} · {clock}", ago, state
 
 
+def radio_turn(times: list[int], now: int, gap_s: int = 20 * 60, aim_s: int = 20 * 60) -> dict:
+    """Judge the newest run of one lane's radio commits.
+
+    A gap of more than 20 minutes starts another turn. One or two radios in
+    the newest turn is short. More than two, or a run of 20 minutes, is about
+    30 minutes.
+    """
+    ordered = sorted({int(ts) for ts in times if int(ts) > 0})
+    if not ordered:
+        return {"verdict": "short", "count": 0, "span_min": 0}
+    run = [ordered[-1]]
+    for ts in reversed(ordered[:-1]):
+        if run[-1] - ts > gap_s:
+            break
+        run.append(ts)
+    run.sort()
+    span_s = run[-1] - run[0]
+    count = len(run)
+    if count > 2 or span_s >= aim_s:
+        verdict = "about 30 minutes"
+    else:
+        verdict = "short"
+    return {"verdict": verdict, "count": count, "span_min": span_s // 60}
+
+
+def turn_sentence(times: list[int], now: int) -> str:
+    """One line: last-turn length, how many radios, and how many minutes."""
+    turn = radio_turn(times, now)
+    noun = "radio" if turn["count"] == 1 else "radios"
+    return f"Turn {turn['verdict']} · {turn['count']} {noun} over {turn['span_min']} min"
+
+
+def radio_commit_times(path: str, limit: int = 120) -> list[int]:
+    """Unix times of that radio file on origin/main, newest first."""
+    raw = git(["log", f"-{limit}", "--format=%ct", "origin/main", "--", path], SITE)
+    times = []
+    for line in raw.splitlines():
+        line = line.strip()
+        if line.isdigit():
+            times.append(int(line))
+    return times
+
+
 def now_section(text: str) -> str:
     start = text.find("## Now")
     if start < 0:
@@ -1421,6 +1464,11 @@ def build_page() -> str:
         stamp = git(["log", "-1", "--format=%cI", "origin/main", "--", agent["radio"]], SITE)
         subject = git(["log", "-1", "--format=%h %s", "origin/main", "--", agent["radio"]], SITE)
         when_label, ago, state = fmt_when(parse_when(stamp.splitlines()[0] if stamp else ""))
+        radio_times = radio_commit_times(agent["radio"])
+        now_s = int(time.time())
+        turn = radio_turn(radio_times, now_s)
+        turn_class = "long" if turn["verdict"] == "about 30 minutes" else "short"
+        turn_line = f"Last radio {when_label} · {ago}. {turn_sentence(radio_times, now_s)}"
         said = headline(radios[agent["key"]])
         nxt = own_next(radios[agent["key"]])
         order = order_for(orders, agent["key"])
@@ -1437,6 +1485,7 @@ def build_page() -> str:
                 <p class="role">{html.escape(agent['role'])}</p>
               </header>
               <p class="stamp"><span class="pill {state}">{state}</span><time>{html.escape(when_label)}</time><span class="ago">{html.escape(ago)}</span></p>
+              <p class="turn {turn_class}">{html.escape(turn_line)}</p>
               <p class="subject">{html.escape(subject)}</p>
               <p class="said">{html.escape(said)}</p>
               {next_html}
@@ -1991,6 +2040,9 @@ def build_page() -> str:
     .stamp {{ display: flex; gap: 0.6rem; align-items: baseline; flex-wrap: wrap; margin: 0.7rem 0 0.2rem; }}
     .stamp time {{ font-size: 1.25rem; color: var(--heading); font-variant-numeric: tabular-nums; }}
     .ago {{ color: var(--muted); }}
+    .turn {{ margin: 0.2rem 0 0.45rem; }}
+    .turn.long {{ color: #86efac; }}
+    .turn.short {{ color: #fecaca; }}
     .pill {{
       border-radius: 999px;
       padding: 0.1rem 0.55rem;
