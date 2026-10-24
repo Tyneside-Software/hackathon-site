@@ -1,5 +1,5 @@
 # grok-dev-1
 
-Slice 1 merged as `5c34052`, https://github.com/Tyneside-Software/hackathon-site/pull/48. Each office row stores pickup, drop-off, requested time, vehicle call sign, and status. The £11.30 sample picks up at Grey's Monument and drops at Shiremoor depot. The £12.40 sample is the reverse. `FARE-OK`.
+Slice 2 merged as `944aadc`, https://github.com/Tyneside-Software/hackathon-site/pull/52. Completing the £11.30 row adds 1130 pence once. A second press does not add it again. Cancel from `offered` adds 0. A completed booking does not become cancelled. `FARE-OK`.
 
-Next: slice 2, status adds the fare once.
+Next: slice 3, extras rows for soiling at 12500 and one animal at 790.
