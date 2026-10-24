@@ -39,6 +39,7 @@
     <p class="lede">The depot is Shiremoor. The worked day below is the example already checked at −1120 pence. This page does not call the API.</p>
     <p id="clock"></p>
     <p id="fallback"></p>
+    <p id="next-offer"></p>
     <ul id="places"></ul>
     <p class="lede" id="berwick-job"></p>
     <p class="lede" id="hexham-job"></p>
@@ -73,6 +74,17 @@
     var game = window.TaxiGame;
     document.getElementById("clock").textContent = "Ten real seconds are " + game.elapsedSeconds(0, 10000) + ".";
     document.getElementById("fallback").textContent = "With no OSRM duration, 3 miles take " + game.fallbackSeconds(3) + " seconds. OSRM unavailable.";
+    var offerStart = Date.now();
+    function paintOffers() {
+      var elapsed = game.elapsedSeconds(offerStart, Date.now());
+      var count = game.offeredCount(elapsed);
+      var wait = game.secondsUntilNextOffer(elapsed);
+      var text = count + " offers.";
+      if (wait !== null) text += " Next offer in " + Math.ceil(wait) + " seconds.";
+      document.getElementById("next-offer").textContent = text;
+    }
+    paintOffers();
+    setInterval(paintOffers, 1000);
     var labels = {
       standing: "Standing for the one car",
       fare_in: "Fare in",

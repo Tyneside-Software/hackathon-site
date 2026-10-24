@@ -162,6 +162,18 @@
     return miles * 3600 / 30;
   }
 
+  function offeredCount(elapsedS) {
+    if (elapsedS < 0) return 0;
+    return Math.min(3, Math.floor(elapsedS / 20));
+  }
+
+  function secondsUntilNextOffer(elapsedS) {
+    if (offeredCount(elapsedS) >= 3) return null;
+    var remainder = elapsedS % 20;
+    if (remainder === 0) return 20;
+    return 20 - remainder;
+  }
+
   function positionOnRoute(points, durationS, elapsedS) {
     if (!points.length) return null;
     if (durationS <= 0 || elapsedS <= 0) return points[0];
@@ -222,6 +234,8 @@
     threeCarDay: threeCarDay,
     elapsedSeconds: elapsedSeconds,
     fallbackSeconds: fallbackSeconds,
+    offeredCount: offeredCount,
+    secondsUntilNextOffer: secondsUntilNextOffer,
     positionOnRoute: positionOnRoute,
     workedWeek: workedWeek,
     fleetWeek: fleetWeek,
