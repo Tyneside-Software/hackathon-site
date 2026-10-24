@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/198
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/201
 
-Title: Office page keeps the empire link. Label repo:site only. No ready label.
+Title: Customer pin for a waiting fare. Label repo:site only. No ready label.
 
-Next: Customer pin for a waiting fare
+Next: Car drives back to the depot
