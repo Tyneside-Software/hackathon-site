@@ -68,6 +68,7 @@ Not assigned. Do not start these.
 - #884 A click on play.html does not add a waypoint. Label repo:site only. No ready label.
 - #888 The play circle is not recentred by a car. Label repo:site only. No ready label.
 - #890 A second account has its own ten cars. Label repo:api only. No ready label.
+- #893 The play money panel follows the feed. Label repo:site only. No ready label.
 
 ## Next for me
 
