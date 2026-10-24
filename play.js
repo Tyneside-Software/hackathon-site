@@ -169,6 +169,7 @@
       "play-quiet-money",
       "play-signout-person",
       "play-feed-401-person",
+      "play-quiet-person",
       "play-locks",
       "play-osrm",
       "play-buses",
@@ -1418,6 +1419,16 @@
     clearQuietFares();
     clearQuietChips();
     clearQuietMoney();
+    clearQuietPeople();
+  }
+
+  function clearQuietPeople() {
+    playPeople.forEach((marker) => map.removeLayer(marker));
+    playPeople.length = 0;
+    const node = document.getElementById("play-quiet-person");
+    if (!node) return;
+    node.dataset.person = playPeople.length === 0 ? "clear" : "shows";
+    node.dataset.feed = "quiet";
   }
 
   async function pollPlay() {
