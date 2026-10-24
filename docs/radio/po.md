@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/639
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/641
 
-Title: The feed says when OSRM missed. Label repo:api only. No ready label.
+Title: A leaving leg starts at the depot. Label repo:api only. No ready label.
 
-Next: A leaving leg starts at the depot
+Next: Car status is one of four words
