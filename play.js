@@ -82,6 +82,7 @@
       "play-depot-chip",
       "play-t11-only",
       "play-price-still",
+      "play-buy-flight",
       "play-started-ten",
       "play-locks",
       "play-osrm",
@@ -526,8 +527,17 @@
     paintPlayBuy();
   }
 
+  let playBuying = false;
+
   function playBuyPence() {
     return 800000;
+  }
+
+  function noteBuyFlight() {
+    const node = document.getElementById("play-buy-flight");
+    if (!node) return;
+    node.dataset.flight = playBuying ? "in-flight" : "ready";
+    node.dataset.pence = String(playBuyPence());
   }
 
   function showPlaySpent() {
@@ -566,9 +576,11 @@
     if (!button) return;
     button.textContent = "Buy the next car for " + playBuyPence();
     button.hidden = !(localStorage.getItem("hackathon-empire-token") || "");
+    button.disabled = playBuying;
   }
 
   async function buyPlayCar() {
+    if (playBuying) return;
     const status = document.getElementById("play-buy-status");
     const token = localStorage.getItem("hackathon-empire-token") || "";
     const base = apiBase();
@@ -577,6 +589,9 @@
       showPlayAccount();
       return;
     }
+    playBuying = true;
+    noteBuyFlight();
+    paintPlayBuy();
     let res;
     try {
       res = await fetch(base + "/v1/empire/buy", {
@@ -591,6 +606,10 @@
     } catch (err) {
       if (status) status.textContent = "Buy failed.";
       return;
+    } finally {
+      playBuying = false;
+      noteBuyFlight();
+      paintPlayBuy();
     }
     if (res.status === 401) {
       localStorage.removeItem("hackathon-empire-token");
