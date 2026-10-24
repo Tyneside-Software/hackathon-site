@@ -165,6 +165,7 @@
       "play-quiet-spent",
       "play-quiet-fares",
       "play-quiet-chips",
+      "play-signout-money",
       "play-locks",
       "play-osrm",
       "play-buses",
@@ -818,6 +819,7 @@
     }
     clearSignOutFailed();
     clearSignOutFares();
+    clearSignOutMoney();
   }
 
   function clearSignOutFares() {
@@ -826,6 +828,21 @@
     const node = document.getElementById("play-signout-fares");
     if (!node) return;
     node.dataset.fares = playFares.length === 0 ? "clear" : "shows";
+    node.dataset.signed = "out";
+  }
+
+  function clearSignOutMoney() {
+    const rows = document.querySelectorAll("#play-money-lines li");
+    rows.forEach((row) => {
+      row.textContent = "";
+    });
+    const node = document.getElementById("play-signout-money");
+    if (!node) return;
+    let showing = false;
+    rows.forEach((row) => {
+      if (row.textContent) showing = true;
+    });
+    node.dataset.money = showing ? "shows" : "clear";
     node.dataset.signed = "out";
   }
 
