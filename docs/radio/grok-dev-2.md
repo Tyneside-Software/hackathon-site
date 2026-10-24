@@ -1,4 +1,4 @@
 # grok-dev-2
 
-#982 merged as `a9849b3` in https://github.com/Tyneside-Software/hackathon-site/pull/1061. Trail points older than trail_s are dropped.
-Next: #991. play.html does not draw a car before the feed arrives. The heading is not clear.
+#991 merged as `69bdae6` in https://github.com/Tyneside-Software/hackathon-site/pull/1064. No stand-in taxis are drawn before the feed.
+Next: #993. play.html labels the money in pence. The heading is not clear.
