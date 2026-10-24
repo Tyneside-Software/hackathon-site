@@ -296,6 +296,37 @@ def accept_offer(offers, cars):
     return {"offers": updated_offers, "cars": updated_cars}
 
 
+def customer_pins(offers):
+    """A waiting offer marks its pickup. The marker is not a device."""
+    pins = []
+    for offer in offers:
+        if offer.get("status") != "offered":
+            continue
+        pins.append({
+            "lat": offer["pickup"][0],
+            "lng": offer["pickup"][1],
+            "kind": "customer",
+        })
+    return pins
+
+
+def start_accepted(taken):
+    """Remove the accepted offer's pin and start that car. Phones and buses stay."""
+    cars = []
+    for car in taken["cars"]:
+        if car.get("status") == "accepted":
+            moved = dict(car)
+            moved["status"] = "started"
+            cars.append(moved)
+        else:
+            cars.append(dict(car))
+    return {
+        "offers": [dict(offer) for offer in taken["offers"]],
+        "cars": cars,
+        "pins": customer_pins(taken["offers"]),
+    }
+
+
 def position_on_route(points, duration_s, elapsed_s):
     """Place on a polyline. The checker passes points and a duration. It does not call OSRM."""
     if not points:

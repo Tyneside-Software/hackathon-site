@@ -182,6 +182,76 @@
     btnSample.parentElement.appendChild(button);
   });
 
+  const EARTH_KM = 6371;
+  const customerPins = [];
+
+  function destinationPoint(origin, bearingDeg, miles) {
+    const km = miles * MILE_KM;
+    const lat1 = origin[0] * Math.PI / 180;
+    const lng1 = origin[1] * Math.PI / 180;
+    const bearing = (bearingDeg % 360) * Math.PI / 180;
+    const ang = km / EARTH_KM;
+    const lat2 = Math.asin(
+      Math.sin(lat1) * Math.cos(ang) + Math.cos(lat1) * Math.sin(ang) * Math.cos(bearing)
+    );
+    const lng2 = lng1 + Math.atan2(
+      Math.sin(bearing) * Math.sin(ang) * Math.cos(lat1),
+      Math.cos(ang) - Math.sin(lat1) * Math.sin(lat2)
+    );
+    const lng = (lng2 * 180 / Math.PI + 540) % 360 - 180;
+    return [lat2 * 180 / Math.PI, lng];
+  }
+
+  function addCustomerPin(latlng) {
+    const pin = L.circleMarker(latlng, {
+      radius: 6,
+      color: "#6b21a8",
+      weight: 2,
+      fillColor: "#e9d5ff",
+      fillOpacity: 0.95,
+    }).addTo(map);
+    pin.bindTooltip("Customer · not a device", { permanent: true, direction: "bottom" });
+    pin.on("click", (ev) => {
+      if (ev.originalEvent) L.DomEvent.stopPropagation(ev.originalEvent);
+    });
+    customerPins.push(pin);
+  }
+
+  addCustomerPin(DEPOT);
+
+  async function startOfferCar(dest) {
+    if (customerPins.length) map.removeLayer(customerPins.shift());
+    const path = [DEPOT, dest];
+    const joined = path.map((p) => `${p[1].toFixed(6)},${p[0].toFixed(6)}`).join(";");
+    const url = `${OSRM}${joined}?overview=full&geometries=geojson`;
+    const sampleStatus = document.getElementById("sample-status");
+    if (sampleStatus) sampleStatus.textContent = "Asking OSRM…";
+    try {
+      const res = await fetch(url);
+      if (!res.ok) throw new Error("HTTP " + res.status);
+      const data = await res.json();
+      const route = data.routes && data.routes[0];
+      if (!route) throw new Error("no route");
+      const coords = route.geometry.coordinates.map(([lng, lat]) => [lat, lng]);
+      drawSample(coords);
+      moveSample(coords, route.duration);
+      if (sampleStatus) sampleStatus.textContent = "T1 started. The customer pin is gone.";
+    } catch (err) {
+      drawSample(path);
+      moveSample(path, fallbackDuration(path));
+      if (sampleStatus) sampleStatus.textContent = "OSRM unavailable";
+    }
+  }
+
+  if (btnSample && btnSample.parentElement) {
+    const acceptPin = document.createElement("button");
+    acceptPin.type = "button";
+    acceptPin.className = "btn btn-ghost";
+    acceptPin.textContent = "Accept the customer pin";
+    acceptPin.addEventListener("click", () => startOfferCar(destinationPoint(DEPOT, 90, 2)));
+    btnSample.parentElement.appendChild(acceptPin);
+  }
+
   const markers = [];
   let routeLine = null;
 
