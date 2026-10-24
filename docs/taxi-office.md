@@ -51,6 +51,8 @@ The day's rows survive a reload in this browser. The desk stores them in `localS
 
 The desk has two sample rows. The £11.30 row is tariff one, 3 miles, no waiting, one extra passenger, and one outside bag. The £12.40 row is tariff two, 3 miles, no waiting, and no extras. The £11.30 row shows meter 1040, extras 90, and total 1130. The £12.40 row shows meter 1240, extras 0, and total 1240.
 
+A completed booking renders a plain-text receipt. The slip names the tariff, the miles, the waiting seconds, the extras in pence, and the quoted pence. The £11.30 slip contains 1130 and £11.30. The slip does not include a driver share, a standing charge, or the price of a new car.
+
 A pickup or drop-off whose text is Berwick-upon-Tweed is not saved and adds 0. Hexham, Durham, Sunderland, Grey's Monument, and Shiremoor depot may be saved. This desk does not keep a coordinate table. The fare on a saved booking is still the meter the clerk entered. Buttons move a sample through `offered`, `accepted`, `started`, and `completed`. Cancel is allowed until `completed`. Completing the £11.30 row adds 1130 pence once. A second press does not add it again. Cancel from `offered` adds 0. A completed booking does not become cancelled.
 
 A button fills the mixed tariff-one case from [Taxi fares](#taxi-fares): the first 161.3 yards in 20 seconds, then 46.8 seconds waiting. The desk shows 265 pence, £2.65, not 290. Three more buttons quote the flag falls: tariff one at exact 161.3 yards and no waiting is 240 pence, tariff two at exact 140.5 yards and no waiting is 315 pence, and tariff two at 0 yards and 45 seconds is 315 pence.

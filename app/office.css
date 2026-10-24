@@ -67,6 +67,11 @@
   font-family: ui-monospace, Consolas, monospace;
   color: var(--accent);
 }
+.office-slip {
+  white-space: pre-wrap;
+  font-family: ui-monospace, Consolas, monospace;
+  margin: 0.45rem 0 0;
+}
 .ledger-line {
   display: flex;
   justify-content: space-between;
