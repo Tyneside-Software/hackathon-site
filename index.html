@@ -45,12 +45,12 @@
         and a real-time taxi empire.
       </p>
       <p class="hero-lead">
-        Open the <a href="app/">map</a> to watch T1, T2, and T3 collect virtual passengers and drive.
-        The public site and the Linux box serve the same <code>main</code>.
-        The last check was commit <code>79c0c10</code>, health 0.1.26, and <code>check.ps1</code> printed CHECK-OK. The three taxis are on that map.
+        Open the <a href="app/">map</a>. It asks for an account before it draws taxis. Create account, Sign in, and Sign out are on that form.
+        This site is GitHub <code>main</code>. Every push rebuilds it. A refresh can show the previous copy for about 10 minutes.
+        The Linux box is a second copy. The last box check was <code>79c0c10</code>, health 0.1.26, and <code>check.ps1</code> printed CHECK-OK.
       </p>
       <div class="hero-actions">
-        <a class="btn btn-fill" href="app/">Watch the taxis →</a>
+        <a class="btn btn-fill" href="app/">Open the map →</a>
         <a class="btn btn-ghost" href="progress.html">Progress</a>
         <a class="btn btn-ghost" href="office.html">Office</a>
         <a class="btn btn-ghost" href="game.html">Desk</a>
@@ -73,11 +73,11 @@
         </div>
         <div class="panel">
           <h3>Empire</h3>
-          <p>The game to play is <a href="app/">the map</a>. T1, T2, and T3 leave Shiremoor, collect a named passenger, and drive the streets. One real second is one game second. <a href="game.html">game.html</a> is the simulated desk. Its banner says <strong>Simulated data</strong>.</p>
+          <p>The game to play is <a href="app/">the map</a>. The account form comes first, and this page does not start T1, T2, and T3 by itself. One real second is one game second. This HTTPS site cannot call the HTTP API, so a sign-in that reaches the server is <a href="http://100.65.94.5/app/">the map on the box</a>, once that copy has the same form. <a href="game.html">game.html</a> is the simulated desk. Its banner says <strong>Simulated data</strong>.</p>
         </div>
         <div class="panel">
           <h3>Next</h3>
-          <p>Next, each player creates an account. That account's taxis then run on the Linux box, check in from their route, and leave a trail on <a href="app/">the map</a>. The desk slices wait. The fare-card slices are done.</p>
+          <p>The account form is on this site, and a signed-in map polls the account fleet. Next the car glides along the server route. That fleet has to keep running on the Linux box. grok-dev-1 builds the API. The product owner is opening those API issues. The desk slices wait. The fare-card slices are done.</p>
         </div>
       </div>
     </div>
