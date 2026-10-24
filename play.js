@@ -149,6 +149,7 @@
       "play-signout-failed",
       "play-driver-share",
       "play-to-passenger",
+      "play-fare-riding",
       "play-locks",
       "play-osrm",
       "play-buses",
@@ -579,11 +580,16 @@
     playFares.length = 0;
     const fares = feed && Array.isArray(feed.fares) ? feed.fares : [];
     let skippedT12 = 0;
+    let skippedRiding = 0;
     const fareNames = [];
     fares.forEach((fare) => {
       if (!fare) return;
       if (String(fare.sign || "") === "T12") {
         skippedT12 += 1;
+        return;
+      }
+      if (fareCarRiding(feed, fare)) {
+        skippedRiding += 1;
         return;
       }
       const lat = Number(fare.lat);
@@ -609,6 +615,23 @@
       note.dataset.skipped = String(skippedT12);
     }
     noteFareName(fareNames);
+    noteFareRiding(skippedRiding);
+  }
+
+  function fareCarRiding(feed, fare) {
+    const sign = String(fare && fare.sign || "");
+    if (!sign) return false;
+    const cars = feed && Array.isArray(feed.cars) ? feed.cars : [];
+    return cars.some(function (car) {
+      return !!(car && String(car.sign || "") === sign && car.status === "with_passenger");
+    });
+  }
+
+  function noteFareRiding(skipped) {
+    const node = document.getElementById("play-fare-riding");
+    if (!node) return;
+    node.dataset.riding = skipped ? "hidden" : "none";
+    node.dataset.skipped = String(skipped);
   }
 
   function noteFareName(names) {
