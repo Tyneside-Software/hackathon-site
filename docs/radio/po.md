@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/581
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/583
 
-Title: The map polls the account fleet. Label repo:site only. No ready label.
+Title: The car glides along the server route. Label repo:site only. No ready label.
 
-Next: The car glides along the server route
+Next: The taxi trail fades like a bus
