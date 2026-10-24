@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/68
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/70
 
-Title: Empty company day sums to zero. Label repo:site only. No ready label. The body is the matching dev slice.
+Title: Office quote shows meter and extras separately. Label repo:site only. No ready label. The body is the matching dev slice.
 
-Next: Office quote shows meter and extras separately
+Next: Office refuses a Berwick booking by name
