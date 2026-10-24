@@ -429,6 +429,28 @@ def main():
     if 'car.passenger + " waiting"' not in fare or "showPassenger(car, pickup)" not in fare:
         print("the new passenger did not show on the map", file=sys.stderr)
         return 1
+    fleet = map_js.split("const TAXI_CARS = [", 1)[1].split("function stopFleet", 1)[0]
+    if "device_id" in fleet:
+        print("a taxi was given a device id", file=sys.stderr)
+        return 1
+    for needle in ("bearing: 210", "bearing: 250", "bearing: 175", "spread: 0", "spread: 40", "spread: 80"):
+        if needle not in map_js:
+            print("the three taxis were not given different streets", file=sys.stderr)
+            return 1
+    if "car.bearing + car.spread" not in map_js or "steps=true" not in map_js:
+        print("the three taxis were not aimed along different streets", file=sys.stderr)
+        return 1
+    moving = map_js.split("function runLeg", 1)[1].split("function driveLeg", 1)[0]
+    if "streetAt(car.steps, elapsed)" not in moving or "car.street" not in moving:
+        print("a moving taxi did not name its street", file=sys.stderr)
+        return 1
+    if 'car.street = "line " + car.sign' not in map_js:
+        print("a taxi without a street shared the road", file=sys.stderr)
+        return 1
+    started = map_js.split("function startFleet", 1)[1].split("function stopFleet", 1)[0]
+    if "taxiCars.forEach" not in started or 'sign: "T1"' not in map_js or 'sign: "T2"' not in map_js:
+        print("the three taxis were not out at the same time", file=sys.stderr)
+        return 1
     posted_trip = taxi_game.post_live_trip(7, 3, ())
     posted_kinds = [row["kind"] for row in posted_trip["lines"]]
     posted_amounts = [row["amount_pence"] for row in posted_trip["lines"]]
