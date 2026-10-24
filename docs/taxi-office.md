@@ -65,7 +65,7 @@ Completing the £11.30 row adds 1130 pence once. A second press does not add it 
 
 A button fills the mixed tariff-one case from [Taxi fares](#taxi-fares): the first 161.3 yards in 20 seconds, then 46.8 seconds waiting. The desk shows 265 pence, £2.65, not 290. Exact 322.6 yards on tariff one also shows 265. The mixed button stays 265. Three more buttons quote the flag falls: tariff one at exact 161.3 yards and no waiting is 240 pence, tariff two at exact 140.5 yards and no waiting is 315 pence, and tariff two at 0 yards and 45 seconds is 315 pence.
 
-Two extras rows sit with the samples. A hiring with no miles, no waiting, and soiling is 12500 pence. A guide or hearing dog adds 0. Tariff one, 1 mile, no waiting, one animal, and no soiling is 490 + 300 = 790 pence.
+Two extras rows sit with the samples. A hiring with no miles, no waiting, and soiling is 12500 pence. A guide or hearing dog on its own row adds 0. Tariff one, 1 mile, no waiting, one animal, and no soiling is 490 + 300 = 790 pence. Neither row changes the 2860 day.
 
 Alex runs the 1130 pence booking and the 490 pence mile. Sam runs the 1240 pence night booking. Completed takings are Alex 1620 pence and Sam 1240 pence. The day is still 2860 pence. These are gross fares. The desk does not subtract a driver share.
 
