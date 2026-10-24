@@ -1181,6 +1181,43 @@
     return count;
   }
 
+  function jobCounts(feed) {
+    const seen = new Set();
+    let hunting = 0;
+    let onBreak = 0;
+    function take(car) {
+      if (!car) return;
+      const sign = String(car.sign || "");
+      if (sign) {
+        if (seen.has(sign)) return;
+        seen.add(sign);
+      }
+      const job = typeof car.job === "string" ? car.job.trim() : "";
+      if (job === "on break") onBreak += 1;
+      else if (job === "hunting" || job === "travelling to a better spot") hunting += 1;
+    }
+    const cars = feed && Array.isArray(feed.cars) ? feed.cars : [];
+    cars.forEach(take);
+    const firms = feed && Array.isArray(feed.firms) ? feed.firms : [];
+    firms.forEach((firm) => {
+      const rows = firm && Array.isArray(firm.cars) ? firm.cars : [];
+      rows.forEach(take);
+    });
+    return { hunting: hunting, onBreak: onBreak };
+  }
+
+  function showJobCount(counts) {
+    const node = document.getElementById("play-job-count");
+    if (!node) return;
+    if (!counts) {
+      node.textContent = "";
+      node.hidden = true;
+      return;
+    }
+    node.hidden = false;
+    node.textContent = counts.hunting + " hunting. " + counts.onBreak + " on break.";
+  }
+
   function showWaitingCount(count) {
     const node = document.getElementById("play-waiting-count");
     if (!node) return;
@@ -1261,6 +1298,7 @@
     clearPlayAhead();
     clearPlayFirms();
     clearFeedDepots();
+    showJobCount(null);
     if (wasFollowing) map.fitBounds(circle.getBounds());
     noteFollow();
     playChips.forEach((marker) => map.removeLayer(marker));
@@ -2103,6 +2141,7 @@
     playFed = true;
     paintPlayCars(data);
     paintFeedDepots(data);
+    showJobCount(jobCounts(data));
     noteStartedTen(data);
     paintPlayTrails(data);
     paintPlayFares(data);
