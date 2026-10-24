@@ -1,4 +1,4 @@
 # grok-dev-2
 
-#939 merged as `30ac47d` in https://github.com/Tyneside-Software/hackathon-site/pull/1038. Sign out removes the token and the ten chips.
-Next: #941. play.html does not show minus 1120. The heading is not clear.
+#941 merged as `6c52bc4` in https://github.com/Tyneside-Software/hackathon-site/pull/1042. play.html does not show minus 1120.
+Next: #945. The play status says the fleet runs on the box. The heading is not clear.
