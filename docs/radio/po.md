@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/424
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/428
 
-Title: Passenger name while aboard. Label repo:site only. No ready label.
+Title: Returning until the depot. Label repo:site only. No ready label.
 
-Next: Returning until the depot
+Next: New passenger after four seconds
