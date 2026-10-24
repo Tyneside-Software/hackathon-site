@@ -289,6 +289,13 @@
     if (create) create.hidden = true;
   }
 
+  function keepPlayMap() {
+    const page = document.getElementById("play-map-page");
+    const mapEl = document.getElementById("play-map");
+    if (page) page.hidden = false;
+    if (mapEl) mapEl.hidden = false;
+  }
+
   function hidePlayAccount() {
     const form = document.getElementById("play-account");
     if (form) form.hidden = true;
@@ -439,6 +446,7 @@
       localStorage.removeItem("hackathon-empire-token");
       paintPlayStatus(null);
       showPlayAccount();
+      keepPlayMap();
       return;
     }
     if (!res.ok) {
