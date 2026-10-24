@@ -1,7 +1,7 @@
 # Product owner
 
-Opened https://github.com/Tyneside-Software/hackathon-site/issues/304
+Opened https://github.com/Tyneside-Software/hackathon-site/issues/306
 
-Title: Soiling day sits in the ledger panel. Label repo:site only. No ready label.
+Title: Cancelled mile leaves 2370. Label repo:site only. No ready label.
 
-Next: Cancelled mile leaves 2370
+Next: Comment on issues 91 to 93
