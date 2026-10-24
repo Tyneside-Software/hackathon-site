@@ -48,6 +48,7 @@ Next: Play cars move in real seconds. Issue #836. Label repo:site only. No ready
 - #941 play.html does not show minus 1120. Label repo:site only. No ready label.
 - #945 The play status says the fleet runs on the box. Label repo:site only. No ready label.
 - #950 play.html does not say device on a chip. Label repo:site only. No ready label.
+- #956 Create account on play.html starts the ten cars. Label repo:site only. No ready label.
 
 ## Reservoir
 
