@@ -20,10 +20,34 @@
     const top = nav ? Math.ceil(nav.getBoundingClientRect().height) : 0;
     document.documentElement.style.setProperty("--play-nav", top + "px");
     map.invalidateSize();
+    keepDepotClear();
+  }
+  function keepDepotClear() {
+    const money = document.getElementById("play-money");
+    const mapEl = document.getElementById("play-map");
+    const node = document.getElementById("play-depot-clear");
+    if (!money || !mapEl) return;
+    const pin = map.latLngToContainerPoint(L.latLng(55.0367, -1.5075));
+    const mapBox = mapEl.getBoundingClientRect();
+    const x = mapBox.left + pin.x;
+    const y = mapBox.top + pin.y;
+    money.style.marginTop = "0px";
+    let box = money.getBoundingClientRect();
+    const hits = function (rect) {
+      return x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom;
+    };
+    if (hits(box)) money.style.marginTop = Math.ceil(y - box.top + 36) + "px";
+    box = money.getBoundingClientRect();
+    const clear = !hits(box);
+    if (node) {
+      node.dataset.cover = clear ? "clear" : "covers";
+      node.dataset.pin = "55.0367,-1.5075";
+    }
   }
   seatPlayScreen();
   map.fitBounds(circle.getBounds());
   window.addEventListener("resize", seatPlayScreen);
+  map.on("moveend", keepDepotClear);
   function clearBusToggle() {
     document.querySelectorAll("button, input, select").forEach((node) => {
       const label = ((node.textContent || "") + " " + (node.id || "") + " " + (node.getAttribute("aria-label") || "")).toLowerCase();
@@ -91,6 +115,7 @@
       "play-started-ten",
       "play-signed-again",
       "play-cash-pence",
+      "play-depot-clear",
       "play-locks",
       "play-osrm",
       "play-buses",
