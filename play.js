@@ -250,6 +250,7 @@
   const playTrails = [];
   const playTrailFed = new Map();
   const playAhead = [];
+  const playBehind = [];
   let playChosen = "";
   let playFollow = false;
   let playFollowFit = "";
@@ -309,16 +310,16 @@
     return points;
   }
 
-  function routeAhead(car, now) {
-    if (!car || car.status === "at_depot") return [];
+  function routeCursor(car, now) {
+    if (!car || car.status === "at_depot") return null;
     const points = routePoints(car);
-    if (points.length < 2) return [];
-    const here = playPlace(car, now);
-    if (!here) return [];
+    if (points.length < 2) return null;
+    const here = taxiHere(car, now);
+    if (!here) return null;
     const duration = Number(car.duration_s) || 0;
     const started = Number(car.leg_started) || 0;
     const elapsed = now - started;
-    if (duration > 0 && elapsed >= duration) return [];
+    if (duration > 0 && elapsed >= duration) return null;
     let index = 1;
     if (duration > 0 && elapsed > 0) {
       const fraction = Math.min(1, elapsed / duration);
@@ -337,12 +338,28 @@
         break;
       }
     }
-    const ahead = [here];
-    for (let k = index; k < points.length; k++) ahead.push(points[k]);
+    return { points: points, here: here, index: index };
+  }
+
+  function routeAhead(car, now) {
+    const cursor = routeCursor(car, now);
+    if (!cursor) return [];
+    const ahead = [cursor.here];
+    for (let k = cursor.index; k < cursor.points.length; k++) ahead.push(cursor.points[k]);
     if (ahead.length < 2) return [];
     const last = ahead[ahead.length - 1];
-    if (ahead.length === 2 && here[0] === last[0] && here[1] === last[1]) return [];
+    if (ahead.length === 2 && cursor.here[0] === last[0] && cursor.here[1] === last[1]) return [];
     return ahead;
+  }
+
+  function routeBehind(car, now) {
+    const cursor = routeCursor(car, now);
+    if (!cursor) return [];
+    const behind = [];
+    for (let k = 0; k < cursor.index; k++) behind.push(cursor.points[k]);
+    behind.push(cursor.here);
+    if (behind.length < 2) return [];
+    return behind;
   }
 
   function legEndName(car) {
@@ -612,6 +629,8 @@
     noteToPassenger();
     noteCarJob();
     paintPlayAhead(feed);
+    paintPlayBehind(feed);
+    paintPlayTrails(feed);
     paintPlayFirms(feed);
     followChosenTaxi(feed);
   }
@@ -689,6 +708,42 @@
     node.dataset.chosen = playChosen;
     node.dataset.place = "feed";
     node.dataset.click = "shows";
+  }
+
+  function routeSolidStyle(colour) {
+    return {
+      color: colour,
+      weight: 5,
+      opacity: 0.85,
+      lineCap: "round",
+      lineJoin: "round",
+      interactive: false
+    };
+  }
+
+  function paintPlayBehind(feed) {
+    const tracking = !!(playFollow && playChosen);
+    const car = tracking ? followedCar(feed) : null;
+    const behind = car ? routeBehind(car, playNow()) : [];
+    if (behind.length < 2) {
+      clearPlayBehind();
+      return;
+    }
+    const colour = trailColour(car);
+    const line = playBehind[0];
+    if (line && line._playSign === playChosen) {
+      line.setLatLngs(behind);
+      if (line._playColour !== colour) {
+        line.setStyle(routeSolidStyle(colour));
+        line._playColour = colour;
+      }
+    } else {
+      clearPlayBehind();
+      const drawn = L.polyline(behind, routeSolidStyle(colour)).addTo(map);
+      drawn._playSign = playChosen;
+      drawn._playColour = colour;
+      playBehind.push(drawn);
+    }
   }
 
   function noteFollow() {
@@ -788,6 +843,8 @@
     playChosen = "";
     playFollowFit = "";
     clearPlayAhead();
+    clearPlayBehind();
+    paintPlayTrails(playFeed);
     zoomToAllTaxis(playFeed);
     noteFollow();
     refreshCarLabels(playFeed);
@@ -1439,6 +1496,11 @@
     playAhead.length = 0;
   }
 
+  function clearPlayBehind() {
+    playBehind.forEach((line) => map.removeLayer(line));
+    playBehind.length = 0;
+  }
+
   function trailPoint(row) {
     if (!Array.isArray(row) || row.length < 3) return null;
     const lng = Number(row[0]);
@@ -1490,50 +1552,44 @@
 
   function paintPlayTrails(feed) {
     clearPlayTrails();
+    const tracking = !!(playFollow && playChosen);
+    const car = tracking ? followedCar(feed) : null;
+    if (!car || !Array.isArray(car.trail)) {
+      playTrailFed.clear();
+      noteTrailReplaced([]);
+      noteTrailChips([]);
+      return;
+    }
     const keep = Number(feed && feed.trail_s);
     const trailS = Number.isFinite(keep) && keep > 0 ? keep : 600;
     const now = playNow();
-    const cars = feed && Array.isArray(feed.cars) ? feed.cars : [];
-    const fedSigns = [];
-    const keptSigns = [];
-    cars.forEach((car) => {
-      if (!car || !car.sign || !Array.isArray(car.trail)) return;
-      if (!drawnPlaySign(car.sign)) return;
-      const sign = String(car.sign);
-      const boughtS = boughtTrailSeconds(car);
-      const keepS = boughtS === null ? trailS : boughtS;
-      const points = [];
-      const stamps = [];
-      let dropped = 0;
-      car.trail.forEach((row) => {
-        const point = trailPoint(row);
-        if (!point) return;
-        if (now - point.at > keepS) {
-          if (boughtS !== null) dropped += 1;
-          return;
-        }
-        stamps.push(trailStamp(point));
-        points.push([point.lat, point.lng]);
-      });
-      playTrailFed.set(sign, stamps);
-      fedSigns.push(sign);
-      if (boughtS !== null) noteBoughtTrailAge(dropped);
-      if (points.length < 2) return;
-      const line = L.polyline(points, {
-        color: trailColour(car),
-        weight: 4,
-        opacity: 0.7
-      }).addTo(map);
+    const sign = String(car.sign || playChosen);
+    const boughtS = boughtTrailSeconds(car);
+    const keepS = boughtS === null ? trailS : boughtS;
+    const points = [];
+    const stamps = [];
+    let dropped = 0;
+    car.trail.forEach((row) => {
+      const point = trailPoint(row);
+      if (!point) return;
+      if (now - point.at > keepS) {
+        if (boughtS !== null) dropped += 1;
+        return;
+      }
+      stamps.push(trailStamp(point));
+      points.push([point.lat, point.lng]);
+    });
+    playTrailFed.clear();
+    playTrailFed.set(sign, stamps);
+    if (boughtS !== null) noteBoughtTrailAge(dropped);
+    if (points.length >= 2) {
+      const line = L.polyline(points, routeSolidStyle(trailColour(car))).addTo(map);
       line._feedStamps = stamps.slice();
       playTrails.push(line);
-      if (keepTrailChip(sign)) keptSigns.push(sign);
-    });
-    const stale = [];
-    playTrailFed.forEach(function (stamps, sign) {
-      if (fedSigns.indexOf(sign) === -1) stale.push(sign);
-    });
-    stale.forEach(function (sign) { playTrailFed.delete(sign); });
-    noteTrailReplaced(fedSigns);
+    }
+    const keptSigns = [];
+    if (keepTrailChip(sign)) keptSigns.push(sign);
+    noteTrailReplaced(points.length >= 2 ? [sign] : []);
     noteTrailChips(keptSigns);
   }
 
@@ -1829,6 +1885,8 @@
     playChosen = "";
     playFollow = false;
     clearPlayAhead();
+    clearPlayBehind();
+    clearPlayTrails();
     clearPlayFirms();
     clearFeedDepots();
     clearFeedLoiter();
@@ -3035,6 +3093,7 @@
     noteToPassenger();
     noteCarJob();
     paintPlayAhead(playFeed);
+    paintPlayBehind(playFeed);
     paintPlayFirms(playFeed);
     followChosenTaxi(playFeed);
     paintPlaySide(playFeed);
