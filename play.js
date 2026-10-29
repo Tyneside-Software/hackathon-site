@@ -597,28 +597,56 @@
     followChosenTaxi(feed);
   }
 
-  function paintPlayAhead(feed) {
-    clearPlayAhead();
-    const node = document.getElementById("play-route-ahead");
+  function followedCar(feed) {
+    if (!playFollow || !playChosen) return null;
     const cars = feed && Array.isArray(feed.cars) ? feed.cars : [];
-    const car = playChosen ? cars.find((row) => row && String(row.sign) === playChosen) : null;
-    if (car && playChips.has(playChosen)) {
-      const ahead = routeAhead(car, playNow());
-      if (ahead.length >= 2) {
-        const line = L.polyline(ahead, {
-          color: trailColour(car),
-          weight: 3,
-          opacity: 0.9,
-          dashArray: "6 8"
-        }).addTo(map);
-        playAhead.push(line);
+    const own = cars.find((row) => row && String(row.sign) === playChosen);
+    if (own) return own;
+    const rival = chosenFirmCar(feed);
+    return rival ? rival.car : null;
+  }
+
+  function paintPlayAhead(feed) {
+    const node = document.getElementById("play-route-ahead");
+    const tracking = !!(playFollow && playChosen);
+    const car = tracking ? followedCar(feed) : null;
+    const ahead = car ? routeAhead(car, playNow()) : [];
+    if (ahead.length < 2) {
+      clearPlayAhead();
+      if (node) {
+        node.dataset.ahead = "clear";
+        node.dataset.chosen = tracking ? playChosen : "";
+        node.dataset.place = "feed";
+        node.dataset.click = tracking ? "shows" : "waiting";
       }
+      return;
+    }
+    const colour = trailColour(car);
+    const line = playAhead[0];
+    if (line && line._playSign === playChosen) {
+      line.setLatLngs(ahead);
+      if (line._playColour !== colour) {
+        line.setStyle({ color: colour });
+        line._playColour = colour;
+      }
+    } else {
+      clearPlayAhead();
+      const drawn = L.polyline(ahead, {
+        color: colour,
+        weight: 3,
+        opacity: 0.95,
+        className: "play-route-ahead",
+        interactive: false
+      }).addTo(map);
+      drawn._playSign = playChosen;
+      drawn._playColour = colour;
+      playAhead.push(drawn);
     }
     if (!node) return;
-    node.dataset.ahead = playAhead.length ? "drawn" : "clear";
+    node.dataset.ahead = "drawn";
     node.dataset.chosen = playChosen;
     node.dataset.place = "feed";
-    node.dataset.click = playChosen ? "shows" : "waiting";
+    node.dataset.click = "shows";
   }
 
   function noteFollow() {
@@ -651,6 +679,8 @@
 
   function stopPlayFollow() {
     playFollow = false;
+    playChosen = "";
+    clearPlayAhead();
     map.fitBounds(circle.getBounds());
     noteFollow();
     refreshCarLabels(playFeed);
