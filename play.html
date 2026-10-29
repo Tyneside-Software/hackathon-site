@@ -131,6 +131,31 @@
       border-radius: 12px;
     }
     #play-account[hidden] { display: none; }
+    #play-how-overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 45;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      background: rgba(8, 12, 16, 0.55);
+    }
+    #play-how-overlay[hidden] { display: none; }
+    #play-how-box {
+      width: min(28rem, 100%);
+      max-height: min(82%, 36rem);
+      overflow: auto;
+      padding: 1rem 1.1rem 1.15rem;
+      background: rgba(12, 18, 25, 0.96);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 12px;
+      color: #f8fafc;
+    }
+    #play-how-box h2 { margin: 0 0 0.55rem; font-size: 1.15rem; }
+    #play-how-box p { margin: 0.4rem 0; font: 500 0.92rem/1.45 system-ui, sans-serif; }
+    #play-how-box ul { margin: 0.35rem 0 0.6rem; padding-left: 1.15rem; }
+    #play-how-box li { margin: 0.28rem 0; font: 500 0.92rem/1.4 system-ui, sans-serif; }
     #play-account label { display: block; margin: 0.55rem 0 0.15rem; font-size: 0.82rem; }
     #play-account input { display: block; width: 100%; margin-top: 0.25rem; box-sizing: border-box; }
     #play-account-status { min-height: 1.2em; }
@@ -172,6 +197,8 @@
     }
     #play-waiting-names li { margin: 0.25rem 0; }
     #play-signout,
+    #play-how,
+    #play-how-close,
     #play-follow-stop,
     #play-cancel {
       position: static;
@@ -317,7 +344,10 @@
             <p id="play-clock"></p>
             <p id="play-band"></p>
             <p id="play-side-osrm"></p>
-            <button type="button" id="play-signout">Sign out</button>
+            <div class="play-side-actions">
+              <button type="button" id="play-how">How to play</button>
+              <button type="button" id="play-signout">Sign out</button>
+            </div>
           </section>
           <section class="play-side-block">
             <p class="hero-kicker">Demand</p>
@@ -415,6 +445,23 @@
           <p id="play-password-rule">The password is at least 8 characters.</p>
           <p id="play-account-status"></p>
         </form>
+        <div id="play-how-overlay" hidden>
+          <div id="play-how-box" role="dialog" aria-modal="true" aria-labelledby="play-how-title">
+            <h2 id="play-how-title">How to play</h2>
+            <p>You run a taxi firm on Tyneside. The clock is real time: one second here is one second in the game.</p>
+            <p>You start with ten taxis at Shiremoor. People appear on the map. Free taxis collect them, drive them, then look for the next job. North and south firms do the same, and they will take jobs you leave.</p>
+            <ul>
+              <li>Click a taxi on the map or in <strong>Your fleet</strong> to follow it. The map zooms to that taxi and its route. The dotted line is where it is going.</li>
+              <li><strong>Stop following</strong> zooms out just far enough to see every taxi.</li>
+              <li><strong>Cancel this job</strong> drops a fare you do not want. Miles already driven still cost fuel.</li>
+              <li>Click the map to fill a loiter patch, then set it so idle taxis wait in that area.</li>
+              <li>When you have 800000 pence, buy another taxi from the money panel.</li>
+            </ul>
+            <p>The money panel is fare in (what passengers paid), driver share (half of that), fuel (20 pence a mile), standing (1500 pence per taxi you own), and cash (what you can spend).</p>
+            <p>Keep cars on paid work, beat the other firms to waiting people, and grow the fleet.</p>
+            <button type="button" id="play-how-close">Close</button>
+          </div>
+        </div>
       </div>
       </div>
       <div id="play-under-map">
@@ -510,6 +557,6 @@
 
   <script src="config.js?v=20261024-https1"></script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-  <script src="play.js?v=20261024-tiplabel1"></script>
+  <script src="play.js?v=20261024-howto1"></script>
 </body>
 </html>

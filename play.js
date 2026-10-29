@@ -3158,6 +3158,27 @@
   if (playCreate) playCreate.addEventListener("click", createPlayAccount);
   const playSignOut = document.getElementById("play-signout");
   if (playSignOut) playSignOut.addEventListener("click", signOutPlay);
+  const playHow = document.getElementById("play-how");
+  const playHowOverlay = document.getElementById("play-how-overlay");
+  const playHowClose = document.getElementById("play-how-close");
+  const playHowBox = document.getElementById("play-how-box");
+  function openPlayHow() {
+    if (playHowOverlay) playHowOverlay.hidden = false;
+  }
+  function closePlayHow() {
+    if (playHowOverlay) playHowOverlay.hidden = true;
+  }
+  if (playHow) playHow.addEventListener("click", openPlayHow);
+  if (playHowClose) playHowClose.addEventListener("click", closePlayHow);
+  if (playHowOverlay) {
+    playHowOverlay.addEventListener("click", function (event) {
+      if (event.target === playHowOverlay) closePlayHow();
+    });
+  }
+  if (playHowBox) playHowBox.addEventListener("click", function (event) { event.stopPropagation(); });
+  document.addEventListener("keydown", function (event) {
+    if (event.key === "Escape") closePlayHow();
+  });
   const playFollowStop = document.getElementById("play-follow-stop");
   if (playFollowStop) playFollowStop.addEventListener("click", stopPlayFollow);
   const playCancel = document.getElementById("play-cancel");
