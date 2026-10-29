@@ -148,19 +148,27 @@
     }
     #play-how-overlay[hidden] { display: none; }
     #play-how-box {
-      width: min(28rem, 100%);
-      max-height: min(82%, 36rem);
+      width: min(46rem, 96%);
+      max-height: min(92%, 52rem);
       overflow: auto;
-      padding: 1rem 1.1rem 1.15rem;
-      background: rgba(12, 18, 25, 0.96);
+      padding: 1.15rem 1.3rem 1.35rem;
+      background: rgba(12, 18, 25, 0.97);
       border: 1px solid rgba(255, 255, 255, 0.14);
       border-radius: 12px;
       color: #f8fafc;
     }
-    #play-how-box h2 { margin: 0 0 0.55rem; font-size: 1.15rem; }
-    #play-how-box p { margin: 0.4rem 0; font: 500 0.92rem/1.45 system-ui, sans-serif; }
-    #play-how-box ul { margin: 0.35rem 0 0.6rem; padding-left: 1.15rem; }
-    #play-how-box li { margin: 0.28rem 0; font: 500 0.92rem/1.4 system-ui, sans-serif; }
+    #play-how-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      margin: 0 0 0.35rem;
+    }
+    #play-how-box h2 { margin: 0; font-size: 1.35rem; }
+    #play-how-box h3 { margin: 0.95rem 0 0.3rem; font-size: 1rem; color: #7dd3fc; }
+    #play-how-box p { margin: 0.4rem 0; font: 500 0.95rem/1.5 system-ui, sans-serif; }
+    #play-how-box ul { margin: 0.35rem 0 0.55rem; padding-left: 1.2rem; }
+    #play-how-box li { margin: 0.32rem 0; font: 500 0.95rem/1.45 system-ui, sans-serif; }
     #play-account label { display: block; margin: 0.55rem 0 0.15rem; font-size: 0.82rem; }
     #play-account input { display: block; width: 100%; margin-top: 0.25rem; box-sizing: border-box; }
     #play-account-status { min-height: 1.2em; }
@@ -453,19 +461,36 @@
         </form>
         <div id="play-how-overlay" hidden>
           <div id="play-how-box" role="dialog" aria-modal="true" aria-labelledby="play-how-title">
-            <h2 id="play-how-title">How to play</h2>
-            <p>You run a taxi firm on Tyneside. The clock is real time: one second here is one second in the game.</p>
-            <p>You start with ten taxis at Shiremoor. People appear on the map. Free taxis collect them, drive them, then look for the next job. North and south firms do the same, and they will take jobs you leave.</p>
+            <div id="play-how-head">
+              <h2 id="play-how-title">How to play</h2>
+              <button type="button" id="play-how-close">Close</button>
+            </div>
+            <h3>The idea</h3>
+            <p>You run a taxi firm on Tyneside. The clock is real time: one second here is one second in the game. You start with ten taxis at the Shiremoor depot. People appear around the map through the day. Free taxis collect them, drive them, then look for the next job.</p>
+            <p>North and south are rival firms. They use the same engine and will take people your cars are not covering. The aim is to keep your cars on paid work, beat the rivals to waiting people, and grow the fleet.</p>
+            <h3>Jobs</h3>
+            <p>Demand follows the time of day: morning commute into town, daytime coast and hospitals, evening reverse, nights out. A waiting person is claimed by the nearest free taxi. That taxi drives to them (collecting), then to the drop (carrying), then is free again.</p>
             <ul>
-              <li>Click a taxi on the map or in <strong>Your fleet</strong> to follow it. The map zooms to that taxi and its route. The dotted line is where it is going.</li>
+              <li>Click a taxi on the map or in <strong>Your fleet</strong> to follow it. The map zooms to that taxi and its route. The dotted moving line is where it is going. The solid line is where it has already been. Only one taxi’s route is shown at a time.</li>
               <li><strong>Stop following</strong> zooms out just far enough to see every taxi.</li>
-              <li><strong>Cancel this job</strong> drops a fare you do not want. Miles already driven still cost fuel.</li>
-              <li>Click the map to fill a loiter patch, then set it so idle taxis wait in that area.</li>
-              <li>When you have 800000 pence, buy another taxi from the money panel.</li>
+              <li><strong>Cancel this job</strong> drops a fare you do not want. If the car has already left, miles driven still cost fuel and there is no fare.</li>
             </ul>
-            <p>The money panel is fare in (what passengers paid), driver share (half of that), fuel (20 pence a mile), standing (1500 pence per taxi you own), and cash (what you can spend).</p>
-            <p>Keep cars on paid work, beat the other firms to waiting people, and grow the fleet.</p>
-            <button type="button" id="play-how-close">Close</button>
+            <h3>Loiter</h3>
+            <p>A loiter patch is a circle you place on the map. Idle taxis of that firm wait inside it instead of hunting around or sitting at the depot. Cars already on a job keep that job. Two idle taxis will not sit on the same point. An empty drive to the patch is at most two miles.</p>
+            <p>Click the map to fill latitude and longitude. Set a radius between 0.2 and 8 km. Firm is blank for <strong>your</strong> cars, or <code>north</code> / <code>south</code> to park that rival. The blue circle on the map is the patch.</p>
+            <p>Use it to park spare cars near busy places (town in the morning, the coast in the afternoon) so the next person is closer than the depot.</p>
+            <h3>Money</h3>
+            <p>The panel on the right is your ledger, in pence:</p>
+            <ul>
+              <li><strong>fare in</strong> — what passengers paid on finished trips (North Tyneside tariff)</li>
+              <li><strong>driver share</strong> — half of fare in</li>
+              <li><strong>fuel</strong> — 20 pence a mile, including empty running</li>
+              <li><strong>standing</strong> — 1500 pence per taxi you own</li>
+              <li><strong>cash</strong> — what you can spend</li>
+            </ul>
+            <p>A new taxi costs 800000 pence. Click the taxi marked for sale, then buy it from that panel. It waits a few seconds at the depot, then takes a fare.</p>
+            <h3>Rivals</h3>
+            <p>North office and South office in the bar list that firm’s recent bookings. They keep money from trips your cars did not take. Watch Demand in the sidebar: if north or south have claimed waiters, they got there first.</p>
           </div>
         </div>
       </div>
