@@ -22,6 +22,10 @@
     map.invalidateSize();
     keepDepotClear();
     keepStatusClear();
+    requestAnimationFrame(function () {
+      map.invalidateSize();
+      keepDepotClear();
+    });
   }
   function keepStatusClear() {
     const status = document.getElementById("play-status");
@@ -110,8 +114,11 @@
     const under = document.getElementById("play-under-map");
     const mapEl = document.getElementById("play-map");
     const screen = document.getElementById("play-screen");
+    const desk = document.getElementById("play-desk");
     if (!under || !mapEl) return;
-    if (screen && screen.contains(mapEl)) {
+    if (desk && desk.contains(mapEl)) {
+      if (under.previousElementSibling !== desk) desk.insertAdjacentElement("afterend", under);
+    } else if (screen && screen.contains(mapEl)) {
       if (under.previousElementSibling !== screen) screen.insertAdjacentElement("afterend", under);
     } else if (mapEl.parentNode && under.previousElementSibling !== mapEl) {
       mapEl.insertAdjacentElement("afterend", under);
@@ -565,9 +572,12 @@
       if (marker._icon) marker._icon.title = title;
       if (list) {
         const item = document.createElement("li");
-        item.dataset.sign = sign;
-        item.dataset.job = job;
-        item.textContent = taxiListText(sign, car, reported ? reported[0] : null, reported ? reported[1] : null);
+        fillTaxiListItem(item, sign, car, reported ? reported[0] : null, reported ? reported[1] : null);
+        item.addEventListener("click", function () {
+          playChosen = sign;
+          playFollow = true;
+          paintPlayCars(playFeed);
+        });
         list.appendChild(item);
       }
     }
@@ -707,6 +717,232 @@
     map.fitBounds(circle.getBounds());
     noteFollow();
     refreshCarLabels(playFeed);
+    paintPlaySide(playFeed);
+  }
+
+  function londonParts(nowS) {
+    const fmt = new Intl.DateTimeFormat("en-GB", {
+      timeZone: "Europe/London",
+      weekday: "short",
+      hour: "2-digit",
+      minute: "2-digit",
+      hourCycle: "h23"
+    });
+    const parts = fmt.formatToParts(new Date(nowS * 1000));
+    const out = { weekday: "", hour: 0, minute: 0 };
+    parts.forEach((part) => {
+      if (part.type === "weekday") out.weekday = part.value;
+      if (part.type === "hour") out.hour = Number(part.value);
+      if (part.type === "minute") out.minute = Number(part.value);
+    });
+    return out;
+  }
+
+  function londonBandName(nowS) {
+    const clock = londonParts(nowS);
+    const minutes = clock.hour * 60 + clock.minute;
+    if (minutes >= 7 * 60 && minutes < 9 * 60 + 30) return "Morning commute";
+    if (minutes >= 9 * 60 + 30 && minutes < 16 * 60 + 30) return "Daytime";
+    if (minutes >= 16 * 60 + 30 && minutes < 19 * 60 + 30) return "Evening";
+    if (minutes >= 19 * 60 + 30 || minutes < 60) return "Night out";
+    return "Small hours";
+  }
+
+  function routeMilesTotal(points) {
+    let miles = 0;
+    for (let i = 1; i < points.length; i++) {
+      miles += haversineKm(
+        { lat: points[i - 1][0], lng: points[i - 1][1] },
+        { lat: points[i][0], lng: points[i][1] }
+      ) / 1.609344;
+    }
+    return miles;
+  }
+
+  function fleetCounts(feed) {
+    const counts = { waiting: 0, collecting: 0, carrying: 0, returning: 0, hunting: 0, break: 0 };
+    const cars = feed && Array.isArray(feed.cars) ? feed.cars : [];
+    cars.forEach((car) => {
+      const job = carJob(car);
+      if (job === "waiting") counts.waiting += 1;
+      else if (job === "collecting") counts.collecting += 1;
+      else if (job === "carrying") counts.carrying += 1;
+      else if (job === "returning") counts.returning += 1;
+      else if (job === "on break") counts.break += 1;
+      else if (job === "hunting" || job === "travelling to a better spot") counts.hunting += 1;
+    });
+    return counts;
+  }
+
+  function canCancelJob(feed, sign) {
+    if (!sign) return false;
+    const cars = feed && Array.isArray(feed.cars) ? feed.cars : [];
+    const car = cars.find((row) => row && String(row.sign) === sign);
+    if (!car) return false;
+    const job = carJob(car);
+    if (job === "collecting" || job === "carrying") return true;
+    const people = feed && Array.isArray(feed.people) ? feed.people : [];
+    return people.some((person) => String(person.sign || "") === sign);
+  }
+
+  function paintPlayClock(feed) {
+    const now = Number(feed && feed.server_now);
+    const stamp = Number.isFinite(now) ? now : playNow();
+    const clock = document.getElementById("play-clock");
+    const band = document.getElementById("play-band");
+    const parts = londonParts(stamp);
+    if (clock) {
+      const hh = String(parts.hour).padStart(2, "0");
+      const mm = String(parts.minute).padStart(2, "0");
+      clock.textContent = (parts.weekday ? parts.weekday + " " : "") + hh + ":" + mm;
+    }
+    if (band) band.textContent = londonBandName(stamp);
+  }
+
+  function paintFleetCounts(feed) {
+    const node = document.getElementById("play-fleet-counts");
+    if (!node) return;
+    const counts = fleetCounts(feed);
+    node.textContent = counts.waiting + " waiting · " + counts.collecting + " collecting · " +
+      counts.carrying + " carrying · " + counts.returning + " returning · " +
+      counts.hunting + " hunting · " + counts.break + " on break";
+  }
+
+  function paintFollowPanel(feed) {
+    const who = document.getElementById("play-follow-who");
+    const detail = document.getElementById("play-follow-detail");
+    const milesNode = document.getElementById("play-follow-miles");
+    const routeNode = document.getElementById("play-follow-route");
+    const cancel = document.getElementById("play-cancel");
+    const car = followedCar(feed);
+    if (!car) {
+      if (who) who.textContent = "Click a taxi on the map or in the list to follow it.";
+      if (detail) detail.textContent = "";
+      if (milesNode) milesNode.textContent = "";
+      if (routeNode) routeNode.textContent = "";
+      if (cancel) cancel.hidden = true;
+      return;
+    }
+    const sign = String(car.sign || playChosen);
+    const job = carJob(car);
+    if (who) who.textContent = "Following " + sign + (job ? " · " + job : "");
+    const bits = [];
+    const pickup = feedText(car.pickup);
+    const drop = feedText(car.drop);
+    if (pickup || drop) bits.push((pickup || "?") + " → " + (drop || "?"));
+    const journey = carriedJourney(car) || feedText(car.journey);
+    if (journey) bits.push(journey);
+    const passenger = typeof car.passenger === "string" ? car.passenger.trim() : "";
+    if (passenger) bits.push(passenger);
+    const trip = feedPence(car, "trip_pence");
+    if (trip !== null) bits.push(trip + " pence");
+    const left = feedSecondsLeft(car, playNow());
+    if (left !== null) bits.push(left + "s left");
+    if (detail) detail.textContent = bits.join(" · ");
+    const points = routePoints(car);
+    const total = routeMilesTotal(points);
+    const duration = Number(car.duration_s) || 0;
+    const started = Number(car.leg_started) || 0;
+    const frac = duration > 0 ? Math.min(1, Math.max(0, (playNow() - started) / duration)) : 0;
+    if (milesNode) {
+      milesNode.textContent = total > 0
+        ? (total * frac).toFixed(2) + " miles driven · " + (total * (1 - frac)).toFixed(2) + " miles left"
+        : "";
+    }
+    if (routeNode) {
+      if (car.osrm === false) routeNode.textContent = "Straight-line fallback";
+      else if (car.osrm === true) routeNode.textContent = "Street route (OSRM)";
+      else routeNode.textContent = "";
+    }
+    if (cancel) cancel.hidden = !canCancelJob(feed, sign);
+  }
+
+  function paintRivalCover(feed) {
+    const node = document.getElementById("play-rival-cover");
+    if (!node) return;
+    const people = feed && Array.isArray(feed.people) ? feed.people : [];
+    let yours = 0;
+    let rival = 0;
+    let none = 0;
+    people.forEach((person) => {
+      if (!person || allocatedTaxiArrived(feed, person)) return;
+      const sign = String(person.sign || "").trim();
+      if (!sign) none += 1;
+      else if (sign.charAt(0) === "T") yours += 1;
+      else rival += 1;
+    });
+    node.textContent = rival + " claimed by north/south. " + yours + " claimed by your cars. " + none + " unallocated.";
+  }
+
+  function paintFirmSummaries(feed) {
+    ["north", "south"].forEach((name) => {
+      const node = document.getElementById("play-firm-" + name);
+      if (!node) return;
+      const firm = firmCalled(feed, name);
+      if (!firm) {
+        node.textContent = name + " — no feed yet.";
+        return;
+      }
+      const rows = Array.isArray(firm.cars) ? firm.cars : [];
+      let out = 0;
+      rows.forEach((car) => {
+        if (carJob(car) && carJob(car) !== "waiting" && carJob(car) !== "on break") out += 1;
+      });
+      const fare = feedPence(firm, "fare_in");
+      const books = Array.isArray(firm.bookings) ? firm.bookings.length : 0;
+      node.textContent = name + " · " + rows.length + " cars · " + out + " out · " +
+        (fare === null ? "0" : String(fare)) + " pence in · " + books + " bookings";
+    });
+  }
+
+  function paintDepotsList(feed) {
+    const list = document.getElementById("play-depots-list");
+    if (!list) return;
+    list.textContent = "";
+    function add(name, lat, lng) {
+      const item = document.createElement("li");
+      item.textContent = name + " · " + Number(lat).toFixed(4) + ", " + Number(lng).toFixed(4);
+      list.appendChild(item);
+    }
+    add("Shiremoor (yours)", 55.0367, -1.5075);
+    const firms = feed && Array.isArray(feed.firms) ? feed.firms : [];
+    firms.forEach((firm) => {
+      if (!firm || !Array.isArray(firm.depot) || firm.depot.length < 2) return;
+      const lat = Number(firm.depot[0]);
+      const lng = Number(firm.depot[1]);
+      if (!Number.isFinite(lat) || !Number.isFinite(lng)) return;
+      const name = depotFirmName(firm);
+      add((name || "firm") + " depot", lat, lng);
+    });
+  }
+
+  function paintLoiterNow(feed) {
+    const node = document.getElementById("play-loiter-now");
+    if (!node) return;
+    const patch = feed && feed.loiter;
+    if (!patch) {
+      node.textContent = "No loiter patch. Click the map to fill lat/lng, then set a radius and firm.";
+      return;
+    }
+    const lat = Number(patch.lat);
+    const lng = Number(patch.lng);
+    const km = Number(patch.radius_km);
+    const firm = typeof patch.firm === "string" ? patch.firm.trim() : "";
+    const bits = [];
+    if (firm) bits.push(firm);
+    if (Number.isFinite(lat) && Number.isFinite(lng)) bits.push(lat.toFixed(4) + ", " + lng.toFixed(4));
+    if (Number.isFinite(km)) bits.push(km + " km");
+    node.textContent = bits.length ? bits.join(" · ") : "No loiter patch.";
+  }
+
+  function paintPlaySide(feed) {
+    paintPlayClock(feed);
+    paintFleetCounts(feed);
+    paintFollowPanel(feed);
+    paintRivalCover(feed);
+    paintFirmSummaries(feed);
+    paintDepotsList(feed);
+    paintLoiterNow(feed);
   }
 
   function mapHtml(text) {
@@ -1022,6 +1258,16 @@
       text += " " + lat + ", " + lng;
     }
     return text;
+  }
+
+  function fillTaxiListItem(item, sign, car, lat, lng) {
+    const job = carJob(car);
+    item.dataset.sign = sign;
+    item.dataset.job = job;
+    const left = feedSecondsLeft(car, playNow());
+    item.textContent = taxiListText(sign, car, lat, lng) + (left !== null ? " " + left + "s" : "");
+    item.classList.toggle("is-selected", !!(playFollow && playChosen === sign));
+    item.style.borderLeftColor = chipFill(car);
   }
 
   function noteCarJob() {
@@ -1353,7 +1599,19 @@
       if (!person || allocatedTaxiArrived(feed, person)) return;
       const name = String(person.name || "").trim();
       if (!name) return;
-      names.push(name);
+      const bits = [name];
+      const journey = feedText(person.journey);
+      if (journey) bits.push(journey);
+      const sign = String(person.sign || "").trim();
+      bits.push(sign || "unallocated");
+      if (sign) {
+        const left = sentSeconds(person.seconds_left);
+        if (left !== null) bits.push(left + "s");
+      } else {
+        const waited = sentSeconds(person.waiting_s);
+        if (waited !== null) bits.push("waited " + waited + "s");
+      }
+      names.push(bits.join(" · "));
     });
     return names;
   }
@@ -1589,6 +1847,7 @@
     clearPlayTrails();
     showPlayAccount();
     paintPlayStatus(null);
+    paintPlaySide(null);
     paintPlayBuy();
     if (leftDuringBuy) {
       clearPlaySpent();
@@ -1655,6 +1914,7 @@
 
   let playBuying = false;
   let playLoitering = false;
+  let playCancelling = false;
 
   function playBuyPence() {
     return 800000;
@@ -1870,6 +2130,52 @@
     }
     if (status) status.textContent = "";
     showPlaySpent();
+    pollPlay();
+  }
+
+  async function cancelPlayJob() {
+    if (playCancelling || !playFollow || !playChosen) return;
+    const status = document.getElementById("play-cancel-status");
+    const token = localStorage.getItem("hackathon-empire-token") || "";
+    const base = apiBase();
+    if (!token || !base) {
+      if (status) status.textContent = "";
+      return;
+    }
+    playCancelling = true;
+    const cancel = document.getElementById("play-cancel");
+    if (cancel) cancel.disabled = true;
+    if (status) status.textContent = "Cancelling…";
+    let res;
+    try {
+      res = await fetch(base + "/v1/empire/cancel", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + token
+        },
+        body: JSON.stringify({ sign: playChosen })
+      });
+    } catch (err) {
+      if (status) status.textContent = "Cancel failed.";
+      return;
+    } finally {
+      playCancelling = false;
+      if (cancel) cancel.disabled = false;
+    }
+    if (!res) return;
+    if (res.status === 401) {
+      localStorage.removeItem("hackathon-empire-token");
+      showPlayAccount();
+      if (status) status.textContent = "";
+      return;
+    }
+    if (!res.ok) {
+      if (status) status.textContent = "That job is not waiting to move.";
+      return;
+    }
+    if (status) status.textContent = "Job cancelled.";
     pollPlay();
   }
 
@@ -2503,6 +2809,7 @@
     paintPlayFares(data);
     paintPlayPeople(data);
     paintPlayOsrm(data);
+    paintPlaySide(data);
     if (!playMotion) playMotion = requestAnimationFrame(glidePlay);
   }
 
@@ -2521,9 +2828,7 @@
       labelOneCar(marker, car, now, "");
       const item = document.querySelector('#play-taxi-list [data-sign="' + sign + '"]');
       if (!item) return;
-      const job = carJob(car);
-      item.dataset.job = job;
-      item.textContent = taxiListText(sign, car, place[0], place[1]);
+      fillTaxiListItem(item, sign, car, place[0], place[1]);
     });
     noteWithPassenger();
     noteToPassenger();
@@ -2531,6 +2836,7 @@
     paintPlayAhead(playFeed);
     paintPlayFirms(playFeed);
     followChosenTaxi(playFeed);
+    paintPlaySide(playFeed);
     playMotion = requestAnimationFrame(glidePlay);
   }
 
@@ -2557,10 +2863,12 @@
 
   function paintPlayOsrm(feed) {
     const line = document.getElementById("play-osrm");
-    if (!line) return;
+    const side = document.getElementById("play-side-osrm");
     const cars = feed && Array.isArray(feed.cars) ? feed.cars : [];
     const missing = (feed && feed.osrm_unavailable === true) || cars.some((car) => car && car.osrm === false);
-    line.textContent = missing ? "OSRM unavailable" : "";
+    const text = missing ? "OSRM unavailable" : "";
+    if (line) line.textContent = text;
+    if (side) side.textContent = text;
   }
 
   function hideCompanyTotals() {
@@ -2648,6 +2956,8 @@
   if (playSignOut) playSignOut.addEventListener("click", signOutPlay);
   const playFollowStop = document.getElementById("play-follow-stop");
   if (playFollowStop) playFollowStop.addEventListener("click", stopPlayFollow);
+  const playCancel = document.getElementById("play-cancel");
+  if (playCancel) playCancel.addEventListener("click", cancelPlayJob);
   const playOfficeNorth = document.getElementById("play-office-north");
   if (playOfficeNorth) playOfficeNorth.addEventListener("click", function () { openPlayOffice("north"); });
   const playOfficeSouth = document.getElementById("play-office-south");

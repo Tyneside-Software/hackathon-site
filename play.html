@@ -9,21 +9,63 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
   <style>
     .play-chip-icon { background: none; border: 0; }
-    body.site { overflow: hidden; }
-    #play-screen { display: block; }
+    html, body.site { height: 100%; overflow: hidden; }
+    body.site {
+      display: flex;
+      flex-direction: column;
+    }
+    .site-nav { position: relative; z-index: 50; flex: 0 0 auto; }
+    main.wrap {
+      flex: 1 1 auto;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+      max-width: none;
+      width: 100%;
+      padding: 0;
+    }
     #play-map-page {
+      flex: 1 1 auto;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
       background: transparent;
       border: 0;
       padding: 0;
       border-radius: 0;
       margin: 0;
     }
+    #play-desk {
+      flex: 1 1 auto;
+      display: flex;
+      flex-direction: row;
+      min-height: 0;
+      width: 100%;
+    }
+    #play-side {
+      flex: 0 0 22rem;
+      width: 22rem;
+      max-width: 36vw;
+      min-width: 16rem;
+      height: 100%;
+      overflow: auto;
+      z-index: 20;
+      background: #121a24;
+      border-right: 1px solid var(--border);
+      color: #e8eef4;
+      padding: 0.7rem 0.75rem 1.1rem;
+      box-sizing: border-box;
+    }
+    #play-screen {
+      flex: 1 1 auto;
+      position: relative;
+      min-width: 0;
+      min-height: 0;
+      display: block;
+    }
     #play-map {
-      position: fixed;
-      left: 0;
-      right: 0;
-      top: var(--play-nav, 4.1rem);
-      bottom: 0;
+      position: absolute;
+      inset: 0;
       width: auto;
       height: auto;
       min-height: 0;
@@ -33,13 +75,12 @@
       z-index: 1;
       background: #0a1016;
     }
-    .site-nav { position: relative; z-index: 50; }
     #play-money {
-      position: fixed;
+      position: absolute;
       z-index: 30;
-      top: calc(var(--play-nav, 4.1rem) + 0.75rem);
+      top: 0.75rem;
       right: 0.75rem;
-      width: min(16rem, calc(100vw - 1.5rem));
+      width: min(16rem, calc(100% - 1.5rem));
       max-height: 42vh;
       overflow: auto;
       margin: 0;
@@ -47,79 +88,104 @@
     }
     #play-buy, #play-buy-row { position: static; inset: auto; }
     #play-account {
-      position: fixed;
+      position: absolute;
       z-index: 40;
       left: 50%;
       top: 42%;
       transform: translate(-50%, -50%);
-      width: min(22rem, calc(100vw - 2rem));
+      width: min(22rem, calc(100% - 2rem));
       padding: 1rem 1.1rem;
       background: rgba(12, 18, 25, 0.94);
       border: 1px solid rgba(255, 255, 255, 0.14);
       border-radius: 12px;
     }
     #play-account[hidden] { display: none; }
-    #play-status {
-      position: fixed;
-      z-index: 30;
-      left: 3.4rem;
-      top: calc(var(--play-nav, 4.1rem) + 0.85rem);
-      margin: 0;
-      text-shadow: 0 1px 2px #000;
-    }
-    #play-waiting-count {
-      position: fixed;
-      z-index: 30;
-      left: 3.4rem;
-      top: calc(var(--play-nav, 4.1rem) + 2.6rem);
-      margin: 0;
-      color: #f8fafc;
-      font: 700 13px/1.3 system-ui, sans-serif;
-      text-shadow: 0 1px 2px #000;
-    }
-    #play-waiting-count[hidden] { display: none; }
-    #play-job-count {
-      position: fixed;
-      z-index: 30;
-      left: 3.4rem;
-      top: calc(var(--play-nav, 4.1rem) + 4.3rem);
-      margin: 0;
-      color: #f8fafc;
-      font: 700 13px/1.3 system-ui, sans-serif;
-      text-shadow: 0 1px 2px #000;
-    }
-    #play-job-count[hidden] { display: none; }
-    #play-waiting-names {
-      position: fixed;
-      z-index: 30;
-      left: 3.4rem;
-      top: calc(var(--play-nav, 4.1rem) + 6rem);
-      margin: 0;
-      padding: 0;
-      max-height: 28vh;
-      overflow: auto;
-      color: #f8fafc;
-      font: 700 13px/1.35 system-ui, sans-serif;
-      text-shadow: 0 1px 2px #000;
-      list-style: none;
-    }
-    #play-waiting-names[hidden] { display: none; }
     #play-account label { display: block; margin: 0.55rem 0 0.15rem; font-size: 0.82rem; }
     #play-account input { display: block; width: 100%; margin-top: 0.25rem; box-sizing: border-box; }
     #play-account-status { min-height: 1.2em; }
-    #play-signout {
-      position: fixed;
-      z-index: 30;
-      left: 0.75rem;
-      bottom: 0.75rem;
+    #play-status { margin: 0 0 0.35rem; color: #e8eef4; font: 700 13px/1.35 system-ui, sans-serif; }
+    #play-waiting-count,
+    #play-job-count,
+    #play-clock,
+    #play-band,
+    #play-side-osrm,
+    #play-fleet-counts,
+    #play-follow-who,
+    #play-follow-detail,
+    #play-follow-miles,
+    #play-follow-route,
+    #play-rival-cover,
+    #play-firm-north,
+    #play-firm-south,
+    #play-loiter-now,
+    #play-cancel-status {
+      margin: 0.2rem 0;
+      color: #f8fafc;
+      font: 650 13px/1.35 system-ui, sans-serif;
     }
-    #play-follow-stop {
-      position: fixed;
-      z-index: 30;
-      left: 7.5rem;
-      bottom: 0.75rem;
+    #play-waiting-count[hidden],
+    #play-job-count[hidden],
+    #play-waiting-names[hidden],
+    #play-follow-stop[hidden],
+    #play-cancel[hidden],
+    #play-office[hidden],
+    #play-loiter[hidden] { display: none; }
+    #play-waiting-names {
+      margin: 0.35rem 0 0;
+      padding: 0;
+      max-height: 12rem;
+      overflow: auto;
+      list-style: none;
+      color: #f8fafc;
+      font: 650 13px/1.35 system-ui, sans-serif;
     }
-    #play-follow-stop[hidden] { display: none; }
+    #play-waiting-names li { margin: 0.25rem 0; }
+    #play-signout,
+    #play-follow-stop,
+    #play-cancel {
+      position: static;
+      margin: 0.35rem 0.35rem 0 0;
+    }
+    .play-side-block {
+      margin: 0 0 0.95rem;
+      padding: 0 0 0.75rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .play-side-block:last-child { border-bottom: 0; margin-bottom: 0; }
+    .play-side-block .hero-kicker { margin-bottom: 0.35rem; }
+    .play-side-title { font-size: 1rem; margin: 0 0 0.35rem; }
+    .play-side-actions { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-top: 0.35rem; }
+    #play-taxi-list {
+      list-style: none;
+      margin: 0.4rem 0 0;
+      padding: 0;
+    }
+    #play-taxi-list li {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.1rem;
+      width: 100%;
+      margin: 0 0 0.4rem;
+      padding: 0.45rem 0.55rem;
+      text-align: left;
+      cursor: pointer;
+      font: 650 12px/1.35 system-ui, sans-serif;
+      color: #f8fafc;
+      background: #0a1016;
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--accent);
+      border-radius: 8px;
+    }
+    #play-taxi-list li:hover { border-color: var(--accent); }
+    #play-taxi-list li.is-selected { background: var(--accent-soft); border-color: var(--accent); }
+    #play-depots-list {
+      list-style: none;
+      margin: 0.3rem 0 0;
+      padding: 0;
+      font: 650 13px/1.35 system-ui, sans-serif;
+    }
+    #play-depots-list li { margin: 0.25rem 0; }
     #play-office-north,
     #play-office-south,
     #play-office-close {
@@ -134,39 +200,24 @@
       cursor: pointer;
     }
     #play-office {
-      position: fixed;
-      z-index: 30;
-      left: 0.75rem;
-      bottom: 3.2rem;
-      width: min(22rem, calc(100vw - 1.5rem));
-      max-height: 46vh;
-      overflow: auto;
-      margin: 0;
-      padding: 0.7rem 0.8rem;
-      background: rgba(12, 18, 25, 0.94);
+      margin: 0.45rem 0 0;
+      padding: 0.55rem 0.6rem;
+      background: #0a1016;
       color: #f8fafc;
       border-radius: 8px;
       font: 700 13px/1.35 system-ui, sans-serif;
     }
-    #play-office[hidden] { display: none; }
     #play-office h2 { margin: 0 0 0.35rem; font-size: 1rem; }
     #play-office p { margin: 0.2rem 0; }
     #play-office ul { margin: 0.45rem 0 0; padding-left: 1.1rem; }
     #play-office li { margin: 0.2rem 0; }
     #play-loiter {
-      position: fixed;
-      z-index: 30;
-      right: 0.75rem;
-      bottom: 0.75rem;
-      width: min(14rem, calc(100vw - 1.5rem));
-      margin: 0;
-      padding: 0.55rem 0.7rem 0.65rem;
-      background: rgba(12, 18, 25, 0.92);
+      margin: 0.4rem 0 0;
+      padding: 0;
+      background: transparent;
       color: #f8fafc;
-      border-radius: 8px;
       font: 700 13px/1.3 system-ui, sans-serif;
     }
-    #play-loiter[hidden] { display: none; }
     #play-loiter label { display: block; margin: 0.35rem 0 0; }
     #play-loiter input {
       display: block;
@@ -191,7 +242,6 @@
       stroke-linejoin: round;
     }
     #play-under-map,
-    #play-taxis,
     #play-signout-chip,
     main.wrap > .hero-kicker,
     main.wrap > h1,
@@ -228,6 +278,77 @@
     <p class="hero-kicker">Empire</p>
     <h1 style="font-size:1.7rem;margin-bottom:0.4rem">Taxi game</h1>
     <section class="panel" id="play-map-page" aria-label="Map">
+      <div id="play-desk">
+        <aside id="play-side" aria-label="Taxi game controls">
+          <section class="play-side-block">
+            <p class="hero-kicker">Session</p>
+            <p id="play-status">The fleet runs on the box.</p>
+            <p id="play-clock"></p>
+            <p id="play-band"></p>
+            <p id="play-side-osrm"></p>
+            <button type="button" id="play-signout">Sign out</button>
+          </section>
+          <section class="play-side-block">
+            <p class="hero-kicker">Demand</p>
+            <p id="play-waiting-count" hidden></p>
+            <p id="play-job-count" hidden></p>
+            <ul id="play-waiting-names" hidden></ul>
+            <p id="play-rival-cover"></p>
+          </section>
+          <section class="play-side-block" id="play-taxis" aria-label="Ten taxis">
+            <p class="hero-kicker">Your fleet</p>
+            <h2 class="play-side-title">Ten taxis</h2>
+            <p id="play-fleet-counts"></p>
+            <ul id="play-taxi-list"></ul>
+          </section>
+          <section class="play-side-block">
+            <p class="hero-kicker">Following</p>
+            <p id="play-follow-who"></p>
+            <p id="play-follow-detail"></p>
+            <p id="play-follow-miles"></p>
+            <p id="play-follow-route"></p>
+            <div class="play-side-actions">
+              <button type="button" id="play-follow-stop" hidden>Stop following</button>
+              <button type="button" id="play-cancel" hidden>Cancel this job</button>
+            </div>
+            <p id="play-cancel-status"></p>
+          </section>
+          <section class="play-side-block">
+            <p class="hero-kicker">Rival firms</p>
+            <p id="play-firm-north"></p>
+            <p id="play-firm-south"></p>
+            <section id="play-office" hidden aria-label="Firm bookings">
+              <h2 id="play-office-title"></h2>
+              <p id="play-office-fare"></p>
+              <ul id="play-office-rows"></ul>
+              <p id="play-office-empty" hidden>No bookings.</p>
+            </section>
+          </section>
+          <section class="play-side-block">
+            <p class="hero-kicker">Depots</p>
+            <ul id="play-depots-list"></ul>
+          </section>
+          <section class="play-side-block">
+            <p class="hero-kicker">Loiter</p>
+            <p id="play-loiter-now"></p>
+            <form id="play-loiter" hidden>
+              <label for="play-loiter-lat">Latitude
+                <input id="play-loiter-lat" name="lat" inputmode="decimal" autocomplete="off">
+              </label>
+              <label for="play-loiter-lng">Longitude
+                <input id="play-loiter-lng" name="lng" inputmode="decimal" autocomplete="off">
+              </label>
+              <label for="play-loiter-km">Radius in kilometres
+                <input id="play-loiter-km" name="radius_km" inputmode="decimal" autocomplete="off">
+              </label>
+              <label for="play-loiter-firm">Firm
+                <input id="play-loiter-firm" name="firm" autocomplete="off">
+              </label>
+              <button type="submit" id="play-loiter-set">Set the loiter patch</button>
+              <p id="play-loiter-status"></p>
+            </form>
+          </section>
+        </aside>
       <div id="play-screen">
         <div id="play-map"></div>
         <section class="panel" id="play-money" aria-label="In-game money">
@@ -248,6 +369,20 @@
           <p id="play-spent-rule">After the purchase the page shows the 800000 spent.</p>
           <p id="play-spent"></p>
         </section>
+        <form id="play-account" hidden>
+          <label for="play-username">Username
+            <input id="play-username" name="username" autocomplete="username" required minlength="3" pattern="[A-Za-z0-9._-]+" title="Letters, numbers, dots, underscores and hyphens. At least 3 characters.">
+          </label>
+          <label for="play-password">Password
+            <input id="play-password" name="password" type="password" autocomplete="current-password" minlength="8" required>
+          </label>
+          <button type="button" id="play-start">Start</button>
+          <button type="submit" id="play-signin" hidden>Sign in</button>
+          <button type="button" id="play-create" hidden>Create account</button>
+          <p id="play-password-rule">The password is at least 8 characters.</p>
+          <p id="play-account-status"></p>
+        </form>
+      </div>
       </div>
       <div id="play-under-map">
         <p id="play-moving">The ten chips move on the map. One real second is one game second.</p>
@@ -266,7 +401,7 @@
         <p id="play-spent-feed">When the empire feed lists T11, the page shows 800000 pence spent. When the feed does not list T11, that spent line is empty. A reload uses the same rule. The fare_in line does not become 800000.</p>
         <p id="play-fare-in">The fare_in line never shows 800000. The price stays 800000 on the buy control and on the new_car line. The ten stay.</p>
         <p id="play-buy-reject">When the purchase request is rejected for the token, the spent line is cleared and Start comes back. The map stays. The price stays 800000.</p>
-        <p id="play-started-screen">After Start the map still fills the screen under the bar. The money stays in the corner panel. Do not bring the side column back.</p>
+        <p id="play-started-screen">After Start the map fills the remaining space beside the left sidebar. The money stays in the corner panel.</p>
         <p id="play-started-ten">After Start the ten chips from the feed are on the map.</p>
         <p id="play-signed-again">Signing in again shows T11 when that account's feed already has it, and does not draw a second T1 to T10.</p>
         <p id="play-cash-pence">The corner panel shows cash_pence once the feed has it, in integer pence.</p>
@@ -336,58 +471,12 @@
       </div>
     </section>
     <p class="lede">This page is the taxi game. It shows the map, the ten taxis, and the in-game money.</p>
-    <p id="play-status">The fleet runs on the box.</p>
-    <p id="play-waiting-count" hidden></p>
-    <p id="play-job-count" hidden></p>
-    <ul id="play-waiting-names" hidden></ul>
-    <button type="button" id="play-signout">Sign out</button>
-    <button type="button" id="play-follow-stop" hidden>Stop following</button>
-    <section id="play-office" hidden aria-label="Firm bookings">
-      <h2 id="play-office-title"></h2>
-      <p id="play-office-fare"></p>
-      <ul id="play-office-rows"></ul>
-      <p id="play-office-empty" hidden>No bookings.</p>
-    </section>
-    <form id="play-loiter" hidden>
-      <label for="play-loiter-lat">Latitude
-        <input id="play-loiter-lat" name="lat" inputmode="decimal" autocomplete="off">
-      </label>
-      <label for="play-loiter-lng">Longitude
-        <input id="play-loiter-lng" name="lng" inputmode="decimal" autocomplete="off">
-      </label>
-      <label for="play-loiter-km">Radius in kilometres
-        <input id="play-loiter-km" name="radius_km" inputmode="decimal" autocomplete="off">
-      </label>
-      <label for="play-loiter-firm">Firm
-        <input id="play-loiter-firm" name="firm" autocomplete="off">
-      </label>
-      <button type="submit" id="play-loiter-set">Set the loiter patch</button>
-      <p id="play-loiter-status"></p>
-    </form>
     <p id="play-signout-chip">Sign out removes the bought car chip and shows Start when no token remains.</p>
-    <form id="play-account" hidden>
-      <label for="play-username">Username
-        <input id="play-username" name="username" autocomplete="username" required minlength="3" pattern="[A-Za-z0-9._-]+" title="Letters, numbers, dots, underscores and hyphens. At least 3 characters.">
-      </label>
-      <label for="play-password">Password
-        <input id="play-password" name="password" type="password" autocomplete="current-password" minlength="8" required>
-      </label>
-      <button type="button" id="play-start">Start</button>
-      <button type="submit" id="play-signin" hidden>Sign in</button>
-      <button type="button" id="play-create" hidden>Create account</button>
-      <p id="play-password-rule">The password is at least 8 characters.</p>
-      <p id="play-account-status"></p>
-    </form>
-
-    <section class="panel" id="play-taxis" aria-label="Ten taxis">
-      <h2>Ten taxis</h2>
-      <ul id="play-taxi-list"></ul>
-    </section>
 
   </main>
 
   <script src="config.js?v=20261024-https1"></script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-  <script src="play.js?v=20261024-routedots1"></script>
+  <script src="play.js?v=20261024-sidebar1"></script>
 </body>
 </html>
