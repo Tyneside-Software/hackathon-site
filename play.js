@@ -1079,22 +1079,28 @@
 
   function followBoxText(car, now, firm) {
     const lines = [];
-    const place = destinationName(car);
-    if (place) lines.push(place);
-    const left = feedSecondsLeft(car, now);
-    if (left !== null) lines.push(left + "s");
-    const pickup = feedText(car && car.pickup);
-    if (pickup) lines.push(pickup);
-    const drop = feedText(car && car.drop);
-    if (drop) lines.push(drop);
-    const trip = feedPence(car, "trip_pence");
-    if (trip !== null) lines.push(trip + " pence");
-    const passenger = typeof car.passenger === "string" ? car.passenger.trim() : "";
-    if (passenger) lines.push(passenger);
+    function add(label, value) {
+      if (!value) return;
+      lines.push(mapHtml(label + ": " + value));
+    }
+    const sign = String(car && car.sign || "").trim();
+    if (sign) add("taxi", sign);
     const job = carJob(car);
-    if (job) lines.push(job);
-    if (firm) lines.push(firm);
-    return lines.map(mapHtml).join("<br>");
+    if (job) add("job", job);
+    const passenger = typeof car.passenger === "string" ? car.passenger.trim() : "";
+    if (passenger) add("passenger", passenger);
+    const pickup = feedText(car && car.pickup);
+    if (pickup) add("pickup", pickup);
+    const drop = feedText(car && car.drop);
+    if (drop) add("drop", drop);
+    const place = destinationName(car);
+    if (place) add("dest", place);
+    const left = feedSecondsLeft(car, now);
+    if (left !== null) add("eta", left + "s");
+    const trip = feedPence(car, "trip_pence");
+    if (trip !== null) add("fare", trip + " pence");
+    if (firm) add("firm", firm);
+    return lines.join("<br>");
   }
 
   function setMapLabel(marker, text, followed) {
