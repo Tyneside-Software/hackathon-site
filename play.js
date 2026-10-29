@@ -1574,12 +1574,14 @@
     });
     const balance = document.getElementById("play-balance");
     if (balance) balance.textContent = "";
+    clearDueAtDrop();
     const node = document.getElementById("play-signout-money");
     if (!node) return;
     let showing = false;
     rows.forEach((row) => {
       if (row.textContent) showing = true;
     });
+    if (dueStillShowing()) showing = true;
     node.dataset.money = showing ? "shows" : "clear";
     node.dataset.signed = "out";
   }
@@ -1708,12 +1710,14 @@
     });
     const balance = document.getElementById("play-balance");
     if (balance) balance.textContent = "";
+    clearDueAtDrop();
     const node = document.getElementById("play-feed-401-money");
     if (!node) return;
     let showing = false;
     rows.forEach((row) => {
       if (row.textContent) showing = true;
     });
+    if (dueStillShowing()) showing = true;
     node.dataset.money = showing ? "shows" : "clear";
     node.dataset.feed = "401";
   }
@@ -2108,12 +2112,14 @@
     });
     const balance = document.getElementById("play-balance");
     if (balance) balance.textContent = "";
+    clearDueAtDrop();
     const node = document.getElementById("play-next-money");
     if (!node) return;
     let showing = false;
     rows.forEach((row) => {
       if (row.textContent) showing = true;
     });
+    if (dueStillShowing()) showing = true;
     node.dataset.money = showing ? "shows" : "clear";
     node.dataset.feed = "waiting";
   }
@@ -2416,12 +2422,14 @@
     });
     const balance = document.getElementById("play-balance");
     if (balance) balance.textContent = "";
+    clearDueAtDrop();
     const node = document.getElementById("play-signed-money");
     if (!node) return;
     let showing = false;
     rows.forEach((row) => {
       if (row.textContent) showing = true;
     });
+    if (dueStillShowing()) showing = true;
     node.dataset.money = showing ? "shows" : "clear";
     node.dataset.feed = "waiting";
   }
@@ -2482,12 +2490,14 @@
     });
     const balance = document.getElementById("play-balance");
     if (balance) balance.textContent = "";
+    clearDueAtDrop();
     const node = document.getElementById("play-quiet-money");
     if (!node) return;
     let showing = false;
     rows.forEach((row) => {
       if (row.textContent) showing = true;
     });
+    if (dueStillShowing()) showing = true;
     node.dataset.money = showing ? "shows" : "clear";
     node.dataset.feed = "quiet";
   }
@@ -2698,6 +2708,46 @@
     note.dataset.fare = row && row.textContent.indexOf("800000") !== -1 ? "shows" : "clear";
   }
 
+  function dueAtDrop(feed) {
+    const cars = feed && Array.isArray(feed.cars) ? feed.cars : [];
+    let total = 0;
+    cars.forEach((car) => {
+      const job = carJob(car);
+      if (job !== "collecting" && job !== "carrying") return;
+      const pence = feedPence(car, "trip_pence");
+      if (pence === null || pence <= 0) return;
+      total += pence;
+    });
+    return total;
+  }
+
+  function dueAmount(feed) {
+    const total = dueAtDrop(feed);
+    if (total === 800000) return "";
+    return shownPence(total);
+  }
+
+  function paintDueAtDrop(feed) {
+    const node = document.getElementById("play-due");
+    if (!node) return;
+    if (!feed) {
+      node.textContent = "";
+      return;
+    }
+    const amount = dueAmount(feed);
+    node.textContent = amount === "" ? "Due at the drop" : "Due at the drop " + amount + " pence";
+  }
+
+  function clearDueAtDrop() {
+    const node = document.getElementById("play-due");
+    if (node) node.textContent = "";
+  }
+
+  function dueStillShowing() {
+    const node = document.getElementById("play-due");
+    return !!(node && node.textContent);
+  }
+
   function paintPlayMoney(feed) {
     ["fare_in", "driver_share", "fuel", "standing", "new_car", "cash_pence"].forEach((key) => {
       const row = document.querySelector('[data-money="' + key + '"]');
@@ -2708,6 +2758,7 @@
     });
     const balanceNode = document.getElementById("play-balance");
     if (balanceNode) balanceNode.textContent = feed ? playBalance(feed) + " pence" : "";
+    paintDueAtDrop(feed);
     hideCompanyTotals();
     noteFareIn();
     noteDriverShare();

@@ -48,9 +48,14 @@
     #play-buy, #play-buy-row { position: static; inset: auto; }
     #play-money { width: min(18rem, calc(100vw - 1.5rem)); }
     #play-balance {
-      margin: 0.15rem 0 0.7rem;
+      margin: 0.15rem 0 0.15rem;
       font: 700 1.7rem/1.1 system-ui, sans-serif;
       color: #f8fafc;
+    }
+    #play-due {
+      margin: 0 0 0.7rem;
+      color: #cbd5e1;
+      font-size: 0.92rem;
     }
     #play-money-lines { list-style: none; margin: 0; padding: 0; }
     #play-money-lines li {
@@ -63,7 +68,7 @@
     #play-sale-pick { margin: 0.7rem 0 0.35rem; }
     #play-buy { margin-top: 0.35rem; }
     #play-buy:disabled { opacity: 0.55; cursor: not-allowed; }
-    #play-money > p:not(#play-balance):not(#play-sale-pick):not(#play-buy-row):not(#play-buy-status):not(#play-spent) {
+    #play-money > p:not(#play-balance):not(#play-due):not(#play-sale-pick):not(#play-buy-row):not(#play-buy-status):not(#play-spent) {
       position: absolute;
       width: 1px;
       height: 1px;
@@ -275,6 +280,7 @@
         <section class="panel" id="play-money" aria-label="In-game money">
           <h2>Your money</h2>
           <p id="play-balance">0 pence</p>
+          <p id="play-due">Due at the drop 0 pence</p>
           <p id="play-money-beside">The in-game money stays on the screen with the map and follows the feed.</p>
           <ul id="play-money-lines">
             <li data-money="fare_in">fare_in 0 pence</li>
