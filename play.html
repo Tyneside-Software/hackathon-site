@@ -222,6 +222,9 @@
     #play-account label { display: block; margin: 0.55rem 0 0.15rem; font-size: 0.82rem; }
     #play-account input { display: block; width: 100%; margin-top: 0.25rem; box-sizing: border-box; }
     #play-account-status { min-height: 1.2em; }
+    #play-company label { display: block; margin: 0.45rem 0 0.15rem; font-size: 0.82rem; }
+    #play-company input { display: block; width: 100%; margin-top: 0.25rem; box-sizing: border-box; }
+    #play-company-status { min-height: 1.2em; margin: 0.2rem 0 0; color: #f8fafc; font: 650 13px/1.35 system-ui, sans-serif; }
     #play-status { margin: 0 0 0.35rem; color: #e8eef4; font: 700 13px/1.35 system-ui, sans-serif; }
     #play-waiting-count,
     #play-job-count,
@@ -264,7 +267,8 @@
     #play-how-close,
     #play-follow-stop,
     #play-cancel,
-    #play-loiter-draw {
+    #play-loiter-draw,
+    #play-company-save {
       position: static;
       margin: 0.35rem 0.35rem 0 0;
     }
@@ -749,6 +753,13 @@
               <button type="button" id="play-how">How to play</button>
               <button type="button" id="play-signout">Sign out</button>
             </div>
+            <form id="play-company">
+              <label for="play-company-name">Company
+                <input id="play-company-name" name="name" maxlength="48" autocomplete="organization">
+              </label>
+              <button type="submit" id="play-company-save">Rename</button>
+              <p id="play-company-status"></p>
+            </form>
           </section>
           <section class="play-side-block">
             <p class="hero-kicker">Demand</p>
@@ -905,8 +916,8 @@
               <button type="button" id="play-how-close">Close</button>
             </div>
             <h3>The idea</h3>
-            <p>You run a taxi firm on Tyneside. The clock is real time: one second here is one second in the game. You start with ten taxis at the Shiremoor depot. People appear around the map through the day. Free taxis collect them, drive them, then look for the next job.</p>
-            <p>North and south are rival firms. They use the same engine and will take people your cars are not covering. The aim is to keep your cars on paid work, beat the rivals to waiting people, and grow the fleet.</p>
+            <p>You run a taxi firm on Tyneside. The clock is real time: one second here is one second in the game. You start with ten taxis at your own depot. Shiremoor Taxis starts at Shiremoor. North Taxis and South Taxis start at their own depots. People appear around the map through the day. The closest free taxi, across the three firms, collects them.</p>
+            <p>Michael, Noah, and Reeve share one map. Each firm can see the other two. They are rivals and compete for the same fares. The closest free taxi wins. Rename the company from the session panel. The aim is to keep your cars on paid work, beat the rivals to waiting people, and grow the fleet.</p>
             <h3>Jobs</h3>
             <p>Demand follows the time of day: morning commute into town, daytime coast and hospitals, evening reverse, nights out. A waiting person is claimed by the nearest free taxi. That taxi drives to them (collecting), then to the drop (carrying), then is free again.</p>
             <ul>
@@ -929,7 +940,7 @@
             </ul>
             <p>A new taxi costs £8,000.00. Click the taxi marked for sale, then buy it from that panel. It waits a few seconds at the depot, then takes a fare.</p>
             <h3>Rivals</h3>
-            <p>North office and South office in the bar list that firm’s recent bookings. They keep money from trips your cars did not take. Watch Demand in the sidebar: if north or south have claimed waiters, they got there first.</p>
+            <p>The office buttons open a rival firm. Watch Demand in the sidebar: a waiter claimed by another firm was closer to their taxi. The closest free taxi wins the fare.</p>
           </div>
         </div>
       </div>
@@ -1027,7 +1038,7 @@
 
   <script src="config.js?v=20261024-https1"></script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-  <script src="play.js?v=20261029-topbar1"></script>
+  <script src="play.js?v=20261029-shared1"></script>
   <script>
     (function () {
       var node = document.getElementById("play-visit");
