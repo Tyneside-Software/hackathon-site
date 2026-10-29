@@ -143,6 +143,129 @@
       white-space: nowrap;
       cursor: pointer;
     }
+    .play-top-menus button.is-open {
+      border-color: #f59e0b;
+      background: rgba(245, 158, 11, 0.28);
+      color: #fde68a;
+    }
+    #play-top-sheet {
+      position: fixed;
+      z-index: 44;
+      top: calc(var(--play-nav, 4.1rem) + var(--play-topbar, 3.55rem) + 0.55rem);
+      left: 50%;
+      transform: translateX(-50%);
+      width: min(40rem, calc(100vw - 36rem));
+      max-height: min(28rem, calc(100vh - 12rem));
+      overflow: auto;
+      padding: 0.85rem 1rem 1rem;
+      background: rgba(18, 26, 36, 0.97);
+      border: 1px solid #2a3544;
+      border-radius: 12px;
+      box-shadow: 0 18px 48px rgba(0, 0, 0, 0.45), inset 0 2px 0 rgba(245, 158, 11, 0.55);
+      color: #f8fafc;
+    }
+    #play-top-sheet[hidden] { display: none; }
+    @media (max-width: 900px) {
+      #play-top-sheet { width: calc(100vw - 1.5rem); }
+    }
+    .play-top-sheet-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      margin-bottom: 0.75rem;
+    }
+    .play-top-kicker {
+      margin: 0;
+      color: #fcd34d;
+      font: 700 0.68rem/1.2 system-ui, sans-serif;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .play-top-sheet-head button,
+    .play-top-buy button {
+      color: var(--heading);
+      font: 700 0.78rem/1 system-ui, sans-serif;
+      padding: 0.35rem 0.7rem;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: transparent;
+      cursor: pointer;
+    }
+    .play-top-panel h2 {
+      margin: 0 0 0.35rem;
+      font: 700 1.15rem/1.2 system-ui, sans-serif;
+    }
+    .play-top-panel .lede {
+      margin: 0 0 0.75rem;
+      color: #94a3b8;
+      font: 600 0.82rem/1.4 system-ui, sans-serif;
+    }
+    .play-top-panel[hidden] { display: none; }
+    .play-top-rows { list-style: none; margin: 0; padding: 0; }
+    .play-top-rows li {
+      display: grid;
+      grid-template-columns: 3.2rem 8.5rem 1fr;
+      gap: 0.55rem;
+      align-items: center;
+      padding: 0.4rem 0;
+      border-top: 1px solid #2a3544;
+      font: 700 0.82rem/1.3 system-ui, sans-serif;
+    }
+    .play-top-sign {
+      color: #0c1219;
+      background: #fcd34d;
+      border-radius: 6px;
+      text-align: center;
+      padding: 0.12rem 0;
+    }
+    .play-top-pill {
+      color: #e8eef4;
+      background: #243140;
+      border-radius: 999px;
+      padding: 0.1rem 0.45rem;
+      text-align: center;
+      font-size: 0.72rem;
+    }
+    .play-top-pill.is-out { color: #86efac; background: rgba(134, 239, 172, 0.12); }
+    .play-top-pill.is-home { color: #94a3b8; }
+    .play-top-where { color: #cbd5e1; font-weight: 600; }
+    .play-top-ledger { list-style: none; margin: 0; padding: 0; }
+    .play-top-ledger li {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 0.45rem 0;
+      border-top: 1px solid #2a3544;
+      font: 700 0.9rem/1.3 system-ui, sans-serif;
+    }
+    .play-top-ledger .in { color: #86efac; }
+    .play-top-ledger .out { color: #fda4af; }
+    .play-top-ledger .sum { color: #fcd34d; }
+    .play-top-buy {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 0.35rem 1rem;
+      align-items: center;
+    }
+    .play-top-buy p { margin: 0; color: #94a3b8; font: 600 0.82rem/1.4 system-ui, sans-serif; }
+    .play-top-buy strong { font: 700 1.35rem/1 system-ui, sans-serif; color: #fcd34d; }
+    .play-top-buy button[disabled] { opacity: 0.55; cursor: not-allowed; }
+    .play-top-firms {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.7rem;
+    }
+    @media (max-width: 720px) {
+      .play-top-firms { grid-template-columns: 1fr; }
+    }
+    .play-top-firm {
+      border: 1px solid #2a3544;
+      border-radius: 10px;
+      padding: 0.7rem 0.75rem;
+    }
+    .play-top-firm h3 { margin: 0 0 0.2rem; font: 700 0.95rem/1.2 system-ui, sans-serif; }
+    .play-top-firm p { margin: 0.2rem 0 0; color: #94a3b8; font: 600 0.78rem/1.35 system-ui, sans-serif; }
     #play-visit {
       position: static;
       flex: 0 0 auto;
@@ -335,13 +458,74 @@
       </div>
     </div>
     <div class="play-top-menus">
-      <button type="button" id="play-top-fleet" data-menu="fleet" title="Cars on the map, who is out, and who is at the Shiremoor depot.">Fleet</button>
-      <button type="button" id="play-top-ledger" data-menu="ledger" title="Today's fares, the driver's half, fuel, and the £15 standing charge for each car.">Ledger</button>
-      <button type="button" id="play-top-buy" data-menu="buy" title="Spend £8,000 to add the next car. It cannot leave the depot until it is paid.">Buy car</button>
-      <button type="button" id="play-top-offices" data-menu="offices" title="North office and South office.">Offices</button>
+      <button type="button" id="play-top-fleet" data-menu="fleet" aria-expanded="false" aria-controls="play-top-panel-fleet" title="Cars on the map, who is out, and who is at the Shiremoor depot.">Fleet</button>
+      <button type="button" id="play-top-ledger" data-menu="ledger" aria-expanded="false" aria-controls="play-top-panel-ledger" title="Today's fares, the driver's half, fuel, and the £15 standing charge for each car.">Ledger</button>
+      <button type="button" id="play-top-buy" data-menu="buy" aria-expanded="false" aria-controls="play-top-panel-buy" title="Spend £8,000 to add the next car. It cannot leave the depot until it is paid.">Buy car</button>
+      <button type="button" id="play-top-offices" data-menu="offices" aria-expanded="false" aria-controls="play-top-panel-offices" title="North office and South office.">Offices</button>
       <p id="play-visit" hidden></p>
     </div>
   </header>
+
+  <div id="play-top-sheet" hidden>
+    <div class="play-top-sheet-head">
+      <p class="play-top-kicker">Sample · centre channel, under the bar</p>
+      <button type="button" data-top-close>Close</button>
+    </div>
+    <section id="play-top-panel-fleet" class="play-top-panel" data-top-panel hidden>
+      <h2>Fleet</h2>
+      <p class="lede">Your cars are T1 to T10 at Shiremoor. Seven are out. Three are home.</p>
+      <ul class="play-top-rows">
+        <li><span class="play-top-sign">T1</span><span class="play-top-pill is-out">Carrying</span><span class="play-top-where">Whitley Bay</span></li>
+        <li><span class="play-top-sign">T2</span><span class="play-top-pill is-out">Collecting</span><span class="play-top-where">Jesmond</span></li>
+        <li><span class="play-top-sign">T3</span><span class="play-top-pill is-out">Returning</span><span class="play-top-where">Empty, back to the depot</span></li>
+        <li><span class="play-top-sign">T4</span><span class="play-top-pill is-out">Better spot</span><span class="play-top-where">Tynemouth</span></li>
+        <li><span class="play-top-sign">T5</span><span class="play-top-pill is-out">Carrying</span><span class="play-top-where">Grey's Monument</span></li>
+        <li><span class="play-top-sign">T6</span><span class="play-top-pill is-out">Collecting</span><span class="play-top-where">Sunderland</span></li>
+        <li><span class="play-top-sign">T7</span><span class="play-top-pill is-out">On break</span><span class="play-top-where">Still out</span></li>
+        <li><span class="play-top-sign">T8</span><span class="play-top-pill is-home">At depot</span><span class="play-top-where">Shiremoor</span></li>
+        <li><span class="play-top-sign">T9</span><span class="play-top-pill is-home">At depot</span><span class="play-top-where">Shiremoor</span></li>
+        <li><span class="play-top-sign">T10</span><span class="play-top-pill is-home">At depot</span><span class="play-top-where">Shiremoor</span></li>
+      </ul>
+    </section>
+    <section id="play-top-panel-ledger" class="play-top-panel" data-top-panel hidden>
+      <h2>Ledger</h2>
+      <p class="lede">Today only. The bank on the bar is the balance. This list is the movement.</p>
+      <ul class="play-top-ledger">
+        <li><span>Fares in</span><span class="in">+£104.00</span></li>
+        <li><span>Driver share, half</span><span class="out">−£52.00</span></li>
+        <li><span>Fuel, £0.20 a mile</span><span class="out">−£14.00</span></li>
+        <li><span>Standing, 10 × £15</span><span class="out">−£150.00</span></li>
+        <li><span>Today</span><span class="sum">−£112.00</span></li>
+      </ul>
+    </section>
+    <section id="play-top-panel-buy" class="play-top-panel" data-top-panel hidden>
+      <h2>Buy the next car</h2>
+      <p class="lede">T11 costs £8,000. It stays at the Shiremoor depot until the bank can pay.</p>
+      <div class="play-top-buy">
+        <p>Bank</p><strong>£2,480.00</strong>
+        <p>Price</p><strong>£8,000.00</strong>
+        <p>Short</p><strong>£5,520.00</strong>
+        <p>The sample bank cannot pay.</p>
+        <button type="button" disabled>Pay £8,000</button>
+      </div>
+    </section>
+    <section id="play-top-panel-offices" class="play-top-panel" data-top-panel hidden>
+      <h2>Offices</h2>
+      <p class="lede">North and South are the other firms. Their cars are not yours, and they are not phones.</p>
+      <div class="play-top-firms">
+        <article class="play-top-firm">
+          <h3>North office</h3>
+          <p>Cars N1 to N10. Depot inside the circle, not Shiremoor.</p>
+          <p>One booking offered. Whitley Bay to Tynemouth, £10.40.</p>
+        </article>
+        <article class="play-top-firm">
+          <h3>South office</h3>
+          <p>Cars S1 to S10. A different depot, also inside the circle.</p>
+          <p>No bookings yet.</p>
+        </article>
+      </div>
+    </section>
+  </div>
 
   <main class="wrap">
     <p class="hero-kicker">Empire</p>
@@ -522,6 +706,51 @@
           node.hidden = false;
         })
         .catch(function () {});
+    })();
+    (function () {
+      var bar = document.getElementById("play-topbar");
+      var sheet = document.getElementById("play-top-sheet");
+      var buttons = bar ? bar.querySelectorAll("[data-menu]") : [];
+      var panels = sheet ? sheet.querySelectorAll("[data-top-panel]") : [];
+      function closeSheet() {
+        buttons.forEach(function (button) {
+          button.classList.remove("is-open");
+          button.setAttribute("aria-expanded", "false");
+        });
+        panels.forEach(function (panel) { panel.hidden = true; });
+        if (sheet) sheet.hidden = true;
+      }
+      function openMenu(name) {
+        var panel = document.getElementById("play-top-panel-" + name);
+        if (!panel || !sheet) return;
+        panels.forEach(function (item) { item.hidden = item !== panel; });
+        sheet.hidden = false;
+        buttons.forEach(function (button) {
+          var on = button.getAttribute("data-menu") === name;
+          button.classList.toggle("is-open", on);
+          button.setAttribute("aria-expanded", on ? "true" : "false");
+        });
+      }
+      buttons.forEach(function (button) {
+        button.addEventListener("click", function () {
+          if (button.classList.contains("is-open")) closeSheet();
+          else openMenu(button.getAttribute("data-menu"));
+        });
+      });
+      if (sheet) {
+        sheet.querySelectorAll("[data-top-close]").forEach(function (node) {
+          node.addEventListener("click", closeSheet);
+        });
+      }
+      document.addEventListener("keydown", function (event) {
+        if (event.key === "Escape") closeSheet();
+      });
+      document.addEventListener("pointerdown", function (event) {
+        if (!sheet || sheet.hidden) return;
+        var target = event.target;
+        if (sheet.contains(target) || (bar && bar.contains(target))) return;
+        closeSheet();
+      });
     })();
   </script>
 </body>
