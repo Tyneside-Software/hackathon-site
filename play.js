@@ -1575,6 +1575,7 @@
     const balance = document.getElementById("play-balance");
     if (balance) balance.textContent = "";
     clearDueAtDrop();
+    clearPlayBookings();
     const node = document.getElementById("play-signout-money");
     if (!node) return;
     let showing = false;
@@ -1582,6 +1583,7 @@
       if (row.textContent) showing = true;
     });
     if (dueStillShowing()) showing = true;
+    if (bookingsStillShowing()) showing = true;
     node.dataset.money = showing ? "shows" : "clear";
     node.dataset.signed = "out";
   }
@@ -1711,6 +1713,7 @@
     const balance = document.getElementById("play-balance");
     if (balance) balance.textContent = "";
     clearDueAtDrop();
+    clearPlayBookings();
     const node = document.getElementById("play-feed-401-money");
     if (!node) return;
     let showing = false;
@@ -1718,6 +1721,7 @@
       if (row.textContent) showing = true;
     });
     if (dueStillShowing()) showing = true;
+    if (bookingsStillShowing()) showing = true;
     node.dataset.money = showing ? "shows" : "clear";
     node.dataset.feed = "401";
   }
@@ -2113,6 +2117,7 @@
     const balance = document.getElementById("play-balance");
     if (balance) balance.textContent = "";
     clearDueAtDrop();
+    clearPlayBookings();
     const node = document.getElementById("play-next-money");
     if (!node) return;
     let showing = false;
@@ -2120,6 +2125,7 @@
       if (row.textContent) showing = true;
     });
     if (dueStillShowing()) showing = true;
+    if (bookingsStillShowing()) showing = true;
     node.dataset.money = showing ? "shows" : "clear";
     node.dataset.feed = "waiting";
   }
@@ -2423,6 +2429,7 @@
     const balance = document.getElementById("play-balance");
     if (balance) balance.textContent = "";
     clearDueAtDrop();
+    clearPlayBookings();
     const node = document.getElementById("play-signed-money");
     if (!node) return;
     let showing = false;
@@ -2430,6 +2437,7 @@
       if (row.textContent) showing = true;
     });
     if (dueStillShowing()) showing = true;
+    if (bookingsStillShowing()) showing = true;
     node.dataset.money = showing ? "shows" : "clear";
     node.dataset.feed = "waiting";
   }
@@ -2491,6 +2499,7 @@
     const balance = document.getElementById("play-balance");
     if (balance) balance.textContent = "";
     clearDueAtDrop();
+    clearPlayBookings();
     const node = document.getElementById("play-quiet-money");
     if (!node) return;
     let showing = false;
@@ -2498,6 +2507,7 @@
       if (row.textContent) showing = true;
     });
     if (dueStillShowing()) showing = true;
+    if (bookingsStillShowing()) showing = true;
     node.dataset.money = showing ? "shows" : "clear";
     node.dataset.feed = "quiet";
   }
@@ -2743,6 +2753,45 @@
     if (node) node.textContent = "";
   }
 
+  function paintPlayBookings(feed) {
+    const list = document.getElementById("play-bookings");
+    const label = document.getElementById("play-bookings-label");
+    if (list) list.textContent = "";
+    const rows = feed && Array.isArray(feed.bookings) ? feed.bookings : [];
+    let shown = 0;
+    rows.forEach((row) => {
+      if (!row || typeof row !== "object") return;
+      const sign = feedText(row.sign);
+      const pickup = feedText(row.pickup);
+      const drop = feedText(row.drop);
+      const pence = feedPence(row, "pence");
+      if (!sign && !pickup && !drop && pence === null) return;
+      shown += 1;
+      if (!list) return;
+      const item = document.createElement("li");
+      const bits = [];
+      if (sign) bits.push(sign);
+      if (pickup) bits.push(pickup);
+      if (drop) bits.push(drop);
+      if (pence !== null) bits.push(pence + " pence");
+      item.textContent = bits.join(" ");
+      list.appendChild(item);
+    });
+    if (label) label.hidden = shown === 0;
+  }
+
+  function clearPlayBookings() {
+    const list = document.getElementById("play-bookings");
+    if (list) list.textContent = "";
+    const label = document.getElementById("play-bookings-label");
+    if (label) label.hidden = true;
+  }
+
+  function bookingsStillShowing() {
+    const list = document.getElementById("play-bookings");
+    return !!(list && list.textContent);
+  }
+
   function dueStillShowing() {
     const node = document.getElementById("play-due");
     return !!(node && node.textContent);
@@ -2759,6 +2808,7 @@
     const balanceNode = document.getElementById("play-balance");
     if (balanceNode) balanceNode.textContent = feed ? playBalance(feed) + " pence" : "";
     paintDueAtDrop(feed);
+    paintPlayBookings(feed);
     hideCompanyTotals();
     noteFareIn();
     noteDriverShare();
