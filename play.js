@@ -225,6 +225,16 @@
     .addTo(map);
 
   const PLAY_SIGNS = ["T1", "T2", "T3", "T4", "T5", "T6", "T7", "T8", "T9", "T10"];
+
+  function fleetSignNumber(sign) {
+    const match = String(sign || "").match(/^[A-Za-z](\d+)$/);
+    return match ? Number(match[1]) : 0;
+  }
+
+  function isOpeningFleetSign(sign) {
+    const n = fleetSignNumber(sign);
+    return n >= 1 && n <= 10;
+  }
   const PLAY_SECOND = 1;
   const FEED_COLOURS = {
     T1: "#f5b942",
@@ -531,9 +541,8 @@
   }
 
   function drawnPlaySign(sign) {
-    const name = String(sign || "");
-    if (PLAY_SIGNS.indexOf(name) !== -1) return true;
-    return name === "T11";
+    const n = fleetSignNumber(sign);
+    return n >= 1 && n <= 11;
   }
 
   function noteT11Only() {
@@ -614,15 +623,17 @@
         list.appendChild(item);
       }
     }
-    PLAY_SIGNS.forEach((sign) => {
-      const car = cars.find((row) => row && row.sign === sign);
-      if (car) paintOne(car);
-    });
+    const ordered = [];
+    for (let n = 1; n <= 10; n++) {
+      const car = cars.find((row) => row && isOpeningFleetSign(row.sign) && fleetSignNumber(row.sign) === n);
+      if (car) ordered.push(car);
+    }
     cars.forEach((car) => {
-      if (!car || PLAY_SIGNS.indexOf(car.sign) !== -1) return;
+      if (!car || isOpeningFleetSign(car.sign)) return;
       if (!drawnPlaySign(car.sign)) return;
-      paintOne(car);
+      ordered.push(car);
     });
+    ordered.forEach(paintOne);
     playChips.forEach((marker, sign) => {
       if (seen.has(sign)) return;
       map.removeLayer(marker);
