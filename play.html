@@ -67,6 +67,21 @@
       margin: 0;
       text-shadow: 0 1px 2px #000;
     }
+    #play-visit {
+      position: fixed;
+      z-index: 30;
+      left: 50%;
+      top: calc(var(--play-nav, 4.1rem) + 0.75rem);
+      transform: translateX(-50%);
+      margin: 0;
+      padding: 0.2rem 0.65rem;
+      border-radius: 999px;
+      background: rgba(12, 18, 25, 0.9);
+      color: #f8fafc;
+      font: 700 13px/1.3 system-ui, sans-serif;
+      text-shadow: 0 1px 2px #000;
+    }
+    #play-visit[hidden] { display: none; }
     #play-waiting-count {
       position: fixed;
       z-index: 30;
@@ -333,6 +348,7 @@
     </section>
     <p class="lede">This page is the taxi game. It shows the map, the ten taxis, and the in-game money.</p>
     <p id="play-status">The fleet runs on the box.</p>
+    <p id="play-visit" hidden></p>
     <p id="play-waiting-count" hidden></p>
     <p id="play-job-count" hidden></p>
     <ul id="play-waiting-names" hidden></ul>
@@ -385,5 +401,21 @@
   <script src="config.js?v=20261024-https1"></script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
   <script src="play.js?v=20261024-chipjourney1"></script>
+  <script>
+    (function () {
+      var node = document.getElementById("play-visit");
+      var base = String(window.HACKATHON_API || "").replace(/\/$/, "");
+      if (!node || !base) return;
+      fetch(base + "/health", { headers: { Accept: "application/json" } })
+        .then(function (res) { return res.ok ? res.json() : null; })
+        .then(function (body) {
+          var text = body && body.mark;
+          if (!text) return;
+          node.textContent = text;
+          node.hidden = false;
+        })
+        .catch(function () {});
+    })();
+  </script>
 </body>
 </html>

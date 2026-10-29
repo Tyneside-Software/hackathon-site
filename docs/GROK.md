@@ -23,7 +23,7 @@ https://github.com/Tyneside-Software/hackathon-site/blob/main/docs/GROK.md
 
 ## Live box — read this before a deploy
 
-The API and the board the team edits run on the Linux box. Cloud Run is not the live API. The procedure is [Linux box and deploy](#linux) (`docs/linux.md`).
+The API and the board the team edits run on the Linux box. Cloud Run is not the live API. Ship with [Deploy](#deploy) (`docs/deploy.md`). The longer note is [Linux box and deploy](#linux) (`docs/linux.md`).
 
 SSH as `michael` to `192.168.0.52`. Do not SSH to `100.65.94.5` (Tailscale SSH wants a browser check). The four-agent deploy is `.\scripts\deploy-if-product.ps1` from the site folder. It runs `/usr/local/bin/update` only when product files changed. `.\scripts\box.ps1 health` checks the API, the site, and SSH. Do not invoke `box.ps1` with the call operator from the current shell.
 

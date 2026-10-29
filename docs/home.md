@@ -15,6 +15,7 @@ If you do not know how the site is wired, start with **[Architecture](#architect
 |--------------|------|
 | Been away — current picture | [Current progress](../progress.html) |
 | How the three repos fit | [Architecture](#architecture) |
+| Ship a change to the Linux box | [Deploy](#deploy) |
 | Queue of changes for an AI | [Development loop](#loop) |
 | Several people or Grok sessions | [Lanes](#lanes) |
 | Orders between Grok sessions | `docs/radio/README.md` on `main` |
@@ -41,4 +42,4 @@ If you do not know how the site is wired, start with **[Architecture](#architect
 
 ## Repos in one line
 
-The **site** is static HTML on the Linux box and on GitHub Pages. The **API** is FastAPI in Docker on that box. The **phone** is a one-switch Android app. They meet only over HTTP. [Architecture](#architecture) has the diagram. [Android tracker](#android) is the phone repo. [Linux box and deploy](#linux) is how an AI ships a change.
+The **site** is static HTML on the Linux box and on GitHub Pages. The **API** is FastAPI in Docker on that box. The **phone** is a one-switch Android app. They meet only over HTTP. [Architecture](#architecture) has the diagram. [Android tracker](#android) is the phone repo. [Deploy](#deploy) is how an AI ships a change. [Linux box and deploy](#linux) is the longer note.

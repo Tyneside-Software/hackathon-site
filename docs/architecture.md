@@ -16,9 +16,9 @@ Three GitHub repos, two hosts, one product. The **site** is static files. The **
            SQLite. Buses: cache 15s, then bustimes.org.
 
   GitHub Pages (https://hackathon.tyneside.software)
-     └─ same static files. The page is HTTPS and the API is HTTP,
-        so the browser will not call the box. The board falls back
-        to board-snapshot.json.
+     └─ same static files. config.js sends that host at the HTTPS
+        tunnel in front of the box API. The board the team edits
+        is still http://100.65.94.5/board.html.
 
   Phone (debug APK)
      └─ API_BASE is http://100.65.94.5:8080. Cleartext is on.
@@ -145,8 +145,8 @@ New map JS stays vanilla inside the existing `app/map.js` IIFE. Alpine is for wi
 
 | Event | What happens |
 |-------|----------------|
-| Push **site** `main` | GitHub Pages publishes this folder. The box copies it when `.\scripts\box.ps1 update` runs |
-| Push **API** `main` | Nothing on the box changes until that same update rebuilds the image |
+| Push **site** `main` | GitHub Pages publishes this folder. The box copies it when [Deploy](#deploy) runs |
+| Push **API** `main` | Nothing on the box changes until that same deploy rebuilds the image |
 
 `update` is `git pull --ff-only`. Docker recreate runs only when the pull changed `app/`, `main.py`, `requirements.txt`, `Dockerfile`, or `docker-entrypoint.sh`. A tests-only or site-only pull leaves the container up and prints `api image unchanged; container left running`. The image is `python:3.14-slim`. Recreate keeps `data/hackathon.db`. The old Cloud Run path used buildpacks and Python 3.13, and those files are still in the API repo. That host is not the live API. See [Linux box and deploy](#linux).
 

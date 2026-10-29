@@ -31,6 +31,12 @@
           "summary": "start.ps1, ports 5500 / 8080, never file://."
         },
         {
+          "id": "deploy",
+          "title": "Deploy",
+          "file": "deploy.md",
+          "summary": "How an AI ships the site and the API to the Linux box, and what the box runs."
+        },
+        {
           "id": "linux",
           "title": "Linux box and deploy",
           "file": "linux.md",
