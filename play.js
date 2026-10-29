@@ -73,7 +73,6 @@
   map.fitBounds(circle.getBounds());
   window.addEventListener("resize", seatPlayScreen);
   map.on("moveend", keepDepotClear);
-  map.on("click", fillLoiterPoint);
   function clearBusToggle() {
     document.querySelectorAll("button, input, select").forEach((node) => {
       const label = ((node.textContent || "") + " " + (node.id || "") + " " + (node.getAttribute("aria-label") || "")).toLowerCase();
@@ -578,6 +577,7 @@
         marker._playJourney = journey;
         marker._playClick = true;
         marker.on("click", function () {
+          if (playLoiterDraw || playLoiterIgnoreClick) return;
           playChosen = sign;
           playFollow = true;
           playSalePick = car && car.for_sale ? sign : "";
@@ -600,6 +600,7 @@
         const item = document.createElement("li");
         fillTaxiListItem(item, sign, car, reported ? reported[0] : null, reported ? reported[1] : null);
         item.addEventListener("click", function () {
+          if (playLoiterDraw || playLoiterIgnoreClick) return;
           playChosen = sign;
           playFollow = true;
           paintPlayCars(playFeed);
@@ -803,8 +804,7 @@
     map.fitBounds(bounds, {
       animate: false,
       maxZoom: maxZoom || 15,
-      paddingTopLeft: [48, 380],
-      paddingBottomRight: [48, 48]
+      padding: [48, 48]
     });
     return true;
   }
@@ -1053,7 +1053,7 @@
     if (!node) return;
     const patch = feed && feed.loiter;
     if (!patch) {
-      node.textContent = "No loiter patch. Click the map, then set a radius and firm.";
+      node.textContent = "No loiter patch. Draw an area on the map, then save it.";
       return;
     }
     const km = Number(patch.radius_km);
@@ -1281,14 +1281,121 @@
     feedLoiter.bindTooltip(mapHtml(title), { permanent: true, direction: "center", className: "play-leg-label", opacity: 0.95 });
   }
 
-  function fillLoiterPoint(event) {
+  let playLoiterDraw = false;
+  let playLoiterIgnoreClick = false;
+  let playLoiterCentre = null;
+  let playLoiterDraft = null;
+
+  function loiterStatus(text) {
+    const status = document.getElementById("play-loiter-status");
+    if (status) status.textContent = text || "";
+  }
+
+  function clearLoiterDraft() {
+    if (playLoiterDraft) {
+      map.removeLayer(playLoiterDraft);
+      playLoiterDraft = null;
+    }
+    playLoiterCentre = null;
+  }
+
+  function loiterDrawButton() {
+    const button = document.getElementById("play-loiter-draw");
+    if (button) button.textContent = playLoiterDraw ? "Cancel drawing" : "Draw area";
+  }
+
+  function startLoiterDraw() {
     const form = document.getElementById("play-loiter");
     if (!form || form.hidden) return;
-    if (!event || !event.latlng) return;
+    playLoiterDraw = true;
+    clearLoiterDraft();
+    map.dragging.disable();
+    L.DomUtil.addClass(map.getContainer(), "play-loiter-drawing");
+    loiterDrawButton();
+    loiterStatus("Click and drag on the map to draw the circle.");
+  }
+
+  function cancelLoiterDraw() {
+    playLoiterDraw = false;
+    clearLoiterDraft();
+    map.dragging.enable();
+    L.DomUtil.removeClass(map.getContainer(), "play-loiter-drawing");
+    loiterDrawButton();
+    loiterStatus("");
+  }
+
+  function toggleLoiterDraw() {
+    if (playLoiterDraw) cancelLoiterDraw();
+    else startLoiterDraw();
+  }
+
+  function loiterRadiusKm(from) {
+    if (!playLoiterCentre || !from) return 0.2;
+    const metres = playLoiterCentre.distanceTo(from);
+    const km = metres / 1000;
+    if (!Number.isFinite(km)) return 0.2;
+    if (km < 0.2) return 0.2;
+    if (km > 8) return 8;
+    return km;
+  }
+
+  function writeLoiterFields(centre, km) {
     const latNode = document.getElementById("play-loiter-lat");
     const lngNode = document.getElementById("play-loiter-lng");
-    if (latNode) latNode.value = String(event.latlng.lat);
-    if (lngNode) lngNode.value = String(event.latlng.lng);
+    const kmNode = document.getElementById("play-loiter-km");
+    if (latNode) latNode.value = String(centre.lat);
+    if (lngNode) lngNode.value = String(centre.lng);
+    if (kmNode) kmNode.value = String(Number(km.toFixed(3)));
+  }
+
+  function beginLoiterDraw(event) {
+    if (!playLoiterDraw) return;
+    if (event.originalEvent && event.originalEvent.button !== 0) return;
+    L.DomEvent.preventDefault(event);
+    L.DomEvent.stopPropagation(event);
+    playLoiterCentre = event.latlng;
+    const km = 0.2;
+    if (playLoiterDraft) map.removeLayer(playLoiterDraft);
+    playLoiterDraft = L.circle(playLoiterCentre, {
+      radius: km * 1000,
+      color: "#38bdf8",
+      weight: 2,
+      fillColor: "#38bdf8",
+      fillOpacity: 0.18,
+      interactive: false
+    }).addTo(map);
+    writeLoiterFields(playLoiterCentre, km);
+  }
+
+  function dragLoiterDraw(event) {
+    if (!playLoiterDraw || !playLoiterCentre || !playLoiterDraft) return;
+    const km = loiterRadiusKm(event.latlng);
+    playLoiterDraft.setRadius(km * 1000);
+    writeLoiterFields(playLoiterCentre, km);
+  }
+
+  function endLoiterDraw() {
+    if (!playLoiterDraw || !playLoiterCentre) return;
+    const km = loiterFieldNumber("play-loiter-km") || 0.2;
+    writeLoiterFields(playLoiterCentre, km);
+    playLoiterDraw = false;
+    playLoiterIgnoreClick = true;
+    playLoiterCentre = null;
+    map.dragging.enable();
+    L.DomUtil.removeClass(map.getContainer(), "play-loiter-drawing");
+    loiterDrawButton();
+    loiterStatus("Patch drawn. Save it, or draw again.");
+    if (playLoiterDraft) {
+      map.removeLayer(playLoiterDraft);
+      playLoiterDraft = null;
+    }
+    setPlayLoiter();
+    window.setTimeout(function () { playLoiterIgnoreClick = false; }, 0);
+  }
+
+  function fillLoiterPoint(event) {
+    if (!playLoiterDraw) return;
+    beginLoiterDraw(event);
   }
 
   function depotFirmName(firm) {
@@ -1342,6 +1449,7 @@
             title: title
           }).addTo(map);
           marker.on("click", function () {
+            if (playLoiterDraw || playLoiterIgnoreClick) return;
             playChosen = sign;
             playFollow = true;
             paintPlayCars(playFeed);
@@ -2269,6 +2377,7 @@
           zIndexOffset: 800
         }).addTo(map);
         marker.on("click", function (event) {
+          if (playLoiterDraw || playLoiterIgnoreClick) return;
           if (event && event.originalEvent) L.DomEvent.stopPropagation(event.originalEvent);
           playSalePick = sign;
           playChosen = sign;
@@ -2446,6 +2555,9 @@
     }
     const button = document.getElementById("play-loiter-set");
     if (button) button.disabled = playLoitering;
+    const draw = document.getElementById("play-loiter-draw");
+    if (draw) draw.disabled = playLoitering || !token;
+    if (!token && playLoiterDraw) cancelLoiterDraw();
   }
 
   function loiterFieldNumber(id) {
@@ -3333,7 +3445,9 @@
   }
   if (playHowBox) playHowBox.addEventListener("click", function (event) { event.stopPropagation(); });
   document.addEventListener("keydown", function (event) {
-    if (event.key === "Escape") closePlayHow();
+    if (event.key !== "Escape") return;
+    closePlayHow();
+    if (playLoiterDraw) cancelLoiterDraw();
   });
   const playFollowStop = document.getElementById("play-follow-stop");
   if (playFollowStop) playFollowStop.addEventListener("click", stopPlayFollow);
@@ -3351,6 +3465,19 @@
   if (playBuy) playBuy.addEventListener("click", buyPlayCar);
   const playLoiterForm = document.getElementById("play-loiter");
   if (playLoiterForm) playLoiterForm.addEventListener("submit", setPlayLoiter);
+  const playLoiterDrawBtn = document.getElementById("play-loiter-draw");
+  if (playLoiterDrawBtn) playLoiterDrawBtn.addEventListener("click", toggleLoiterDraw);
+  map.on("mousedown", beginLoiterDraw);
+  map.on("mousemove", dragLoiterDraw);
+  window.addEventListener("mousemove", function (event) {
+    if (!playLoiterDraw || !playLoiterCentre || !playLoiterDraft) return;
+    const latlng = map.mouseEventToLatLng(event);
+    if (!latlng) return;
+    const km = loiterRadiusKm(latlng);
+    playLoiterDraft.setRadius(km * 1000);
+    writeLoiterFields(playLoiterCentre, km);
+  });
+  window.addEventListener("mouseup", endLoiterDraw);
   paintPlayStatus(null);
   clearStandInTaxis();
   setInterval(pollPlay, 2000);

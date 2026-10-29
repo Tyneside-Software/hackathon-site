@@ -37,27 +37,28 @@
     }
     #play-desk {
       flex: 1 1 auto;
-      position: relative;
+      display: flex;
+      flex-direction: row;
       min-height: 0;
       width: 100%;
     }
     #play-side {
-      position: absolute;
-      z-index: 30;
-      top: 0.75rem;
-      left: 0.75rem;
-      bottom: 0.75rem;
-      width: min(22rem, calc(100% - 2rem));
-      max-height: calc(100% - 1.5rem);
+      flex: 0 0 22rem;
+      width: 22rem;
+      max-width: 36vw;
+      min-width: 16rem;
+      height: 100%;
       overflow: auto;
-      margin: 0;
-      background: rgba(12, 18, 25, 0.9);
+      z-index: 20;
+      background: #121a24;
+      border-right: 1px solid var(--border);
       color: #e8eef4;
+      padding: 0.7rem 0.75rem 1.1rem;
       box-sizing: border-box;
     }
     #play-screen {
-      position: absolute;
-      inset: 0;
+      flex: 1 1 auto;
+      position: relative;
       min-width: 0;
       min-height: 0;
       display: block;
@@ -228,7 +229,8 @@
     #play-how,
     #play-how-close,
     #play-follow-stop,
-    #play-cancel {
+    #play-cancel,
+    #play-loiter-draw {
       position: static;
       margin: 0.35rem 0.35rem 0 0;
     }
@@ -314,12 +316,16 @@
     #play-loiter button { margin-top: 0.5rem; }
     #play-loiter-status { min-height: 1.2em; margin: 0.35rem 0 0; }
     #play-loiter label[for="play-loiter-lat"],
-    #play-loiter label[for="play-loiter-lng"] {
+    #play-loiter label[for="play-loiter-lng"],
+    #play-loiter label[for="play-loiter-km"] {
       position: absolute;
       width: 1px;
       height: 1px;
       overflow: hidden;
       clip: rect(0, 0, 0, 0);
+    }
+    .leaflet-container.play-loiter-drawing {
+      cursor: crosshair;
     }
     .leaflet-tooltip.play-leg-label,
     .leaflet-tooltip.play-follow-box {
@@ -709,7 +715,7 @@
     <h1 style="font-size:1.7rem;margin-bottom:0.4rem">Taxi game</h1>
     <section class="panel" id="play-map-page" aria-label="Map">
       <div id="play-desk">
-        <aside id="play-side" class="panel" aria-label="Taxi game controls">
+        <aside id="play-side" aria-label="Taxi game controls">
           <section class="play-side-block">
             <p class="hero-kicker">Session</p>
             <p id="play-status">The fleet runs on the box.</p>
@@ -775,9 +781,10 @@
                 <input id="play-loiter-km" name="radius_km" inputmode="decimal" autocomplete="off">
               </label>
               <label for="play-loiter-firm">Firm
-                <input id="play-loiter-firm" name="firm" autocomplete="off">
+                <input id="play-loiter-firm" name="firm" autocomplete="off" placeholder="blank = yours, or north / south">
               </label>
-              <button type="submit" id="play-loiter-set">Set the loiter patch</button>
+              <button type="button" id="play-loiter-draw">Draw area</button>
+              <button type="submit" id="play-loiter-set">Save patch</button>
               <p id="play-loiter-status"></p>
             </form>
           </section>
@@ -1001,7 +1008,7 @@
             </ul>
             <h3>Loiter</h3>
             <p>A loiter patch is a circle you place on the map. Idle taxis of that firm wait inside it instead of hunting around or sitting at the depot. Cars already on a job keep that job. Two idle taxis will not sit on the same point. An empty drive to the patch is at most two miles.</p>
-            <p>Click the map to fill latitude and longitude. Set a radius between 0.2 and 8 km. Firm is blank for <strong>your</strong> cars, or <code>north</code> / <code>south</code> to park that rival. The blue circle on the map is the patch.</p>
+            <p>Press <strong>Draw area</strong>, then click and drag on the map to draw the circle (0.2 to 8 km). Firm is blank for <strong>your</strong> cars, or <code>north</code> / <code>south</code> to park that rival. The blue circle on the map is the patch.</p>
             <p>Use it to park spare cars near busy places (town in the morning, the coast in the afternoon) so the next person is closer than the depot.</p>
             <h3>Money</h3>
             <p>The panel on the right is your ledger, in pence:</p>
@@ -1112,7 +1119,7 @@
 
   <script src="config.js?v=20261024-https1"></script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-  <script src="play.js?v=20261024-floatside1"></script>
+  <script src="play.js?v=20261024-loiterdraw1"></script>
   <script>
     (function () {
       var node = document.getElementById("play-visit");
