@@ -109,7 +109,23 @@
     #play-sale-pick { margin: 0.7rem 0 0.35rem; }
     #play-buy { margin-top: 0.35rem; }
     #play-buy:disabled { opacity: 0.55; cursor: not-allowed; }
-    #play-money > p:not(#play-balance):not(#play-due):not(#play-sale-pick):not(#play-buy-row):not(#play-buy-status):not(#play-spent) {
+    #play-bookings-label {
+      margin: 0.7rem 0 0.25rem;
+      color: #cbd5e1;
+      font-size: 0.82rem;
+    }
+    #play-bookings-label[hidden] { display: none; }
+    #play-bookings {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    #play-bookings:empty { display: none; }
+    #play-bookings li {
+      margin: 0.2rem 0;
+      font-size: 0.82rem;
+    }
+    #play-money > p:not(#play-balance):not(#play-due):not(#play-bookings-label):not(#play-sale-pick):not(#play-buy-row):not(#play-buy-status):not(#play-spent) {
       position: absolute;
       width: 1px;
       height: 1px;
@@ -438,6 +454,8 @@
             <li data-money="new_car">new_car 800000 pence</li>
             <li data-money="cash_pence">cash_pence pence</li>
           </ul>
+          <p id="play-bookings-label" hidden>Finished trips</p>
+          <ul id="play-bookings" aria-label="Finished trips"></ul>
           <p id="play-sale-pick">Click the taxi marked for sale, then buy it here.</p>
           <p id="play-buy-row"><button type="button" id="play-buy" hidden>Buy this taxi for 800000</button></p>
           <p id="play-buy-sits">The buy control sits with the money. It does not cover the taxis.</p>
