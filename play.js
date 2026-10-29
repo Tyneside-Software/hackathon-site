@@ -2124,6 +2124,7 @@
     if (balance) balance.textContent = "";
     clearDueAtDrop();
     clearPlayBookings();
+    clearPlayTop();
     const node = document.getElementById("play-signout-money");
     if (!node) return;
     let showing = false;
@@ -2263,6 +2264,7 @@
     if (balance) balance.textContent = "";
     clearDueAtDrop();
     clearPlayBookings();
+    clearPlayTop();
     const node = document.getElementById("play-feed-401-money");
     if (!node) return;
     let showing = false;
@@ -2717,6 +2719,7 @@
     if (balance) balance.textContent = "";
     clearDueAtDrop();
     clearPlayBookings();
+    clearPlayTop();
     const node = document.getElementById("play-next-money");
     if (!node) return;
     let showing = false;
@@ -3029,6 +3032,7 @@
     if (balance) balance.textContent = "";
     clearDueAtDrop();
     clearPlayBookings();
+    clearPlayTop();
     const node = document.getElementById("play-signed-money");
     if (!node) return;
     let showing = false;
@@ -3099,6 +3103,7 @@
     if (balance) balance.textContent = "";
     clearDueAtDrop();
     clearPlayBookings();
+    clearPlayTop();
     const node = document.getElementById("play-quiet-money");
     if (!node) return;
     let showing = false;
@@ -3413,6 +3418,157 @@
     return !!(node && node.textContent);
   }
 
+  function setTopValue(id, text) {
+    const node = document.getElementById(id);
+    if (node) node.textContent = text;
+  }
+
+  function clearPlayTop() {
+    setTopValue("play-top-cash", "");
+    setTopValue("play-top-fares", "");
+    setTopValue("play-top-fuel", "");
+    setTopValue("play-top-out", "");
+    const rows = document.getElementById("play-top-ledger-rows");
+    if (rows) rows.textContent = "";
+    const slipRows = document.getElementById("play-top-slip-rows");
+    if (slipRows) slipRows.textContent = "";
+    const slip = document.getElementById("play-top-slip");
+    if (slip) slip.hidden = true;
+    const title = document.getElementById("play-top-slip-title");
+    if (title) title.textContent = "";
+  }
+
+  function ledgerFieldPence(feed, key) {
+    if (!feed || !Object.prototype.hasOwnProperty.call(feed, key)) return null;
+    if (key === "fare_in" && fareInAmount(feed.fare_in) === "") return null;
+    if (key === "driver_share" && driverShareAmount(feed.driver_share) === "") return null;
+    if (key !== "fare_in" && key !== "driver_share" && shownPence(feed[key]) === "") return null;
+    return feedPence(feed, key);
+  }
+
+  function signedPounds(pence, kind) {
+    const text = formatPounds(Math.abs(pence));
+    if (pence === 0) return text;
+    if (kind === "in") return "+" + text;
+    return "−" + text;
+  }
+
+  function addLedgerRow(list, label, text, kind) {
+    const item = document.createElement("li");
+    const name = document.createElement("span");
+    name.textContent = label;
+    const value = document.createElement("span");
+    if (kind) value.className = kind;
+    value.textContent = text;
+    item.appendChild(name);
+    item.appendChild(value);
+    list.appendChild(item);
+  }
+
+  function faresAfterCut(feed) {
+    const fare = ledgerFieldPence(feed, "fare_in");
+    const share = ledgerFieldPence(feed, "driver_share");
+    if (fare === null || share === null) return null;
+    return fare - share;
+  }
+
+  function topCashText(feed) {
+    if (!feed) return "";
+    if (Object.prototype.hasOwnProperty.call(feed, "balance") && Number.isFinite(Number(feed.balance))) {
+      const pence = Math.trunc(Number(feed.balance));
+      if (blankPence(pence)) return "";
+      return formatPounds(pence);
+    }
+    if (!feedHasCash(feed) && ledgerFieldPence(feed, "fare_in") === null) return "";
+    const pence = playBalance(feed);
+    if (blankPence(pence)) return "";
+    return formatPounds(pence);
+  }
+
+  function topFuelText(feed) {
+    const pence = ledgerFieldPence(feed, "fuel");
+    if (pence === null) return "";
+    if (pence > 0) return "−" + formatPounds(pence);
+    return formatPounds(pence);
+  }
+
+  function topOutText(feed) {
+    if (!feed || !Array.isArray(feed.cars)) return "";
+    let count = 0;
+    feed.cars.forEach((car) => {
+      if (!car || car.for_sale === true) return;
+      if (carJob(car).toLowerCase() === "on break") return;
+      count += 1;
+    });
+    return String(count);
+  }
+
+  function paintTopSlip(feed) {
+    const slip = document.getElementById("play-top-slip");
+    const title = document.getElementById("play-top-slip-title");
+    const rows = document.getElementById("play-top-slip-rows");
+    if (!slip || !rows) return;
+    rows.textContent = "";
+    const list = feed && Array.isArray(feed.bookings) ? feed.bookings : [];
+    let last = null;
+    for (let i = list.length - 1; i >= 0; i--) {
+      const row = list[i];
+      if (!row || typeof row !== "object") continue;
+      const sign = feedText(row.sign);
+      const pickup = feedText(row.pickup);
+      const drop = feedText(row.drop);
+      const pence = feedPence(row, "pence");
+      if (!sign && !pickup && !drop && pence === null) continue;
+      last = { sign: sign, pickup: pickup, drop: drop, pence: pence };
+      break;
+    }
+    if (!last) {
+      slip.hidden = true;
+      if (title) title.textContent = "";
+      return;
+    }
+    const titleBits = ["Last ticket"];
+    if (last.sign) titleBits.push(last.sign);
+    if (title) title.textContent = titleBits.join(" · ");
+    if (last.pickup) addLedgerRow(rows, "Pickup", last.pickup, "");
+    if (last.drop) addLedgerRow(rows, "Drop", last.drop, "");
+    if (last.pence !== null) addLedgerRow(rows, "Fare", formatPounds(last.pence), "in");
+    slip.hidden = rows.childElementCount === 0;
+  }
+
+  function paintPlayTop(feed) {
+    if (!feed) {
+      clearPlayTop();
+      return;
+    }
+    setTopValue("play-top-cash", topCashText(feed));
+    const net = faresAfterCut(feed);
+    setTopValue("play-top-fares", net === null ? "" : formatPounds(net));
+    setTopValue("play-top-fuel", topFuelText(feed));
+    setTopValue("play-top-out", topOutText(feed));
+    const rows = document.getElementById("play-top-ledger-rows");
+    if (rows) rows.textContent = "";
+    const fare = ledgerFieldPence(feed, "fare_in");
+    const share = ledgerFieldPence(feed, "driver_share");
+    const fuel = ledgerFieldPence(feed, "fuel");
+    const standing = ledgerFieldPence(feed, "standing");
+    if (rows && fare !== null) addLedgerRow(rows, "Fares in", signedPounds(fare, "in"), fare < 0 ? "out" : "in");
+    if (rows && share !== null) addLedgerRow(rows, "Driver share", signedPounds(share, "out"), "out");
+    if (rows && fuel !== null) addLedgerRow(rows, "Fuel", signedPounds(fuel, "out"), "out");
+    if (rows && standing !== null) addLedgerRow(rows, "Standing", signedPounds(standing, "out"), "out");
+    let sum = 0;
+    let parts = 0;
+    if (fare !== null) { sum += fare; parts += 1; }
+    if (share !== null) { sum -= share; parts += 1; }
+    if (fuel !== null) { sum -= fuel; parts += 1; }
+    if (standing !== null) { sum -= standing; parts += 1; }
+    if (rows && parts > 0) {
+      const kind = sum > 0 ? "in" : sum < 0 ? "out" : "sum";
+      addLedgerRow(rows, "This shift", sum === 0 ? formatPounds(0) : signedPounds(sum, kind), kind);
+    }
+    paintTopSlip(feed);
+  }
+
   function paintPlayMoney(feed) {
     ["fare_in", "driver_share", "fuel", "standing", "new_car", "cash_pence"].forEach((key) => {
       const row = document.querySelector('[data-money="' + key + '"]');
@@ -3431,6 +3587,7 @@
     noteCashPence(feed);
     const money = document.getElementById("play-money");
     if (money) money.dataset.follows = "feed";
+    paintPlayTop(feed);
     keepPlayMoney();
   }
 
