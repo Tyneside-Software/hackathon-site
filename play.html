@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
   <style>
     .play-chip-icon { background: none; border: 0; }
-    body.site { overflow: hidden; }
+    body.site { overflow: hidden; --play-topbar: 3.55rem; }
     #play-screen { display: block; }
     #play-map-page {
       background: transparent;
@@ -22,7 +22,7 @@
       position: fixed;
       left: 0;
       right: 0;
-      top: var(--play-nav, 4.1rem);
+      top: calc(var(--play-nav, 4.1rem) + var(--play-topbar, 3.55rem));
       bottom: 0;
       width: auto;
       height: auto;
@@ -37,7 +37,7 @@
     #play-money {
       position: fixed;
       z-index: 30;
-      top: calc(var(--play-nav, 4.1rem) + 0.75rem);
+      top: calc(var(--play-nav, 4.1rem) + var(--play-topbar, 3.55rem) + 0.75rem);
       right: 0.75rem;
       width: min(16rem, calc(100vw - 1.5rem));
       max-height: 42vh;
@@ -63,30 +63,102 @@
       position: fixed;
       z-index: 30;
       left: 3.4rem;
-      top: calc(var(--play-nav, 4.1rem) + 0.85rem);
+      top: calc(var(--play-nav, 4.1rem) + var(--play-topbar, 3.55rem) + 0.85rem);
       margin: 0;
       text-shadow: 0 1px 2px #000;
     }
-    #play-visit {
+    #play-topbar {
       position: fixed;
-      z-index: 30;
-      left: 50%;
-      top: calc(var(--play-nav, 4.1rem) + 0.75rem);
-      transform: translateX(-50%);
+      z-index: 45;
+      left: 0;
+      right: 0;
+      top: var(--play-nav, 4.1rem);
+      height: var(--play-topbar, 3.55rem);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0 0.75rem;
+      background: rgba(18, 26, 36, 0.96);
+      border-bottom: 1px solid #2a3544;
+      box-shadow: inset 0 -2px 0 rgba(245, 158, 11, 0.55);
+      color: #f8fafc;
+      overflow-x: auto;
+    }
+    .play-top-id { flex: 0 0 auto; min-width: 9.5rem; }
+    .play-top-id strong {
+      display: block;
+      font: 700 0.92rem/1.15 system-ui, sans-serif;
+      letter-spacing: 0.03em;
+    }
+    .play-top-id span {
+      display: block;
+      margin-top: 0.12rem;
+      color: #94a3b8;
+      font: 700 0.68rem/1.2 system-ui, sans-serif;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    .play-top-stats {
+      display: flex;
+      align-items: stretch;
+      gap: 0.15rem;
+      flex: 1 1 auto;
+    }
+    .play-top-stat {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-width: 4.4rem;
+      padding: 0.1rem 0.6rem;
+      border-left: 1px solid #2a3544;
+    }
+    .play-top-stat .k {
+      color: #94a3b8;
+      font: 700 0.62rem/1 system-ui, sans-serif;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+    }
+    .play-top-stat .v {
+      margin-top: 0.12rem;
+      font: 700 0.95rem/1.15 system-ui, sans-serif;
+      white-space: nowrap;
+    }
+    .play-top-stat[data-stat="cash"] .v { color: #fcd34d; font-size: 1.08rem; }
+    .play-top-stat[data-stat="fares"] .v { color: #86efac; }
+    .play-top-stat[data-stat="fuel"] .v { color: #fda4af; }
+    .play-top-menus {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      flex: 0 0 auto;
+      margin-left: auto;
+    }
+    .play-top-menus button {
+      color: var(--heading);
+      font: 700 0.78rem/1 system-ui, sans-serif;
+      padding: 0.4rem 0.7rem;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--accent-soft);
+      white-space: nowrap;
+      cursor: pointer;
+    }
+    #play-visit {
+      position: static;
+      flex: 0 0 auto;
       margin: 0;
-      padding: 0.2rem 0.65rem;
+      padding: 0.15rem 0.5rem;
       border-radius: 999px;
       background: rgba(12, 18, 25, 0.9);
-      color: #f8fafc;
-      font: 700 13px/1.3 system-ui, sans-serif;
-      text-shadow: 0 1px 2px #000;
+      color: #94a3b8;
+      font: 700 11px/1.3 system-ui, sans-serif;
     }
     #play-visit[hidden] { display: none; }
     #play-waiting-count {
       position: fixed;
       z-index: 30;
       left: 3.4rem;
-      top: calc(var(--play-nav, 4.1rem) + 2.6rem);
+      top: calc(var(--play-nav, 4.1rem) + var(--play-topbar, 3.55rem) + 2.6rem);
       margin: 0;
       color: #f8fafc;
       font: 700 13px/1.3 system-ui, sans-serif;
@@ -97,7 +169,7 @@
       position: fixed;
       z-index: 30;
       left: 3.4rem;
-      top: calc(var(--play-nav, 4.1rem) + 4.3rem);
+      top: calc(var(--play-nav, 4.1rem) + var(--play-topbar, 3.55rem) + 4.3rem);
       margin: 0;
       color: #f8fafc;
       font: 700 13px/1.3 system-ui, sans-serif;
@@ -108,7 +180,7 @@
       position: fixed;
       z-index: 30;
       left: 3.4rem;
-      top: calc(var(--play-nav, 4.1rem) + 6rem);
+      top: calc(var(--play-nav, 4.1rem) + var(--play-topbar, 3.55rem) + 6rem);
       margin: 0;
       padding: 0;
       max-height: 28vh;
@@ -235,6 +307,42 @@
     </div>
   </nav>
 
+  <header id="play-topbar" aria-label="Empire" data-sample="true">
+    <div class="play-top-id">
+      <strong>Shiremoor Taxis</strong>
+      <span>Sample · 14:32 · Day · Tariff 1</span>
+    </div>
+    <div class="play-top-stats">
+      <div class="play-top-stat" data-stat="cash" title="The bank. Game cash in pence, shown as pounds.">
+        <span class="k">Cash</span>
+        <span class="v">£2,480.00</span>
+      </div>
+      <div class="play-top-stat" data-stat="fares" title="Fares taken today. The November 2024 tariff, when the job completes.">
+        <span class="k">Fares</span>
+        <span class="v">£104.00</span>
+      </div>
+      <div class="play-top-stat" data-stat="fuel" title="Fuel today. £0.20 a mile, including the empty run.">
+        <span class="k">Fuel</span>
+        <span class="v">−£14.00</span>
+      </div>
+      <div class="play-top-stat" data-stat="fleet" title="Cars out of the cars you own. A new car is £8,000 and stays at the depot until it is paid.">
+        <span class="k">Fleet</span>
+        <span class="v">7/10</span>
+      </div>
+      <div class="play-top-stat" data-stat="waiting" title="People waiting inside the circle with no car yet.">
+        <span class="k">Waiting</span>
+        <span class="v">2</span>
+      </div>
+    </div>
+    <div class="play-top-menus">
+      <button type="button" id="play-top-fleet" data-menu="fleet" title="Cars on the map, who is out, and who is at the Shiremoor depot.">Fleet</button>
+      <button type="button" id="play-top-ledger" data-menu="ledger" title="Today's fares, the driver's half, fuel, and the £15 standing charge for each car.">Ledger</button>
+      <button type="button" id="play-top-buy" data-menu="buy" title="Spend £8,000 to add the next car. It cannot leave the depot until it is paid.">Buy car</button>
+      <button type="button" id="play-top-offices" data-menu="offices" title="North office and South office.">Offices</button>
+      <p id="play-visit" hidden></p>
+    </div>
+  </header>
+
   <main class="wrap">
     <p class="hero-kicker">Empire</p>
     <h1 style="font-size:1.7rem;margin-bottom:0.4rem">Taxi game</h1>
@@ -348,7 +456,6 @@
     </section>
     <p class="lede">This page is the taxi game. It shows the map, the ten taxis, and the in-game money.</p>
     <p id="play-status">The fleet runs on the box.</p>
-    <p id="play-visit" hidden></p>
     <p id="play-waiting-count" hidden></p>
     <p id="play-job-count" hidden></p>
     <ul id="play-waiting-names" hidden></ul>
