@@ -606,6 +606,32 @@
     return rival ? rival.car : null;
   }
 
+  const ROUTE_DOT_GAP = 16;
+
+  function prefersQuietMotion() {
+    return !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+  }
+
+  function routeDotOffset(line) {
+    if (prefersQuietMotion()) return 0;
+    let dash = (line._playDash || 0) - 1.2;
+    while (dash <= -ROUTE_DOT_GAP) dash += ROUTE_DOT_GAP;
+    line._playDash = dash;
+    return dash;
+  }
+
+  function routeDotStyle(colour, offset) {
+    return {
+      color: colour,
+      weight: 6,
+      opacity: 0.95,
+      dashArray: "0, " + ROUTE_DOT_GAP,
+      dashOffset: String(offset),
+      lineCap: "round",
+      lineJoin: "round"
+    };
+  }
+
   function paintPlayAhead(feed) {
     const node = document.getElementById("play-route-ahead");
     const tracking = !!(playFollow && playChosen);
@@ -625,21 +651,18 @@
     const line = playAhead[0];
     if (line && line._playSign === playChosen) {
       line.setLatLngs(ahead);
-      if (line._playColour !== colour) {
-        line.setStyle({ color: colour });
-        line._playColour = colour;
-      }
+      const offset = routeDotOffset(line);
+      line.setStyle(routeDotStyle(colour, offset));
+      line._playColour = colour;
     } else {
       clearPlayAhead();
-      const drawn = L.polyline(ahead, {
-        color: colour,
-        weight: 3,
-        opacity: 0.95,
+      const drawn = L.polyline(ahead, Object.assign(routeDotStyle(colour, 0), {
         className: "play-route-ahead",
         interactive: false
-      }).addTo(map);
+      })).addTo(map);
       drawn._playSign = playChosen;
       drawn._playColour = colour;
+      drawn._playDash = 0;
       playAhead.push(drawn);
     }
     if (!node) return;
