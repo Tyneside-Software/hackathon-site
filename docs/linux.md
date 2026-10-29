@@ -19,7 +19,7 @@ That file is local only. Do not copy it into git, GitHub, Hermione, or `cc_repos
 | API | http://100.65.94.5:8080/health |
 | Pages | https://hackathon.tyneside.software |
 
-`config.js` sets `window.HACKATHON_API` to `http://100.65.94.5:8080`. Pages is HTTPS, so a browser there will not call that HTTP API. The public board then shows `board-snapshot.json` and will not save. Edits happen on the tailnet URL above.
+`config.js` sets `window.HACKATHON_API`. On the box and on localhost that is `http://100.65.94.5:8080`. On `hackathon.tyneside.software`, `tyneside.software`, and `github.io` it is the HTTPS URL in that file, a Cloudflare tunnel in front of the same API. The board the team edits is still http://100.65.94.5/board.html. The short ship recipe is [Deploy](#deploy).
 
 Hostname `michael-System-Product-Name`. MagicDNS `michael-system-product-name.taild4eca3.ts.net`. This Windows PC is Tailscale node `cc-michael` (`100.73.27.4`). `tailscale.exe` is `C:\Program Files\Tailscale\tailscale.exe` and is not on PATH.
 
@@ -96,6 +96,8 @@ The running SQLite file is the board. The API never pushes it to git.
 Do not delete `data/hackathon.db`. Do not `docker compose down -v`. Do not re-seed. Startup imports `app/board_seed.json` only when the database has never held cards. Wiping the file and leaving a `board_meta.seeded` row does not refill it. A brand-new file imports the git seed once, which is older than the live board.
 
 ## Commands an AI runs
+
+The short recipe is [Deploy](#deploy). These are the commands it names.
 
 From `hackathon-site`, with no password typed:
 

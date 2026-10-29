@@ -50,7 +50,7 @@ A Cloud Build log that says `gcr.io/k8s-skaffold/pack` is buildpacks. A log that
 | Method | Path | Returns |
 |--------|------|---------|
 | GET | `/` | `service`, `docs`, `health`, `test_field`, `register`, `login`, `token`, `users_me`, `locations`, `devices`, `buses`, `version` |
-| GET | `/health` | `ok`, `service`, `utc`, `version` |
+| GET | `/health` | `ok`, `service`, `utc`, `version`, `mark` |
 | GET | `/test_field` | `ok`, `key`, `value` |
 | POST | `/register` | Create a user (JSON). 201 + public user |
 | POST | `/login` | JSON username/password → `{ access_token, token_type }` |

@@ -2,7 +2,7 @@
 
 This is the page an AI follows when someone queues several changes and expects them to land without being asked to run a command.
 
-Read [For Grok](#grok) and [Linux box and deploy](#linux) as well. This page is the order of work for the integrator checkout.
+Read [Deploy](#deploy), [For Grok](#grok), and [Linux box and deploy](#linux) as well. This page is the order of work for the integrator checkout. [Deploy](#deploy) is the short recipe.
 
 ## If this checkout is a lane
 
@@ -56,7 +56,7 @@ Connor’s PC does not have the Desktop password file. On Michael’s PC the fil
 - Edit card HTML by hand. The board is `GET /v1/board`.
 - Treat Cloud Run or Firestore as the live path. Those hosts are not serving. Phones, the board, and the bus cache are SQLite.
 - Leave the emulator tracking. It posts every minute.
-- Expect GitHub Pages (`https://hackathon.tyneside.software`) to call the API. The page is HTTPS and the API is HTTP. The board people edit is `http://100.65.94.5/board.html`.
+- Expect the box and localhost to use a different API host from Pages. `config.js` sends Pages at the HTTPS tunnel and sends the box at `http://100.65.94.5:8080`. The board people edit is `http://100.65.94.5/board.html`.
 
 ## When something fails
 
