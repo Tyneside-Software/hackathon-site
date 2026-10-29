@@ -76,54 +76,59 @@
       height: var(--play-topbar, 3.55rem);
       display: flex;
       align-items: center;
-      gap: 0.75rem;
-      padding: 0 0.75rem;
-      background: rgba(18, 26, 36, 0.96);
+      gap: 0.85rem;
+      padding: 0 0.7rem 0 0.85rem;
+      background: linear-gradient(180deg, rgba(22, 32, 44, 0.98), rgba(12, 18, 25, 0.98));
       border-bottom: 1px solid #2a3544;
-      box-shadow: inset 0 -2px 0 rgba(245, 158, 11, 0.55);
+      box-shadow: inset 0 -2px 0 #f59e0b, 0 8px 24px rgba(0, 0, 0, 0.28);
       color: #f8fafc;
       overflow-x: auto;
     }
-    .play-top-id { flex: 0 0 auto; min-width: 9.5rem; }
+    .play-top-id { flex: 0 0 auto; min-width: 10.5rem; padding-left: 0.7rem; border-left: 3px solid #f59e0b; }
     .play-top-id strong {
       display: block;
-      font: 700 0.92rem/1.15 system-ui, sans-serif;
-      letter-spacing: 0.03em;
+      font: 700 0.95rem/1.1 system-ui, sans-serif;
+      letter-spacing: 0.04em;
     }
     .play-top-id span {
       display: block;
-      margin-top: 0.12rem;
-      color: #94a3b8;
+      margin-top: 0.16rem;
+      color: #cbd5e1;
       font: 700 0.68rem/1.2 system-ui, sans-serif;
-      letter-spacing: 0.04em;
+      letter-spacing: 0.06em;
       text-transform: uppercase;
     }
     .play-top-stats {
       display: flex;
       align-items: stretch;
-      gap: 0.15rem;
+      gap: 0.35rem;
       flex: 1 1 auto;
     }
     .play-top-stat {
       display: flex;
       flex-direction: column;
       justify-content: center;
-      min-width: 4.4rem;
-      padding: 0.1rem 0.6rem;
-      border-left: 1px solid #2a3544;
+      min-width: 4.5rem;
+      padding: 0.2rem 0.65rem;
+      border-radius: 8px;
+      background: rgba(8, 12, 18, 0.45);
+      border: 1px solid rgba(42, 53, 68, 0.9);
     }
     .play-top-stat .k {
       color: #94a3b8;
-      font: 700 0.62rem/1 system-ui, sans-serif;
-      letter-spacing: 0.07em;
+      font: 700 0.6rem/1 system-ui, sans-serif;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
     }
     .play-top-stat .v {
-      margin-top: 0.12rem;
-      font: 700 0.95rem/1.15 system-ui, sans-serif;
+      margin-top: 0.14rem;
+      font: 700 0.95rem/1.1 system-ui, sans-serif;
       white-space: nowrap;
     }
-    .play-top-stat[data-stat="cash"] .v { color: #fcd34d; font-size: 1.08rem; }
+    .play-top-stat[data-stat="cash"] { border-color: rgba(245, 158, 11, 0.45); }
+    .play-top-stat[data-stat="cash"] .v,
+    .play-top-stat[data-stat="rating"] .v { color: #fcd34d; }
+    .play-top-stat[data-stat="cash"] .v { font-size: 1.05rem; }
     .play-top-stat[data-stat="fares"] .v { color: #86efac; }
     .play-top-stat[data-stat="fuel"] .v { color: #fda4af; }
     .play-top-menus {
@@ -135,18 +140,19 @@
     }
     .play-top-menus button {
       color: var(--heading);
-      font: 700 0.78rem/1 system-ui, sans-serif;
-      padding: 0.4rem 0.7rem;
+      font: 700 0.76rem/1 system-ui, sans-serif;
+      padding: 0.42rem 0.72rem;
       border-radius: 8px;
-      border: 1px solid var(--border);
-      background: var(--accent-soft);
+      border: 1px solid #3a4658;
+      background: rgba(245, 158, 11, 0.1);
       white-space: nowrap;
       cursor: pointer;
     }
+    .play-top-menus button:hover { border-color: #f59e0b; }
     .play-top-menus button.is-open {
       border-color: #f59e0b;
-      background: rgba(245, 158, 11, 0.28);
-      color: #fde68a;
+      background: #f59e0b;
+      color: #0c1219;
     }
     #play-top-sheet {
       position: fixed;
@@ -155,7 +161,7 @@
       left: 50%;
       transform: translateX(-50%);
       width: min(40rem, calc(100vw - 36rem));
-      max-height: min(28rem, calc(100vh - 12rem));
+      max-height: min(34rem, calc(100vh - 11rem));
       overflow: auto;
       padding: 0.85rem 1rem 1rem;
       background: rgba(18, 26, 36, 0.97);
@@ -205,13 +211,91 @@
     .play-top-rows { list-style: none; margin: 0; padding: 0; }
     .play-top-rows li {
       display: grid;
-      grid-template-columns: 3.2rem 8.5rem 1fr;
-      gap: 0.55rem;
+      grid-template-columns: 2.9rem 1fr auto;
+      gap: 0.65rem;
       align-items: center;
-      padding: 0.4rem 0;
+      padding: 0.45rem 0;
       border-top: 1px solid #2a3544;
       font: 700 0.82rem/1.3 system-ui, sans-serif;
     }
+    .play-desk-main { min-width: 0; }
+    .play-desk-main strong { display: flex; align-items: center; gap: 0.4rem; font-weight: 700; }
+    .play-desk-sub { display: block; margin-top: 0.12rem; color: #94a3b8; font: 600 0.74rem/1.3 system-ui, sans-serif; }
+    .play-meter {
+      width: 3.4rem;
+      height: 0.38rem;
+      border-radius: 99px;
+      background: #243140;
+      overflow: hidden;
+    }
+    .play-meter i { display: block; height: 100%; width: calc(var(--n) * 1%); background: #86efac; }
+    .play-meter.is-low i { background: #fda4af; }
+    .play-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin: 0 0 0.7rem;
+    }
+    .play-strip span {
+      padding: 0.2rem 0.5rem;
+      border-radius: 999px;
+      background: #0c1219;
+      border: 1px solid #2a3544;
+      color: #cbd5e1;
+      font: 700 0.72rem/1 system-ui, sans-serif;
+    }
+    .play-slip {
+      margin-top: 0.85rem;
+      padding: 0.75rem 0.85rem 0.85rem;
+      border-radius: 10px;
+      border: 1px dashed #3a4658;
+      background: #0c1219;
+    }
+    .play-slip h3 {
+      margin: 0 0 0.45rem;
+      color: #fcd34d;
+      font: 700 0.68rem/1 system-ui, sans-serif;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .play-bays {
+      display: grid;
+      grid-template-columns: 1.3fr 1fr 1fr;
+      gap: 0.65rem;
+    }
+    @media (max-width: 720px) {
+      .play-bays { grid-template-columns: 1fr; }
+    }
+    .play-bay {
+      border: 1px solid #2a3544;
+      border-radius: 10px;
+      padding: 0.7rem 0.75rem 0.8rem;
+      background: rgba(8, 12, 18, 0.35);
+    }
+    .play-bay h3 { margin: 0 0 0.25rem; font: 700 0.92rem/1.2 system-ui, sans-serif; }
+    .play-bay p { margin: 0.2rem 0 0; color: #94a3b8; font: 600 0.76rem/1.35 system-ui, sans-serif; }
+    .play-bay .price { display: block; margin-top: 0.35rem; color: #fcd34d; font: 700 1.15rem/1 system-ui, sans-serif; }
+    .play-call {
+      margin-bottom: 0.75rem;
+      padding: 0.7rem 0.8rem;
+      border-radius: 10px;
+      border: 1px solid rgba(245, 158, 11, 0.45);
+      background: rgba(245, 158, 11, 0.08);
+    }
+    .play-call strong { display: block; font: 700 0.95rem/1.25 system-ui, sans-serif; }
+    .play-call p { margin: 0.2rem 0 0; color: #cbd5e1; font: 600 0.78rem/1.35 system-ui, sans-serif; }
+    .play-bay button,
+    .play-call button {
+      margin-top: 0.55rem;
+      color: #f8fafc;
+      font: 700 0.78rem/1 system-ui, sans-serif;
+      padding: 0.4rem 0.7rem;
+      border-radius: 8px;
+      border: 1px solid #3a4658;
+      background: rgba(245, 158, 11, 0.14);
+    }
+    .play-bay button[disabled],
+    .play-call button[disabled] { opacity: 0.5; cursor: not-allowed; }
     .play-top-sign {
       color: #0c1219;
       background: #fcd34d;
@@ -433,94 +517,200 @@
   <header id="play-topbar" aria-label="Empire" data-sample="true">
     <div class="play-top-id">
       <strong>Shiremoor Taxis</strong>
-      <span>Sample · 14:32 · Day · Tariff 1</span>
+      <span>Day shift · 14:32 · Tariff 1</span>
     </div>
     <div class="play-top-stats">
-      <div class="play-top-stat" data-stat="cash" title="The bank. Game cash in pence, shown as pounds.">
+      <div class="play-top-stat" data-stat="cash" title="The bank. Fares go in. Fuel, the driver's half, standing, and a new car come out.">
         <span class="k">Cash</span>
-        <span class="v">£2,480.00</span>
+        <span class="v">£2,480</span>
       </div>
-      <div class="play-top-stat" data-stat="fares" title="Fares taken today. The November 2024 tariff, when the job completes.">
+      <div class="play-top-stat" data-stat="rating" title="What passengers think of the firm. A happy ride leaves a tip. A dirty cab or an empty tank cuts it.">
+        <span class="k">Rating</span>
+        <span class="v">4.6</span>
+      </div>
+      <div class="play-top-stat" data-stat="fares" title="Fares taken this shift, before the driver's half.">
         <span class="k">Fares</span>
-        <span class="v">£104.00</span>
+        <span class="v">£104</span>
       </div>
-      <div class="play-top-stat" data-stat="fuel" title="Fuel today. £0.20 a mile, including the empty run.">
+      <div class="play-top-stat" data-stat="fuel" title="Fuel burned this shift. £0.20 a mile, including the empty run home.">
         <span class="k">Fuel</span>
-        <span class="v">−£14.00</span>
+        <span class="v">−£14</span>
       </div>
-      <div class="play-top-stat" data-stat="fleet" title="Cars out of the cars you own. A new car is £8,000 and stays at the depot until it is paid.">
-        <span class="k">Fleet</span>
+      <div class="play-top-stat" data-stat="fleet" title="Cars out, of the cars you own.">
+        <span class="k">Out</span>
         <span class="v">7/10</span>
       </div>
-      <div class="play-top-stat" data-stat="waiting" title="People waiting inside the circle with no car yet.">
-        <span class="k">Waiting</span>
+      <div class="play-top-stat" data-stat="waiting" title="Calls waiting. Nobody has a car yet.">
+        <span class="k">Calls</span>
         <span class="v">2</span>
       </div>
     </div>
     <div class="play-top-menus">
-      <button type="button" id="play-top-fleet" data-menu="fleet" aria-expanded="false" aria-controls="play-top-panel-fleet" title="Cars on the map, who is out, and who is at the Shiremoor depot.">Fleet</button>
-      <button type="button" id="play-top-ledger" data-menu="ledger" aria-expanded="false" aria-controls="play-top-panel-ledger" title="Today's fares, the driver's half, fuel, and the £15 standing charge for each car.">Ledger</button>
-      <button type="button" id="play-top-buy" data-menu="buy" aria-expanded="false" aria-controls="play-top-panel-buy" title="Spend £8,000 to add the next car. It cannot leave the depot until it is paid.">Buy car</button>
-      <button type="button" id="play-top-offices" data-menu="offices" aria-expanded="false" aria-controls="play-top-panel-offices" title="North office and South office.">Offices</button>
+      <button type="button" id="play-top-fleet" data-menu="fleet" aria-expanded="false" aria-controls="play-top-panel-fleet" title="Who is driving, which car, and how much fuel is left.">Fleet</button>
+      <button type="button" id="play-top-ledger" data-menu="ledger" aria-expanded="false" aria-controls="play-top-panel-ledger" title="The shift totals, and the ticket from the last fare.">Ledger</button>
+      <button type="button" id="play-top-buy" data-menu="buy" aria-expanded="false" aria-controls="play-top-panel-buy" title="The yard. Buy the next car, wash the cabs, keep fuel in them.">Garage</button>
+      <button type="button" id="play-top-offices" data-menu="offices" aria-expanded="false" aria-controls="play-top-panel-offices" title="The phone, and the other two firms.">Dispatch</button>
       <p id="play-visit" hidden></p>
     </div>
   </header>
 
   <div id="play-top-sheet" hidden>
     <div class="play-top-sheet-head">
-      <p class="play-top-kicker">Sample · centre channel, under the bar</p>
+      <p class="play-top-kicker">Shiremoor desk · sample</p>
       <button type="button" data-top-close>Close</button>
     </div>
     <section id="play-top-panel-fleet" class="play-top-panel" data-top-panel hidden>
       <h2>Fleet</h2>
-      <p class="lede">Your cars are T1 to T10 at Shiremoor. Seven are out. Three are home.</p>
+      <p class="lede">Ten cars, ten drivers, one depot. A careful driver saves fuel. A fast one reaches the pickup and spends more on the brakes.</p>
+      <div class="play-strip">
+        <span>7 out</span>
+        <span>3 at Shiremoor</span>
+        <span>2 carrying</span>
+      </div>
       <ul class="play-top-rows">
-        <li><span class="play-top-sign">T1</span><span class="play-top-pill is-out">Carrying</span><span class="play-top-where">Whitley Bay</span></li>
-        <li><span class="play-top-sign">T2</span><span class="play-top-pill is-out">Collecting</span><span class="play-top-where">Jesmond</span></li>
-        <li><span class="play-top-sign">T3</span><span class="play-top-pill is-out">Returning</span><span class="play-top-where">Empty, back to the depot</span></li>
-        <li><span class="play-top-sign">T4</span><span class="play-top-pill is-out">Better spot</span><span class="play-top-where">Tynemouth</span></li>
-        <li><span class="play-top-sign">T5</span><span class="play-top-pill is-out">Carrying</span><span class="play-top-where">Grey's Monument</span></li>
-        <li><span class="play-top-sign">T6</span><span class="play-top-pill is-out">Collecting</span><span class="play-top-where">Sunderland</span></li>
-        <li><span class="play-top-sign">T7</span><span class="play-top-pill is-out">On break</span><span class="play-top-where">Still out</span></li>
-        <li><span class="play-top-sign">T8</span><span class="play-top-pill is-home">At depot</span><span class="play-top-where">Shiremoor</span></li>
-        <li><span class="play-top-sign">T9</span><span class="play-top-pill is-home">At depot</span><span class="play-top-where">Shiremoor</span></li>
-        <li><span class="play-top-sign">T10</span><span class="play-top-pill is-home">At depot</span><span class="play-top-where">Shiremoor</span></li>
+        <li>
+          <span class="play-top-sign">T1</span>
+          <div class="play-desk-main">
+            <strong>Ada <span class="play-top-pill is-out">Carrying</span></strong>
+            <span class="play-desk-sub">Joan to Whitley Bay · long shift, light on fuel</span>
+          </div>
+          <span class="play-meter" style="--n:72" title="Fuel 72%"><i></i></span>
+        </li>
+        <li>
+          <span class="play-top-sign">T2</span>
+          <div class="play-desk-main">
+            <strong>Ben <span class="play-top-pill is-out">Collecting</span></strong>
+            <span class="play-desk-sub">Sam waiting at Jesmond · quick, heavy on the brakes</span>
+          </div>
+          <span class="play-meter is-low" style="--n:28" title="Fuel 28%"><i></i></span>
+        </li>
+        <li>
+          <span class="play-top-sign">T3</span>
+          <div class="play-desk-main">
+            <strong>Chris <span class="play-top-pill is-out">Returning</span></strong>
+            <span class="play-desk-sub">Empty, back to the depot · the miles still burn fuel</span>
+          </div>
+          <span class="play-meter" style="--n:54" title="Fuel 54%"><i></i></span>
+        </li>
+        <li>
+          <span class="play-top-sign">T4</span>
+          <div class="play-desk-main">
+            <strong>Dee <span class="play-top-pill is-out">Better spot</span></strong>
+            <span class="play-desk-sub">Loitering toward Tynemouth · day shift, coast patch</span>
+          </div>
+          <span class="play-meter" style="--n:61" title="Fuel 61%"><i></i></span>
+        </li>
+        <li>
+          <span class="play-top-sign">T5</span>
+          <div class="play-desk-main">
+            <strong>Eve <span class="play-top-pill is-out">Carrying</span></strong>
+            <span class="play-desk-sub">Priya to Grey's Monument · passengers talk, tips follow</span>
+          </div>
+          <span class="play-meter" style="--n:48" title="Fuel 48%"><i></i></span>
+        </li>
+        <li>
+          <span class="play-top-sign">T6</span>
+          <div class="play-desk-main">
+            <strong>Farid <span class="play-top-pill is-out">Collecting</span></strong>
+            <span class="play-desk-sub">Jo at Sunderland · night work suits this driver</span>
+          </div>
+          <span class="play-meter" style="--n:40" title="Fuel 40%"><i></i></span>
+        </li>
+        <li>
+          <span class="play-top-sign">T7</span>
+          <div class="play-desk-main">
+            <strong>Grace <span class="play-top-pill is-out">On break</span></strong>
+            <span class="play-desk-sub">Still out · the car is not earning</span>
+          </div>
+          <span class="play-meter" style="--n:66" title="Fuel 66%"><i></i></span>
+        </li>
+        <li>
+          <span class="play-top-sign">T8</span>
+          <div class="play-desk-main">
+            <strong>Hal <span class="play-top-pill is-home">At depot</span></strong>
+            <span class="play-desk-sub">Shiremoor · waiting for a call</span>
+          </div>
+          <span class="play-meter" style="--n:90" title="Fuel 90%"><i></i></span>
+        </li>
+        <li>
+          <span class="play-top-sign">T9</span>
+          <div class="play-desk-main">
+            <strong>Ivy <span class="play-top-pill is-home">At depot</span></strong>
+            <span class="play-desk-sub">Shiremoor · cab wants a wash before the next fare</span>
+          </div>
+          <span class="play-meter" style="--n:84" title="Fuel 84%"><i></i></span>
+        </li>
+        <li>
+          <span class="play-top-sign">T10</span>
+          <div class="play-desk-main">
+            <strong>Jon <span class="play-top-pill is-home">At depot</span></strong>
+            <span class="play-desk-sub">Shiremoor · spare car, no driver on this shift</span>
+          </div>
+          <span class="play-meter" style="--n:100" title="Fuel full"><i></i></span>
+        </li>
       </ul>
     </section>
     <section id="play-top-panel-ledger" class="play-top-panel" data-top-panel hidden>
       <h2>Ledger</h2>
-      <p class="lede">Today only. The bank on the bar is the balance. This list is the movement.</p>
+      <p class="lede">The bar shows the bank. This is the shift. Green came in, rose went out.</p>
       <ul class="play-top-ledger">
         <li><span>Fares in</span><span class="in">+£104.00</span></li>
         <li><span>Driver share, half</span><span class="out">−£52.00</span></li>
         <li><span>Fuel, £0.20 a mile</span><span class="out">−£14.00</span></li>
-        <li><span>Standing, 10 × £15</span><span class="out">−£150.00</span></li>
-        <li><span>Today</span><span class="sum">−£112.00</span></li>
+        <li><span>Standing, 10 cars × £15</span><span class="out">−£150.00</span></li>
+        <li><span>This shift</span><span class="sum">−£112.00</span></li>
       </ul>
+      <div class="play-slip">
+        <h3>Last ticket · T5 · Priya</h3>
+        <ul class="play-top-ledger">
+          <li><span>Tariff 1 · flag fall</span><span>£2.40</span></li>
+          <li><span>3 miles · 32 units</span><span>£8.00</span></li>
+          <li><span>Fare</span><span class="in">£10.40</span></li>
+          <li><span>Tip · rating held</span><span class="in">+£1.50</span></li>
+          <li><span>Driver's half of the fare</span><span class="out">−£5.20</span></li>
+        </ul>
+      </div>
     </section>
     <section id="play-top-panel-buy" class="play-top-panel" data-top-panel hidden>
-      <h2>Buy the next car</h2>
-      <p class="lede">T11 costs £8,000. It stays at the Shiremoor depot until the bank can pay.</p>
-      <div class="play-top-buy">
-        <p>Bank</p><strong>£2,480.00</strong>
-        <p>Price</p><strong>£8,000.00</strong>
-        <p>Short</p><strong>£5,520.00</strong>
-        <p>The sample bank cannot pay.</p>
-        <button type="button" disabled>Pay £8,000</button>
+      <h2>Garage</h2>
+      <p class="lede">A new car waits at the depot until it is paid for. A dirty cab or an empty tank loses the tip.</p>
+      <div class="play-bays">
+        <article class="play-bay">
+          <h3>Next car · T11</h3>
+          <p>Bank £2,480. Price £8,000. Short £5,520.</p>
+          <span class="price">£8,000</span>
+          <p>It cannot leave Shiremoor until the bank can pay.</p>
+          <p><button type="button" disabled>Pay £8,000</button></p>
+        </article>
+        <article class="play-bay">
+          <h3>Wash</h3>
+          <p>Nine cabs are clean. Ivy's cab is not.</p>
+          <p>Passengers notice. The rating moves before the tip does.</p>
+        </article>
+        <article class="play-bay">
+          <h3>Pumps</h3>
+          <p>Ben is on 28%. The rest of the fleet can finish the shift.</p>
+          <p>Fuel is already £0.20 a mile on the ledger, including the run home.</p>
+        </article>
       </div>
     </section>
     <section id="play-top-panel-offices" class="play-top-panel" data-top-panel hidden>
-      <h2>Offices</h2>
-      <p class="lede">North and South are the other firms. Their cars are not yours, and they are not phones.</p>
+      <h2>Dispatch</h2>
+      <p class="lede">The phone rings first. Then a car is sent. North and South are other firms, not your T-cars.</p>
+      <div class="play-call">
+        <strong>Incoming · Sam · Jesmond</strong>
+        <p>To Grey's Monument · Tariff 1 · about £10.40 · no car taken yet.</p>
+        <p><button type="button" disabled>Send a car</button></p>
+      </div>
       <div class="play-top-firms">
         <article class="play-top-firm">
           <h3>North office</h3>
-          <p>Cars N1 to N10. Depot inside the circle, not Shiremoor.</p>
-          <p>One booking offered. Whitley Bay to Tynemouth, £10.40.</p>
+          <p>N1–N10. Their depot is inside the circle, not Shiremoor.</p>
+          <p>One job offered. Whitley Bay to Tynemouth, £10.40.</p>
         </article>
         <article class="play-top-firm">
           <h3>South office</h3>
-          <p>Cars S1 to S10. A different depot, also inside the circle.</p>
+          <p>S1–S10. A different depot, also inside the circle.</p>
           <p>No bookings yet.</p>
         </article>
       </div>
