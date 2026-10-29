@@ -240,6 +240,8 @@
     T10: "#facc15"
   };
   const playChips = new Map();
+  const playSaleChips = new Map();
+  let playSalePick = "";
   const playFirmChips = new Map();
   const playDepots = [];
   let feedLoiter = null;
@@ -504,6 +506,9 @@
     if (playFed) return;
     playChips.forEach((marker) => map.removeLayer(marker));
     playChips.clear();
+    playSalePick = "";
+    playSaleChips.forEach((marker) => map.removeLayer(marker));
+    playSaleChips.clear();
     const list = document.getElementById("play-taxi-list");
     if (list) list.textContent = "";
   }
@@ -557,7 +562,10 @@
         marker.on("click", function () {
           playChosen = sign;
           playFollow = true;
+          playSalePick = car && car.for_sale ? sign : "";
           paintPlayCars(playFeed);
+          paintPlaySale(playFeed);
+          paintPlayBuy();
         });
         playChips.set(sign, marker);
       } else if (marker._playFill !== fill || marker._playJob !== job || marker._playPlace !== endName || marker._playPassenger !== passenger || marker._playJourney !== journey) {
@@ -1757,6 +1765,9 @@
     noteFollow();
     playChips.forEach((marker) => map.removeLayer(marker));
     playChips.clear();
+    playSalePick = "";
+    playSaleChips.forEach((marker) => map.removeLayer(marker));
+    playSaleChips.clear();
     const list = document.getElementById("play-taxi-list");
     if (list) list.textContent = "";
   }
@@ -1873,6 +1884,8 @@
     rows.forEach((row) => {
       row.textContent = "";
     });
+    const balance = document.getElementById("play-balance");
+    if (balance) balance.textContent = "";
     const node = document.getElementById("play-signout-money");
     if (!node) return;
     let showing = false;
@@ -2006,6 +2019,8 @@
     rows.forEach((row) => {
       row.textContent = "";
     });
+    const balance = document.getElementById("play-balance");
+    if (balance) balance.textContent = "";
     const node = document.getElementById("play-feed-401-money");
     if (!node) return;
     let showing = false;
@@ -2048,7 +2063,7 @@
   function feedListsT11(feed) {
     const cars = feed && Array.isArray(feed.cars) ? feed.cars : [];
     return cars.some(function (car) {
-      return !!(car && String(car.sign) === "T11");
+      return !!(car && String(car.sign) === "T11" && !car.for_sale);
     });
   }
 
@@ -2059,15 +2074,109 @@
     node.dataset.pence = String(playBuyPence());
   }
 
+  function saleRows(feed) {
+    const rows = feed && Array.isArray(feed.for_sale) ? feed.for_sale : [];
+    const owned = new Set();
+    const cars = feed && Array.isArray(feed.cars) ? feed.cars : [];
+    cars.forEach((car) => {
+      if (car && car.sign && !car.for_sale) owned.add(String(car.sign));
+    });
+    return rows.filter((row) => row && row.sign && !owned.has(String(row.sign)) && String(row.sign) === "T11");
+  }
+
+  function playBalance(feed) {
+    if (!feed) return 0;
+    const sent = Number(feed.balance);
+    if (Number.isFinite(sent)) return Math.trunc(sent);
+    const cash = Number(feed.cash_pence);
+    const fare = Number(feed.fare_in);
+    const share = Number(feed.driver_share);
+    const fuel = Number(feed.fuel);
+    const standing = Number(feed.standing);
+    if ([cash, fare, share, fuel, standing].every(Number.isFinite)) {
+      return Math.trunc(cash + fare - share - fuel - standing);
+    }
+    return 0;
+  }
+
+  function selectedSale() {
+    if (!playSalePick) return null;
+    const ghost = saleRows(playFeed).find((row) => String(row.sign) === playSalePick);
+    if (ghost) return { sign: playSalePick, pence: Number(ghost.pence) || playBuyPence() };
+    const cars = playFeed && Array.isArray(playFeed.cars) ? playFeed.cars : [];
+    const car = cars.find((row) => row && String(row.sign) === playSalePick && row.for_sale);
+    if (car) return { sign: playSalePick, pence: playBuyPence() };
+    return null;
+  }
+
+  function saleIcon(sign) {
+    const picked = playSalePick === sign;
+    const border = picked ? "2px solid #f8fafc" : "2px dashed #99f6e4";
+    const html = '<span class="play-chip" style="display:flex;align-items:center;justify-content:center;min-width:92px;height:22px;padding:0 6px;border-radius:6px;background:#134e4a;color:#f8fafc;border:' + border + ';cursor:pointer;font:700 11px/1 system-ui,sans-serif;white-space:nowrap">' + sign + " for sale</span>";
+    return L.divIcon({ className: "play-chip-icon", html: html, iconSize: [92, 22], iconAnchor: [46, 11] });
+  }
+
+  function paintPlaySale(feed) {
+    if (!playFed) return;
+    const rows = saleRows(feed);
+    const seen = new Set();
+    rows.forEach((row) => {
+      const sign = String(row.sign);
+      const lat = Number(row.lat);
+      const lng = Number(row.lng);
+      if (!Number.isFinite(lat) || !Number.isFinite(lng)) return;
+      seen.add(sign);
+      const place = [lat - 0.02, lng];
+      let marker = playSaleChips.get(sign);
+      if (!marker) {
+        marker = L.marker(place, {
+          icon: saleIcon(sign),
+          title: sign + " for sale",
+          zIndexOffset: 800
+        }).addTo(map);
+        marker.on("click", function (event) {
+          if (event && event.originalEvent) L.DomEvent.stopPropagation(event.originalEvent);
+          playSalePick = sign;
+          playChosen = sign;
+          playFollow = false;
+          paintPlaySale(playFeed);
+          paintPlayBuy();
+        });
+        playSaleChips.set(sign, marker);
+      } else {
+        marker.setLatLng(place);
+        marker.setIcon(saleIcon(sign));
+      }
+    });
+    playSaleChips.forEach((marker, sign) => {
+      if (seen.has(sign)) return;
+      map.removeLayer(marker);
+      playSaleChips.delete(sign);
+      if (playSalePick === sign) playSalePick = "";
+    });
+  }
+
   function paintPlayBuy() {
     const button = document.getElementById("play-buy");
+    const note = document.getElementById("play-sale-pick");
     seatPlayBuy();
     if (!button) return;
     const listed = feedListsT11(playFeed);
-    button.textContent = "Buy the next car for " + playBuyPence();
+    const sale = selectedSale();
     const token = !!(localStorage.getItem("hackathon-empire-token") || "");
-    button.hidden = !token || listed;
-    button.disabled = playBuying;
+    const price = sale ? sale.pence : playBuyPence();
+    const affordable = playBalance(playFeed) >= price;
+    button.hidden = !token || listed || !sale;
+    button.disabled = playBuying || !affordable;
+    if (!sale) button.textContent = "Buy this taxi for " + playBuyPence();
+    else if (affordable) button.textContent = "Buy " + sale.sign + " for " + price;
+    else button.textContent = "Not enough money for " + sale.sign;
+    if (note) {
+      if (!token) note.textContent = "";
+      else if (sale) note.textContent = sale.sign + " is for sale at " + price + " pence.";
+      else if (listed) note.textContent = "No taxi is for sale.";
+      else note.textContent = "Click the taxi marked for sale, then buy it here.";
+    }
     noteBuyOnce(listed);
     paintPlaySpent(playFeed);
     paintPlayLoiter();
@@ -2075,8 +2184,14 @@
 
   async function buyPlayCar() {
     if (playBuying) return;
-    if (feedListsT11(playFeed)) return;
+    const sale = selectedSale();
+    if (!sale || feedListsT11(playFeed)) return;
     const status = document.getElementById("play-buy-status");
+    if (playBalance(playFeed) < sale.pence) {
+      if (status) status.textContent = "Not enough money.";
+      paintPlayBuy();
+      return;
+    }
     const token = localStorage.getItem("hackathon-empire-token") || "";
     const base = apiBase();
     if (!token || !base) {
@@ -2096,7 +2211,7 @@
           "Content-Type": "application/json",
           Authorization: "Bearer " + token
         },
-        body: JSON.stringify({ pence: playBuyPence() })
+        body: JSON.stringify({ pence: sale.pence })
       });
     } catch (err) {
       if (localStorage.getItem("hackathon-empire-token") || "") {
@@ -2125,7 +2240,14 @@
       return;
     }
     if (!res.ok) {
-      if (status) status.textContent = "Buy failed.";
+      let detail = "";
+      try {
+        const payload = await res.json();
+        detail = payload && payload.detail ? String(payload.detail) : "";
+      } catch (err) {
+        detail = "";
+      }
+      if (status) status.textContent = detail.indexOf("Not enough") !== -1 ? "Not enough money." : "Buy failed.";
       return;
     }
     if (status) status.textContent = "";
@@ -2343,6 +2465,8 @@
     rows.forEach((row) => {
       row.textContent = "";
     });
+    const balance = document.getElementById("play-balance");
+    if (balance) balance.textContent = "";
     const node = document.getElementById("play-next-money");
     if (!node) return;
     let showing = false;
@@ -2368,7 +2492,7 @@
     const token = !!(localStorage.getItem("hackathon-empire-token") || "");
     node.dataset.feed = playFeed ? "held" : "clear";
     node.dataset.t11 = feedListsT11(playFeed) ? "listed" : "gone";
-    node.dataset.buy = token && button && !button.hidden ? "offered" : "hidden";
+    node.dataset.buy = token && button && !feedListsT11(playFeed) ? "offered" : "hidden";
   }
 
   async function createPlayAccount() {
@@ -2649,6 +2773,8 @@
     rows.forEach((row) => {
       row.textContent = "";
     });
+    const balance = document.getElementById("play-balance");
+    if (balance) balance.textContent = "";
     const node = document.getElementById("play-signed-money");
     if (!node) return;
     let showing = false;
@@ -2713,6 +2839,8 @@
     rows.forEach((row) => {
       row.textContent = "";
     });
+    const balance = document.getElementById("play-balance");
+    if (balance) balance.textContent = "";
     const node = document.getElementById("play-quiet-money");
     if (!node) return;
     let showing = false;
@@ -2800,6 +2928,7 @@
     paintPlayMoney(data);
     playFed = true;
     paintPlayCars(data);
+    paintPlaySale(data);
     paintFeedDepots(data);
     paintPlayOffice();
     paintFeedLoiter(data);
@@ -2935,8 +3064,11 @@
       const row = document.querySelector('[data-money="' + key + '"]');
       if (!row) return;
       const amount = key === "fare_in" ? fareInAmount(feed && feed[key]) : key === "driver_share" ? driverShareAmount(feed && feed[key]) : key === "cash_pence" ? cashPenceAmount(feed) : shownPence(feed && feed[key]);
-      row.textContent = (amount === "" ? key : key + " " + amount) + " pence";
+      const cost = amount !== "" && (key === "driver_share" || key === "fuel" || key === "standing");
+      row.textContent = (amount === "" ? key : key + " " + (cost ? "-" : "") + amount) + " pence";
     });
+    const balanceNode = document.getElementById("play-balance");
+    if (balanceNode) balanceNode.textContent = feed ? playBalance(feed) + " pence" : "";
     hideCompanyTotals();
     noteFareIn();
     noteDriverShare();
