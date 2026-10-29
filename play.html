@@ -447,8 +447,7 @@
       white-space: nowrap;
     }
     .play-top-stat[data-stat="cash"] { border-color: rgba(245, 158, 11, 0.45); }
-    .play-top-stat[data-stat="cash"] .v,
-    .play-top-stat[data-stat="rating"] .v { color: #fcd34d; }
+    .play-top-stat[data-stat="cash"] .v { color: #fcd34d; }
     .play-top-stat[data-stat="cash"] .v { font-size: 1.05rem; }
     .play-top-stat[data-stat="fares"] .v { color: #86efac; }
     .play-top-stat[data-stat="fuel"] .v { color: #fda4af; }
@@ -707,7 +706,7 @@
     </div>
   </nav>
 
-  <header id="play-topbar" aria-label="Empire" data-sample="true">
+  <header id="play-topbar" aria-label="Empire">
     <div class="play-top-id">
       <strong>Shiremoor Taxis</strong>
       <span>Day shift · 14:32 · Tariff 1</span>
@@ -715,33 +714,23 @@
     <div class="play-top-stats">
       <div class="play-top-stat" data-stat="cash" title="The bank. Fares go in. Fuel, the driver's half, standing, and a new car come out.">
         <span class="k">Cash</span>
-        <span class="v">£2,480</span>
+        <span class="v" id="play-top-cash"></span>
       </div>
-      <div class="play-top-stat" data-stat="rating" title="What passengers think of the firm. A happy ride leaves a tip. A dirty cab or an empty tank cuts it.">
-        <span class="k">Rating</span>
-        <span class="v">4.6</span>
-      </div>
-      <div class="play-top-stat" data-stat="fares" title="Fares taken this shift, before the driver's half.">
+      <div class="play-top-stat" data-stat="fares" title="Fares kept after the driver's half.">
         <span class="k">Fares</span>
-        <span class="v">£104</span>
+        <span class="v" id="play-top-fares"></span>
       </div>
       <div class="play-top-stat" data-stat="fuel" title="Fuel burned this shift. £0.20 a mile, including the empty run home.">
         <span class="k">Fuel</span>
-        <span class="v">−£14</span>
+        <span class="v" id="play-top-fuel"></span>
       </div>
-      <div class="play-top-stat" data-stat="fleet" title="Cars out, of the cars you own.">
+      <div class="play-top-stat" data-stat="fleet" title="Taxis you own that are not on break.">
         <span class="k">Out</span>
-        <span class="v">7/10</span>
-      </div>
-      <div class="play-top-stat" data-stat="waiting" title="Calls waiting. Nobody has a car yet.">
-        <span class="k">Calls</span>
-        <span class="v">2</span>
+        <span class="v" id="play-top-out"></span>
       </div>
     </div>
     <div class="play-top-menus">
-      <button type="button" id="play-top-fleet" data-menu="fleet" aria-expanded="false" aria-controls="play-top-panel-fleet" title="Who is driving, which car, and how much fuel is left.">Fleet</button>
       <button type="button" id="play-top-ledger" data-menu="ledger" aria-expanded="false" aria-controls="play-top-panel-ledger" title="The shift totals, and the ticket from the last fare.">Ledger</button>
-      <button type="button" id="play-top-buy" data-menu="buy" aria-expanded="false" aria-controls="play-top-panel-buy" title="The yard. Buy the next car, wash the cabs, keep fuel in them.">Garage</button>
       <button type="button" id="play-top-offices" data-menu="offices" aria-expanded="false" aria-controls="play-top-panel-offices" title="The phone, and the other two firms.">Dispatch</button>
       <p id="play-visit" hidden></p>
     </div>
@@ -837,142 +826,16 @@
       <div id="play-screen">
         <div id="play-top-sheet" hidden>
           <div class="play-top-sheet-head">
-            <p class="play-top-kicker">Shiremoor desk · sample</p>
+            <p class="play-top-kicker">Shiremoor desk</p>
             <button type="button" data-top-close>Close</button>
           </div>
-          <section id="play-top-panel-fleet" class="play-top-panel" data-top-panel hidden>
-            <h2>Fleet</h2>
-            <p class="lede">Ten cars, ten drivers, one depot. A careful driver saves fuel. A fast one reaches the pickup and spends more on the brakes.</p>
-            <div class="play-strip">
-              <span>7 out</span>
-              <span>3 at Shiremoor</span>
-              <span>2 carrying</span>
-            </div>
-            <ul class="play-top-rows">
-              <li>
-                <span class="play-top-sign">T1</span>
-                <div class="play-desk-main">
-                  <strong>Ada <span class="play-top-pill is-out">Carrying</span></strong>
-                  <span class="play-desk-sub">Joan to Whitley Bay · long shift, light on fuel</span>
-                </div>
-                <span class="play-meter" style="--n:72" title="Fuel 72%"><i></i></span>
-              </li>
-              <li>
-                <span class="play-top-sign">T2</span>
-                <div class="play-desk-main">
-                  <strong>Ben <span class="play-top-pill is-out">Collecting</span></strong>
-                  <span class="play-desk-sub">Sam waiting at Jesmond · quick, heavy on the brakes</span>
-                </div>
-                <span class="play-meter is-low" style="--n:28" title="Fuel 28%"><i></i></span>
-              </li>
-              <li>
-                <span class="play-top-sign">T3</span>
-                <div class="play-desk-main">
-                  <strong>Chris <span class="play-top-pill is-out">Returning</span></strong>
-                  <span class="play-desk-sub">Empty, back to the depot · the miles still burn fuel</span>
-                </div>
-                <span class="play-meter" style="--n:54" title="Fuel 54%"><i></i></span>
-              </li>
-              <li>
-                <span class="play-top-sign">T4</span>
-                <div class="play-desk-main">
-                  <strong>Dee <span class="play-top-pill is-out">Better spot</span></strong>
-                  <span class="play-desk-sub">Loitering toward Tynemouth · day shift, coast patch</span>
-                </div>
-                <span class="play-meter" style="--n:61" title="Fuel 61%"><i></i></span>
-              </li>
-              <li>
-                <span class="play-top-sign">T5</span>
-                <div class="play-desk-main">
-                  <strong>Eve <span class="play-top-pill is-out">Carrying</span></strong>
-                  <span class="play-desk-sub">Priya to Grey's Monument · passengers talk, tips follow</span>
-                </div>
-                <span class="play-meter" style="--n:48" title="Fuel 48%"><i></i></span>
-              </li>
-              <li>
-                <span class="play-top-sign">T6</span>
-                <div class="play-desk-main">
-                  <strong>Farid <span class="play-top-pill is-out">Collecting</span></strong>
-                  <span class="play-desk-sub">Jo at Sunderland · night work suits this driver</span>
-                </div>
-                <span class="play-meter" style="--n:40" title="Fuel 40%"><i></i></span>
-              </li>
-              <li>
-                <span class="play-top-sign">T7</span>
-                <div class="play-desk-main">
-                  <strong>Grace <span class="play-top-pill is-out">On break</span></strong>
-                  <span class="play-desk-sub">Still out · the car is not earning</span>
-                </div>
-                <span class="play-meter" style="--n:66" title="Fuel 66%"><i></i></span>
-              </li>
-              <li>
-                <span class="play-top-sign">T8</span>
-                <div class="play-desk-main">
-                  <strong>Hal <span class="play-top-pill is-home">At depot</span></strong>
-                  <span class="play-desk-sub">Shiremoor · waiting for a call</span>
-                </div>
-                <span class="play-meter" style="--n:90" title="Fuel 90%"><i></i></span>
-              </li>
-              <li>
-                <span class="play-top-sign">T9</span>
-                <div class="play-desk-main">
-                  <strong>Ivy <span class="play-top-pill is-home">At depot</span></strong>
-                  <span class="play-desk-sub">Shiremoor · cab wants a wash before the next fare</span>
-                </div>
-                <span class="play-meter" style="--n:84" title="Fuel 84%"><i></i></span>
-              </li>
-              <li>
-                <span class="play-top-sign">T10</span>
-                <div class="play-desk-main">
-                  <strong>Jon <span class="play-top-pill is-home">At depot</span></strong>
-                  <span class="play-desk-sub">Shiremoor · spare car, no driver on this shift</span>
-                </div>
-                <span class="play-meter" style="--n:100" title="Fuel full"><i></i></span>
-              </li>
-            </ul>
-          </section>
           <section id="play-top-panel-ledger" class="play-top-panel" data-top-panel hidden>
             <h2>Ledger</h2>
             <p class="lede">The bar shows the bank. This is the shift. Green came in, rose went out.</p>
-            <ul class="play-top-ledger">
-              <li><span>Fares in</span><span class="in">+£104.00</span></li>
-              <li><span>Driver share, half</span><span class="out">−£52.00</span></li>
-              <li><span>Fuel, £0.20 a mile</span><span class="out">−£14.00</span></li>
-              <li><span>Standing, 10 cars × £15</span><span class="out">−£150.00</span></li>
-              <li><span>This shift</span><span class="sum">−£112.00</span></li>
-            </ul>
-            <div class="play-slip">
-              <h3>Last ticket · T5 · Priya</h3>
-              <ul class="play-top-ledger">
-                <li><span>Tariff 1 · flag fall</span><span>£2.40</span></li>
-                <li><span>3 miles · 32 units</span><span>£8.00</span></li>
-                <li><span>Fare</span><span class="in">£10.40</span></li>
-                <li><span>Tip · rating held</span><span class="in">+£1.50</span></li>
-                <li><span>Driver's half of the fare</span><span class="out">−£5.20</span></li>
-              </ul>
-            </div>
-          </section>
-          <section id="play-top-panel-buy" class="play-top-panel" data-top-panel hidden>
-            <h2>Garage</h2>
-            <p class="lede">A new car waits at the depot until it is paid for. A dirty cab or an empty tank loses the tip.</p>
-            <div class="play-bays">
-              <article class="play-bay">
-                <h3>Next car · T11</h3>
-                <p>Bank £2,480. Price £8,000. Short £5,520.</p>
-                <span class="price">£8,000</span>
-                <p>It cannot leave Shiremoor until the bank can pay.</p>
-                <p><button type="button" disabled>Pay £8,000</button></p>
-              </article>
-              <article class="play-bay">
-                <h3>Wash</h3>
-                <p>Nine cabs are clean. Ivy's cab is not.</p>
-                <p>Passengers notice. The rating moves before the tip does.</p>
-              </article>
-              <article class="play-bay">
-                <h3>Pumps</h3>
-                <p>Ben is on 28%. The rest of the fleet can finish the shift.</p>
-                <p>Fuel is already £0.20 a mile on the ledger, including the run home.</p>
-              </article>
+            <ul class="play-top-ledger" id="play-top-ledger-rows"></ul>
+            <div class="play-slip" id="play-top-slip" hidden>
+              <h3 id="play-top-slip-title"></h3>
+              <ul class="play-top-ledger" id="play-top-slip-rows"></ul>
             </div>
           </section>
           <section id="play-top-panel-offices" class="play-top-panel" data-top-panel hidden>
