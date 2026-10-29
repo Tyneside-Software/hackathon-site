@@ -252,6 +252,7 @@
   const playAhead = [];
   let playChosen = "";
   let playFollow = false;
+  let playFollowFit = "";
   let playOfficeName = "";
   let playFeed = null;
   let playFeedEpoch = 0;
@@ -697,32 +698,97 @@
     if (!node) return;
     node.dataset.follow = playFollow ? "on" : "off";
     node.dataset.chosen = playChosen;
-    node.dataset.circle = playFollow ? "taxi" : "full";
+    node.dataset.circle = playFollow ? "taxi" : "fleet";
+  }
+
+  function taxiHere(car, now) {
+    if (!car) return null;
+    const own = playPlace(car, now);
+    if (own) return own;
+    return firmPlace(car, now);
+  }
+
+  function followViewBounds(car, now) {
+    const points = [];
+    const here = taxiHere(car, now);
+    if (here) points.push(here);
+    routePoints(car).forEach((point) => points.push(point));
+    routeAhead(car, now).forEach((point) => points.push(point));
+    if (!points.length) return null;
+    return L.latLngBounds(points);
+  }
+
+  function allTaxiBounds(feed) {
+    const points = [];
+    const now = playNow();
+    function take(car, placeFn) {
+      if (!car) return;
+      const here = placeFn(car, now);
+      if (here) points.push(here);
+    }
+    const cars = feed && Array.isArray(feed.cars) ? feed.cars : [];
+    cars.forEach((car) => take(car, playPlace));
+    const firms = feed && Array.isArray(feed.firms) ? feed.firms : [];
+    firms.forEach((firm) => {
+      const rows = firm && Array.isArray(firm.cars) ? firm.cars : [];
+      rows.forEach((car) => take(car, firmPlace));
+    });
+    if (!points.length) return null;
+    return L.latLngBounds(points);
+  }
+
+  function fitPlayBounds(bounds, maxZoom) {
+    if (!bounds || !bounds.isValid()) return false;
+    const ne = bounds.getNorthEast();
+    const sw = bounds.getSouthWest();
+    if (ne.equals(sw)) {
+      map.setView(bounds.getCenter(), Math.min(14, maxZoom || 14), { animate: false });
+      return true;
+    }
+    map.fitBounds(bounds, {
+      animate: false,
+      maxZoom: maxZoom || 15,
+      padding: [48, 48]
+    });
+    return true;
+  }
+
+  function zoomToFollowedTaxi(car) {
+    const bounds = followViewBounds(car, playNow());
+    if (!fitPlayBounds(bounds, 15)) return;
+  }
+
+  function zoomToAllTaxis(feed) {
+    const bounds = allTaxiBounds(feed);
+    if (fitPlayBounds(bounds, 13)) return;
+    map.fitBounds(circle.getBounds(), { animate: false });
   }
 
   function followChosenTaxi(feed) {
     noteFollow();
     refreshCarLabels(feed);
     if (!playFollow || !playChosen) return;
-    const cars = feed && Array.isArray(feed.cars) ? feed.cars : [];
-    const own = cars.find((row) => row && String(row.sign) === playChosen);
-    if (own) {
-      const here = playPlace(own, playNow());
-      if (here) map.panTo(here, { animate: false });
+    const car = followedCar(feed);
+    if (!car) return;
+    const now = playNow();
+    const here = taxiHere(car, now);
+    const key = playChosen + "|" + String(car.status || "") + "|" + String(car.leg_started || "") + "|" + String(car.duration_s || "");
+    if (playFollowFit !== key) {
+      playFollowFit = key;
+      zoomToFollowedTaxi(car);
       return;
     }
-    const rival = chosenFirmCar(feed);
-    if (!rival) return;
-    const here = firmPlace(rival.car, playNow());
-    if (!here) return;
-    map.panTo(here, { animate: false });
+    if (here && !map.getBounds().pad(-0.12).contains(L.latLng(here[0], here[1]))) {
+      map.panTo(here, { animate: false });
+    }
   }
 
   function stopPlayFollow() {
     playFollow = false;
     playChosen = "";
+    playFollowFit = "";
     clearPlayAhead();
-    map.fitBounds(circle.getBounds());
+    zoomToAllTaxis(playFeed);
     noteFollow();
     refreshCarLabels(playFeed);
     paintPlaySide(playFeed);
@@ -1761,7 +1827,7 @@
     clearFeedDepots();
     clearFeedLoiter();
     showJobCount(null);
-    if (wasFollowing) map.fitBounds(circle.getBounds());
+    if (wasFollowing) zoomToAllTaxis(playFeed);
     noteFollow();
     playChips.forEach((marker) => map.removeLayer(marker));
     playChips.clear();
