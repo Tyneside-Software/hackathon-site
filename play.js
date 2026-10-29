@@ -938,6 +938,51 @@
       counts.hunting + " hunting · " + counts.break + " on break";
   }
 
+  function carStatNumber(value) {
+    const n = Number(value);
+    return Number.isFinite(n) ? n : 0;
+  }
+
+  function hidePlayCarStats() {
+    const box = document.getElementById("play-car-stats");
+    if (box) box.hidden = true;
+  }
+
+  function paintPlayCarStats(feed) {
+    const box = document.getElementById("play-car-stats");
+    if (!box) return;
+    const car = followedCar(feed);
+    if (!car) {
+      box.hidden = true;
+      return;
+    }
+    box.hidden = false;
+    const title = document.getElementById("play-car-stats-title");
+    const sign = String(car.sign || playChosen || "Taxi").trim() || "Taxi";
+    if (title) title.textContent = sign;
+    const miles = carStatNumber(car.miles);
+    const fare = Math.trunc(carStatNumber(car.fare_in));
+    const fuel = Object.prototype.hasOwnProperty.call(car, "fuel_pence")
+      ? Math.trunc(carStatNumber(car.fuel_pence))
+      : Math.round(miles * 20);
+    const driver = Object.prototype.hasOwnProperty.call(car, "driver_share")
+      ? Math.trunc(carStatNumber(car.driver_share))
+      : Math.trunc(fare / 2);
+    const company = Object.prototype.hasOwnProperty.call(car, "company_pence")
+      ? Math.trunc(carStatNumber(car.company_pence))
+      : fare - driver;
+    const milesNode = document.getElementById("play-car-miles");
+    const fuelNode = document.getElementById("play-car-fuel");
+    const earnedNode = document.getElementById("play-car-earned");
+    const driverNode = document.getElementById("play-car-driver");
+    const companyNode = document.getElementById("play-car-company");
+    if (milesNode) milesNode.textContent = miles.toFixed(2);
+    if (fuelNode) fuelNode.textContent = formatPounds(fuel);
+    if (earnedNode) earnedNode.textContent = formatPounds(fare);
+    if (driverNode) driverNode.textContent = formatPounds(driver);
+    if (companyNode) companyNode.textContent = formatPounds(company);
+  }
+
   function paintFollowPanel(feed) {
     const who = document.getElementById("play-follow-who");
     const detail = document.getElementById("play-follow-detail");
@@ -1112,6 +1157,7 @@
     paintPlayClock(feed);
     paintFleetCounts(feed);
     paintFollowPanel(feed);
+    paintPlayCarStats(feed);
     paintRivalCover(feed);
     paintFirmSummaries(feed);
     paintCompany(feed);
@@ -2185,6 +2231,7 @@
     clearDueAtDrop();
     clearPlayBookings();
     clearPlayTop();
+    hidePlayCarStats();
     const node = document.getElementById("play-signout-money");
     if (!node) return;
     let showing = false;
@@ -2325,6 +2372,7 @@
     clearDueAtDrop();
     clearPlayBookings();
     clearPlayTop();
+    hidePlayCarStats();
     const node = document.getElementById("play-feed-401-money");
     if (!node) return;
     let showing = false;
@@ -2780,6 +2828,7 @@
     clearDueAtDrop();
     clearPlayBookings();
     clearPlayTop();
+    hidePlayCarStats();
     const node = document.getElementById("play-next-money");
     if (!node) return;
     let showing = false;
@@ -3093,6 +3142,7 @@
     clearDueAtDrop();
     clearPlayBookings();
     clearPlayTop();
+    hidePlayCarStats();
     const node = document.getElementById("play-signed-money");
     if (!node) return;
     let showing = false;
@@ -3164,6 +3214,7 @@
     clearDueAtDrop();
     clearPlayBookings();
     clearPlayTop();
+    hidePlayCarStats();
     const node = document.getElementById("play-quiet-money");
     if (!node) return;
     let showing = false;
@@ -3641,6 +3692,7 @@
     if (balanceNode) balanceNode.textContent = feed ? formatPounds(playBalance(feed)) : "";
     paintDueAtDrop(feed);
     paintPlayBookings(feed);
+    paintPlayCarStats(feed);
     hideCompanyTotals();
     noteFareIn();
     noteDriverShare();

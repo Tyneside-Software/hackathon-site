@@ -159,6 +159,27 @@
       border-left: 4px solid var(--accent);
       border-radius: 8px;
     }
+    #play-car-stats[hidden] { display: none; }
+    #play-car-stats-list {
+      list-style: none;
+      margin: 0.4rem 0 0;
+      padding: 0;
+    }
+    #play-car-stats-list li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.75rem;
+      width: 100%;
+      margin: 0 0 0.4rem;
+      padding: 0.45rem 0.55rem;
+      font: 650 12px/1.35 system-ui, sans-serif;
+      color: #f8fafc;
+      background: #0a1016;
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--accent);
+      border-radius: 8px;
+    }
     #play-money > p:not(#play-balance):not(#play-due):not(#play-bookings-label):not(#play-sale-pick):not(#play-buy-row):not(#play-buy-status):not(#play-spent) {
       position: absolute;
       width: 1px;
@@ -880,6 +901,17 @@
               <li data-money="cash_pence">cash_pence</li>
             </ul>
           </section>
+          <section class="play-side-block" id="play-car-stats" hidden aria-label="This taxi">
+            <p class="hero-kicker">This taxi</p>
+            <h3 class="play-side-title" id="play-car-stats-title">This taxi</h3>
+            <ul id="play-car-stats-list">
+              <li>Miles <span id="play-car-miles">0.00</span></li>
+              <li>Fuel <span id="play-car-fuel">£0.00</span></li>
+              <li>Earned <span id="play-car-earned">£0.00</span></li>
+              <li>Driver <span id="play-car-driver">£0.00</span></li>
+              <li>Company <span id="play-car-company">£0.00</span></li>
+            </ul>
+          </section>
           <section class="play-side-block">
             <p class="hero-kicker" id="play-bookings-label" hidden>Finished trips</p>
             <ul id="play-bookings" aria-label="Finished trips"></ul>
@@ -921,7 +953,7 @@
             <h3>Jobs</h3>
             <p>Demand follows the time of day: morning commute into town, daytime coast and hospitals, evening reverse, nights out. A waiting person is claimed by the nearest free taxi. That taxi drives to them (collecting), then to the drop (carrying), then is free again.</p>
             <ul>
-              <li>Click a taxi on the map or in <strong>Your fleet</strong> to follow it. The map zooms once to that taxi and its route. After that you can pan and zoom freely; the route stays on the map. The dotted moving line is where it is going. The solid line is where it has already been. Only one taxi’s route is shown at a time.</li>
+              <li>Click a taxi on the map or in <strong>Your fleet</strong> to follow it. The map zooms once to that taxi and its route. After that you can pan and zoom freely; the route stays on the map. The dotted moving line is where it is going. The solid line is where it has already been. Only one taxi’s route is shown at a time. The right panel shows that taxi’s miles, fuel, and earnings.</li>
               <li><strong>Stop following</strong> zooms out just far enough to see every taxi.</li>
               <li><strong>Cancel this job</strong> drops a fare you do not want. If the car has already left, miles driven still cost fuel and there is no fare.</li>
             </ul>
@@ -1038,7 +1070,7 @@
 
   <script src="config.js?v=20261024-https1"></script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-  <script src="play.js?v=20261029-shared1"></script>
+  <script src="play.js?v=20261029-carstats1"></script>
   <script>
     (function () {
       var node = document.getElementById("play-visit");
