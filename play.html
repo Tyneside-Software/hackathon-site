@@ -956,21 +956,21 @@
         <div id="play-map"></div>
         <section class="panel" id="play-money" aria-label="In-game money">
           <h2>Your money</h2>
-          <p id="play-balance">0 pence</p>
-          <p id="play-due">Due at the drop 0 pence</p>
+          <p id="play-balance">£0.00</p>
+          <p id="play-due">Due at the drop £0.00</p>
           <p id="play-money-beside">The in-game money stays on the screen with the map and follows the feed.</p>
           <ul id="play-money-lines">
-            <li data-money="fare_in">fare_in 0 pence</li>
-            <li data-money="driver_share">driver_share 0 pence</li>
-            <li data-money="fuel">fuel 0 pence</li>
-            <li data-money="standing">standing 0 pence</li>
-            <li data-money="new_car">new_car 800000 pence</li>
-            <li data-money="cash_pence">cash_pence pence</li>
+            <li data-money="fare_in">fare_in £0.00</li>
+            <li data-money="driver_share">driver_share £0.00</li>
+            <li data-money="fuel">fuel £0.00</li>
+            <li data-money="standing">standing £0.00</li>
+            <li data-money="new_car">new_car £8,000.00</li>
+            <li data-money="cash_pence">cash_pence</li>
           </ul>
           <p id="play-bookings-label" hidden>Finished trips</p>
           <ul id="play-bookings" aria-label="Finished trips"></ul>
           <p id="play-sale-pick">Click the taxi marked for sale, then buy it here.</p>
-          <p id="play-buy-row"><button type="button" id="play-buy" hidden>Buy this taxi for 800000</button></p>
+          <p id="play-buy-row"><button type="button" id="play-buy" hidden>Buy this taxi for £8,000.00</button></p>
           <p id="play-buy-sits">The buy control sits with the money. It does not cover the taxis.</p>
           <p id="play-one-price">The control shows 800000. It does not show a second fare, a second standing charge, or a second fuel rate.</p>
           <p id="play-buy-status"></p>
@@ -1011,15 +1011,15 @@
             <p>Press <strong>Draw area</strong>, then click and drag on the map to draw the circle (0.2 to 8 km). Firm is blank for <strong>your</strong> cars, or <code>north</code> / <code>south</code> to park that rival. The blue circle on the map is the patch.</p>
             <p>Use it to park spare cars near busy places (town in the morning, the coast in the afternoon) so the next person is closer than the depot.</p>
             <h3>Money</h3>
-            <p>The panel on the right is your ledger, in pence:</p>
+            <p>The panel on the right is your ledger, in pounds:</p>
             <ul>
               <li><strong>fare in</strong> — what passengers paid on finished trips (North Tyneside tariff)</li>
               <li><strong>driver share</strong> — half of fare in</li>
-              <li><strong>fuel</strong> — 20 pence a mile, including empty running</li>
-              <li><strong>standing</strong> — 1500 pence per taxi you own</li>
+              <li><strong>fuel</strong> — £0.20 a mile, including empty running</li>
+              <li><strong>standing</strong> — £15.00 per taxi you own</li>
               <li><strong>cash</strong> — what you can spend</li>
             </ul>
-            <p>A new taxi costs 800000 pence. Click the taxi marked for sale, then buy it from that panel. It waits a few seconds at the depot, then takes a fare.</p>
+            <p>A new taxi costs £8,000.00. Click the taxi marked for sale, then buy it from that panel. It waits a few seconds at the depot, then takes a fare.</p>
             <h3>Rivals</h3>
             <p>North office and South office in the bar list that firm’s recent bookings. They keep money from trips your cars did not take. Watch Demand in the sidebar: if north or south have claimed waiters, they got there first.</p>
           </div>
@@ -1119,7 +1119,7 @@
 
   <script src="config.js?v=20261024-https1"></script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-  <script src="play.js?v=20261024-loiterdraw1"></script>
+  <script src="play.js?v=20261029-pounds1"></script>
   <script>
     (function () {
       var node = document.getElementById("play-visit");

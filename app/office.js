@@ -32,7 +32,7 @@
     return [
       {
         title: "£11.30 booking",
-        detail: "Tariff one, 3 miles, no waiting, one extra passenger, one outside bag. A guide or hearing dog adds 0",
+        detail: "Tariff one, 3 miles, no waiting, one extra passenger, one outside bag. A guide or hearing dog adds £0.00",
         pickup: "Grey's Monument",
         dropOff: "Shiremoor depot",
         requestedTime: "15:00",
@@ -71,7 +71,7 @@
       },
       {
         title: "Pram and bag",
-        detail: "Tariff one, 1 mile, one pram, one outside bag. 490 + 50 + 40 = 580",
+        detail: "Tariff one, 1 mile, one pram, one outside bag. £4.90 + £0.50 + £0.40 = £5.80",
         pickup: "Grey's Monument",
         dropOff: "Shiremoor depot",
         requestedTime: "15:00",
@@ -107,7 +107,7 @@
       },
       {
         title: "Guide or hearing dog",
-        detail: "A guide or hearing dog adds 0",
+        detail: "A guide or hearing dog adds £0.00",
         pickup: "Grey's Monument",
         dropOff: "Shiremoor depot",
         requestedTime: "15:00",
@@ -168,14 +168,12 @@
   }
 
   function money(pence) {
-    var sign = pence < 0 ? "-" : "";
-    var abs = Math.abs(pence);
-    var rest = abs % 100;
-    return sign + "£" + Math.floor(abs / 100) + "." + (rest < 10 ? "0" : "") + rest;
+    var n = Number.isFinite(Number(pence)) ? Math.trunc(Number(pence)) : 0;
+    return (n / 100).toLocaleString("en-GB", { style: "currency", currency: "GBP" });
   }
 
   function penceText(pence) {
-    return pence + " pence, " + money(pence);
+    return money(pence);
   }
 
   function whole(id) {
@@ -239,12 +237,12 @@
     }
     lastQuote = quote;
     if (quote.yards === 0 && quote.seconds === 0 && quote.extraPence === 0) {
-      result.textContent = "0 pence, £0.00. The hiring has no distance and no time, so no fare is added to the ledger.";
+      result.textContent = "£0.00. The hiring has no distance and no time, so no fare is added to the ledger.";
       return;
     }
     var text = penceText(quote.pence);
     if (quote.tariff === 1 && quote.yards === 17600 && quote.seconds === 0 && quote.extraPence === 0) {
-      text = "Flag 240 plus 10 units of 25, total 490. " + text;
+      text = "Flag £2.40 plus 10 units of £0.25, total £4.90. " + text;
     }
     result.textContent = text;
   }
@@ -317,7 +315,7 @@
       ["cancelled-mile", cancelledMile],
       ["company-week", completedDay * 7],
       ["empty-day", 0],
-      ["empty-day, cancelled 490 pence mile only", 0]
+      ["empty-day, cancelled £4.90 mile only", 0]
     ].forEach(function (line) {
       var row = document.createElement("p");
       row.className = "ledger-line";
@@ -346,9 +344,8 @@
       + "tariff " + tariffName + "\n"
       + "Miles " + (yards / 17600) + "\n"
       + "Waiting seconds " + (seconds / 10) + "\n"
-      + "Extras " + extras + "\n"
-      + "Quoted pence " + total + "\n"
-      + money(total);
+      + "Extras " + money(extras) + "\n"
+      + "Quoted " + money(total);
   }
 
   function renderSlips() {
@@ -387,14 +384,14 @@
       var breakdown = "";
       if (row.tariff === 1 && extras === 0 && row.segments.length === 1
           && row.segments[0][0] === 17600 && row.segments[0][1] === 0) {
-        breakdown = " Flag 240 plus 10 units of 25, total 490.";
+        breakdown = " Flag £2.40 plus 10 units of £0.25, total £4.90.";
       }
-      detail.textContent = row.detail + "." + breakdown + " Meter " + meter + ". Extras " + extras
-        + ". Total " + pence + ". " + penceText(pence) + ". Pickup " + row.pickup
+      detail.textContent = row.detail + "." + breakdown + " Meter " + money(meter) + ". Extras " + money(extras)
+        + ". Total " + money(pence) + ". Pickup " + row.pickup
         + ". Drop-off " + row.dropOff + ". Requested " + row.requestedTime
         + ". Vehicle " + row.callSign
         + (row.driver ? ". Driver " + row.driver : "")
-        + (row.payment ? ". Payment " + row.payment + ". Fare " + row.postedPence : "") + ".";
+        + (row.payment ? ". Payment " + row.payment + ". Fare " + money(row.postedPence) : "") + ".";
       var status = document.createElement("p");
       status.className = "office-status";
       status.textContent = row.status;
@@ -507,7 +504,7 @@
     var dropOff = document.getElementById("drop-off").value;
     if (placeRefused(pickup) || placeRefused(dropOff)) {
       document.getElementById("quote-result").textContent =
-        "Berwick-upon-Tweed is not saved, so 0 pence is added. The meter the clerk entered stays on the quote.";
+        "Berwick-upon-Tweed is not saved, so £0.00 is added. The meter the clerk entered stays on the quote.";
       if (!quote.error) {
         document.getElementById("quote-result").textContent += " " + penceText(quote.pence) + ".";
       }
@@ -549,7 +546,7 @@
     return [
       {
         title: "£11.30 booking",
-        detail: "Tariff one, 3 miles, no waiting, one extra passenger, one outside bag. A guide or hearing dog adds 0",
+        detail: "Tariff one, 3 miles, no waiting, one extra passenger, one outside bag. A guide or hearing dog adds £0.00",
         pickup: "Grey's Monument",
         dropOff: "Shiremoor depot",
         requestedTime: "15:00",
@@ -595,7 +592,7 @@
     persistDay();
     renderSamples();
     renderLedger();
-    dayNote("Restored three completed bookings, 1130, 1240, and 490. The day shows " + runningPence() + ".");
+    dayNote("Restored three completed bookings, £11.30, £12.40, and £4.90. The day shows " + money(runningPence()) + ".");
   }
 
   function showAlexDay() {
@@ -605,7 +602,7 @@
     persistDay();
     renderSamples();
     renderLedger();
-    dayNote("Alex's 1130 and 490 show " + runningPence() + ".");
+    dayNote("Alex's £11.30 and £4.90 show " + money(runningPence()) + ".");
   }
 
   function showCancelledMile() {
@@ -619,7 +616,7 @@
     persistDay();
     renderSamples();
     renderLedger();
-    dayNote("The 490 pence mile is cancelled. The day shows " + runningPence() + ".");
+    dayNote("The £4.90 mile is cancelled. The day shows " + money(runningPence()) + ".");
   }
 
   function showEmptyDay() {
@@ -628,7 +625,7 @@
     persistDay();
     renderSamples();
     renderLedger();
-    dayNote("Empty day. The total is 0.");
+    dayNote("Empty day. The total is £0.00.");
   }
 
   document.getElementById("btn-restore").addEventListener("click", showFullDay);

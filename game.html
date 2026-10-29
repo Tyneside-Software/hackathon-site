@@ -38,7 +38,7 @@
     <p class="hero-kicker">Empire · Shiremoor depot</p>
     <p class="desk-banner">Simulated data</p>
     <h1 style="font-size:1.7rem;margin-bottom:0.4rem">One empire day</h1>
-    <p class="lede">The depot is Shiremoor. The worked day below is the example already checked at −1120 pence. This page does not call the API.</p>
+    <p class="lede">The depot is Shiremoor. The worked day below is the example already checked at −£11.20. This page does not call the API.</p>
     <p id="clock"></p>
     <p id="fallback"></p>
     <p id="next-offer"></p>
@@ -165,7 +165,7 @@
       && game.sumPence(game.workedDay()) === -1120
       && !outNow.cars.some(function (car) { return car.device_id; })
       && !outLater.cars.some(function (car) { return car.device_id; })
-      ? "T1 and T2 move on two accepted offers. T3 can stay at the depot. The checked day stays −1120."
+      ? "T1 and T2 move on two accepted offers. T3 can stay at the depot. The checked day stays −£11.20."
       : "Two cars did not move together.";
     var doneRow = game.completedFareRow(11, 3, []);
     var doneAgain = game.completedFareRow(11, 3, doneRow.posted);
@@ -261,7 +261,7 @@
       && goingHome.status === "returning"
       && arrivedHome.status === "at_depot"
       && game.sumPence(game.workedDay()) === -1120
-      ? "After the drop-off the car is returning. Arrival sets at_depot. The checked day stays −1120."
+      ? "After the drop-off the car is returning. Arrival sets at_depot. The checked day stays −£11.20."
       : "The drive home changed the day.";
     var liveFuel = game.postLiveFuel(9, 3, []);
     var fuelAgain = game.postLiveFuel(9, 3, liveFuel.posted);
@@ -271,7 +271,7 @@
       && fuelAgain.lines.length === 0
       && checkedFuel.amountPence === -140
       && game.sumPence(game.workedDay()) === -1120
-      ? "A live 3 mile trip adds −60 fuel once. The checked day still has −140."
+      ? "A live 3 mile trip adds −£0.60 fuel once. The checked day still has −£1.40."
       : "Live fuel changed the day.";
     var startRow = game.movingRow("T1", 600, 0);
     var halfRow = game.movingRow("T1", 600, 300);
@@ -300,7 +300,7 @@
       && livePostAgain.lines.length === 0
       && checkedFuelLine.amountPence === -140
       && game.sumPence(game.workedDay()) === -1120
-      ? "A live trip posts one fare of 1040 and one fuel of −60. Posting it again adds nothing. The checked day stays −1120."
+      ? "A live trip posts one fare of £10.40 and one fuel of −£0.60. Posting it again adds nothing. The checked day stays −£11.20."
       : "A live post changed the day.";
     document.getElementById("btn-accept").addEventListener("click", function () {
       var elapsed = game.elapsedSeconds(offerStart, Date.now());
@@ -321,7 +321,7 @@
       : "A short trip left the circle.";
     var liveFare = game.liveFarePence(3, 0);
     document.getElementById("live-fare").textContent = liveFare === 1040 && game.sumPence(game.workedDay()) === -1120
-      ? "A live 3 mile fare is 1040. The checked day stays −1120."
+      ? "A live 3 mile fare is £10.40. The checked day stays −£11.20."
       : "A live fare changed the day.";
     var fleet = game.fleetPositions([
       { points: [[0, 0], [0, 2]], durationS: 600 },
@@ -334,7 +334,7 @@
       && game.sumPence(game.workedDay()) === -1120
       && !fleet.some(function (car) { return car.device_id; });
     document.getElementById("fleet-move").textContent = together
-      ? "T1, T2, and T3 can move together. None is a device. The checked day stays −1120."
+      ? "T1, T2, and T3 can move together. None is a device. The checked day stays −£11.20."
       : "A car was a device.";
     var labels = {
       standing: "Standing for the one car",
@@ -352,18 +352,18 @@
       ? "A Berwick drop-off adds no lines."
       : "A Berwick drop-off was wrong.";
     document.getElementById("hexham-job").textContent = game.dropoffOffered(54.9716, -2.1015) && game.dropoffLines(54.9716, -2.1015).length === 0
-      ? "Hexham may be offered. The priced day stays 1040."
+      ? "Hexham may be offered. The priced day stays £10.40."
       : "Hexham was given a fare.";
     document.getElementById("unpaid-car").textContent = game.startUnpaidCar().length === 0
       ? "An unpaid second car stays at the depot and adds no fare."
       : "An unpaid car wrote a fare.";
     var jamie = game.newDriver("Jamie");
     document.getElementById("jamie").textContent = jamie.costPence === 0 && game.sumPence(game.dayWithDriver()) === -1120
-      ? "Jamie costs 0. The day stays −1120."
+      ? "Jamie costs £0.00. The day stays −£11.20."
       : "Jamie changed the day.";
-    document.getElementById("three-car-day").textContent = "three-car day " + game.sumPence(game.threeCarDay());
+    document.getElementById("three-car-day").textContent = "three-car day " + game.formatPounds(game.sumPence(game.threeCarDay()));
     function showPence(n) {
-      return n < 0 ? "−" + (-n) : String(n);
+      return game.formatPounds(n);
     }
     var weekList = document.getElementById("week-days");
     for (var day = 1; day <= 7; day++) {

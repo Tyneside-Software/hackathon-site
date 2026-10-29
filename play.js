@@ -382,7 +382,7 @@
 
   function newCarLineReady() {
     const row = document.querySelector('[data-money="new_car"]');
-    return !!(row && String(row.textContent).indexOf("800000") !== -1);
+    return !!(row && String(row.textContent).indexOf(formatPounds(playBuyPence())) !== -1);
   }
 
   function boughtAtDepot(car) {
@@ -967,7 +967,7 @@
     const passenger = typeof car.passenger === "string" ? car.passenger.trim() : "";
     if (passenger) bits.push(passenger);
     const trip = feedPence(car, "trip_pence");
-    if (trip !== null) bits.push(trip + " pence");
+    if (trip !== null) bits.push(formatPounds(trip));
     const left = feedSecondsLeft(car, playNow());
     if (left !== null) bits.push(left + "s left");
     if (detail) detail.textContent = bits.join(" · ");
@@ -1023,7 +1023,7 @@
       const fare = feedPence(firm, "fare_in");
       const books = Array.isArray(firm.bookings) ? firm.bookings.length : 0;
       node.textContent = name + " · " + rows.length + " cars · " + out + " out · " +
-        (fare === null ? "0" : String(fare)) + " pence in · " + books + " bookings";
+        (fare === null ? formatPounds(0) : formatPounds(fare)) + " in · " + books + " bookings";
     });
   }
 
@@ -1154,7 +1154,7 @@
     const left = feedSecondsLeft(car, now);
     if (left !== null) add("eta", left + "s");
     const trip = feedPence(car, "trip_pence");
-    if (trip !== null) add("fare", trip + " pence");
+    if (trip !== null) add("fare", formatPounds(trip));
     if (firm) add("firm", firm);
     return lines.join("<br>");
   }
@@ -2040,7 +2040,7 @@
     const firm = firmCalled(playFeed, playOfficeName);
     const fareNode = document.getElementById("play-office-fare");
     const fare = feedPence(firm, "fare_in");
-    if (fareNode) fareNode.textContent = fare === null ? "" : "fare_in " + fare + " pence";
+    if (fareNode) fareNode.textContent = fare === null ? "" : "fare_in " + formatPounds(fare);
     const list = document.getElementById("play-office-rows");
     const empty = document.getElementById("play-office-empty");
     if (list) list.textContent = "";
@@ -2060,7 +2060,7 @@
       if (sign) bits.push(sign);
       if (pickup) bits.push(pickup);
       if (drop) bits.push(drop);
-      if (pence !== null) bits.push(pence + " pence");
+      if (pence !== null) bits.push(formatPounds(pence));
       item.textContent = bits.join(" ");
       list.appendChild(item);
     });
@@ -2159,7 +2159,7 @@
     if (!node) return;
     const line = document.getElementById("play-spent");
     const text = line ? line.textContent : "";
-    node.dataset.spent = text.indexOf("800000") === -1 ? "clear" : "shows";
+    node.dataset.spent = spentShows(text) ? "shows" : "clear";
     node.dataset.flight = "left";
   }
 
@@ -2182,7 +2182,7 @@
     const line = document.getElementById("play-spent");
     if (!line) return;
     const token = !!(localStorage.getItem("hackathon-empire-token") || "");
-    if (token && feedListsT11(feed)) line.textContent = String(playBuyPence()) + " pence spent";
+    if (token && feedListsT11(feed)) line.textContent = formatPounds(playBuyPence()) + " spent";
     else line.textContent = "";
     const note = document.getElementById("play-spent-feed");
     if (!note) return;
@@ -2278,7 +2278,7 @@
     if (!node) return;
     const line = document.getElementById("play-spent");
     const text = line ? line.textContent : "";
-    node.dataset.spent = text.indexOf("800000") === -1 ? "clear" : "shows";
+    node.dataset.spent = spentShows(text) ? "shows" : "clear";
     node.dataset.chip = playChips.has("T11") ? "stays" : "gone";
     node.dataset.feed = "empire";
   }
@@ -2411,12 +2411,12 @@
     const affordable = playBalance(playFeed) >= price;
     button.hidden = !token || listed || !sale;
     button.disabled = playBuying || !affordable;
-    if (!sale) button.textContent = "Buy this taxi for " + playBuyPence();
-    else if (affordable) button.textContent = "Buy " + sale.sign + " for " + price;
+    if (!sale) button.textContent = "Buy this taxi for " + formatPounds(playBuyPence());
+    else if (affordable) button.textContent = "Buy " + sale.sign + " for " + formatPounds(price);
     else button.textContent = "Not enough money for " + sale.sign;
     if (note) {
       if (!token) note.textContent = "";
-      else if (sale) note.textContent = sale.sign + " is for sale at " + price + " pence.";
+      else if (sale) note.textContent = sale.sign + " is for sale at " + formatPounds(price) + ".";
       else if (listed) note.textContent = "No taxi is for sale.";
       else note.textContent = "Click the taxi marked for sale, then buy it here.";
     }
@@ -2642,7 +2642,7 @@
     if (!node) return;
     const line = document.getElementById("play-spent");
     const text = line ? line.textContent : "";
-    node.dataset.spent = text.indexOf("800000") === -1 ? "clear" : "shows";
+    node.dataset.spent = spentShows(text) ? "shows" : "clear";
     node.dataset.account = "next";
   }
 
@@ -3014,7 +3014,7 @@
     if (!node) return;
     const line = document.getElementById("play-spent");
     const text = line ? line.textContent : "";
-    node.dataset.spent = text.indexOf("800000") === -1 ? "clear" : "shows";
+    node.dataset.spent = spentShows(text) ? "shows" : "clear";
     node.dataset.feed = "waiting";
   }
 
@@ -3065,7 +3065,7 @@
     if (!node) return;
     const line = document.getElementById("play-spent");
     const text = line ? line.textContent : "";
-    node.dataset.spent = text.indexOf("800000") === -1 ? "clear" : "shows";
+    node.dataset.spent = spentShows(text) ? "shows" : "clear";
     node.dataset.feed = "quiet";
   }
 
@@ -3268,10 +3268,24 @@
     });
   }
 
-  function shownPence(value) {
+  function formatPounds(pence) {
+    const n = Number.isFinite(Number(pence)) ? Math.trunc(Number(pence)) : 0;
+    return (n / 100).toLocaleString("en-GB", { style: "currency", currency: "GBP" });
+  }
+
+  function spentShows(text) {
+    return String(text || "").indexOf(formatPounds(playBuyPence())) !== -1;
+  }
+
+  function blankPence(value) {
     const pence = Number.isFinite(Number(value)) ? Math.trunc(Number(value)) : 0;
-    if (pence === 2860 || pence === 1130 || pence === 1240 || pence === -1120) return "";
-    return String(pence);
+    return pence === 2860 || pence === 1130 || pence === 1240 || pence === -1120;
+  }
+
+  function shownPence(value) {
+    if (blankPence(value)) return "";
+    const pence = Number.isFinite(Number(value)) ? Math.trunc(Number(value)) : 0;
+    return formatPounds(pence);
   }
 
   function feedHasCash(feed) {
@@ -3293,15 +3307,15 @@
   }
 
   function fareInAmount(value) {
-    const amount = shownPence(value);
-    if (amount === "800000") return "";
-    return amount;
+    const pence = Number.isFinite(Number(value)) ? Math.trunc(Number(value)) : 0;
+    if (pence === 800000) return "";
+    return shownPence(value);
   }
 
   function driverShareAmount(value) {
-    const amount = shownPence(value);
-    if (amount === "400000") return "";
-    return amount;
+    const pence = Number.isFinite(Number(value)) ? Math.trunc(Number(value)) : 0;
+    if (pence === 400000) return "";
+    return shownPence(value);
   }
 
   function noteDriverShare() {
@@ -3345,7 +3359,7 @@
       return;
     }
     const amount = dueAmount(feed);
-    node.textContent = amount === "" ? "Due at the drop" : "Due at the drop " + amount + " pence";
+    node.textContent = amount === "" ? "Due at the drop" : "Due at the drop " + amount;
   }
 
   function clearDueAtDrop() {
@@ -3373,7 +3387,7 @@
       if (sign) bits.push(sign);
       if (pickup) bits.push(pickup);
       if (drop) bits.push(drop);
-      if (pence !== null) bits.push(pence + " pence");
+      if (pence !== null) bits.push(formatPounds(pence));
       item.textContent = bits.join(" ");
       list.appendChild(item);
     });
@@ -3403,10 +3417,10 @@
       if (!row) return;
       const amount = key === "fare_in" ? fareInAmount(feed && feed[key]) : key === "driver_share" ? driverShareAmount(feed && feed[key]) : key === "cash_pence" ? cashPenceAmount(feed) : shownPence(feed && feed[key]);
       const cost = amount !== "" && (key === "driver_share" || key === "fuel" || key === "standing");
-      row.textContent = (amount === "" ? key : key + " " + (cost ? "-" : "") + amount) + " pence";
+      row.textContent = amount === "" ? key : key + " " + (cost ? "−" : "") + amount;
     });
     const balanceNode = document.getElementById("play-balance");
-    if (balanceNode) balanceNode.textContent = feed ? playBalance(feed) + " pence" : "";
+    if (balanceNode) balanceNode.textContent = feed ? formatPounds(playBalance(feed)) : "";
     paintDueAtDrop(feed);
     paintPlayBookings(feed);
     hideCompanyTotals();
