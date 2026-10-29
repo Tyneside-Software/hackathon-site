@@ -57,6 +57,7 @@
       box-sizing: border-box;
     }
     #play-screen {
+      --play-rail: min(22rem, 40%);
       flex: 1 1 auto;
       position: relative;
       min-width: 0;
@@ -66,6 +67,7 @@
     #play-map {
       position: absolute;
       inset: 0;
+      right: var(--play-rail);
       width: auto;
       height: auto;
       min-height: 0;
@@ -78,52 +80,84 @@
     #play-money {
       position: absolute;
       z-index: 30;
-      top: 0.75rem;
-      right: 0.75rem;
-      width: min(16rem, calc(100% - 1.5rem));
-      max-height: 42vh;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: var(--play-rail);
+      max-height: none;
       overflow: auto;
       margin: 0;
-      background: rgba(12, 18, 25, 0.9);
+      background: #121a24;
+      border: 0;
+      border-left: 1px solid var(--border);
+      border-radius: 0;
+      box-shadow: none;
+      color: #e8eef4;
+      padding: 0.7rem 0.75rem 1.1rem;
+    }
+    #play-money .play-side-block:last-of-type { border-bottom: 0; margin-bottom: 0; }
+    #play-money .play-side-block:has(#play-bookings:empty) { display: none; }
+    #play-money .hero-kicker {
+      margin-bottom: 0.35rem;
+      color: var(--accent);
+      font-size: 0.72rem;
+      font-weight: 400;
+      letter-spacing: 0.14em;
+      line-height: 1.2;
+      text-transform: uppercase;
+    }
+    #play-money #play-sale-pick,
+    #play-money #play-buy-status,
+    #play-money #play-spent {
+      color: #f8fafc;
+      font: 650 13px/1.35 system-ui, sans-serif;
     }
     #play-buy, #play-buy-row { position: static; inset: auto; }
-    #play-money { width: min(18rem, calc(100vw - 1.5rem)); }
-    #play-balance {
+    #play-money #play-balance {
       margin: 0.15rem 0 0.15rem;
-      font: 700 1.7rem/1.1 system-ui, sans-serif;
+      font: 700 1.55rem/1.1 system-ui, sans-serif;
       color: #f8fafc;
     }
-    #play-due {
-      margin: 0 0 0.7rem;
-      color: #cbd5e1;
-      font-size: 0.92rem;
+    #play-money #play-due {
+      margin: 0.15rem 0 0;
+      color: #f8fafc;
+      font: 650 13px/1.35 system-ui, sans-serif;
     }
-    #play-money-lines { list-style: none; margin: 0; padding: 0; }
+    #play-money-lines { list-style: none; margin: 0.4rem 0 0; padding: 0; }
     #play-money-lines li {
       display: flex;
       justify-content: space-between;
+      align-items: center;
       gap: 0.75rem;
-      margin: 0.2rem 0;
-      font-size: 0.88rem;
+      width: 100%;
+      margin: 0 0 0.4rem;
+      padding: 0.45rem 0.55rem;
+      font: 650 12px/1.35 system-ui, sans-serif;
+      color: #f8fafc;
+      background: #0a1016;
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--accent);
+      border-radius: 8px;
     }
-    #play-sale-pick { margin: 0.7rem 0 0.35rem; }
+    #play-sale-pick { margin: 0.15rem 0 0.35rem; }
     #play-buy { margin-top: 0.35rem; }
     #play-buy:disabled { opacity: 0.55; cursor: not-allowed; }
-    #play-bookings-label {
-      margin: 0.7rem 0 0.25rem;
-      color: #cbd5e1;
-      font-size: 0.82rem;
-    }
     #play-bookings-label[hidden] { display: none; }
     #play-bookings {
       list-style: none;
-      margin: 0;
+      margin: 0.4rem 0 0;
       padding: 0;
     }
     #play-bookings:empty { display: none; }
     #play-bookings li {
-      margin: 0.2rem 0;
-      font-size: 0.82rem;
+      margin: 0 0 0.4rem;
+      padding: 0.45rem 0.55rem;
+      font: 650 12px/1.35 system-ui, sans-serif;
+      color: #f8fafc;
+      background: #0a1016;
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--accent);
+      border-radius: 8px;
     }
     #play-money > p:not(#play-balance):not(#play-due):not(#play-bookings-label):not(#play-sale-pick):not(#play-buy-row):not(#play-buy-status):not(#play-spent) {
       position: absolute;
@@ -142,7 +176,7 @@
     #play-account {
       position: absolute;
       z-index: 40;
-      left: 50%;
+      left: calc((100% - var(--play-rail)) / 2);
       top: 42%;
       transform: translate(-50%, -50%);
       width: min(22rem, calc(100% - 2rem));
@@ -442,7 +476,7 @@
       z-index: 35;
       top: 0.55rem;
       left: 23.5rem;
-      width: min(40rem, calc(100% - 43rem));
+      width: min(40rem, calc(100% - 23.5rem - var(--play-rail) - 0.75rem));
       max-height: min(34rem, calc(100% - 1.2rem));
       overflow: auto;
       padding: 0.85rem 1rem 1rem;
@@ -456,7 +490,7 @@
     @media (max-width: 1100px) {
       #play-top-sheet {
         left: 0.75rem;
-        width: calc(100% - 1.5rem);
+        width: calc(100% - var(--play-rail) - 1.5rem);
         max-height: min(46vh, calc(100% - 1.2rem));
       }
     }
@@ -955,27 +989,38 @@
 
         <div id="play-map"></div>
         <section class="panel" id="play-money" aria-label="In-game money">
-          <h2>Your money</h2>
-          <p id="play-balance">£0.00</p>
-          <p id="play-due">Due at the drop £0.00</p>
+          <section class="play-side-block">
+            <p class="hero-kicker">Ledger</p>
+            <h2 class="play-side-title">Your money</h2>
+            <p id="play-balance">£0.00</p>
+            <p id="play-due">Due at the drop £0.00</p>
+          </section>
+          <section class="play-side-block">
+            <p class="hero-kicker">Shift</p>
+            <ul id="play-money-lines">
+              <li data-money="fare_in">fare_in £0.00</li>
+              <li data-money="driver_share">driver_share £0.00</li>
+              <li data-money="fuel">fuel £0.00</li>
+              <li data-money="standing">standing £0.00</li>
+              <li data-money="new_car">new_car £8,000.00</li>
+              <li data-money="cash_pence">cash_pence</li>
+            </ul>
+          </section>
+          <section class="play-side-block">
+            <p class="hero-kicker" id="play-bookings-label" hidden>Finished trips</p>
+            <ul id="play-bookings" aria-label="Finished trips"></ul>
+          </section>
+          <section class="play-side-block">
+            <p class="hero-kicker">Yard</p>
+            <p id="play-sale-pick">Click the taxi marked for sale, then buy it here.</p>
+            <p id="play-buy-row"><button type="button" id="play-buy" hidden>Buy this taxi for £8,000.00</button></p>
+            <p id="play-buy-status"></p>
+            <p id="play-spent"></p>
+          </section>
           <p id="play-money-beside">The in-game money stays on the screen with the map and follows the feed.</p>
-          <ul id="play-money-lines">
-            <li data-money="fare_in">fare_in £0.00</li>
-            <li data-money="driver_share">driver_share £0.00</li>
-            <li data-money="fuel">fuel £0.00</li>
-            <li data-money="standing">standing £0.00</li>
-            <li data-money="new_car">new_car £8,000.00</li>
-            <li data-money="cash_pence">cash_pence</li>
-          </ul>
-          <p id="play-bookings-label" hidden>Finished trips</p>
-          <ul id="play-bookings" aria-label="Finished trips"></ul>
-          <p id="play-sale-pick">Click the taxi marked for sale, then buy it here.</p>
-          <p id="play-buy-row"><button type="button" id="play-buy" hidden>Buy this taxi for £8,000.00</button></p>
           <p id="play-buy-sits">The buy control sits with the money. It does not cover the taxis.</p>
           <p id="play-one-price">The control shows 800000. It does not show a second fare, a second standing charge, or a second fuel rate.</p>
-          <p id="play-buy-status"></p>
           <p id="play-spent-rule">After the purchase the page shows the 800000 spent.</p>
-          <p id="play-spent"></p>
         </section>
         <form id="play-account" hidden>
           <label for="play-username">Username
