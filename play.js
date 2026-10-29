@@ -803,7 +803,8 @@
     map.fitBounds(bounds, {
       animate: false,
       maxZoom: maxZoom || 15,
-      padding: [48, 48]
+      paddingTopLeft: [48, 380],
+      paddingBottomRight: [48, 48]
     });
     return true;
   }
@@ -1030,12 +1031,12 @@
     const list = document.getElementById("play-depots-list");
     if (!list) return;
     list.textContent = "";
-    function add(name, lat, lng) {
+    function add(name) {
       const item = document.createElement("li");
-      item.textContent = name + " · " + Number(lat).toFixed(4) + ", " + Number(lng).toFixed(4);
+      item.textContent = name;
       list.appendChild(item);
     }
-    add("Shiremoor (yours)", 55.0367, -1.5075);
+    add("Shiremoor (yours)");
     const firms = feed && Array.isArray(feed.firms) ? feed.firms : [];
     firms.forEach((firm) => {
       if (!firm || !Array.isArray(firm.depot) || firm.depot.length < 2) return;
@@ -1043,7 +1044,7 @@
       const lng = Number(firm.depot[1]);
       if (!Number.isFinite(lat) || !Number.isFinite(lng)) return;
       const name = depotFirmName(firm);
-      add((name || "firm") + " depot", lat, lng);
+      add((name || "firm") + " depot");
     });
   }
 
@@ -1052,16 +1053,14 @@
     if (!node) return;
     const patch = feed && feed.loiter;
     if (!patch) {
-      node.textContent = "No loiter patch. Click the map to fill lat/lng, then set a radius and firm.";
+      node.textContent = "No loiter patch. Click the map, then set a radius and firm.";
       return;
     }
-    const lat = Number(patch.lat);
-    const lng = Number(patch.lng);
     const km = Number(patch.radius_km);
     const firm = typeof patch.firm === "string" ? patch.firm.trim() : "";
     const bits = [];
     if (firm) bits.push(firm);
-    if (Number.isFinite(lat) && Number.isFinite(lng)) bits.push(lat.toFixed(4) + ", " + lng.toFixed(4));
+    else bits.push("your fleet");
     if (Number.isFinite(km)) bits.push(km + " km");
     node.textContent = bits.length ? bits.join(" · ") : "No loiter patch.";
   }
@@ -1391,9 +1390,6 @@
     text += listStatus(car);
     if (passenger) text += " " + passenger;
     if (placeName) text += " " + placeName;
-    else if (lat !== null && lat !== undefined && lng !== null && lng !== undefined && Number.isFinite(Number(lat)) && Number.isFinite(Number(lng))) {
-      text += " " + lat + ", " + lng;
-    }
     return text;
   }
 

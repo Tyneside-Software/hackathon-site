@@ -37,28 +37,27 @@
     }
     #play-desk {
       flex: 1 1 auto;
-      display: flex;
-      flex-direction: row;
+      position: relative;
       min-height: 0;
       width: 100%;
     }
     #play-side {
-      flex: 0 0 22rem;
-      width: 22rem;
-      max-width: 36vw;
-      min-width: 16rem;
-      height: 100%;
+      position: absolute;
+      z-index: 30;
+      top: 0.75rem;
+      left: 0.75rem;
+      bottom: 0.75rem;
+      width: min(22rem, calc(100% - 2rem));
+      max-height: calc(100% - 1.5rem);
       overflow: auto;
-      z-index: 20;
-      background: #121a24;
-      border-right: 1px solid var(--border);
+      margin: 0;
+      background: rgba(12, 18, 25, 0.9);
       color: #e8eef4;
-      padding: 0.7rem 0.75rem 1.1rem;
       box-sizing: border-box;
     }
     #play-screen {
-      flex: 1 1 auto;
-      position: relative;
+      position: absolute;
+      inset: 0;
       min-width: 0;
       min-height: 0;
       display: block;
@@ -298,6 +297,14 @@
     }
     #play-loiter button { margin-top: 0.5rem; }
     #play-loiter-status { min-height: 1.2em; margin: 0.35rem 0 0; }
+    #play-loiter label[for="play-loiter-lat"],
+    #play-loiter label[for="play-loiter-lng"] {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+    }
     .leaflet-tooltip.play-leg-label,
     .leaflet-tooltip.play-follow-box {
       background: rgba(12, 18, 25, 0.92);
@@ -350,7 +357,7 @@
     <h1 style="font-size:1.7rem;margin-bottom:0.4rem">Taxi game</h1>
     <section class="panel" id="play-map-page" aria-label="Map">
       <div id="play-desk">
-        <aside id="play-side" aria-label="Taxi game controls">
+        <aside id="play-side" class="panel" aria-label="Taxi game controls">
           <section class="play-side-block">
             <p class="hero-kicker">Session</p>
             <p id="play-status">The fleet runs on the box.</p>
@@ -588,6 +595,6 @@
 
   <script src="config.js?v=20261024-https1"></script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-  <script src="play.js?v=20261024-oneroute1"></script>
+  <script src="play.js?v=20261024-floatside1"></script>
 </body>
 </html>
