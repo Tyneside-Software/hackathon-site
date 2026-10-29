@@ -584,6 +584,9 @@
           paintPlayCars(playFeed);
           paintPlaySale(playFeed);
           paintPlayBuy();
+          paintPlayAhead(playFeed);
+          paintPlayBehind(playFeed);
+          followChosenTaxi(playFeed);
         });
         playChips.set(sign, marker);
       } else if (marker._playFill !== fill || marker._playJob !== job || marker._playPlace !== endName || marker._playPassenger !== passenger || marker._playJourney !== journey) {
@@ -604,6 +607,9 @@
           playChosen = sign;
           playFollow = true;
           paintPlayCars(playFeed);
+          paintPlayAhead(playFeed);
+          paintPlayBehind(playFeed);
+          followChosenTaxi(playFeed);
         });
         list.appendChild(item);
       }
@@ -826,17 +832,9 @@
     if (!playFollow || !playChosen) return;
     const car = followedCar(feed);
     if (!car) return;
-    const now = playNow();
-    const here = taxiHere(car, now);
-    const key = playChosen + "|" + String(car.status || "") + "|" + String(car.leg_started || "") + "|" + String(car.duration_s || "");
-    if (playFollowFit !== key) {
-      playFollowFit = key;
-      zoomToFollowedTaxi(car);
-      return;
-    }
-    if (here && !map.getBounds().pad(-0.12).contains(L.latLng(here[0], here[1]))) {
-      map.panTo(here, { animate: false });
-    }
+    if (playFollowFit === playChosen) return;
+    playFollowFit = playChosen;
+    zoomToFollowedTaxi(car);
   }
 
   function stopPlayFollow() {
@@ -1453,6 +1451,9 @@
             playChosen = sign;
             playFollow = true;
             paintPlayCars(playFeed);
+            paintPlayAhead(playFeed);
+            paintPlayBehind(playFeed);
+            followChosenTaxi(playFeed);
           });
           playFirmChips.set(sign, marker);
         } else if (marker._playFirmTitle !== title || marker._playFill !== fill || marker._playJourney !== journey) {
@@ -1988,6 +1989,7 @@
     const wasFollowing = playFollow;
     playChosen = "";
     playFollow = false;
+    playFollowFit = "";
     clearPlayAhead();
     clearPlayBehind();
     clearPlayTrails();
