@@ -460,10 +460,6 @@
     return "#94a3b8";
   }
 
-  function chipLabel(sign) {
-    return String(sign || "").replace(/device/ig, "").trim();
-  }
-
   function carJob(car) {
     if (!car) return "";
     const sent = typeof car.job === "string" ? car.job.trim() : "";
@@ -495,21 +491,30 @@
     return journey;
   }
 
-  function chipText(sign, job, endName, passenger, journey) {
-    let text = chipLabel(sign);
-    if (job) text += " " + job;
-    if (passenger) text += " " + passenger;
-    if (journey) text += " " + journey;
-    if (endName) text += " " + endName;
-    return text;
+  const COMPANY_COLOUR = { own: "#f5b942", north: "#38bdf8", south: "#fb7185" };
+
+  function companyColour(sign, firmId) {
+    const id = String(firmId || "").trim().toLowerCase();
+    if (id === "north" || id === "noah") return COMPANY_COLOUR.north;
+    if (id === "south" || id === "reeve") return COMPANY_COLOUR.south;
+    const prefix = String(sign || "").trim().charAt(0).toUpperCase();
+    if (!id && prefix === "N") return COMPANY_COLOUR.north;
+    if (!id && prefix === "S") return COMPANY_COLOUR.south;
+    return COMPANY_COLOUR.own;
   }
 
-  function chipIcon(sign, fill, job, endName, passenger, journey) {
-    const raw = chipText(sign, job, endName, passenger, journey);
-    const text = raw.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-    const width = Math.max(36, 8 + raw.length * 7);
-    const html = '<span class="play-chip" style="display:flex;align-items:center;justify-content:center;min-width:' + width + 'px;height:22px;padding:0 4px;border-radius:6px;background:' + fill + ';color:#0c1219;font:700 11px/1 system-ui,sans-serif;white-space:nowrap">' + text + "</span>";
-    return L.divIcon({ className: "play-chip-icon", html: html, iconSize: [width, 22], iconAnchor: [width / 2, 11] });
+  function carIcon(fill) {
+    const colour = /^#[0-9a-fA-F]{6}$/.test(fill) ? fill : COMPANY_COLOUR.own;
+    const html = '<svg class="play-car" width="16" height="26" viewBox="0 0 16 26" aria-hidden="true">'
+      + '<rect x="1.5" y="1.5" width="13" height="23" rx="3.2" fill="' + colour + '" stroke="#0f172a" stroke-width="1.4"/>'
+      + '<rect x="3.4" y="4.2" width="9.2" height="6.2" rx="1.4" fill="#f8fafc"/>'
+      + '<rect x="3.4" y="14.6" width="9.2" height="5.4" rx="1.2" fill="#0f172a" opacity="0.28"/>'
+      + "</svg>";
+    return L.divIcon({ className: "play-chip-icon", html: html, iconSize: [16, 26], iconAnchor: [8, 13] });
+  }
+
+  function chipIcon(sign, fill) {
+    return carIcon(fill || companyColour(sign));
   }
 
   function apiBase() {
@@ -571,23 +576,18 @@
       if (!place) return;
       seen.add(sign);
       if (boughtAtDepot(car)) noteBoughtDepot(car);
-      const fill = chipFill(car);
+      const fill = companyColour(sign);
       const job = carJob(car);
-      const endName = feedPlaceName(car);
-      const passenger = carriedName(car);
-      const journey = carriedJourney(car);
-      const title = chipText(sign, job, endName, passenger, journey);
+      const title = sign;
       let marker = playChips.get(sign);
       if (!marker) {
         marker = L.marker(place, {
-          icon: chipIcon(sign, fill, job, endName, passenger, journey),
-          title: title
+          icon: chipIcon(sign, fill),
+          title: title,
+          zIndexOffset: 400
         }).addTo(map);
         marker._playFill = fill;
         marker._playJob = job;
-        marker._playPlace = endName;
-        marker._playPassenger = passenger;
-        marker._playJourney = journey;
         marker._playClick = true;
         marker.on("click", function () {
           if (playLoiterDraw || playLoiterIgnoreClick) return;
@@ -602,14 +602,11 @@
           followChosenTaxi(playFeed);
         });
         playChips.set(sign, marker);
-      } else if (marker._playFill !== fill || marker._playJob !== job || marker._playPlace !== endName || marker._playPassenger !== passenger || marker._playJourney !== journey) {
-        marker.setIcon(chipIcon(sign, fill, job, endName, passenger, journey));
+      } else if (marker._playFill !== fill) {
+        marker.setIcon(chipIcon(sign, fill));
         marker._playFill = fill;
-        marker._playJob = job;
-        marker._playPlace = endName;
-        marker._playPassenger = passenger;
-        marker._playJourney = journey;
       }
+      marker._playJob = job;
       marker.options.title = title;
       if (marker._icon) marker._icon.title = title;
       if (list) {
@@ -646,6 +643,7 @@
     dropSecondTen();
     noteT11Only();
     notePriceStill();
+    labelPlayCars();
     noteSignedAgain(feed);
     noteWithPassenger();
     noteToPassenger();
@@ -1018,10 +1016,13 @@
     }
     const sign = String(car.sign || playChosen);
     const job = carJob(car);
-    if (who) who.textContent = "Following " + sign + (job ? " · " + job : "");
+    const company = followedCompany(feed);
+    if (who) who.textContent = "Following " + sign + (company ? " · " + company : "") + (job ? " · " + job : "");
     const bits = [];
     const pickup = feedText(car.pickup);
     const drop = feedText(car.drop);
+    const place = destinationName(car);
+    if (place) bits.push(place);
     if (pickup || drop) bits.push((pickup || "?") + " → " + (drop || "?"));
     const journey = carriedJourney(car) || feedText(car.journey);
     if (journey) bits.push(journey);
@@ -1216,16 +1217,6 @@
     return !!(car && car.status && car.status !== "at_depot");
   }
 
-  function legLabel(car, now) {
-    if (!carOnLeg(car)) return "";
-    const parts = [];
-    const place = destinationName(car);
-    if (place) parts.push(place);
-    const left = feedSecondsLeft(car, now);
-    if (left !== null) parts.push(left + "s");
-    return parts.join(" ");
-  }
-
   function feedText(value) {
     if (typeof value !== "string") return "";
     const name = value.trim();
@@ -1242,50 +1233,6 @@
     return whole;
   }
 
-  function followBoxText(car, now, firm) {
-    const lines = [];
-    function add(label, value) {
-      if (!value) return;
-      lines.push(mapHtml(label + ": " + value));
-    }
-    const sign = String(car && car.sign || "").trim();
-    if (sign) add("taxi", sign);
-    const job = carJob(car);
-    if (job) add("job", job);
-    const passenger = typeof car.passenger === "string" ? car.passenger.trim() : "";
-    if (passenger) add("passenger", passenger);
-    const pickup = feedText(car && car.pickup);
-    if (pickup) add("pickup", pickup);
-    const drop = feedText(car && car.drop);
-    if (drop) add("drop", drop);
-    const place = destinationName(car);
-    if (place) add("dest", place);
-    const left = feedSecondsLeft(car, now);
-    if (left !== null) add("eta", left + "s");
-    const trip = feedPence(car, "trip_pence");
-    if (trip !== null) add("fare", formatPounds(trip));
-    if (firm) add("firm", firm);
-    return lines.join("<br>");
-  }
-
-  function setMapLabel(marker, text, followed) {
-    if (!marker) return;
-    const want = followed ? "play-follow-box" : "play-leg-label";
-    if (!text) {
-      if (marker.getTooltip()) marker.unbindTooltip();
-      marker._playLabelKind = "";
-      return;
-    }
-    const html = followed ? text : mapHtml(text);
-    if (marker.getTooltip() && marker._playLabelKind === want) {
-      marker.setTooltipContent(html);
-      return;
-    }
-    if (marker.getTooltip()) marker.unbindTooltip();
-    marker._playLabelKind = want;
-    marker.bindTooltip(html, { permanent: true, direction: "top", className: want, opacity: 0.95 });
-  }
-
   function chosenFirmCar(feed) {
     const firms = feed && Array.isArray(feed.firms) ? feed.firms : [];
     for (let i = 0; i < firms.length; i++) {
@@ -1300,25 +1247,25 @@
     return null;
   }
 
-  function labelOneCar(marker, car, now, firm) {
-    const followed = !!(playFollow && car && String(car.sign || "") === playChosen);
-    const text = followed ? followBoxText(car, now, firm) : legLabel(car, now);
-    setMapLabel(marker, text, followed);
+  function followedCompany(feed) {
+    const found = chosenFirmCar(feed);
+    if (found) {
+      const firms = feed && Array.isArray(feed.firms) ? feed.firms : [];
+      for (let i = 0; i < firms.length; i++) {
+        const firm = firms[i];
+        const id = firm && typeof firm.firm === "string" ? firm.firm.trim() : "";
+        if (id !== found.firm) continue;
+        const company = firm && typeof firm.company === "string" ? firm.company.trim() : "";
+        return company || id;
+      }
+      return found.firm;
+    }
+    const own = feed && typeof feed.company === "string" ? feed.company.trim() : "";
+    return own;
   }
 
-  function refreshCarLabels(feed) {
-    const now = playNow();
-    const cars = feed && Array.isArray(feed.cars) ? feed.cars : [];
-    cars.forEach((car) => {
-      if (!car || !car.sign) return;
-      const marker = playChips.get(String(car.sign));
-      if (!marker) return;
-      labelOneCar(marker, car, now, "");
-    });
-    playFirmChips.forEach((marker) => {
-      if (!marker || !marker._playFirmCar) return;
-      labelOneCar(marker, marker._playFirmCar, now, marker._playFirmName || "");
-    });
+  function refreshCarLabels() {
+    labelPlayCars();
   }
 
   function firmPlace(car, now) {
@@ -1337,15 +1284,6 @@
     const lng = Number(car.lng);
     if (Number.isFinite(lat) && Number.isFinite(lng)) return [lat, lng];
     return null;
-  }
-
-  function firmChipText(sign, firm, job, place, passenger) {
-    let text = chipLabel(sign);
-    if (firm) text += " " + firm;
-    if (job) text += " " + job;
-    if (passenger) text += " " + passenger;
-    if (place) text += " " + place;
-    return text;
   }
 
   function clearPlayFirms() {
@@ -1579,8 +1517,6 @@
     firms.forEach((firm) => {
       if (!firm) return;
       const id = typeof firm.firm === "string" ? firm.firm.trim() : "";
-      const company = typeof firm.company === "string" ? firm.company.trim() : "";
-      const name = company || id;
       const rows = Array.isArray(firm.cars) ? firm.cars : [];
       rows.forEach((car) => {
         if (!car) return;
@@ -1589,19 +1525,17 @@
         const place = firmPlace(car, now);
         if (!place) return;
         seen.add(sign);
-        const fill = chipFill(car);
+        const fill = companyColour(sign, id);
         const job = carJob(car);
-        const placeName = feedPlaceName(car);
-        const passenger = carriedName(car);
-        const journey = carriedJourney(car);
-        const title = firmChipText(sign, name, job, placeName, passenger);
-        const iconEnd = name && placeName ? name + " " + placeName : (name || placeName);
+        const title = sign;
         let marker = playFirmChips.get(sign);
         if (!marker) {
           marker = L.marker(place, {
-            icon: chipIcon(sign, fill, job, iconEnd, passenger, journey),
-            title: title
+            icon: chipIcon(sign, fill),
+            title: title,
+            zIndexOffset: 400
           }).addTo(map);
+          marker._playFill = fill;
           marker.on("click", function () {
             if (playLoiterDraw || playLoiterIgnoreClick) return;
             playChosen = sign;
@@ -1612,18 +1546,15 @@
             followChosenTaxi(playFeed);
           });
           playFirmChips.set(sign, marker);
-        } else if (marker._playFirmTitle !== title || marker._playFill !== fill || marker._playJourney !== journey) {
-          marker.setIcon(chipIcon(sign, fill, job, iconEnd, passenger, journey));
+        } else if (marker._playFill !== fill) {
+          marker.setIcon(chipIcon(sign, fill));
           marker._playFill = fill;
-          marker._playJourney = journey;
         }
-        marker._playJourney = journey;
-        marker._playFirmTitle = title;
-        marker._playFirmName = name;
+        marker._playJob = job;
         marker._playFirmCar = car;
         marker.setLatLng(place);
         marker.options.title = title;
-        labelOneCar(marker, car, now, name);
+        if (marker._icon) marker._icon.title = title;
       });
     });
     playFirmChips.forEach((marker, sign) => {
@@ -1631,6 +1562,7 @@
       map.removeLayer(marker);
       playFirmChips.delete(sign);
     });
+    labelPlayCars();
   }
 
   function listStatus(car) {
@@ -2015,7 +1947,40 @@
     });
   }
 
-  map.on("zoomend moveend", labelPlayPeople);
+  function labelOneSign(marker, sign) {
+    const show = map.getZoom() >= PERSON_NAME_ZOOM;
+    const bounds = show ? map.getBounds().pad(0.15) : null;
+    const want = !!(show && sign && bounds && bounds.contains(marker.getLatLng()));
+    const tip = marker.getTooltip();
+    if (!want) {
+      if (tip) marker.unbindTooltip();
+      marker._playLabelKind = "";
+      return;
+    }
+    if (tip && marker._playLabelKind === "sign" && tip._playSign === sign) return;
+    if (tip) marker.unbindTooltip();
+    marker._playLabelKind = "sign";
+    marker.bindTooltip(mapHtml(sign), {
+      permanent: true,
+      direction: "top",
+      className: "play-leg-label",
+      opacity: 0.95,
+      interactive: false
+    });
+    const next = marker.getTooltip();
+    if (next) next._playSign = sign;
+  }
+
+  function labelPlayCars() {
+    playChips.forEach((marker, sign) => labelOneSign(marker, sign));
+    playFirmChips.forEach((marker, sign) => labelOneSign(marker, sign));
+    playSaleChips.forEach((marker, sign) => labelOneSign(marker, sign));
+  }
+
+  map.on("zoomend moveend", function () {
+    labelPlayPeople();
+    labelPlayCars();
+  });
 
   function personPinText(person) {
     const name = String(person && person.name || "Person").trim() || "Person";
@@ -2584,10 +2549,7 @@
   }
 
   function saleIcon(sign) {
-    const picked = playSalePick === sign;
-    const border = picked ? "2px solid #f8fafc" : "2px dashed #99f6e4";
-    const html = '<span class="play-chip" style="display:flex;align-items:center;justify-content:center;min-width:92px;height:22px;padding:0 6px;border-radius:6px;background:#134e4a;color:#f8fafc;border:' + border + ';cursor:pointer;font:700 11px/1 system-ui,sans-serif;white-space:nowrap">' + sign + " for sale</span>";
-    return L.divIcon({ className: "play-chip-icon", html: html, iconSize: [92, 22], iconAnchor: [46, 11] });
+    return carIcon(companyColour(sign));
   }
 
   function paintPlaySale(feed) {
@@ -2620,7 +2582,6 @@
         playSaleChips.set(sign, marker);
       } else {
         marker.setLatLng(place);
-        marker.setIcon(saleIcon(sign));
       }
     });
     playSaleChips.forEach((marker, sign) => {
@@ -2629,6 +2590,7 @@
       playSaleChips.delete(sign);
       if (playSalePick === sign) playSalePick = "";
     });
+    labelPlayCars();
   }
 
   function paintPlayBuy() {
@@ -3443,7 +3405,6 @@
       const place = playPlace(car, now);
       if (!place) return;
       marker.setLatLng(place);
-      if (playFollow && playChosen === sign) labelOneCar(marker, car, now, "");
       const item = document.querySelector('#play-taxi-list [data-sign="' + sign + '"]');
       if (!item) return;
       fillTaxiListItem(item, sign, car, place[0], place[1]);
@@ -3458,9 +3419,6 @@
       const place = firmPlace(car, now);
       if (!place) return;
       marker.setLatLng(place);
-      if (playFollow && playChosen === sign) {
-        labelOneCar(marker, car, now, marker._playFirmName || "");
-      }
     });
   }
 

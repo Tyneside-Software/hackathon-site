@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
   <style>
     .play-chip-icon { background: none; border: 0; }
+    .play-chip-icon .play-car { display: block; }
     html, body.site { height: 100%; overflow: hidden; }
     body.site {
       display: flex;
@@ -953,7 +954,7 @@
             <h3>Jobs</h3>
             <p>A baseline of fares stands in that circle at every hour of the week, and the peaks sit much higher. Weekday mornings are commutes, stations, and the universities. Daytime is shops, hospitals, the coast, and days out. Evenings run home from work. Friday and Saturday nights are the busiest, and Sundays stay busy through the day and ease off at night. Late trips are nights out, stations, hotels, and the airport. A home is a street in a town. An airport, station, hospital, hotel, or workplace is that building. A waiting person is claimed by the nearest free taxi that can reach them in ten minutes. Fares stand on the map all day, a taxi drives into range before it can take one, and a small fleet does not run out. That taxi drives to them (collecting), then to the drop (carrying), then is free again. If nobody claims them, they leave and another hail can appear.</p>
             <ul>
-              <li>Click a taxi on the map or in <strong>Your fleet</strong> to follow it. The camera stays on that taxi as it moves. The route stays on the map. The dotted moving line is where it is going. The solid line is where it has already been. Only one taxi’s route is shown at a time. The right panel shows that taxi’s miles, fuel, and earnings.</li>
+              <li>Click a taxi on the map or in <strong>Your fleet</strong> to follow it. The camera stays on that taxi as it moves. The route stays on the map. The dotted moving line is where it is going. The solid line is where it has already been. Only one taxi’s route is shown at a time. Each taxi on the map is a small car coloured by company. The call sign appears when you zoom in. The job, the passenger, and the fare stay in the sidebar. The right panel shows that taxi’s miles, fuel, and earnings.</li>
               <li><strong>Stop following</strong> zooms out just far enough to see every taxi.</li>
               <li><strong>Cancel this job</strong> drops a fare you do not want. If the car has already left, miles driven still cost fuel and there is no fare.</li>
             </ul>
@@ -1016,8 +1017,8 @@
         <p id="play-person-waiting">The play map draws a person who is waiting with no taxi allocated.</p>
         <p id="play-person-stays">That waiting person stays on the map until the allocated taxi arrives.</p>
         <p id="play-person-sign">The waiting person's pin shows the call sign of the taxi the feed has claimed. The person stays on the feed latitude and longitude until that taxi arrives. Do not offset the pin.</p>
-        <p id="play-car-job">The chip and the taxi list show the current job as waiting, travelling to a better spot, collecting, carrying, or returning.</p>
-        <p id="play-job-feed">The chip and the list show the job string the feed sends, including a job the page has not named before. Do not decide who takes a break in play.js. on break is that string when the feed sends it.</p>
+        <p id="play-car-job">The taxi list shows the current job as waiting, travelling to a better spot, collecting, carrying, or returning. The map icon does not.</p>
+        <p id="play-job-feed">The taxi list shows the job string the feed sends, including a job the page has not named before. The map icon does not. Do not decide who takes a break in play.js. on break is that string when the feed sends it.</p>
         <p id="play-next-failed">Starting another account clears Buy failed left by the previous account.</p>
         <p id="play-next-trail">Starting another account clears the previous account's trail before the next feed.</p>
         <p id="play-next-fares">Starting another account clears the previous account's fare pins before the next feed.</p>
@@ -1044,7 +1045,7 @@
         <p id="play-signed-failed">Sign in again clears Buy failed left by the previous account.</p>
         <p id="play-signed-spent">Sign in again clears the spent line before the next feed.</p>
         <p id="play-signed-money">Sign in again clears the previous account's corner money before the next feed.</p>
-        <p id="play-route-ahead">The page draws the rest of the stored route ahead of the followed car as a moving dotted line, and a solid line for where that car has already been. Only that taxi's route is on the map. The chip and the list name the place at the end of the leg from the feed. Do not add a place list.</p>
+        <p id="play-route-ahead">The page draws the rest of the stored route ahead of the followed car as a moving dotted line, and a solid line for where that car has already been. Only that taxi's route is on the map. The Following panel and the taxi list name the place at the end of the leg from the feed. Do not add a place list.</p>
         <p id="play-follow">The player can follow one taxi, and the camera stays on that taxi. Choosing another taxi follows that one. Stop following zooms out only far enough to show every taxi.</p>
         <p id="play-locks">Sentences a test still needs stay on the page, under the map, not in front of the taxis.</p>
         <p id="play-osrm"></p>
@@ -1053,7 +1054,7 @@
         <p id="play-stops">This page has no Place stops control.</p>
         <p id="play-depot">The depot pin is at 55.0367, -1.5075.</p>
         <p id="play-dead-token">A rejected token brings Start back. The map stays.</p>
-        <p id="play-from-feed">The ten taxis are drawn from the empire feed. They open where that feed left them. Each chip shows its call sign.</p>
+        <p id="play-from-feed">The ten taxis are drawn from the empire feed. They open where that feed left them. Each taxi is a small car coloured by company. The call sign shows when zoomed in.</p>
         <p id="play-standin">No stand-in taxis are drawn before the feed.</p>
         <p id="play-returning">When the feed status is returning, that car is returning.</p>
         <p id="play-bought">The bought car chip appears on the map. The ten stay.</p>
@@ -1070,7 +1071,7 @@
 
   <script src="config.js?v=20261024-https1"></script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-  <script src="play.js?v=20261030-followcam"></script>
+  <script src="play.js?v=20261030-cars"></script>
   <script>
     (function () {
       var node = document.getElementById("play-visit");
