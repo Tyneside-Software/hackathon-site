@@ -271,6 +271,8 @@
     #play-job-count[hidden],
     #play-waiting-names[hidden],
     #play-follow-stop[hidden],
+    #play-follow-taxi[hidden],
+    #play-follow-route[hidden],
     #play-cancel[hidden],
     #play-office[hidden],
     #play-loiter[hidden] { display: none; }
@@ -288,6 +290,8 @@
     #play-how,
     #play-how-close,
     #play-follow-stop,
+    #play-follow-taxi,
+    #play-follow-route,
     #play-cancel,
     #play-loiter-draw,
     #play-company-save {
@@ -303,6 +307,22 @@
     .play-side-block .hero-kicker { margin-bottom: 0.35rem; }
     .play-side-title { font-size: 1rem; margin: 0 0 0.35rem; }
     .play-side-actions { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-top: 0.35rem; }
+    #play-follow-taxi,
+    #play-follow-route {
+      color: #f8fafc;
+      font: 700 0.76rem/1 system-ui, sans-serif;
+      padding: 0.42rem 0.72rem;
+      border-radius: 8px;
+      border: 1px solid #3a4658;
+      background: rgba(8, 12, 18, 0.45);
+      cursor: pointer;
+    }
+    #play-follow-taxi[aria-pressed="true"],
+    #play-follow-route[aria-pressed="true"] {
+      border-color: #f59e0b;
+      background: #f59e0b;
+      color: #0c1219;
+    }
     #play-taxi-list {
       list-style: none;
       margin: 0.4rem 0 0;
@@ -803,6 +823,8 @@
             <p id="play-follow-miles"></p>
             <p id="play-follow-route"></p>
             <div class="play-side-actions">
+              <button type="button" id="play-follow-taxi" aria-pressed="true" hidden>On the taxi</button>
+              <button type="button" id="play-follow-route" aria-pressed="false" hidden>Whole route</button>
               <button type="button" id="play-follow-stop" hidden>Stop following</button>
               <button type="button" id="play-cancel" hidden>Cancel this job</button>
             </div>
@@ -954,7 +976,7 @@
             <h3>Jobs</h3>
             <p>A baseline of fares stands in that circle at every hour of the week, and the peaks sit much higher. Weekday mornings are commutes, stations, and the universities. Daytime is shops, hospitals, the coast, and days out. Evenings run home from work. Friday and Saturday nights are the busiest, and Sundays stay busy through the day and ease off at night. Late trips are nights out, stations, hotels, and the airport. A home is a street in a town. An airport, station, hospital, hotel, or workplace is that building. A waiting person is claimed by the nearest free taxi that can reach them in ten minutes. Fares stand on the map all day, a taxi drives into range before it can take one, and a small fleet does not run out. That taxi drives to them (collecting), then to the drop (carrying), then is free again. If nobody claims them, they leave and another hail can appear.</p>
             <ul>
-              <li>Click a taxi on the map or in <strong>Your fleet</strong> to follow it. The camera stays on that taxi as it moves. The route stays on the map. The dotted moving line is where it is going. The solid line is where it has already been. Only one taxi’s route is shown at a time. Each taxi on the map is a small car coloured by company. The call sign appears when you zoom in. The job, the passenger, and the fare stay in the sidebar. The right panel shows that taxi’s miles, fuel, and earnings.</li>
+              <li>Click a taxi on the map or in <strong>Your fleet</strong> to follow it. On the taxi keeps the camera on that car. Whole route fits that car and its route. The route stays on the map. The dotted moving line is where it is going. The solid line is where it has already been. Only one taxi’s route is shown at a time. Each taxi on the map is a small car coloured by company. The call sign appears when you zoom in. The job, the passenger, and the fare stay in the sidebar. The right panel shows that taxi’s miles, fuel, and earnings.</li>
               <li><strong>Stop following</strong> zooms out just far enough to see every taxi.</li>
               <li><strong>Cancel this job</strong> drops a fare you do not want. If the car has already left, miles driven still cost fuel and there is no fare.</li>
             </ul>
@@ -1046,7 +1068,7 @@
         <p id="play-signed-spent">Sign in again clears the spent line before the next feed.</p>
         <p id="play-signed-money">Sign in again clears the previous account's corner money before the next feed.</p>
         <p id="play-route-ahead">The page draws the rest of the stored route ahead of the followed car as a moving dotted line, and a solid line for where that car has already been. Only that taxi's route is on the map. The Following panel and the taxi list name the place at the end of the leg from the feed. Do not add a place list.</p>
-        <p id="play-follow">The player can follow one taxi, and the camera stays on that taxi. Choosing another taxi follows that one. Stop following zooms out only far enough to show every taxi.</p>
+        <p id="play-follow">The player can follow one taxi. On the taxi keeps the camera on that taxi. Whole route fits that taxi and its route. Choosing another taxi follows that one in the same mode. Stop following zooms out only far enough to show every taxi.</p>
         <p id="play-locks">Sentences a test still needs stay on the page, under the map, not in front of the taxis.</p>
         <p id="play-osrm"></p>
         <p id="play-buses">This page has no bus toggle.</p>
@@ -1071,7 +1093,7 @@
 
   <script src="config.js?v=20261024-https1"></script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-  <script src="play.js?v=20261030-cars"></script>
+  <script src="play.js?v=20261030-view"></script>
   <script>
     (function () {
       var node = document.getElementById("play-visit");

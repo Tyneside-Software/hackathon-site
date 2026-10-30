@@ -264,6 +264,7 @@
   const playBehind = [];
   let playChosen = "";
   let playFollow = false;
+  let playFollowMode = "taxi";
   let playFollowFit = "";
   let playOfficeName = "";
   let playFeed = null;
@@ -769,11 +770,23 @@
   function noteFollow() {
     const node = document.getElementById("play-follow");
     const button = document.getElementById("play-follow-stop");
+    const taxi = document.getElementById("play-follow-taxi");
+    const route = document.getElementById("play-follow-route");
+    const onRoute = playFollowMode === "route";
     if (button) button.hidden = !playFollow;
+    if (taxi) {
+      taxi.hidden = !playFollow;
+      taxi.setAttribute("aria-pressed", onRoute ? "false" : "true");
+    }
+    if (route) {
+      route.hidden = !playFollow;
+      route.setAttribute("aria-pressed", onRoute ? "true" : "false");
+    }
     if (!node) return;
     node.dataset.follow = playFollow ? "on" : "off";
     node.dataset.chosen = playChosen;
     node.dataset.circle = playFollow ? "taxi" : "fleet";
+    node.dataset.mode = onRoute ? "route" : "taxi";
   }
 
   function taxiHere(car, now) {
@@ -829,6 +842,23 @@
     return playChosen + "|" + String(car && car.status || "") + "|" + started;
   }
 
+  function followViewBounds(car, now) {
+    const points = [];
+    const here = taxiHere(car, now);
+    if (here) points.push(here);
+    routePoints(car).forEach((point) => points.push(point));
+    routeAhead(car, now).forEach((point) => points.push(point));
+    if (!points.length) return null;
+    return L.latLngBounds(points);
+  }
+
+  function setFollowMode(mode) {
+    playFollowMode = mode === "route" ? "route" : "taxi";
+    playFollowFit = "";
+    noteFollow();
+    trackFollowedTaxi();
+  }
+
   function trackFollowedTaxi() {
     if (playLoiterDraw || !playFollow || !playChosen || !playFeed) return;
     const car = followedCar(playFeed);
@@ -837,6 +867,12 @@
     if (!here) return;
     const latlng = L.latLng(here[0], here[1]);
     const leg = followLegKey(car);
+    if (playFollowMode === "route") {
+      if (playFollowFit === leg) return;
+      playFollowFit = leg;
+      fitPlayBounds(followViewBounds(car, playNow()), 15);
+      return;
+    }
     if (playFollowFit !== leg) {
       playFollowFit = leg;
       const zoom = map.getZoom() < 13 ? 15 : map.getZoom();
@@ -3825,6 +3861,10 @@
   });
   const playFollowStop = document.getElementById("play-follow-stop");
   if (playFollowStop) playFollowStop.addEventListener("click", stopPlayFollow);
+  const playFollowTaxi = document.getElementById("play-follow-taxi");
+  if (playFollowTaxi) playFollowTaxi.addEventListener("click", function () { setFollowMode("taxi"); });
+  const playFollowRoute = document.getElementById("play-follow-route");
+  if (playFollowRoute) playFollowRoute.addEventListener("click", function () { setFollowMode("route"); });
   const playCancel = document.getElementById("play-cancel");
   if (playCancel) playCancel.addEventListener("click", cancelPlayJob);
   async function savePlayCompany(event) {
