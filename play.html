@@ -113,7 +113,7 @@
       color: #f8fafc;
       font: 650 13px/1.35 system-ui, sans-serif;
     }
-    #play-buy, #play-buy-row { position: static; inset: auto; }
+    #play-buy, #play-sell, #play-buy-row, #play-sell-row { position: static; inset: auto; }
     #play-money #play-balance {
       margin: 0.15rem 0 0.15rem;
       font: 700 1.55rem/1.1 system-ui, sans-serif;
@@ -141,8 +141,9 @@
       border-radius: 8px;
     }
     #play-sale-pick { margin: 0.15rem 0 0.35rem; }
-    #play-buy { margin-top: 0.35rem; }
-    #play-buy:disabled { opacity: 0.55; cursor: not-allowed; }
+    #play-sell-row[hidden], #play-sell[hidden] { display: none; }
+    #play-buy, #play-sell { margin-top: 0.35rem; }
+    #play-buy:disabled, #play-sell:disabled { opacity: 0.55; cursor: not-allowed; }
     #play-bookings-label[hidden] { display: none; }
     #play-bookings {
       list-style: none;
@@ -920,7 +921,7 @@
               <li data-money="driver_share">driver_share £0.00</li>
               <li data-money="fuel">fuel £0.00</li>
               <li data-money="standing">standing £0.00</li>
-              <li data-money="new_car">new_car £8,000.00</li>
+              <li data-money="new_car">new_car £500.00</li>
               <li data-money="cash_pence">cash_pence</li>
             </ul>
           </section>
@@ -942,14 +943,15 @@
           <section class="play-side-block">
             <p class="hero-kicker">Yard</p>
             <p id="play-sale-pick">Click the taxi marked for sale, then buy it here.</p>
-            <p id="play-buy-row"><button type="button" id="play-buy" hidden>Buy this taxi for £8,000.00</button></p>
+            <p id="play-buy-row"><button type="button" id="play-buy" hidden>Buy this taxi for £500.00</button></p>
+            <p id="play-sell-row"><button type="button" id="play-sell" hidden>Sell this taxi for £400.00</button></p>
             <p id="play-buy-status"></p>
             <p id="play-spent"></p>
           </section>
           <p id="play-money-beside">The in-game money stays on the screen with the map and follows the feed.</p>
           <p id="play-buy-sits">The buy control sits with the money. It does not cover the taxis.</p>
-          <p id="play-one-price">The control shows 800000. It does not show a second fare, a second standing charge, or a second fuel rate.</p>
-          <p id="play-spent-rule">After the purchase the page shows the 800000 spent.</p>
+          <p id="play-one-price">The control shows 50000. It does not show a second fare, a second standing charge, or a second fuel rate. Selling pays 40000.</p>
+          <p id="play-spent-rule">After the purchase the page shows the 50000 spent.</p>
         </section>
         <form id="play-account" hidden>
           <label for="play-username">Username
@@ -993,7 +995,8 @@
               <li><strong>standing</strong> — £15.00 per taxi you own</li>
               <li><strong>cash</strong> — what you can spend</li>
             </ul>
-            <p>A new taxi costs £8,000.00. Click the taxi marked for sale, then buy it from that panel. It waits a few seconds at the depot, then takes a fare.</p>
+            <p>Drivers work at most 12 hours a day and 60 a week. After four hours they take an hour off. The drive home counts as that break, and home is a door in the loiter patch. Two taxis stay out when the fleet is larger, and one of a pair stays out. A taxi with a passenger finishes that job first.</p>
+            <p>A new taxi costs £500.00. Click the taxi marked for sale, then buy it from that panel. It waits a few seconds at the depot, then takes a fare. Selling a taxi you own pays £400.00. Follow it, then sell it from the yard. The last two stay. A taxi that is collecting or carrying a passenger is not sold.</p>
             <h3>Rivals</h3>
             <p>The office buttons open a rival firm. Watch Demand in the sidebar: a waiter claimed by another firm was closer to their taxi, and within ten minutes. The closest free taxi within that reach wins the fare.</p>
           </div>
@@ -1009,21 +1012,21 @@
         <p id="play-trail-age">The bought car trail keeps points from the last ten minutes and drops older ones. The ten keep their own trails.</p>
         <p id="play-trail-replace">Each empire feed replaces the bought car trail. A point the feed no longer sends is not left on the map. The ten trails follow the same rule.</p>
         <p id="play-trail-chip">The bought car chip stays on the map when its trail is drawn. The trail does not replace the chip. The ten chips stay.</p>
-        <p id="play-depot-chip">While the bought car status is at_depot, the chip is drawn at 55.0367, -1.5075. The new_car line showing 800000 is not what places that chip. The ten keep their feed positions.</p>
+        <p id="play-depot-chip">While the bought car status is at_depot, the chip is drawn at 55.0367, -1.5075. The new_car line showing 50000 is not what places that chip. The ten keep their feed positions.</p>
         <p id="play-t11-only">The map draws the bought T11 chip and does not draw T12. T1 through T10 stay on the map.</p>
-        <p id="play-price-still">A car is drawn from its feed position. The new_car 800000 line does not send the ten back to the depot and does not send them away from it.</p>
-        <p id="play-buy-flight">A second press does nothing until the first purchase request finishes. When that request fails, the control can be pressed again. The price stays 800000. The ten stay on the map. The two-second poll stays a read of the empire feed.</p>
-        <p id="play-buy-once">When the empire feed includes T11, the buy control is not offered again. The price stays 800000. T1 through T11 stay on the map.</p>
-        <p id="play-spent-feed">When the empire feed lists T11, the page shows 800000 pence spent. When the feed does not list T11, that spent line is empty. A reload uses the same rule. The fare_in line does not become 800000.</p>
-        <p id="play-fare-in">The fare_in line never shows 800000. The price stays 800000 on the buy control and on the new_car line. The ten stay.</p>
-        <p id="play-buy-reject">When the purchase request is rejected for the token, the spent line is cleared and Start comes back. The map stays. The price stays 800000.</p>
+        <p id="play-price-still">A car is drawn from its feed position. The new_car 50000 line does not send the ten back to the depot and does not send them away from it.</p>
+        <p id="play-buy-flight">A second press does nothing until the first purchase request finishes. When that request fails, the control can be pressed again. The price stays 50000. The ten stay on the map. The two-second poll stays a read of the empire feed.</p>
+        <p id="play-buy-once">When the empire feed includes T11, the buy control is not offered again. The price stays 50000. T1 through T11 stay on the map.</p>
+        <p id="play-spent-feed">When the empire feed lists T11, the page shows 50000 pence spent. When the feed does not list T11, that spent line is empty. A reload uses the same rule. The fare_in line does not become 800000.</p>
+        <p id="play-fare-in">The fare_in line never shows 800000. The price stays 50000 on the buy control and on the new_car line. Selling pays 40000. The ten stay.</p>
+        <p id="play-buy-reject">When the purchase request is rejected for the token, the spent line is cleared and Start comes back. The map stays. The price stays 50000.</p>
         <p id="play-started-screen">After Start the map fills the remaining space beside the left sidebar. The money stays in the corner panel.</p>
         <p id="play-started-ten">After Start the ten chips from the feed are on the map.</p>
         <p id="play-signed-again">Signing in again shows T11 when that account's feed already has it, and does not draw a second T1 to T10.</p>
         <p id="play-cash-pence">The corner panel shows cash_pence once the feed has it, in integer pence.</p>
         <p id="play-depot-clear">The corner money panel does not cover the depot pin.</p>
         <p id="play-zoom-clear">The status line does not cover the zoom control.</p>
-        <p id="play-signout-flight">Signing out while the purchase request is in flight does not leave 800000 spent on the page.</p>
+        <p id="play-signout-flight">Signing out while the purchase request is in flight does not leave 50000 spent on the page.</p>
         <p id="play-next-account">Starting another account clears the spent line left by the previous account.</p>
         <p id="play-fare-t12">The play map does not draw a waiting fare for T12.</p>
         <p id="play-next-feed">Starting another account clears the previous feed before the next poll, so a previous T11 does not hide the buy control.</p>
@@ -1041,6 +1044,8 @@
         <p id="play-person-sign">The waiting person's pin shows the call sign of the taxi the feed has claimed. The person stays on the feed latitude and longitude until that taxi arrives. Do not offset the pin.</p>
         <p id="play-car-job">The taxi list shows the current job as waiting, travelling to a better spot, collecting, carrying, or returning. The map icon does not.</p>
         <p id="play-job-feed">The taxi list shows the job string the feed sends, including a job the page has not named before. The map icon does not. Do not decide who takes a break in play.js. on break is that string when the feed sends it.</p>
+        <p id="play-hours">Drivers work at most 12 hours a day and 60 a week, with an hour off after four. The drive home counts as that break. Home is in the loiter patch. Two taxis stay out when the fleet is larger, and one of a pair stays out. The page does not decide the break. The map icon does not say home. Destination home is the feed string in the sidebar.</p>
+        <p id="play-sell-rule">Sell pays 40000 pence. The buy price stays 50000. The last two taxis stay. A taxi collecting or carrying a passenger is not sold. A fare of 800000 is still not shown.</p>
         <p id="play-next-failed">Starting another account clears Buy failed left by the previous account.</p>
         <p id="play-next-trail">Starting another account clears the previous account's trail before the next feed.</p>
         <p id="play-next-fares">Starting another account clears the previous account's fare pins before the next feed.</p>
@@ -1093,7 +1098,7 @@
 
   <script src="config.js?v=20261024-https1"></script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-  <script src="play.js?v=20261030-view"></script>
+  <script src="play.js?v=20261030-hours"></script>
   <script>
     (function () {
       var node = document.getElementById("play-visit");

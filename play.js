@@ -2397,11 +2397,20 @@
   }
 
   let playBuying = false;
+  let playSelling = false;
   let playLoitering = false;
   let playCancelling = false;
 
   function playBuyPence() {
-    return 800000;
+    const sent = playFeed && Number(playFeed.new_car);
+    if (Number.isFinite(sent) && sent > 0) return Math.trunc(sent);
+    return 50000;
+  }
+
+  function playSellPence() {
+    const sent = playFeed && Number(playFeed.sell_car);
+    if (Number.isFinite(sent) && sent > 0) return Math.trunc(sent);
+    return 40000;
   }
 
   function noteBuyFlight() {
@@ -2653,6 +2662,97 @@
     noteBuyOnce(listed);
     paintPlaySpent(playFeed);
     paintPlayLoiter();
+    paintPlaySell();
+  }
+
+  function ownedPlayCars(feed) {
+    const cars = feed && Array.isArray(feed.cars) ? feed.cars : [];
+    return cars.filter(function (car) {
+      return !!(car && car.sign && !car.for_sale);
+    });
+  }
+
+  function sellableCar(feed) {
+    if (!playFollow || !playChosen) return null;
+    const owned = ownedPlayCars(feed);
+    if (owned.length <= 2) return null;
+    const car = owned.find(function (row) {
+      return String(row.sign) === playChosen;
+    });
+    if (!car) return null;
+    const status = String(car.status || "");
+    if (status === "to_passenger" || status === "with_passenger") return null;
+    if (car.passenger || car.fare_name) return null;
+    return car;
+  }
+
+  function paintPlaySell() {
+    const button = document.getElementById("play-sell");
+    if (!button) return;
+    const token = !!(localStorage.getItem("hackathon-empire-token") || "");
+    const car = token ? sellableCar(playFeed) : null;
+    const sign = car ? String(car.sign) : "this taxi";
+    const row = document.getElementById("play-sell-row");
+    button.hidden = !car;
+    if (row) row.hidden = !car;
+    button.disabled = playSelling || !car;
+    button.textContent = "Sell " + sign + " for " + formatPounds(playSellPence());
+    const note = document.getElementById("play-sell-rule");
+    if (note) note.dataset.pence = String(playSellPence());
+  }
+
+  async function sellPlayCar() {
+    if (playSelling) return;
+    const car = sellableCar(playFeed);
+    if (!car) return;
+    const status = document.getElementById("play-buy-status");
+    const token = localStorage.getItem("hackathon-empire-token") || "";
+    const base = apiBase();
+    if (!token || !base) {
+      if (status) status.textContent = "";
+      showPlayAccount();
+      return;
+    }
+    playSelling = true;
+    paintPlaySell();
+    let res;
+    try {
+      res = await fetch(base + "/v1/empire/sell", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + token
+        },
+        body: JSON.stringify({ sign: String(car.sign) })
+      });
+    } catch (err) {
+      if (localStorage.getItem("hackathon-empire-token") || "") {
+        if (status) status.textContent = "Sell failed.";
+      }
+      return;
+    } finally {
+      playSelling = false;
+      paintPlaySell();
+    }
+    if (!(localStorage.getItem("hackathon-empire-token") || "")) return;
+    if (res.status === 401) {
+      localStorage.removeItem("hackathon-empire-token");
+      closePlayOffice();
+      paintPlayStatus(null);
+      showPlayAccount();
+      keepPlayMap();
+      return;
+    }
+    if (!res.ok) {
+      if (status) status.textContent = "That taxi cannot be sold.";
+      return;
+    }
+    if (status) status.textContent = "";
+    playFollow = false;
+    playChosen = "";
+    noteFollow();
+    pollPlay();
   }
 
   async function buyPlayCar() {
@@ -3936,6 +4036,8 @@
   paintPlayBuy();
   const playBuy = document.getElementById("play-buy");
   if (playBuy) playBuy.addEventListener("click", buyPlayCar);
+  const playSell = document.getElementById("play-sell");
+  if (playSell) playSell.addEventListener("click", sellPlayCar);
   const playLoiterForm = document.getElementById("play-loiter");
   if (playLoiterForm) playLoiterForm.addEventListener("submit", setPlayLoiter);
   const playLoiterDrawBtn = document.getElementById("play-loiter-draw");
