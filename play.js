@@ -1035,8 +1035,48 @@
     if (companyNode) companyNode.textContent = formatPounds(company);
   }
 
+  function feedDoor(car, key) {
+    const door = car && car[key];
+    if (!door || typeof door !== "object") return null;
+    const line = typeof door.line === "string" ? door.line.trim() : "";
+    const city = typeof door.city === "string" ? door.city.trim() : "";
+    const postcode = typeof door.postcode === "string" ? door.postcode.trim() : "";
+    if (!line || !city || !postcode) return null;
+    return { line: line, city: city, postcode: postcode };
+  }
+
+  function sameDoor(left, right) {
+    return !!(left && right && left.line === right.line && left.city === right.city && left.postcode === right.postcode);
+  }
+
+  function paintDoorCard(id, kicker, door, here) {
+    const node = document.getElementById(id);
+    if (!node) return;
+    if (!door) {
+      node.hidden = true;
+      node.classList.remove("is-here");
+      return;
+    }
+    node.hidden = false;
+    node.classList.toggle("is-here", !!here);
+    const label = node.querySelector(".play-door-k");
+    const line = node.querySelector(".play-door-line");
+    const city = node.querySelector(".play-door-city");
+    const post = node.querySelector(".play-door-post");
+    if (label) label.textContent = kicker;
+    if (line) line.textContent = door.line;
+    if (city) city.textContent = door.city;
+    if (post) post.textContent = door.postcode;
+  }
+
+  function sentenceJob(job) {
+    if (!job) return "";
+    return job.charAt(0).toUpperCase() + job.slice(1);
+  }
+
   function paintFollowPanel(feed) {
     const who = document.getElementById("play-follow-who");
+    const jobNode = document.getElementById("play-follow-job");
     const detail = document.getElementById("play-follow-detail");
     const milesNode = document.getElementById("play-follow-miles");
     const routeNode = document.getElementById("play-follow-route");
@@ -1044,7 +1084,10 @@
     const car = followedCar(feed);
     if (!car) {
       if (who) who.textContent = "Click a taxi on the map or in the list to follow it.";
+      if (jobNode) jobNode.textContent = "";
       if (detail) detail.textContent = "";
+      paintDoorCard("play-follow-from", "From", null, false);
+      paintDoorCard("play-follow-to", "To", null, false);
       if (milesNode) milesNode.textContent = "";
       if (routeNode) routeNode.textContent = "";
       if (cancel) cancel.hidden = true;
@@ -1053,22 +1096,29 @@
     const sign = String(car.sign || playChosen);
     const job = carJob(car);
     const company = followedCompany(feed);
-    if (who) who.textContent = "Following " + sign + (company ? " · " + company : "") + (job ? " · " + job : "");
+    if (who) who.textContent = sign + (company ? " · " + company : "");
     const bits = [];
-    const pickup = feedText(car.pickup);
-    const drop = feedText(car.drop);
-    const place = destinationName(car);
-    if (place) bits.push(place);
-    if (pickup || drop) bits.push((pickup || "?") + " → " + (drop || "?"));
+    if (job) bits.push(sentenceJob(job));
     const journey = carriedJourney(car) || feedText(car.journey);
-    if (journey) bits.push(journey);
     const passenger = typeof car.passenger === "string" ? car.passenger.trim() : "";
     if (passenger) bits.push(passenger);
+    if (journey) bits.push(journey);
     const trip = feedPence(car, "trip_pence");
-    if (trip !== null) bits.push(formatPounds(trip));
+    if (trip !== null && trip > 0) bits.push(formatPounds(trip));
     const left = feedSecondsLeft(car, playNow());
-    if (left !== null) bits.push(left + "s left");
-    if (detail) detail.textContent = bits.join(" · ");
+    if (left !== null && left > 0 && carOnLeg(car)) bits.push(left + "s left");
+    if (jobNode) jobNode.textContent = bits.join(" · ");
+    if (detail) detail.textContent = "";
+    const origin = feedDoor(car, "origin");
+    const dest = feedDoor(car, "dest");
+    if (origin && dest && sameDoor(origin, dest)) {
+      paintDoorCard("play-follow-from", "Here", origin, true);
+      paintDoorCard("play-follow-to", "To", null, false);
+    } else {
+      const home = destinationName(car) === "home";
+      paintDoorCard("play-follow-from", "From", origin, false);
+      paintDoorCard("play-follow-to", home ? "Home" : "To", dest, false);
+    }
     const points = routePoints(car);
     const total = routeMilesTotal(points);
     const duration = Number(car.duration_s) || 0;

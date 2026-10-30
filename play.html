@@ -256,6 +256,7 @@
     #play-side-osrm,
     #play-fleet-counts,
     #play-follow-who,
+    #play-follow-job,
     #play-follow-detail,
     #play-follow-miles,
     #play-follow-route,
@@ -323,6 +324,54 @@
       border-color: #f59e0b;
       background: #f59e0b;
       color: #0c1219;
+    }
+    #play-follow-who {
+      margin: 0.15rem 0 0.1rem;
+      color: #f8fafc;
+      font: 750 1.02rem/1.3 system-ui, sans-serif;
+    }
+    #play-follow-job {
+      margin: 0.1rem 0 0.15rem;
+      color: #cbd5e1;
+      font: 650 12px/1.35 system-ui, sans-serif;
+    }
+    #play-follow-job:empty,
+    #play-follow-detail:empty,
+    #play-follow-miles:empty,
+    #play-follow-route:empty { display: none; }
+    .play-door {
+      margin: 0.45rem 0 0;
+      padding: 0.42rem 0.55rem 0.48rem 0.6rem;
+      background: #0a1016;
+      border: 1px solid #243044;
+      border-left: 3px solid #64748b;
+      border-radius: 8px;
+    }
+    .play-door[hidden] { display: none; }
+    #play-follow-to,
+    .play-door.is-here { border-left-color: #f5b942; }
+    .play-door-k {
+      margin: 0;
+      color: #f5b942;
+      font: 750 0.68rem/1.2 system-ui, sans-serif;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+    .play-door-line {
+      margin: 0.16rem 0 0;
+      color: #f8fafc;
+      font: 700 0.95rem/1.3 system-ui, sans-serif;
+    }
+    .play-door-city {
+      margin: 0.04rem 0 0;
+      color: #cbd5e1;
+      font: 600 0.82rem/1.3 system-ui, sans-serif;
+    }
+    .play-door-post {
+      margin: 0.14rem 0 0;
+      color: #f8fafc;
+      font: 750 0.84rem/1.2 ui-monospace, "Cascadia Mono", Consolas, monospace;
+      letter-spacing: 0.08em;
     }
     #play-taxi-list {
       list-style: none;
@@ -817,9 +866,22 @@
             <p id="play-fleet-counts"></p>
             <ul id="play-taxi-list"></ul>
           </section>
-          <section class="play-side-block">
+          <section class="play-side-block" id="play-following">
             <p class="hero-kicker">Following</p>
             <p id="play-follow-who"></p>
+            <p id="play-follow-job"></p>
+            <article class="play-door" id="play-follow-from" hidden>
+              <p class="play-door-k">From</p>
+              <p class="play-door-line"></p>
+              <p class="play-door-city"></p>
+              <p class="play-door-post"></p>
+            </article>
+            <article class="play-door" id="play-follow-to" hidden>
+              <p class="play-door-k">To</p>
+              <p class="play-door-line"></p>
+              <p class="play-door-city"></p>
+              <p class="play-door-post"></p>
+            </article>
             <p id="play-follow-detail"></p>
             <p id="play-follow-miles"></p>
             <p id="play-follow-route"></p>
@@ -978,7 +1040,7 @@
             <h3>Jobs</h3>
             <p>A baseline of fares stands in that circle at every hour of the week, and the peaks sit much higher. Weekday mornings are commutes, stations, and the universities. Daytime is shops, hospitals, the coast, and days out. Evenings run home from work. Friday and Saturday nights are the busiest, and Sundays stay busy through the day and ease off at night. Late trips are nights out, stations, hotels, and the airport. A home is a street in a town. An airport, station, hospital, hotel, or workplace is that building. A waiting person is claimed by the nearest free taxi that can reach them in ten minutes. Fares stand on the map all day, a taxi drives into range before it can take one, and a small fleet does not run out. That taxi drives to them (collecting), then to the drop (carrying), then is free again. If nobody claims them, they leave and another hail can appear.</p>
             <ul>
-              <li>Click a taxi on the map or in <strong>Your fleet</strong> to follow it. On the taxi keeps the camera on that car. Whole route fits that car and its route. The route stays on the map. The dotted moving line is where it is going. The solid line is where it has already been. Only one taxi’s route is shown at a time. Each taxi on the map is a small car coloured by company. The call sign appears when you zoom in. The job, the passenger, and the fare stay in the sidebar. The right panel shows that taxi’s miles, fuel, and earnings.</li>
+              <li>Click a taxi on the map or in <strong>Your fleet</strong> to follow it. On the taxi keeps the camera on that car. Whole route fits that car and its route. The route stays on the map. The dotted moving line is where it is going. The solid line is where it has already been. Only one taxi’s route is shown at a time. Each taxi on the map is a small car coloured by company. The call sign appears when you zoom in. The job, the passenger, and the fare stay in the sidebar. Origin and destination are each a first line, a town, and a postcode. The right panel shows that taxi’s miles, fuel, and earnings.</li>
               <li><strong>Stop following</strong> zooms out just far enough to see every taxi.</li>
               <li><strong>Cancel this job</strong> drops a fare you do not want. If the car has already left, miles driven still cost fuel and there is no fare.</li>
             </ul>
@@ -995,7 +1057,7 @@
               <li><strong>standing</strong> — £15.00 per taxi you own</li>
               <li><strong>cash</strong> — what you can spend</li>
             </ul>
-            <p>Drivers work at most 12 hours a day and 60 a week. After four hours they take an hour off. The drive home counts as that break, and home is a door in the loiter patch. Two taxis stay out when the fleet is larger, and one of a pair stays out. A taxi with a passenger finishes that job first.</p>
+            <p>Drivers work at most 12 hours a day and 60 a week. After four hours they take an hour off. The drive home counts as that break, and home is a door in the loiter patch. Two taxis stay out when the fleet is larger, and one of a pair stays out. A taxi with a passenger finishes that job first. That door, and every pickup and drop, is a first line, a town, and a postcode.</p>
             <p>A new taxi costs £500.00. Click the taxi marked for sale, then buy it from that panel. It waits a few seconds at the depot, then takes a fare. Selling a taxi you own pays £400.00. Follow it, then sell it from the yard. The last two stay. A taxi that is collecting or carrying a passenger is not sold.</p>
             <h3>Rivals</h3>
             <p>The office buttons open a rival firm. Watch Demand in the sidebar: a waiter claimed by another firm was closer to their taxi, and within ten minutes. The closest free taxi within that reach wins the fare.</p>
@@ -1044,7 +1106,7 @@
         <p id="play-person-sign">The waiting person's pin shows the call sign of the taxi the feed has claimed. The person stays on the feed latitude and longitude until that taxi arrives. Do not offset the pin.</p>
         <p id="play-car-job">The taxi list shows the current job as waiting, travelling to a better spot, collecting, carrying, or returning. The map icon does not.</p>
         <p id="play-job-feed">The taxi list shows the job string the feed sends, including a job the page has not named before. The map icon does not. Do not decide who takes a break in play.js. on break is that string when the feed sends it.</p>
-        <p id="play-hours">Drivers work at most 12 hours a day and 60 a week, with an hour off after four. The drive home counts as that break. Home is in the loiter patch. Two taxis stay out when the fleet is larger, and one of a pair stays out. The page does not decide the break. The map icon does not say home. Destination home is the feed string in the sidebar.</p>
+        <p id="play-hours">Drivers work at most 12 hours a day and 60 a week, with an hour off after four. The drive home counts as that break. Home is in the loiter patch. Two taxis stay out when the fleet is larger, and one of a pair stays out. The page does not decide the break. The map icon does not say home. Destination home is the feed string in the taxi list. The following panel shows that door as a first line, a town, and a postcode.</p>
         <p id="play-sell-rule">Sell pays 40000 pence. The buy price stays 50000. The last two taxis stay. A taxi collecting or carrying a passenger is not sold. A fare of 800000 is still not shown.</p>
         <p id="play-next-failed">Starting another account clears Buy failed left by the previous account.</p>
         <p id="play-next-trail">Starting another account clears the previous account's trail before the next feed.</p>
@@ -1072,7 +1134,7 @@
         <p id="play-signed-failed">Sign in again clears Buy failed left by the previous account.</p>
         <p id="play-signed-spent">Sign in again clears the spent line before the next feed.</p>
         <p id="play-signed-money">Sign in again clears the previous account's corner money before the next feed.</p>
-        <p id="play-route-ahead">The page draws the rest of the stored route ahead of the followed car as a moving dotted line, and a solid line for where that car has already been. Only that taxi's route is on the map. The Following panel and the taxi list name the place at the end of the leg from the feed. Do not add a place list.</p>
+        <p id="play-route-ahead">The page draws the rest of the stored route ahead of the followed car as a moving dotted line, and a solid line for where that car has already been. Only that taxi's route is on the map. The Following panel shows the feed origin and destination as a first line, a town, and a postcode. The taxi list still names the place at the end of the leg from the feed. Do not add a place list.</p>
         <p id="play-follow">The player can follow one taxi. On the taxi keeps the camera on that taxi. Whole route fits that taxi and its route. Choosing another taxi follows that one in the same mode. Stop following zooms out only far enough to show every taxi.</p>
         <p id="play-locks">Sentences a test still needs stay on the page, under the map, not in front of the taxis.</p>
         <p id="play-osrm"></p>
@@ -1098,7 +1160,7 @@
 
   <script src="config.js?v=20261024-https1"></script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-  <script src="play.js?v=20261030-hours"></script>
+  <script src="play.js?v=20261030-doors"></script>
   <script>
     (function () {
       var node = document.getElementById("play-visit");
