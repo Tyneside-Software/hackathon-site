@@ -747,6 +747,18 @@
     .play-top-pill.is-out { color: #86efac; background: rgba(134, 239, 172, 0.12); }
     .play-top-pill.is-home { color: #94a3b8; }
     .play-top-where { color: #cbd5e1; font-weight: 600; }
+    .play-top-rows li { cursor: pointer; }
+    .play-top-rows li.is-selected { background: rgba(245, 158, 11, 0.08); }
+    .play-top-rows button {
+      color: #f8fafc;
+      font: 700 0.72rem/1 system-ui, sans-serif;
+      padding: 0.35rem 0.55rem;
+      border-radius: 8px;
+      border: 1px solid #3a4658;
+      background: rgba(245, 158, 11, 0.14);
+      cursor: pointer;
+    }
+    .play-top-rows button[disabled] { opacity: 0.45; cursor: not-allowed; }
     .play-top-ledger { list-style: none; margin: 0; padding: 0; }
     .play-top-ledger li {
       display: flex;
@@ -840,6 +852,7 @@
       </div>
     </div>
     <div class="play-top-menus">
+      <button type="button" id="play-top-fleet" data-menu="fleet" aria-expanded="false" aria-controls="play-top-panel-fleet" title="Every taxi, its performance, and buy or sell.">Fleet</button>
       <button type="button" id="play-top-ledger" data-menu="ledger" aria-expanded="false" aria-controls="play-top-panel-ledger" title="The shift totals, and the ticket from the last fare.">Ledger</button>
       <button type="button" id="play-top-offices" data-menu="offices" aria-expanded="false" aria-controls="play-top-panel-offices" title="The phone, and the other firms.">Dispatch</button>
       <p id="play-visit" hidden></p>
@@ -953,6 +966,21 @@
             <p class="play-top-kicker">Shiremoor desk</p>
             <button type="button" data-top-close>Close</button>
           </div>
+          <section id="play-top-panel-fleet" class="play-top-panel" data-top-panel hidden>
+            <h2>Fleet</h2>
+            <p class="lede">Every taxi you own. Miles, fuel, and what the fare paid. Buy the next car here, or sell one that is free.</p>
+            <div class="play-strip" id="play-fleet-strip"></div>
+            <ul class="play-top-rows" id="play-fleet-rows"></ul>
+            <div class="play-bays">
+              <article class="play-bay">
+                <h3>Next car</h3>
+                <p id="play-fleet-buy-note">The next taxi waits at the yard.</p>
+                <span class="price" id="play-fleet-buy-price">£500.00</span>
+                <p><button type="button" id="play-fleet-buy">Buy this taxi for £500.00</button></p>
+                <p id="play-fleet-trade-status"></p>
+              </article>
+            </div>
+          </section>
           <section id="play-top-panel-ledger" class="play-top-panel" data-top-panel hidden>
             <h2>Ledger</h2>
             <p class="lede">The bar shows the bank. This is the shift. Green came in, rose went out.</p>
@@ -1058,6 +1086,7 @@
             <p>A baseline of fares stands in that circle at every hour of the week, and the peaks sit much higher. Weekday mornings are commutes, stations, and the universities. Daytime is shops, hospitals, the coast, and days out. Evenings run home from work. Friday and Saturday nights are the busiest, and Sundays stay busy through the day and ease off at night. Late trips are nights out, stations, hotels, and the airport. A home is a street in a town. An airport, station, hospital, hotel, or workplace is that building. A waiting person is claimed by the nearest free taxi that can reach them in ten minutes. Fares stand on the map all day, a taxi drives into range before it can take one, and a small fleet does not run out. That taxi drives to them (collecting), then to the drop (carrying), then is free again. If nobody claims them, they leave and another hail can appear.</p>
             <ul>
               <li>Click a taxi on the map or in <strong>Your fleet</strong> to follow it. On the taxi keeps the camera on that car. Whole route fits that car and its route. The route stays on the map. The dotted moving line is where it is going. The solid line is where it has already been. Only one taxi’s route is shown at a time. Each taxi on the map is a small car coloured by company. The call sign appears when you zoom in. The job, the passenger, and the fare stay in the sidebar. Origin and destination are each a first line, a town, and a postcode. The right panel shows that taxi’s miles, fuel, and earnings.</li>
+              <li><strong>Fleet</strong> on the top bar lists every taxi, with miles, fuel, and earnings. Buy the next taxi there. Sell one that is free. The last two stay.</li>
               <li><strong>Stop following</strong> zooms out just far enough to see every taxi.</li>
               <li><strong>Cancel this job</strong> drops a fare you do not want. If the car has already left, miles driven still cost fuel and there is no fare.</li>
             </ul>
@@ -1177,7 +1206,7 @@
 
   <script src="config.js?v=20261024-https1"></script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-  <script src="play.js?v=20261030-npc"></script>
+  <script src="play.js?v=20261030-fleet"></script>
   <script>
     (function () {
       var node = document.getElementById("play-visit");
