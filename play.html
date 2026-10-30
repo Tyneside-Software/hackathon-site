@@ -953,7 +953,7 @@
             <h3>Jobs</h3>
             <p>A baseline of fares stands in that circle at every hour of the week, and the peaks sit much higher. Weekday mornings are commutes, stations, and the universities. Daytime is shops, hospitals, the coast, and days out. Evenings run home from work. Friday and Saturday nights are the busiest, and Sundays stay busy through the day and ease off at night. Late trips are nights out, stations, hotels, and the airport. A home is a street in a town. An airport, station, hospital, hotel, or workplace is that building. A waiting person is claimed by the nearest free taxi that can reach them in ten minutes. Fares stand on the map all day, a taxi drives into range before it can take one, and a small fleet does not run out. That taxi drives to them (collecting), then to the drop (carrying), then is free again. If nobody claims them, they leave and another hail can appear.</p>
             <ul>
-              <li>Click a taxi on the map or in <strong>Your fleet</strong> to follow it. The map zooms once to that taxi and its route. After that you can pan and zoom freely; the route stays on the map. The dotted moving line is where it is going. The solid line is where it has already been. Only one taxi’s route is shown at a time. The right panel shows that taxi’s miles, fuel, and earnings.</li>
+              <li>Click a taxi on the map or in <strong>Your fleet</strong> to follow it. The camera stays on that taxi as it moves. The route stays on the map. The dotted moving line is where it is going. The solid line is where it has already been. Only one taxi’s route is shown at a time. The right panel shows that taxi’s miles, fuel, and earnings.</li>
               <li><strong>Stop following</strong> zooms out just far enough to see every taxi.</li>
               <li><strong>Cancel this job</strong> drops a fare you do not want. If the car has already left, miles driven still cost fuel and there is no fare.</li>
             </ul>
@@ -1045,7 +1045,7 @@
         <p id="play-signed-spent">Sign in again clears the spent line before the next feed.</p>
         <p id="play-signed-money">Sign in again clears the previous account's corner money before the next feed.</p>
         <p id="play-route-ahead">The page draws the rest of the stored route ahead of the followed car as a moving dotted line, and a solid line for where that car has already been. Only that taxi's route is on the map. The chip and the list name the place at the end of the leg from the feed. Do not add a place list.</p>
-        <p id="play-follow">The player can follow one taxi, and the camera zooms to that taxi and its current route. Choosing another taxi follows that one. Stop following zooms out only far enough to show every taxi.</p>
+        <p id="play-follow">The player can follow one taxi, and the camera stays on that taxi. Choosing another taxi follows that one. Stop following zooms out only far enough to show every taxi.</p>
         <p id="play-locks">Sentences a test still needs stay on the page, under the map, not in front of the taxis.</p>
         <p id="play-osrm"></p>
         <p id="play-buses">This page has no bus toggle.</p>
@@ -1070,7 +1070,7 @@
 
   <script src="config.js?v=20261024-https1"></script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-  <script src="play.js?v=20261030-reuse1"></script>
+  <script src="play.js?v=20261030-followcam"></script>
   <script>
     (function () {
       var node = document.getElementById("play-visit");

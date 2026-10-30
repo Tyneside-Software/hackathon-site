@@ -785,16 +785,6 @@
     return firmPlace(car, now);
   }
 
-  function followViewBounds(car, now) {
-    const points = [];
-    const here = taxiHere(car, now);
-    if (here) points.push(here);
-    routePoints(car).forEach((point) => points.push(point));
-    routeAhead(car, now).forEach((point) => points.push(point));
-    if (!points.length) return null;
-    return L.latLngBounds(points);
-  }
-
   function allTaxiBounds(feed) {
     const points = [];
     const now = playNow();
@@ -830,26 +820,39 @@
     return true;
   }
 
-  function zoomToFollowedTaxi(car) {
-    const bounds = followViewBounds(car, playNow());
-    if (!fitPlayBounds(bounds, 15)) return;
-  }
-
   function zoomToAllTaxis(feed) {
     const bounds = allTaxiBounds(feed);
     if (fitPlayBounds(bounds, 13)) return;
     map.fitBounds(circle.getBounds(), { animate: false });
   }
 
+  function followLegKey(car) {
+    const started = Math.round(Number(car && car.leg_started) || 0);
+    return playChosen + "|" + String(car && car.status || "") + "|" + started;
+  }
+
+  function trackFollowedTaxi() {
+    if (playLoiterDraw || !playFollow || !playChosen || !playFeed) return;
+    const car = followedCar(playFeed);
+    if (!car) return;
+    const here = taxiHere(car, playNow());
+    if (!here) return;
+    const latlng = L.latLng(here[0], here[1]);
+    const leg = followLegKey(car);
+    if (playFollowFit !== leg) {
+      playFollowFit = leg;
+      const zoom = map.getZoom() < 13 ? 15 : map.getZoom();
+      map.setView(latlng, zoom, { animate: false });
+      return;
+    }
+    if (map.getCenter().distanceTo(latlng) < 4) return;
+    map.panTo(latlng, { animate: false });
+  }
+
   function followChosenTaxi(feed) {
     noteFollow();
     refreshCarLabels(feed);
-    if (!playFollow || !playChosen) return;
-    const car = followedCar(feed);
-    if (!car) return;
-    if (playFollowFit === playChosen) return;
-    playFollowFit = playChosen;
-    zoomToFollowedTaxi(car);
+    trackFollowedTaxi();
   }
 
   function stopPlayFollow() {
@@ -3468,7 +3471,10 @@
     playMoveAt = stamp;
     movePlayCars();
     movePlayFirms();
-    if (playFollow) paintPlayBehind(playFeed);
+    if (playFollow) {
+      paintPlayBehind(playFeed);
+      trackFollowedTaxi();
+    }
   }
 
   function statusName(value) {
