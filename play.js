@@ -252,10 +252,10 @@
   const playSaleChips = new Map();
   let playSalePick = "";
   const playFirmChips = new Map();
-  const playDepots = [];
+  const playDepots = new Map();
   let feedLoiter = null;
-  const playFares = [];
-  const playPeople = [];
+  const playFares = new Map();
+  const playPeople = new Map();
   const playPeopleRenderer = L.canvas({ padding: 0.5 });
   const PERSON_NAME_ZOOM = 13;
   const playTrails = [];
@@ -271,6 +271,8 @@
   let playFed = false;
   let playClock = null;
   let playMotion = 0;
+  const PLAY_MOVE_MS = 100;
+  let playMoveAt = 0;
 
   function haversineKm(a, b) {
     const rad = Math.PI / 180;
@@ -1350,13 +1352,23 @@
 
   function clearFeedDepots() {
     playDepots.forEach((marker) => map.removeLayer(marker));
-    playDepots.length = 0;
+    playDepots.clear();
   }
 
   function clearFeedLoiter() {
     if (!feedLoiter) return;
     map.removeLayer(feedLoiter);
     feedLoiter = null;
+  }
+
+  function dropPlayFares() {
+    playFares.forEach((marker) => map.removeLayer(marker));
+    playFares.clear();
+  }
+
+  function dropPlayPeople() {
+    playPeople.forEach((marker) => map.removeLayer(marker));
+    playPeople.clear();
   }
 
   function loiterTitle(patch) {
@@ -1366,22 +1378,34 @@
   }
 
   function paintFeedLoiter(feed) {
-    clearFeedLoiter();
     const patch = feed && feed.loiter;
-    if (!patch) return;
-    const lat = Number(patch.lat);
-    const lng = Number(patch.lng);
-    const radiusKm = Number(patch.radius_km);
-    if (!Number.isFinite(lat) || !Number.isFinite(lng) || !Number.isFinite(radiusKm) || radiusKm <= 0) return;
+    const lat = Number(patch && patch.lat);
+    const lng = Number(patch && patch.lng);
+    const radiusKm = Number(patch && patch.radius_km);
+    if (!Number.isFinite(lat) || !Number.isFinite(lng) || !Number.isFinite(radiusKm) || radiusKm <= 0) {
+      clearFeedLoiter();
+      return;
+    }
     const title = loiterTitle(patch);
+    const metres = radiusKm * 1000;
+    if (feedLoiter) {
+      feedLoiter.setLatLng([lat, lng]);
+      feedLoiter.setRadius(metres);
+      if (feedLoiter._playLoiterTitle !== title) {
+        feedLoiter.setTooltipContent(mapHtml(title));
+        feedLoiter._playLoiterTitle = title;
+      }
+      return;
+    }
     feedLoiter = L.circle([lat, lng], {
-      radius: radiusKm * 1000,
+      radius: metres,
       color: "#38bdf8",
       weight: 2,
       fillColor: "#38bdf8",
       fillOpacity: 0.12,
       interactive: false
     }).addTo(map);
+    feedLoiter._playLoiterTitle = title;
     feedLoiter.bindTooltip(mapHtml(title), { permanent: true, direction: "center", className: "play-leg-label", opacity: 0.95 });
   }
 
@@ -1511,18 +1535,37 @@
   }
 
   function paintFeedDepots(feed) {
-    clearFeedDepots();
+    const seen = new Set();
     const firms = feed && Array.isArray(feed.firms) ? feed.firms : [];
     firms.forEach((firm) => {
       if (!firm || !Array.isArray(firm.depot) || firm.depot.length < 2) return;
+      const id = typeof firm.firm === "string" ? firm.firm.trim() : "";
+      if (!id) return;
       const lat = Number(firm.depot[0]);
       const lng = Number(firm.depot[1]);
       if (!Number.isFinite(lat) || !Number.isFinite(lng)) return;
       const name = depotFirmName(firm);
       const title = name ? name + " depot" : "depot";
-      const marker = L.marker([lat, lng], { title: title }).addTo(map);
-      marker.bindTooltip(mapHtml(title), { permanent: true, direction: "top", className: "play-leg-label", opacity: 0.95 });
-      playDepots.push(marker);
+      seen.add(id);
+      let marker = playDepots.get(id);
+      if (!marker) {
+        marker = L.marker([lat, lng], { title: title }).addTo(map);
+        marker.bindTooltip(mapHtml(title), { permanent: true, direction: "top", className: "play-leg-label", opacity: 0.95 });
+        playDepots.set(id, marker);
+      } else {
+        const here = marker.getLatLng();
+        if (here.lat !== lat || here.lng !== lng) marker.setLatLng([lat, lng]);
+        if (marker._playDepotTitle !== title) {
+          marker.setTooltipContent(mapHtml(title));
+          marker.options.title = title;
+        }
+      }
+      marker._playDepotTitle = title;
+    });
+    playDepots.forEach((marker, id) => {
+      if (seen.has(id)) return;
+      map.removeLayer(marker);
+      playDepots.delete(id);
     });
   }
 
@@ -1798,9 +1841,25 @@
     noteTrailChips(keptSigns);
   }
 
+  function fareKey(fare) {
+    const sign = String(fare && fare.sign || "");
+    if (sign) return sign;
+    const lat = Number(fare && fare.lat);
+    const lng = Number(fare && fare.lng);
+    return String(fare && fare.name || "") + "|" + lat.toFixed(5) + "|" + lng.toFixed(5);
+  }
+
+  function fareIcon(name) {
+    return L.divIcon({
+      className: "play-chip-icon",
+      html: '<span class="play-fare" style="display:inline-block;padding:2px 6px;border-radius:6px;background:#fff;color:#0c1219;font:700 11px/1.2 system-ui,sans-serif;white-space:nowrap">' + name + "</span>",
+      iconSize: [120, 22],
+      iconAnchor: [60, 22]
+    });
+  }
+
   function paintPlayFares(feed) {
-    playFares.forEach((marker) => map.removeLayer(marker));
-    playFares.length = 0;
+    const seen = new Set();
     const fares = feed && Array.isArray(feed.fares) ? feed.fares : [];
     let skippedT12 = 0;
     let skippedRiding = 0;
@@ -1819,18 +1878,31 @@
       const lng = Number(fare.lng);
       if (!Number.isFinite(lat) || !Number.isFinite(lng)) return;
       const name = fare.name || "Passenger";
-      const marker = L.marker([lat, lng], {
-        icon: L.divIcon({
-          className: "play-chip-icon",
-          html: '<span class="play-fare" style="display:inline-block;padding:2px 6px;border-radius:6px;background:#fff;color:#0c1219;font:700 11px/1.2 system-ui,sans-serif;white-space:nowrap">' + name + "</span>",
-          iconSize: [120, 22],
-          iconAnchor: [60, 22]
-        }),
-        title: name,
-        zIndexOffset: 650
-      }).addTo(map);
-      playFares.push(marker);
+      const key = fareKey(fare);
+      seen.add(key);
+      let marker = playFares.get(key);
+      if (!marker) {
+        marker = L.marker([lat, lng], {
+          icon: fareIcon(name),
+          title: name,
+          zIndexOffset: 650
+        }).addTo(map);
+        playFares.set(key, marker);
+      } else {
+        const here = marker.getLatLng();
+        if (here.lat !== lat || here.lng !== lng) marker.setLatLng([lat, lng]);
+        if (marker._playFareName !== name) {
+          marker.setIcon(fareIcon(name));
+          marker.options.title = name;
+        }
+      }
+      marker._playFareName = name;
       fareNames.push(name);
+    });
+    playFares.forEach((marker, key) => {
+      if (seen.has(key)) return;
+      map.removeLayer(marker);
+      playFares.delete(key);
     });
     const note = document.getElementById("play-fare-t12");
     if (note) {
@@ -1857,9 +1929,15 @@
     });
   }
 
+  function personKey(person) {
+    const lat = Number(person && person.lat);
+    const lng = Number(person && person.lng);
+    const name = String(person && person.name || "");
+    return name + "|" + lat.toFixed(5) + "|" + lng.toFixed(5);
+  }
+
   function paintPlayPeople(feed) {
-    playPeople.forEach((marker) => map.removeLayer(marker));
-    playPeople.length = 0;
+    const seen = new Set();
     const people = feed && Array.isArray(feed.people) ? feed.people : [];
     let drawn = 0;
     let stayed = 0;
@@ -1873,22 +1951,33 @@
       const lat = Number(person.lat);
       const lng = Number(person.lng);
       if (!Number.isFinite(lat) || !Number.isFinite(lng)) return;
+      const key = personKey(person);
       const sign = personTaxiSign(person);
-      const marker = L.circleMarker([lat, lng], {
-        renderer: playPeopleRenderer,
-        radius: 4,
-        weight: 1,
-        color: "#f8fafc",
-        fillColor: "#0f172a",
-        fillOpacity: 1,
-        opacity: 1,
-        interactive: false
-      }).addTo(map);
+      const label = personPinText(person);
+      seen.add(key);
+      let marker = playPeople.get(key);
+      if (!marker) {
+        marker = L.circleMarker([lat, lng], {
+          renderer: playPeopleRenderer,
+          radius: 4,
+          weight: 1,
+          color: "#f8fafc",
+          fillColor: "#0f172a",
+          fillOpacity: 1,
+          opacity: 1,
+          interactive: false
+        }).addTo(map);
+        playPeople.set(key, marker);
+      }
       marker._playPersonSign = sign;
-      marker._playPersonLabel = personPinText(person);
-      playPeople.push(marker);
+      marker._playPersonLabel = label;
       drawn += 1;
       if (person.allocated === true || sign) stayed += 1;
+    });
+    playPeople.forEach((marker, key) => {
+      if (seen.has(key)) return;
+      map.removeLayer(marker);
+      playPeople.delete(key);
     });
     labelPlayPeople();
     notePersonWaiting(drawn, stayed);
@@ -1938,7 +2027,10 @@
   function notePersonSign() {
     const node = document.getElementById("play-person-sign");
     if (!node) return;
-    const claimed = playPeople.filter((marker) => marker && marker._playPersonSign).length;
+    let claimed = 0;
+    playPeople.forEach((marker) => {
+      if (marker && marker._playPersonSign) claimed += 1;
+    });
     node.dataset.sign = claimed ? "feed" : "none";
     node.dataset.claimed = String(claimed);
     node.dataset.offset = "none";
@@ -2242,11 +2334,10 @@
   }
 
   function clearSignOutFares() {
-    playFares.forEach((marker) => map.removeLayer(marker));
-    playFares.length = 0;
+    dropPlayFares();
     const node = document.getElementById("play-signout-fares");
     if (!node) return;
-    node.dataset.fares = playFares.length === 0 ? "clear" : "shows";
+    node.dataset.fares = playFares.size === 0 ? "clear" : "shows";
     node.dataset.signed = "out";
   }
 
@@ -2274,12 +2365,11 @@
   }
 
   function clearSignOutPeople() {
-    playPeople.forEach((marker) => map.removeLayer(marker));
-    playPeople.length = 0;
+    dropPlayPeople();
     showWaitingCount(null);
     const node = document.getElementById("play-signout-person");
     if (!node) return;
-    node.dataset.person = playPeople.length === 0 ? "clear" : "shows";
+    node.dataset.person = playPeople.size === 0 ? "clear" : "shows";
     node.dataset.signed = "out";
   }
 
@@ -2373,21 +2463,19 @@
   }
 
   function clearFeed401Fares() {
-    playFares.forEach((marker) => map.removeLayer(marker));
-    playFares.length = 0;
+    dropPlayFares();
     const node = document.getElementById("play-feed-401-fares");
     if (!node) return;
-    node.dataset.fares = playFares.length === 0 ? "clear" : "shows";
+    node.dataset.fares = playFares.size === 0 ? "clear" : "shows";
     node.dataset.feed = "401";
   }
 
   function clearFeed401People() {
-    playPeople.forEach((marker) => map.removeLayer(marker));
-    playPeople.length = 0;
+    dropPlayPeople();
     showWaitingCount(null);
     const node = document.getElementById("play-feed-401-person");
     if (!node) return;
-    node.dataset.person = playPeople.length === 0 ? "clear" : "shows";
+    node.dataset.person = playPeople.size === 0 ? "clear" : "shows";
     node.dataset.feed = "401";
   }
 
@@ -2813,23 +2901,21 @@
   function clearFaresForNextAccount(username) {
     const previous = localStorage.getItem("hackathon-empire-user") || "";
     if (!previous || previous === username) return;
-    playFares.forEach((marker) => map.removeLayer(marker));
-    playFares.length = 0;
+    dropPlayFares();
     const node = document.getElementById("play-next-fares");
     if (!node) return;
-    node.dataset.fares = playFares.length === 0 ? "clear" : "shows";
+    node.dataset.fares = playFares.size === 0 ? "clear" : "shows";
     node.dataset.feed = "waiting";
   }
 
   function clearPeopleForNextAccount(username) {
     const previous = localStorage.getItem("hackathon-empire-user") || "";
     if (!previous || previous === username) return;
-    playPeople.forEach((marker) => map.removeLayer(marker));
-    playPeople.length = 0;
+    dropPlayPeople();
     showWaitingCount(null);
     const node = document.getElementById("play-next-person");
     if (!node) return;
-    node.dataset.person = playPeople.length === 0 ? "clear" : "shows";
+    node.dataset.person = playPeople.size === 0 ? "clear" : "shows";
     node.dataset.feed = "waiting";
   }
 
@@ -3114,11 +3200,10 @@
   }
 
   function clearSignedFares() {
-    playFares.forEach((marker) => map.removeLayer(marker));
-    playFares.length = 0;
+    dropPlayFares();
     const node = document.getElementById("play-signed-fares");
     if (!node) return;
-    node.dataset.fares = playFares.length === 0 ? "clear" : "shows";
+    node.dataset.fares = playFares.size === 0 ? "clear" : "shows";
     node.dataset.feed = "waiting";
   }
 
@@ -3132,12 +3217,11 @@
   }
 
   function clearSignedPeople() {
-    playPeople.forEach((marker) => map.removeLayer(marker));
-    playPeople.length = 0;
+    dropPlayPeople();
     showWaitingCount(null);
     const node = document.getElementById("play-signed-person");
     if (!node) return;
-    node.dataset.person = playPeople.length === 0 ? "clear" : "shows";
+    node.dataset.person = playPeople.size === 0 ? "clear" : "shows";
     node.dataset.feed = "waiting";
   }
 
@@ -3215,11 +3299,10 @@
   }
 
   function clearQuietFares() {
-    playFares.forEach((marker) => map.removeLayer(marker));
-    playFares.length = 0;
+    dropPlayFares();
     const node = document.getElementById("play-quiet-fares");
     if (!node) return;
-    node.dataset.fares = playFares.length === 0 ? "clear" : "shows";
+    node.dataset.fares = playFares.size === 0 ? "clear" : "shows";
     node.dataset.feed = "quiet";
   }
 
@@ -3269,12 +3352,11 @@
   }
 
   function clearQuietPeople() {
-    playPeople.forEach((marker) => map.removeLayer(marker));
-    playPeople.length = 0;
+    dropPlayPeople();
     showWaitingCount(null);
     const node = document.getElementById("play-quiet-person");
     if (!node) return;
-    node.dataset.person = playPeople.length === 0 ? "clear" : "shows";
+    node.dataset.person = playPeople.size === 0 ? "clear" : "shows";
     node.dataset.feed = "quiet";
   }
 
@@ -3347,8 +3429,7 @@
     if (!playMotion) playMotion = requestAnimationFrame(glidePlay);
   }
 
-  function glidePlay() {
-    playMotion = 0;
+  function movePlayCars() {
     const cars = playFeed && Array.isArray(playFeed.cars) ? playFeed.cars : [];
     const now = playNow();
     cars.forEach((car) => {
@@ -3359,20 +3440,35 @@
       const place = playPlace(car, now);
       if (!place) return;
       marker.setLatLng(place);
-      labelOneCar(marker, car, now, "");
+      if (playFollow && playChosen === sign) labelOneCar(marker, car, now, "");
       const item = document.querySelector('#play-taxi-list [data-sign="' + sign + '"]');
       if (!item) return;
       fillTaxiListItem(item, sign, car, place[0], place[1]);
     });
-    noteWithPassenger();
-    noteToPassenger();
-    noteCarJob();
-    paintPlayAhead(playFeed);
-    paintPlayBehind(playFeed);
-    paintPlayFirms(playFeed);
-    followChosenTaxi(playFeed);
-    paintPlaySide(playFeed);
+  }
+
+  function movePlayFirms() {
+    const now = playNow();
+    playFirmChips.forEach((marker, sign) => {
+      const car = marker && marker._playFirmCar;
+      if (!car) return;
+      const place = firmPlace(car, now);
+      if (!place) return;
+      marker.setLatLng(place);
+      if (playFollow && playChosen === sign) {
+        labelOneCar(marker, car, now, marker._playFirmName || "");
+      }
+    });
+  }
+
+  function glidePlay(stamp) {
     playMotion = requestAnimationFrame(glidePlay);
+    if (playFollow) paintPlayAhead(playFeed);
+    if (stamp - playMoveAt < PLAY_MOVE_MS) return;
+    playMoveAt = stamp;
+    movePlayCars();
+    movePlayFirms();
+    if (playFollow) paintPlayBehind(playFeed);
   }
 
   function statusName(value) {
