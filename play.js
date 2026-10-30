@@ -494,7 +494,9 @@
 
   const COMPANY_COLOUR = { own: "#f5b942", north: "#38bdf8", south: "#fb7185" };
 
-  function companyColour(sign, firmId) {
+  function companyColour(sign, firmId, explicit) {
+    const given = String(explicit || "").trim();
+    if (/^#[0-9a-fA-F]{6}$/.test(given)) return given;
     const id = String(firmId || "").trim().toLowerCase();
     if (id === "north" || id === "noah") return COMPANY_COLOUR.north;
     if (id === "south" || id === "reeve") return COMPANY_COLOUR.south;
@@ -1096,7 +1098,8 @@
     const sign = String(car.sign || playChosen);
     const job = carJob(car);
     const company = followedCompany(feed);
-    if (who) who.textContent = sign + (company ? " · " + company : "");
+    const npc = followedIsNpc(feed) ? " · NPC" : "";
+    if (who) who.textContent = sign + (company ? " · " + company : "") + npc;
     const bits = [];
     if (job) bits.push(sentenceJob(job));
     const journey = carriedJourney(car) || feedText(car.journey);
@@ -1161,30 +1164,42 @@
   }
 
   function paintFirmSummaries(feed) {
+    const list = document.getElementById("play-firm-list");
+    if (!list) return;
+    list.textContent = "";
     const firms = feed && Array.isArray(feed.firms) ? feed.firms : [];
-    [
-      { id: "play-firm-north", fallback: "north" },
-      { id: "play-firm-south", fallback: "south" }
-    ].forEach((slot, index) => {
-      const node = document.getElementById(slot.id);
-      if (!node) return;
-      const firm = firms[index] || null;
-      if (!firm) {
-        node.textContent = slot.fallback + " — no feed yet.";
-        return;
+    if (!firms.length) {
+      const empty = document.createElement("li");
+      empty.textContent = "No other firms yet.";
+      list.appendChild(empty);
+      return;
+    }
+    firms.forEach((firm) => {
+      const item = document.createElement("li");
+      const company = firm && typeof firm.company === "string" ? firm.company.trim() : "";
+      const called = firm && typeof firm.firm === "string" ? firm.firm.trim() : "";
+      const label = company || called || "firm";
+      const name = document.createElement("span");
+      name.textContent = label;
+      item.appendChild(name);
+      if (firm && firm.npc === true) {
+        const badge = document.createElement("span");
+        badge.className = "play-npc";
+        badge.textContent = "NPC";
+        item.appendChild(badge);
       }
-      const company = typeof firm.company === "string" ? firm.company.trim() : "";
-      const called = typeof firm.firm === "string" ? firm.firm.trim() : "";
-      const label = company || called || slot.fallback;
-      const rows = Array.isArray(firm.cars) ? firm.cars : [];
+      const rows = firm && Array.isArray(firm.cars) ? firm.cars : [];
       let out = 0;
       rows.forEach((car) => {
         if (carJob(car) && carJob(car) !== "waiting" && carJob(car) !== "on break") out += 1;
       });
       const fare = feedPence(firm, "fare_in");
-      const books = Array.isArray(firm.bookings) ? firm.bookings.length : 0;
-      node.textContent = label + " · " + rows.length + " cars · " + out + " out · " +
+      const books = firm && Array.isArray(firm.bookings) ? firm.bookings.length : 0;
+      const detail = document.createElement("span");
+      detail.textContent = " · " + rows.length + " cars · " + out + " out · " +
         (fare === null ? formatPounds(0) : formatPounds(fare)) + " in · " + books + " bookings";
+      item.appendChild(detail);
+      list.appendChild(item);
     });
   }
 
@@ -1205,7 +1220,8 @@
       const lng = Number(firm.depot[1]);
       if (!Number.isFinite(lat) || !Number.isFinite(lng)) return;
       const name = depotFirmName(firm);
-      add((name || "firm") + " depot");
+      const npc = firm && firm.npc === true ? " · NPC" : "";
+      add((name || "firm") + " depot" + npc);
     });
   }
 
@@ -1333,21 +1349,34 @@
     return null;
   }
 
-  function followedCompany(feed) {
+  function followedFirmRow(feed) {
     const found = chosenFirmCar(feed);
-    if (found) {
-      const firms = feed && Array.isArray(feed.firms) ? feed.firms : [];
-      for (let i = 0; i < firms.length; i++) {
-        const firm = firms[i];
-        const id = firm && typeof firm.firm === "string" ? firm.firm.trim() : "";
-        if (id !== found.firm) continue;
-        const company = firm && typeof firm.company === "string" ? firm.company.trim() : "";
-        return company || id;
-      }
-      return found.firm;
+    if (!found) return null;
+    const firms = feed && Array.isArray(feed.firms) ? feed.firms : [];
+    for (let i = 0; i < firms.length; i++) {
+      const firm = firms[i];
+      const id = firm && typeof firm.firm === "string" ? firm.firm.trim() : "";
+      if (id === found.firm) return firm;
     }
+    return null;
+  }
+
+  function followedCompany(feed) {
+    const firm = followedFirmRow(feed);
+    if (firm) {
+      const company = typeof firm.company === "string" ? firm.company.trim() : "";
+      const id = typeof firm.firm === "string" ? firm.firm.trim() : "";
+      return company || id;
+    }
+    const found = chosenFirmCar(feed);
+    if (found) return found.firm;
     const own = feed && typeof feed.company === "string" ? feed.company.trim() : "";
     return own;
+  }
+
+  function followedIsNpc(feed) {
+    const firm = followedFirmRow(feed);
+    return !!(firm && firm.npc === true);
   }
 
   function refreshCarLabels() {
@@ -1572,7 +1601,8 @@
       const lng = Number(firm.depot[1]);
       if (!Number.isFinite(lat) || !Number.isFinite(lng)) return;
       const name = depotFirmName(firm);
-      const title = name ? name + " depot" : "depot";
+      const npc = firm.npc === true ? " · NPC" : "";
+      const title = (name ? name + " depot" : "depot") + npc;
       seen.add(id);
       let marker = playDepots.get(id);
       if (!marker) {
@@ -1611,7 +1641,7 @@
         const place = firmPlace(car, now);
         if (!place) return;
         seen.add(sign);
-        const fill = companyColour(sign, id);
+        const fill = companyColour(sign, id, firm.colour);
         const job = carJob(car);
         const title = sign;
         let marker = playFirmChips.get(sign);

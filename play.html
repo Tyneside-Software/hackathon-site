@@ -261,8 +261,7 @@
     #play-follow-miles,
     #play-follow-route,
     #play-rival-cover,
-    #play-firm-north,
-    #play-firm-south,
+    #play-firm-list,
     #play-loiter-now,
     #play-cancel-status {
       margin: 0.2rem 0;
@@ -288,6 +287,25 @@
       font: 650 13px/1.35 system-ui, sans-serif;
     }
     #play-waiting-names li { margin: 0.25rem 0; }
+    #play-firm-list {
+      margin: 0.35rem 0 0;
+      padding: 0;
+      max-height: 16rem;
+      overflow: auto;
+      list-style: none;
+    }
+    #play-firm-list li { margin: 0.35rem 0; }
+    .play-npc {
+      display: inline-block;
+      margin-left: 0.35rem;
+      padding: 0 0.35rem;
+      border-radius: 999px;
+      background: #1e293b;
+      color: #f8fafc;
+      font: 700 10px/1.5 system-ui, sans-serif;
+      letter-spacing: 0.06em;
+      vertical-align: 1px;
+    }
     #play-signout,
     #play-how,
     #play-how-close,
@@ -823,7 +841,7 @@
     </div>
     <div class="play-top-menus">
       <button type="button" id="play-top-ledger" data-menu="ledger" aria-expanded="false" aria-controls="play-top-panel-ledger" title="The shift totals, and the ticket from the last fare.">Ledger</button>
-      <button type="button" id="play-top-offices" data-menu="offices" aria-expanded="false" aria-controls="play-top-panel-offices" title="The phone, and the other two firms.">Dispatch</button>
+      <button type="button" id="play-top-offices" data-menu="offices" aria-expanded="false" aria-controls="play-top-panel-offices" title="The phone, and the other firms.">Dispatch</button>
       <p id="play-visit" hidden></p>
     </div>
   </header>
@@ -894,9 +912,8 @@
             <p id="play-cancel-status"></p>
           </section>
           <section class="play-side-block">
-            <p class="hero-kicker">Rival firms</p>
-            <p id="play-firm-north"></p>
-            <p id="play-firm-south"></p>
+            <p class="hero-kicker">Other firms</p>
+            <ul id="play-firm-list"></ul>
             <section id="play-office" hidden aria-label="Firm bookings">
               <h2 id="play-office-title"></h2>
               <p id="play-office-fare"></p>
@@ -1035,8 +1052,8 @@
               <button type="button" id="play-how-close">Close</button>
             </div>
             <h3>The idea</h3>
-            <p>You run a taxi firm on Tyneside. The clock is real time: one second here is one second in the game. You start with ten taxis at your own depot. Shiremoor Taxis starts at Shiremoor. North Taxis and South Taxis start at their own depots. People appear across the land inside the 50-mile circle around Newcastle, thicker in the towns. The closest free taxi within ten minutes, across the three firms, collects them. A person nobody reaches leaves after ten minutes.</p>
-            <p>Michael, Noah, and Reeve share one map. Each firm can see the other two. They are rivals and compete for the same fares. The closest free taxi within ten minutes wins. Rename the company from the session panel. The aim is to keep your cars on paid work, beat the rivals to waiting people, and grow the fleet.</p>
+            <p>You run a taxi firm on Tyneside. The clock is real time: one second here is one second in the game. You start with ten taxis at your own depot. Shiremoor Taxis starts at Shiremoor. North Taxis and South Taxis start at their own depots. People appear across the land inside the 50-mile circle around Newcastle, thicker in the towns. The closest free taxi within ten minutes, across every firm on the map, collects them. A person nobody reaches leaves after ten minutes.</p>
+            <p>Michael, Noah, and Reeve share one map with seven NPC firms. NPC firms are labelled NPC. They are not player companies. The closest free taxi within ten minutes wins. Rename the company from the session panel. The aim is to keep your cars on paid work, beat the rivals to waiting people, and grow the fleet.</p>
             <h3>Jobs</h3>
             <p>A baseline of fares stands in that circle at every hour of the week, and the peaks sit much higher. Weekday mornings are commutes, stations, and the universities. Daytime is shops, hospitals, the coast, and days out. Evenings run home from work. Friday and Saturday nights are the busiest, and Sundays stay busy through the day and ease off at night. Late trips are nights out, stations, hotels, and the airport. A home is a street in a town. An airport, station, hospital, hotel, or workplace is that building. A waiting person is claimed by the nearest free taxi that can reach them in ten minutes. Fares stand on the map all day, a taxi drives into range before it can take one, and a small fleet does not run out. That taxi drives to them (collecting), then to the drop (carrying), then is free again. If nobody claims them, they leave and another hail can appear.</p>
             <ul>
@@ -1160,7 +1177,7 @@
 
   <script src="config.js?v=20261024-https1"></script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-  <script src="play.js?v=20261030-doors"></script>
+  <script src="play.js?v=20261030-npc"></script>
   <script>
     (function () {
       var node = document.getElementById("play-visit");
