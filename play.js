@@ -256,6 +256,8 @@
   let feedLoiter = null;
   const playFares = [];
   const playPeople = [];
+  const playPeopleRenderer = L.canvas({ padding: 0.5 });
+  const PERSON_NAME_ZOOM = 13;
   const playTrails = [];
   const playTrailFed = new Map();
   const playAhead = [];
@@ -1585,16 +1587,6 @@
     });
   }
 
-  function personTimeText(person) {
-    const sign = personTaxiSign(person);
-    if (sign) {
-      const left = sentSeconds(person.seconds_left);
-      return left === null ? "" : left + "s";
-    }
-    const waited = sentSeconds(person.waiting_s);
-    return waited === null ? "" : waited + "s";
-  }
-
   function listStatus(car) {
     const job = carJob(car);
     return job ? " " + job : "";
@@ -1882,25 +1874,23 @@
       const lng = Number(person.lng);
       if (!Number.isFinite(lat) || !Number.isFinite(lng)) return;
       const sign = personTaxiSign(person);
-      const label = personPinText(person);
-      const width = Math.max(72, 8 + label.length * 7);
-      const marker = L.marker([lat, lng], {
-        icon: L.divIcon({
-          className: "play-chip-icon",
-          html: '<span class="play-person" style="display:inline-block;padding:2px 6px;border-radius:999px;background:#111827;color:#f8fafc;font:700 11px/1.2 system-ui,sans-serif;white-space:nowrap">' + personPinHtml(label) + "</span>",
-          iconSize: [width, 22],
-          iconAnchor: [width / 2, 22]
-        }),
-        title: label,
-        zIndexOffset: 700
+      const marker = L.circleMarker([lat, lng], {
+        renderer: playPeopleRenderer,
+        radius: 4,
+        weight: 1,
+        color: "#f8fafc",
+        fillColor: "#0f172a",
+        fillOpacity: 1,
+        opacity: 1,
+        interactive: false
       }).addTo(map);
       marker._playPersonSign = sign;
-      const time = personTimeText(person);
-      if (time) marker.bindTooltip(mapHtml(time), { permanent: true, direction: "top", className: "play-leg-label", opacity: 0.95 });
+      marker._playPersonLabel = personPinText(person);
       playPeople.push(marker);
       drawn += 1;
       if (person.allocated === true || sign) stayed += 1;
     });
+    labelPlayPeople();
     notePersonWaiting(drawn, stayed);
     notePersonStays(stayed, arrived);
     notePersonSign();
@@ -1908,14 +1898,37 @@
     showWaitingNames(waitingNames(feed));
   }
 
+  function labelPlayPeople() {
+    const show = map.getZoom() >= PERSON_NAME_ZOOM;
+    const bounds = show ? map.getBounds().pad(0.15) : null;
+    playPeople.forEach((marker) => {
+      const label = marker._playPersonLabel || "";
+      const want = !!(show && label && bounds && bounds.contains(marker.getLatLng()));
+      const tip = marker.getTooltip();
+      if (!want) {
+        if (tip) marker.unbindTooltip();
+        return;
+      }
+      if (tip && tip._playPersonLabel === label) return;
+      if (tip) marker.unbindTooltip();
+      marker.bindTooltip(personPinHtml(label), {
+        permanent: true,
+        direction: "top",
+        className: "play-leg-label",
+        opacity: 0.95,
+        interactive: false
+      });
+      const next = marker.getTooltip();
+      if (next) next._playPersonLabel = label;
+    });
+  }
+
+  map.on("zoomend moveend", labelPlayPeople);
+
   function personPinText(person) {
     const name = String(person && person.name || "Person").trim() || "Person";
     const sign = personTaxiSign(person);
-    const journey = String(person && person.journey || "").trim();
-    let text = name;
-    if (sign) text += " " + sign;
-    if (journey) text += " " + journey;
-    return text;
+    return sign ? name + " " + sign : name;
   }
 
   function personPinHtml(text) {
@@ -1968,16 +1981,21 @@
   function showWaitingNames(names) {
     const list = document.getElementById("play-waiting-names");
     if (!list) return;
-    list.textContent = "";
     if (!names || !names.length) {
+      list.textContent = "";
       list.hidden = true;
       return;
     }
     list.hidden = false;
-    names.forEach((name) => {
-      const item = document.createElement("li");
-      item.textContent = name;
-      list.appendChild(item);
+    const items = list.children;
+    while (items.length > names.length) list.removeChild(list.lastChild);
+    names.forEach((name, index) => {
+      let item = items[index];
+      if (!item) {
+        item = document.createElement("li");
+        list.appendChild(item);
+      }
+      if (item.textContent !== name) item.textContent = name;
     });
   }
 
